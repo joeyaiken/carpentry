@@ -1,0 +1,466 @@
+// @darkPrimaryColor:   #512DA8;
+// @primaryColor:       #673AB7;
+// @lightPrimaryColor:  #D1C4E9;
+// @textPrimaryColor:   #FFFFFF;
+// @accentColor:        #9E9E9E;
+// @primaryTextColor:   #212121;
+// @secondaryTextColor: #757575;
+// @dividerColor:       #BDBDBD;
+
+@darkPrimaryColor:    #1976D2;
+@primaryColor:        #2196F3;
+@lightPrimaryColor:   #BBDEFB;
+
+// @darkPrimaryColor:    #40241a;
+// @primaryColor:        #6d4c41;
+// @lightPrimaryColor:   #9c786c;
+
+@darkSecondaryColor:  #c66900;
+@secondaryColor:      #ff9800;
+@lightSecondaryColor: #ffc947;
+
+@textPrimaryColor:    #FFFFFF;
+@accentColor:         #9E9E9E;
+@primaryTextColor:    #212121;
+@secondaryTextColor:  #757575;
+@dividerColor:        #BDBDBD;
+
+
+@gutter: 8px;
+
+@app-bar-height: 48px;
+
+html, body, #root{
+    height: 100%;
+    font-family: Roboto, sans-serif;
+   
+}
+
+.bar-dark {
+    background-color: @darkPrimaryColor;
+}
+
+.bar-light {
+    background-color: @primaryColor;
+}
+
+.bar-grey{
+
+}
+
+.app-bar {
+    // height: @app-bar-height;
+    //bottom border shadow
+    box-shadow: 0 2px 6px rgba(0,0,0,.4);
+    //any sort of padding?
+}
+
+
+.pull-right{
+    float: right;
+}
+
+
+.sd-card-binder{
+    
+    .card-list{
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+    }
+
+    .mana-icon{
+        height: 50px;
+        width: 50px;
+    }
+
+    .binder-section{
+        .section-header{
+            color: @secondaryTextColor;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 8px;
+            background-color: @lightPrimaryColor;
+        }
+        
+    }
+}
+
+.app-contents {
+    // display: grid;
+    // grid-template-columns: auto 30%;
+
+    // .grid-full {
+    //     grid-column-start: 1;
+    //     grid-column-end: 3;
+    // }
+    // .grid-col-1{
+    //     grid-column-start: 1;
+    // }
+    // .grid-col-2{
+    //     grid-column-start: 2;
+    // }
+
+    // //deck editor
+    // .sd-deck-editor {
+    //     // width: auto;
+    //     grid-column-start: 1;
+    // }
+
+    // //side panel
+    // .app-side-sheet{
+    //     // width: 30%;
+    //     grid-column-start: 2;
+    // }
+
+
+    
+    // height: 100%;
+    //First option
+    // display: grid;
+    // grid-template-columns: 16px auto 16px;
+    // grid-template-rows: 8px auto 16px;
+    // .sd-deck-editor{
+    //     grid-column-start: 2;
+    //     grid-row-start: 2;
+    // }
+
+    
+}
+
+.card {
+    background-color: @textPrimaryColor;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    border-radius: 2px;
+    //box-shadow: 0 2px 6px rgba(0,0,0,.4);
+    .card-header{
+        .header-section{
+            display: inline-block;
+        }
+        border-radius: 2px 2px 0 0;
+        background-color: @primaryColor;
+        color: @textPrimaryColor;
+        padding: 8px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+}
+
+//Layout of the Deck Editor grid contents
+.sd-deck-editor {
+    // display: grid;
+    // grid-gap: @gutter;
+    // grid-template-columns: auto @gutter auto;
+    // grid-template-columns: auto auto;
+    // grid-template-rows: [row-1] auto 8px [row-2] auto 8px [row-3] auto 8px [row-4] auto;
+
+    //grid-template-rows: auto @gutter auto @gutter auto @gutter auto @gutter auto;
+    // grid-template-rows: auto auto auto auto auto;
+    
+    // .deck-editor-header {
+    //     grid-column-start: 1;
+    //     grid-column-end: 3;
+    // }
+    // .sd-card-binder{
+    //     grid-row-start: 2;
+    // }
+    // .sd-deck-quick-stats{
+    //     grid-row-start: 3;
+    // }
+
+    // .sd-deck-detail, .sd-card-quick-add, .sd-rare-binder{
+    //     grid-row-start: 2;
+    //     grid-row-end: 4;
+    //     grid-column-start: 2;
+    // }
+
+    // .sd-deck-detail{
+    //     grid-row-start: 2;
+    //     grid-column-start: 2;
+    // }
+
+    // .sd-card-quick-add{
+    //     grid-row-start: 2;
+    //     grid-column-start: 2;
+    // }
+    
+    // .sd-rare-binder{
+    //     grid-row-start: 2;
+    //     grid-column-start: 2;
+    // }
+
+}
+
+.sd-land-counter {
+    // display: inline-block;
+    display: grid;
+    .mana-icon{
+        
+    }
+    .sd-counter {
+        grid-column-start: 2;
+    }
+}
+
+.sd-counter {
+    button, input{
+        display: block;
+        max-width: 50px;
+    }
+    button{
+        background: inherit;
+        cursor: pointer;
+        border: none;
+        width: 100%;
+    }
+}
+
+.sd-material-button {
+    border: none;
+    background-color: inherit;
+    color: @textPrimaryColor;
+    cursor: pointer;
+    .selected-icon{
+        color: @secondaryColor;
+        border-bottom: @secondaryColor 2px solid;
+    }
+}
+
+.flex-container-horizontal {
+    display: flex;
+    flex-flow: row;
+}
+
+.flex-row {
+    display: flex;
+    flex-flow: row;
+}
+
+.flex-col {
+    display: flex;
+    flex-flow: column;
+}
+
+.flex-container-vertical{
+    display: flex;
+    flex-flow: column;
+}
+
+.flex-section {
+    flex: 1 1 auto;
+}
+
+.static-section {
+    flex: 0 0 auto;
+}
+
+.section-flex{
+    flex: 1 1 auto;
+}
+
+.section-static{
+    flex: 0 0 auto;
+}
+
+.padded-section{
+    padding: 8px;
+}
+
+
+
+.sd-deck-list {
+
+    .sd-deck-card {
+        label{
+            color: @primaryTextColor;
+            font-weight: 600;
+        }
+    }
+    
+    .compact-card {
+        width: 75px;
+        height: 75px;
+        // background-color: @secondaryTextColor;
+        border-radius: 25px;
+        margin: 5px;
+        padding: 5px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        .deck-mana-types{
+            display: inline-grid;
+            grid-template-columns: 25px 25px 25px;
+            vertical-align: middle;
+            //float: ;
+        }
+    }
+    .selected-card {
+        background-color: @lightPrimaryColor;
+    }
+
+}
+
+.sd-card-quick-add{
+    .card-container{
+        flex-wrap: wrap;
+        .magic-card{
+            flex: 1 1 25%;
+            // margin: 8px;
+            border: solid @primaryColor 1px;
+        }
+        .selected-card{
+            background-color: @lightPrimaryColor;
+        }
+    }
+
+}
+
+.ReactModal__Overlay {
+    z-index: 99 !important
+}
+
+.outline-section {
+    border: solid @accentColor 1px;
+    padding: 8px;
+    margin: 8px;
+    background-color: @textPrimaryColor;
+}
+
+#options {
+    border: solid @darkPrimaryColor 1px;
+}
+
+
+.app {
+    display: grid;
+
+    
+    //grid-template-columns: '[start] auto';
+    grid-template-columns: 30% auto 30%;
+    //grid-template-rows: auto auto auto auto;
+    grid-template-rows: @app-bar-height auto;
+
+    //what are our diff states?
+
+    //app
+
+    //overlay:
+    //nav
+    //header
+    //body
+    //overlay-screen
+
+
+
+
+    .app-header{
+        grid-column-start: 1;
+        grid-column-end: 4;
+    }
+
+    //side sheet
+    
+    .contents-full{
+        grid-column-start: 1;
+        grid-column-end: 4;
+    }
+    .contents-short{
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+
+    //app bar needs to always span 2 rows
+
+
+    // display: flex;
+    // flex-flow: column;
+
+    // width: 100%;
+    // height: 100%;
+    background-color: #E1E2E1;
+
+    .app-header {
+        // height: @app-bar-height;
+        flex: 0 0 auto;
+        // padding-left: 16px;
+        // background-color: @darkPrimaryColor;
+        // box-shadow: 0 2px 6px rgba(0,0,0,.4);
+        z-index: 5;
+        .header-section{
+            display: inline-block;
+        }
+        .app-icon-title {
+            padding-left: 16px;
+            display: inline-block;
+            color: @textPrimaryColor;
+        }
+        .app-icon-description {
+            padding-left: 16px;
+            display: inline-block;
+            color: @lightPrimaryColor;
+        }
+    }
+    
+
+    .app-contents{
+        flex: 1 1 auto;
+    }
+
+    .app-nav-overlay { 
+        position: absolute;
+        left:0;
+        top:0;
+        height: 100%;
+        width: 100%;
+        z-index: 100;
+        
+        display: grid;
+        grid-template-columns: 30% 70%;
+
+
+        .cc-app-nav{
+            flex: 0 0 auto;
+            // margin: 0 16px 0 16px;
+            // padding: 16px;
+            background-color: @textPrimaryColor;
+            border-radius: 0 0 25px 25px;
+            
+            // .app-nav-header{
+            //     height: @app-bar-height;
+            // }
+    
+            .cc-app-nav-item {
+                cursor: pointer;
+                label{
+                    color: @primaryTextColor;
+                    font-weight: 600;
+                }
+            }
+            
+            .compact-card {
+                width: 75px;
+                height: 75px;
+                border-radius: 25px;
+                margin: 5px;
+                padding: 5px;
+                box-shadow: 0 3px 6px rgba(87, 68, 68, 0.16), 0 3px 6px rgba(0,0,0,0.23);
+                .deck-mana-types{
+                    display: inline-grid;
+                    grid-template-columns: 25px 25px 25px;
+                    vertical-align: middle;
+                }
+            }
+            .selected-card {
+                background-color: @lightPrimaryColor;
+            }
+    
+    
+        }
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.33);
+        }
+
+    }
+
+
+
+}
+
