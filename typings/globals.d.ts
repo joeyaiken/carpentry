@@ -2,7 +2,19 @@
 
 declare interface State {
     actions: AppState
-    ui: UIState;
+    
+    ui: IUIState;
+
+    //deck editor
+    deckEditor: IDeckEditorState;
+    
+    //api
+
+    //rare binder
+    
+    //
+
+
 }
 
 declare interface AppState {
@@ -28,7 +40,7 @@ declare interface AppState {
     selectedDeckId: number;
 
     //ui == unused
-    ui: UIProps;
+    // ui: UIProps;
     searchFilter: SearchFilterProps;
     
     cardIndex: ICardIndex;
@@ -48,6 +60,9 @@ declare interface UIState {
     isNavOpen: boolean;
     isSideSheetOpen: boolean;
     visibleSideSheet: string;
+    //selected deck ID
+
+
 
     //make interface "deck"?
     deckView: string;
@@ -66,6 +81,30 @@ declare interface UIState {
 
 }
 
+
+declare interface IUIState {
+    isNavOpen: boolean;
+    isSideSheetOpen: boolean;
+    visibleSideSheet: string;
+    selectedDeckId: string;
+}
+
+declare interface IDeckEditorState {
+    deckView: string;
+    deckGroup: string;
+    deckSort: string;
+    deckFilter: string;
+
+    //section visibilities
+}
+
+
+//API state?
+
+
+
+
+
 declare interface ICardIndex {
     [id: string]: IMagicCard;
 }
@@ -78,9 +117,9 @@ declare interface SearchFilterProps {
     selectedCardId?: string;
 }
 
-declare interface UIProps {
-    isFindModalVisible: boolean;
-}
+// declare interface UIProps {
+//     isFindModalVisible: boolean;
+// }
 
 
 

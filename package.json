@@ -10,6 +10,7 @@
     "@types/react-modal": "^3.6.0",
     "@types/react-redux": "^6.0.11",
     "@types/redux": "^3.6.0",
+    "diskdb": "^0.1.17",
     "material-icons": "^0.3.0",
     "mtgsdk-ts": "^1.1.2",
     "react": "^16.7.0",

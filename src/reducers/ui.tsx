@@ -1,14 +1,15 @@
 // import { SELECT_DECK, ADD_DECK, LOG_STATE, SELECTED_DECK_CHANGE } from '../actions'
-import Redux from 'redux'
+import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
+import { loadDefaultUIState } from '../data/lumberyard'
+
 import { 
-    APP_NAV_CLICK,
-    CARD_BINDER_SHEET_TOGGLE,
-    CARD_BINDER_VIEW_CHANGE,
-    CARD_BINDER_GROUP_CHANGE,
-    CARD_BINDER_SORT_CHANGE
+    APP_SHEET_TOGGLE, APP_NAV_CLICK,
+    // CARD_BINDER_VIEW_CHANGE,
+    // CARD_BINDER_GROUP_CHANGE,
+    // CARD_BINDER_SORT_CHANGE
 } from '../actions'
 
 
@@ -26,14 +27,14 @@ import {
 
 
 //export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
-export const ui = (state: UIState, action: ReduxAction): any => {
+export const ui = (state: IUIState, action: ReduxAction): any => {
     switch(action.type){
         case APP_NAV_CLICK:
             return {
                 ...state,
                 isNavOpen: !state.isNavOpen
             }
-        case CARD_BINDER_SHEET_TOGGLE: 
+        case APP_SHEET_TOGGLE: 
             ///isSearchOpen: boolean;
             // isRareBinderOpen: boolean;
             // isDetailOpen: boolean;
@@ -52,44 +53,31 @@ export const ui = (state: UIState, action: ReduxAction): any => {
                 // isDetailOpen: false,
                 // [action.payload]: true
             }
-        case CARD_BINDER_VIEW_CHANGE:
-            return {
-                ...state,
-                deckView: action.payload
-            }
-        case CARD_BINDER_GROUP_CHANGE:
-            return {
-                ...state,
-                deckGroup: action.payload
-            }
-        case CARD_BINDER_SORT_CHANGE:
-            return {
-                ...state,
-                deckSort: action.payload
-            }
-        // case OPEN_FIND_MODAL:
+
+        // case CARD_BINDER_VIEW_CHANGE:
         //     return {
-        //         isFindModalVisible: true
-        //     } as uiActionsProps;
-        // case CLOSE_FIND_MODAL:
+        //         ...state,
+        //         deckView: action.payload
+        //     }
+
+        // case CARD_BINDER_GROUP_CHANGE:
         //     return {
-        //         isFindModalVisible: false
-        //     } as uiActionsProps;
+        //         ...state,
+        //         deckGroup: action.payload
+        //     }
+
+        // case CARD_BINDER_SORT_CHANGE:
+        //     return {
+        //         ...state,
+        //         deckSort: action.payload
+        //     }
+
         default:
             console.log('ui state default reducer');
             console.log(state);
+            
             if(!state){
-                state = {
-                    // isFindModalVisible: true
-                    isNavOpen: false,
-                    isSideSheetOpen: false,
-                    visibleSideSheet: '',
-
-                    deckView: 'card',
-                    deckGroup: 'none',
-                    deckSort: 'name',
-                    deckFilter: ''
-                }// a
+                state = loadDefaultUIState();
             }
             return state;
             // return {

@@ -20,7 +20,7 @@ import {
     deckChanged,
     saveDeck,
     onSectionToggle,
-    cardBinderSheetToggle,
+    appSheetToggle,
     // selectDeck,
     // deckChanged
     searchApplied,
@@ -56,6 +56,7 @@ class App extends React.Component<AppProps>{
         this.handleOverlayClick = this.handleOverlayClick.bind(this);
 
         this.handleSheetToggle = this.handleSheetToggle.bind(this);
+        this.handleSaveStateClick = this.handleSaveStateClick.bind(this);
     }
 
     handleNavClick(){
@@ -71,11 +72,15 @@ class App extends React.Component<AppProps>{
     }
 
     handleSheetToggle(section: string){
-        this.props.dispatch(cardBinderSheetToggle(section))
+        this.props.dispatch(appSheetToggle(section))
     }
 
     handleOverlayClick() {
         this.props.dispatch(appNavClick())
+    }
+
+    handleSaveStateClick() {
+
     }
 
     // handleDeckSelected(id: number) {
@@ -125,6 +130,7 @@ class App extends React.Component<AppProps>{
                         <AppIcon />
                     </div>
                     <div className="header-section pull-right">
+                        <MaterialButton value="save" icon="save" onClick={this.handleSaveStateClick} />
                         <MaterialButton value="detail" icon="list" onClick={this.handleSheetToggle} />
                         <MaterialButton value="search" icon="search" onClick={this.handleSheetToggle} />
                         <MaterialButton value="rare" icon="grade" onClick={this.handleSheetToggle} />

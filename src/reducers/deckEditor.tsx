@@ -24,7 +24,7 @@ import {
 
 
 //export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
-export const data = (state: IDeckEditorState, action: ReduxAction): any => {
+export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any => {
     switch(action.type){
         case CARD_BINDER_VIEW_CHANGE:
             return {

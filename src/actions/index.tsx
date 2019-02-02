@@ -13,6 +13,7 @@ import { unmountComponentAtNode } from 'react-dom';
 export const APP_NAV_CLICK = 'APP_NAV_CLICK';
 export const APP_NAV_DECK_SELECT = 'APP_NAV_DECK_SELECT'
 export const APP_NAV_DECK_ADD = 'APP_NAV_DECK_ADD'
+export const APP_SHEET_TOGGLE = 'APP_SHEET_TOGGLE'
 
 
 export const ADD_DECK = 'ADD_DECK'
@@ -50,8 +51,8 @@ export const CARD_BINDER_FILTER_CHANGE = 'CARD_BINDER_FILTER_CHANGE'
 export const CARD_BINDER_SELECTION_CHANGE = 'CARD_BINDER_SELECTION_CHANGE'
 export const CARD_BINDER_CARD_ADD = 'CARD_BINDER_CARD_ADD'
 export const CARD_BINDER_CARD_REMOVE = 'CARD_BINDER_CARD_REMOVE'
-export const CARD_BINDER_SECTION_TOGGLE = 'CARD_BINDER_SECTION_TOGGLE' // selection toggle ??
-export const CARD_BINDER_SHEET_TOGGLE = 'CARD_BINDER_SHEET_TOGGLE'
+export const DECK_EDITOR_SECTION_TOGGLE = 'DECK_EDITOR_SECTION_TOGGLE' // selection toggle ??
+
 
 
 export const ON_SECTION_TOGGLE = 'ON_SECTION_TOGGLE'
@@ -182,8 +183,8 @@ export const cardBinderCardRemove = (): ReduxAction => ({
     payload: undefined
 })
 
-export const cardbinderSectionToggle = (): ReduxAction => ({
-    type: CARD_BINDER_SECTION_TOGGLE,
+export const deckEditorSectionToggle = (): ReduxAction => ({
+    type: DECK_EDITOR_SECTION_TOGGLE,
     payload: undefined
 })
 
@@ -195,8 +196,8 @@ export const onSectionToggle = (sectionIndex: number): ReduxAction => ({
     payload: sectionIndex
 })
 
-export const cardBinderSheetToggle = (section: string): ReduxAction => ({
-    type: CARD_BINDER_SHEET_TOGGLE,
+export const appSheetToggle = (section: string): ReduxAction => ({
+    type: APP_SHEET_TOGGLE,
     payload: section
 })
 //CARD_BINDER_SHEET_TOGGLE
@@ -354,52 +355,3 @@ export const receiveCardDetail = (card: Card | undefined): ReduxAction => ({
     payload: card
 });
 
-// export const searchForCards = (filter: CardFilter): any => {
-//     console.log('search for cards called');
-//     //state = getState();
-//     return (dispatch: any, getState: any) => {
-//         let state: AppState = getState();
-//         if(!state.searchFilter.isFetching){
-//             return dispatch(fetchCards(filter));
-//         }
-//     }
-// }
-
-
-//MTG api calls
-
-
-
-// //This is the function that will be called by the UI
-// function tryFetchCards(filter: CardFilter){
-//     return (dispatch: any, getState: any) => {
-        
-//         // return dispatch()
-//     }
-
-
-
-//     // if(true){
-//     //     return dispatchEvent(fetchCards(filter));
-//     // }
-//     //if not already fetching cards...
-
-// }
-
-
-    // let filter: CardFilter = {
-    //     name: "Nicol"
-    // }
-    // console.log('searching for cards');
-    // console.log(React);
-    // console.log(Cards);
-
-    // Cards.where(filter).then(results => {
-    //         console.log('grand result dump');
-    //         console.log(results);
-    //         for (const card of results) console.log(card.name);
-    //     });
-
-    
-    // return Magic.Cards.
-// }

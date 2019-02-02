@@ -1,5 +1,4 @@
 import React from 'react';
-import FindCard from '../containers/FindCard'
 
 //Card List displays a collection of cards (in either list or card format)
 //Doesn't need a title section

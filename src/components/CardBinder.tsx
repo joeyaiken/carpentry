@@ -275,7 +275,7 @@ function mapStateToProps(state: State): PropsFromState {
     let groupedCards: groupedCardCollection = {};
     let cardGroups: binderCardGroup[] = [];
     //group visible cards
-    switch(state.ui.deckGroup){// spellType | rarity | none
+    switch(state.deckEditor.deckGroup){// spellType | rarity | none
         case 'spellType':
             visibleCards.forEach((card: IMagicCard) => {
                 const cardType: string = card.data.types[0];
@@ -321,9 +321,9 @@ function mapStateToProps(state: State): PropsFromState {
         cardCollections: groupedCards,
         cardGroups: cardGroups,
         landCounts: activeDeck.basicLands,
-        display: state.ui.deckView,
-        groupBy: state.ui.deckGroup,
-        sortBy: state.ui.deckSort
+        display: state.deckEditor.deckView,
+        groupBy: state.deckEditor.deckGroup,
+        sortBy: state.deckEditor.deckSort
         // searchValue: searchFilterName,
         // searchResults: searchResults,
         // selectedSearchResult: selectedSearchResult

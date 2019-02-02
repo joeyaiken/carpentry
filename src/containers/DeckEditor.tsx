@@ -5,7 +5,7 @@ import {
     deckChanged,
     saveDeck,
     onSectionToggle,
-    cardBinderSheetToggle,
+    appSheetToggle,
     // selectDeck,
     // deckChanged
     searchApplied,
@@ -226,7 +226,6 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         const groupNames = Object.keys(this.props.cardCollections);
 
 
-
         return(
             <div className="sd-deck-editor card">
                 { 
@@ -297,7 +296,7 @@ function mapStateToProps(state: State): PropsFromState {
     // }
 
     // console.log(state.actions.sectionVisibilities)
-
+    //test
     const selectedDeckId = state.actions.selectedDeckId;
     const activeDeck = state.actions.deckList[selectedDeckId];
 
@@ -344,7 +343,7 @@ function mapStateToProps(state: State): PropsFromState {
     let groupedCards: groupedCardCollection = {};
     let cardGroups: binderCardGroup[] = [];
     //group visible cards
-    switch(state.ui.deckGroup){// spellType | rarity | none
+    switch(state.deckEditor.deckGroup){// spellType | rarity | none
         case 'spellType':
             visibleCards.forEach((card: IMagicCard) => {
                 const cardType: string = card.data.types[0];
@@ -382,9 +381,9 @@ function mapStateToProps(state: State): PropsFromState {
         isDetailOpen: state.actions.isDetailOpen,
         isRareBinderOpen: state.actions.isRareBinderOpen,
         isSearchOpen: state.actions.isSearchOpen,
-        display: state.ui.deckView,
-        groupBy: state.ui.deckGroup,
-        sortBy: state.ui.deckSort,
+        display: state.deckEditor.deckView,
+        groupBy: state.deckEditor.deckGroup,
+        sortBy: state.deckEditor.deckSort,
         cardCollections: groupedCards,
         // cardGroups: cardGroups,
         landCounts: activeDeck.basicLands,

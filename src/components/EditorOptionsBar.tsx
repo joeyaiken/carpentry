@@ -1,5 +1,5 @@
 import React from 'react';
-import FindCard from '../containers/FindCard';
+// import FindCard from '../containers/FindCard';
 
 export interface EditorOptionsBarProps {
     handleAddNewClick: () => void;
@@ -18,7 +18,7 @@ export function EditorOptionsBar(props: EditorOptionsBarProps ): JSX.Element {
         <div id="options" className="padded-section">
             <button onClick={ props.handleAddNewClick }>Add New</button>
             <button onClick={ props.handleLogClick }>Log</button>
-            <FindCard />
+            {/* <FindCard /> */}
         </div>
     );
 }
