@@ -32,7 +32,8 @@ import {
     cardBinderGroupChange,
     cardBinderSortChange,
     // cardDetailRequested,
-    fetchCardsIfNeeded
+    fetchCardsIfNeeded,
+    appNavSave
 } from '../actions'
 
 
@@ -56,6 +57,7 @@ class App extends React.Component<AppProps>{
         this.handleOverlayClick = this.handleOverlayClick.bind(this);
 
         this.handleSheetToggle = this.handleSheetToggle.bind(this);
+        this.handleSaveClick = this.handleSaveClick.bind(this);
     }
 
     handleNavClick(){
@@ -78,6 +80,9 @@ class App extends React.Component<AppProps>{
         this.props.dispatch(appNavClick())
     }
 
+    handleSaveClick(): void {
+        this.props.dispatch(appNavSave());
+    }
     // handleDeckSelected(id: number) {
     //     this.props.dispatch(selectDeck(id))
     // }
@@ -85,7 +90,7 @@ class App extends React.Component<AppProps>{
     render() {
         // flex-container-vertical
         //static-section
-        const description: string = "a MTG deck management tooklit";
+        // const description: string = "a MTG deck management tooklit";
 
         // const navContainer: JSX.Element = <div>NAVIGATION</div>;
 
@@ -125,6 +130,7 @@ class App extends React.Component<AppProps>{
                         <AppIcon />
                     </div>
                     <div className="header-section pull-right">
+                        <MaterialButton value="save" icon="save" onClick={this.handleSaveClick} />
                         <MaterialButton value="detail" icon="list" onClick={this.handleSheetToggle} />
                         <MaterialButton value="search" icon="search" onClick={this.handleSheetToggle} />
                         <MaterialButton value="rare" icon="grade" onClick={this.handleSheetToggle} />

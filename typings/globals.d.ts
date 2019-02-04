@@ -44,6 +44,18 @@ declare interface AppState {
     //requestedCards6
 }
 
+declare interface IUIState {
+
+}
+
+declare interface IApiState {
+
+}
+
+declare interface IDeckEditorState {
+    
+}
+
 declare interface UIState {
     isNavOpen: boolean;
     isSideSheetOpen: boolean;

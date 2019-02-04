@@ -8,9 +8,11 @@ import {
     CARD_BINDER_SHEET_TOGGLE,
     CARD_BINDER_VIEW_CHANGE,
     CARD_BINDER_GROUP_CHANGE,
-    CARD_BINDER_SORT_CHANGE
+    CARD_BINDER_SORT_CHANGE,
+    SAVE_APP_STATE
 } from '../actions'
 
+import { trySaveState } from '../data/lumberyard'
 
 
 // interface UI {
@@ -33,6 +35,19 @@ export const ui = (state: UIState, action: ReduxAction): any => {
                 ...state,
                 isNavOpen: !state.isNavOpen
             }
+
+        // case SAVE_APP_STATE:
+        //     // console.log('UI reducer app_nav_save');
+        //     // // trySaveState();
+        //     // let save = (getState: any): void => {
+        //     //     saveAppState(getState());
+        //     // };
+            
+
+
+        //     return {
+        //         ...state
+        //     }
         case CARD_BINDER_SHEET_TOGGLE: 
             ///isSearchOpen: boolean;
             // isRareBinderOpen: boolean;
@@ -76,8 +91,8 @@ export const ui = (state: UIState, action: ReduxAction): any => {
         //         isFindModalVisible: false
         //     } as uiActionsProps;
         default:
-            console.log('ui state default reducer');
-            console.log(state);
+            // console.log('ui state default reducer');
+            // console.log(state);
             if(!state){
                 state = {
                     // isFindModalVisible: true

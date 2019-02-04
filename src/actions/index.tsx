@@ -6,6 +6,8 @@ import Redux, { Store, Dispatch } from 'redux'
 import { stat } from 'fs';
 import { unmountComponentAtNode } from 'react-dom';
 
+import { lumberyardSaveState } from '../data/lumberyard'
+ 
 
 //Actions
 
@@ -13,6 +15,8 @@ import { unmountComponentAtNode } from 'react-dom';
 export const APP_NAV_CLICK = 'APP_NAV_CLICK';
 export const APP_NAV_DECK_SELECT = 'APP_NAV_DECK_SELECT'
 export const APP_NAV_DECK_ADD = 'APP_NAV_DECK_ADD'
+
+export const SAVE_APP_STATE = 'SAVE_APP_STATE'
 
 
 export const ADD_DECK = 'ADD_DECK'
@@ -29,7 +33,7 @@ export const FIND_MODAL_FILTER_APPLY = 'FIND_MODAL_FILTER_APPLY';
 
 
 export const SEARCH_VALUE_CHANGE = 'SEARCH_VALUE_CHANGE'
-export const SEARCH_APPLIED = 'SEARCH_APPLIED'
+// export const SEARCH_APPLIED = 'SEARCH_APPLIED'
 export const SEARCH_CARD_SELECTED = 'SEARCH_CARD_SELECTED'
 
 export const ADD_CARD_TO_DECK = 'ADD_CARD_TO_DECK';
@@ -71,7 +75,10 @@ export const ON_SECTION_TOGGLE = 'ON_SECTION_TOGGLE'
 export const appNavClick = (): ReduxAction => ({
     type: APP_NAV_CLICK
 })
-
+//APP_NAV_SAVE
+// export const appNavSave = (): ReduxAction => ({
+//     type: APP_NAV_SAVE
+// })
 
 //deck: CardDeck
 export const addDeck = (): ReduxAction => ({
@@ -305,12 +312,34 @@ function fetchCardDetail(cardId: string, dispatch: Dispatch){
     });
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+//SAVE_APP_STATE
+export const appNavSave = (): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return trySaveState(dispatch, getState());
+    }
+
+}
+
+function trySaveState(dispatch: Dispatch, state: State) {
+    lumberyardSaveState(state);
+    dispatch(saveAppState())
+}
+
+export const saveAppState = (): ReduxAction => ({
+    type: SAVE_APP_STATE
+})
+
+////////////////////////////////////////////////////////////////////////////////
+
 //This is what's called from the QuickSearchAddWhatever
 export const searchApplied = (filter: string): any => {
     return (dispatch: Dispatch, getState: any) => {
         return tryFetchCards(dispatch, getState());
     }
 };
+
 function tryFetchCards(dispatch: Dispatch, state: State) {
     //if(!state.actions.searchFilter.isFetching){
     if(!state.actions.searchIsFetching){
@@ -366,40 +395,4 @@ export const receiveCardDetail = (card: Card | undefined): ReduxAction => ({
 // }
 
 
-//MTG api calls
 
-
-
-// //This is the function that will be called by the UI
-// function tryFetchCards(filter: CardFilter){
-//     return (dispatch: any, getState: any) => {
-        
-//         // return dispatch()
-//     }
-
-
-
-//     // if(true){
-//     //     return dispatchEvent(fetchCards(filter));
-//     // }
-//     //if not already fetching cards...
-
-// }
-
-
-    // let filter: CardFilter = {
-    //     name: "Nicol"
-    // }
-    // console.log('searching for cards');
-    // console.log(React);
-    // console.log(Cards);
-
-    // Cards.where(filter).then(results => {
-    //         console.log('grand result dump');
-    //         console.log(results);
-    //         for (const card of results) console.log(card.name);
-    //     });
-
-    
-    // return Magic.Cards.
-// }

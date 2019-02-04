@@ -149,7 +149,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     handleSectionToggle(sectionIndex: number){
-        console.log('sectionToggle: ' + sectionIndex)
+        // console.log('sectionToggle: ' + sectionIndex)
         this.props.dispatch(onSectionToggle(sectionIndex));
     }
 
@@ -177,11 +177,11 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     handleCardClick(cardId: string){
-
+        
     }
 
     render(){
-        console.log('rendering deckEditor control')
+        // console.log('rendering deckEditor control')
         const { deckList, selectedDeckId } = this.props;
         const selectedDeck = deckList.find((deck) => {
             return deck.id == selectedDeckId
@@ -301,8 +301,8 @@ function mapStateToProps(state: State): PropsFromState {
     const selectedDeckId = state.actions.selectedDeckId;
     const activeDeck = state.actions.deckList[selectedDeckId];
 
-    console.log('card binder state')
-    console.log(state);
+    // console.log('card binder state')
+    // console.log(state);
 
     //Get collection of visible magic cards
     let visibleCards: IMagicCard[] = activeDeck.cards.map((cardId) =>{
@@ -319,11 +319,12 @@ function mapStateToProps(state: State): PropsFromState {
     });
     
     // console.log()
-
+    // console.log('mapping cards');
     //once we have the set of visible cards, lets log those card names (in case this garbage breaks again)
-    let visibleCardNames: string[] = visibleCards.map((card) => {
-        return card.data.name
-    })
+    // let visibleCardNames: string[] = visibleCards.map((card) => {
+    //     console.log(card);
+    //     return card.data.name
+    // })
 
     // console.log('visibleCardNames')
     // console.log(visibleCardNames);
