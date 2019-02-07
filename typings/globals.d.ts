@@ -12,30 +12,6 @@ declare interface State {
     
 }
 
-// declare interface AppState {
-
-//     // activeDeck?: CardDeck;
-//     // activeDeckVisibleCards: IMagicCard[];
-//     //need sections, not visible cards
-
-//     // deckList: CardDeck[]
-//     // selectedDeckId: number;
-
-//     //ui == unused
-//     // ui: UIProps;
-//     // searchFilter: SearchFilterProps;
-    
-//     // cardIndex: ICardIndex;
-
-//     // sectionVisibilities: boolean[];
-    
-//     // searchIsFetching: boolean;
-//     // requestedCards: string[];
-//     //Things needed by our web api
-//     //isFetching
-//     //requestedCards6
-// }
-
 declare interface IUIState {
     isNavOpen: boolean;
     isSideSheetOpen: boolean;
@@ -50,6 +26,9 @@ declare interface IDeckEditorState {
     deckGroup: string;
     deckSort: string;
     deckFilter: string;
+
+    
+    selectedCard: string | null;
 
     //selected deck ID ? Or does that belong in UI ?
     //IDK how one will reach the other so maybe both for now? Ugh

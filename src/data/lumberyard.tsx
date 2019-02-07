@@ -6,14 +6,6 @@ import { Card } from 'mtgsdk-ts'
 
 const CACHED_UI_STATE_IDENTIFIER = 'CARPENTRY_CACHED_UI_STATE_IDENTIFIER';
 
-// import Datastore from 'nedb'
-// import path from 'path'
-//var fs = require('fs');
-
-// import fs from 'fs'
-//export function 
-
-// import db from 'diskdb'
 
 // import React from 'react';
 
@@ -46,6 +38,7 @@ export function loadInitialDeckEditorState(): IDeckEditorState {
         deckFilter: '',
         activeDeckVisibleCards: [],
         sectionVisibilities: [true,true,true,true,true,true],
+        selectedCard: null
     }
 
     return initialDeckEditorState;

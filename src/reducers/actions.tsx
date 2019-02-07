@@ -34,7 +34,7 @@ import {
 
     // CARD_BINDER_LAND_COUNT_CHANGE,
 
-    ON_SECTION_TOGGLE
+    // ON_SECTION_TOGGLE
 } from '../actions'
 
 

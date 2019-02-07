@@ -7,7 +7,8 @@ import {
     CARD_BINDER_VIEW_CHANGE,
     CARD_BINDER_GROUP_CHANGE,
     CARD_BINDER_SORT_CHANGE,
-    CARD_BINDER_LAND_COUNT_CHANGE
+    CARD_BINDER_LAND_COUNT_CHANGE,
+    DECK_EDITOR_CARD_SELECTED
 } from '../actions'
 
 import { loadInitialDeckEditorState } from '../data/lumberyard'
@@ -26,7 +27,13 @@ import { loadInitialDeckEditorState } from '../data/lumberyard'
 
 //export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
 export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any => {
+    let newDeckEditorState: IDeckEditorState = {
+        ...state
+    }
+
     switch(action.type){
+        
+
         case CARD_BINDER_VIEW_CHANGE:
             return {
                 ...state,
@@ -44,9 +51,11 @@ export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any =>
             }
 
         case CARD_BINDER_LAND_COUNT_CHANGE:            
-            let newBinderState: IDeckEditorState = {
-                ...state
-            }
+            return newDeckEditorState;
+
+        case DECK_EDITOR_CARD_SELECTED:
+            newDeckEditorState.selectedCard = action.payload;
+            return newDeckEditorState;
             // let activeDeck = newBinderState.deckList[state.selectedDeckId];
             // let manaType: string = action.payload.manaType;
             // activeDeck.basicLands = {
@@ -58,7 +67,7 @@ export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any =>
             // }
             
             // console.log(activeDeck);
-            return newBinderState;
+            // return newBinderState;
         default:
             if(!state){
                 state = loadInitialDeckEditorState();

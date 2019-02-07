@@ -59,7 +59,7 @@ export const DECK_EDITOR_SECTION_TOGGLE = 'DECK_EDITOR_SECTION_TOGGLE' // select
 
 
 
-export const ON_SECTION_TOGGLE = 'ON_SECTION_TOGGLE'
+// export const ON_SECTION_TOGGLE = 'ON_SECTION_TOGGLE'
 
 //Action Creators
 // export function addDeck(deck: CardDeck): ReduxAction {
@@ -195,7 +195,7 @@ export const cardBinderCardRemove = (): ReduxAction => ({
     payload: undefined
 })
 
-export const deckEditorSectionToggle = (): ReduxAction => ({
+export const deckEditorSectionToggle = (sectionIndex: string): ReduxAction => ({
     type: DECK_EDITOR_SECTION_TOGGLE,
     payload: undefined
 })
@@ -203,10 +203,10 @@ export const deckEditorSectionToggle = (): ReduxAction => ({
 //END: Card binder action action creators
 
 
-export const onSectionToggle = (sectionIndex: number): ReduxAction => ({
-    type: ON_SECTION_TOGGLE,
-    payload: sectionIndex
-})
+// export const onSectionToggle = (sectionIndex: string): ReduxAction => ({
+//     type: ON_SECTION_TOGGLE,
+//     payload: sectionIndex
+// })
 
 export const appSheetToggle = (section: string): ReduxAction => ({
     type: APP_SHEET_TOGGLE,

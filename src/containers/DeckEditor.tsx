@@ -4,7 +4,7 @@ import {
     selectDeck,
     // deckChanged,
     saveDeck,
-    onSectionToggle,
+    deckEditorSectionToggle,
     appSheetToggle,
     // selectDeck,
     // deckChanged
@@ -17,6 +17,9 @@ import {
 
 
     deckEditorCardSelected
+
+    //deckEditorHeaderToggle
+    //deckEditorSectionToggle
 } from '../actions'
 
 
@@ -53,6 +56,9 @@ interface PropsFromState {
     deckList: CardDeck[];
     selectedDeckId: number;
     sectionVisibilities: boolean[];
+    
+    selectedCard: string | null;
+    
     // dispatch?: any;
 
     display: string | null; // card | list
@@ -89,6 +95,9 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handleGroupChange = this.handleGroupChange.bind(this);
         this.handleSortChange = this.handleSortChange.bind(this);
         this.handleLandCountChange = this.handleLandCountChange.bind(this);
+
+        this.handleHeaderToggle = this.handleHeaderToggle.bind(this);
+        this.handleSectionToggle = this.handleSectionToggle.bind(this);
     }
 
     // componentDidMount() {
@@ -136,9 +145,13 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.props.dispatch(saveDeck())
     }
 
-    handleSectionToggle(sectionIndex: number){
+    handleHeaderToggle(){
+
+    }
+
+    handleSectionToggle(sectionIndex: string){
         console.log('sectionToggle: ' + sectionIndex)
-        this.props.dispatch(onSectionToggle(sectionIndex));
+        this.props.dispatch(deckEditorSectionToggle(sectionIndex));
     }
 
     // handleSheetToggle(section: string){
@@ -167,6 +180,10 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     handleCardClick(cardName: string){
         this.props.dispatch(deckEditorCardSelected(cardName))
     }
+
+    
+
+  
 
     render(){
         console.log('rendering deckEditor control')
@@ -261,15 +278,16 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                                     <label>(count)</label>
                                     {/* <label className="pull-right">(icon)</label> */}
                                     <div className="pull-right">
-                                        <MaterialButton value="manaCost" isSelected={false} icon="expand_less" onClick={() => { } } />
+                                        <MaterialButton value="manaCost" isSelected={false} icon="expand_less" onClick={() => { this.handleSectionToggle(name) } } />
                                     </div>
                                 </div>
                                 <div className="card-list">
                                     {
                                         collection.cards.map((card: IMagicCard, index: number) => {
-                                            const cardIsSelected = false; // (this.props.selectedSearchResult == card.id);
-
-                                            return (<MagicCard key={index} card={card} display={this.props.display} cardIsSelected={cardIsSelected} onClick={() => this.handleCardClick("")} />);
+                                            // const cardIsSelected = false; // (this.props.selectedSearchResult == card.id);
+                                            const cardIsSelected = this.props.selectedCard == card.data.name;
+                                            // console.log(card.data)
+                                            return (<MagicCard key={index} card={card} display={this.props.display} cardIsSelected={cardIsSelected} onClick={() => this.handleCardClick(card.data.name)} />);
                                         })
                                     }
                                 </div>
@@ -386,6 +404,7 @@ function mapStateToProps(state: State): PropsFromState {
         cardCollections: groupedCards,
         // cardGroups: cardGroups,
         landCounts: activeDeck.basicLands,
+        selectedCard: state.deckEditor.selectedCard
     }
     
     return result;
