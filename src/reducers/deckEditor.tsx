@@ -6,10 +6,11 @@ import { Stream } from 'stream';
 import { 
     CARD_BINDER_VIEW_CHANGE,
     CARD_BINDER_GROUP_CHANGE,
-    CARD_BINDER_SORT_CHANGE
+    CARD_BINDER_SORT_CHANGE,
+    CARD_BINDER_LAND_COUNT_CHANGE
 } from '../actions'
 
-
+import { loadInitialDeckEditorState } from '../data/lumberyard'
 
 // interface UI {
 //     isNavOpen: boolean;
@@ -41,14 +42,26 @@ export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any =>
                 ...state,
                 deckSort: action.payload
             }
+
+        case CARD_BINDER_LAND_COUNT_CHANGE:            
+            let newBinderState: IDeckEditorState = {
+                ...state
+            }
+            // let activeDeck = newBinderState.deckList[state.selectedDeckId];
+            // let manaType: string = action.payload.manaType;
+            // activeDeck.basicLands = {
+            //     ...activeDeck.basicLands,
+            //     [manaType]: action.payload.newValue
+            // }
+            // newBinderState.deckList[state.selectedDeckId].basicLands = {
+
+            // }
+            
+            // console.log(activeDeck);
+            return newBinderState;
         default:
             if(!state){
-                state = {
-                    deckView: 'card',
-                    deckGroup: 'none',
-                    deckSort: 'name',
-                    deckFilter: ''
-                }
+                state = loadInitialDeckEditorState();
             }
             return state;
     }

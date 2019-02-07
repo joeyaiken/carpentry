@@ -8,10 +8,10 @@ import {
     searchValueChange,
     searchCardSelected,
     addCardToDeck,
-    cardBinderLandCountChange,
-    cardBinderViewChange,
-    cardBinderGroupChange,
-    cardBinderSortChange,
+    // cardBinderLandCountChange,
+    // cardBinderViewChange,
+    // cardBinderGroupChange,
+    // cardBinderSortChange,
     // cardDetailRequested,
     fetchCardsIfNeeded
 
@@ -93,7 +93,7 @@ class CardBinder extends React.Component<CardBinderProps> {
     }
 
     handleLandCountChange(newValue: number, type: string){
-        this.props.dispatch(cardBinderLandCountChange(newValue, type))
+        // this.props.dispatch(cardBinderLandCountChange(newValue, type))
     }
 
     render(){
@@ -229,8 +229,8 @@ class CardBinder extends React.Component<CardBinderProps> {
 function mapStateToProps(state: State): PropsFromState {
 
     //get selected deck
-    const selectedDeckId = state.actions.selectedDeckId;
-    const activeDeck = state.actions.deckList[selectedDeckId];
+    const selectedDeckId = state.ui.selectedDeckId;
+    const activeDeck = state.data.deckList[selectedDeckId];
 
     // console.log('card binder state')
     // console.log(state);
@@ -238,13 +238,13 @@ function mapStateToProps(state: State): PropsFromState {
     //Get collection of visible magic cards
     let visibleCards: IMagicCard[] = activeDeck.cards.map((cardId) =>{
 
-        const indexData = state.actions.cardIndex[cardId];
+        const indexData = state.data.cardIndex[cardId];
         
         
 
         const card: IMagicCard = {
             cardId: cardId,
-            data: state.actions.cardIndex[cardId]
+            data: state.data.cardIndex[cardId]
         }
         return card;
     });
@@ -331,7 +331,7 @@ function mapStateToProps(state: State): PropsFromState {
     return result;
 }
 
-export default connect(mapStateToProps)(CardBinder);
+// export default connect(mapStateToProps)(CardBinder);
 
 
 

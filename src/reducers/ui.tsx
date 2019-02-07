@@ -3,13 +3,14 @@ import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
-import { loadDefaultUIState } from '../data/lumberyard'
+import { loadInitialUIState, cacheUIState } from '../data/lumberyard'
 
 import { 
-    APP_SHEET_TOGGLE, APP_NAV_CLICK,
-    // CARD_BINDER_VIEW_CHANGE,
-    // CARD_BINDER_GROUP_CHANGE,
-    // CARD_BINDER_SORT_CHANGE
+    APP_SHEET_TOGGLE, 
+    APP_NAV_CLICK,
+    // SELECTED_DECK_CHANGE,
+
+    SELECT_DECK,
 } from '../actions'
 
 
@@ -53,36 +54,39 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
                 // isDetailOpen: false,
                 // [action.payload]: true
             }
+        case SELECT_DECK:
+            let newState: IUIState = {
+                ...state,
+                selectedDeckId: action.payload,
+                isNavOpen: false
+            }
+            
+            cacheUIState(newState);
+            //also should cache the UI when the selected deck changes
 
-        // case CARD_BINDER_VIEW_CHANGE:
+            // return Object.assign({},state,{
+            //     selectedDeckId: action.payload
+            // })
+            return newState;
+        
+        // case SELECTED_DECK_CHANGE:
+        //     // console.log('deck changed');
+        //     // console.log(action)
+        //     //
+        //     // return state;
         //     return {
         //         ...state,
-        //         deckView: action.payload
-        //     }
-
-        // case CARD_BINDER_GROUP_CHANGE:
-        //     return {
-        //         ...state,
-        //         deckGroup: action.payload
-        //     }
-
-        // case CARD_BINDER_SORT_CHANGE:
-        //     return {
-        //         ...state,
-        //         deckSort: action.payload
-        //     }
+        //         // deckList: state.deckList.map((deck) => { 
+        //         //     return (deck.id == state.selectedDeckId) ? action.payload : deck
+        //         // })
+        //     };
 
         default:
-            console.log('ui state default reducer');
-            console.log(state);
-            
+            // console.log('ui state default reducer');
+            // console.log(state);
             if(!state){
-                state = loadDefaultUIState();
+                state = loadInitialUIState();
             }
             return state;
-            // return {
-            //     // isFindModalVisible: true
-            //     something: true
-            // }// as uiActionsProps;
     }
 }

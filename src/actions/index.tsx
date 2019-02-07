@@ -6,6 +6,7 @@ import Redux, { Store, Dispatch } from 'redux'
 import { stat } from 'fs';
 import { unmountComponentAtNode } from 'react-dom';
 
+// import { lumberyardSaveState } from '../data/lumberyard'
 
 //Actions
 
@@ -15,18 +16,19 @@ export const APP_NAV_DECK_SELECT = 'APP_NAV_DECK_SELECT'
 export const APP_NAV_DECK_ADD = 'APP_NAV_DECK_ADD'
 export const APP_SHEET_TOGGLE = 'APP_SHEET_TOGGLE'
 
+export const SAVE_APP_STATE = 'SAVE_APP_STATE'
 
 export const ADD_DECK = 'ADD_DECK'
 export const SELECT_DECK = 'SELECT_DECK'
 export const LOG_STATE = 'LOG_STATE'
-export const SELECTED_DECK_CHANGE = 'SELECTED_DECK_CHANGE'
+// export const SELECTED_DECK_CHANGE = 'SELECTED_DECK_CHANGE'
 export const SELECTED_DECK_SAVED = 'SELECTED_DECK_SAVED'
 
 
-export const FIND_MODAL_OPEN = 'FIND_MODAL_OPEN';
-export const FIND_MODAL_CLOSE = 'FIND_MODAL_CLOSE';
-export const FIND_MODAL_FILTER_CHANGE = 'FIND_MODAL_FILTER_CHANGE';
-export const FIND_MODAL_FILTER_APPLY = 'FIND_MODAL_FILTER_APPLY';
+// export const FIND_MODAL_OPEN = 'FIND_MODAL_OPEN';
+// export const FIND_MODAL_CLOSE = 'FIND_MODAL_CLOSE';
+// export const FIND_MODAL_FILTER_CHANGE = 'FIND_MODAL_FILTER_CHANGE';
+// export const FIND_MODAL_FILTER_APPLY = 'FIND_MODAL_FILTER_APPLY';
 
 
 export const SEARCH_VALUE_CHANGE = 'SEARCH_VALUE_CHANGE'
@@ -42,7 +44,9 @@ export const RECEIVE_CARD_SEARCH = 'RECEIVE_CARD_SEARCH';
 export const REQUEST_CARD_DETAIL = 'REQUEST_CARD_DETAIL'
 export const RECEIVE_CARD_DETAIL = 'RECEIVE_CARD_DETAIL'
 
-//card binder actions
+//deck editor actions
+export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED'
+
 export const CARD_BINDER_LAND_COUNT_CHANGE = 'CARD_BINDER_LAND_COUNT_CHANGE';
 export const CARD_BINDER_VIEW_CHANGE = 'CARD_BINDER_VIEW_CHANGE'
 export const CARD_BINDER_GROUP_CHANGE = 'CARD_BINDER_GROUP_CHANGE'
@@ -88,10 +92,10 @@ export const selectDeck = (id: number): ReduxAction => ({
     // }
 });
 
-export const deckChanged = (updatedDeck: CardDeck): ReduxAction => ({
-    type: SELECTED_DECK_CHANGE,
-    payload: updatedDeck
-});
+// export const deckChanged = (updatedDeck: CardDeck): ReduxAction => ({
+//     type: SELECTED_DECK_CHANGE,
+//     payload: updatedDeck
+// });
 
 export const saveDeck = (): ReduxAction => ({
     type: SELECTED_DECK_SAVED
@@ -101,22 +105,22 @@ export const logState = (): ReduxAction => ({
     type: LOG_STATE
 });
 
-export const openFindCardModal = (): ReduxAction => ({
-    type: FIND_MODAL_OPEN
-});
+// export const openFindCardModal = (): ReduxAction => ({
+//     type: FIND_MODAL_OPEN
+// });
 
-export const closeFindCardModal = (): ReduxAction => ({
-    type: FIND_MODAL_CLOSE
-});
+// export const closeFindCardModal = (): ReduxAction => ({
+//     type: FIND_MODAL_CLOSE
+// });
 
-export const findModalFilterChange = (updatedFilter: SearchFilterProps): ReduxAction => ({
-    type: FIND_MODAL_FILTER_CHANGE,
-    payload: updatedFilter
-});
+// export const findModalFilterChange = (updatedFilter: SearchFilterProps): ReduxAction => ({
+//     type: FIND_MODAL_FILTER_CHANGE,
+//     payload: updatedFilter
+// });
 
-export const findModalFilterApply = () => ({
-    type: FIND_MODAL_FILTER_APPLY
-});
+// export const findModalFilterApply = () => ({
+//     type: FIND_MODAL_FILTER_APPLY
+// });
 
 export const searchValueChange = (newValue: string): ReduxAction => ({
     type: SEARCH_VALUE_CHANGE,
@@ -139,8 +143,16 @@ export const addCardToRares = (cardId: string): ReduxAction => ({
 });
 
 
-//START: Card binder action action creators
-export const cardBinderLandCountChange = (newValue: number, manaType: string): ReduxAction => ({
+//START: Deck Editor action creators
+
+// export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED'
+//deckEditorCardSelected
+export const deckEditorCardSelected = (cardName: string): ReduxAction => ({
+    type: DECK_EDITOR_CARD_SELECTED,
+    payload: cardName
+})
+
+export const deckEditorLandCountChange = (newValue: number, manaType: string): ReduxAction => ({
     type: CARD_BINDER_LAND_COUNT_CHANGE,
     payload: {
         newValue: newValue,
@@ -148,17 +160,17 @@ export const cardBinderLandCountChange = (newValue: number, manaType: string): R
     }
 })
 
-export const cardBinderViewChange = (value: string): ReduxAction => ({
+export const deckEditorViewChange = (value: string): ReduxAction => ({
     type: CARD_BINDER_VIEW_CHANGE,
     payload: value
 })
 
-export const cardBinderGroupChange = (value: string): ReduxAction => ({
+export const deckEditorGroupChange = (value: string): ReduxAction => ({
     type: CARD_BINDER_GROUP_CHANGE,
     payload: value
 })
 
-export const cardBinderSortChange = (value: string): ReduxAction => ({
+export const deckEditorSortChange = (value: string): ReduxAction => ({
     type: CARD_BINDER_SORT_CHANGE,
     payload: value
 })
@@ -232,7 +244,7 @@ export const fetchCardsIfNeeded = (): any => {
 
 function shouldFetchCards(state: State): boolean {
     //return true if there are any requested cards
-    if(!state.actions.searchIsFetching && state.actions.requestedCards.length > 0){
+    if(!state.cardSearch.searchIsFetching && state.cardSearch.requestedCards.length > 0){
         return true;
     } else {
         return false
@@ -263,8 +275,8 @@ function tryFetchCardDetail(dispatch: Dispatch, state: State) {
     //     console.log('---card found and REQUEST PENDING ' + cardId);
     // }
 
-    const nextIdToFetch = state.actions.requestedCards[0];
-    if(!state.actions.searchIsFetching && nextIdToFetch){
+    const nextIdToFetch = state.cardSearch.requestedCards[0];
+    if(!state.cardSearch.searchIsFetching && nextIdToFetch){
         console.log('requestING card');
         fetchCardDetail(nextIdToFetch, dispatch);
     }
@@ -314,8 +326,8 @@ export const searchApplied = (filter: string): any => {
 };
 function tryFetchCards(dispatch: Dispatch, state: State) {
     //if(!state.actions.searchFilter.isFetching){
-    if(!state.actions.searchIsFetching){
-        fetchCards(dispatch, state.actions.searchFilter.name);
+    if(!state.cardSearch.searchIsFetching){
+        fetchCards(dispatch, state.cardSearch.searchFilter.name);
     }
 }
 
@@ -355,3 +367,22 @@ export const receiveCardDetail = (card: Card | undefined): ReduxAction => ({
     payload: card
 });
 
+////////////////////////////////////////////////////////////////////////////////
+//SAVE_APP_STATE
+export const appNavSave = (): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return trySaveState(dispatch, getState());
+    }
+
+}
+
+function trySaveState(dispatch: Dispatch, state: State) {
+    // lumberyardSaveState(state);
+    dispatch(saveAppState())
+}
+
+export const saveAppState = (): ReduxAction => ({
+    type: SAVE_APP_STATE
+})
+
+////////////////////////////////////////////////////////////////////////////////

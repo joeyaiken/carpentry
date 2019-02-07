@@ -1,11 +1,16 @@
 import { combineReducers } from 'redux';
-
+//core
+import { data } from './data'
 import { ui } from './ui'
+//components
 import { deckEditor } from './deckEditor'
-import { actions } from './actions'
+import { cardSearch } from './cardSearch'
 
 export default combineReducers({
-    actions,
+    //core
+    data,
     ui,
-    deckEditor
+    //components
+    deckEditor,
+    cardSearch
 });

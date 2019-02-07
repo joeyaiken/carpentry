@@ -2,33 +2,27 @@ import { connect, MapStateToProps, DispatchProp } from 'react-redux'
 import React, { Component, SyntheticEvent } from 'react'
 import {
     selectDeck,
-    deckChanged,
+    // deckChanged,
     saveDeck,
     onSectionToggle,
     appSheetToggle,
     // selectDeck,
     // deckChanged
-    searchApplied,
-    searchValueChange,
-    searchCardSelected,
-    addCardToDeck,
-    cardBinderLandCountChange,
-    cardBinderViewChange,
-    cardBinderGroupChange,
-    cardBinderSortChange,
+    deckEditorLandCountChange,
+    deckEditorViewChange,
+    deckEditorGroupChange,
+    deckEditorSortChange,
     // cardDetailRequested,
-    fetchCardsIfNeeded
+    fetchCardsIfNeeded,
+
+
+    deckEditorCardSelected
 } from '../actions'
 
 
-import EditorOptions from './EditorOptions';
-import DeckList from '../components/DeckList';
-import DeckDetail from '../components/DeckDetail';
-import DeckBuilder from '../components/DeckBuilder';
+// import DeckBuilder from '../components/DeckBuilder';
 import DeckQuickStats from '../components/DeckQuickStats';
-import CardBinder from '../components/CardBinder';
-import CardQuickAdd from './CardQuickAdd';
-import RareBinder from '../components/RareBinder';
+
 import LandCounter from '../components/LandCounter';
 import MagicCard from '../components/MagicCard';
 
@@ -61,12 +55,6 @@ interface PropsFromState {
     sectionVisibilities: boolean[];
     // dispatch?: any;
 
-
-    isSearchOpen: boolean;
-    isRareBinderOpen: boolean;
-    isDetailOpen: boolean;
-
-
     display: string | null; // card | list
 
     groupBy: string; // spellType | rarity | none
@@ -90,7 +78,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     constructor(props: DeckEditorProps) {
         super(props)
         this.handleDeckSelected = this.handleDeckSelected.bind(this);
-        this.handleDeckChanged = this.handleDeckChanged.bind(this);
+        // this.handleDeckChanged = this.handleDeckChanged.bind(this);
         this.handleDeckSaved = this.handleDeckSaved.bind(this);
         // this.handleSheetToggle = this.handleSheetToggle.bind(this);
 
@@ -132,16 +120,16 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.props.dispatch(selectDeck(id))
     }
 
-    handleDeckChanged(event: any, selectedDeck: CardDeck){
+    // handleDeckChanged(event: any, selectedDeck: CardDeck){
         
-        const updatedDeck: CardDeck = {
-            ...selectedDeck, [event.target.name]: event.target.value
-        }
-        // console.log(updatedDeck)
+    //     const updatedDeck: CardDeck = {
+    //         ...selectedDeck, [event.target.name]: event.target.value
+    //     }
+    //     // console.log(updatedDeck)
 
 
-        this.props.dispatch(deckChanged(updatedDeck))
-    }
+    //     this.props.dispatch(deckChanged(updatedDeck))
+    // }
 
     handleDeckSaved(){
         //localStorage.setItem('')
@@ -159,25 +147,25 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
     handleViewChange(view: string){
         // console.log('handling view change: '+view)
-        this.props.dispatch(cardBinderViewChange(view));
+        this.props.dispatch(deckEditorViewChange(view));
     }
 
     handleGroupChange(group: string){
         // console.log('handling group change: '+group)
-        this.props.dispatch(cardBinderGroupChange(group));
+        this.props.dispatch(deckEditorGroupChange(group));
     }
 
     handleSortChange(sort: string){
         // console.log('handling sort change: '+sort)
-        this.props.dispatch(cardBinderSortChange(sort));
+        this.props.dispatch(deckEditorSortChange(sort));
     }
 
     handleLandCountChange(newValue: number, type: string){
-        this.props.dispatch(cardBinderLandCountChange(newValue, type))
+        this.props.dispatch(deckEditorLandCountChange(newValue, type))
     }
 
-    handleCardClick(cardId: string){
-
+    handleCardClick(cardName: string){
+        this.props.dispatch(deckEditorCardSelected(cardName))
     }
 
     render(){
@@ -190,8 +178,18 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         // console.log(selectedDeck);
         // let test = this.props;
 
+        const selectedCardHeaderSection: JSX.Element = (
+            <div className="header-section">
+                <label>Selected Card:</label>
+                <label>-the name of the selected card-</label>
+                <MaterialButton value="add" icon="add_circle" onClick={this.handleSortChange} />
+                <MaterialButton value="remove" icon="remove_circle" onClick={this.handleSortChange} />
+                <MaterialButton value="clear" icon="cancel" onClick={this.handleSortChange} />
+            </div>
+        );
 
-        let deckViewOptions: JSX.Element = (
+
+        const deckViewOptions: JSX.Element = (
             <div className="card-header app-bar">
                     {/* <div className="header-section">
                         <label>Card Binder</label>
@@ -213,8 +211,12 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                         <MaterialButton value="rarity" isSelected={(this.props.sortBy == "rarity")} icon="grade" onClick={this.handleSortChange} />
                         <MaterialButton value="manaCost" isSelected={(this.props.sortBy == "manaCost")} icon="signal_cellular_alt" onClick={this.handleSortChange} />
                     </div>
+                    {
+                        true && selectedCardHeaderSection
+                    }
+
                     <div className="pull-right">
-                        <MaterialButton value="manaCost" isSelected={false} icon="expand_less" onClick={() => { } } />
+                        <MaterialButton value="" isSelected={false} icon="expand_less" onClick={() => { } } />
                     </div>
                     {/* <label className="pull-right">(icon)</label> */}
                     {/* <div className="section-header pull-right">
@@ -297,8 +299,8 @@ function mapStateToProps(state: State): PropsFromState {
 
     // console.log(state.actions.sectionVisibilities)
     //test
-    const selectedDeckId = state.actions.selectedDeckId;
-    const activeDeck = state.actions.deckList[selectedDeckId];
+    const selectedDeckId = state.ui.selectedDeckId;
+    const activeDeck = state.data.deckList[selectedDeckId];
 
     console.log('card binder state')
     console.log(state);
@@ -306,13 +308,13 @@ function mapStateToProps(state: State): PropsFromState {
     //Get collection of visible magic cards
     let visibleCards: IMagicCard[] = activeDeck.cards.map((cardId) =>{
 
-        const indexData = state.actions.cardIndex[cardId];
+        const indexData = state.data.cardIndex[cardId];
         
         
 
         const card: IMagicCard = {
             cardId: cardId,
-            data: state.actions.cardIndex[cardId]
+            data: state.data.cardIndex[cardId]
         }
         return card;
     });
@@ -375,12 +377,9 @@ function mapStateToProps(state: State): PropsFromState {
     }
 
     const result: PropsFromState = {
-        deckList: state.actions.deckList,
-        selectedDeckId: state.actions.selectedDeckId,
-        sectionVisibilities: state.actions.sectionVisibilities,
-        isDetailOpen: state.actions.isDetailOpen,
-        isRareBinderOpen: state.actions.isRareBinderOpen,
-        isSearchOpen: state.actions.isSearchOpen,
+        deckList: state.data.deckList,
+        selectedDeckId: state.ui.selectedDeckId,
+        sectionVisibilities: state.deckEditor.sectionVisibilities,
         display: state.deckEditor.deckView,
         groupBy: state.deckEditor.deckGroup,
         sortBy: state.deckEditor.deckSort,

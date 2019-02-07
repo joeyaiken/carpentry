@@ -1,92 +1,48 @@
 /// <reference types="mtgsdk-ts" />
 
 declare interface State {
-    actions: AppState
-    
+    //actions need to be removed completely
+    // actions: AppState;
+    //core
+    data: IDataStore;
     ui: IUIState;
-
-    //deck editor
+    //components
     deckEditor: IDeckEditorState;
+    cardSearch: ICardSearch;
     
-    //api
-
-    //rare binder
-    
-    //
-
-
 }
 
-declare interface AppState {
-    //nav properties
-    // isNavOpen: boolean;
+// declare interface AppState {
 
-    //editor UI props
-    isSearchOpen: boolean;
-    isRareBinderOpen: boolean;
-    isDetailOpen: boolean;
+//     // activeDeck?: CardDeck;
+//     // activeDeckVisibleCards: IMagicCard[];
+//     //need sections, not visible cards
 
-    // cardBinderView: string;
-    // cardBinderSort: string;
-    // cardBinderFiter: string;
-    // cardBinderGroup: string;
-    //also card binder section visibilities
+//     // deckList: CardDeck[]
+//     // selectedDeckId: number;
 
-    // activeDeck?: CardDeck;
-    activeDeckVisibleCards: IMagicCard[];
-    //need sections, not visible cards
-
-    deckList: CardDeck[]
-    selectedDeckId: number;
-
-    //ui == unused
-    // ui: UIProps;
-    searchFilter: SearchFilterProps;
+//     //ui == unused
+//     // ui: UIProps;
+//     // searchFilter: SearchFilterProps;
     
-    cardIndex: ICardIndex;
+//     // cardIndex: ICardIndex;
 
-    sectionVisibilities: boolean[];
+//     // sectionVisibilities: boolean[];
     
-
-
-    searchIsFetching: boolean;
-    requestedCards: string[];
-    //Things needed by our web api
-    //isFetching
-    //requestedCards6
-}
-
-declare interface UIState {
-    isNavOpen: boolean;
-    isSideSheetOpen: boolean;
-    visibleSideSheet: string;
-    //selected deck ID
-
-
-
-    //make interface "deck"?
-    deckView: string;
-    deckGroup: string;
-    deckSort: string;
-    deckFilter: string;
-
-    //deck section visibilities?
-    // sectionVisibilities: boolean[];
-
-    //interface "search"?
-
-    //interface "detail"?
-
-    //interface "rare binder"?
-
-}
-
+//     // searchIsFetching: boolean;
+//     // requestedCards: string[];
+//     //Things needed by our web api
+//     //isFetching
+//     //requestedCards6
+// }
 
 declare interface IUIState {
     isNavOpen: boolean;
     isSideSheetOpen: boolean;
     visibleSideSheet: string;
-    selectedDeckId: string;
+    // selectedDeckId: string;
+
+    selectedDeckId: number;
 }
 
 declare interface IDeckEditorState {
@@ -95,19 +51,45 @@ declare interface IDeckEditorState {
     deckSort: string;
     deckFilter: string;
 
+    //selected deck ID ? Or does that belong in UI ?
+    //IDK how one will reach the other so maybe both for now? Ugh
+
+
+    //active deck visible cards?
+
+    //active deck cards?
+
     //section visibilities
+
+    //DUMP
+    activeDeckVisibleCards: IMagicCard[];
+    sectionVisibilities: boolean[];
+
+
 }
+
+//Need a data object
+declare interface IDataStore {
+    //dictionary of cards "card index"
+
+    //dictionary of decks
+
+    //DUMP
+    deckList: CardDeck[]
+    cardIndex: ICardIndex;
+}
+
+declare interface ICardSearch {
+    searchFilter: SearchFilterProps;
+    searchIsFetching: boolean;
+
+    requestedCards: string[];
+}
+
 
 
 //API state?
 
-
-
-
-
-declare interface ICardIndex {
-    [id: string]: IMagicCard;
-}
 
 
 declare interface SearchFilterProps {
@@ -116,11 +98,6 @@ declare interface SearchFilterProps {
     results: any;
     selectedCardId?: string;
 }
-
-// declare interface UIProps {
-//     isFindModalVisible: boolean;
-// }
-
 
 
 // declare 
@@ -148,6 +125,43 @@ declare interface CardDeck {
     //"gimick" ?
 }
 
+declare interface ICardDeck {
+    id: number;
+    detail: IDeckDetail;
+    lands: IDeckLandCount;
+    // cards: string[]; //list of card names
+    //cards are left in a separate object for convenience
+}
+
+
+declare interface IDeckDetailIndex {
+    [id: number]: IDeckDetail;
+}
+declare interface IDeckDetail {
+    id: number;
+    //
+    name: string;
+    description: string;
+    type: string;
+    colors: string;
+}
+
+// declare interface IDeckLandCountIndex {
+//     [id: number]: IDeckLandCount;
+// }
+// declare interface IDeckLandCount {
+//     id: number;
+//     basicLands: ILandCount;
+// }
+
+declare interface ICardListIndex {
+    [id: number]: ICardList;
+}
+declare interface ICardList {
+    id: number;
+    cards: string[]; //Cards are just a collection of string IDs represengint a Magic.Card.Name
+}
+
 declare interface ILandCount {
     R: number,
     U: number,
@@ -157,7 +171,19 @@ declare interface ILandCount {
 }
 
 
-//other typings
+
+//
+//  DataStore
+//
+
+declare interface IDeckIndex {
+    [id: string]: ICardDeck;
+}
+
+declare interface ICardIndex {
+    [id: string]: Card;
+}
+
 declare interface IMagicCard {
     //name
     cardId: string;

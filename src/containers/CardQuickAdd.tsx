@@ -154,9 +154,9 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
 }
 
 function mapStateToProps(state: State): PropsFromState {
-    const searchFilterName = state.actions.searchFilter.name;
-    const searchResults: Card[] = state.actions.searchFilter.results.slice();
-    const selectedSearchResult = state.actions.searchFilter.selectedCardId;
+    const searchFilterName = state.cardSearch.searchFilter.name;
+    const searchResults: Card[] = state.cardSearch.searchFilter.results.slice();
+    const selectedSearchResult = state.cardSearch.searchFilter.selectedCardId;
     // console.log('can we hit thisss?')
     const result: PropsFromState = {
         searchValue: searchFilterName,

@@ -17,22 +17,14 @@ import {
     appNavClick,
     addDeck,
     selectDeck,
-    deckChanged,
+    // deckChanged,
     saveDeck,
     onSectionToggle,
     appSheetToggle,
     // selectDeck,
     // deckChanged
-    searchApplied,
-    searchValueChange,
-    searchCardSelected,
-    addCardToDeck,
-    cardBinderLandCountChange,
-    cardBinderViewChange,
-    cardBinderGroupChange,
-    cardBinderSortChange,
     // cardDetailRequested,
-    fetchCardsIfNeeded
+    appNavSave
 } from '../actions'
 
 
@@ -80,7 +72,7 @@ class App extends React.Component<AppProps>{
     }
 
     handleSaveStateClick() {
-
+        this.props.dispatch(appNavSave());
     }
 
     // handleDeckSelected(id: number) {
@@ -188,8 +180,8 @@ function mapStateToProps(state: State): PropsFromState {
 
     const result: PropsFromState = {
         isNavOpen: state.ui.isNavOpen,
-        selectedDeckId: state.actions.selectedDeckId,
-        deckList: state.actions.deckList,
+        selectedDeckId: state.ui.selectedDeckId,
+        deckList: state.data.deckList,
         isSideSheetOpen: state.ui.isSideSheetOpen,
         visibleSideSheet: state.ui.visibleSideSheet
         // searchValue: searchFilterName,
