@@ -181,7 +181,7 @@ declare interface IDeckIndex {
 }
 
 declare interface ICardIndex {
-    [id: string]: Card;
+    [id: string]: ICard;
 }
 
 declare interface IMagicCard {
@@ -197,3 +197,30 @@ declare interface IMagicCard {
 
     //???
 }
+
+declare interface ICard {
+    //Guess I'll just put relevant info by ID
+    cmc: number;
+    colorIdentity: string[];
+    colors: string[];
+    flavor: string;
+    id: string;
+    imageUrl: string;
+    layout: string;
+    manaCost: string;
+    multiverseid: number;
+    name: string;
+    number: string;
+    printings: string[];
+    rarity: string;
+    set: string;
+    setName: string;
+    text: string;
+    type: string;
+    types: string[];
+}
+
+
+
+
+
