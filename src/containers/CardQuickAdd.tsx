@@ -19,7 +19,8 @@ import { stat } from 'fs';
 interface PropsFromState {
     searchValue: string;
     searchResults: Card[];
-    selectedSearchResult?: string;
+    selectedSearchResultId?: string;
+    selectedSearchResultName?: string;
 }
 
 type CardQuickAddProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -92,8 +93,8 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
 
     handleAddToDeckClick(){
         console.log('trying to add to deck');
-        console.log(this.props.selectedSearchResult)
-        this.props.dispatch(addCardToDeck(this.props.selectedSearchResult || ""))
+        console.log(this.props.selectedSearchResultName)
+        this.props.dispatch(addCardToDeck(this.props.selectedSearchResultName || ""))
         // if(this.props.selectedSearchResult){
         //     this.props.dispatch(addCardToDeck(this.props.selectedSearchResult || ""))
         // }
@@ -137,17 +138,17 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
                         <button onClick={this.handleSearchClick}>GO</button>
                     </div>
                     {
-                        (this.props.selectedSearchResult) && addCardButtons
+                        (this.props.selectedSearchResultId) && addCardButtons
                     }
                     
                 </div>
                 <div className="outline-section flex-row card-container">
                     {
                         this.props.searchResults.map((card: Card, index: number) => {
-                            console.log('card match?')
-                            console.log(this.props.selectedSearchResult)
-                            console.log(card.id)
-                            const cardIsSelected = (this.props.selectedSearchResult == card.id);
+                            // console.log('card match?')
+                            // console.log(this.props.selectedSearchResult)
+                            // console.log(card.id)
+                            const cardIsSelected = (this.props.selectedSearchResultId == card.id);
                             return(
                                 <div key={card.id} className={cardIsSelected ? "magic-card selected-card" : "magic-card"} onClick={() => this.handleCardClick(card.id, card.name) }>
                                     <img src={card.imageUrl} />
@@ -164,12 +165,14 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
 function mapStateToProps(state: State): PropsFromState {
     const searchFilterName = state.cardSearch.searchFilter.name;
     const searchResults: Card[] = state.cardSearch.searchFilter.results.slice();
-    const selectedSearchResult = state.cardSearch.searchFilter.selectedCardId;
+    const selectedSearchResultId = state.cardSearch.searchFilter.selectedCardId;
+    const selectedSearchResultName = state.cardSearch.searchFilter.selectedCardName;
     // console.log('can we hit thisss?')
     const result: PropsFromState = {
         searchValue: searchFilterName,
         searchResults: searchResults,
-        selectedSearchResult: selectedSearchResult
+        selectedSearchResultId: selectedSearchResultId,
+        selectedSearchResultName: selectedSearchResultName
     }
     return result;
 }

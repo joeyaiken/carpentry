@@ -129,6 +129,11 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             cacheDeckDetails(newDataStoreState.detailList)
             return newDataStoreState;
         case ADD_CARD_TO_DECK:
+            console.log('trying to add a card to this deck')
+            console.log(action.payload);
+
+
+            
             let activeDeckCards = newDataStoreState.cardLists[state.selectedDeckId];
             activeDeckCards.cards.push(action.payload.cardName);
             
