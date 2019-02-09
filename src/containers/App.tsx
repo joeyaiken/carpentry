@@ -5,6 +5,7 @@ import '../App.css';
 import DeckEditor from './DeckEditor';
 import RareBinder from '../components/RareBinder';
 import CardQuickAdd from './CardQuickAdd';
+import AppData from './AppData';
 
 import DeckDetail from '../components/DeckDetail';
 
@@ -48,7 +49,7 @@ class App extends React.Component<AppProps>{
         this.handleOverlayClick = this.handleOverlayClick.bind(this);
 
         this.handleSheetToggle = this.handleSheetToggle.bind(this);
-        this.handleSaveStateClick = this.handleSaveStateClick.bind(this);
+        // this.handleSaveStateClick = this.handleSaveStateClick.bind(this);
     }
 
     handleNavClick(){
@@ -71,9 +72,9 @@ class App extends React.Component<AppProps>{
         this.props.dispatch(appNavClick())
     }
 
-    handleSaveStateClick() {
-        this.props.dispatch(appNavSave());
-    }
+    // handleSaveStateClick() {
+    //     this.props.dispatch(appNavSave());
+    // }
 
     // handleDeckSelected(id: number) {
     //     this.props.dispatch(selectDeck(id))
@@ -82,7 +83,7 @@ class App extends React.Component<AppProps>{
     render() {
         // flex-container-vertical
         //static-section
-        const description: string = "a MTG deck management tooklit";
+        // const description: string = "a MTG deck management tooklit";
 
         // const navContainer: JSX.Element = <div>NAVIGATION</div>;
 
@@ -91,12 +92,14 @@ class App extends React.Component<AppProps>{
         //const { ui } = props;
 
 
-        const deckDetailSheet: JSX.Element = (<div className="app-deck-detail"></div>);
+        const deckDataSheet: JSX.Element = (<AppData />);
+        const deckDetailSheet: JSX.Element = (<div className="app-deck-detail">DECK DETAIL SHOULD GO HERE EVENTUALLY</div>);
         const cardSearchSheet: JSX.Element = (<CardQuickAdd />);
         const rareBinderSheet: JSX.Element = (<RareBinder />);
 
         const sideSheet: JSX.Element = (
             <div className="app-side-sheet grid-col-2">
+                {this.props.visibleSideSheet == 'data' && deckDataSheet}
                 {this.props.visibleSideSheet == 'detail' && deckDetailSheet}
                 {this.props.visibleSideSheet == 'search' && cardSearchSheet}
                 {this.props.visibleSideSheet == 'rare' && rareBinderSheet}
@@ -114,25 +117,31 @@ class App extends React.Component<AppProps>{
             </div>
         );
 
+        const appHeader: JSX.Element = (
+            <div className="app-header app-bar bar-dark">
+                <div className="header-section">
+                    <MaterialButton value="" isSelected={this.props.isNavOpen} onClick={this.handleNavClick} icon="menu"  />
+                    <AppIcon />
+                </div>
+                <div className="header-section pull-right">
+                    <MaterialButton value="data" icon="save" onClick={this.handleSheetToggle} />
+                    <MaterialButton value="detail" icon="list" onClick={this.handleSheetToggle} />
+                    <MaterialButton value="search" icon="search" onClick={this.handleSheetToggle} />
+                    <MaterialButton value="rare" icon="grade" onClick={this.handleSheetToggle} />
+                </div>
+            </div>
+        );
+        
+        const appBody: JSX.Element = (
+            <div className={"app-contents"+(this.props.isSideSheetOpen ? " contents-short" : " contents-full")}>
+                <DeckEditor />
+            </div>
+        );
+
         return (
             <div className="app">
-                <div className="app-header app-bar bar-dark">
-                    <div className="header-section">
-                        <MaterialButton value="" isSelected={this.props.isNavOpen} onClick={this.handleNavClick} icon="menu"  />
-                        <AppIcon />
-                    </div>
-                    <div className="header-section pull-right">
-                        <MaterialButton value="save" icon="save" onClick={this.handleSaveStateClick} />
-                        <MaterialButton value="detail" icon="list" onClick={this.handleSheetToggle} />
-                        <MaterialButton value="search" icon="search" onClick={this.handleSheetToggle} />
-                        <MaterialButton value="rare" icon="grade" onClick={this.handleSheetToggle} />
-                    </div>
-                </div>
-               
-                <div className={"app-contents"+(this.props.isSideSheetOpen ? " contents-short" : " contents-full")}>
-                    <DeckEditor />
-                </div>
-                
+                { appHeader }
+                { appBody }
                 { this.props.isSideSheetOpen && sideSheet }
                 { this.props.isNavOpen && navOverlay }
             </div>

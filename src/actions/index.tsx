@@ -61,7 +61,7 @@ export const CARD_BINDER_CARD_ADD = 'CARD_BINDER_CARD_ADD';
 export const CARD_BINDER_CARD_REMOVE = 'CARD_BINDER_CARD_REMOVE';
 export const DECK_EDITOR_SECTION_TOGGLE = 'DECK_EDITOR_SECTION_TOGGLE'; // selection toggle ??
 
-
+export const APP_DATA_STORE_STRING_CHANGE = 'APP_DATA_STORE_STRING_CHANGE';
 
 // export const ON_SECTION_TOGGLE = 'ON_SECTION_TOGGLE'
 
@@ -219,6 +219,14 @@ export const deckEditorSectionToggle = (sectionIndex: string): ReduxAction => ({
     type: DECK_EDITOR_SECTION_TOGGLE,
     payload: undefined
 })
+
+
+export const appDataStoreStringChanged = (updatedObject: any): ReduxAction => ({
+    type: APP_DATA_STORE_STRING_CHANGE,
+    payload: updatedObject
+})
+
+
 
 //END: Card binder action action creators
 
