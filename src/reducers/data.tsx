@@ -9,7 +9,8 @@ import {
     DECK_EDITOR_DUPLICATE_SELECTED_CARD,
     DECK_EDITOR_REMOVE_ONE_SELECTED_CARD,
     DECK_EDITOR_REMOVE_ALL_SELECTED_CARD,
-    DECK_EDITOR_CARD_SELECTED
+    DECK_EDITOR_CARD_SELECTED,
+    CARD_BINDER_LAND_COUNT_CHANGE
 } from '../actions'
 
 // interface UI {
@@ -72,6 +73,27 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
         //     }
         case DECK_EDITOR_CARD_SELECTED:
             newDataStoreState.selectedCard = action.payload;
+            return newDataStoreState;
+
+
+        case CARD_BINDER_LAND_COUNT_CHANGE:
+            // let newBinderState: IDeckEditorState = {
+            //     ...state
+            // }
+            // let activeDeck = newDataStoreState.deckList[state.selectedDeckId];
+            let activeDeck = newDataStoreState.detailList[state.selectedDeckId];
+            let manaType: string = action.payload.manaType;
+            activeDeck.basicLands = {
+                ...activeDeck.basicLands,
+                [manaType]: action.payload.newValue
+            }
+            // newBinderState.deckList[state.selectedDeckId].basicLands = {
+
+            // }
+            
+            // console.log(activeDeck);
+            // return newBinderState;
+        
             return newDataStoreState;
         default:
             if(!state){

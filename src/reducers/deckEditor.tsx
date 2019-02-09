@@ -51,8 +51,24 @@ export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any =>
                 deckSort: action.payload
             }
 
-        case CARD_BINDER_LAND_COUNT_CHANGE:            
-            return newDeckEditorState;
+        // case CARD_BINDER_LAND_COUNT_CHANGE:
+        //     let newBinderState: IDeckEditorState = {
+        //         ...state
+        //     }
+        //     let activeDeck = newBinderState.deckList[state.selectedDeckId];
+        //     let manaType: string = action.payload.manaType;
+        //     activeDeck.basicLands = {
+        //         ...activeDeck.basicLands,
+        //         [manaType]: action.payload.newValue
+        //     }
+        //     // newBinderState.deckList[state.selectedDeckId].basicLands = {
+
+        //     // }
+            
+        //     // console.log(activeDeck);
+        //     // return newBinderState;
+        
+        //     return newDeckEditorState;
 
         case DECK_EDITOR_CARD_SELECTED:
             newDeckEditorState.selectedCard = action.payload;
