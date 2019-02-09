@@ -6,12 +6,11 @@ import { Stream } from 'stream';
 import { loadInitialDataStore } from '../data/lumberyard'
 
 import { 
-    CARD_BINDER_VIEW_CHANGE,
-    CARD_BINDER_GROUP_CHANGE,
-    CARD_BINDER_SORT_CHANGE
+    DECK_EDITOR_DUPLICATE_SELECTED_CARD,
+    DECK_EDITOR_REMOVE_ONE_SELECTED_CARD,
+    DECK_EDITOR_REMOVE_ALL_SELECTED_CARD,
+    DECK_EDITOR_CARD_SELECTED
 } from '../actions'
-
-
 
 // interface UI {
 //     isNavOpen: boolean;
@@ -27,7 +26,35 @@ import {
 
 //export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
 export const data = (state: IDataStore, action: ReduxAction): any => {
-    switch(action.type){
+    let newDataStoreState: IDataStore = {
+        ...state
+    }
+    //need to add the current card name to the deck of the current active deck
+    //a lot of things need that deck so here:
+    // const activeDeck = state.deckList[state.selectedDeckId];
+
+    switch(action.type){    
+        case DECK_EDITOR_DUPLICATE_SELECTED_CARD:
+            if(state.selectedCard)
+                newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
+            return newDataStoreState;
+        case DECK_EDITOR_REMOVE_ONE_SELECTED_CARD:
+            if(state.selectedCard){
+                //index of the first card?
+                var firstSelectedCardIndex = newDataStoreState.cardLists[state.selectedDeckId].cards.indexOf(state.selectedCard);
+
+                newDataStoreState.cardLists[state.selectedDeckId].cards.splice(firstSelectedCardIndex,1);
+                // newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
+            }
+            return newDataStoreState;
+        case DECK_EDITOR_REMOVE_ALL_SELECTED_CARD:
+            if(state.selectedCard){
+                newDataStoreState.cardLists[state.selectedDeckId].cards = newDataStoreState.cardLists[state.selectedDeckId].cards.filter((card) => {
+                    return (card != state.selectedCard);
+                })
+                // newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
+            }
+            return newDataStoreState;
         // case CARD_BINDER_VIEW_CHANGE:
         //     return {
         //         ...state,
@@ -43,6 +70,9 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
         //         ...state,
         //         deckSort: action.payload
         //     }
+        case DECK_EDITOR_CARD_SELECTED:
+            newDataStoreState.selectedCard = action.payload;
+            return newDataStoreState;
         default:
             if(!state){
                 state = loadInitialDataStore();

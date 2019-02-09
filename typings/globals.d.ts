@@ -48,14 +48,35 @@ declare interface IDeckEditorState {
 }
 
 //Need a data object
+//possible other thigns to include
+//  selected deck id
+//  active deck visible cards
+//  maybe even section visibilities?
+//  probably at least sections
 declare interface IDataStore {
+    selectedCard: string | null;
+
+    selectedDeckId: number; // | null ?
+    //  active deck visible cards
+
+    //  maybe even section visibilities?
+    
+    //  probably at least sections
+    
     //dictionary of cards "card index"
+    cardIndex: ICardIndex;
 
     //dictionary of decks
+    // deckList: CardDeck[]
+    //instead of a list of decks, we have a list of details and a list of cards
+    detailList: IDeckDetail[];
+    cardLists: ICardList[];
 
-    //DUMP
-    deckList: CardDeck[]
-    cardIndex: ICardIndex;
+
+
+
+
+
 }
 
 declare interface ICardSearch {
@@ -123,6 +144,8 @@ declare interface IDeckDetail {
     description: string;
     type: string;
     colors: string;
+
+    basicLands: ILandCount;
 }
 
 // declare interface IDeckLandCountIndex {

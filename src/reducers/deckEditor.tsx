@@ -30,6 +30,7 @@ export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any =>
     let newDeckEditorState: IDeckEditorState = {
         ...state
     }
+    
 
     switch(action.type){
         

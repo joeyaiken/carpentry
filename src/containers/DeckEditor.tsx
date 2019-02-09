@@ -16,11 +16,14 @@ import {
     fetchCardsIfNeeded,
 
 
-    deckEditorCardSelected
-
+    deckEditorCardSelected,
+    deckEditorDuplicateSelectedCard,
+    deckEditorRemoveOneSelectedCard,
+    deckEditorRemoveAllSelectedCards
     //deckEditorHeaderToggle
     //deckEditorSectionToggle
 } from '../actions'
+
 
 
 // import DeckBuilder from '../components/DeckBuilder';
@@ -53,7 +56,7 @@ interface groupedCardCollection { [key: string]:
 };
 
 interface PropsFromState {
-    deckList: CardDeck[];
+    // deckList: CardDeck[];
     selectedDeckId: number;
     sectionVisibilities: boolean[];
     
@@ -98,6 +101,10 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
         this.handleHeaderToggle = this.handleHeaderToggle.bind(this);
         this.handleSectionToggle = this.handleSectionToggle.bind(this);
+
+        this.handleDuplicateClick = this.handleDuplicateClick.bind(this);
+        this.handleRemoveOneClick = this.handleRemoveOneClick.bind(this);
+        this.handleRemoveAllClick = this.handleRemoveAllClick.bind(this);
     }
 
     // componentDidMount() {
@@ -181,16 +188,33 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.props.dispatch(deckEditorCardSelected(cardName))
     }
 
+    handleDuplicateClick(){
+        this.props.dispatch(deckEditorDuplicateSelectedCard())
+        //
+    }
+
+    handleRemoveOneClick(){
+        this.props.dispatch(deckEditorRemoveOneSelectedCard())
+        //
+    }
+
+    handleRemoveAllClick(){
+        this.props.dispatch(deckEditorRemoveAllSelectedCards())
+        //
+    }
+    
+    
     
 
+    
   
 
     render(){
-        console.log('rendering deckEditor control')
-        const { deckList, selectedDeckId } = this.props;
-        const selectedDeck = deckList.find((deck) => {
-            return deck.id == selectedDeckId
-        }) || deckList[0];
+        // console.log('rendering deckEditor control')
+        // const { deckList, selectedDeckId } = this.props;
+        // const selectedDeck = deckList.find((deck) => {
+        //     return deck.id == selectedDeckId
+        // }) || deckList[0];
 
         // console.log(selectedDeck);
         // let test = this.props;
@@ -198,10 +222,10 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         const selectedCardHeaderSection: JSX.Element = (
             <div className="header-section">
                 <label>Selected Card:</label>
-                <label>-the name of the selected card-</label>
-                <MaterialButton value="add" icon="add_circle" onClick={this.handleSortChange} />
-                <MaterialButton value="remove" icon="remove_circle" onClick={this.handleSortChange} />
-                <MaterialButton value="clear" icon="cancel" onClick={this.handleSortChange} />
+                <label>{ this.props.selectedCard }</label>
+                <MaterialButton value="add" icon="add_circle" onClick={this.handleDuplicateClick} />
+                <MaterialButton value="remove" icon="remove_circle" onClick={this.handleRemoveOneClick} />
+                <MaterialButton value="clear" icon="cancel" onClick={this.handleRemoveAllClick} />
             </div>
         );
 
@@ -229,7 +253,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                         <MaterialButton value="manaCost" isSelected={(this.props.sortBy == "manaCost")} icon="signal_cellular_alt" onClick={this.handleSortChange} />
                     </div>
                     {
-                        true && selectedCardHeaderSection
+                        (this.props.selectedCard != null) && selectedCardHeaderSection
                     }
 
                     <div className="pull-right">
@@ -318,15 +342,20 @@ function mapStateToProps(state: State): PropsFromState {
     // console.log(state.actions.sectionVisibilities)
     //test
     const selectedDeckId = state.ui.selectedDeckId;
-    const activeDeck = state.data.deckList[selectedDeckId];
+    // const activeDeck = state.data.deckList[selectedDeckId];
+    const activeDeckDetail = state.data.detailList[selectedDeckId];
+    const activeDeckCardList = state.data.cardLists[selectedDeckId];
 
-    console.log('card binder state')
-    console.log(state);
+    // console.log('card binder state')
+    // console.log(state);
 
     //Get collection of visible magic cards
-    let visibleCards: IMagicCard[] = activeDeck.cards.map((cardId) =>{
 
-        const indexData = state.data.cardIndex[cardId];
+    console.log('trying to determine visible cards what did I break?')
+
+    let visibleCards: IMagicCard[] = activeDeckCardList.cards.map((cardId) =>{
+
+        // const indexData = state.data.cardIndex[cardId];
         
         
 
@@ -340,9 +369,9 @@ function mapStateToProps(state: State): PropsFromState {
     // console.log()
 
     //once we have the set of visible cards, lets log those card names (in case this garbage breaks again)
-    let visibleCardNames: string[] = visibleCards.map((card) => {
-        return card.data.name
-    })
+    // let visibleCardNames: string[] = visibleCards.map((card) => {
+    //     return card.data.name
+    // })
 
     // console.log('visibleCardNames')
     // console.log(visibleCardNames);
@@ -366,14 +395,22 @@ function mapStateToProps(state: State): PropsFromState {
     switch(state.deckEditor.deckGroup){// spellType | rarity | none
         case 'spellType':
             visibleCards.forEach((card: IMagicCard) => {
+                
                 const cardType: string = card.data.types[0];
+
+
                 if(!groupedCards[cardType]){
-                    groupedCards[cardType].cards = [];
+                    // groupedCards[cardType].cards = [];
+                    groupedCards[cardType] = {
+                        cards: [],
+                        isOpen: true
+                    }
                 }
                 groupedCards[cardType].cards.push(card);
             });
             break;
         case 'rarity':
+            console.log('sorting by rarity');
             visibleCards.forEach((card: IMagicCard) => {
                 // const cardType: string = card.data.types[0];
                 if(!groupedCards[card.data.rarity]){
@@ -395,7 +432,7 @@ function mapStateToProps(state: State): PropsFromState {
     }
 
     const result: PropsFromState = {
-        deckList: state.data.deckList,
+        // deckList: state.data.deckList,
         selectedDeckId: state.ui.selectedDeckId,
         sectionVisibilities: state.deckEditor.sectionVisibilities,
         display: state.deckEditor.deckView,
@@ -403,7 +440,7 @@ function mapStateToProps(state: State): PropsFromState {
         sortBy: state.deckEditor.deckSort,
         cardCollections: groupedCards,
         // cardGroups: cardGroups,
-        landCounts: activeDeck.basicLands,
+        landCounts: activeDeckDetail.basicLands,
         selectedCard: state.deckEditor.selectedCard
     }
     

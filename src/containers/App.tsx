@@ -178,10 +178,23 @@ function mapStateToProps(state: State): PropsFromState {
     //
     //state.ui.visibleSideSheet
 
+    const localCardList: CardDeck[] = state.data.detailList.map((detail) => {
+        let returningCardDeck: CardDeck = {
+            basicLands: detail.basicLands,
+            cards: state.data.cardLists[detail.id].cards,
+            colors: detail.colors,
+            description: detail.description,
+            id: detail.id,
+            name: detail.name,
+            type: detail.type
+        }
+        return returningCardDeck;
+    })
+
     const result: PropsFromState = {
         isNavOpen: state.ui.isNavOpen,
         selectedDeckId: state.ui.selectedDeckId,
-        deckList: state.data.deckList,
+        deckList: localCardList,
         isSideSheetOpen: state.ui.isSideSheetOpen,
         visibleSideSheet: state.ui.visibleSideSheet
         // searchValue: searchFilterName,
