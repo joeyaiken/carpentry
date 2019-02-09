@@ -17,7 +17,8 @@ import {
 
 
 interface PropsFromState {
-    dataObject: any;
+    dataObject: string;
+    cardIndex: string; //This might be too big..... how many cards are there?
     // searchValue: string;
     // searchResults: Card[];
     // selectedSearchResultId?: string;
@@ -157,7 +158,11 @@ class AppData extends React.Component<AppDataProps> {
                 </div>
                 <div className="outline-section">
                     {/* <textarea  /> */}
-                    <textarea value={ this.props.dataObject } onChange={ this.handleDataObjectUpdated } />
+                    <textarea value={ this.props.dataObject } />
+                </div>
+                <div className="outline-section">
+                    {/* <textarea  /> */}
+                    <textarea value={ this.props.cardIndex } />
                 </div>
             </div>
         );
@@ -177,11 +182,13 @@ function mapStateToProps(state: State): PropsFromState {
     const appStateObj = {
         detailList: state.data.detailList,
         cardLists: state.data.cardLists
+        // cardIndex: state.data.cardIndex
         //rareStore: state.data.rareStore
     }
 
     const result: PropsFromState = {
-        dataObject: JSON.stringify(appStateObj)
+        dataObject: JSON.stringify(appStateObj),
+        cardIndex: JSON.stringify(state.data.cardIndex)
         // searchValue: searchFilterName,
         // searchResults: searchResults,
         // selectedSearchResultId: selectedSearchResultId,
