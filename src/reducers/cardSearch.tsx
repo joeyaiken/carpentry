@@ -79,7 +79,8 @@ export const cardSearch = (state: ICardSearch, action: ReduxAction): any => {
                 ...state,
                 searchFilter: {
                     ...state.searchFilter,
-                    selectedCardId: action.payload
+                    selectedCardId: action.payload.cardId,
+                    selectedCardName: action.payload.cardName
                 }
             }
         // case SEARCH_APPLIED:

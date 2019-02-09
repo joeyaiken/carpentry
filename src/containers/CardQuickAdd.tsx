@@ -56,8 +56,11 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
 
     }
 
-    handleCardClick(cardId: string){
-        this.props.dispatch(searchCardSelected(cardId));
+    handleCardClick(cardId: string, cardName: string){
+        console.log('card clicked');
+        console.log(cardId);
+        console.log(cardName);
+        this.props.dispatch(searchCardSelected(cardId, cardName));
     }
 
     // componentDidMount() {
@@ -88,6 +91,8 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
     // let searchResults: JSX.Element;
 
     handleAddToDeckClick(){
+        console.log('trying to add to deck');
+        console.log(this.props.selectedSearchResult)
         this.props.dispatch(addCardToDeck(this.props.selectedSearchResult || ""))
         // if(this.props.selectedSearchResult){
         //     this.props.dispatch(addCardToDeck(this.props.selectedSearchResult || ""))
@@ -139,9 +144,12 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
                 <div className="outline-section flex-row card-container">
                     {
                         this.props.searchResults.map((card: Card, index: number) => {
+                            console.log('card match?')
+                            console.log(this.props.selectedSearchResult)
+                            console.log(card.id)
                             const cardIsSelected = (this.props.selectedSearchResult == card.id);
                             return(
-                                <div key={card.id} className={cardIsSelected ? "magic-card selected-card" : "magic-card"} onClick={() => this.handleCardClick(card.id) }>
+                                <div key={card.id} className={cardIsSelected ? "magic-card selected-card" : "magic-card"} onClick={() => this.handleCardClick(card.id, card.name) }>
                                     <img src={card.imageUrl} />
                                 </div>
                             )

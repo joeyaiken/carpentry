@@ -441,7 +441,7 @@ function mapStateToProps(state: State): PropsFromState {
         cardCollections: groupedCards,
         // cardGroups: cardGroups,
         landCounts: activeDeckDetail.basicLands,
-        selectedCard: state.deckEditor.selectedCard
+        selectedCard: state.data.selectedCard
     }
     
     return result;

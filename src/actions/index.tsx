@@ -131,9 +131,13 @@ export const searchValueChange = (newValue: string): ReduxAction => ({
     payload: newValue
 });
 
-export const searchCardSelected = (cardId: string): ReduxAction => ({
+export const searchCardSelected = (cardId: string, cardName: string): ReduxAction => ({
     type: SEARCH_CARD_SELECTED,
-    payload: cardId
+    // payload: cardId
+    payload: {
+        cardId: cardId,
+        cardName: cardName
+    }
 });
 
 export const addCardToDeck = (cardId: string): ReduxAction => ({

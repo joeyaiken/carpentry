@@ -3,14 +3,16 @@ import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
-import { loadInitialDataStore } from '../data/lumberyard'
+import { loadInitialDataStore, cacheDeckDetails } from '../data/lumberyard'
 
 import { 
     DECK_EDITOR_DUPLICATE_SELECTED_CARD,
     DECK_EDITOR_REMOVE_ONE_SELECTED_CARD,
     DECK_EDITOR_REMOVE_ALL_SELECTED_CARD,
     DECK_EDITOR_CARD_SELECTED,
-    CARD_BINDER_LAND_COUNT_CHANGE
+    CARD_BINDER_LAND_COUNT_CHANGE,
+    SELECT_DECK,
+    ADD_CARD_TO_DECK
 } from '../actions'
 
 // interface UI {
@@ -30,11 +32,36 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
     let newDataStoreState: IDataStore = {
         ...state
     }
+   
+    // let deckId = state.
+    // let activeDeckCards = newDataStoreState.cardLists[state.selectedDeckId];
+    // let activeDeckDetail = newDataStoreState.detailList[state.selectedDeckId];
+    
+    // if(state.selectedDeckId){
+    //     let activeDeckCards = newDataStoreState.cardLists[state.selectedDeckId];
+    //     let activeDeckDetail = newDataStoreState.detailList[state.selectedDeckId];
+    // }
+
     //need to add the current card name to the deck of the current active deck
     //a lot of things need that deck so here:
     // const activeDeck = state.deckList[state.selectedDeckId];
 
-    switch(action.type){    
+    switch(action.type){
+        case SELECT_DECK:
+            // let newState: IUIState = {
+            //     ...state,
+            //     selectedDeckId: action.payload,
+            //     isNavOpen: false
+            // }
+            newDataStoreState.selectedDeckId = action.payload
+
+            // cacheUIState(newState);
+            //also should cache the UI when the selected deck changes
+
+            // return Object.assign({},state,{
+            //     selectedDeckId: action.payload
+            // })
+            return newDataStoreState;
         case DECK_EDITOR_DUPLICATE_SELECTED_CARD:
             if(state.selectedCard)
                 newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
@@ -81,10 +108,14 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             //     ...state
             // }
             // let activeDeck = newDataStoreState.deckList[state.selectedDeckId];
-            let activeDeck = newDataStoreState.detailList[state.selectedDeckId];
+            // console.log('trying to update land counts')
+            
+            // console.log('active deck')
+            // console.log(activeDeck)
+            let activeDeckDetail = newDataStoreState.detailList[state.selectedDeckId];
             let manaType: string = action.payload.manaType;
-            activeDeck.basicLands = {
-                ...activeDeck.basicLands,
+            activeDeckDetail.basicLands = {
+                ...activeDeckDetail.basicLands,
                 [manaType]: action.payload.newValue
             }
             // newBinderState.deckList[state.selectedDeckId].basicLands = {
@@ -93,7 +124,15 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             
             // console.log(activeDeck);
             // return newBinderState;
-        
+
+            //cache deck details
+            cacheDeckDetails(newDataStoreState.detailList)
+            return newDataStoreState;
+        case ADD_CARD_TO_DECK:
+            let activeDeckCards = newDataStoreState.cardLists[state.selectedDeckId];
+            activeDeckCards.cards.push(action.payload.cardName);
+            
+
             return newDataStoreState;
         default:
             if(!state){

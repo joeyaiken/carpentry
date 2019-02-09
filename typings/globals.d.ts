@@ -97,6 +97,7 @@ declare interface SearchFilterProps {
     // isFetching: boolean;
     results: any;
     selectedCardId?: string;
+    selectedCardName?: string;
 }
 
 
