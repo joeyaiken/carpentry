@@ -12,7 +12,9 @@ import {
     DECK_EDITOR_CARD_SELECTED,
     CARD_BINDER_LAND_COUNT_CHANGE,
     SELECT_DECK,
-    ADD_CARD_TO_DECK
+    ADD_CARD_TO_DECK,
+    ADD_CARD_TO_RARES,
+    ADD_CARD_TO_INDEX
 } from '../actions'
 
 // interface UI {
@@ -129,16 +131,18 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             cacheDeckDetails(newDataStoreState.detailList)
             return newDataStoreState;
         case ADD_CARD_TO_DECK:
-            console.log('trying to add a card to this deck')
-            console.log(action.payload);
+            // console.log('trying to add a card to this deck')
+            // console.log(action.payload);
 
-
-            
             let activeDeckCards = newDataStoreState.cardLists[state.selectedDeckId];
-            activeDeckCards.cards.push(action.payload.cardName);
+            activeDeckCards.cards.push(action.payload);
             
-
             return newDataStoreState;
+        case ADD_CARD_TO_INDEX:
+            let cardToIndex: ICard = action.payload;
+            //is there a problem with updating the index instead of not ovewriting things?
+            newDataStoreState.cardIndex[cardToIndex.name] = cardToIndex;
+            return newDataStoreState
         default:
             if(!state){
                 state = loadInitialDataStore();

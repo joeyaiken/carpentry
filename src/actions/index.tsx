@@ -36,6 +36,7 @@ export const SEARCH_APPLIED = 'SEARCH_APPLIED'
 export const SEARCH_CARD_SELECTED = 'SEARCH_CARD_SELECTED'
 
 export const ADD_CARD_TO_DECK = 'ADD_CARD_TO_DECK';
+export const ADD_CARD_TO_INDEX = 'ADD_CARD_TO_INDEX';
 export const ADD_CARD_TO_RARES = 'ADD_CARD_TO_RARES';
 
 export const REQUEST_CARD_SEARCH = 'REQUEST_CARD_SEARCH';
@@ -144,6 +145,11 @@ export const addCardToDeck = (cardId: string): ReduxAction => ({
     type: ADD_CARD_TO_DECK,
     payload: cardId
 });
+
+export const addCardToIndex = (card: ICard): ReduxAction => ({
+    type: ADD_CARD_TO_INDEX,
+    payload: card
+})
 
 export const addCardToRares = (cardId: string): ReduxAction => ({
     type: ADD_CARD_TO_RARES,

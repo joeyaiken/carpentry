@@ -83,16 +83,12 @@ declare interface ICardSearch {
     requestedCards: string[];
 }
 
-
-
 //API state?
-
-
 
 declare interface SearchFilterProps {
     name: string;
     // isFetching: boolean;
-    results: any;
+    results: any; //results is an array of cards, right?
     selectedCardId?: string;
     selectedCardName?: string;
 }
@@ -203,7 +199,7 @@ declare interface ICard {
     cmc: number;
     colorIdentity: string[];
     colors: string[];
-    flavor: string;
+    flavor: string | undefined;
     id: string;
     imageUrl: string;
     layout: string;

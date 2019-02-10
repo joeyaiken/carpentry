@@ -188,8 +188,8 @@ function mapStateToProps(state: State): PropsFromState {
     //state.ui.visibleSideSheet
 
     // console.log('app mapping things')
-    console.log('app mapping things');
-    console.log(state.data)
+    // console.log('app mapping things');
+    // console.log(state.data)
 
     const localCardList: CardDeck[] = state.data.detailList.map((detail) => {
         let returningCardDeck: CardDeck = {

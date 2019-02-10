@@ -309,6 +309,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                                     {
                                         collection.cards.map((card: IMagicCard, index: number) => {
                                             // const cardIsSelected = false; // (this.props.selectedSearchResult == card.id);
+                                            console.log(card)
                                             const cardIsSelected = this.props.selectedCard == card.data.name;
                                             // console.log(card.data)
                                             return (<MagicCard key={index} card={card} display={this.props.display} cardIsSelected={cardIsSelected} onClick={() => this.handleCardClick(card.data.name)} />);

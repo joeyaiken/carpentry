@@ -73,8 +73,13 @@ export function loadInitialDataStore(): IDataStore {
         detailList: IDeckDetail[]
     } = require('./logpile.json');
 
-
+    //mapCardToICard
     let defaultIndex: ICardIndex = require('./cardIndex.json');
+    // let defaultIndex: ICardIndex = {};
+    
+    // Object.keys(fullIndex).forEach((key) => {
+    //     defaultIndex[key] = mapCardToICard(fullIndex[key])
+    // })
 
     // console.log('did I load default data?');
     // console.log(defaultIndex['Anointed Procession']);
@@ -142,8 +147,8 @@ export function loadInitialDataStore(): IDataStore {
 
     // let cardLists: ICardList[] = cachedCardLists || []
     let cardLists: ICardList[] = defaultData.cardLists || []
-    console.log('default data')
-    console.log(defaultData);
+    // console.log('default data')
+    // console.log(defaultData);
     const cachedUIState = loadUIStateCache();
 
     const initialDataStore: IDataStore = {
@@ -232,82 +237,6 @@ function loadDeckCardsCache(): ICardList[] | null {
 
 
 
-///////////////
-
-export default class lumberyard {
-    constructor(props: any){
-
-    }
-
-}
-
-
-
-// export function tryLoadData(): AppState {
-    
-
-    
-//     // console.log('trying to load some of the new parsed data');
-//     // let storedDeckDetailInstance = loadDeckDetailIndex();
-//     // console.log(storedDeckDetailInstance);
-
-//     // console.log(loadLandCountIndex())
-//     // console.log(loadCardListIndex())
-
-//     //also need to cache the rare binder
-//     // let initialState: AppState = generateAppStateInstance();
-
-    
-
-//     // if(!deckList || !deckList.length){
-//     //     deckList = generateDeckData();
-//     // }
-//     // initialState.deckList = deckList;// || generateDeckData();
-
-//     // if(cachedIndexData){
-//     //     // var rawCache = JSON.parse(cachedIndexData);
-//     //     let cardIndex: ICardIndex = JSON.parse(cachedIndexData);
-//     //     initialState.cardIndex = cardIndex || {};
-//     // }
-    
-//     //Check for any cards that need to be loaded in the initial deck
-//     // let activeDeck = initialState.deckList[initialState.selectedDeckId];
-//     // activeDeck.cards.forEach((cardId: string) => {
-//     //     let cardFromIndex = initialState.cardIndex[cardId];
-//     //     if(!cardFromIndex){
-//     //         initialState.requestedCards.push(cardId);
-//     //     }
-//     // });
-//     // console.log('audit result');
-//     // console.log(initialState.requestedCards)
-    
-
-//     // if(deckList && deckList.length){
-//     //     initialState.deckList = deckList;
-//     // } else {
-//     //     initialState.deckList = generateDeckData();
-//     // }
-
-//     return initialState;
-// }
-
-// function generateAppStateInstance(): AppState {
-//     return {
-
-//         deckList: [],
-//         selectedDeckId: 0,
-//         searchFilter: {
-//             name: '',
-//             results: []
-//         },
-//         cardIndex: {},
-//         sectionVisibilities: [true,true,true,true,true,true],
-//         searchIsFetching: false,
-//         requestedCards: [],
-//         activeDeckVisibleCards: []
-//     }
-// }
-
 function generateLandCounterInstance(): ILandCount {
     return {
         R: 0,
@@ -315,6 +244,29 @@ function generateLandCounterInstance(): ILandCount {
         G: 0,
         W: 0,
         B: 0
+    }
+}
+
+export function mapCardToICard(card: any): ICard {
+    return {
+        cmc: card.cmc,
+        colorIdentity: card.colorIdentity,
+        colors: card.colors,
+        flavor: card.flavor,
+        id: card.id,
+        imageUrl: card.imageUrl,
+        layout: card.layout,
+        manaCost: card.manaCost,
+        multiverseid: card.multiverseid,
+        name: card.name,
+        number: card.number,
+        printings: card.printings,
+        rarity: card.rarity,
+        set: card.set,
+        setName: card.setName,
+        text: card.text,
+        type: card.type,
+        types: card.types
     }
 }
 
@@ -327,10 +279,5 @@ export function loadDefaultUIState(): IUIState {
         isSideSheetOpen: false,
         visibleSideSheet: '',
         selectedDeckId: 0
-
-        // deckView: 'card',
-        // deckGroup: 'none',
-        // deckSort: 'name',
-        // deckFilter: ''
     }// a
 }

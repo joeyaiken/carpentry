@@ -6,7 +6,8 @@ import {
     searchApplied,
     searchValueChange,
     searchCardSelected,
-    addCardToDeck
+    addCardToDeck,
+    addCardToIndex
 
 } from '../actions'
 import InputField from '../components/InputField';
@@ -14,7 +15,7 @@ import { Card } from 'mtgsdk-ts';
 import { stat } from 'fs';
 //import Magic = require('mtgsdk-ts');
 // import Magic from 'mtgsdk-ts';
-
+import { mapCardToICard } from '../data/lumberyard';
 
 interface PropsFromState {
     searchValue: string;
@@ -93,20 +94,30 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
 
     handleAddToDeckClick(){
         console.log('trying to add to deck');
-        console.log(this.props.selectedSearchResultName)
-        this.props.dispatch(addCardToDeck(this.props.selectedSearchResultName || ""))
+        console.log(this.props.selectedSearchResultName);
+        // this.props.dispatch(addCardToDeck(this.props.selectedSearchResultName || ""))
         // if(this.props.selectedSearchResult){
         //     this.props.dispatch(addCardToDeck(this.props.selectedSearchResult || ""))
         // }
+        if(this.props.selectedSearchResultId){
+            let thisCard = this.props.searchResults.find((card) => {
+                return (card.id == this.props.selectedSearchResultId)
+            })
+            if(thisCard){
+                this.props.dispatch(addCardToIndex(mapCardToICard(thisCard)))
+            }
+            this.props.dispatch(addCardToDeck(this.props.selectedSearchResultName || ""))
+        }
+        //thisCard
+        // this.props.dispatch(add)
         
+        // this.props.dispatch(addCardToIndex(mapCardToICard()))
     }
     handleAddToRaresClick(){
 
     }
 
     render(){
-
-
         //only want to show the "add" buttons if a card is selected
 
         // if(this.props.selectedSearchResult){
