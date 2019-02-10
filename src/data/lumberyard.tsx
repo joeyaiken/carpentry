@@ -7,9 +7,7 @@ import { Card } from 'mtgsdk-ts'
 const CACHED_UI_STATE_IDENTIFIER = 'CARPENTRY_CACHED_UI_STATE_IDENTIFIER';
 const CACHED_DECK_DETAIL_IDENTIFIER = 'CARPENTRY_CACHED_DECK_DETAIL_IDENTIFIER';
 const CACHED_CARD_LIST_IDENTIFIER = 'CARPENTRY_CACHED_CARD_LIST_IDENTIFIER';
-
-// import React from 'react';
-
+const CACHED_CARD_INDEX_IDENTIFIER = 'CACHED_CARD_INDEX_IDENTIFIER';
 
 //So I don't really know WHERE I should be loading the default states, but here are the methods that will be called!
 export function loadInitialUIState(): IUIState {
@@ -60,6 +58,21 @@ export function loadInitialCardSearchState(): ICardSearch {
     return initialCardSearchState;
 }
 
+export function saveCardIndexCache(index: ICardIndex): void {
+    localStorage.setItem(CACHED_CARD_INDEX_IDENTIFIER, JSON.stringify(index))
+}
+
+
+function loadCardIndexCache(): ICardIndex | null {
+    const cachedData: string|null = localStorage.getItem(CACHED_CARD_INDEX_IDENTIFIER);
+    if(cachedData){
+        const cardIndex: ICardIndex = JSON.parse(cachedData);
+        return cardIndex;
+    } else {
+        return null;
+    }
+}
+
 export function loadInitialDataStore(): IDataStore {
 
     // const cachedData: string|null = localStorage.getItem('deck-cache');
@@ -73,25 +86,28 @@ export function loadInitialDataStore(): IDataStore {
         detailList: IDeckDetail[]
     } = require('./logpile.json');
 
+    const cachedDeckDetails = loadDeckDetailCache();
+    const cachedDeckCards = loadDeckCardsCache();
+
+    if(cachedDeckDetails){
+        defaultData.detailList = cachedDeckDetails;
+    }
+    if(cachedDeckCards){
+        defaultData.cardLists = cachedDeckCards;
+    }
+
     //mapCardToICard
-    let defaultIndex: ICardIndex = require('./cardIndex.json');
+    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndex.json');
     // let defaultIndex: ICardIndex = {};
     
     // Object.keys(fullIndex).forEach((key) => {
     //     defaultIndex[key] = mapCardToICard(fullIndex[key])
     // })
 
-    // console.log('did I load default data?');
-    // console.log(defaultIndex['Anointed Procession']);
-    // console.log(defaultIndex);
-    
     //loadDeckDetailCache
     // const cachedDeckDetails = loadDeckDetailCache();
 
     // var cardLists: ICardList[] = JSON.parse(cardListsById);
-
-    // console.log('CARD LISTS');
-    // console.log(cardLists);
 
 
     // let cardIndex: ICardIndex = {}
@@ -163,14 +179,6 @@ export function loadInitialDataStore(): IDataStore {
     return initialDataStore;
 }
 
-
-
-////////cache access
-//I'd really like to wrap this in a class or some other object
-
-
-
-
 export function cacheUIState(state: IUIState): void {
     const UIStateString: string = JSON.stringify(state);
     localStorage.setItem(CACHED_UI_STATE_IDENTIFIER, UIStateString);
@@ -234,9 +242,6 @@ function loadDeckCardsCache(): ICardList[] | null {
 //What abt a load default app state?
 
 
-
-
-
 function generateLandCounterInstance(): ILandCount {
     return {
         R: 0,
@@ -269,8 +274,6 @@ export function mapCardToICard(card: any): ICard {
         types: card.types
     }
 }
-
-
 
 export function loadDefaultUIState(): IUIState {
     return {
