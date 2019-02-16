@@ -1,5 +1,9 @@
 /// <reference types="mtgsdk-ts" />
 
+
+//////////////////////
+//  State interfaces/
+////////////////////
 declare interface State {
     //actions need to be removed completely
     // actions: AppState;
@@ -103,44 +107,19 @@ declare interface ReduxAction extends AnyAction {
     meta?: any
 }
 
-declare interface CardDeck {
-    id: number;
-    name: string;
-    description: string;
-    //cards: MagicCard[];
-    cards: string[]; //Cards are just a collection of string IDs represengint a Magic.Card.id
-
-    basicLands: ILandCount;
-
-    type: string; // edh / standard / legacy
-    colors: string;
-    //colors (calculate this?)
-
-    //"gimick" ?
-}
-
-declare interface ICardDeck {
-    id: number;
-    detail: IDeckDetail;
-    lands: IDeckLandCount;
-    // cards: string[]; //list of card names
-    //cards are left in a separate object for convenience
-}
 
 
-declare interface IDeckDetailIndex {
-    [id: number]: IDeckDetail;
-}
-declare interface IDeckDetail {
-    id: number;
-    //
-    name: string;
-    description: string;
-    type: string;
-    colors: string;
 
-    basicLands: ILandCount;
-}
+///////////////////////
+//  Object interfaces/
+/////////////////////
+//A deck has...
+
+
+// declare interface IDeckDetailIndex {
+//     [id: number]: IDeckDetail;
+// }
+
 
 // declare interface IDeckLandCountIndex {
 //     [id: number]: IDeckLandCount;
@@ -172,9 +151,9 @@ declare interface ILandCount {
 //  DataStore
 //
 
-declare interface IDeckIndex {
-    [id: string]: ICardDeck;
-}
+// declare interface IDeckIndex {
+//     [id: string]: ICardDeck;
+// }
 
 declare interface ICardIndex {
     [id: string]: ICard;

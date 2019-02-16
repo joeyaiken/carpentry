@@ -3,7 +3,7 @@ import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
-import { loadInitialUIState, cacheUIState } from '../data/lumberyard'
+import { Lumberyard } from '../data/lumberyard'
 
 import { 
     APP_SHEET_TOGGLE, 
@@ -61,7 +61,7 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
                 isNavOpen: false
             }
             
-            cacheUIState(newState);
+            Lumberyard.UI.cacheUIState(newState);
             //also should cache the UI when the selected deck changes
 
             // return Object.assign({},state,{
@@ -85,7 +85,7 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
             // console.log('ui state default reducer');
             // console.log(state);
             if(!state){
-                state = loadInitialUIState();
+                state = Lumberyard.UI.loadInitialUIState();
             }
             return state;
     }

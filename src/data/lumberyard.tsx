@@ -1,62 +1,168 @@
+/////////////////////////
+//CURRENT GOALS
+//  I don't like the way the app state is initializing
+//  Initial states should be empty objects, should not load cached data
+//  After the app actually initializes, we can load cached & stored data
+/////////////////////////
+
 import DeckList from "../components/DeckList";
 import DeckDetail from "../components/DeckDetail";
 import { stat } from "fs";
 import { Card } from 'mtgsdk-ts'
-
 
 const CACHED_UI_STATE_IDENTIFIER = 'CARPENTRY_CACHED_UI_STATE_IDENTIFIER';
 const CACHED_DECK_DETAIL_IDENTIFIER = 'CARPENTRY_CACHED_DECK_DETAIL_IDENTIFIER';
 const CACHED_CARD_LIST_IDENTIFIER = 'CARPENTRY_CACHED_CARD_LIST_IDENTIFIER';
 const CACHED_CARD_INDEX_IDENTIFIER = 'CACHED_CARD_INDEX_IDENTIFIER';
 
-//So I don't really know WHERE I should be loading the default states, but here are the methods that will be called!
-export function loadInitialUIState(): IUIState {
+
+//lumberyard.UI.loadInitialState();
+//lumberyard.UI.save(currentState)
+
+
+//I need a name for the class that handles the caching / loading / default initialization of a specific record type
+
+// declare namespace Lumberyard {
+//     Lumberyard.StateManager = StateManagerClass
+//     // class UI {
+//     //     // constructor(){
+
+//     //     // }
+
+
+//     // }
     
-    //try to cache a loaded UI state?
-    //What do we REALLY want to cache besides selected deck ID?
-    //Would it hurt to cache everything and only apply certain settings?
-    const cachedUIState = loadUIStateCache();
 
-    const initialUIState: IUIState = loadUIStateCache() || {
-        isNavOpen: false,
-        isSideSheetOpen: false,
-        // selectedDeckId: 0,
-        selectedDeckId: (cachedUIState && cachedUIState.selectedDeckId) || 0,
-        visibleSideSheet: ''
+//     //create a "state manager" ?
+//     //  state manager properties are ones that we would never want to store in a JSON file, only cache
+
+//     //create a "data manager" ?
+//     //  a data manager class worries about data we would want to store in JSON files
+//     //  additionally, it will/should store differences between the data store and live data
+
+// }
+
+export interface IStateInitializer {
+    loadInitialUIState(): IUIState;
+}
+export class StateInitalizer {
+    constructor(){
     }
-
-    return initialUIState;
+    loadInitialUIState(): IUIState {
+    
+        //try to cache a loaded UI state?
+        //What do we REALLY want to cache besides selected deck ID?
+        //Would it hurt to cache everything and only apply certain settings?
+        const cachedUIState = loadUIStateCache();
+    
+        const initialUIState: IUIState = loadUIStateCache() || {
+            isNavOpen: false,
+            isSideSheetOpen: false,
+            // selectedDeckId: 0,
+            selectedDeckId: (cachedUIState && cachedUIState.selectedDeckId) || 0,
+            visibleSideSheet: ''
+        }
+    
+        return initialUIState;
+    }
 }
 
-export function loadInitialDeckEditorState(): IDeckEditorState {
 
-    const initialDeckEditorState: IDeckEditorState = {
-        deckView: 'card',
-        deckGroup: 'none',
-        deckSort: 'name',
-        deckFilter: '',
-        activeDeckVisibleCards: [],
-        sectionVisibilities: [true,true,true,true,true,true],
-        selectedCard: null
+export namespace Lumberyard {
+    export namespace UI {
+        export function loadInitialUIState(): IUIState {
+    
+            //try to cache a loaded UI state?
+            //What do we REALLY want to cache besides selected deck ID?
+            //Would it hurt to cache everything and only apply certain settings?
+            const cachedUIState = loadUIStateCache();
+        
+            const initialUIState: IUIState = loadUIStateCache() || {
+                isNavOpen: false,
+                isSideSheetOpen: false,
+                // selectedDeckId: 0,
+                selectedDeckId: (cachedUIState && cachedUIState.selectedDeckId) || 0,
+                visibleSideSheet: ''
+            }
+        
+            return initialUIState;
+        }
+
+        export function cacheUIState(state: IUIState): void {
+            const UIStateString: string = JSON.stringify(state);
+            localStorage.setItem(CACHED_UI_STATE_IDENTIFIER, UIStateString);
+        }
+
     }
 
-    return initialDeckEditorState;
+    export namespace Datastore {
+
+    }
+
+    
+    export namespace DeckEditor {
+        export function loadInitialDeckEditorState(): IDeckEditorState {
+
+            const initialDeckEditorState: IDeckEditorState = {
+                deckView: 'card',
+                deckGroup: 'none',
+                deckSort: 'name',
+                deckFilter: '',
+                activeDeckVisibleCards: [],
+                sectionVisibilities: [true,true,true,true,true,true],
+                selectedCard: null
+            }
+            return initialDeckEditorState;
+        }
+
+    }
+
+    export namespace CardSearch {
+        export function loadInitialCardSearchState(): ICardSearch {
+
+            let initialCardSearchState: ICardSearch = {
+                requestedCards: [],
+                searchFilter: {
+                    name: '',
+                    results: []
+                },
+                searchIsFetching: false
+            }
+        
+            return initialCardSearchState;
+        }
+    }
+
 
 }
 
-export function loadInitialCardSearchState(): ICardSearch {
 
-    let initialCardSearchState: ICardSearch = {
-        requestedCards: [],
-        searchFilter: {
-            name: '',
-            results: []
-        },
-        searchIsFetching: false
-    }
+/*
+What types of objects am I currently caching/loading?
+    various app states (possibly cached)
+        Note: some app states are never cached
+    stored data
 
-    return initialCardSearchState;
-}
+
+
+    UI state
+    deck editor state
+    data store
+
+
+
+*/
+
+
+
+
+
+//So I don't really know WHERE I should be loading the default states, but here are the methods that will be called!
+
+
+
+
+
 
 export function saveCardIndexCache(index: ICardIndex): void {
     localStorage.setItem(CACHED_CARD_INDEX_IDENTIFIER, JSON.stringify(index))
@@ -179,10 +285,7 @@ export function loadInitialDataStore(): IDataStore {
     return initialDataStore;
 }
 
-export function cacheUIState(state: IUIState): void {
-    const UIStateString: string = JSON.stringify(state);
-    localStorage.setItem(CACHED_UI_STATE_IDENTIFIER, UIStateString);
-}
+
 
 function loadUIStateCache(): IUIState | null {
     const cachedUIStateData: string|null = localStorage.getItem(CACHED_UI_STATE_IDENTIFIER)

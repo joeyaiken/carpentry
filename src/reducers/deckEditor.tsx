@@ -11,7 +11,7 @@ import {
     DECK_EDITOR_CARD_SELECTED
 } from '../actions'
 
-import { loadInitialDeckEditorState } from '../data/lumberyard'
+import { Lumberyard } from '../data/lumberyard'
 
 // interface UI {
 //     isNavOpen: boolean;
@@ -87,7 +87,7 @@ export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any =>
             // return newBinderState;
         default:
             if(!state){
-                state = loadInitialDeckEditorState();
+                state = Lumberyard.DeckEditor.loadInitialDeckEditorState();
             }
             return state;
     }
