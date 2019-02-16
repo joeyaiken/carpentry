@@ -133,16 +133,6 @@ export function loadInitialDataStore(): IDataStore {
 
     //generate a card index cache by ID? 
    
-    // cardLists.map((list) => {
-    //     var someCardNames = list.cards.map((card) => {
-    //         return cardIndex[card].name;
-    //     });
-
-    //     console.log('did we get cards by name?');
-    //     console.log(someCardNames)
-    //     //return list.
-    // })
-    
 
     
     // let detailList: IDeckDetail[] = [];
