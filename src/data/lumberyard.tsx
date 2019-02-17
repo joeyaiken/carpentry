@@ -54,7 +54,7 @@ export class UIStateManager {
 }
 
 export class LumberyardDataStore {
-    
+
 }
 
 export function loadInitialDeckEditorState(): IDeckEditorState {
@@ -280,11 +280,6 @@ return {
 }// a
 }
 
-
-
-    
-
-
 function loadUIStateCache(): IUIState | null {
     const cachedUIStateData: string|null = localStorage.getItem(CACHED_UI_STATE_IDENTIFIER)
     if(cachedUIStateData){
@@ -293,10 +288,6 @@ function loadUIStateCache(): IUIState | null {
         return null;
     }
 }
-    
-
-
-
 
 /*
 What types of objects am I currently caching/loading?
