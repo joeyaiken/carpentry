@@ -3,7 +3,7 @@ import { Card } from 'mtgsdk-ts'
 //import {} from './data/lumberyard'
 
 
-import { Lumberyard } from '../data/lumberyard'
+import { loadInitialCardSearchState } from '../data/lumberyard'
 
 //reducer file ideas
 //ui

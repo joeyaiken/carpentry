@@ -342,7 +342,7 @@ function mapStateToProps(state: State): PropsFromState {
 
     // console.log(state.actions.sectionVisibilities)
     //test
-    const selectedDeckId = state.ui.selectedDeckId;
+    const selectedDeckId = state.ui.selectedDeckId || 0;
     // const activeDeck = state.data.deckList[selectedDeckId];
     const activeDeckDetail = state.data.detailList[selectedDeckId];
     const activeDeckCardList = state.data.cardLists[selectedDeckId];
@@ -434,7 +434,7 @@ function mapStateToProps(state: State): PropsFromState {
 
     const result: PropsFromState = {
         // deckList: state.data.deckList,
-        selectedDeckId: state.ui.selectedDeckId,
+        selectedDeckId: state.ui.selectedDeckId || 0,
         sectionVisibilities: state.deckEditor.sectionVisibilities,
         display: state.deckEditor.deckView,
         groupBy: state.deckEditor.deckGroup,

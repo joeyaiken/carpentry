@@ -1,5 +1,3 @@
-
-
 declare interface ICardDeck {
     //an index
     id: number;
@@ -11,11 +9,7 @@ declare interface ICardDeck {
     stats: IDeckStats;
 
     //a collection of cards
-    cards: [{
-        name: string;
-        set: string;
-        //...count ?
-    }];
+    cards: IDeckCard[];
 }
 
 declare interface IDeckDetail {
@@ -25,7 +19,7 @@ declare interface IDeckDetail {
     description: string;
     type: string;
 
-    // basicLands: ILandCount;
+    basicLands: ILandCount;
 
     //"gimick" ?
 }
@@ -34,4 +28,9 @@ declare interface IDeckStats {
     id: number;
     //
     colors: string;
+}
+
+declare interface IDeckCard {
+    name: string;
+    set: string;
 }

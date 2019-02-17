@@ -31,8 +31,9 @@ import {
 
 interface PropsFromState { 
     isNavOpen: boolean;
-    selectedDeckId: number;
-    deckList: CardDeck[];
+    selectedDeckId: number | null;
+    // deckList: CardDeck[];
+    // deckList: ICardDeck[];
     isSideSheetOpen: boolean;
     visibleSideSheet: string;
 }
@@ -108,12 +109,12 @@ class App extends React.Component<AppProps>{
 
         const navOverlay: JSX.Element = (
             <div className="app-nav-overlay">
-                <AppNav deckList={this.props.deckList} 
+                {/* <AppNav deckList={this.props.deckList} 
                     selectedDeckId={this.props.selectedDeckId} 
                     onAddDeckClick={this.handleAddDeck} 
                     onItemSelected={this.handleSelectDeck}
                     handleNavClick={this.handleNavClick}/>
-                <div className="overlay" onClick={this.handleOverlayClick} />
+                <div className="overlay" onClick={this.handleOverlayClick} /> */}
             </div>
         );
 
@@ -191,23 +192,24 @@ function mapStateToProps(state: State): PropsFromState {
     // console.log('app mapping things');
     // console.log(state.data)
 
-    const localCardList: CardDeck[] = state.data.detailList.map((detail) => {
-        let returningCardDeck: CardDeck = {
-            basicLands: detail.basicLands,
-            cards: state.data.cardLists[detail.id].cards,
-            colors: detail.colors,
-            description: detail.description,
-            id: detail.id,
-            name: detail.name,
-            type: detail.type
-        }
-        return returningCardDeck;
-    })
+    // const localCardList: ICardDeck[] = state.data.detailList.map((detail) => {
+    //     let returningCardDeck: ICardDeck = {
+    //         // basicLands: detail.basicLands,
+    //         // cards: state.data.cardLists[detail.id].cards,
+    //         // colors: detail.colors,
+    //         // description: detail.description,
+    //         id: detail.id,
+    //     //  
+    //         // name: detail.name,
+    //         // type: detail.type
+    //     }
+    //     return returningCardDeck;
+    // })
 
     const result: PropsFromState = {
         isNavOpen: state.ui.isNavOpen,
         selectedDeckId: state.ui.selectedDeckId,
-        deckList: localCardList,
+        // deckList: localCardList,
         isSideSheetOpen: state.ui.isSideSheetOpen,
         visibleSideSheet: state.ui.visibleSideSheet
         // searchValue: searchFilterName,
