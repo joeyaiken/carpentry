@@ -29,12 +29,18 @@ import {
 
 //export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
 export const ui = (state: IUIState, action: ReduxAction): any => {
+    let newState: IUIState = {
+        ...state,
+    }
+    
     switch(action.type){
         case APP_NAV_CLICK:
-            return {
-                ...state,
+            newState = {
+                ...newState,
                 isNavOpen: !state.isNavOpen
             }
+            UIStateManager.cacheUIState(newState);
+            return newState
         case APP_SHEET_TOGGLE: 
             ///isSearchOpen: boolean;
             // isRareBinderOpen: boolean;
@@ -55,8 +61,8 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
                 // [action.payload]: true
             }
         case SELECT_DECK:
-            let newState: IUIState = {
-                ...state,
+            newState = {
+                ...newState,
                 selectedDeckId: action.payload,
                 isNavOpen: false
             }

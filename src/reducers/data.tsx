@@ -14,7 +14,8 @@ import {
     SELECT_DECK,
     ADD_CARD_TO_DECK,
     ADD_CARD_TO_RARES,
-    ADD_CARD_TO_INDEX
+    ADD_CARD_TO_INDEX,
+    TOGGLE_DECK_EDITOR_STATUS
 } from '../actions'
 
 // interface UI {
@@ -35,6 +36,8 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
         ...state
     }
    
+    
+
     // let deckId = state.
     // let activeDeckCards = newDataStoreState.cardLists[state.selectedDeckId];
     // let activeDeckDetail = newDataStoreState.detailList[state.selectedDeckId];
@@ -146,7 +149,13 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             //is there a problem with updating the index instead of not ovewriting things?
             newDataStoreState.cardIndex[cardToIndex.name] = cardToIndex;
             saveCardIndexCache(newDataStoreState.cardIndex);
-            return newDataStoreState
+            return newDataStoreState;
+        case TOGGLE_DECK_EDITOR_STATUS:
+            // console.log('status toggle?')
+            let activeDeckDetail2 = newDataStoreState.detailList[state.selectedDeckId];
+            activeDeckDetail2.isUpToDate = !activeDeckDetail2.isUpToDate;
+            cacheDeckDetails(newDataStoreState.detailList);
+            return newDataStoreState;
         default:
             if(!state){
                 state = loadInitialDataStore();

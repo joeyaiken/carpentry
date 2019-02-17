@@ -36,7 +36,7 @@ export class UIStateManager {
         const cachedUIState = loadUIStateCache();
 
         const initialUIState: IUIState = loadUIStateCache() || {
-            isNavOpen: false,
+            isNavOpen: (cachedUIState && cachedUIState.isNavOpen) || false,
             isSideSheetOpen: false,
             // selectedDeckId: 0,
             // selectedDeckId: null,
@@ -108,9 +108,9 @@ export function loadInitialDataStore(): IDataStore {
     // const cachedCardLists = loadDeckCardsCache();
 
     let defaultData: {
-        cardLists: ICardList[],
+        cardLists: ICardList_Legacy[],
         detailList: IDeckDetail[]
-    } = require('./logpile.json');
+    } = require('./logpile_legacy.json');
 
     const cachedDeckDetails = loadDeckDetailCache();
     const cachedDeckCards = loadDeckCardsCache();
@@ -123,7 +123,7 @@ export function loadInitialDataStore(): IDataStore {
     }
 
     //mapCardToICard
-    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndex.json');
+    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndex_legacy.json');
     // let defaultIndex: ICardIndex = {};
     
     // Object.keys(fullIndex).forEach((key) => {
@@ -188,7 +188,7 @@ export function loadInitialDataStore(): IDataStore {
     // }
 
     // let cardLists: ICardList[] = cachedCardLists || []
-    let cardLists: ICardList[] = defaultData.cardLists || []
+    let cardLists: ICardList_Legacy[] = defaultData.cardLists || []
     // console.log('default data')
     // console.log(defaultData);
     const cachedUIState = loadUIStateCache();
@@ -223,12 +223,12 @@ function loadDeckDetailCache(): IDeckDetail[] | null {
     }
 }
 ////
-export function cacheDeckCards(cards: ICardList[] | null): void {
+export function cacheDeckCards(cards: ICardList_Legacy[] | null): void {
     const cardsString: string = JSON.stringify(cards);
     localStorage.setItem(CACHED_CARD_LIST_IDENTIFIER, cardsString);
 }
         
-function loadDeckCardsCache(): ICardList[] | null {
+function loadDeckCardsCache(): ICardList_Legacy[] | null {
     const cardsString: string|null = localStorage.getItem(CACHED_CARD_LIST_IDENTIFIER)
     if(cardsString){
         return JSON.parse(cardsString);  //what if this parse fails?

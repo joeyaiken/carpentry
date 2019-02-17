@@ -19,7 +19,8 @@ import {
     deckEditorCardSelected,
     deckEditorDuplicateSelectedCard,
     deckEditorRemoveOneSelectedCard,
-    deckEditorRemoveAllSelectedCards
+    deckEditorRemoveAllSelectedCards,
+    toggleDeckEditorStatus
     //deckEditorHeaderToggle
     //deckEditorSectionToggle
 } from '../actions'
@@ -77,7 +78,7 @@ interface PropsFromState {
     //cardCollections: binderCardCollection;//{ [key: string]: IMagicCard[] };
     cardCollections: groupedCardCollection;//{ [key: string]: IMagicCard[] };
 
-
+    isDeckUpToDate: boolean;
 
 }
 
@@ -105,6 +106,8 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handleDuplicateClick = this.handleDuplicateClick.bind(this);
         this.handleRemoveOneClick = this.handleRemoveOneClick.bind(this);
         this.handleRemoveAllClick = this.handleRemoveAllClick.bind(this);
+
+        this.handleStatusChange = this.handleStatusChange.bind(this);
     }
 
     // componentDidMount() {
@@ -153,7 +156,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     handleHeaderToggle(){
-
+        
     }
 
     handleSectionToggle(sectionIndex: string){
@@ -203,7 +206,9 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         //
     }
     
-    
+    handleStatusChange(){
+        this.props.dispatch(toggleDeckEditorStatus())
+    }
     
 
     
@@ -221,7 +226,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
         const selectedCardHeaderSection: JSX.Element = (
             <div className="header-section">
-                <label>Selected Card:</label>
+                <label>Selected:</label>
                 <label>{ this.props.selectedCard }</label>
                 <MaterialButton value="add" icon="add_circle" onClick={this.handleDuplicateClick} />
                 <MaterialButton value="remove" icon="remove_circle" onClick={this.handleRemoveOneClick} />
@@ -251,6 +256,11 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                         <MaterialButton value="name" isSelected={(this.props.sortBy == "name")} icon="text_format" onClick={this.handleSortChange} />
                         <MaterialButton value="rarity" isSelected={(this.props.sortBy == "rarity")} icon="grade" onClick={this.handleSortChange} />
                         <MaterialButton value="manaCost" isSelected={(this.props.sortBy == "manaCost")} icon="signal_cellular_alt" onClick={this.handleSortChange} />
+                    </div>
+                    <div className="header-section">
+                        <label>Status:</label>
+                        <MaterialButton value="clear" isSelected={!this.props.isDeckUpToDate} icon="clear" onClick={this.handleStatusChange} />
+                        <MaterialButton value="done" isSelected={this.props.isDeckUpToDate} icon="done" onClick={this.handleStatusChange} />
                     </div>
                     {
                         (this.props.selectedCard != null) && selectedCardHeaderSection
@@ -309,7 +319,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                                     {
                                         collection.cards.map((card: IMagicCard, index: number) => {
                                             // const cardIsSelected = false; // (this.props.selectedSearchResult == card.id);
-                                            console.log(card)
+                                            // console.log(card)
                                             const cardIsSelected = this.props.selectedCard == card.data.name;
                                             // console.log(card.data)
                                             return (<MagicCard key={index} card={card} display={this.props.display} cardIsSelected={cardIsSelected} onClick={() => this.handleCardClick(card.data.name)} />);
@@ -352,7 +362,7 @@ function mapStateToProps(state: State): PropsFromState {
 
     //Get collection of visible magic cards
 
-    console.log('trying to determine visible cards what did I break?')
+    // console.log('trying to determine visible cards what did I break?')
 
     let visibleCards: IMagicCard[] = activeDeckCardList.cards.map((cardId) =>{
 
@@ -391,7 +401,7 @@ function mapStateToProps(state: State): PropsFromState {
     
 
     let groupedCards: groupedCardCollection = {};
-    let cardGroups: binderCardGroup[] = [];
+    // let cardGroups: binderCardGroup[] = [];
     //group visible cards
     switch(state.deckEditor.deckGroup){// spellType | rarity | none
         case 'spellType':
@@ -411,7 +421,7 @@ function mapStateToProps(state: State): PropsFromState {
             });
             break;
         case 'rarity':
-            console.log('sorting by rarity');
+            // console.log('sorting by rarity');
             visibleCards.forEach((card: IMagicCard) => {
                 // const cardType: string = card.data.types[0];
                 if(!groupedCards[card.data.rarity]){
@@ -442,7 +452,8 @@ function mapStateToProps(state: State): PropsFromState {
         cardCollections: groupedCards,
         // cardGroups: cardGroups,
         landCounts: activeDeckDetail.basicLands,
-        selectedCard: state.data.selectedCard
+        selectedCard: state.data.selectedCard,
+        isDeckUpToDate: activeDeckDetail.isUpToDate
     }
     
     return result;

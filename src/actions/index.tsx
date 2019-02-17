@@ -46,6 +46,8 @@ export const REQUEST_CARD_DETAIL = 'REQUEST_CARD_DETAIL';
 export const RECEIVE_CARD_DETAIL = 'RECEIVE_CARD_DETAIL';
 
 //deck editor actions
+export const TOGGLE_DECK_EDITOR_STATUS = 'TOGGLE_DECK_EDITOR_STATUS';
+
 export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED';
 
 export const DECK_EDITOR_DUPLICATE_SELECTED_CARD = 'DECK_EDITOR_DUPLICATE_SELECTED_CARD';
@@ -158,6 +160,11 @@ export const addCardToRares = (cardId: string): ReduxAction => ({
 
 
 //START: Deck Editor action creators
+
+export const toggleDeckEditorStatus = (): ReduxAction => ({
+    type: TOGGLE_DECK_EDITOR_STATUS
+});
+
 
 // export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED'
 //deckEditorCardSelected

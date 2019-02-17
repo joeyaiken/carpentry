@@ -272,35 +272,36 @@ html, body, #root{
 
 
 
-.sd-deck-list {
+// .sd-deck-list {
 
-    .sd-deck-card {
-        label{
-            color: @primaryTextColor;
-            font-weight: 600;
-        }
-    }
+//     .sd-deck-card {
+//         label{
+//             color: @primaryTextColor;
+//             font-weight: 600;
+//         }
+//     }
     
-    .compact-card {
-        width: 75px;
-        height: 75px;
-        // background-color: @secondaryTextColor;
-        border-radius: 25px;
-        margin: 5px;
-        padding: 5px;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-        .deck-mana-types{
-            display: inline-grid;
-            grid-template-columns: 25px 25px 25px;
-            vertical-align: middle;
-            //float: ;
-        }
-    }
-    .selected-card {
-        background-color: @lightPrimaryColor;
-    }
+//     .compact-card {
+//         width: 75px;
+//         height: 75px;
+//         // background-color: @secondaryTextColor;
+//         border-radius: 25px;
+//         margin: 5px;
+//         padding: 5px;
+//         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+//         .deck-mana-types{
+//             //mana-icon
+//             display: inline-grid;
+//             grid-template-columns: 25px 25px 25px;
+//             vertical-align: middle;
+//             //float: ;
+//         }
+//     }
+//     .selected-card {
+//         background-color: @lightPrimaryColor;
+//     }
 
-}
+// }
 
 .sd-card-quick-add{
     .card-container{
@@ -447,12 +448,19 @@ html, body, #root{
                 margin: 5px;
                 padding: 5px;
                 box-shadow: 0 3px 6px rgba(87, 68, 68, 0.16), 0 3px 6px rgba(0,0,0,0.23);
-                .deck-mana-types{
-                    display: inline-grid;
-                    grid-template-columns: 25px 25px 25px;
-                    vertical-align: middle;
+                
+            }
+
+            .deck-mana-types{
+                display: inline-block;
+                // display: inline-grid;
+                // grid-template-columns: 25px 25px 25px;
+                // vertical-align: middle;
+                .mana-icon{
+                    width: 25px;
                 }
             }
+
             .selected-card {
                 background-color: @lightPrimaryColor;
             }

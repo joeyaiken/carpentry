@@ -108,26 +108,6 @@ body,
 .padded-section {
   padding: 8px;
 }
-.sd-deck-list .sd-deck-card label {
-  color: #212121;
-  font-weight: 600;
-}
-.sd-deck-list .compact-card {
-  width: 75px;
-  height: 75px;
-  border-radius: 25px;
-  margin: 5px;
-  padding: 5px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-.sd-deck-list .compact-card .deck-mana-types {
-  display: inline-grid;
-  grid-template-columns: 25px 25px 25px;
-  vertical-align: middle;
-}
-.sd-deck-list .selected-card {
-  background-color: #BBDEFB;
-}
 .sd-card-quick-add .card-container {
   flex-wrap: wrap;
 }
@@ -218,10 +198,11 @@ body,
   padding: 5px;
   box-shadow: 0 3px 6px rgba(87, 68, 68, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
-.app .app-nav-overlay .cc-app-nav .compact-card .deck-mana-types {
-  display: inline-grid;
-  grid-template-columns: 25px 25px 25px;
-  vertical-align: middle;
+.app .app-nav-overlay .cc-app-nav .deck-mana-types {
+  display: inline-block;
+}
+.app .app-nav-overlay .cc-app-nav .deck-mana-types .mana-icon {
+  width: 25px;
 }
 .app .app-nav-overlay .cc-app-nav .selected-card {
   background-color: #BBDEFB;

@@ -1,0 +1,38 @@
+
+General current task list:
+    Tasks Priority:
+        --Get app nav working
+        --Add deck property for "is up to date"
+        --Refactor app nav to
+            --LIST decks
+            --optionally show mana?
+            --show is up to date
+        --Add way to toggle "is up to date" property of decks
+
+        //after this, options include 
+        //  start refactoring DB storage
+        //      Prob shouldn't remove ILandCount until the deck editor groups same cards
+        //      For now, the 
+        //  Log current decks with in-place DB structure?
+        //      It doesn't make sense to do this until we're storing name AND set
+        //      At that point, we'll prob have lands working differently
+        //  Start refactoring search
+        //      options for local vs web
+        //      additional search filters
+        //      actually search on "enter" (make form?)
+
+    Goals
+        Have all current decks logged
+        Have all rares logged
+
+        Once I have all data logged, I can work on stats, stores, and deck building tools
+        I should probably create the basic stores now, but not fully populate them
+    
+    
+    Add overview page
+        lists decks & deck stats
+        Can be used to navigate to decks
+    Refactor AppNav to be a constant left bar?
+    Add card index JSON files for specific sets
+    Update decks to store Name / Set combos for cards, not just Name
+    Update decks to store lands in the card list, not a unique object

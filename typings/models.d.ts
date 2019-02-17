@@ -6,7 +6,7 @@ declare interface ICardDeck {
     details: IDeckDetail;
 
     //some statistics
-    stats: IDeckStats;
+    stats: IDeckStats | null;
 
     //a collection of cards
     cards: IDeckCard[];
@@ -19,8 +19,9 @@ declare interface IDeckDetail {
     description: string;
     type: string;
 
-    basicLands: ILandCount;
+    basicLands: ILandCount; //needs to be removed
 
+    isUpToDate: boolean;
     //"gimick" ?
 }
 

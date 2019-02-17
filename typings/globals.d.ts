@@ -76,7 +76,7 @@ declare interface IDataStore {
 
     //These are the only records that need to be stored under source controll
     detailList: IDeckDetail[]; //should this be a dictionary instead?
-    cardLists: ICardList[]; //should this be a dictionary instead?
+    cardLists: ICardList_Legacy[]; //should this be a dictionary instead?
     // rareStore: ICardList;
 }
 
@@ -130,11 +130,17 @@ declare interface ReduxAction extends AnyAction {
 // }
 
 declare interface ICardListIndex {
-    [id: number]: ICardList;
+    [id: number]: ICardList_Legacy;
 }
-declare interface ICardList {
+declare interface ICardList_Legacy {
     id: number;
     cards: string[]; //Cards are just a collection of string IDs represengint a Magic.Card.Name
+}
+
+declare interface ICardList {
+    id: number;
+    cards: IDeckCard[]; //Cards are just a collection of string IDs represengint a Magic.Card.Name
+    lands: ILandCount;
 }
 
 declare interface ILandCount {
@@ -199,38 +205,38 @@ declare interface ICard {
 
 
 
-declare interface ICardDeck {
-    //an index
-    id: number;
+// declare interface ICardDeck {
+//     //an index
+//     id: number;
 
-    //some settings / properties
-    details: IDeckDetail;
+//     //some settings / properties
+//     details: IDeckDetail;
 
-    //some statistics
-    stats: IDeckStats;
+//     //some statistics
+//     stats: IDeckStats;
 
-    //a collection of cards
-    cards: [{
-        name: string;
-        set: string;
-        //...count ?
-    }];
-}
+//     //a collection of cards
+//     cards: [{
+//         name: string;
+//         set: string;
+//         //...count ?
+//     }];
+// }
 
-declare interface IDeckDetail {
-    id: number;
-    //
-    name: string;
-    description: string;
-    type: string;
+// declare interface IDeckDetail {
+//     id: number;
+//     //
+//     name: string;
+//     description: string;
+//     type: string;
 
-    basicLands: ILandCount;
+//     basicLands: ILandCount;
 
-    //"gimick" ?
-}
+//     //"gimick" ?
+// }
 
-declare interface IDeckStats {
-    id: number;
-    //
-    colors: string;
-}
+// declare interface IDeckStats {
+//     id: number;
+//     //
+//     colors: string;
+// }
