@@ -199,7 +199,7 @@ function mapStateToProps(state: State): PropsFromState {
     // }
 
 
-    let relevantCardIndex: ICardIndex_Legacy = {};
+    // let relevantCardIndex: ICardIndex_Legacy = {};
     // let deckIndexKeys = Object.keys(state.data.cardIndex);
     
     // state.data.cardLists.forEach((cardList) => {

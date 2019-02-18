@@ -14,9 +14,6 @@ const CACHED_DECK_DATA_IDENTIFIER = 'CACHED_DECK_DATA_IDENTIFIER';
 const CACHED_CARD_LIST_IDENTIFIER = 'CARPENTRY_CACHED_CARD_LIST_IDENTIFIER';
 const CACHED_CARD_INDEX_IDENTIFIER = 'CACHED_CARD_INDEX_IDENTIFIER';
 
-//lumberyard.UI.loadInitialState();
-//lumberyard.UI.save(currentState)
-
 //I need a name for the class that handles the caching / loading / default initialization of a specific record type
 
 //create a "state manager" ?
@@ -115,93 +112,17 @@ export function loadInitialDataStore(): IDataStore {
     // console.log(defaultData);
     const cachedDeckData = loadDeckDataCache();
 
-    // if(cachedDeckDetails){
-    //     defaultLegacyData.detailList = cachedDeckDetails;
-    // }
-    // if(cachedDeckCards){
-    //     defaultLegacyData.cardLists = cachedDeckCards;
-    // }
-
     //mapCardToICard
     let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndexData.json');
-    // let defaultIndex: ICardIndex = {};
-    
-    // Object.keys(fullIndex).forEach((key) => {
-    //     defaultIndex[key] = mapCardToICard(fullIndex[key])
-    // })
 
-    //loadDeckDetailCache
-    // const cachedDeckDetails = loadDeckDetailCache();
-
-    // var cardLists: ICardList[] = JSON.parse(cardListsById);
-
-
-    // if(cachedIndexDataByName){
-    //     // var rawCache = JSON.parse(cachedIndexData);
-    //     cardIndex = JSON.parse(cachedIndexDataByName);
-    // }
-
-
-    // let cardIndexByName: ICardIndex = {}
-
-    //const cachedIndexData: string|null = localStorage.getItem('card-index-cache');
-    
-
-    // Object.keys(cardIndex).forEach((key) => {
-    //     let card = cardIndex[key];
-    //     cardIndexByName[card.name] = card;
-    // });
-
-    // localStorage.setItem('card-index-cache-by-name',JSON.stringify(cardIndexByName))
-
-    //generate a card index cache by ID? 
-    
-    // cardLists.map((list) => {
-    //     var someCardNames = list.cards.map((card) => {
-    //         return cardIndex[card].name;
-    //     });
-
-    //     console.log('did we get cards by name?');
-    //     console.log(someCardNames)
-    //     //return list.
-    // })
-    
-
-    
-    // let detailList: IDeckDetail[] = [];
-    // let detailList = cachedDeckDetails || [];//defaultData
-    // let detailList = defaultLegacyData.detailList || [];//defaultData
-
-    //defaultDeckDetails
-    // if(defaultDeckDetails && defaultDeckDetails.length > 0 && detailList.length == 0){
-        // detailList = JSON.parse(defaultDeckDetails);
-
-        //Should only really need to do this once
-    // detailList.forEach((deckDetail) => {
-    //     if(!deckDetail.basicLands){
-    //         deckDetail.basicLands = generateLandCounterInstance();
-    //     }
-    // })
-    // }
-
-    // let cardLists: ICardList[] = cachedCardLists || []
-    // let cardLists: ICardList_Legacy[] = defaultLegacyData.cardLists || []
-    // console.log('default data')
-    // console.log(defaultData);
     const cachedUIState = loadUIStateCache();
 
     const initialDataStore: IDataStore = {
-        // deckList: deckList,
-        // cardLists: cardLists,
-        // detailList: detailList,
-        // cardIndex: cardIndex,
         selectedCard: null,
         selectedDeckId: (cachedUIState && cachedUIState.selectedDeckId) || 0,
         deckList: defaultData.deckData,
         cardIndex: defaultIndex
     }
-    // console.log('initial data store')
-    // console.log(initialDataStore)
 
     return initialDataStore;
 }
@@ -288,7 +209,3 @@ What types of objects am I currently caching/loading?
     deck editor state
     data store
 */
-
-
-
-

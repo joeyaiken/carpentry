@@ -1,18 +1,3 @@
-declare interface ICardDeck_Legacy {
-    //an index
-    id: number;
-
-    //some settings / properties
-    details: IDeckDetail_Legacy;
-
-    //some statistics
-    stats: IDeckStats | null;
-
-    //a collection of cards
-    cards: IDeckCard[];
-    
-}
-
 declare interface ICardDeck {
     //an index
     id: number;
@@ -27,19 +12,6 @@ declare interface ICardDeck {
     cards: IDeckCard[];
     //basic lands (for now)
     basicLands: ILandCount;
-}
-
-declare interface IDeckDetail_Legacy {
-    id: number;
-    //
-    name: string;
-    description: string;
-    type: string;
-
-    basicLands: ILandCount; //needs to be removed
-
-    isUpToDate: boolean;
-    //"gimick" ?
 }
 
 declare interface IDeckDetail {
@@ -61,8 +33,6 @@ declare interface IDeckCard {
     name: string;
     set: string;
 }
-
-
 
 declare interface ICardIndex {
     [set: string]: {

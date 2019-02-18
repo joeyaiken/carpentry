@@ -7,8 +7,6 @@ import RareBinder from '../components/RareBinder';
 import CardQuickAdd from './CardQuickAdd';
 import AppData from './AppData';
 
-import DeckDetail from '../components/DeckDetail';
-
 import MaterialButton from '../components/MaterialButton'
 import AppNav from '../components/AppNav'
 
@@ -18,21 +16,13 @@ import {
     appNavClick,
     addDeck,
     selectDeck,
-    // deckChanged,
-    saveDeck,
-    // onSectionToggle,
-    appSheetToggle,
-    // selectDeck,
-    // deckChanged
-    // cardDetailRequested,
-    appNavSave
+    appSheetToggle
 } from '../actions'
 
 
 interface PropsFromState { 
     isNavOpen: boolean;
     selectedDeckId: number | null;
-    // deckList: CardDeck[];
     deckList: ICardDeck[];
     isSideSheetOpen: boolean;
     visibleSideSheet: string;
@@ -150,35 +140,6 @@ class App extends React.Component<AppProps>{
     }
 }
 
-
-// class App extends Component {
-//     //Will either be showing the DeckManager or RareBinder container components
-
-
-//     render() {
-//         // flex-container-vertical
-//         //static-section
-//         const description: string = "Deck Manager";
-//         return (
-//             <div className="app">
-//                 <div className="app-header">
-//                     <h1>carpentry</h1><h2>{description}</h2>
-//                 </div>
-//                 <div className="app-contents">
-                    
-//                     {/* <ViewSelector />  flex-section */}
-//                     <DeckManager />
-//                     {/* <RareBinder /> */}
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
-
-// export default App;
-
-    
-
 function mapStateToProps(state: State): PropsFromState {
     // const searchFilterName = state.actions.searchFilter.name;
     // const searchResults: Card[] = state.actions.searchFilter.results.slice();
@@ -224,9 +185,6 @@ function mapStateToProps(state: State): PropsFromState {
         deckList: state.data.deckList,
         isSideSheetOpen: state.ui.isSideSheetOpen,
         visibleSideSheet: state.ui.visibleSideSheet
-        // searchValue: searchFilterName,
-        // searchResults: searchResults,
-        // selectedSearchResult: selectedSearchResult
     }
     return result;
 }

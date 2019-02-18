@@ -67,20 +67,6 @@ declare interface IDataStore {
     //  maybe even section visibilities?
     
     //  probably at least sections
-    
-    
-
-    //dictionary of cards "card index"
-    // cardIndex: ICardIndex_Legacy;
-
-    //dictionary of decks
-    // deckList: CardDeck[]
-    //instead of a list of decks, we have a list of details and a list of cards
-
-    //These are the only records that need to be stored under source controll
-    // detailList: IDeckDetail_Legacy[]; //should this be a dictionary instead?
-    // cardLists: ICardList_Legacy[]; //should this be a dictionary instead?
-    // rareStore: ICardList;
 
     deckList: ICardDeck[];
     cardIndex: ICardIndex;
@@ -120,29 +106,6 @@ declare interface ReduxAction extends AnyAction {
 ///////////////////////
 //  Object interfaces/
 /////////////////////
-//A deck has...
-
-
-// declare interface IDeckDetailIndex {
-//     [id: number]: IDeckDetail;
-// }
-
-
-// declare interface IDeckLandCountIndex {
-//     [id: number]: IDeckLandCount;
-// }
-// declare interface IDeckLandCount {
-//     id: number;
-//     basicLands: ILandCount;
-// }
-
-declare interface ICardListIndex {
-    [id: number]: ICardList_Legacy;
-}
-declare interface ICardList_Legacy {
-    id: number;
-    cards: string[]; //Cards are just a collection of string IDs represengint a Magic.Card.Name
-}
 
 declare interface ICardList {
     id: number;
@@ -164,27 +127,14 @@ declare interface ILandCount {
 //  DataStore
 //
 
-// declare interface IDeckIndex {
-//     [id: string]: ICardDeck;
-// }
 
-declare interface ICardIndex_Legacy {
-    [id: string]: ICard;
-}
-
+//should be depricated
 declare interface IMagicCard {
     //name
     cardId: string;
     data: Card;
-    // updateRequested: boolean;
-    //ID ?
-
-    //color(s)
-
-    //set
-
-    //???
 }
+
 
 declare interface ICard {
     //Guess I'll just put relevant info by ID
@@ -207,43 +157,3 @@ declare interface ICard {
     type: string;
     types: string[];
 }
-
-
-
-
-
-// declare interface ICardDeck {
-//     //an index
-//     id: number;
-
-//     //some settings / properties
-//     details: IDeckDetail;
-
-//     //some statistics
-//     stats: IDeckStats;
-
-//     //a collection of cards
-//     cards: [{
-//         name: string;
-//         set: string;
-//         //...count ?
-//     }];
-// }
-
-// declare interface IDeckDetail {
-//     id: number;
-//     //
-//     name: string;
-//     description: string;
-//     type: string;
-
-//     basicLands: ILandCount;
-
-//     //"gimick" ?
-// }
-
-// declare interface IDeckStats {
-//     id: number;
-//     //
-//     colors: string;
-// }
