@@ -148,6 +148,9 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             return newDataStoreState;
         case ADD_CARD_TO_INDEX:
             let cardToIndex: ICard = action.payload;
+            if(!newDataStoreState.cardIndex[cardToIndex.set]){
+                newDataStoreState.cardIndex[cardToIndex.set] = {}
+            }
             //is there a problem with updating the index instead of not ovewriting things?
             newDataStoreState.cardIndex[cardToIndex.set][cardToIndex.name] = cardToIndex;
             saveCardIndexCache(newDataStoreState.cardIndex);

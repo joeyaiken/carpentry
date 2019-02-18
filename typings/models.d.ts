@@ -39,3 +39,34 @@ declare interface ICardIndex {
         [name: string]: ICard;
     }
 }
+
+declare interface IWebSearchFilter {
+    name?: string;
+    layout?: string;
+    cmc?: number;
+    colors?: string;
+    colorIdentity?: string;
+    type?: string;
+    supertypes?: string;
+    types?: string;
+    subtypes?: string;
+    rarity?: string;
+    set?: string;
+    setName?: string;
+    text?: string;
+    flavor?: string;
+    artist?: string;
+    number?: string;
+    power?: string;
+    toughness?: string;
+    loyalty?: number;
+    foreignName?: string;
+    language?: string;
+    gameFormat?: string;
+    legality?: keyof typeof Legality;
+    page?: number;
+    pageSize?: number;
+    orderBy?: string;
+    random?: boolean;
+    contains?: string;
+}

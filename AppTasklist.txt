@@ -1,22 +1,14 @@
 //caches might be unreliable
 General current task list:
     Tasks Priority:
-        --Get app nav working
-        --Add deck property for "is up to date"
-        --Refactor app nav to
-            --LIST decks
-            --optionally show mana?
-            --show is up to date
-        --Add way to toggle "is up to date" property of decks
+        Add some filtering to deck search
 
-        --cached data is updated
+
         //after this, options include 
         //  start refactoring DB storage
         //      Prob shouldn't remove ILandCount until the deck editor groups same cards
         //      For now, it's part of an ICardList
-        //  Log current decks with in-place DB structure?
-        //      It doesn't make sense to do this until we're storing name AND set
-        //      At that point, we'll prob have lands working differently
+        //  Log current decks with in-place DB structure
         //  Start refactoring search
         //      options for local vs web
         //      additional search filters

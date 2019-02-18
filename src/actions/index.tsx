@@ -64,7 +64,7 @@ export const CARD_BINDER_CARD_ADD = 'CARD_BINDER_CARD_ADD';
 export const CARD_BINDER_CARD_REMOVE = 'CARD_BINDER_CARD_REMOVE';
 export const DECK_EDITOR_SECTION_TOGGLE = 'DECK_EDITOR_SECTION_TOGGLE'; // selection toggle ??
 
-export const APP_DATA_STORE_STRING_CHANGE = 'APP_DATA_STORE_STRING_CHANGE';
+// export const APP_DATA_STORE_STRING_CHANGE = 'APP_DATA_STORE_STRING_CHANGE';
 
 // export const ON_SECTION_TOGGLE = 'ON_SECTION_TOGGLE'
 
@@ -143,9 +143,9 @@ export const searchCardSelected = (cardId: string, cardName: string): ReduxActio
     }
 });
 
-export const addCardToDeck = (cardId: string): ReduxAction => ({
+export const addCardToDeck = (card: IDeckCard): ReduxAction => ({
     type: ADD_CARD_TO_DECK,
-    payload: cardId
+    payload: card
 });
 
 export const addCardToIndex = (card: ICard): ReduxAction => ({
@@ -234,10 +234,10 @@ export const deckEditorSectionToggle = (sectionIndex: string): ReduxAction => ({
 })
 
 
-export const appDataStoreStringChanged = (updatedObject: any): ReduxAction => ({
-    type: APP_DATA_STORE_STRING_CHANGE,
-    payload: updatedObject
-})
+// export const appDataStoreStringChanged = (updatedObject: any): ReduxAction => ({
+//     type: APP_DATA_STORE_STRING_CHANGE,
+//     payload: updatedObject
+// })
 
 
 
@@ -377,7 +377,7 @@ function tryFetchCards(dispatch: Dispatch, state: State) {
 function fetchCards(dispatch: Dispatch, filter: string): any {
     
     dispatch(requestCardSearch());
-
+    
     let cardFilter: CardFilter = {
         //name: "Nicol"
         name: filter

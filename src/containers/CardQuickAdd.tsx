@@ -42,7 +42,8 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
         this.props.dispatch(searchValueChange(event.target.value))
     }
 
-    handleSearchClick(){
+    handleSearchClick(event: any){
+        event.preventDefault();
         //this.props.dispatch(searchApplied());
         this.props.dispatch(searchApplied(this.props.searchValue));
         //fetchCards
@@ -105,8 +106,13 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
             })
             if(thisCard){
                 this.props.dispatch(addCardToIndex(mapCardToICard(thisCard)))
+                let card: IDeckCard = {
+                    name: thisCard.name,
+                    set: thisCard.set
+                }
+                this.props.dispatch(addCardToDeck(card))
             }
-            this.props.dispatch(addCardToDeck(this.props.selectedSearchResultName || ""))
+            
         }
         //thisCard
         // this.props.dispatch(add)
@@ -142,17 +148,20 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
                 <div className="card-header">
                     <label>Card Search</label>
                 </div>
-                <div className="outline-section flex-row">
-                    <InputField label="Card Search" value={this.props.searchValue} property="" onChange={this.handleSearchFilterChanged} />
-                    <div className="outline-section flex-col">
-                        <label>Search</label>
-                        <button onClick={this.handleSearchClick}>GO</button>
+                <form onSubmit={this.handleSearchClick}>
+                    <div className="outline-section flex-row">
+                        
+                            <InputField label="Card Search" value={this.props.searchValue} property="" onChange={this.handleSearchFilterChanged} />
+                            <div className="outline-section flex-col">
+                                <label>Search</label>
+                                <button onClick={this.handleSearchClick}>GO</button>
+                            </div>
+                        {
+                            (this.props.selectedSearchResultId) && addCardButtons
+                        }
+                        
                     </div>
-                    {
-                        (this.props.selectedSearchResultId) && addCardButtons
-                    }
-                    
-                </div>
+                </form>
                 <div className="outline-section flex-row card-container">
                     {
                         this.props.searchResults.map((card: Card, index: number) => {

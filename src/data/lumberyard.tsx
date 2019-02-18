@@ -104,9 +104,7 @@ export function loadInitialDataStore(): IDataStore {
 
     // const cachedCardLists = loadDeckCardsCache();
 
-    let defaultData: {
-        deckData: ICardDeck[]
-    } = require('./deckData.json');
+    let defaultData: ICardDeck[] = require('./deckData.json');
 
     // console.log('default deck data');
     // console.log(defaultData);
@@ -120,7 +118,7 @@ export function loadInitialDataStore(): IDataStore {
     const initialDataStore: IDataStore = {
         selectedCard: null,
         selectedDeckId: (cachedUIState && cachedUIState.selectedDeckId) || 0,
-        deckList: defaultData.deckData,
+        deckList: defaultData,
         cardIndex: defaultIndex
     }
 
