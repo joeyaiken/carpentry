@@ -187,9 +187,46 @@ function mapStateToProps(state: State): PropsFromState {
 
     //creating a list of decks
 
+    //going to determine the unique card sets in the index
     
 
+    
+    //let currentSets: string[] = [];
+    // let uniqueSets: { [id: string]: string} = {};
+    let refactoredCardIndex: ICardIndex = {};
+    // declare interface ICardIndex {
+    //     [id: string]: ICard;
+    // }
 
+
+    let relevantCardIndex: ICardIndex_Legacy = {};
+    // let deckIndexKeys = Object.keys(state.data.cardIndex);
+    
+    state.data.cardLists.forEach((cardList) => {
+        cardList.cards.forEach((card) => {
+            if(!relevantCardIndex[card]){
+                // let indexCard = state.data.cardIndex[card];
+                relevantCardIndex[card] = state.data.cardIndex[card];
+            }
+        })
+    })
+
+    // let deckIndexKeys = Object.keys(relevantCardIndex);
+
+    // deckIndexKeys.forEach((key) => {
+    //     //let relevantSet = state.data.cardIndex[key].set;
+    //     let relevantCard = state.data.cardIndex[key];
+    //     if(!refactoredCardIndex[relevantCard.set]){
+    //         refactoredCardIndex[relevantCard.set] = {}
+    //     }
+    //     refactoredCardIndex[relevantCard.set][relevantCard.name] = relevantCard;
+    //     // uniqueSets[relevantCard.set] = relevantCard.set;
+    // })
+    
+    
+    //ICardIndex
+
+    // console.log(uniqueSets);
 
     let deckLists = state.data.detailList.map((detail) => {
         let mappedIDeckCards = state.data.cardLists[detail.id].cards.map((cardName) => {
@@ -231,7 +268,8 @@ function mapStateToProps(state: State): PropsFromState {
 
     const result: PropsFromState = {
         dataObject: JSON.stringify(appStateObj),
-        cardIndex: '', //JSON.stringify(state.data.cardIndex)
+        //cardIndex: '',
+        cardIndex: JSON.stringify(relevantCardIndex)
         // searchValue: searchFilterName,
         // searchResults: searchResults,
         // selectedSearchResultId: selectedSearchResultId,

@@ -85,14 +85,14 @@ export function loadInitialCardSearchState(): ICardSearch {
     return initialCardSearchState;
 }
     
-export function saveCardIndexCache(index: ICardIndex): void {
+export function saveCardIndexCache(index: ICardIndex_Legacy): void {
     localStorage.setItem(CACHED_CARD_INDEX_IDENTIFIER, JSON.stringify(index))
 }
 
-function loadCardIndexCache(): ICardIndex | null {
+function loadCardIndexCache(): ICardIndex_Legacy | null {
     const cachedData: string|null = localStorage.getItem(CACHED_CARD_INDEX_IDENTIFIER);
     if(cachedData){
-        const cardIndex: ICardIndex = JSON.parse(cachedData);
+        const cardIndex: ICardIndex_Legacy = JSON.parse(cachedData);
         return cardIndex;
     } else {
         return null;
@@ -127,7 +127,7 @@ export function loadInitialDataStore(): IDataStore {
     }
 
     //mapCardToICard
-    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndex_legacy.json');
+    let defaultIndex: ICardIndex_Legacy = loadCardIndexCache() || require('./cardIndex_legacy_actuallyUsed.json');
     // let defaultIndex: ICardIndex = {};
     
     // Object.keys(fullIndex).forEach((key) => {

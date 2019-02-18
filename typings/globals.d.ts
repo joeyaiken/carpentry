@@ -68,7 +68,7 @@ declare interface IDataStore {
     //  probably at least sections
     
     //dictionary of cards "card index"
-    cardIndex: ICardIndex;
+    cardIndex: ICardIndex_Legacy;
 
     //dictionary of decks
     // deckList: CardDeck[]
@@ -161,7 +161,7 @@ declare interface ILandCount {
 //     [id: string]: ICardDeck;
 // }
 
-declare interface ICardIndex {
+declare interface ICardIndex_Legacy {
     [id: string]: ICard;
 }
 

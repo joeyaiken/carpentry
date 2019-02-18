@@ -61,3 +61,11 @@ declare interface IDeckCard {
     name: string;
     set: string;
 }
+
+
+
+declare interface ICardIndex {
+    [set: string]: {
+        [name: string]: ICard;
+    }
+}
