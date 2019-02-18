@@ -75,7 +75,7 @@ declare interface IDataStore {
     //instead of a list of decks, we have a list of details and a list of cards
 
     //These are the only records that need to be stored under source controll
-    detailList: IDeckDetail[]; //should this be a dictionary instead?
+    detailList: IDeckDetail_Legacy[]; //should this be a dictionary instead?
     cardLists: ICardList_Legacy[]; //should this be a dictionary instead?
     // rareStore: ICardList;
 }

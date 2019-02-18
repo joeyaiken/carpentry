@@ -107,19 +107,23 @@ export function loadInitialDataStore(): IDataStore {
 
     // const cachedCardLists = loadDeckCardsCache();
 
-    let defaultData: {
+    let defaultLegacyData: {
         cardLists: ICardList_Legacy[],
-        detailList: IDeckDetail[]
+        detailList: IDeckDetail_Legacy[]
     } = require('./logpile_legacy.json');
+
+    let defaultData: {
+        data: ICardDeck[]
+    } = require('./deckData.json');
 
     const cachedDeckDetails = loadDeckDetailCache();
     const cachedDeckCards = loadDeckCardsCache();
 
     if(cachedDeckDetails){
-        defaultData.detailList = cachedDeckDetails;
+        defaultLegacyData.detailList = cachedDeckDetails;
     }
     if(cachedDeckCards){
-        defaultData.cardLists = cachedDeckCards;
+        defaultLegacyData.cardLists = cachedDeckCards;
     }
 
     //mapCardToICard
@@ -173,7 +177,7 @@ export function loadInitialDataStore(): IDataStore {
     
     // let detailList: IDeckDetail[] = [];
     // let detailList = cachedDeckDetails || [];//defaultData
-    let detailList = defaultData.detailList || [];//defaultData
+    let detailList = defaultLegacyData.detailList || [];//defaultData
 
     //defaultDeckDetails
     // if(defaultDeckDetails && defaultDeckDetails.length > 0 && detailList.length == 0){
@@ -188,7 +192,7 @@ export function loadInitialDataStore(): IDataStore {
     // }
 
     // let cardLists: ICardList[] = cachedCardLists || []
-    let cardLists: ICardList_Legacy[] = defaultData.cardLists || []
+    let cardLists: ICardList_Legacy[] = defaultLegacyData.cardLists || []
     // console.log('default data')
     // console.log(defaultData);
     const cachedUIState = loadUIStateCache();
@@ -209,12 +213,12 @@ export function loadInitialDataStore(): IDataStore {
         
         
 ////
-export function cacheDeckDetails(detail: IDeckDetail[]): void {
+export function cacheDeckDetails(detail: IDeckDetail_Legacy[]): void {
     const deckDetailString: string = JSON.stringify(detail);
     localStorage.setItem(CACHED_DECK_DETAIL_IDENTIFIER, deckDetailString);
 }
 
-function loadDeckDetailCache(): IDeckDetail[] | null {
+function loadDeckDetailCache(): IDeckDetail_Legacy[] | null {
     const cachedDeckDetail: string|null = localStorage.getItem(CACHED_DECK_DETAIL_IDENTIFIER)
     if(cachedDeckDetail){
         return JSON.parse(cachedDeckDetail);  //what if this parse fails?

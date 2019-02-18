@@ -179,16 +179,59 @@ function mapStateToProps(state: State): PropsFromState {
     // detailList: IDeckDetail[]; //should this be a dictionary instead?
     // cardLists: ICardList[]; //should this be a dictionary instead?
     // rareStore: ICardList;
+
+
+    //Output:  list of 
+
+    //state.data.
+
+    //creating a list of decks
+
+    
+
+
+
+    let deckLists = state.data.detailList.map((detail) => {
+        let mappedIDeckCards = state.data.cardLists[detail.id].cards.map((cardName) => {
+            let thisMagicCard = state.data.cardIndex[cardName];
+            let returningICard: IDeckCard = {
+                name: cardName,
+                set: thisMagicCard.set
+            }
+            return returningICard;
+        })
+
+        let result: ICardDeck = {
+            id: detail.id,
+            details: {
+                id: detail.id,
+                description: detail.description,
+                isUpToDate: detail.isUpToDate,
+                name: detail.name,
+                type: detail.type
+            },
+            basicLands: detail.basicLands,
+            cards: mappedIDeckCards
+        }
+        return result;
+    })
+
+    // const someReturnObject = {
+
+
+    // }
+
     const appStateObj = {
-        detailList: state.data.detailList,
-        cardLists: state.data.cardLists
+        deckData: deckLists
+        // detailList: state.data.detailList,
+        // cardLists: state.data.cardLists
         // cardIndex: state.data.cardIndex
         //rareStore: state.data.rareStore
     }
 
     const result: PropsFromState = {
         dataObject: JSON.stringify(appStateObj),
-        cardIndex: JSON.stringify(state.data.cardIndex)
+        cardIndex: '', //JSON.stringify(state.data.cardIndex)
         // searchValue: searchFilterName,
         // searchResults: searchResults,
         // selectedSearchResultId: selectedSearchResultId,

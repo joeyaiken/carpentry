@@ -33,7 +33,7 @@ interface PropsFromState {
     isNavOpen: boolean;
     selectedDeckId: number | null;
     // deckList: CardDeck[];
-    deckList: ICardDeck[];
+    deckList: ICardDeck_Legacy[];
     isSideSheetOpen: boolean;
     visibleSideSheet: string;
 }
@@ -192,7 +192,7 @@ function mapStateToProps(state: State): PropsFromState {
     // console.log('app mapping things');
     // console.log(state.data)
 
-    const localCardList: ICardDeck[] = state.data.detailList.map((detail) => {
+    const localCardList: ICardDeck_Legacy[] = state.data.detailList.map((detail) => {
 
         let deckCardList: IDeckCard[] = state.data.cardLists[detail.id].cards.map((cardName) => {
             return {
@@ -202,7 +202,7 @@ function mapStateToProps(state: State): PropsFromState {
             
         })
 
-        let returningCardDeck: ICardDeck = {
+        let returningCardDeck: ICardDeck_Legacy = {
             // basicLands: detail.basicLands,
             // cards: state.data.cardLists[detail.id].cards,
             // colors: detail.colors,

@@ -5,7 +5,7 @@ import MaterialIcon from './MaterialIcon'
 export interface AppNavItemProps {
     // label: string; label={item.details.name} 
     isSelected: boolean;
-    deckData: ICardDeck;
+    deckData: ICardDeck_Legacy;
     // icon?: string;
     onClick: () => void;
 }
