@@ -5,7 +5,7 @@ import MaterialIcon from './MaterialIcon'
 export interface AppNavItemProps {
     // label: string; label={item.details.name} 
     isSelected: boolean;
-    deckData: ICardDeck_Legacy;
+    deckData: ICardDeck;
     // icon?: string;
     onClick: () => void;
 }
@@ -14,11 +14,11 @@ export default function AppNavItem(props: AppNavItemProps): JSX.Element {
 
     let itemBody: JSX.Element = (
         <div className="deck-mana-types">
-            {props.deckData.details.basicLands.R > 0 && <LandIcon manaType={'R'} />}
-            {props.deckData.details.basicLands.U > 0 && <LandIcon manaType={'U'} />}
-            {props.deckData.details.basicLands.G > 0 && <LandIcon manaType={'G'} />}
-            {props.deckData.details.basicLands.W > 0 && <LandIcon manaType={'W'} />}
-            {props.deckData.details.basicLands.B > 0 && <LandIcon manaType={'B'} />}
+            {props.deckData.basicLands.R > 0 && <LandIcon manaType={'R'} />}
+            {props.deckData.basicLands.U > 0 && <LandIcon manaType={'U'} />}
+            {props.deckData.basicLands.G > 0 && <LandIcon manaType={'G'} />}
+            {props.deckData.basicLands.W > 0 && <LandIcon manaType={'W'} />}
+            {props.deckData.basicLands.B > 0 && <LandIcon manaType={'B'} />}
         </div>
     );
             

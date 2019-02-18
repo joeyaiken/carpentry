@@ -4,7 +4,7 @@ import AppIcon from './AppIcon'
 import MaterialButton from './MaterialButton'
 
 export interface AppNavProps {
-    deckList: ICardDeck_Legacy[];
+    deckList: ICardDeck[];
     selectedDeckId: number | null;
     onItemSelected: (index: number) => void;
     onAddDeckClick: () => void;

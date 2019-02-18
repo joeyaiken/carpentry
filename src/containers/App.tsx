@@ -33,7 +33,7 @@ interface PropsFromState {
     isNavOpen: boolean;
     selectedDeckId: number | null;
     // deckList: CardDeck[];
-    deckList: ICardDeck_Legacy[];
+    deckList: ICardDeck[];
     isSideSheetOpen: boolean;
     visibleSideSheet: string;
 }
@@ -192,36 +192,36 @@ function mapStateToProps(state: State): PropsFromState {
     // console.log('app mapping things');
     // console.log(state.data)
 
-    const localCardList: ICardDeck_Legacy[] = state.data.detailList.map((detail) => {
+    // const localCardList: ICardDeck_Legacy[] = state.data.deckList.map((deck) => {
 
-        let deckCardList: IDeckCard[] = state.data.cardLists[detail.id].cards.map((cardName) => {
-            return {
-                name: cardName,
-                set: ''
-            }
+    //     // let deckCardList: IDeckCard[] = deck.cards.map((cardName) => {
+    //     //     return {
+    //     //         name: cardName,
+    //     //         set: ''
+    //     //     }
             
-        })
+    //     // })
 
-        let returningCardDeck: ICardDeck_Legacy = {
-            // basicLands: detail.basicLands,
-            // cards: state.data.cardLists[detail.id].cards,
-            // colors: detail.colors,
-            // description: detail.description,
-            id: detail.id,
-            details: detail,
-            cards: deckCardList,
-            stats: null
-        //  
-            // name: detail.name,
-            // type: detail.type
-        }
-        return returningCardDeck;
-    })
+    //     let returningCardDeck: ICardDeck_Legacy = {
+    //         // basicLands: detail.basicLands,
+    //         // cards: state.data.cardLists[detail.id].cards,
+    //         // colors: detail.colors,
+    //         // description: detail.description,
+    //         id: detail.id,
+    //         details: detail,
+    //         cards: deckcard,
+    //         stats: null
+    //     //  
+    //         // name: detail.name,
+    //         // type: detail.type
+    //     }
+    //     return returningCardDeck;
+    // })
 
     const result: PropsFromState = {
         isNavOpen: state.ui.isNavOpen,
         selectedDeckId: state.ui.selectedDeckId,
-        deckList: localCardList,
+        deckList: state.data.deckList,
         isSideSheetOpen: state.ui.isSideSheetOpen,
         visibleSideSheet: state.ui.visibleSideSheet
         // searchValue: searchFilterName,

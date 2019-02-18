@@ -58,7 +58,8 @@ declare interface IDeckEditorState {
 //  maybe even section visibilities?
 //  probably at least sections
 declare interface IDataStore {
-    selectedCard: string | null;
+    //selectedCard: string | null;
+    selectedCard: IDeckCard | null;
 
     selectedDeckId: number; // | null ?
     //  active deck visible cards
@@ -67,17 +68,23 @@ declare interface IDataStore {
     
     //  probably at least sections
     
+    
+
     //dictionary of cards "card index"
-    cardIndex: ICardIndex_Legacy;
+    // cardIndex: ICardIndex_Legacy;
 
     //dictionary of decks
     // deckList: CardDeck[]
     //instead of a list of decks, we have a list of details and a list of cards
 
     //These are the only records that need to be stored under source controll
-    detailList: IDeckDetail_Legacy[]; //should this be a dictionary instead?
-    cardLists: ICardList_Legacy[]; //should this be a dictionary instead?
+    // detailList: IDeckDetail_Legacy[]; //should this be a dictionary instead?
+    // cardLists: ICardList_Legacy[]; //should this be a dictionary instead?
     // rareStore: ICardList;
+
+    deckList: ICardDeck[];
+    cardIndex: ICardIndex;
+
 }
 
 declare interface ICardSearch {

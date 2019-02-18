@@ -10,7 +10,7 @@
 import { Card } from 'mtgsdk-ts'
 
 const CACHED_UI_STATE_IDENTIFIER = 'CARPENTRY_CACHED_UI_STATE_IDENTIFIER';
-const CACHED_DECK_DETAIL_IDENTIFIER = 'CARPENTRY_CACHED_DECK_DETAIL_IDENTIFIER';
+const CACHED_DECK_DATA_IDENTIFIER = 'CACHED_DECK_DATA_IDENTIFIER';
 const CACHED_CARD_LIST_IDENTIFIER = 'CARPENTRY_CACHED_CARD_LIST_IDENTIFIER';
 const CACHED_CARD_INDEX_IDENTIFIER = 'CACHED_CARD_INDEX_IDENTIFIER';
 
@@ -85,14 +85,14 @@ export function loadInitialCardSearchState(): ICardSearch {
     return initialCardSearchState;
 }
     
-export function saveCardIndexCache(index: ICardIndex_Legacy): void {
+export function saveCardIndexCache(index: ICardIndex): void {
     localStorage.setItem(CACHED_CARD_INDEX_IDENTIFIER, JSON.stringify(index))
 }
 
-function loadCardIndexCache(): ICardIndex_Legacy | null {
+function loadCardIndexCache(): ICardIndex | null {
     const cachedData: string|null = localStorage.getItem(CACHED_CARD_INDEX_IDENTIFIER);
     if(cachedData){
-        const cardIndex: ICardIndex_Legacy = JSON.parse(cachedData);
+        const cardIndex: ICardIndex = JSON.parse(cachedData);
         return cardIndex;
     } else {
         return null;
@@ -107,27 +107,23 @@ export function loadInitialDataStore(): IDataStore {
 
     // const cachedCardLists = loadDeckCardsCache();
 
-    let defaultLegacyData: {
-        cardLists: ICardList_Legacy[],
-        detailList: IDeckDetail_Legacy[]
-    } = require('./logpile_legacy.json');
-
     let defaultData: {
-        data: ICardDeck[]
+        deckData: ICardDeck[]
     } = require('./deckData.json');
 
-    const cachedDeckDetails = loadDeckDetailCache();
-    const cachedDeckCards = loadDeckCardsCache();
+    // console.log('default deck data');
+    // console.log(defaultData);
+    const cachedDeckData = loadDeckDataCache();
 
-    if(cachedDeckDetails){
-        defaultLegacyData.detailList = cachedDeckDetails;
-    }
-    if(cachedDeckCards){
-        defaultLegacyData.cardLists = cachedDeckCards;
-    }
+    // if(cachedDeckDetails){
+    //     defaultLegacyData.detailList = cachedDeckDetails;
+    // }
+    // if(cachedDeckCards){
+    //     defaultLegacyData.cardLists = cachedDeckCards;
+    // }
 
     //mapCardToICard
-    let defaultIndex: ICardIndex_Legacy = loadCardIndexCache() || require('./cardIndex_legacy_actuallyUsed.json');
+    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndexData_actuallyUsed.json');
     // let defaultIndex: ICardIndex = {};
     
     // Object.keys(fullIndex).forEach((key) => {
@@ -140,9 +136,6 @@ export function loadInitialDataStore(): IDataStore {
     // var cardLists: ICardList[] = JSON.parse(cardListsById);
 
 
-    // let cardIndex: ICardIndex = {}
-    let cardIndex = defaultIndex;
-    
     // if(cachedIndexDataByName){
     //     // var rawCache = JSON.parse(cachedIndexData);
     //     cardIndex = JSON.parse(cachedIndexDataByName);
@@ -177,34 +170,38 @@ export function loadInitialDataStore(): IDataStore {
     
     // let detailList: IDeckDetail[] = [];
     // let detailList = cachedDeckDetails || [];//defaultData
-    let detailList = defaultLegacyData.detailList || [];//defaultData
+    // let detailList = defaultLegacyData.detailList || [];//defaultData
 
     //defaultDeckDetails
     // if(defaultDeckDetails && defaultDeckDetails.length > 0 && detailList.length == 0){
         // detailList = JSON.parse(defaultDeckDetails);
 
         //Should only really need to do this once
-    detailList.forEach((deckDetail) => {
-        if(!deckDetail.basicLands){
-            deckDetail.basicLands = generateLandCounterInstance();
-        }
-    })
+    // detailList.forEach((deckDetail) => {
+    //     if(!deckDetail.basicLands){
+    //         deckDetail.basicLands = generateLandCounterInstance();
+    //     }
+    // })
     // }
 
     // let cardLists: ICardList[] = cachedCardLists || []
-    let cardLists: ICardList_Legacy[] = defaultLegacyData.cardLists || []
+    // let cardLists: ICardList_Legacy[] = defaultLegacyData.cardLists || []
     // console.log('default data')
     // console.log(defaultData);
     const cachedUIState = loadUIStateCache();
 
     const initialDataStore: IDataStore = {
         // deckList: deckList,
-        cardLists: cardLists,
-        detailList: detailList,
-        cardIndex: cardIndex,
+        // cardLists: cardLists,
+        // detailList: detailList,
+        // cardIndex: cardIndex,
         selectedCard: null,
-        selectedDeckId: (cachedUIState && cachedUIState.selectedDeckId) || 0
+        selectedDeckId: (cachedUIState && cachedUIState.selectedDeckId) || 0,
+        deckList: defaultData.deckData,
+        cardIndex: defaultIndex
     }
+    // console.log('initial data store')
+    // console.log(initialDataStore)
 
     return initialDataStore;
 }
@@ -213,34 +210,22 @@ export function loadInitialDataStore(): IDataStore {
         
         
 ////
-export function cacheDeckDetails(detail: IDeckDetail_Legacy[]): void {
-    const deckDetailString: string = JSON.stringify(detail);
-    localStorage.setItem(CACHED_DECK_DETAIL_IDENTIFIER, deckDetailString);
+
+export function cacheDeckData(data: ICardDeck[]): void {
+    const deckDataString: string = JSON.stringify(data);
+    localStorage.setItem(CACHED_DECK_DATA_IDENTIFIER, deckDataString);
 }
 
-function loadDeckDetailCache(): IDeckDetail_Legacy[] | null {
-    const cachedDeckDetail: string|null = localStorage.getItem(CACHED_DECK_DETAIL_IDENTIFIER)
-    if(cachedDeckDetail){
-        return JSON.parse(cachedDeckDetail);  //what if this parse fails?
+function loadDeckDataCache(): ICardDeck[] | null {
+    const cachedDeckData: string|null = localStorage.getItem(CACHED_DECK_DATA_IDENTIFIER)
+    if(cachedDeckData){
+        return JSON.parse(cachedDeckData);  //what if this parse fails?
     } else {
         return null;
     }
 }
 ////
-export function cacheDeckCards(cards: ICardList_Legacy[] | null): void {
-    const cardsString: string = JSON.stringify(cards);
-    localStorage.setItem(CACHED_CARD_LIST_IDENTIFIER, cardsString);
-}
-        
-function loadDeckCardsCache(): ICardList_Legacy[] | null {
-    const cardsString: string|null = localStorage.getItem(CACHED_CARD_LIST_IDENTIFIER)
-    if(cardsString){
-        return JSON.parse(cardsString);  //what if this parse fails?
-    } else {
-        return null;
-    }
-}
-        
+
 function generateLandCounterInstance(): ILandCount {
 return {
     R: 0,

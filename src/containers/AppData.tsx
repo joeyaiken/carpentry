@@ -202,14 +202,14 @@ function mapStateToProps(state: State): PropsFromState {
     let relevantCardIndex: ICardIndex_Legacy = {};
     // let deckIndexKeys = Object.keys(state.data.cardIndex);
     
-    state.data.cardLists.forEach((cardList) => {
-        cardList.cards.forEach((card) => {
-            if(!relevantCardIndex[card]){
-                // let indexCard = state.data.cardIndex[card];
-                relevantCardIndex[card] = state.data.cardIndex[card];
-            }
-        })
-    })
+    // state.data.cardLists.forEach((cardList) => {
+    //     cardList.cards.forEach((card) => {
+    //         if(!relevantCardIndex[card]){
+    //             // let indexCard = state.data.cardIndex[card];
+    //             relevantCardIndex[card] = state.data.cardIndex[card];
+    //         }
+    //     })
+    // })
 
     // let deckIndexKeys = Object.keys(relevantCardIndex);
 
@@ -228,48 +228,49 @@ function mapStateToProps(state: State): PropsFromState {
 
     // console.log(uniqueSets);
 
-    let deckLists = state.data.detailList.map((detail) => {
-        let mappedIDeckCards = state.data.cardLists[detail.id].cards.map((cardName) => {
-            let thisMagicCard = state.data.cardIndex[cardName];
-            let returningICard: IDeckCard = {
-                name: cardName,
-                set: thisMagicCard.set
-            }
-            return returningICard;
-        })
+    // let deckLists = state.data.detailList.map((detail) => {
+    //     let mappedIDeckCards = state.data.cardLists[detail.id].cards.map((cardName) => {
+    //         let thisMagicCard = state.data.cardIndex[cardName];
+    //         let returningICard: IDeckCard = {
+    //             name: cardName,
+    //             set: thisMagicCard.set
+    //         }
+    //         return returningICard;
+    //     })
 
-        let result: ICardDeck = {
-            id: detail.id,
-            details: {
-                id: detail.id,
-                description: detail.description,
-                isUpToDate: detail.isUpToDate,
-                name: detail.name,
-                type: detail.type
-            },
-            basicLands: detail.basicLands,
-            cards: mappedIDeckCards
-        }
-        return result;
-    })
+    //     let result: ICardDeck = {
+    //         id: detail.id,
+    //         details: {
+    //             id: detail.id,
+    //             description: detail.description,
+    //             isUpToDate: detail.isUpToDate,
+    //             name: detail.name,
+    //             type: detail.type
+    //         },
+    //         basicLands: detail.basicLands,
+    //         cards: mappedIDeckCards
+    //     }
+    //     return result;
+    // })
 
     // const someReturnObject = {
 
 
     // }
 
-    const appStateObj = {
-        deckData: deckLists
-        // detailList: state.data.detailList,
-        // cardLists: state.data.cardLists
-        // cardIndex: state.data.cardIndex
-        //rareStore: state.data.rareStore
-    }
+    // const appStateObj = {
+    //     deckData: deckLists
+    //     // detailList: state.data.detailList,
+    //     // cardLists: state.data.cardLists
+    //     // cardIndex: state.data.cardIndex
+    //     //rareStore: state.data.rareStore
+    // }
 
     const result: PropsFromState = {
-        dataObject: JSON.stringify(appStateObj),
-        //cardIndex: '',
-        cardIndex: JSON.stringify(relevantCardIndex)
+        // dataObject: JSON.stringify(appStateObj),
+        dataObject: '',
+        cardIndex: '',
+        // cardIndex: JSON.stringify(relevantCardIndex)
         // searchValue: searchFilterName,
         // searchResults: searchResults,
         // selectedSearchResultId: selectedSearchResultId,

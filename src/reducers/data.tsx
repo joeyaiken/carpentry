@@ -3,7 +3,7 @@ import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
-import { cacheDeckCards, cacheDeckDetails, saveCardIndexCache, loadInitialDataStore } from '../data/lumberyard'
+import { cacheDeckData, saveCardIndexCache, loadInitialDataStore } from '../data/lumberyard'
 
 import { 
     DECK_EDITOR_DUPLICATE_SELECTED_CARD,
@@ -68,28 +68,30 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             // })
             return newDataStoreState;
         case DECK_EDITOR_DUPLICATE_SELECTED_CARD:
-            if(state.selectedCard)
-                newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
-                cacheDeckCards(newDataStoreState.cardLists);
+            if(state.selectedCard){
+                // const cardToAdd = state.cardIndex[state.selectedCard.set][state.selectedCard.name];
+                newDataStoreState.deckList[state.selectedDeckId].cards.push(state.selectedCard);
+                cacheDeckData(newDataStoreState.deckList);
+            }
             return newDataStoreState;
         case DECK_EDITOR_REMOVE_ONE_SELECTED_CARD:
             if(state.selectedCard){
                 //index of the first card?
-                var firstSelectedCardIndex = newDataStoreState.cardLists[state.selectedDeckId].cards.indexOf(state.selectedCard);
+                var firstSelectedCardIndex = newDataStoreState.deckList[state.selectedDeckId].cards.indexOf(state.selectedCard);
 
-                newDataStoreState.cardLists[state.selectedDeckId].cards.splice(firstSelectedCardIndex,1);
+                newDataStoreState.deckList[state.selectedDeckId].cards.splice(firstSelectedCardIndex,1);
                 // newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
             }
-            cacheDeckCards(newDataStoreState.cardLists);
+            cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         case DECK_EDITOR_REMOVE_ALL_SELECTED_CARD:
             if(state.selectedCard){
-                newDataStoreState.cardLists[state.selectedDeckId].cards = newDataStoreState.cardLists[state.selectedDeckId].cards.filter((card) => {
+                newDataStoreState.deckList[state.selectedDeckId].cards = newDataStoreState.deckList[state.selectedDeckId].cards.filter((card) => {
                     return (card != state.selectedCard);
                 })
                 // newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
             }
-            cacheDeckCards(newDataStoreState.cardLists);
+            cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         // case CARD_BINDER_VIEW_CHANGE:
         //     return {
@@ -120,7 +122,7 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             
             // console.log('active deck')
             // console.log(activeDeck)
-            let activeDeckDetail = newDataStoreState.detailList[state.selectedDeckId];
+            let activeDeckDetail = newDataStoreState.deckList[state.selectedDeckId];
             let manaType: string = action.payload.manaType;
             activeDeckDetail.basicLands = {
                 ...activeDeckDetail.basicLands,
@@ -134,27 +136,27 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             // return newBinderState;
 
             //cache deck details
-            cacheDeckDetails(newDataStoreState.detailList);
+            cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         case ADD_CARD_TO_DECK:
             // console.log('trying to add a card to this deck')
             // console.log(action.payload);
 
-            let activeDeckCards = newDataStoreState.cardLists[state.selectedDeckId];
+            let activeDeckCards = newDataStoreState.deckList[state.selectedDeckId];
             activeDeckCards.cards.push(action.payload);
-            cacheDeckCards(newDataStoreState.cardLists);
+            cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         case ADD_CARD_TO_INDEX:
             let cardToIndex: ICard = action.payload;
             //is there a problem with updating the index instead of not ovewriting things?
-            newDataStoreState.cardIndex[cardToIndex.name] = cardToIndex;
+            newDataStoreState.cardIndex[cardToIndex.set][cardToIndex.name] = cardToIndex;
             saveCardIndexCache(newDataStoreState.cardIndex);
             return newDataStoreState;
         case TOGGLE_DECK_EDITOR_STATUS:
             // console.log('status toggle?')
-            let activeDeckDetail2 = newDataStoreState.detailList[state.selectedDeckId];
-            activeDeckDetail2.isUpToDate = !activeDeckDetail2.isUpToDate;
-            cacheDeckDetails(newDataStoreState.detailList);
+            let activedeck = newDataStoreState.deckList[state.selectedDeckId];
+            activedeck.details.isUpToDate = !activedeck.details.isUpToDate;
+            cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         default:
             if(!state){

@@ -61,7 +61,7 @@ interface PropsFromState {
     selectedDeckId: number;
     sectionVisibilities: boolean[];
     
-    selectedCard: string | null;
+    selectedCard: IDeckCard | null;
     
     // dispatch?: any;
 
@@ -352,52 +352,22 @@ function mapStateToProps(state: State): PropsFromState {
 
     // console.log(state.actions.sectionVisibilities)
     //test
+    console.log('breakin things')
     const selectedDeckId = state.ui.selectedDeckId || 0;
-    // const activeDeck = state.data.deckList[selectedDeckId];
-    const activeDeckDetail = state.data.detailList[selectedDeckId];
-    const activeDeckCardList = state.data.cardLists[selectedDeckId];
+    const activeDeck = state.data.deckList[selectedDeckId];
+    // const activeDeckDetail = state.data.detailList[selectedDeckId];
+    // const activeDeckCardList = state.data.cardLists[selectedDeckId];
 
-    // console.log('card binder state')
-    // console.log(state);
-
-    //Get collection of visible magic cards
-
-    // console.log('trying to determine visible cards what did I break?')
-
-    let visibleCards: IMagicCard[] = activeDeckCardList.cards.map((cardId) =>{
+    let visibleCards: IMagicCard[] = activeDeck.cards.map((deckCard) =>{
 
         // const indexData = state.data.cardIndex[cardId];
         
-        
-
         const card: IMagicCard = {
-            cardId: cardId,
-            data: state.data.cardIndex[cardId]
+            cardId: deckCard.name,
+            data: state.data.cardIndex[deckCard.set][deckCard.name]
         }
         return card;
     });
-    
-    // console.log()
-
-    //once we have the set of visible cards, lets log those card names (in case this garbage breaks again)
-    // let visibleCardNames: string[] = visibleCards.map((card) => {
-    //     return card.data.name
-    // })
-
-    // console.log('visibleCardNames')
-    // console.log(visibleCardNames);
-
-    //Group cards (only by type for now)
-    // let groupedCards: groupedCardCollection = {};
-
-    // visibleCards.forEach((card: IMagicCard) => {
-    //     const cardType: string = card.data.types[0];
-    //     if(!groupedCards[cardType]){
-    //         groupedCards[cardType] = [];
-    //     }
-    //     groupedCards[cardType].push(card);
-    // });
-
     
 
     let groupedCards: groupedCardCollection = {};
@@ -451,9 +421,9 @@ function mapStateToProps(state: State): PropsFromState {
         sortBy: state.deckEditor.deckSort,
         cardCollections: groupedCards,
         // cardGroups: cardGroups,
-        landCounts: activeDeckDetail.basicLands,
+        landCounts: activeDeck.basicLands,
         selectedCard: state.data.selectedCard,
-        isDeckUpToDate: activeDeckDetail.isUpToDate
+        isDeckUpToDate: activeDeck.details.isUpToDate
     }
     
     return result;
