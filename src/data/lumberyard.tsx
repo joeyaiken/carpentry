@@ -123,7 +123,7 @@ export function loadInitialDataStore(): IDataStore {
     // }
 
     //mapCardToICard
-    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndexData_actuallyUsed.json');
+    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndexData.json');
     // let defaultIndex: ICardIndex = {};
     
     // Object.keys(fullIndex).forEach((key) => {
