@@ -1,8 +1,9 @@
 //caches might be unreliable
 General current task list:
     Tasks Priority:
-        Add some filtering to deck search
-
+        search refactoring: Add some filtering to deck search
+        search refactoring: Add "auto-cache to index"
+        search refactoring: Add ability to search index instead of/in addition to web
 
         //after this, options include 
         //  start refactoring DB storage
@@ -17,6 +18,7 @@ General current task list:
     Goals
         Have all current decks logged
         Have all rares logged
+        Have general index files populated
 
         Once I have all data logged, I can work on stats, stores, and deck building tools
         I should probably create the basic stores now, but not fully populate them
