@@ -84,6 +84,17 @@ declare interface ICardSearch {
 
 declare interface SearchFilterProps {
     name: string;
+
+    //mana types
+    includeRed: boolean;
+    includeBlue: boolean;
+    includeGreen: boolean;
+    includeWhite: boolean;
+    includeBlack: boolean;
+    colorIdentity: string;
+    //sets
+    setFilterString: string;
+
     // isFetching: boolean;
     results: any; //results is an array of cards, right?
     selectedCardId?: string;

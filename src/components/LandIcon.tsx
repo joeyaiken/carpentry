@@ -7,6 +7,8 @@ import manaB from '../img/B.svg'
 
 export interface LandIconProps {
     manaType: string;
+    isTransparent?: boolean;
+    onClick?: any;
 }
 
 export default function LandIcon(props: LandIconProps): JSX.Element {
@@ -29,5 +31,5 @@ export default function LandIcon(props: LandIconProps): JSX.Element {
             break;
     }
 
-    return(<img src={iconStr} className="mana-icon" />);
+    return(<img src={iconStr} className={ "mana-icon" + (props.isTransparent ? ' transparent' : '') } />);
 }

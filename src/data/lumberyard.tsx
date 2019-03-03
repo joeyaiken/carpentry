@@ -74,6 +74,13 @@ export function loadInitialCardSearchState(): ICardSearch {
         requestedCards: [],
         searchFilter: {
             name: '',
+            setFilterString: '',
+            includeRed: false,
+            includeBlue: false,
+            includeGreen: false,
+            includeWhite: false,
+            includeBlack: false,
+            colorIdentity: '',
             results: []
         },
         searchIsFetching: false

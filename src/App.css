@@ -10,6 +10,9 @@ body,
 .bar-light {
   background-color: #2196F3;
 }
+.transparent {
+  opacity: 0.3;
+}
 .app-bar {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
@@ -132,7 +135,7 @@ body,
 }
 .app {
   display: grid;
-  grid-template-columns: 30% auto 30%;
+  grid-template-columns: 30% auto 50%;
   grid-template-rows: 48px auto;
   background-color: #E1E2E1;
 }
