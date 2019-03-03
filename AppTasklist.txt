@@ -5,6 +5,9 @@ General current task list:
         search refactoring: Add "auto-cache to index"
         search refactoring: Add ability to search index instead of/in addition to web
 
+        Need to clear search results as soon as a new search initializes
+        Need to show a visual indicator when results are searching
+            non-determinate loading bar below the filters?
         //after this, options include 
         //  start refactoring DB storage
         //      Prob shouldn't remove ILandCount until the deck editor groups same cards
