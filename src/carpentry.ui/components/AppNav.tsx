@@ -1,12 +1,11 @@
 import React from 'react';
-import DeckList from './DeckList'
 import AppNavItem from './AppNavItem'
 import AppIcon from './AppIcon'
 import MaterialButton from './MaterialButton'
 
 export interface AppNavProps {
-    deckList: CardDeck[];
-    selectedDeckId: number;
+    deckList: ICardDeck[];
+    selectedDeckId: number | null;
     onItemSelected: (index: number) => void;
     onAddDeckClick: () => void;
     handleNavClick: () => void;
@@ -33,14 +32,9 @@ export default function AppNav(props: AppNavProps): JSX.Element {
             <AppNavItem label="Rare Binder" icon="star_border" isSelected={false} onClick= {() => { props.onItemSelected(-1) }}  />
         </div> */}
         <div className="app-nav-section flex-col">
-            {/* <DeckList deckList={deckList}
-                onDeckItemClicked={this.handleDeckSelected}
-                selectedDeck={selectedDeckId}
-                isOpen={this.props.sectionVisibilities[0]}
-                onHeaderToggle={() => this.handleSectionToggle(0)} /> */}
             {
                 deckList.map((item, index) => {
-                    return <AppNavItem key={index} label={item.name} onClick= {() => { props.onItemSelected(index) }} isSelected={ item.id == props.selectedDeckId } deckData={item} />
+                    return <AppNavItem key={index} onClick= {() => { props.onItemSelected(index) }} isSelected={ item.id == props.selectedDeckId } deckData={item} />
                 })
             }
         </div>

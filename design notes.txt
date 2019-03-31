@@ -1,0 +1,42 @@
+Attempting to design a data model
+
+
+
+Deck
+	>Active Cards<
+	>Potential Cards<
+		
+		
+	Sideboard
+	Deck Details
+	...
+	
+	
+	
+Deck Details
+	ID
+	Name
+	Format
+	...
+	
+Inventory
+
+	
+Card ?
+
+
+
+Deck Potential Cards
+	<Deck>
+	<Card>
+	Owned?
+	
+Deck Active Cards
+	<Deck>
+	<Card>
+	Count
+	tags?
+		Key Card
+		Supporting Card
+		Filler Card
+		?Customizable?

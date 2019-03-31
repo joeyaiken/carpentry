@@ -20,7 +20,7 @@ import {
     // SELECTED_DECK_CHANGE, 
     // FIND_MODAL_FILTER_CHANGE,
     SEARCH_VALUE_CHANGE,
-    
+    SEARCH_FILTER_CHANGE,
     REQUEST_CARD_SEARCH,
     RECEIVE_CARD_SEARCH,
 
@@ -74,6 +74,46 @@ export const cardSearch = (state: ICardSearch, action: ReduxAction): any => {
                     name: action.payload
                 }
             }
+
+        case SEARCH_FILTER_CHANGE:
+            let newFilterState = {
+                ...state
+            }
+            const filterProperty: string = action.payload.property;
+            const filterValue: string = action.payload.value;
+            console.log('filter change - '+filterProperty + ' - ' + filterValue)
+            switch(filterProperty) {
+                case 'name':
+                    newFilterState.searchFilter.name = filterValue;
+                break;
+                case 'set':
+                    newFilterState.searchFilter.setFilterString = filterValue.toUpperCase();
+                break;
+                case 'colorIdentity':
+                    newFilterState.searchFilter.colorIdentity = filterValue
+                break;
+                case 'lands':
+                    switch(filterValue){
+                        case 'R':
+                            newFilterState.searchFilter.includeRed = !newFilterState.searchFilter.includeRed;
+                            break;
+                        case 'U':
+                            newFilterState.searchFilter.includeBlue = !newFilterState.searchFilter.includeBlue;
+                            break;
+                        case 'G':
+                            newFilterState.searchFilter.includeGreen = !newFilterState.searchFilter.includeGreen;
+                            break;
+                        case 'W':
+                            newFilterState.searchFilter.includeWhite = !newFilterState.searchFilter.includeWhite;
+                            break;
+                        case 'B':
+                            newFilterState.searchFilter.includeBlack = !newFilterState.searchFilter.includeBlack
+                            break;
+                        
+                    }
+                break;
+            }
+            return newFilterState;
         case SEARCH_CARD_SELECTED:
             return {
                 ...state,

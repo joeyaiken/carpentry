@@ -3,7 +3,7 @@ import InputField from '../components/InputField'
 import CardList from '../components/CardList'
 
 export interface DeckDetailProps{
-    data: CardDeck
+    data: any;
     handleChange: any;
     handleSaveClick: any;
     isExpanded: boolean;

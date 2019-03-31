@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface MagicCardProps{
-    card: IMagicCard;
+    card: ICard;
     cardIsSelected: boolean;
     display: string | null; // card | list
     onClick: any;
@@ -16,13 +16,20 @@ export default function MagicCard(props: MagicCardProps): JSX.Element{
 
     // console.log(props.card)
 
-    if(!props.card.data){
+    if(!props.card){
         return noDataCard;
     }
 
     const imgCard: JSX.Element = 
         <div className={props.cardIsSelected ? "magic-card selected-card" : "magic-card"} onClick={props.onClick}>
-            <img src={props.card.data.imageUrl} />
+            <img src={props.card.imageUrl} />
+
+            <div>
+                <span>[ { props.card.set } ]</span>
+                <span>[ { props.card.setName } ]</span>
+                {/* <span>[ { props.card.colors } ]</span> */}
+                <span>[ { props.card.colorIdentity } ]</span>
+            </div>
         </div>;
     const detailCard: JSX.Element = 
         <div>

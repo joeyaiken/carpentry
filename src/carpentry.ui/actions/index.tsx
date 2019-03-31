@@ -5,6 +5,7 @@ import Magic, { CardFilter, Cards, Card } from 'mtgsdk-ts';
 import Redux, { Store, Dispatch } from 'redux'
 import { stat } from 'fs';
 import { unmountComponentAtNode } from 'react-dom';
+import { string } from 'prop-types';
 
 // import { lumberyardSaveState } from '../data/lumberyard'
 
@@ -35,6 +36,8 @@ export const SEARCH_VALUE_CHANGE = 'SEARCH_VALUE_CHANGE'
 export const SEARCH_APPLIED = 'SEARCH_APPLIED'
 export const SEARCH_CARD_SELECTED = 'SEARCH_CARD_SELECTED'
 
+export const SEARCH_FILTER_CHANGE = 'SEARCH_FILTER_CHANGE';
+
 export const ADD_CARD_TO_DECK = 'ADD_CARD_TO_DECK';
 export const ADD_CARD_TO_INDEX = 'ADD_CARD_TO_INDEX';
 export const ADD_CARD_TO_RARES = 'ADD_CARD_TO_RARES';
@@ -46,6 +49,8 @@ export const REQUEST_CARD_DETAIL = 'REQUEST_CARD_DETAIL';
 export const RECEIVE_CARD_DETAIL = 'RECEIVE_CARD_DETAIL';
 
 //deck editor actions
+export const TOGGLE_DECK_EDITOR_STATUS = 'TOGGLE_DECK_EDITOR_STATUS';
+
 export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED';
 
 export const DECK_EDITOR_DUPLICATE_SELECTED_CARD = 'DECK_EDITOR_DUPLICATE_SELECTED_CARD';
@@ -62,7 +67,7 @@ export const CARD_BINDER_CARD_ADD = 'CARD_BINDER_CARD_ADD';
 export const CARD_BINDER_CARD_REMOVE = 'CARD_BINDER_CARD_REMOVE';
 export const DECK_EDITOR_SECTION_TOGGLE = 'DECK_EDITOR_SECTION_TOGGLE'; // selection toggle ??
 
-export const APP_DATA_STORE_STRING_CHANGE = 'APP_DATA_STORE_STRING_CHANGE';
+// export const APP_DATA_STORE_STRING_CHANGE = 'APP_DATA_STORE_STRING_CHANGE';
 
 // export const ON_SECTION_TOGGLE = 'ON_SECTION_TOGGLE'
 
@@ -141,9 +146,17 @@ export const searchCardSelected = (cardId: string, cardName: string): ReduxActio
     }
 });
 
-export const addCardToDeck = (cardId: string): ReduxAction => ({
+export const searchFilterChanged = (property: string, value: string|boolean): ReduxAction => ({
+    type: SEARCH_FILTER_CHANGE,
+    payload: {
+        property: property,
+        value: value
+    }
+})
+
+export const addCardToDeck = (card: IDeckCard): ReduxAction => ({
     type: ADD_CARD_TO_DECK,
-    payload: cardId
+    payload: card
 });
 
 export const addCardToIndex = (card: ICard): ReduxAction => ({
@@ -158,6 +171,11 @@ export const addCardToRares = (cardId: string): ReduxAction => ({
 
 
 //START: Deck Editor action creators
+
+export const toggleDeckEditorStatus = (): ReduxAction => ({
+    type: TOGGLE_DECK_EDITOR_STATUS
+});
+
 
 // export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED'
 //deckEditorCardSelected
@@ -227,10 +245,10 @@ export const deckEditorSectionToggle = (sectionIndex: string): ReduxAction => ({
 })
 
 
-export const appDataStoreStringChanged = (updatedObject: any): ReduxAction => ({
-    type: APP_DATA_STORE_STRING_CHANGE,
-    payload: updatedObject
-})
+// export const appDataStoreStringChanged = (updatedObject: any): ReduxAction => ({
+//     type: APP_DATA_STORE_STRING_CHANGE,
+//     payload: updatedObject
+// })
 
 
 
@@ -361,20 +379,46 @@ export const searchApplied = (filter: string): any => {
 function tryFetchCards(dispatch: Dispatch, state: State) {
     //if(!state.actions.searchFilter.isFetching){
     if(!state.cardSearch.searchIsFetching){
-        fetchCards(dispatch, state.cardSearch.searchFilter.name);
+        fetchCards(dispatch, state.cardSearch.searchFilter);
     }
 }
 
 //export const fetchCards = (): any => {
 //This is supposed to return a function that takes in whatever TF Dispatch is
-function fetchCards(dispatch: Dispatch, filter: string): any {
+function fetchCards(dispatch: Dispatch, filter: SearchFilterProps): any {
     
     dispatch(requestCardSearch());
+    let cardFilter: CardFilter = {};
+    cardFilter.name = filter.name;
+    //parse sets
+    const parsedSetList: string[] = filter.setFilterString.split(',');
+    // if(parsedSetList && parsedSetList.length){
+    //     cardFilter.set 
+    // }
+    cardFilter.set = filter.setFilterString;
+    cardFilter.colorIdentity = filter.colorIdentity;
+    // const parsedColorIdentity: string[] = [];
+    // if(filter.includeRed) parsedColorIdentity.push('R');
+    // if(filter.includeBlue) parsedColorIdentity.push('U');
+    // if(filter.includeGreen) parsedColorIdentity.push('G');
+    // if(filter.includeWhite) parsedColorIdentity.push('W');
+    // if(filter.includeBlack) parsedColorIdentity.push('B');
 
-    let cardFilter: CardFilter = {
-        //name: "Nicol"
-        name: filter
-    }   
+    // cardFilter.colors
+    console.log('about to search cards')
+    console.log('parsed sets')
+    console.log(parsedSetList);
+    console.log('parsed color identity')
+    // console.log(parsedColorIdentity)
+    // cardFilter.colorIdentity = parsedColorIdentity.join('|')
+    // console.log()
+
+    // cardFilter.colorIdentity = "RW"
+
+    // let cardFilter: CardFilter = {
+    //     //name: "Nicol"
+    //     name: filter.name
+    // }   
     return Cards.where(cardFilter).then(results => {
         console.log('grand result dump');
         console.log(results);

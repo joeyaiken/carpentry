@@ -7,7 +7,8 @@ import {
     searchValueChange,
     searchCardSelected,
     addCardToDeck,
-    addCardToIndex
+    addCardToIndex,
+    searchFilterChanged
 
 } from '../actions'
 import InputField from '../components/InputField';
@@ -17,11 +18,23 @@ import { stat } from 'fs';
 // import Magic from 'mtgsdk-ts';
 import { mapCardToICard } from '../data/lumberyard';
 
+import LandIcon from '../components/LandIcon'
+
 interface PropsFromState {
     searchValue: string;
     searchResults: Card[];
     selectedSearchResultId?: string;
     selectedSearchResultName?: string;
+
+    //mana types
+    includeRed: boolean;
+    includeBlue: boolean;
+    includeGreen: boolean;
+    includeWhite: boolean;
+    includeBlack: boolean;
+    colorIdentityString: string;
+    //sets
+    setFilterString: string;
 }
 
 type CardQuickAddProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -36,13 +49,31 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
         this.handleCardClick = this.handleCardClick.bind(this);
 
         this.handleAddToDeckClick = this.handleAddToDeckClick.bind(this);
+        this.handleSetFilterChanged = this.handleSetFilterChanged.bind(this);
+        this.handleLandFilterClick = this.handleLandFilterClick.bind(this);
+        this.handleColorIdentityChanged = this.handleColorIdentityChanged.bind(this);
     }
 
     handleSearchFilterChanged(event: any){
-        this.props.dispatch(searchValueChange(event.target.value))
+        // this.props.dispatch(searchValueChange(event.target.value))
+        this.props.dispatch(searchFilterChanged('name', event.target.value));
     }
 
-    handleSearchClick(){
+    handleSetFilterChanged(event: any){
+        this.props.dispatch(searchFilterChanged('set', event.target.value));
+    }
+
+    handleLandFilterClick(type: string){
+        // console.log('clikk')
+        this.props.dispatch(searchFilterChanged('lands', type));
+    }
+
+    handleColorIdentityChanged(event: any){
+        this.props.dispatch(searchFilterChanged('colorIdentity', event.target.value));
+    }
+
+    handleSearchClick(event: any){
+        event.preventDefault();
         //this.props.dispatch(searchApplied());
         this.props.dispatch(searchApplied(this.props.searchValue));
         //fetchCards
@@ -105,8 +136,13 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
             })
             if(thisCard){
                 this.props.dispatch(addCardToIndex(mapCardToICard(thisCard)))
+                let card: IDeckCard = {
+                    name: thisCard.name,
+                    set: thisCard.set
+                }
+                this.props.dispatch(addCardToDeck(card))
             }
-            this.props.dispatch(addCardToDeck(this.props.selectedSearchResultName || ""))
+            
         }
         //thisCard
         // this.props.dispatch(add)
@@ -142,17 +178,49 @@ class CardQuickAdd extends React.Component<CardQuickAddProps> {
                 <div className="card-header">
                     <label>Card Search</label>
                 </div>
-                <div className="outline-section flex-row">
-                    <InputField label="Card Search" value={this.props.searchValue} property="" onChange={this.handleSearchFilterChanged} />
-                    <div className="outline-section flex-col">
-                        <label>Search</label>
-                        <button onClick={this.handleSearchClick}>GO</button>
+                <form onSubmit={this.handleSearchClick}>
+                    <div className="outline-section flex-row">
+                        
+                            <InputField label="Name" value={this.props.searchValue} property="" onChange={this.handleSearchFilterChanged} />
+                            <InputField label="Colors" value={this.props.colorIdentityString} property="" onChange={this.handleColorIdentityChanged} />
+                            {/* <div className="outline-section">
+                                Colors
+        
+                                <div onClick={() => { this.handleLandFilterClick('R') }} > 
+                                    <LandIcon isTransparent={!this.props.includeRed} manaType={'R'} />
+                                </div>
+                                <div onClick={() => { this.handleLandFilterClick('U') }} > 
+                                    <LandIcon isTransparent={!this.props.includeBlue} manaType={'U'} />
+                                </div>
+                                <div onClick={() => { this.handleLandFilterClick('G') }} > 
+                                    <LandIcon isTransparent={!this.props.includeGreen} manaType={'G'} />
+                                </div>
+                                <div onClick={() => { this.handleLandFilterClick('W') }} > 
+                                    <LandIcon isTransparent={!this.props.includeWhite} manaType={'W'} />
+                                </div>
+                                <div onClick={() => { this.handleLandFilterClick('B') }} > 
+                                    <LandIcon isTransparent={!this.props.includeBlack} manaType={'B'} />
+                                </div>
+                            </div> */}
+                            <div className="outline-section">
+                                <InputField label="Sets" value={this.props.setFilterString} property="" onChange={this.handleSetFilterChanged} />
+                                <p>RNA - Ravnica Allegiance</p>
+                                <p>GRN - Guilds of Ravnica</p>
+                                <p>RIX - Rivals of Ixalan</p>
+                                <p>IXL - Ixalan</p>
+                                <p>HOU - Hour of Devastation</p>
+                                <p>ANK - Amonkhet</p>
+                            </div>
+                            <div className="outline-section flex-col">
+                                <label>Search</label>
+                                <button onClick={this.handleSearchClick}>GO</button>
+                            </div>
+                        {
+                            (this.props.selectedSearchResultId) && addCardButtons
+                        }
+                        
                     </div>
-                    {
-                        (this.props.selectedSearchResultId) && addCardButtons
-                    }
-                    
-                </div>
+                </form>
                 <div className="outline-section flex-row card-container">
                     {
                         this.props.searchResults.map((card: Card, index: number) => {
@@ -183,7 +251,16 @@ function mapStateToProps(state: State): PropsFromState {
         searchValue: searchFilterName,
         searchResults: searchResults,
         selectedSearchResultId: selectedSearchResultId,
-        selectedSearchResultName: selectedSearchResultName
+        selectedSearchResultName: selectedSearchResultName,
+        setFilterString: state.cardSearch.searchFilter.setFilterString,
+        includeRed: state.cardSearch.searchFilter.includeRed,
+        includeBlue: state.cardSearch.searchFilter.includeBlue,
+        includeGreen: state.cardSearch.searchFilter.includeGreen,
+        includeWhite: state.cardSearch.searchFilter.includeWhite,
+        includeBlack: state.cardSearch.searchFilter.includeBlack,
+        colorIdentityString: state.cardSearch.searchFilter.colorIdentity
+
+
     }
     return result;
 }

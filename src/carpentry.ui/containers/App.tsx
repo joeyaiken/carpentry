@@ -7,8 +7,6 @@ import RareBinder from '../components/RareBinder';
 import CardQuickAdd from './CardQuickAdd';
 import AppData from './AppData';
 
-import DeckDetail from '../components/DeckDetail';
-
 import MaterialButton from '../components/MaterialButton'
 import AppNav from '../components/AppNav'
 
@@ -18,21 +16,14 @@ import {
     appNavClick,
     addDeck,
     selectDeck,
-    // deckChanged,
-    saveDeck,
-    // onSectionToggle,
-    appSheetToggle,
-    // selectDeck,
-    // deckChanged
-    // cardDetailRequested,
-    appNavSave
+    appSheetToggle
 } from '../actions'
 
 
 interface PropsFromState { 
     isNavOpen: boolean;
-    selectedDeckId: number;
-    deckList: CardDeck[];
+    selectedDeckId: number | null;
+    deckList: ICardDeck[];
     isSideSheetOpen: boolean;
     visibleSideSheet: string;
 }
@@ -87,7 +78,7 @@ class App extends React.Component<AppProps>{
 
         // const navContainer: JSX.Element = <div>NAVIGATION</div>;
 
-        //const { deckList } = props;
+        // const { deckList } = props;
 
         //const { ui } = props;
 
@@ -105,13 +96,13 @@ class App extends React.Component<AppProps>{
                 {this.props.visibleSideSheet == 'rare' && rareBinderSheet}
             </div>
         )
-
+            //
         const navOverlay: JSX.Element = (
             <div className="app-nav-overlay">
                 <AppNav deckList={this.props.deckList} 
-                    selectedDeckId={this.props.selectedDeckId} 
                     onAddDeckClick={this.handleAddDeck} 
                     onItemSelected={this.handleSelectDeck}
+                    selectedDeckId={this.props.selectedDeckId} 
                     handleNavClick={this.handleNavClick}/>
                 <div className="overlay" onClick={this.handleOverlayClick} />
             </div>
@@ -149,35 +140,6 @@ class App extends React.Component<AppProps>{
     }
 }
 
-
-// class App extends Component {
-//     //Will either be showing the DeckManager or RareBinder container components
-
-
-//     render() {
-//         // flex-container-vertical
-//         //static-section
-//         const description: string = "Deck Manager";
-//         return (
-//             <div className="app">
-//                 <div className="app-header">
-//                     <h1>carpentry</h1><h2>{description}</h2>
-//                 </div>
-//                 <div className="app-contents">
-                    
-//                     {/* <ViewSelector />  flex-section */}
-//                     <DeckManager />
-//                     {/* <RareBinder /> */}
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
-
-// export default App;
-
-    
-
 function mapStateToProps(state: State): PropsFromState {
     // const searchFilterName = state.actions.searchFilter.name;
     // const searchResults: Card[] = state.actions.searchFilter.results.slice();
@@ -191,28 +153,38 @@ function mapStateToProps(state: State): PropsFromState {
     // console.log('app mapping things');
     // console.log(state.data)
 
-    const localCardList: CardDeck[] = state.data.detailList.map((detail) => {
-        let returningCardDeck: CardDeck = {
-            basicLands: detail.basicLands,
-            cards: state.data.cardLists[detail.id].cards,
-            colors: detail.colors,
-            description: detail.description,
-            id: detail.id,
-            name: detail.name,
-            type: detail.type
-        }
-        return returningCardDeck;
-    })
+    // const localCardList: ICardDeck_Legacy[] = state.data.deckList.map((deck) => {
+
+    //     // let deckCardList: IDeckCard[] = deck.cards.map((cardName) => {
+    //     //     return {
+    //     //         name: cardName,
+    //     //         set: ''
+    //     //     }
+            
+    //     // })
+
+    //     let returningCardDeck: ICardDeck_Legacy = {
+    //         // basicLands: detail.basicLands,
+    //         // cards: state.data.cardLists[detail.id].cards,
+    //         // colors: detail.colors,
+    //         // description: detail.description,
+    //         id: detail.id,
+    //         details: detail,
+    //         cards: deckcard,
+    //         stats: null
+    //     //  
+    //         // name: detail.name,
+    //         // type: detail.type
+    //     }
+    //     return returningCardDeck;
+    // })
 
     const result: PropsFromState = {
         isNavOpen: state.ui.isNavOpen,
         selectedDeckId: state.ui.selectedDeckId,
-        deckList: localCardList,
+        deckList: state.data.deckList,
         isSideSheetOpen: state.ui.isSideSheetOpen,
         visibleSideSheet: state.ui.visibleSideSheet
-        // searchValue: searchFilterName,
-        // searchResults: searchResults,
-        // selectedSearchResult: selectedSearchResult
     }
     return result;
 }

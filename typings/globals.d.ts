@@ -1,5 +1,9 @@
 /// <reference types="mtgsdk-ts" />
 
+
+//////////////////////
+//  State interfaces/
+////////////////////
 declare interface State {
     //actions need to be removed completely
     // actions: AppState;
@@ -18,7 +22,7 @@ declare interface IUIState {
     visibleSideSheet: string;
     // selectedDeckId: string;
 
-    selectedDeckId: number;
+    selectedDeckId: number | null;
 }
 
 declare interface IDeckEditorState {
@@ -54,7 +58,8 @@ declare interface IDeckEditorState {
 //  maybe even section visibilities?
 //  probably at least sections
 declare interface IDataStore {
-    selectedCard: string | null;
+    //selectedCard: string | null;
+    selectedCard: IDeckCard | null;
 
     selectedDeckId: number; // | null ?
     //  active deck visible cards
@@ -62,18 +67,10 @@ declare interface IDataStore {
     //  maybe even section visibilities?
     
     //  probably at least sections
-    
-    //dictionary of cards "card index"
+
+    deckList: ICardDeck[];
     cardIndex: ICardIndex;
 
-    //dictionary of decks
-    // deckList: CardDeck[]
-    //instead of a list of decks, we have a list of details and a list of cards
-
-    //These are the only records that need to be stored under source controll
-    detailList: IDeckDetail[]; //should this be a dictionary instead?
-    cardLists: ICardList[]; //should this be a dictionary instead?
-    // rareStore: ICardList;
 }
 
 declare interface ICardSearch {
@@ -87,6 +84,17 @@ declare interface ICardSearch {
 
 declare interface SearchFilterProps {
     name: string;
+
+    //mana types
+    includeRed: boolean;
+    includeBlue: boolean;
+    includeGreen: boolean;
+    includeWhite: boolean;
+    includeBlack: boolean;
+    colorIdentity: string;
+    //sets
+    setFilterString: string;
+
     // isFetching: boolean;
     results: any; //results is an array of cards, right?
     selectedCardId?: string;
@@ -103,59 +111,17 @@ declare interface ReduxAction extends AnyAction {
     meta?: any
 }
 
-declare interface CardDeck {
-    id: number;
-    name: string;
-    description: string;
-    //cards: MagicCard[];
-    cards: string[]; //Cards are just a collection of string IDs represengint a Magic.Card.id
-
-    basicLands: ILandCount;
-
-    type: string; // edh / standard / legacy
-    colors: string;
-    //colors (calculate this?)
-
-    //"gimick" ?
-}
-
-declare interface ICardDeck {
-    id: number;
-    detail: IDeckDetail;
-    lands: IDeckLandCount;
-    // cards: string[]; //list of card names
-    //cards are left in a separate object for convenience
-}
 
 
-declare interface IDeckDetailIndex {
-    [id: number]: IDeckDetail;
-}
-declare interface IDeckDetail {
-    id: number;
-    //
-    name: string;
-    description: string;
-    type: string;
-    colors: string;
 
-    basicLands: ILandCount;
-}
+///////////////////////
+//  Object interfaces/
+/////////////////////
 
-// declare interface IDeckLandCountIndex {
-//     [id: number]: IDeckLandCount;
-// }
-// declare interface IDeckLandCount {
-//     id: number;
-//     basicLands: ILandCount;
-// }
-
-declare interface ICardListIndex {
-    [id: number]: ICardList;
-}
 declare interface ICardList {
     id: number;
-    cards: string[]; //Cards are just a collection of string IDs represengint a Magic.Card.Name
+    cards: IDeckCard[]; //Cards are just a collection of string IDs represengint a Magic.Card.Name
+    lands: ILandCount;
 }
 
 declare interface ILandCount {
@@ -172,27 +138,14 @@ declare interface ILandCount {
 //  DataStore
 //
 
-declare interface IDeckIndex {
-    [id: string]: ICardDeck;
-}
 
-declare interface ICardIndex {
-    [id: string]: ICard;
-}
-
+//should be depricated
 declare interface IMagicCard {
     //name
     cardId: string;
     data: Card;
-    // updateRequested: boolean;
-    //ID ?
-
-    //color(s)
-
-    //set
-
-    //???
 }
+
 
 declare interface ICard {
     //Guess I'll just put relevant info by ID
@@ -215,8 +168,3 @@ declare interface ICard {
     type: string;
     types: string[];
 }
-
-
-
-
-

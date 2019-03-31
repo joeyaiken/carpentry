@@ -3,7 +3,7 @@ import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
-import { loadInitialUIState, cacheUIState } from '../data/lumberyard'
+import { UIStateManager } from '../data/lumberyard'
 
 import { 
     APP_SHEET_TOGGLE, 
@@ -29,12 +29,18 @@ import {
 
 //export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
 export const ui = (state: IUIState, action: ReduxAction): any => {
+    let newState: IUIState = {
+        ...state,
+    }
+    
     switch(action.type){
         case APP_NAV_CLICK:
-            return {
-                ...state,
+            newState = {
+                ...newState,
                 isNavOpen: !state.isNavOpen
             }
+            UIStateManager.cacheUIState(newState);
+            return newState
         case APP_SHEET_TOGGLE: 
             ///isSearchOpen: boolean;
             // isRareBinderOpen: boolean;
@@ -55,13 +61,13 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
                 // [action.payload]: true
             }
         case SELECT_DECK:
-            let newState: IUIState = {
-                ...state,
+            newState = {
+                ...newState,
                 selectedDeckId: action.payload,
                 isNavOpen: false
             }
             
-            cacheUIState(newState);
+            UIStateManager.cacheUIState(newState);
             //also should cache the UI when the selected deck changes
 
             // return Object.assign({},state,{
@@ -85,7 +91,7 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
             // console.log('ui state default reducer');
             // console.log(state);
             if(!state){
-                state = loadInitialUIState();
+                state = UIStateManager.loadInitialUIState();
             }
             return state;
     }
