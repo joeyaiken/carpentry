@@ -6,9 +6,9 @@ import '../node_modules/material-icons/iconfont/material-icons.css';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import rootReducer from './reducers'
+import rootReducer from './carpentry.ui/reducers'
 
-import App from './containers/App';
+import App from './carpentry.ui/containers/App';
 import * as serviceWorker from './serviceWorker';
 
 //Eventually this should call something that initializes the store as well...

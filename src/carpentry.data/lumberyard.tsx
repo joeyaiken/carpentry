@@ -111,14 +111,14 @@ export function loadInitialDataStore(): IDataStore {
 
     // const cachedCardLists = loadDeckCardsCache();
 
-    let defaultData: ICardDeck[] = require('./deckData.json');
+    let defaultData: ICardDeck[] = require('./legacy2/deckData_legacy.json');
 
     // console.log('default deck data');
     // console.log(defaultData);
     const cachedDeckData = loadDeckDataCache();
 
     //mapCardToICard
-    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./cardIndexData.json');
+    let defaultIndex: ICardIndex = loadCardIndexCache() || require('./legacy2/cardIndexData_legacy.json');
 
     const cachedUIState = loadUIStateCache();
 
