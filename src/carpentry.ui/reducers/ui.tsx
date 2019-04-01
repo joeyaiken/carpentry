@@ -3,8 +3,7 @@ import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
-import { UIStateManager } from '../data/lumberyard'
-
+import { Lumberjack } from '../../carpentry.logic/lumberjack'
 import { 
     APP_SHEET_TOGGLE, 
     APP_NAV_CLICK,
@@ -39,7 +38,7 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
                 ...newState,
                 isNavOpen: !state.isNavOpen
             }
-            UIStateManager.cacheUIState(newState);
+            Lumberjack.legacy_cacheUIState(newState);
             return newState
         case APP_SHEET_TOGGLE: 
             ///isSearchOpen: boolean;
@@ -67,7 +66,7 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
                 isNavOpen: false
             }
             
-            UIStateManager.cacheUIState(newState);
+            Lumberjack.legacy_cacheUIState(newState);
             //also should cache the UI when the selected deck changes
 
             // return Object.assign({},state,{
@@ -91,7 +90,7 @@ export const ui = (state: IUIState, action: ReduxAction): any => {
             // console.log('ui state default reducer');
             // console.log(state);
             if(!state){
-                state = UIStateManager.loadInitialUIState();
+                state = Lumberjack.legacy_loadInitialUIState();
             }
             return state;
     }

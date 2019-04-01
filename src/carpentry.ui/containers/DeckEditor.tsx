@@ -352,22 +352,29 @@ function mapStateToProps(state: State): PropsFromState {
 
     // console.log(state.actions.sectionVisibilities)
     //test
-    console.log('breakin things')
+    // console.log('breakin things')
     const selectedDeckId = state.ui.selectedDeckId || 0;
     const activeDeck = state.data.deckList[selectedDeckId];
     // const activeDeckDetail = state.data.detailList[selectedDeckId];
     // const activeDeckCardList = state.data.cardLists[selectedDeckId];
+    let visibleCards: IMagicCard[] = [];
+    if(activeDeck){
+        visibleCards = activeDeck.cards.map((deckCard) =>{
 
-    let visibleCards: IMagicCard[] = activeDeck.cards.map((deckCard) =>{
-
-        // const indexData = state.data.cardIndex[cardId];
-        
-        const card: IMagicCard = {
-            cardId: deckCard.name,
-            data: state.data.cardIndex[deckCard.set][deckCard.name]
-        }
-        return card;
-    });
+            // const indexData = state.data.cardIndex[cardId];
+            let data = {};
+            let cardSet = state.data.cardIndex[deckCard.set];
+            if(cardSet){
+                data = cardSet[deckCard.name];
+            }
+            const card: IMagicCard = {
+                cardId: deckCard.name,
+                data: data
+            }
+            return card;
+        });
+    }
+    
     
 
     let groupedCards: groupedCardCollection = {};
@@ -412,6 +419,13 @@ function mapStateToProps(state: State): PropsFromState {
         break;
     }
 
+    let landCounts: ILandCount = {B:0,G:0,R:0,U:0,W:0}
+    let deckIsUpToDate = false;
+    if (activeDeck){
+        landCounts = activeDeck.basicLands;
+        deckIsUpToDate = activeDeck.details.isUpToDate;
+    }
+
     const result: PropsFromState = {
         // deckList: state.data.deckList,
         selectedDeckId: state.ui.selectedDeckId || 0,
@@ -421,9 +435,9 @@ function mapStateToProps(state: State): PropsFromState {
         sortBy: state.deckEditor.deckSort,
         cardCollections: groupedCards,
         // cardGroups: cardGroups,
-        landCounts: activeDeck.basicLands,
+        landCounts: landCounts,
         selectedCard: state.data.selectedCard,
-        isDeckUpToDate: activeDeck.details.isUpToDate
+        isDeckUpToDate: deckIsUpToDate
     }
     
     return result;

@@ -1,3 +1,12 @@
+Thoughts:
+	The data store management object/class should still be a "lumberyard"
+		I'm okay with calling "new Lumberyard()"
+
+
+
+
+
+
 Attempting to design a data model
 
 

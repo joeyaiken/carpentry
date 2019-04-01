@@ -9,6 +9,11 @@ import { string } from 'prop-types';
 
 // import { lumberyardSaveState } from '../data/lumberyard'
 
+
+//initializations
+export const INI_APP_DATA = 'INI_APP_DATA'
+
+
 //Actions
 
 //Navigation actions
@@ -81,6 +86,10 @@ export const DECK_EDITOR_SECTION_TOGGLE = 'DECK_EDITOR_SECTION_TOGGLE'; // selec
 //     }
 // }
 
+
+export const initAppData = (): ReduxAction => ({
+    type: INI_APP_DATA
+});
 
 
 export const appNavClick = (): ReduxAction => ({

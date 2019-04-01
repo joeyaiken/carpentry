@@ -61,7 +61,7 @@ declare interface IDataStore {
     //selectedCard: string | null;
     selectedCard: IDeckCard | null;
 
-    selectedDeckId: number; // | null ?
+    selectedDeckId: number | null; // | null ?
     //  active deck visible cards
 
     //  maybe even section visibilities?

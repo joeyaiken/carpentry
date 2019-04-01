@@ -3,8 +3,8 @@ import { Card } from 'mtgsdk-ts'
 //import {} from './data/lumberyard'
 
 
-import { loadInitialCardSearchState } from '../data/lumberyard'
-
+// import { loadInitialCardSearchState } from '../../carpentry.data/lumberyard'
+import { Lumberjack } from '../../carpentry.logic/lumberjack'
 //reducer file ideas
 //ui
 //api
@@ -215,7 +215,7 @@ export const cardSearch = (state: ICardSearch, action: ReduxAction): any => {
 
         default:
             if(!state){
-                state = loadInitialCardSearchState();
+                state = Lumberjack.defaultStateInstance_cardSearch();
             }
             return state;
     }
