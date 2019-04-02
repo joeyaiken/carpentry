@@ -172,11 +172,33 @@ class Architect extends React.Component<ArchitectProps> {
         // );
 
         // const groupNames = Object.keys(this.props.cardCollections);
-
+        /*
+        <div className="">
+        </div>
+        
+        */
 
         return(
-            <div className="">
-               
+            <div className="architect-container">
+                <div className="architect-card-section">
+                    <h1>Hallo, wurld</h1>
+                    <div className="notes">
+                        <p>This component will allow the user to browse individual sets, and propose cards for decks</p>
+                        <p>Q: Should the "Set" filter be optional?</p>
+                        <p>It shouldn't be able to directly add cards to decks</p>
+                        <p>If a user wants to add specific cards to specific deck s, the QuickAdd component from the deck editor is more appropriate</p>
+                        <p>Maybe provide an expanded & collapsed version of the deck list</p>
+                        <p>Compact could have an summary, card count, and a + icon (when a card is selected)</p>
+                        <p>It shouldn't show that pesky QuickAdd component</p>
+                        <p>This component isn't going to rely on some local index, it's going to always query the MTG API</p>
+                        <p>Q: Should the queries continue to log to an index to keep building out a local library?</p>
+                        <p>Does this get its own reducer?</p>
+                        <p></p>
+                    </div>
+                </div>
+                <div className="architect-deck-section">
+                    <p>This should list decks</p>
+                </div>
             </div>
         )
     }
@@ -184,6 +206,19 @@ class Architect extends React.Component<ArchitectProps> {
 }
 
 function mapStateToProps(state: State): PropsFromState {
+    //This function can map the deck list from the data/store/whatever reducer
+        //let something = state.data.
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // const { selectedSubreddit, postsBySubreddit } = state
     // const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
     //   selectedSubreddit
@@ -191,6 +226,7 @@ function mapStateToProps(state: State): PropsFromState {
     //   isFetching: true,
     //   items: []
     // }
+
 
     // console.log(state.actions.sectionVisibilities)
     //test

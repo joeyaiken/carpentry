@@ -3,6 +3,7 @@ import React from 'react';
 
 import '../App.css';
 import DeckEditor from './DeckEditor';
+import Architect from './Architect';
 import RareBinder from '../components/RareBinder';
 import CardQuickAdd from './CardQuickAdd';
 import AppData from './AppData';
@@ -61,7 +62,7 @@ class App extends React.Component<AppProps>{
 
     handleSheetToggle(section: string){
         this.props.dispatch(appSheetToggle(section))
-    }
+    } 
 
     handleOverlayClick() {
         this.props.dispatch(appNavClick())
@@ -135,7 +136,8 @@ class App extends React.Component<AppProps>{
         
         const appBody: JSX.Element = (
             <div className={"app-contents"+(this.props.isSideSheetOpen ? " contents-short" : " contents-full")}>
-                <DeckEditor />
+                {/* <DeckEditor /> */}
+                <Architect />
             </div>
         );
 

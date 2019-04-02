@@ -58,6 +58,13 @@ declare interface IDeckEditorState {
 //  maybe even section visibilities?
 //  probably at least sections
 declare interface IDataStore {
+    //Is this actually the most recent data store?
+
+    //Architect - needs the list of decks
+    deckList: ICardDeck[];
+    //this may eventually be too much data
+
+
     //selectedCard: string | null;
     selectedCard: IDeckCard | null;
 
@@ -80,6 +87,18 @@ declare interface ICardSearch {
     requestedCards: string[];
 }
 
+
+declare interface IArchitectCardSearchFilter {
+    //what do I even want for filters?
+}
+
+declare interface IArchitectCardSearchState {
+    filter: IArchitectCardSearchFilter;
+    //more search related vars
+
+
+
+}
 //API state?
 
 declare interface SearchFilterProps {
