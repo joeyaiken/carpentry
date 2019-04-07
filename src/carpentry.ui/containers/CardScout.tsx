@@ -4,38 +4,9 @@ import React, { Component, SyntheticEvent } from 'react'
 import InputField from '../components/InputField';
 
 import {
-    // selectDeck,
-    // // deckChanged,
-    // saveDeck,
-    // deckEditorSectionToggle,
-    // appSheetToggle,
-    // // selectDeck,
-    // // deckChanged
-    // deckEditorLandCountChange,
-    // deckEditorViewChange,
-    // deckEditorGroupChange,
-    // deckEditorSortChange,
-    // // cardDetailRequested,
-    // fetchCardsIfNeeded,
-
-
-    // deckEditorCardSelected,
-    // deckEditorDuplicateSelectedCard,
-    // deckEditorRemoveOneSelectedCard,
-    // deckEditorRemoveAllSelectedCards,
-    // toggleDeckEditorStatus
-    // //deckEditorHeaderToggle
-    // //deckEditorSectionToggle
-    scoutSearchFilterChanged
+    scoutSearchFilterChanged,
+    scoutSearchApplied
 } from '../actions/cardScoutActions'
-
-
-
-/**
- * 
- * The Deck Editor is basically a fancy data table
- * 
- */
 
 interface binderCardGroup { 
     name: string;
@@ -64,36 +35,13 @@ interface CardScoutSearchFilter {
 }
 
 interface PropsFromState {
-
     searchFilter: CardScoutSearchFilter;
+    searchIsInProgress: boolean;
+    searchResults?: ICard[];
 
     pinnedDecks: CardScoutDeck[];
     relatedDecks: CardScoutDeck[];
     otherDecks: CardScoutDeck[];
-
-    // deckList: CardDeck[];
-    // selectedDeckId: number;
-    // sectionVisibilities: boolean[];
-    
-    // selectedCard: IDeckCard | null;
-    
-    // // dispatch?: any;
-
-    // display: string | null; // card | list
-
-    // groupBy: string; // spellType | rarity | none
-    // //spell type icon   flash_on
-    // //rarity icon       grade
-    // //name icon         text-format
-    // //mana cost icon    battery-unknown | signal_cellular_alt
-    // sortBy: string | null; //manaCost | name | rarity
-
-    // landCounts: ILandCount;
-    // //cardCollections: binderCardCollection;//{ [key: string]: IMagicCard[] };
-    // cardCollections: groupedCardCollection;//{ [key: string]: IMagicCard[] };
-
-    // isDeckUpToDate: boolean;
-
 }
 
 function generateTestData(state: State): PropsFromState {
@@ -105,6 +53,8 @@ function generateTestData(state: State): PropsFromState {
         //     type:"wiz"
         // },
         searchFilter: state.cardScoutCardSearch.filter,
+        searchIsInProgress: state.cardScoutCardSearch.searchIsInProgress,
+        searchResults: state.cardScoutCardSearch.searchResults,
         pinnedDecks: [
             {
                 name:"Pinned Deck"
@@ -140,33 +90,12 @@ type CardScoutProps = PropsFromState & DispatchProp<ReduxAction>;
 
 class CardScout extends React.Component<CardScoutProps> {
     constructor(props: CardScoutProps) {
-        super(props)
-        this.handleDeckSelected = this.handleDeckSelected.bind(this);
-        // this.handleDeckChanged = this.handleDeckChanged.bind(this);
-        this.handleDeckSaved = this.handleDeckSaved.bind(this);
-        // this.handleSheetToggle = this.handleSheetToggle.bind(this);
-
-        // this.handleCardClick = this.handleCardClick.bind(this);
-        // this.handleLandCountChange = this.handleLandCountChange.bind(this);
-
-        // this.handleViewChange = this.handleViewChange.bind(this);
-        // this.handleGroupChange = this.handleGroupChange.bind(this);
-        // this.handleSortChange = this.handleSortChange.bind(this);
-        // this.handleLandCountChange = this.handleLandCountChange.bind(this);
-
-        this.handleHeaderToggle = this.handleHeaderToggle.bind(this);
-        // this.handleSectionToggle = this.handleSectionToggle.bind(this);
-
-        // this.handleDuplicateClick = this.handleDuplicateClick.bind(this);
-        // this.handleRemoveOneClick = this.handleRemoveOneClick.bind(this);
-        // this.handleRemoveAllClick = this.handleRemoveAllClick.bind(this);
-
-        // this.handleStatusChange = this.handleStatusChange.bind(this);
-
+        super(props);
         this.handleSetFilterChanged = this.handleSetFilterChanged.bind(this);
         this.handleSearchFilterChanged = this.handleSearchFilterChanged.bind(this);
         this.handleTypeFilterChanged = this.handleTypeFilterChanged.bind(this);
         this.handleColorIdentityChanged = this.handleColorIdentityChanged.bind(this);
+        this.handleSearchClick = this.handleSearchClick.bind(this);
     }
 
     // componentDidMount() {
@@ -194,29 +123,6 @@ class CardScout extends React.Component<CardScoutProps> {
     //     // dispatch(fetchPostsIfNeeded(selectedSubreddit))
     // }
 
-    handleDeckSelected(id: number) {
-        // this.props.dispatch(selectDeck(id))
-    }
-
-    // handleDeckChanged(event: any, selectedDeck: CardDeck){
-        
-    //     const updatedDeck: CardDeck = {
-    //         ...selectedDeck, [event.target.name]: event.target.value
-    //     }
-    //     // console.log(updatedDeck)
-
-
-    //     this.props.dispatch(deckChanged(updatedDeck))
-    // }
-
-    handleDeckSaved(){
-        //localStorage.setItem('')
-        // this.props.dispatch(saveDeck())
-    }
-
-    handleHeaderToggle(){
-        
-    }
 
     handleSetFilterChanged(event: any){
         this.props.dispatch(scoutSearchFilterChanged('set', event.target.value));
@@ -234,8 +140,10 @@ class CardScout extends React.Component<CardScoutProps> {
         this.props.dispatch(scoutSearchFilterChanged('colorIdentity', event.target.value));
     }
 
+    handleSearchClick(event: any){
+        this.props.dispatch(scoutSearchApplied());
+    }
 
-    
     renderCardScoutDeck(deck: CardScoutDeck): JSX.Element{
         return(
             <div className="outline-section flex-row">
@@ -257,27 +165,6 @@ class CardScout extends React.Component<CardScoutProps> {
 
     render(){
         
-
-        // const selectedCardHeaderSection: JSX.Element = (
-        //     <div className="header-section">
-        //         <label>Selected:</label>
-        //         <label>{ this.props.selectedCard }</label>
-        //         <MaterialButton value="add" icon="add_circle" onClick={this.handleDuplicateClick} />
-        //         <MaterialButton value="remove" icon="remove_circle" onClick={this.handleRemoveOneClick} />
-        //         <MaterialButton value="clear" icon="cancel" onClick={this.handleRemoveAllClick} />
-        //     </div>
-        // );
-
-        // const groupNames = Object.keys(this.props.cardCollections);
-        /*
-        <div className="">
-        </div>
-        
-
-
-        <div className="outline-section">[]</div>
-        */
-
         return(
             <div className="card-scout-container flex-col">
                 <div className="outline-section">Card Scout</div>
@@ -291,21 +178,36 @@ class CardScout extends React.Component<CardScoutProps> {
                                 <InputField label="Name" value={this.props.searchFilter.name} property="" onChange={this.handleSearchFilterChanged} />
                                 <InputField label="Type" value={this.props.searchFilter.type} property="" onChange={this.handleTypeFilterChanged} />
                                 <InputField label="Colors" value={this.props.searchFilter.colorIdentity} property="" onChange={this.handleColorIdentityChanged} />
-                                <div className="outline-section">[Search Button]</div>
+                                {/* <div className="outline-section">[Search Button]</div> */}
+                                <div className="outline-section flex-col">
+                                    <label>Search</label>
+                                    <button onClick={this.handleSearchClick}>GO</button>
+                                </div>
                             </div>
                         </div>
                         
                         <div className="outline-section">
                             <div className="outline-section">Search Results</div>
-                            <div className="outline-section flex-row">
-                                <div className="outline-section">result</div>
-                                <div className="outline-section">result</div>
-                                <div className="outline-section">result</div>
-                                <div className="outline-section">result</div>
-                                <div className="outline-section">result</div>
-                            </div>
-                            <div className="outline-section">[No Results]</div>
-                            <div className="outline-section">[No Search Performed]</div>
+                            {
+                                (this.props.searchResults && this.props.searchResults.length > 0) && (
+                                    <div className="outline-section flex-row">
+                                        <div className="outline-section">result</div>
+                                        <div className="outline-section">result</div>
+                                        <div className="outline-section">result</div>
+                                        <div className="outline-section">result</div>
+                                        <div className="outline-section">result</div>
+                                    </div>
+                                )
+                            }
+                            {
+                                (this.props.searchResults && this.props.searchResults.length == 0) && <div className="outline-section">[No Results]</div>
+                            }
+                            {
+                                (!this.props.searchResults) && <div className="outline-section">[No Search Performed]</div>
+                            }
+                            {
+                                this.props.searchIsInProgress && <div className="outline-section">[Search In Progress]</div>
+                            }
                         </div>
                     </div>
                     <div className="flex-section">

@@ -23,3 +23,9 @@ export const scoutSearchFilterChanged = (property: string, value: string): Redux
         value: value
     }
 });
+
+export const SCOUT_SEARCH_APPLIED = "SCOUT_SEARCH_APPLIED";
+
+export const scoutSearchApplied = (): ReduxAction => ({
+    type: SCOUT_SEARCH_APPLIED
+});

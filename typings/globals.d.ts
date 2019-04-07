@@ -90,6 +90,10 @@ declare interface ICardSearch {
 
 declare interface ICardScoutCardSearch {
     filter: ICardScoutSearchFilter;
+    
+    searchIsInProgress: boolean;
+
+    searchResults?: ICard[];
 }
 
 declare interface ICardScoutSearchFilter {
