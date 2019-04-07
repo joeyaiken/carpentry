@@ -14,28 +14,8 @@ import { ui } from './ui'
 import { deckEditor } from './deckEditor'
 
 import { 
-    // SELECT_DECK, 
-    // ADD_DECK, 
-    // LOG_STATE, 
-    // SELECTED_DECK_CHANGE, 
-    // // FIND_MODAL_FILTER_CHANGE,
-    // SEARCH_VALUE_CHANGE,
-    // SEARCH_FILTER_CHANGE,
-    // REQUEST_CARD_SEARCH,
-    // RECEIVE_CARD_SEARCH,
-
-    // REQUEST_CARD_DETAIL,
-    // RECEIVE_CARD_DETAIL,
-
-    // SELECTED_DECK_SAVED,
-    // SEARCH_CARD_SELECTED,
-    // ADD_CARD_TO_DECK,
-    // ADD_CARD_TO_RARES,
-
-    // CARD_BINDER_LAND_COUNT_CHANGE,
-
-    // ON_SECTION_TOGGLE
-} from '../actions'
+    SCOUT_SEARCH_FILTER_CHANGE
+} from '../actions/cardScoutActions'
 
 
 
@@ -43,9 +23,22 @@ import {
 //import visibilityFilter from './visibilityFilter'
 
 //const actions = (state = defaultStateData, action: ReduxAction): any => {
-export const architectCardSearch = (state: IArchitectCardSearchState, action: ReduxAction): any => {
+export const cardScoutCardSearch = (state: ICardScoutCardSearch, action: ReduxAction): any => {
     switch(action.type){
 
+        case SCOUT_SEARCH_FILTER_CHANGE:
+            let newState: ICardScoutCardSearch = {
+                ...state,
+                filter:{
+                    ...state.filter,
+                    [action.payload.property]: action.payload.value
+                }
+                
+            };
+            console.log('new scout filter state');
+            console.log(newState);
+
+            return newState;
         
         // case SELECTED_DECK_CHANGE:
         //     // console.log('deck changed');
@@ -179,7 +172,10 @@ export const architectCardSearch = (state: IArchitectCardSearchState, action: Re
                 // state = Lumberjack.defaultStateInstance_cardSearch();
                 state = {
                     filter: {
-
+                        set: "",
+                        name: "",
+                        type:"",
+                        colorIdentity: "",
                     }
                 }
             }

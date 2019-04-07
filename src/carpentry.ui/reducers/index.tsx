@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import { data } from './data'
 import { ui } from './ui'
 //components
-import { architectCardSearch } from './architectCardSearch'
+import { cardScoutCardSearch } from './cardScoutCardSearch'
 import { deckEditor } from './deckEditor'
 import { cardSearch } from './cardSearch'
 
@@ -12,7 +12,7 @@ export default combineReducers({
     data,
     ui,
     //components
-    architectCardSearch,
+    cardScoutCardSearch,
     deckEditor,
     cardSearch
 });

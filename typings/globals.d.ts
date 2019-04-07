@@ -13,6 +13,7 @@ declare interface State {
     //components
     deckEditor: IDeckEditorState;
     cardSearch: ICardSearch;
+    cardScoutCardSearch: ICardScoutCardSearch;
     
 }
 
@@ -87,6 +88,16 @@ declare interface ICardSearch {
     requestedCards: string[];
 }
 
+declare interface ICardScoutCardSearch {
+    filter: ICardScoutSearchFilter;
+}
+
+declare interface ICardScoutSearchFilter {
+    set: string;
+    name: string;
+    type: string;
+    colorIdentity: string;
+}
 
 declare interface IArchitectCardSearchFilter {
     //what do I even want for filters?

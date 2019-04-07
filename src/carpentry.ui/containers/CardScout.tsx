@@ -1,6 +1,7 @@
 import { connect, MapStateToProps, DispatchProp } from 'react-redux'
 import React, { Component, SyntheticEvent } from 'react'
 
+import InputField from '../components/InputField';
 
 import {
     // selectDeck,
@@ -25,7 +26,8 @@ import {
     // toggleDeckEditorStatus
     // //deckEditorHeaderToggle
     // //deckEditorSectionToggle
-} from '../actions'
+    scoutSearchFilterChanged
+} from '../actions/cardScoutActions'
 
 
 
@@ -54,8 +56,16 @@ interface CardScoutDeck {
     name: string;
 }
 
+interface CardScoutSearchFilter {
+    set: string;
+    name: string;
+    type: string;
+    colorIdentity: string;
+}
+
 interface PropsFromState {
 
+    searchFilter: CardScoutSearchFilter;
 
     pinnedDecks: CardScoutDeck[];
     relatedDecks: CardScoutDeck[];
@@ -86,8 +96,15 @@ interface PropsFromState {
 
 }
 
-function generateTestData(): PropsFromState {
+function generateTestData(state: State): PropsFromState {
     return {
+        // searchFilter:{
+        //     set:"DOM", //RNA, guessing on the DOM bit
+        //     colors:"",
+        //     name: "",
+        //     type:"wiz"
+        // },
+        searchFilter: state.cardScoutCardSearch.filter,
         pinnedDecks: [
             {
                 name:"Pinned Deck"
@@ -145,6 +162,11 @@ class CardScout extends React.Component<CardScoutProps> {
         // this.handleRemoveAllClick = this.handleRemoveAllClick.bind(this);
 
         // this.handleStatusChange = this.handleStatusChange.bind(this);
+
+        this.handleSetFilterChanged = this.handleSetFilterChanged.bind(this);
+        this.handleSearchFilterChanged = this.handleSearchFilterChanged.bind(this);
+        this.handleTypeFilterChanged = this.handleTypeFilterChanged.bind(this);
+        this.handleColorIdentityChanged = this.handleColorIdentityChanged.bind(this);
     }
 
     // componentDidMount() {
@@ -195,6 +217,23 @@ class CardScout extends React.Component<CardScoutProps> {
     handleHeaderToggle(){
         
     }
+
+    handleSetFilterChanged(event: any){
+        this.props.dispatch(scoutSearchFilterChanged('set', event.target.value));
+    }
+
+    handleSearchFilterChanged(event: any){
+        this.props.dispatch(scoutSearchFilterChanged('name', event.target.value));
+    }
+
+    handleTypeFilterChanged(event: any){
+        this.props.dispatch(scoutSearchFilterChanged('type', event.target.value));
+    }
+
+    handleColorIdentityChanged(event: any){
+        this.props.dispatch(scoutSearchFilterChanged('colorIdentity', event.target.value));
+    }
+
 
     
     renderCardScoutDeck(deck: CardScoutDeck): JSX.Element{
@@ -247,10 +286,11 @@ class CardScout extends React.Component<CardScoutProps> {
                         <div className="outline-section">Card Search</div>
                         <div className="outline-section">
                             <div className="outline-section">Search Filters</div>
-                            <div className="outline-section flex-row">    
-                                <div className="outline-section">[Set]</div>
-                                <div className="outline-section">[Colors]</div>
-                                <div className="outline-section">[More Filters]</div>
+                            <div className="flex-row">
+                                <InputField label="Set" value={this.props.searchFilter.set} property="" onChange={this.handleSetFilterChanged} />
+                                <InputField label="Name" value={this.props.searchFilter.name} property="" onChange={this.handleSearchFilterChanged} />
+                                <InputField label="Type" value={this.props.searchFilter.type} property="" onChange={this.handleTypeFilterChanged} />
+                                <InputField label="Colors" value={this.props.searchFilter.colorIdentity} property="" onChange={this.handleColorIdentityChanged} />
                                 <div className="outline-section">[Search Button]</div>
                             </div>
                         </div>
@@ -264,6 +304,8 @@ class CardScout extends React.Component<CardScoutProps> {
                                 <div className="outline-section">result</div>
                                 <div className="outline-section">result</div>
                             </div>
+                            <div className="outline-section">[No Results]</div>
+                            <div className="outline-section">[No Search Performed]</div>
                         </div>
                     </div>
                     <div className="flex-section">
@@ -304,108 +346,9 @@ class CardScout extends React.Component<CardScoutProps> {
 }
 
 function mapStateToProps(state: State): PropsFromState {
-    //This function can map the deck list from the data/store/whatever reducer
-        //let something = state.data.
     
+    const result: PropsFromState = generateTestData(state);
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // const { selectedSubreddit, postsBySubreddit } = state
-    // const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
-    //   selectedSubreddit
-    // ] || {
-    //   isFetching: true,
-    //   items: []
-    // }
-
-
-    // console.log(state.actions.sectionVisibilities)
-    //test
-    // console.log('breakin things')
-    const selectedDeckId = state.ui.selectedDeckId || 0;
-    const activeDeck = state.data.deckList[selectedDeckId];
-    // const activeDeckDetail = state.data.detailList[selectedDeckId];
-    // const activeDeckCardList = state.data.cardLists[selectedDeckId];
-    let visibleCards: IMagicCard[] = [];
-    if(activeDeck){
-        visibleCards = activeDeck.cards.map((deckCard) =>{
-
-            // const indexData = state.data.cardIndex[cardId];
-            let data = {};
-            let cardSet = state.data.cardIndex[deckCard.set];
-            if(cardSet){
-                data = cardSet[deckCard.name];
-            }
-            const card: IMagicCard = {
-                cardId: deckCard.name,
-                data: data
-            }
-            return card;
-        });
-    }
-    
-    
-
-    let groupedCards: groupedCardCollection = {};
-    // let cardGroups: binderCardGroup[] = [];
-    //group visible cards
-    switch(state.deckEditor.deckGroup){// spellType | rarity | none
-        case 'spellType':
-            visibleCards.forEach((card: IMagicCard) => {
-                
-                const cardType: string = card.data.types[0];
-
-
-                if(!groupedCards[cardType]){
-                    // groupedCards[cardType].cards = [];
-                    groupedCards[cardType] = {
-                        cards: [],
-                        isOpen: true
-                    }
-                }
-                groupedCards[cardType].cards.push(card);
-            });
-            break;
-        case 'rarity':
-            // console.log('sorting by rarity');
-            visibleCards.forEach((card: IMagicCard) => {
-                // const cardType: string = card.data.types[0];
-                if(!groupedCards[card.data.rarity]){
-                    //groupedCards[card.data.rarity] = [];
-                    groupedCards[card.data.rarity] = {
-                        cards: [],
-                        isOpen: true
-                    };
-                }
-                groupedCards[card.data.rarity].cards.push(card);
-            });
-            break;
-        default: 
-            groupedCards['Cards'] = {
-                cards: visibleCards,
-                isOpen: true
-            };
-        break;
-    }
-
-    let landCounts: ILandCount = {B:0,G:0,R:0,U:0,W:0}
-    let deckIsUpToDate = false;
-    if (activeDeck){
-        landCounts = activeDeck.basicLands;
-        deckIsUpToDate = activeDeck.details.isUpToDate;
-    }
-
-    const result: PropsFromState = generateTestData();
-
-    
-    
     return result;
 }
 
