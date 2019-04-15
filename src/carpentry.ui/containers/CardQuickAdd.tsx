@@ -16,7 +16,8 @@ import { Card } from 'mtgsdk-ts';
 import { stat } from 'fs';
 //import Magic = require('mtgsdk-ts');
 // import Magic from 'mtgsdk-ts';
-import { mapCardToICard } from '../data/lumberyard';
+//import { mapCardToICard } from '../data/lumberyard';
+import { mapCardToICard } from '../../carpentry.data/lumberyard';
 
 import LandIcon from '../components/LandIcon'
 

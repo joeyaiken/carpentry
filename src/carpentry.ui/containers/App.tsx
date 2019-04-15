@@ -13,6 +13,8 @@ import AppNav from '../components/AppNav'
 import AppIcon from '../components/AppIcon'
 
 import {
+    initAppData,
+
     appNavClick,
     addDeck,
     selectDeck,
@@ -43,6 +45,8 @@ class App extends React.Component<AppProps>{
         // this.handleSaveStateClick = this.handleSaveStateClick.bind(this);
     }
 
+    //Should THIS be the thing that initializes shit? Instead of a reducer?
+
     handleNavClick(){
         this.props.dispatch(appNavClick())
     }
@@ -70,6 +74,12 @@ class App extends React.Component<AppProps>{
     // handleDeckSelected(id: number) {
     //     this.props.dispatch(selectDeck(id))
     // }
+
+
+    componentDidMount() {
+        console.log('App.tsx did mount');
+        this.props.dispatch(initAppData())
+    }
 
     render() {
         // flex-container-vertical

@@ -3,9 +3,11 @@ import Redux, { ReducersMapObject } from 'redux'
 import { Stream } from 'stream';
 // import React from 'react'
 
-import { cacheDeckData, saveCardIndexCache, loadInitialDataStore } from '../data/lumberyard'
+//import { cacheDeckData, saveCardIndexCache, loadInitialDataStore } from '../../carpentry.data/lumberyard'
 
 import { 
+    INI_APP_DATA,
+
     DECK_EDITOR_DUPLICATE_SELECTED_CARD,
     DECK_EDITOR_REMOVE_ONE_SELECTED_CARD,
     DECK_EDITOR_REMOVE_ALL_SELECTED_CARD,
@@ -18,6 +20,8 @@ import {
     TOGGLE_DECK_EDITOR_STATUS
 } from '../actions'
 
+import { Lumberjack } from '../../carpentry.logic/lumberjack'
+
 // interface UI {
 //     isNavOpen: boolean;
 //     isSideSheetOpen: boolean;
@@ -29,9 +33,13 @@ import {
 // }
 
 
+//Data reducer should be the only one that has an instance of the Lumberyard
+
+
 
 //export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
 export const data = (state: IDataStore, action: ReduxAction): any => {
+    // console.log('evaluating data state');
     let newDataStoreState: IDataStore = {
         ...state
     }
@@ -68,30 +76,30 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             // })
             return newDataStoreState;
         case DECK_EDITOR_DUPLICATE_SELECTED_CARD:
-            if(state.selectedCard){
+            if(state.selectedCard && state.selectedDeckId){
                 // const cardToAdd = state.cardIndex[state.selectedCard.set][state.selectedCard.name];
                 newDataStoreState.deckList[state.selectedDeckId].cards.push(state.selectedCard);
-                cacheDeckData(newDataStoreState.deckList);
+                Lumberjack.legacy_cacheDeckData(newDataStoreState.deckList);
             }
             return newDataStoreState;
         case DECK_EDITOR_REMOVE_ONE_SELECTED_CARD:
-            if(state.selectedCard){
+            if(state.selectedCard && state.selectedDeckId){
                 //index of the first card?
                 var firstSelectedCardIndex = newDataStoreState.deckList[state.selectedDeckId].cards.indexOf(state.selectedCard);
 
                 newDataStoreState.deckList[state.selectedDeckId].cards.splice(firstSelectedCardIndex,1);
                 // newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
             }
-            cacheDeckData(newDataStoreState.deckList);
+            Lumberjack.legacy_cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         case DECK_EDITOR_REMOVE_ALL_SELECTED_CARD:
-            if(state.selectedCard){
+            if(state.selectedCard && state.selectedDeckId){
                 newDataStoreState.deckList[state.selectedDeckId].cards = newDataStoreState.deckList[state.selectedDeckId].cards.filter((card) => {
                     return (card != state.selectedCard);
                 })
                 // newDataStoreState.cardLists[state.selectedDeckId].cards.push(state.selectedCard);
             }
-            cacheDeckData(newDataStoreState.deckList);
+            Lumberjack.legacy_cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         // case CARD_BINDER_VIEW_CHANGE:
         //     return {
@@ -122,11 +130,13 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             
             // console.log('active deck')
             // console.log(activeDeck)
-            let activeDeckDetail = newDataStoreState.deckList[state.selectedDeckId];
-            let manaType: string = action.payload.manaType;
-            activeDeckDetail.basicLands = {
-                ...activeDeckDetail.basicLands,
-                [manaType]: action.payload.newValue
+            if(state.selectedDeckId){
+                let activeDeckDetail = newDataStoreState.deckList[state.selectedDeckId];
+                let manaType: string = action.payload.manaType;
+                activeDeckDetail.basicLands = {
+                    ...activeDeckDetail.basicLands,
+                    [manaType]: action.payload.newValue
+                }
             }
             // newBinderState.deckList[state.selectedDeckId].basicLands = {
 
@@ -136,15 +146,16 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             // return newBinderState;
 
             //cache deck details
-            cacheDeckData(newDataStoreState.deckList);
+            Lumberjack.legacy_cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         case ADD_CARD_TO_DECK:
             // console.log('trying to add a card to this deck')
             // console.log(action.payload);
-
-            let activeDeckCards = newDataStoreState.deckList[state.selectedDeckId];
-            activeDeckCards.cards.push(action.payload);
-            cacheDeckData(newDataStoreState.deckList);
+            if(state.selectedDeckId){
+                let activeDeckCards = newDataStoreState.deckList[state.selectedDeckId];
+                activeDeckCards.cards.push(action.payload);
+            }
+            Lumberjack.legacy_cacheDeckData(newDataStoreState.deckList);
             return newDataStoreState;
         case ADD_CARD_TO_INDEX:
             let cardToIndex: ICard = action.payload;
@@ -153,23 +164,24 @@ export const data = (state: IDataStore, action: ReduxAction): any => {
             }
             //is there a problem with updating the index instead of not ovewriting things?
             newDataStoreState.cardIndex[cardToIndex.set][cardToIndex.name] = cardToIndex;
-            saveCardIndexCache(newDataStoreState.cardIndex);
+            Lumberjack.legacy_saveCardIndexCache(newDataStoreState.cardIndex);
             return newDataStoreState;
         case TOGGLE_DECK_EDITOR_STATUS:
             // console.log('status toggle?')
-            let activedeck = newDataStoreState.deckList[state.selectedDeckId];
-            activedeck.details.isUpToDate = !activedeck.details.isUpToDate;
-            cacheDeckData(newDataStoreState.deckList);
+            if(state.selectedDeckId){
+                let activedeck = newDataStoreState.deckList[state.selectedDeckId];
+                activedeck.details.isUpToDate = !activedeck.details.isUpToDate;
+            }
+            Lumberjack.legacy_cacheDeckData(newDataStoreState.deckList);
+            return newDataStoreState;
+
+        case INI_APP_DATA:
+            console.log('initializing stuff from data reducer')
+            newDataStoreState = Lumberjack.legacy_loadInitialDataStore();
             return newDataStoreState;
         default:
             if(!state){
-                state = loadInitialDataStore();
-                // state = {
-                //     deckView: 'card',
-                //     deckGroup: 'none',
-                //     deckSort: 'name',
-                //     deckFilter: ''
-                // }
+                state = Lumberjack.defaultStateInstance_dataStore();
             }
             return state;
     }

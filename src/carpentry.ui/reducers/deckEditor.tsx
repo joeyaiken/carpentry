@@ -11,21 +11,8 @@ import {
     DECK_EDITOR_CARD_SELECTED
 } from '../actions'
 
-import { loadInitialDeckEditorState } from '../data/lumberyard'
+import { Lumberjack } from '../../carpentry.logic/lumberjack'
 
-// interface UI {
-//     isNavOpen: boolean;
-//     isSideSheetOpen: boolean;
-//     visibleSideSheet: string;
-
-//     deckView: string;
-//     deckGroup: string;
-//     deckSort: string;
-// }
-
-
-
-//export const ui = (state: uiActionsProps, action: ReduxAction): ReducerMapObject<uiActionsProps> => {
 export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any => {
     let newDeckEditorState: IDeckEditorState = {
         ...state
@@ -87,7 +74,7 @@ export const deckEditor = (state: IDeckEditorState, action: ReduxAction): any =>
             // return newBinderState;
         default:
             if(!state){
-                state = loadInitialDeckEditorState();
+                state = Lumberjack.defaultStateInstance_deckEditor();
             }
             return state;
     }
