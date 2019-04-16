@@ -76,7 +76,7 @@ export class Lumberyard{
         return {
             ...this.CollectionIndex_AKH(),
             ...this.CollectionIndex_HOU(),
-            ...this.CollectionIndex_Misc()
+            // ...this.CollectionIndex_Misc()
         }
     }
 

@@ -145,7 +145,7 @@ class CardInventory extends React.Component<CardInventoryProps> {
                 <div className="outline-section">Sort By: Name</div>
                 <div className="outline-section">Group By: Set</div>
                 <div className="outline-section">Rarity: All</div>
-                <div className="outline-section">?</div>
+                <div className="outline-section">Display: Names</div>
                 {/* <InputField label="Set" value={this.props.searchFilter.set} property="" onChange={this.handleSetFilterChanged} />
                 <InputField label="Name" value={this.props.searchFilter.name} property="" onChange={this.handleSearchFilterChanged} />
                 <InputField label="Type" value={this.props.searchFilter.type} property="" onChange={this.handleTypeFilterChanged} />
@@ -166,7 +166,6 @@ class CardInventory extends React.Component<CardInventoryProps> {
     renderCardGroup(cardGroup: CardInventoryGroup): JSX.Element {
         return(
             <div className="flex-col">
-            
                 <div className="outline-section">{cardGroup.name}</div>
                 <div className="outline-section flex-row-wrap">
                     {
@@ -205,7 +204,7 @@ class CardInventory extends React.Component<CardInventoryProps> {
                         { this.renderCardGroups(this.props.cardGroups) }
                     </div>
                 </div>
-                { this.renderCardNotes() }
+                {/* { this.renderCardNotes() } */}
             </div>
         )
     }
