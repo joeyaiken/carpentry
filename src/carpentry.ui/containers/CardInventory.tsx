@@ -42,6 +42,8 @@ interface CardInventoryGroup {
 
 interface CardInventoryItem {
     name: string;
+    cmc: number;
+    type: string;
 }
 
 interface PropsFromState {
@@ -169,10 +171,25 @@ class CardInventory extends React.Component<CardInventoryProps> {
                 <div className="outline-section">{cardGroup.name}</div>
                 <div className="outline-section flex-row-wrap">
                     {
-                        cardGroup.cards.map((card) =>{
-                            return(<div className="outline-section">{card.name}</div>)
-                        })
+                        cardGroup.cards.map((card) => this.renderCard(card))
                     }
+                </div>
+            </div>
+        );
+    }
+
+    renderCard(card: CardInventoryItem): JSX.Element {
+        return(
+            <div className="outline-section flex-col">
+                <div className="flex-row">
+                    <div className="outline-section">{card.name}</div>
+                    <div className="outline-section">{card.cmc}</div>
+                </div>
+                <div className="outline-section">{card.type}</div>
+                <div className="flex-row">
+                    <div className="outline-section">[-]</div>
+                    <div className="outline-section">[#]</div>
+                    <div className="outline-section">[+]</div>
                 </div>
             </div>
         );
@@ -218,9 +235,11 @@ function mapStateCardGroupToLocal(group: INamedCardArray): CardInventoryGroup {
     }
 }
 
-function mapStateCardToLocal(card: ITempCard): CardInventoryItem {
+function mapStateCardToLocal(card: ICard): CardInventoryItem {
     return {
-        name: card.name
+        name: card.name,
+        cmc: card.cmc,
+        type: card.type
     }
 }
 
