@@ -5,6 +5,10 @@
 //When trying to check data, we should always load both timestamps (cache and .json), then load the most recent source
 //Yes, this isn't terribly efficient, but it's what I'm going to try for V1
 
+// export interface ICardGroup {
+//     name: string;
+// }
+
 export interface DataCard {
     //So if this were to ever go in a SQL table, it would most likely want a ID
     //Since it isn't, lets be more hacky

@@ -88,6 +88,11 @@ body,
   display: flex;
   flex-flow: row;
 }
+.flex-row-wrap {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+}
 .flex-col {
   display: flex;
   flex-flow: column;

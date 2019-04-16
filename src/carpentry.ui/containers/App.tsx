@@ -4,6 +4,7 @@ import React from 'react';
 import '../App.css';
 import DeckEditor from './DeckEditor';
 import CardScout from './CardScout';
+import CardInventory from './CardInventory';
 import RareBinder from '../components/RareBinder';
 import CardQuickAdd from './CardQuickAdd';
 import AppData from './AppData';
@@ -138,7 +139,8 @@ class App extends React.Component<AppProps>{
             <div className={"app-contents"+(this.props.isSideSheetOpen ? " contents-short" : " contents-full")}>
                 {/* <DeckEditor /> */}
                 {/* <Architect /> */}
-                <CardScout />
+                {/* <CardScout /> */}
+                <CardInventory />
             </div>
         );
 

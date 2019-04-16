@@ -10,9 +10,7 @@
 
 
 
-///////////////////////////////
-//default instance generators//
-///////////////////////////////
+
 
 import { Lumberyard } from '../carpentry.data/lumberyard'
 
@@ -27,16 +25,47 @@ export class Lumberjack {
     //defaultStates
     //defaultStates: DefaultInstanceStateGeneratorl
 
-    //what have I been breaking?
+
+
+    //getGroupedCards(filter): cardGroup[]
+    static getGroupedCards = (): INamedCardArray[] => {
+        // const dummyData: INamedCardArray[] = [
+        //     {name: "Set 1",cards:[{name:"Card"},{name:"Card"},{name:"Card"}]},
+        //     {name: "Set 2",cards:[{name:"Card"},{name:"Card"},{name:"Card"}]},
+        //     {name: "Set 3",cards:[{name:"Card"},{name:"Card"},{name:"Card"}]},
+        //     {name: "Set 4",cards:[{name:"Card"},{name:"Card"},{name:"Card"}]}
+        // ];
+        
+        
+        const indexData: ICardIndex = Lumberyard.Collections_All_BySet();
+
+        const dataKeys = Object.keys(indexData);
+
+        const groupedResults: INamedCardArray[] = dataKeys.map((key) => {
+            let theseCards: ICard[] = [];
+
+            let thisIndex = indexData[key];
+            let thisIndexNames = Object.keys(thisIndex);
+            theseCards = thisIndexNames.map(cardName => thisIndex[cardName])
+            let result: INamedCardArray = {
+                name:key,
+                cards: theseCards
+            };
+            return result;
+        })
+
+
+        // declare interface ICardIndex {
+        //     [set: string]: {
+        //         [name: string]: ICard;
+        //     }
+        // }
 
 
 
+        return (groupedResults);
+    }
     
-
-
-
-
-
     static defaultStateInstance_cardSearch = (): ICardSearch => {
         const initialCardSearchState: ICardSearch = {
             requestedCards: [],

@@ -68,8 +68,37 @@ export class Lumberyard{
     //Gotta have some static classes & shit
 
 
-    //classes!
 
+
+    //static defaultStateInstance_cardSearch = (): ICardSearch => {
+    
+    static Collections_All_BySet(): ICardIndex {
+        return {
+            ...this.CollectionIndex_AKH(),
+            ...this.CollectionIndex_HOU(),
+            ...this.CollectionIndex_Misc()
+        }
+    }
+
+    static CollectionIndex_AKH(): ICardIndex {
+        let Misc_CardIndex: ICardIndex = require('./index/AKH.index.json');
+        return Misc_CardIndex;
+    }
+    // declare interface ICardIndex {
+    //     [set: string]: {
+    //         [name: string]: ICard;
+    //     }
+    // }
+    static CollectionIndex_HOU(): ICardIndex {
+        let HOU_CardIndex: ICardIndex = require('./index/HOU.index.json');
+        return HOU_CardIndex;
+    }
+
+
+    static CollectionIndex_Misc(): ICardIndex {
+        let Misc_CardIndex: ICardIndex = require('./index/Misc.index.json');
+        return Misc_CardIndex;
+    }
 
     //this stuff should be refactord out probs
     static legacy_loadInitialUIState(): IUIState{

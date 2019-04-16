@@ -1,21 +1,7 @@
 /// <reference types="mtgsdk-ts" />
 
 
-//////////////////////
-//  State interfaces/
-////////////////////
-declare interface State {
-    //actions need to be removed completely
-    // actions: AppState;
-    //core
-    data: IDataStore;
-    ui: IUIState;
-    //components
-    deckEditor: IDeckEditorState;
-    cardSearch: ICardSearch;
-    cardScoutCardSearch: ICardScoutCardSearch;
-    
-}
+
 
 declare interface IUIState {
     isNavOpen: boolean;
@@ -147,6 +133,15 @@ declare interface ReduxAction extends AnyAction {
 
 
 
+declare interface INamedCardArray {
+    name: string;
+    cards: ICard[];
+}
+
+
+declare interface ITempCard{
+    name: string;
+}
 
 ///////////////////////
 //  Object interfaces/

@@ -6,6 +6,7 @@ import { ui } from './ui'
 import { cardScoutCardSearch } from './cardScoutCardSearch'
 import { deckEditor } from './deckEditor'
 import { cardSearch } from './cardSearch'
+import { cardInventory } from './cardInventory.reducer';
 
 export default combineReducers({
     //core
@@ -14,5 +15,6 @@ export default combineReducers({
     //components
     cardScoutCardSearch,
     deckEditor,
-    cardSearch
+    cardSearch,
+    cardInventory
 });
