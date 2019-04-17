@@ -188,7 +188,7 @@ class CardInventory extends React.Component<CardInventoryProps> {
                 <div className="outline-section">{card.type}</div>
                 <div className="flex-row">
                     <div className="outline-section">[-]</div>
-                    <div className="outline-section">[#]</div>
+                    <div className="outline-section">0</div>
                     <div className="outline-section">[+]</div>
                 </div>
             </div>
@@ -214,7 +214,7 @@ class CardInventory extends React.Component<CardInventoryProps> {
         
         return(
             <div className="card-scout-container flex-col">
-                <div className="outline-section">Card Inventory</div>
+                <div className="outline-section">Card Inventory - Can we add cards here?</div>
                 <div className="flex-row">
                     <div className="flex-section">
                         { this.renderFilters() }

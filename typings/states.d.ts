@@ -18,3 +18,7 @@ declare interface State {
 declare interface ICardInventoryState {
     groupedCards: INamedCardArray[] | null;
 }
+
+
+
+//ui - activeView: inventory | deck | scout

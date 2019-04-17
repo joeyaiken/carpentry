@@ -9,6 +9,8 @@ import RareBinder from '../components/RareBinder';
 import CardQuickAdd from './CardQuickAdd';
 import AppData from './AppData';
 
+import AddPack from './addPack.container';
+
 import MaterialButton from '../components/MaterialButton'
 import AppNav from '../components/AppNav'
 
@@ -16,7 +18,6 @@ import AppIcon from '../components/AppIcon'
 
 import {
     initAppData,
-
     appNavClick,
     addDeck,
     selectDeck,
@@ -96,7 +97,9 @@ class App extends React.Component<AppProps>{
 
 
         const deckDataSheet: JSX.Element = (<AppData />);
-        const deckDetailSheet: JSX.Element = (<div className="app-deck-detail">DECK DETAIL SHOULD GO HERE EVENTUALLY</div>);
+        const deckDetailSheet: JSX.Element = (
+            <AddPack/>
+        );
         const cardSearchSheet: JSX.Element = (<CardQuickAdd />);
         const rareBinderSheet: JSX.Element = (<RareBinder />);
 
