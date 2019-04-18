@@ -140,6 +140,7 @@ export const cardSearch = (state: ICardSearch, action: ReduxAction): any => {
             // let newIndex = {...state.cardIndex}
 
             console.log('search recieve index')
+            console.log('is this getting added?')
             // console.log(newIndex)
 
             // payloadCards.forEach((card) => {

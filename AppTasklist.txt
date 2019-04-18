@@ -1,3 +1,17 @@
+Next thing to deal with...
+The data reducer needs to be updated to accept the RECEIVE_CARD_SEARCH action, which has the payload from the card search
+The data redurcer should store info on what indexes have changed, and report that info in a way tat the AppData container can consume it
+This helps the goal of building out deck indexes
+
+
+
+
+
+
+
+
+
+
 //caches might be unreliable
 General current task list:
     Tasks Priority:

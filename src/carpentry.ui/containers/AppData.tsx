@@ -8,7 +8,7 @@ interface PropsFromState {
     dataObject: string;
     cardIndex: string;
 }
-
+//This component is meant to show what local data changes exist
 type AppDataProps = PropsFromState & DispatchProp<ReduxAction>;
 
 class AppData extends React.Component<AppDataProps> {

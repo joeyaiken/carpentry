@@ -17,7 +17,9 @@ import {
     ADD_CARD_TO_DECK,
     ADD_CARD_TO_RARES,
     ADD_CARD_TO_INDEX,
-    TOGGLE_DECK_EDITOR_STATUS
+    TOGGLE_DECK_EDITOR_STATUS,
+
+    RECEIVE_CARD_SEARCH
 } from '../actions'
 
 import { Lumberjack } from '../../carpentry.logic/lumberjack'

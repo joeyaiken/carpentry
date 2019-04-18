@@ -9,8 +9,15 @@ import React, { Component, SyntheticEvent } from 'react'
 //     // csSearchApplied
 // } from '../actions/addPack.actions'
 
-interface PropsFromState {
+interface apCardSection {
+    name: string;
+    cards: string[];
+}
 
+interface PropsFromState {
+    cardSets: string[];
+    selectedSet: string | null;
+    setCards: apCardSection[];
 }
 
 type AddPackProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -53,17 +60,62 @@ class AddPack extends React.Component<AddPackProps> {
         )
     }
 
-    renderCardSection(name: string): JSX.Element {
+    renderFilterButton(name: string): JSX.Element {
+        return(
+            <div className="">
+                <button onClick={() => 
+                        {/*props.onClick(props.value)*/}
+                    }>
+                    { name }
+                </button>
+            </div>
+        )
+    }
+
+    renderCardSection(collection: apCardSection): JSX.Element {
         return(
             <div className="flex-col">
-                <div className="outline-section">{ name }</div>
+                <div className="outline-section">{ collection.name }</div>
                 <div className="flex-col">
-                    { this.renderCard() }
-                    { this.renderCard() }
-                    { this.renderCard() }                
+                    {collection.cards.map((card) => {
+                        return this.renderCard();
+                    })}
                 </div>
             </div>
         );
+    }
+
+    renderSetMenu(): JSX.Element {
+        return(
+            <div className="outline-section flex-col">
+                    Pick a set
+                    <div className="outline-section flex-row-wrap">
+                        {
+                            this.props.cardSets.map((set) => {
+                                return this.renderFilterButton(set)
+                            })
+                        }
+                    </div>
+                </div>
+        );
+    }
+
+    renderSetContents(): JSX.Element {
+        return(
+            <>
+                <div className="outline-section flex-row">
+                    <div className="outline-section">Set</div>
+                    <div className="outline-section">Location</div>
+                    <div className="outline-section">Filters</div>
+                </div>
+                {
+                    this.props.setCards.map((collection) => {
+                        return(this.renderCardSection(collection))
+                    })
+                }
+                <div className="outline-section">Save</div>
+            </>
+        )
     }
 
     render(){
@@ -71,47 +123,45 @@ class AddPack extends React.Component<AddPackProps> {
         return(
             <div>
                 <div className="outline-section">Add Pack</div>
-                <div className="outline-section flex-row">
-                    <div className="outline-section">Set</div>
-                    <div className="outline-section">Location</div>
-                    <div className="outline-section">Filters</div>
-                </div>
-                { this.renderCardSection("Common Cards") }
-                { this.renderCardSection("Uncommon Cards") }
-                { this.renderCardSection("Rare Cards") }
-                { this.renderCardSection("Mythic Cards") }
-                <div className="outline-section">Save</div>
+                { (this.props.selectedSet == null) && this.renderSetMenu() }
+                { (this.props.selectedSet == null) && this.renderSetContents() }                
             </div>
-            // <div className="outline-section"></div>
-            // <div className="architect-container">
-            //     <div className="architect-card-section">
-            //         <h1>Hallo, wurld</h1>
-            //         <div className="notes">
-            //             <p>This component will allow the user to browse individual sets, and propose cards for decks</p>
-            //             <p>Q: Should the "Set" filter be optional?</p>
-            //             <p>It shouldn't be able to directly add cards to decks</p>
-            //             <p>If a user wants to add specific cards to specific deck s, the QuickAdd component from the deck editor is more appropriate</p>
-            //             <p>Maybe provide an expanded & collapsed version of the deck list</p>
-            //             <p>Compact could have an summary, card count, and a + icon (when a card is selected)</p>
-            //             <p>It shouldn't show that pesky QuickAdd component</p>
-            //             <p>This component isn't going to rely on some local index, it's going to always query the MTG API</p>
-            //             <p>Q: Should the queries continue to log to an index to keep building out a local library?</p>
-            //             <p>Does this get its own reducer?</p>
-            //             <p></p>
-            //         </div>
-            //     </div>
-            //     <div className="architect-deck-section">
-            //         <p>This should list decks</p>
-            //     </div>
-            // </div>
         )
     }
 
 }
 
-function mapStateToProps(state: State): PropsFromState {
 
+function generateTestSets(): string[] {
+    return(["AKH","HOU","THS","RTR","DGM","AER","FRF","10E","SOI","EMN","M15","XLN","RIX","MM3","RNA","GRN","DOM"]);
+}
+
+function generateTestSetContents(): apCardSection[] {
+    return [
+        {
+            name: "Common Cards",
+            cards: ["card","card","card"]
+        },
+        {
+            name: "Uncommon Cards",
+            cards: ["card","card","card"]
+        },
+        {
+            name: "Rare Cards",
+            cards: ["card","card","card"]
+        },
+        {
+            name: "Mythic Cards",
+            cards: ["card","card","card"]
+        }
+    ]
+}
+
+function mapStateToProps(state: State): PropsFromState {
     const result: PropsFromState = {
+        cardSets: generateTestSets(),
+        selectedSet: null,
+        setCards: generateTestSetContents()
     }
     return result;
 }
