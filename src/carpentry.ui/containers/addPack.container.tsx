@@ -14,8 +14,13 @@ interface apCardSection {
     cards: string[];
 }
 
+interface apCardSet {
+    code: string;
+    name: string;
+}
+
 interface PropsFromState {
-    cardSets: string[];
+    cardSets: apCardSet[];
     selectedSet: string | null;
     setCards: apCardSection[];
 }
@@ -60,14 +65,15 @@ class AddPack extends React.Component<AddPackProps> {
         )
     }
 
-    renderFilterButton(name: string): JSX.Element {
+    renderFilterButton(set: apCardSet): JSX.Element {
         return(
             <div className="">
                 <button onClick={() => 
                         {/*props.onClick(props.value)*/}
                     }>
-                    { name }
+                    { set.code }
                 </button>
+                <span>{set.name}</span>
             </div>
         )
     }
@@ -89,8 +95,8 @@ class AddPack extends React.Component<AddPackProps> {
         return(
             <div className="outline-section flex-col">
                     Pick a set
-                    <div className="outline-section flex-row-wrap">
-                        {
+                    <div className="outline-section flex-col">
+                        { //row-wrap
                             this.props.cardSets.map((set) => {
                                 return this.renderFilterButton(set)
                             })
@@ -132,8 +138,26 @@ class AddPack extends React.Component<AddPackProps> {
 }
 
 
-function generateTestSets(): string[] {
-    return(["AKH","HOU","THS","RTR","DGM","AER","FRF","10E","SOI","EMN","M15","XLN","RIX","MM3","RNA","GRN","DOM"]);
+function generateTestSets(): apCardSet[] {
+    return([
+        { name: "Amonkhet", code: "AKH" }, 
+        { name: "Hour of Devastation", code: "HOU" },
+        { name: "Theros", code: "THS" },
+        { name: "Return to Ravnica", code: "RTR" },
+        { name: "Dragon's Maze", code: "DGM" },
+        { name: "Aether Revolt", code: "AER" },
+        { name: "Fate Reforged", code: "FRF" },
+        { name: "Tenth Edition", code: "10E" },
+        { name: "Shadows over Innistrad", code: "SOI" },
+        { name: "Eldritch Moon", code: "EMN" },
+        { name: "Magic 2015 Core Set", code: "M15" },
+        { name: "Ixalan", code: "XLN" },
+        { name: "Rivals of Ixalan", code: "RIX" },
+        { name: "Modern Masters 2017", code: "MM3" },
+        { name: "Ravnica Allegiance", code: "RNA" }, 
+        { name: "Guilds of Ravnica", code: "GRN" },
+        { name: "Dominaria", code: "DOM" }
+    ])
 }
 
 function generateTestSetContents(): apCardSection[] {
