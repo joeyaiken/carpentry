@@ -124,13 +124,20 @@ class AddPack extends React.Component<AddPackProps> {
         )
     }
 
+    renderSetLoading(): JSX.Element {
+        return(<div className="outline-section">
+            <div className="outline-section">Loading set...</div>
+        </div>)
+    }
+
     render(){
         
         return(
             <div>
                 <div className="outline-section">Add Pack</div>
                 { (this.props.selectedSet == null) && this.renderSetMenu() }
-                { (this.props.selectedSet == null) && this.renderSetContents() }                
+                { (this.props.selectedSet != null && this.props.cardSets.length > 0) && this.renderSetContents() }
+                { (this.props.selectedSet != null && this.props.cardSets.length == 0) && this.renderSetContents() }
             </div>
         )
     }
@@ -185,7 +192,7 @@ function mapStateToProps(state: State): PropsFromState {
     const result: PropsFromState = {
         cardSets: generateTestSets(),
         selectedSet: null,
-        setCards: generateTestSetContents()
+        setCards: [] //generateTestSetContents()
     }
     return result;
 }

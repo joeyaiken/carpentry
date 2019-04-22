@@ -187,9 +187,8 @@ class CardInventory extends React.Component<CardInventoryProps> {
                 </div>
                 <div className="outline-section">{card.type}</div>
                 <div className="flex-row">
-                    <div className="outline-section">[-]</div>
-                    <div className="outline-section">0</div>
-                    <div className="outline-section">[+]</div>
+                    <div className="outline-section">0 (Inv)</div>
+                    <div className="outline-section">0 (Decks)</div>
                 </div>
             </div>
         );
