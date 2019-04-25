@@ -135,6 +135,7 @@ declare interface ReduxAction extends AnyAction {
 
 declare interface INamedCardArray {
     name: string;
+    count?: number;
     cards: ICard[];
 }
 

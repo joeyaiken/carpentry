@@ -26,12 +26,7 @@ export class Lumberjack {
     //defaultStates: DefaultInstanceStateGeneratorl
 
     static getAllCardsForSet = (setCode: string): ICardDictionary | null => {
-        switch(setCode){
-            case 'DOM':
-            return Lumberyard.CollectionIndex_DOM();
-        }
-        //Lumberjack.getSet
-        return null;
+        return Lumberyard.getAllCardsForSet(setCode);
     }
 
     //for now, always groups by rarity
@@ -58,6 +53,43 @@ export class Lumberjack {
     }
 
     //getGroupedCards(filter): cardGroup[]
+
+    static getAllOwnedCardsBySet = (): INamedCardArray[] => {
+        const indexData: ICardIndex = Lumberyard.Collections_All_BySet();
+
+        //filter this shit by owned cards?
+
+        
+
+
+
+        const dataKeys = Object.keys(indexData);
+
+        const groupedResults: INamedCardArray[] = dataKeys.map((key) => {
+            let theseCards: ICard[] = [];
+
+            let thisIndex = indexData[key];
+            let thisIndexNames = Object.keys(thisIndex);
+            theseCards = thisIndexNames.map(cardName => thisIndex[cardName])
+            let result: INamedCardArray = {
+                name:key,
+                cards: theseCards
+            };
+            return result;
+        })
+
+
+        // declare interface ICardIndex {
+        //     [set: string]: {
+        //         [name: string]: ICard;
+        //     }
+        // }
+
+
+
+        return (groupedResults);
+    }
+
     static getGroupedCards = (): INamedCardArray[] => {
         // const dummyData: INamedCardArray[] = [
         //     {name: "Set 1",cards:[{name:"Card"},{name:"Card"},{name:"Card"}]},

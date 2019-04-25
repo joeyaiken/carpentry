@@ -41,15 +41,15 @@ export const apInitialized = (): ReduxAction => ({
 
 
 
-export const AP_SET_SELECTED = 'AP_SET_SELECTED';
-
-export const csSearchRequested = (setCode: string): ReduxAction => ({
-    type: AP_SET_SELECTED,
-    payload: setCode
-});
 
 
-function requestCardList(): any {
+// export const csSearchRequested = (setCode: string): ReduxAction => ({
+//     type: AP_SET_SELECTED,
+//     payload: setCode
+// });
+
+
+export function requestCardList(): any {
     return (dispatch: Dispatch, getState: any) => {
         return tryGetSetCards(dispatch, getState());
     }
@@ -110,12 +110,20 @@ function fetchCards(dispatch: Dispatch, filter: SearchFilterProps): any {
     });
 }
 
-export const apSetSelected = (setCode: string): any => {
+export const AP_SET_SELECTED = 'AP_SET_SELECTED';
+export const apSetSelected = (setCode: string): ReduxAction => {
     return {
         type: AP_SET_SELECTED,
         payload: setCode
     }
 };
+
+export const AP_CLEAR_SELECTED_SET = 'AP_CLEAR_SELECTED_SET';
+export const apClearSelectedSet = (): ReduxAction => {
+    return {
+        type: AP_CLEAR_SELECTED_SET
+    }
+}
 
 
 //Container call action

@@ -81,32 +81,133 @@ export class Lumberyard{
         }
     }
 
+    static getAllCardsForSet = (setCode: string): ICardDictionary | null => {
+        switch(setCode){
+            case '10E':
+                return Lumberyard.CollectionIndex_10E();
+            case 'AER':
+                return Lumberyard.CollectionIndex_AER();
+            case 'AKH':
+                return Lumberyard.CollectionIndex_AKH();
+            case 'DGM':
+                return Lumberyard.CollectionIndex_DGM();
+            case 'DOM':
+                return Lumberyard.CollectionIndex_DOM();
+            case 'EMN':
+                return Lumberyard.CollectionIndex_EMN();
+            case 'FRF':
+                return Lumberyard.CollectionIndex_FRF();
+            case 'GRN':
+                return Lumberyard.CollectionIndex_GRN();
+            case 'HOU':
+                return Lumberyard.CollectionIndex_HOU();
+            case 'M15':
+                return Lumberyard.CollectionIndex_M15();
+            case 'MM3':
+                return Lumberyard.CollectionIndex_MM3();
+            case 'RIX':
+                return Lumberyard.CollectionIndex_RIX();
+            case 'RNA':
+                return Lumberyard.CollectionIndex_RNA();
+            case 'RTR':
+                return Lumberyard.CollectionIndex_RTR();
+            case 'SOI':
+                return Lumberyard.CollectionIndex_SOI();
+            case 'THS':
+                return Lumberyard.CollectionIndex_THS();
+            case 'XLN':
+                return Lumberyard.CollectionIndex_XLN();
+        }
+        //Lumberjack.getSet
+        return null;
+    }
+
+
+    static CollectionIndex_10E(): ICardDictionary {
+        let Misc_CardIndex: ICardDictionary = require('./index/10E.index.json');
+        return Misc_CardIndex;
+    }
+
+    static CollectionIndex_AER(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/AER.index.json');
+        return cardIndex;
+    }
+
     static CollectionIndex_AKH(): ICardDictionary {
         let Misc_CardIndex: ICardDictionary = require('./index/AKH.index.json');
         return Misc_CardIndex;
     }
-    // declare interface ICardIndex {
-    //     [set: string]: {
-    //         [name: string]: ICard;
-    //     }
-    // }
-    static CollectionIndex_HOU(): ICardDictionary {
-        let HOU_CardIndex: ICardDictionary = require('./index/HOU.index.json');
-        return HOU_CardIndex;
-    }
 
+    static CollectionIndex_DGM(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/DGM.index.json');
+        return cardIndex;
+    }
 
     static CollectionIndex_DOM(): ICardDictionary {
         let DOM_Index: ICardDictionary = require('./index/DOM.index.json');
         return DOM_Index;
     }
-    
 
-
-    static CollectionIndex_Misc(): ICardIndex {
-        let Misc_CardIndex: ICardIndex = require('./index/Misc.index.json');
-        return Misc_CardIndex;
+    static CollectionIndex_EMN(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/EMN.index.json');
+        return cardIndex;
     }
+
+    static CollectionIndex_FRF(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/FRF.index.json');
+        return cardIndex;
+    }
+
+    static CollectionIndex_GRN(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/GRN.index.json');
+        return cardIndex;
+    }
+
+    static CollectionIndex_HOU(): ICardDictionary {
+        let HOU_CardIndex: ICardDictionary = require('./index/HOU.index.json');
+        return HOU_CardIndex;
+    }
+
+    static CollectionIndex_M15(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/M15.index.json');
+        return cardIndex;
+    }
+
+    static CollectionIndex_MM3(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/MM3.index.json');
+        return cardIndex;
+    }
+
+    static CollectionIndex_RIX(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/RIX.index.json');
+        return cardIndex;
+    }
+
+    static CollectionIndex_RNA(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/RNA.index.json');
+        return cardIndex;
+    }
+  
+    static CollectionIndex_RTR(): ICardDictionary {
+        let HOU_CardIndex: ICardDictionary = require('./index/RTR.index.json');
+        return HOU_CardIndex;
+    }
+
+    static CollectionIndex_SOI(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/SOI.index.json');
+        return cardIndex;
+    }
+
+    static CollectionIndex_THS(): ICardDictionary {
+        let HOU_CardIndex: ICardDictionary = require('./index/THS.index.json');
+        return HOU_CardIndex;
+    }
+
+    static CollectionIndex_XLN(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/XLN.index.json');
+        return cardIndex;
+    }
+
 
     //this stuff should be refactord out probs
     static legacy_loadInitialUIState(): IUIState{

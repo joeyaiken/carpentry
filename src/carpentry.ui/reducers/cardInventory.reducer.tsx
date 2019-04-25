@@ -46,7 +46,7 @@ export const cardInventory = (state: ICardInventoryState, action: ReduxAction): 
             //no initial search filter for now, so lets just load everything?
             let newState: ICardInventoryState = {
                 ...state,
-                groupedCards: Lumberjack.getGroupedCards()
+                groupedCards: Lumberjack.getAllOwnedCardsBySet()
             }
             return newState;
             

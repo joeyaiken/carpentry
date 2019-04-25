@@ -4,7 +4,8 @@ import React, { Component, SyntheticEvent } from 'react'
 import {
     apInitialized,
     apSetSelected,
-    apLoadSelectedSet
+    apLoadSelectedSet,
+    apClearSelectedSet
 } from '../actions/addPack.actions'
 
 // import {
@@ -13,10 +14,16 @@ import {
 
 import { timingSafeEqual } from 'crypto';
 import { stat } from 'fs';
+import MaterialButton from '../components/MaterialButton';
 
 interface apCardSection {
     name: string;
-    cards: ICard[];
+    cards: apCard[];
+}
+interface apCard {
+    name: string;
+    count: number;
+    data: ICard;
 }
 
 interface apCardSet {
@@ -41,6 +48,7 @@ class AddPack extends React.Component<AddPackProps> {
         // this.handleCardSelected = this.handleCardSelected.bind(this);
         // this.handleActionApplied = this.handleActionApplied.bind(this);
         this.handleSetSelected = this.handleSetSelected.bind(this);
+        this.handleClearSelectedSet = this.handleClearSelectedSet.bind(this);
     }
 
     componentDidMount(): void {
@@ -66,6 +74,10 @@ class AddPack extends React.Component<AddPackProps> {
     handleSetSelected(setCode: string): void {
         this.props.dispatch(apSetSelected(setCode))
     }
+
+    handleClearSelectedSet(): void {
+        this.props.dispatch(apClearSelectedSet());
+    }
     // handleFilterChanged(): void {
     //     this.props.dispatch(csFilterChanged())
     // }
@@ -82,11 +94,15 @@ class AddPack extends React.Component<AddPackProps> {
     //     this.props.dispatch(csActionApplied())
     // }
 
-    renderCard(card: ICard): JSX.Element {
+    renderCard(card: apCard): JSX.Element {
         return(
             <div className="flex-row">
-                <div className="outline-section flex-section">{card.name} | {card.type}</div>
-                <div className="outline-section">- | # | +</div>
+                <div className="outline-section flex-section">{card.name} | {card.data.type}</div>
+                <div className="outline-section icon-dark">
+                <MaterialButton icon="remove_circle_outline" onClick={() => { } } value={""} />
+                 <span>| {card.count} | </span>
+                 <MaterialButton icon="add_circle_outline" onClick={() => { } } value={""} />
+                 </div>
             </div>
         )
     }
@@ -101,6 +117,8 @@ class AddPack extends React.Component<AddPackProps> {
             </div>
         )
     }
+
+    
 
     renderCardSection(collection: apCardSection): JSX.Element {
         return(
@@ -134,6 +152,7 @@ class AddPack extends React.Component<AddPackProps> {
         return(
             <>
                 <div className="outline-section flex-row">
+                    <div className="outline-section"><MaterialButton icon="arrow_back" onClick={() => {this.handleClearSelectedSet()}} value="" /></div>
                     <div className="outline-section">Set</div>
                     <div className="outline-section">Location</div>
                     <div className="outline-section">Filters</div>
@@ -269,7 +288,7 @@ function mapNamedCardCollectionToLocal(stateData: INamedCardArray[] | null): apC
         const mapped = stateData.map((group: INamedCardArray) => {
             return {
                 name: group.name,
-                cards: group.cards
+                cards: group.cards.map((card) => ({ name: card.name, count: 0, data: card } as apCard))
             } as apCardSection;
         });
         return mapped;

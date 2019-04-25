@@ -22,7 +22,8 @@ import {
     AP_SET_SELECTED,
     AP_LOAD_SET_STARTED,
     AP_LOAD_SET_COMPLETE,
-    AP_CARD_LOADED
+    AP_CARD_LOADED,
+    AP_CLEAR_SELECTED_SET
 } from '../actions/addPack.actions';
 
 import {
@@ -50,6 +51,13 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
             return {
                 ...state,
                 selectedSetCode: action.payload
+            } as IAddPackState;
+        case AP_CLEAR_SELECTED_SET:
+
+            return {
+                ...state,
+                selectedSetCode: null,
+                groupedCards: null
             } as IAddPackState;
         case AP_LOAD_SET_STARTED:
             return {

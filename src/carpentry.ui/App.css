@@ -80,6 +80,9 @@ body,
   color: #ff9800;
   border-bottom: #ff9800 2px solid;
 }
+.icon-dark .sd-material-button {
+  color: #757575;
+}
 .flex-container-horizontal {
   display: flex;
   flex-flow: row;
