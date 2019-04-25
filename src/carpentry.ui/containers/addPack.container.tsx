@@ -82,10 +82,10 @@ class AddPack extends React.Component<AddPackProps> {
     //     this.props.dispatch(csActionApplied())
     // }
 
-    renderCard(): JSX.Element {
+    renderCard(card: ICard): JSX.Element {
         return(
             <div className="flex-row">
-                <div className="outline-section flex-section">Name | Type</div>
+                <div className="outline-section flex-section">{card.name} | {card.type}</div>
                 <div className="outline-section">- | # | +</div>
             </div>
         )
@@ -108,7 +108,7 @@ class AddPack extends React.Component<AddPackProps> {
                 <div className="outline-section">{ collection.name }</div>
                 <div className="flex-col">
                     {collection.cards.map((card) => {
-                        return this.renderCard();
+                        return this.renderCard(card);
                     })}
                 </div>
             </div>

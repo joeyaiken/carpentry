@@ -26,6 +26,11 @@ export class Lumberjack {
     //defaultStates: DefaultInstanceStateGeneratorl
 
     static getAllCardsForSet = (setCode: string): ICardDictionary | null => {
+        switch(setCode){
+            case 'DOM':
+            return Lumberyard.CollectionIndex_DOM();
+        }
+        //Lumberjack.getSet
         return null;
     }
 

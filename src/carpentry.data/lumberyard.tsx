@@ -74,14 +74,15 @@ export class Lumberyard{
     
     static Collections_All_BySet(): ICardIndex {
         return {
-            ...this.CollectionIndex_AKH(),
-            ...this.CollectionIndex_HOU(),
+            // "AKH": this.CollectionIndex_AKH(),
+            // "HOU": this.CollectionIndex_HOU(),
+            "DOM": this.CollectionIndex_DOM()
             // ...this.CollectionIndex_Misc()
         }
     }
 
-    static CollectionIndex_AKH(): ICardIndex {
-        let Misc_CardIndex: ICardIndex = require('./index/AKH.index.json');
+    static CollectionIndex_AKH(): ICardDictionary {
+        let Misc_CardIndex: ICardDictionary = require('./index/AKH.index.json');
         return Misc_CardIndex;
     }
     // declare interface ICardIndex {
@@ -89,10 +90,17 @@ export class Lumberyard{
     //         [name: string]: ICard;
     //     }
     // }
-    static CollectionIndex_HOU(): ICardIndex {
-        let HOU_CardIndex: ICardIndex = require('./index/HOU.index.json');
+    static CollectionIndex_HOU(): ICardDictionary {
+        let HOU_CardIndex: ICardDictionary = require('./index/HOU.index.json');
         return HOU_CardIndex;
     }
+
+
+    static CollectionIndex_DOM(): ICardDictionary {
+        let DOM_Index: ICardDictionary = require('./index/DOM.index.json');
+        return DOM_Index;
+    }
+    
 
 
     static CollectionIndex_Misc(): ICardIndex {
