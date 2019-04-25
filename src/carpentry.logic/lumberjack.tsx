@@ -25,7 +25,32 @@ export class Lumberjack {
     //defaultStates
     //defaultStates: DefaultInstanceStateGeneratorl
 
+    static getAllCardsForSet = (setCode: string): ICardDictionary | null => {
+        return null;
+    }
 
+    //for now, always groups by rarity
+    static mapCardDictionaryToGroupedNamedCardArray(dict: ICardDictionary): INamedCardArray[]{
+        //const mappedCards: INamedCardArray = cardsFromAction.map
+            //let groupedCards: ICardIndex = {}
+            let groupedCards: { [grouping: string]: ICard[] } = {}
+
+            Object.keys(dict).forEach((cardName: string) => {
+                let card = dict[cardName];
+                groupedCards = {
+                    [card.rarity]: [],
+                    ...groupedCards
+                }
+                groupedCards[card.rarity].push(card);
+            });
+            let groupedCardArray = Object.keys(groupedCards).map((group) => {
+                return {
+                    name: group,
+                    cards: groupedCards[group]
+                } as INamedCardArray;
+            })
+            return groupedCardArray;
+    }
 
     //getGroupedCards(filter): cardGroup[]
     static getGroupedCards = (): INamedCardArray[] => {

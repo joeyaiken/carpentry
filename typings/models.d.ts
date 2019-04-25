@@ -35,9 +35,11 @@ declare interface IDeckCard {
 }
 
 declare interface ICardIndex {
-    [set: string]: {
-        [name: string]: ICard;
-    }
+    [set: string]: ICardDictionary;
+}
+
+declare interface ICardDictionary {
+    [name: string]: ICard;
 }
 
 declare interface IWebSearchFilter {
@@ -69,4 +71,10 @@ declare interface IWebSearchFilter {
     orderBy?: string;
     random?: boolean;
     contains?: string;
+}
+
+
+declare interface ICardSet{
+    code: string,
+    name: string
 }

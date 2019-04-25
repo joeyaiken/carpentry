@@ -13,8 +13,6 @@ import {
     deckEditorGroupChange,
     deckEditorSortChange,
     // cardDetailRequested,
-    fetchCardsIfNeeded,
-
 
     deckEditorCardSelected,
     deckEditorDuplicateSelectedCard,

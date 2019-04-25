@@ -7,6 +7,9 @@ import { cardScoutCardSearch } from './cardScoutCardSearch'
 import { deckEditor } from './deckEditor'
 import { cardSearch } from './cardSearch'
 import { cardInventory } from './cardInventory.reducer';
+
+import { mtgApiSearch } from './mtgApiSearch.reducer';
+
 import { addPack } from './addPack.reducer';
 export default combineReducers({
     //core
@@ -17,5 +20,6 @@ export default combineReducers({
     cardScoutCardSearch,
     deckEditor,
     cardSearch,
-    cardInventory
+    cardInventory,
+    mtgApiSearch
 });

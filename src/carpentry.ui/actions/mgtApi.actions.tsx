@@ -7,6 +7,87 @@ import { stat } from 'fs';
 import { unmountComponentAtNode } from 'react-dom';
 import { string } from 'prop-types';
 
+import { mapCardToICard } from '../../carpentry.data/lumberyard';
+
+//export const searchApplied = (filter: string): any => {
+export const mtgApiRequestAddPackSearch = (): any => {
+    console.log('search requested')
+
+    return (dispatch: Dispatch, getState: any) => {
+        return tryFetchCardsForAddPack(dispatch, getState());
+    }
+};
+
+// export const mtgApiRequestAddPackSearch = (): any => {
+//     ((dispatch: Dispatch, getState: any) => tryFetchCards(dispatch, getState()))
+// };
+
+function tryFetchCardsForAddPack(dispatch: Dispatch, state: State) {
+    // console.log('state');
+    // console.log(state)
+    // console.log(state.mtgApiSearch)
+    if(!state.mtgApiSearch.searchInProgress && state.addPack.selectedSetCode){
+        //fetchCards(dispatch, state.mgtApiSearch.searchFilter);
+        fetchCardsForSet(dispatch, state.addPack.selectedSetCode);
+    }
+}
+
+export const MTG_API_SEARCH_REQUESTED = 'MTG_API_SEARCH_REQUESTED';
+export const mtgApiSearechRequested = (): ReduxAction => ({
+    type: MTG_API_SEARCH_REQUESTED,
+});
+
+export const MTG_API_SEARCH_COMPLETED = 'MTG_API_SEARCH_COMPLETED';
+export const mtgApiSearechCompleted = (): ReduxAction => ({
+    type: MTG_API_SEARCH_COMPLETED,
+});
+
+export const MTG_API_SEARCH_ITEM_RETURNED = 'MTG_API_SEARCH_ITEM_RETURNED';
+export const mtgApiSearchItemReturned = (card: ICard): ReduxAction => ({
+    type: MTG_API_SEARCH_ITEM_RETURNED,
+    payload: card
+});
+
+//This is supposed to return a function that takes in whatever TF Dispatch is
+function fetchCardsForSet(dispatch: Dispatch, setCode: string): any {
+    
+    dispatch(mtgApiSearechRequested());
+
+    //dispatch(requestCardSearch());
+    let cardFilter: CardFilter = {};
+    cardFilter.set = setCode;
+    cardFilter.pageSize = 100;
+    
+    return Cards.all(cardFilter)
+    .on("data", (card: Card) => {
+        // console.log(card.name);
+        return dispatch(mtgApiSearchItemReturned(mapCardToICard(card)));
+    })
+    .on("cancel", () => {
+        console.log("cancel");
+    })
+    .on("error", (err: Error) => {
+        console.log("error: "+err);
+    })
+    .on("end", () => {
+        console.log("done");
+        return dispatch(mtgApiSearechCompleted());
+    });
+
+
+    // // cardFilte
+    // return Cards.where(cardFilter).then(results => {
+    //     console.log('grand result dump');
+    //     console.log(results);
+    //     // return dispatch(receiveCardSearch(results));
+    // });
+
+    
+
+}
+
+
+
 // import { lumberyardSaveState } from '../data/lumberyard'
 
 
@@ -269,65 +350,10 @@ export const appSheetToggle = (section: string): ReduxAction => ({
 })
 //CARD_BINDER_SHEET_TOGGLE
 
-//This is what's called from the QuickSearchAddWhatever
-export const searchApplied = (filter: string): any => {
-    return (dispatch: Dispatch, getState: any) => {
-        return tryFetchCards(dispatch, getState());
-    }
-};
-function tryFetchCards(dispatch: Dispatch, state: State) {
-    //if(!state.actions.searchFilter.isFetching){
-    if(!state.cardSearch.searchIsFetching){
-        fetchCards(dispatch, state.cardSearch.searchFilter);
-    }
-}
 
-//This is supposed to return a function that takes in whatever TF Dispatch is
-function fetchCards(dispatch: Dispatch, filter: SearchFilterProps): any {
-    
-    dispatch(requestCardSearch());
-    let cardFilter: CardFilter = {};
-    cardFilter.name = filter.name;
-    //parse sets
-    const parsedSetList: string[] = filter.setFilterString.split(',');
-    // if(parsedSetList && parsedSetList.length){
-    //     cardFilter.set 
-    // }
-    cardFilter.set = filter.setFilterString;
-    cardFilter.colorIdentity = filter.colorIdentity;
-    // const parsedColorIdentity: string[] = [];
-    // if(filter.includeRed) parsedColorIdentity.push('R');
-    // if(filter.includeBlue) parsedColorIdentity.push('U');
-    // if(filter.includeGreen) parsedColorIdentity.push('G');
-    // if(filter.includeWhite) parsedColorIdentity.push('W');
-    // if(filter.includeBlack) parsedColorIdentity.push('B');
 
-    // cardFilter.colors
-    console.log('about to search cards')
-    console.log('parsed sets')
-    console.log(parsedSetList);
-    console.log('parsed color identity')
-    // console.log(parsedColorIdentity)
-    // cardFilter.colorIdentity = parsedColorIdentity.join('|')
-    // console.log()
 
-    // cardFilter.colorIdentity = "RW"
 
-    // let cardFilter: CardFilter = {
-    //     //name: "Nicol"
-    //     name: filter.name
-    // }   
-    return Cards.where(cardFilter).then(results => {
-        console.log('grand result dump');
-        console.log(results);
-        return dispatch(receiveCardSearch(results));
-    });
-}
-
-export const requestCardSearch = (): ReduxAction => ({
-    type: REQUEST_CARD_SEARCH,
-    // payload: filter
-});
 
 export const receiveCardSearch = (cards: Card[]): ReduxAction => ({
     type: RECEIVE_CARD_SEARCH,

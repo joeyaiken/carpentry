@@ -197,3 +197,4 @@ declare interface ICard {
     type: string;
     types: string[];
 }
+
