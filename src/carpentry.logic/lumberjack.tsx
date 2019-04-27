@@ -33,7 +33,12 @@ export class Lumberjack {
     static mapCardDictionaryToGroupedNamedCardArray(dict: ICardDictionary): INamedCardArray[]{
         //const mappedCards: INamedCardArray = cardsFromAction.map
             //let groupedCards: ICardIndex = {}
-            let groupedCards: { [grouping: string]: ICard[] } = {}
+            let groupedCards: { [grouping: string]: ICard[] } = { };
+            //     "Mythic": [],
+            //     "Rare": [],
+            //     "Uncommon": [],
+            //     "Common": []
+            // }
 
             Object.keys(dict).forEach((cardName: string) => {
                 let card = dict[cardName];
@@ -43,13 +48,61 @@ export class Lumberjack {
                 }
                 groupedCards[card.rarity].push(card);
             });
-            let groupedCardArray = Object.keys(groupedCards).map((group) => {
-                return {
-                    name: group,
-                    cards: groupedCards[group]
-                } as INamedCardArray;
-            })
+
+            //This is going to specifically sort cards by rarity
+            //Rare
+            
+            let groupedCardArray = [
+                Lumberjack.namedCardArray("Mythic", groupedCards["Mythic"]),
+                Lumberjack.namedCardArray("Rare", groupedCards["Rare"]),
+                Lumberjack.namedCardArray("Uncommon", groupedCards["Uncommon"]),
+                Lumberjack.namedCardArray("Common", groupedCards["Common"]),
+            ];
+
+
+            // let groupedCardArray = Object.keys(groupedCards).map((group) => {
+            //     return {
+            //         name: group,
+            //         cards: groupedCards[group]
+            //     } as INamedCardArray;
+            // })
             return groupedCardArray;
+    }
+
+    static namedCardArray(name: string, cards: ICard[]): INamedCardArray{
+
+        // let sortedCard = cards.sort((a,b) => {
+        //         return ((+a.number) - (+b.number))
+        //     } )
+
+        let sortedCard = cards.sort((a,b) => {
+            
+            if(a.name > b.name){
+                return 1
+            }
+            if(a.name < b.name){
+                return -1
+            }
+            return 0
+            //(+a.number) - (+b.number))
+        });
+        console.log('sorted')
+        console.log(sortedCard)
+        return {
+            name: name,
+            cards: sortedCard
+            // cards.sort((a,b) => {
+            //     console.log('sorting...')
+            //     if(a.name.toUpperCase() > b.name.toUpperCase()){
+            //         return 1
+            //     }
+            //     if(a.name > b.name){
+            //         return -1
+            //     }
+            //     return 0
+            //     //(+a.number) - (+b.number))
+            // }) 
+        } as INamedCardArray;
     }
 
     //getGroupedCards(filter): cardGroup[]
