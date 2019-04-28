@@ -176,6 +176,9 @@ declare interface IMagicCard {
     data: Card;
 }
 
+declare interface IntDictionary {
+    [key: string]: number
+}
 
 declare interface ICard {
     //Guess I'll just put relevant info by ID

@@ -40,8 +40,26 @@ export const apInitialized = (): ReduxAction => ({
 });
 
 
-
-
+export const AP_ADD_CARD = 'AP_ADD_CARD';
+export const apAddCard = (cardName: string, isFoil?: boolean): ReduxAction => ({
+    type: AP_ADD_CARD,
+    payload: {
+        name: cardName,
+        isFoil: (isFoil)
+    }
+});
+export const AP_REMOVE_CARD = 'AP_REMOVE_CARD';
+export const apRemoveCard = (cardName: string, isFoil?: boolean): ReduxAction => ({
+    type: AP_REMOVE_CARD,
+    payload: {
+        name: cardName,
+        isFoil: (isFoil)
+    }
+});
+export const AP_SAVE_TO_INVENTORY = 'AP_SAVE_TO_INVENTORY';
+export const apSaveToInventory = (): ReduxAction => ({
+    type: AP_SAVE_TO_INVENTORY
+});
 
 // export const csSearchRequested = (setCode: string): ReduxAction => ({
 //     type: AP_SET_SELECTED,

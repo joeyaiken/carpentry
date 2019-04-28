@@ -28,6 +28,10 @@ declare interface IAddPackState {
     isLoadingSet: boolean;
     groupedCards: INamedCardArray[] | null;
     
+    //pendingCards: ICard[] | null;
+    //pending cards is a dictionary of ints that represents the number of cards in a set that should eventually be added to the inventory
+    pendingCards: IntDictionary;
+
     //apiCache  //needs to be a dictionary of dictionaries 
     // dict { [key: setName] : {[key: cardName] : ICard  }   }
     apiCache: ICardIndex;

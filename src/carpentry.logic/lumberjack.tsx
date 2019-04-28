@@ -17,6 +17,33 @@ import { Lumberyard } from '../carpentry.data/lumberyard'
 
 export class Lumberjack {
     
+
+    static addCardToPending = (cardName: string, pendingCards: IntDictionary): IntDictionary => {
+        let result = {
+            ...pendingCards
+        } as IntDictionary;
+
+        if(!result[cardName]){
+            result[cardName] = 0
+        }
+        result[cardName]++;
+        console.log('adding cards')
+        return result;
+    }
+
+    static removeCardFromPending = (cardName: string, pendingCards: IntDictionary): IntDictionary => {
+        let result = {
+            ...pendingCards
+        } as IntDictionary;
+
+        if(!result[cardName]){
+            result[cardName] = 0
+        }
+        result[cardName]--;
+        console.log('removing cards')
+        return result;
+    }
+
     // constructor(){
     //     // let defaultStates = new DefaultInstanceStateGenerator();
     //     //this.handleSectionToggle = this.handleSectionToggle.bind(this);
@@ -140,7 +167,7 @@ export class Lumberjack {
 
 
 
-        return (groupedResults);
+        return groupedResults;
     }
 
     static getGroupedCards = (): INamedCardArray[] => {

@@ -5,7 +5,10 @@ import {
     apInitialized,
     apSetSelected,
     apLoadSelectedSet,
-    apClearSelectedSet
+    apClearSelectedSet,
+    apAddCard,
+    apRemoveCard,
+    apSaveToInventory
 } from '../actions/addPack.actions'
 
 // import {
@@ -15,6 +18,7 @@ import {
 import { timingSafeEqual } from 'crypto';
 import { stat } from 'fs';
 import MaterialButton from '../components/MaterialButton';
+import { throws } from 'assert';
 
 interface apCardSection {
     name: string;
@@ -49,6 +53,9 @@ class AddPack extends React.Component<AddPackProps> {
         // this.handleActionApplied = this.handleActionApplied.bind(this);
         this.handleSetSelected = this.handleSetSelected.bind(this);
         this.handleClearSelectedSet = this.handleClearSelectedSet.bind(this);
+        this.handleAddCardClick = this.handleAddCardClick.bind(this);
+        this.handleRemoveCardClick = this.handleRemoveCardClick.bind(this);
+        this.handleSaveClick = this.handleSaveClick.bind(this);
     }
 
     componentDidMount(): void {
@@ -78,6 +85,19 @@ class AddPack extends React.Component<AddPackProps> {
     handleClearSelectedSet(): void {
         this.props.dispatch(apClearSelectedSet());
     }
+
+    //if eventually tracking foils, add an optional boolean param for isFoil?
+    handleAddCardClick(cardName: string): void {
+        this.props.dispatch(apAddCard(cardName));
+    }
+
+    handleRemoveCardClick(cardName: string): void {
+        this.props.dispatch(apRemoveCard(cardName));
+    }
+
+    handleSaveClick(): void {
+        this.props.dispatch(apSaveToInventory());
+    }
     // handleFilterChanged(): void {
     //     this.props.dispatch(csFilterChanged())
     // }
@@ -99,9 +119,9 @@ class AddPack extends React.Component<AddPackProps> {
             <div className="flex-row">
                 <div className="outline-section flex-section">{card.name} | {card.data.type}</div>
                 <div className="outline-section icon-dark">
-                <MaterialButton icon="remove_circle_outline" onClick={() => { } } value={""} />
+                <MaterialButton icon="remove_circle_outline" onClick={() => { this.handleRemoveCardClick(card.name) } } value={""} />
                  <span>| {card.count} | </span>
-                 <MaterialButton icon="add_circle_outline" onClick={() => { } } value={""} />
+                 <MaterialButton icon="add_circle_outline" onClick={() => { this.handleAddCardClick(card.name) } } value={""} />
                  </div>
             </div>
         )
@@ -152,17 +172,27 @@ class AddPack extends React.Component<AddPackProps> {
         return(
             <>
                 <div className="outline-section flex-row">
-                    <div className="outline-section"><MaterialButton icon="arrow_back" onClick={() => {this.handleClearSelectedSet()}} value="" /></div>
-                    <div className="outline-section">Set</div>
-                    <div className="outline-section">Location</div>
-                    <div className="outline-section">Filters</div>
+                    <div className="outline-section">
+                        <MaterialButton icon="arrow_back" onClick={() => {this.handleClearSelectedSet()}} value="" />
+                        Set: { this.props.selectedSet }
+                    </div>
+
+                    {/* <div className="outline-section">Set</div>
+                    <div className="outline-section">Location</div> */}
+                    <div className="outline-section">Color(s)Filter</div>
+                    <div className="outline-section">QuickTextFilter</div>
+                    <div className="outline-section">Group by</div>
                 </div>
                 {
                     this.props.setCards.map((collection) => {
                         return(this.renderCardSection(collection))
                     })
                 }
-                <div className="outline-section">Save</div>
+                <div className="outline-section">
+                    <button onClick={() => this.handleSaveClick() }>
+                        Save
+                    </button>
+                </div>
             </>
         )
     }
@@ -208,18 +238,18 @@ function generateTestSets(): apCardSet[] {
         { name: "Dominaria", code: "DOM" },
         { name: "Amonkhet", code: "AKH" }, 
         { name: "Hour of Devastation", code: "HOU" },
-        { name: "Theros", code: "THS" },
+        // { name: "Theros", code: "THS" },
         { name: "Return to Ravnica", code: "RTR" },
-        { name: "Dragon's Maze", code: "DGM" },
+        // { name: "Dragon's Maze", code: "DGM" },
         { name: "Aether Revolt", code: "AER" },
-        { name: "Fate Reforged", code: "FRF" },
-        { name: "Tenth Edition", code: "10E" },
-        { name: "Shadows over Innistrad", code: "SOI" },
-        { name: "Eldritch Moon", code: "EMN" },
-        { name: "Magic 2015 Core Set", code: "M15" },
+        // { name: "Fate Reforged", code: "FRF" },
+        // { name: "Tenth Edition", code: "10E" },
+        // { name: "Shadows over Innistrad", code: "SOI" },
+        // { name: "Eldritch Moon", code: "EMN" },
+        // { name: "Magic 2015 Core Set", code: "M15" },
         { name: "Ixalan", code: "XLN" },
         { name: "Rivals of Ixalan", code: "RIX" },
-        { name: "Modern Masters 2017", code: "MM3" },
+        // { name: "Modern Masters 2017", code: "MM3" },
         { name: "Ravnica Allegiance", code: "RNA" }, 
         { name: "Guilds of Ravnica", code: "GRN" }
     ])
@@ -283,12 +313,14 @@ function generateTestSets(): apCardSet[] {
 
 // }
 
-function mapNamedCardCollectionToLocal(stateData: INamedCardArray[] | null): apCardSection[] {
+
+
+function mapNamedCardCollectionToLocal(stateData: INamedCardArray[] | null, pendingCards: IntDictionary): apCardSection[] {
     if(stateData){
         const mapped = stateData.map((group: INamedCardArray) => {
             return {
                 name: group.name,
-                cards: group.cards.map((card) => ({ name: card.name, count: 0, data: card } as apCard))
+                cards: group.cards.map((card) => ({ name: card.name, count: (pendingCards[card.name] || 0), data: card } as apCard))
             } as apCardSection;
         });
         return mapped;
@@ -338,7 +370,7 @@ interface apCardSection {
         cardSets: generateTestSets(),
         selectedSet: state.addPack.selectedSetCode,
         //setCards: tryMapSearchResultsToLocal(state.mtgApiSearch),
-        setCards: mapNamedCardCollectionToLocal(state.addPack.groupedCards),
+        setCards: mapNamedCardCollectionToLocal(state.addPack.groupedCards, state.addPack.pendingCards),
         //searchInProgress: ((state.mtgApiSearch && state.mtgApiSearch.searchInProgress) || false)
         searchInProgress: state.addPack.isLoadingSet
     }

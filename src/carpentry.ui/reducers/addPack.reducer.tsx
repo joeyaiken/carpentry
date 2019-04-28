@@ -23,13 +23,28 @@ import {
     AP_LOAD_SET_STARTED,
     AP_LOAD_SET_COMPLETE,
     AP_CARD_LOADED,
-    AP_CLEAR_SELECTED_SET
+    AP_CLEAR_SELECTED_SET,
+    AP_ADD_CARD,
+    AP_REMOVE_CARD,
+    AP_SAVE_TO_INVENTORY
+
 } from '../actions/addPack.actions';
 
 import {
     MTG_API_SEARCH_REQUESTED,
     MTG_API_SEARCH_COMPLETED
 } from '../actions/mgtApi.actions';
+
+
+
+
+
+
+
+
+
+
+
 
 //import todos from './todos'
 //import visibilityFilter from './visibilityFilter'
@@ -97,14 +112,35 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
                 ...state,
                 apiCache: newCache
             } as IAddPackState;
+
+        case AP_ADD_CARD:
+            let cardToAdd: string = action.payload.name;
+            // let isFoil: boolean | undefined = action.payload.isFoil;
+            return {
+                ...state,
+                pendingCards: Lumberjack.addCardToPending(cardToAdd, state.pendingCards)
+            } as IAddPackState;
+        case AP_REMOVE_CARD:
+            let cardToRemove: string = action.payload.name;
+            // let isFoil: boolean | undefined = action.payload.isFoil;
+            return {
+                ...state,
+                pendingCards: Lumberjack.removeCardFromPending(cardToRemove, state.pendingCards)
+            } as IAddPackState;
+        case AP_SAVE_TO_INVENTORY:
+            return {
+                ...state
+            } as IAddPackState;
+            
         default:
             if(!state){
                 state = {
                     apiCache: {},
                     isLoadingSet: false,
-                    selectedSetCode: null,
+                    selectedSetCode: "AKH",
                     visibleSetFilters: null,
-                    groupedCards: null                     
+                    groupedCards: null,
+                    pendingCards: {}
                 } as IAddPackState;
             }
             return state;
