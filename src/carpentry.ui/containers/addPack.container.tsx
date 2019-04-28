@@ -323,7 +323,7 @@ function mapNamedCardCollectionToLocal(stateData: INamedCardArray[] | null, pend
         const mapped = stateData.map((group: INamedCardArray) => {
             return {
                 name: group.name,
-                cards: group.cards.map((card) => ({ name: card.name, count: (pendingCards[card.name] || 0), data: card } as apCard))
+                cards: group.cards.map((card) => ({ name: card.name, count: (pendingCards[card.name][0] || 0), data: card } as apCard))
             } as apCardSection;
         });
         return mapped;

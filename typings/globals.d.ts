@@ -177,7 +177,7 @@ declare interface IMagicCard {
 }
 
 declare interface IntDictionary {
-    [key: string]: number
+    [key: string]: number[]
 }
 
 declare interface ICard {

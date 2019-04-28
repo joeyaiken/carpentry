@@ -18,28 +18,42 @@ import { Lumberyard } from '../carpentry.data/lumberyard'
 export class Lumberjack {
     
 
-    static addCardToPending = (cardName: string, pendingCards: IntDictionary): IntDictionary => {
+    static addCardToPending = (cardName: string, pendingCards: IntDictionary, isFoil?: boolean): IntDictionary => {
         let result = {
             ...pendingCards
         } as IntDictionary;
 
         if(!result[cardName]){
-            result[cardName] = 0
+            result[cardName] = [0,0]
         }
-        result[cardName]++;
+        if(isFoil){
+            result[cardName][1]++;
+        } else {
+            result[cardName][0]++;
+        }
+        
         console.log('adding cards')
         return result;
     }
 
-    static removeCardFromPending = (cardName: string, pendingCards: IntDictionary): IntDictionary => {
+    static removeCardFromPending = (cardName: string, pendingCards: IntDictionary, isFoil?: boolean): IntDictionary => {
         let result = {
             ...pendingCards
         } as IntDictionary;
 
         if(!result[cardName]){
-            result[cardName] = 0
+            result[cardName] = [0,0]
         }
-        result[cardName]--;
+
+        if(!result[cardName]){
+            result[cardName] = [0,0]
+        }
+        if(isFoil){
+            result[cardName][1]--;
+        } else {
+            result[cardName][0]--;
+        }
+
         console.log('removing cards')
         return result;
     }
