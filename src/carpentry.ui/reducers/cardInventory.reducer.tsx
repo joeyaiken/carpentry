@@ -37,6 +37,11 @@ import {
     CI_INITIALIZED
 } from '../actions/cardInventory.actions'
 
+import {
+    AP_SAVE_TO_INVENTORY
+} from '../actions/addPack.actions'
+
+
 //import todos from './todos'
 //import visibilityFilter from './visibilityFilter'
 
@@ -49,7 +54,13 @@ export const cardInventory = (state: ICardInventoryState, action: ReduxAction): 
                 groupedCards: Lumberjack.getAllOwnedCardsBySet()
             }
             return newState;
-            
+        case AP_SAVE_TO_INVENTORY:
+            const cards: IntDictionary = action.payload.cards;
+            const setCode: string = action.payload.setCode;
+            return {
+                ...state,
+                groupedCards: Lumberjack.addCardsToInventory(setCode,cards)
+            }
         default:
             if(!state){
                 state = carpentryDefaultStates.cardInventory();

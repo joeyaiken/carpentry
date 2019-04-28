@@ -129,9 +129,10 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
             } as IAddPackState;
         case AP_SAVE_TO_INVENTORY:
             return {
-                ...state
+                ...state,
+                pendingCards: {},
+                selectedSetCode: null
             } as IAddPackState;
-            
         default:
             if(!state){
                 state = {

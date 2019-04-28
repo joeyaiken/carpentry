@@ -57,8 +57,12 @@ export const apRemoveCard = (cardName: string, isFoil?: boolean): ReduxAction =>
     }
 });
 export const AP_SAVE_TO_INVENTORY = 'AP_SAVE_TO_INVENTORY';
-export const apSaveToInventory = (): ReduxAction => ({
-    type: AP_SAVE_TO_INVENTORY
+export const apSaveToInventory = (setCode: string, cards: IntDictionary): ReduxAction => ({
+    type: AP_SAVE_TO_INVENTORY,
+    payload: {
+        setCode: setCode,
+        cards: cards
+    }
 });
 
 // export const csSearchRequested = (setCode: string): ReduxAction => ({

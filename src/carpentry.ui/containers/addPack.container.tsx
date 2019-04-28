@@ -40,6 +40,7 @@ interface PropsFromState {
     selectedSet: string | null;
     setCards: apCardSection[];
     searchInProgress: boolean;
+    pendingCards: IntDictionary;
 }
 
 type AddPackProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -96,7 +97,9 @@ class AddPack extends React.Component<AddPackProps> {
     }
 
     handleSaveClick(): void {
-        this.props.dispatch(apSaveToInventory());
+        if(this.props.selectedSet){
+            this.props.dispatch(apSaveToInventory(this.props.selectedSet, this.props.pendingCards));
+        }
     }
     // handleFilterChanged(): void {
     //     this.props.dispatch(csFilterChanged())
@@ -372,7 +375,8 @@ interface apCardSection {
         //setCards: tryMapSearchResultsToLocal(state.mtgApiSearch),
         setCards: mapNamedCardCollectionToLocal(state.addPack.groupedCards, state.addPack.pendingCards),
         //searchInProgress: ((state.mtgApiSearch && state.mtgApiSearch.searchInProgress) || false)
-        searchInProgress: state.addPack.isLoadingSet
+        searchInProgress: state.addPack.isLoadingSet,
+        pendingCards: state.addPack.pendingCards
     }
     return result;
 }

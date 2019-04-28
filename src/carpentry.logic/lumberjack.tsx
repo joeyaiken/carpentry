@@ -44,6 +44,9 @@ export class Lumberjack {
         return result;
     }
 
+    static addCardsToInventory = (setCode: string, cards: IntDictionary): INamedCardArray[] => {
+        return [];
+    }
     // constructor(){
     //     // let defaultStates = new DefaultInstanceStateGenerator();
     //     //this.handleSectionToggle = this.handleSectionToggle.bind(this);
