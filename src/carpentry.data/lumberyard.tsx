@@ -74,8 +74,8 @@ export class Lumberyard{
     
     static Collections_All_BySet(): ICardIndex {
         return {
-            // "AKH": this.CollectionIndex_AKH(),
-            // "HOU": this.CollectionIndex_HOU(),
+            "AKH": this.CollectionIndex_AKH(),
+            "HOU": this.CollectionIndex_HOU(),
             "DOM": this.CollectionIndex_DOM()
             // ...this.CollectionIndex_Misc()
         }

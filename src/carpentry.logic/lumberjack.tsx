@@ -13,6 +13,7 @@
 
 
 import { Lumberyard } from '../carpentry.data/lumberyard'
+import { ninvoke } from 'q';
 
 
 export class Lumberjack {
@@ -229,79 +230,131 @@ export class Lumberjack {
         //should start by loading cache AND/OR hard data
 
         let cachedInventory: DataInventoryCard[] = Lumberyard.cache_load_cardInventory();
+        //Rather than itterating over each set, we should itterate over cards and grab the set info when necissary
 
+        let resultsAsDict: { [set: string]: NamedInventoryCardArray } =  { }
 
-
-        const setKeys = Object.keys(indexData);
-
-        const groupedResults: NamedInventoryCardArray[] = setKeys.map((key) => {
-            //This thing is expected to return a NamedInventoryCardArray
-
-            let thisSetInventoryArray: NamedInventoryCardArray = {
-                name: key,
-                cards: [] //InventoryCard[]
+        //for each card
+        cachedInventory.forEach((card: DataInventoryCard) => {
+            if(!resultsAsDict[card.set]){
+                resultsAsDict[card.set] = {
+                    name: card.set,                    
+                    cards: []
+                }
             }
 
-            
-            //Grouping saved card sata per set
-            //Originally, this was mapping all index cards to the results
-            //Instead, we should itterate over the inventory, and pull cards out of the index as needed
+            console.log('mapping card')
+            console.log(card)
 
+            resultsAsDict[card.set].cards.push({
+                data: indexData[card.set][card.name],
+                inDecks: 0,
+                inInventory: card.norm,
+                inInventoryFoil: card.foil
+                // name: card.name,
+                // set: card.set,
+                // foil: card.foil,
+                // norm: card.norm
+            } as InventoryCard)
 
-            //getting an array of cards for this specific set
+            // mappedSetGroups[card.set].cards.push(indexData[card.set][card.name])
+        });
 
-            /*
-                name: string;
-                cards: InventoryCard[];
-            */
-            const thisCardIndex: ICardDictionary = indexData[key];
-
-            const filteredInventory = cachedInventory.filter((item: DataInventoryCard) => {
-                return (item.set == key);
-            })
-
-            let inventoryMappedToInventoryCard: InventoryCard[] = filteredInventory.map((item: DataInventoryCard) => {
-                return {
-                    data: thisCardIndex[item.name],
-                    inDecks: 0,
-                    inInventory: item.norm,
-                    inInventoryFoil: item.foil
-                }  as InventoryCard;//
-            })
-        
-            thisSetInventoryArray.cards = inventoryMappedToInventoryCard;
-            // let anInventoryCard: InventoryCard = {
-            //     data: null,
-            //     inDecks: null,
-            //     inInventory: null,
-            //     inInventoryFoil: null
-            // }
-
-            // let theseCards: InventoryCard[] = [];
-
-            // let thisIndex = indexData[key];
-
-
-            // let thisIndexNames = Object.keys(thisIndex);
-
-
-            // theseCards = thisIndexNames.map(cardName => {
-            //     //thisIndex[cardName]
-
-            //     return {
-            //         data: null,
-            //         inDecks: null,
-            //         inInventory: null,
-            //         inInventoryFoil: null
-            //     } as InventoryCard;
-            // });
-
-            // let result: NamedInventoryCardArray = {
-            //     name:key,
-            //     cards: theseCards
-            // };
-            return thisSetInventoryArray;
+        let resultsAsArray = Object.keys(resultsAsDict).map((key) => {
+            return resultsAsDict[key];
         })
+
+
+
+        // let mappedSetGroups: { [set: string]: INamedCardArray } = { }
+
+        // cachedInventory.forEach((card: DataInventoryCard) => {
+        //     if(!mappedSetGroups[card.set]){
+        //         mappedSetGroups[card.set] = {
+        //             name: card.set,
+        //             count: 0,
+        //             cards: []
+        //         }
+        //     }
+
+        //     mappedSetGroups[card.set].cards.push(indexData[card.set][card.name])
+        // });
+
+
+        //const setKeys = Object.keys(indexData);
+
+        // const groupedResults: NamedInventoryCardArray[] = Object.keys(mappedSetGroups).map((key) => {
+        //     //This thing is expected to return a NamedInventoryCardArray
+        //     //mappedSetGroups[key].
+
+        //     let inventoryMappedToInventoryCard: InventoryCard[] = filteredInventory.map((item: DataInventoryCard) => {
+        //         return {
+        //             data: thisCardIndex[item.name],
+        //             inDecks: 0,
+        //             inInventory: item.norm,
+        //             inInventoryFoil: item.foil
+        //         }  as InventoryCard;//
+        //     })
+
+
+        //     let thisSetInventoryArray: NamedInventoryCardArray = {
+        //         name: mappedSetGroups[key].name,
+        //         cards: mappedSetGroups[key].cards //collection of InventoryCard
+        //     }
+
+            
+        //     //Grouping saved card sata per set
+        //     //Originally, this was mapping all index cards to the results
+        //     //Instead, we should itterate over the inventory, and pull cards out of the index as needed
+
+
+        //     //getting an array of cards for this specific set
+
+        //     /*
+        //         name: string;
+        //         cards: InventoryCard[];
+        //     */
+        //     const thisCardIndex: ICardDictionary = indexData[key];
+
+        //     const filteredInventory = cachedInventory.filter((item: DataInventoryCard) => {
+        //         return (item.set == key);
+        //     })
+
+            
+        
+        //     thisSetInventoryArray.cards = inventoryMappedToInventoryCard;
+        //     // let anInventoryCard: InventoryCard = {
+        //     //     data: null,
+        //     //     inDecks: null,
+        //     //     inInventory: null,
+        //     //     inInventoryFoil: null
+        //     // }
+
+        //     // let theseCards: InventoryCard[] = [];
+
+        //     // let thisIndex = indexData[key];
+
+
+        //     // let thisIndexNames = Object.keys(thisIndex);
+
+
+        //     // theseCards = thisIndexNames.map(cardName => {
+        //     //     //thisIndex[cardName]
+
+        //     //     return {
+        //     //         data: null,
+        //     //         inDecks: null,
+        //     //         inInventory: null,
+        //     //         inInventoryFoil: null
+        //     //     } as InventoryCard;
+        //     // });
+
+        //     // let result: NamedInventoryCardArray = {
+        //     //     name:key,
+        //     //     cards: theseCards
+        //     // };
+        //     return thisSetInventoryArray;
+        // })
 
 
         // declare interface ICardIndex {
@@ -312,7 +365,7 @@ export class Lumberjack {
 
 
 
-        return groupedResults;
+        return resultsAsArray;
     }
 
     // static map___ToInventoryCard(): InventoryCard {
