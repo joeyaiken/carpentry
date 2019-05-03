@@ -18,7 +18,7 @@ declare interface State {
 }
 
 declare interface ICardInventoryState {
-    groupedCards: INamedCardArray[] | null;
+    groupedCards: NamedInventoryCardArray[] | null;
 }
 
 

@@ -214,6 +214,13 @@ export class Lumberjack {
 
     //getGroupedCards(filter): cardGroup[]
 
+    /**
+     * 
+     * This thing is supposed to get all cached data
+     * Then it is supposed to group that data by set
+     * Each set is formatted as a  "NamedInventoryCardArray"
+     * 
+     */
     static getAllOwnedCardsBySet = (): NamedInventoryCardArray[] => {
         const indexData: ICardIndex = Lumberyard.Collections_All_BySet();
 
@@ -228,6 +235,14 @@ export class Lumberjack {
         const setKeys = Object.keys(indexData);
 
         const groupedResults: NamedInventoryCardArray[] = setKeys.map((key) => {
+            //This thing is expected to return a NamedInventoryCardArray
+
+            let thisSetInventoryArray: NamedInventoryCardArray = {
+                name: key,
+                cards: [] //InventoryCard[]
+            }
+
+            
             //Grouping saved card sata per set
             //Originally, this was mapping all index cards to the results
             //Instead, we should itterate over the inventory, and pull cards out of the index as needed
@@ -241,7 +256,11 @@ export class Lumberjack {
             */
             const thisCardIndex: ICardDictionary = indexData[key];
 
-            let unnamed: InventoryCard[] = cachedInventory.map((item: DataInventoryCard) => {
+            const filteredInventory = cachedInventory.filter((item: DataInventoryCard) => {
+                return (item.set == key);
+            })
+
+            let inventoryMappedToInventoryCard: InventoryCard[] = filteredInventory.map((item: DataInventoryCard) => {
                 return {
                     data: thisCardIndex[item.name],
                     inDecks: 0,
@@ -250,25 +269,38 @@ export class Lumberjack {
                 }  as InventoryCard;//
             })
         
+            thisSetInventoryArray.cards = inventoryMappedToInventoryCard;
+            // let anInventoryCard: InventoryCard = {
+            //     data: null,
+            //     inDecks: null,
+            //     inInventory: null,
+            //     inInventoryFoil: null
+            // }
 
-            let theseCards: ICard[] = [];
+            // let theseCards: InventoryCard[] = [];
 
-            let thisIndex = indexData[key];
-
-
-            let thisIndexNames = Object.keys(thisIndex);
+            // let thisIndex = indexData[key];
 
 
-            theseCards = thisIndexNames.map(cardName => thisIndex[cardName]);
+            // let thisIndexNames = Object.keys(thisIndex);
 
 
+            // theseCards = thisIndexNames.map(cardName => {
+            //     //thisIndex[cardName]
 
+            //     return {
+            //         data: null,
+            //         inDecks: null,
+            //         inInventory: null,
+            //         inInventoryFoil: null
+            //     } as InventoryCard;
+            // });
 
-            let result: NamedInventoryCardArray = {
-                name:key,
-                cards: theseCards
-            };
-            return result;
+            // let result: NamedInventoryCardArray = {
+            //     name:key,
+            //     cards: theseCards
+            // };
+            return thisSetInventoryArray;
         })
 
 
@@ -282,6 +314,13 @@ export class Lumberjack {
 
         return groupedResults;
     }
+
+    // static map___ToInventoryCard(): InventoryCard {
+    //     let result: InventoryCard = {
+
+    //     }
+    //     return result;
+    // }
 
     static getGroupedCards = (): INamedCardArray[] => {
         // const dummyData: INamedCardArray[] = [

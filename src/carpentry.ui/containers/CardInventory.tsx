@@ -230,18 +230,21 @@ class CardInventory extends React.Component<CardInventoryProps> {
 
 }
 
-function mapStateCardGroupToLocal(group: INamedCardArray): CardInventoryGroup {
+function mapStateCardGroupToLocal(group: NamedInventoryCardArray): CardInventoryGroup {
     return{
         name: group.name,
         cards: group.cards.map((card) => mapStateCardToLocal(card))
     }
 }
 
-function mapStateCardToLocal(card: ICard): CardInventoryItem {
+function mapStateCardToLocal(card: InventoryCard): CardInventoryItem {
     return {
-        name: card.name,
-        cmc: card.cmc,
-        type: card.type
+        name: card.data.name,
+        cmc: card.data.cmc,
+        type: card.data.type,
+        inDecks: card.inDecks,
+        inInventory: card.inInventory,
+        inInventoryFoil: card.inInventoryFoil
     }
 }
 
