@@ -209,6 +209,24 @@ export class Lumberyard{
     }
 
 
+    static cache_save_cardInventory(cards: DataInventoryCard[]): void {
+        const stringToSave: string = JSON.stringify(cards);
+        localStorage.setItem("LUMBERYARD_CARD_INVENTORY_CACHE", stringToSave);
+    }
+
+    static cache_load_cardInventory(): DataInventoryCard[] {
+        const cachedData: string|null = localStorage.getItem("LUMBERYARD_CARD_INVENTORY_CACHE");
+        if(cachedData){
+            console.log('found cache')
+            console.log(cachedData)
+            const cardIndex: DataInventoryCard[] = JSON.parse(cachedData);
+            return cardIndex;
+        } else {
+            console.log('no cache')
+            return [];
+        }
+    }
+
     //this stuff should be refactord out probs
     static legacy_loadInitialUIState(): IUIState{
         //try to cache a loaded UI state?

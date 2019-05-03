@@ -8,7 +8,8 @@ import {
     apClearSelectedSet,
     apAddCard,
     apRemoveCard,
-    apSaveToInventory
+    apSaveToInventory,
+    apCardLoaded
 } from '../actions/addPack.actions'
 
 // import {
@@ -27,6 +28,7 @@ interface apCardSection {
 interface apCard {
     name: string;
     count: number;
+    foilCount: number;
     data: ICard;
 }
 
@@ -185,6 +187,11 @@ class AddPack extends React.Component<AddPackProps> {
                     <div className="outline-section">Color(s)Filter</div>
                     <div className="outline-section">QuickTextFilter</div>
                     <div className="outline-section">Group by</div>
+                    <div className="outline-section">
+                        <button onClick={() => this.handleSaveClick() }>
+                            Save
+                        </button>
+                    </div>
                 </div>
                 {
                     this.props.setCards.map((collection) => {
@@ -316,6 +323,20 @@ function generateTestSets(): apCardSet[] {
 
 // }
 
+function mapICardToLocal(card: ICard): apCard {
+    let result: apCard = {
+        count: 0,
+        foilCount: 0,
+        data: card,
+        name: card.name
+        // name: card.name,
+        // cards: []
+    }
+
+    //({ name: card.name, count: (pendingCards[card.name][0] || 0), data: card } as apCard
+
+    return result;
+}
 
 
 function mapNamedCardCollectionToLocal(stateData: INamedCardArray[] | null, pendingCards: IntDictionary): apCardSection[] {
@@ -323,7 +344,17 @@ function mapNamedCardCollectionToLocal(stateData: INamedCardArray[] | null, pend
         const mapped = stateData.map((group: INamedCardArray) => {
             return {
                 name: group.name,
-                cards: group.cards.map((card) => ({ name: card.name, count: (pendingCards[card.name][0] || 0), data: card } as apCard))
+                cards: group.cards.map((card) => {
+                    //mapICardToLocal(card)
+                    const relevantPendingCards: number[] = pendingCards[card.name] || [0,0];
+
+                    return {
+                        data: card,
+                        name: card.name,
+                        count: relevantPendingCards[0],
+                        foilCount: relevantPendingCards[1]
+                    } as apCard;
+                })
             } as apCardSection;
         });
         return mapped;

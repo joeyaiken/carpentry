@@ -140,6 +140,21 @@ declare interface INamedCardArray {
 }
 
 
+
+declare interface NamedInventoryCardArray {
+    name: string;
+    cards: InventoryCard[];
+}
+
+
+declare interface InventoryCard {
+    //Does this need to store the name?
+    data: ICard;
+    inDecks: number;
+    inInventory: number;
+    inInventoryFoil: number;
+}
+
 declare interface ITempCard{
     name: string;
 }
@@ -162,6 +177,13 @@ declare interface ILandCount {
     B: number,
 }
 
+
+declare interface DataInventoryCard {
+    set: string,
+    name: string,
+    norm: number,
+    foil: number
+}
 
 
 //

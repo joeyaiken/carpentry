@@ -59,7 +59,70 @@ export class Lumberjack {
     }
 
     static addCardsToInventory = (setCode: string, cards: IntDictionary): INamedCardArray[] => {
+
+        let currentCache = Lumberyard.cache_load_cardInventory();
+
+        Object.keys(cards).forEach((cardName: string) => {
+
+            let existingCard = currentCache.find((dataCard) => (dataCard.name == cardName));
+
+            let newCardCounts = cards[cardName];
+
+            if(existingCard){
+                existingCard.norm = existingCard.norm + newCardCounts[0]
+                existingCard.foil = existingCard.foil + newCardCounts[1]
+            } else {
+                currentCache.push({
+                    name: cardName,
+                    set: setCode,
+                    norm: newCardCounts[0],
+                    foil: newCardCounts[1]
+                } as DataInventoryCard);
+            }
+        });
+
+        //This would be the spot to remove any 0/0 items
+
+        Lumberyard.cache_save_cardInventory(currentCache);
+
+
+        //init should load current cache then call this same logic:
+        //{
+        let mappedResult = Lumberjack.mapInventoryCacheToNamedCardArray(currentCache);
+        
+        return mappedResult;
+    }
+
+    static mapInventoryCacheToNamedCardArray(data: DataInventoryCard[]): INamedCardArray[] {
+        let mappedThings: {
+            [set: string]: INamedCardArray
+        }= {
+
+        }
+
+        //return an obj that's mapped back to a...named card array? I guess each name is a set
+        //So, this section is generating an object that the UI can load
+        //Really, it should be it's own function that the initial load also calls
+
+
+        data.forEach((card: DataInventoryCard) => {
+            if(!mappedThings[card.set]){
+                mappedThings[card.set] = {
+                    name: card.set,
+                    count: 0,
+                    cards: []
+                }
+            }
+
+            mappedThings[card.set].cards.push({
+                
+            } as ICard)
+
+
+        })
+
         return [];
+
     }
     // constructor(){
     //     // let defaultStates = new DefaultInstanceStateGenerator();
@@ -151,24 +214,57 @@ export class Lumberjack {
 
     //getGroupedCards(filter): cardGroup[]
 
-    static getAllOwnedCardsBySet = (): INamedCardArray[] => {
+    static getAllOwnedCardsBySet = (): NamedInventoryCardArray[] => {
         const indexData: ICardIndex = Lumberyard.Collections_All_BySet();
 
         //filter this shit by owned cards?
 
+        //should start by loading cache AND/OR hard data
+
+        let cachedInventory: DataInventoryCard[] = Lumberyard.cache_load_cardInventory();
+
+
+
+        const setKeys = Object.keys(indexData);
+
+        const groupedResults: NamedInventoryCardArray[] = setKeys.map((key) => {
+            //Grouping saved card sata per set
+            //Originally, this was mapping all index cards to the results
+            //Instead, we should itterate over the inventory, and pull cards out of the index as needed
+
+
+            //getting an array of cards for this specific set
+
+            /*
+                name: string;
+                cards: InventoryCard[];
+            */
+            const thisCardIndex: ICardDictionary = indexData[key];
+
+            let unnamed: InventoryCard[] = cachedInventory.map((item: DataInventoryCard) => {
+                return {
+                    data: thisCardIndex[item.name],
+                    inDecks: 0,
+                    inInventory: item.norm,
+                    inInventoryFoil: item.foil
+                }  as InventoryCard;//
+            })
         
 
-
-
-        const dataKeys = Object.keys(indexData);
-
-        const groupedResults: INamedCardArray[] = dataKeys.map((key) => {
             let theseCards: ICard[] = [];
 
             let thisIndex = indexData[key];
+
+
             let thisIndexNames = Object.keys(thisIndex);
-            theseCards = thisIndexNames.map(cardName => thisIndex[cardName])
-            let result: INamedCardArray = {
+
+
+            theseCards = thisIndexNames.map(cardName => thisIndex[cardName]);
+
+
+
+
+            let result: NamedInventoryCardArray = {
                 name:key,
                 cards: theseCards
             };

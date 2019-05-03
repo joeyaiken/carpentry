@@ -57,6 +57,10 @@ export const cardInventory = (state: ICardInventoryState, action: ReduxAction): 
         case AP_SAVE_TO_INVENTORY:
             const cards: IntDictionary = action.payload.cards;
             const setCode: string = action.payload.setCode;
+            // console.log('adding cards to inventory');
+            // console.log(cards);
+            // console.log('existing inventory');
+            // console.log(state.groupedCards);
             return {
                 ...state,
                 groupedCards: Lumberjack.addCardsToInventory(setCode,cards)

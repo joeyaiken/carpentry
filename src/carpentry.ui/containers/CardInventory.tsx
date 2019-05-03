@@ -44,6 +44,9 @@ interface CardInventoryItem {
     name: string;
     cmc: number;
     type: string;
+    inInventory: number;
+    inInventoryFoil: number;
+    inDecks: number;
 }
 
 interface PropsFromState {
