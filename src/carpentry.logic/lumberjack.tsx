@@ -341,7 +341,8 @@ export class Lumberjack {
         //Rather than itterating over each set, we should itterate over cards and grab the set info when necissary
 
         let resultsAsDict: { [set: string]: NamedInventoryCardArray } =  { }
-
+        // console.log(cachedInventory)
+        // alert("")
         //for each card
         cachedInventory.forEach((card: DataInventoryCard) => {
             if(!resultsAsDict[card.set]){

@@ -4,6 +4,8 @@ import {
 
 } from '../actions'
 
+import { Lumberyard } from '../../carpentry.data/lumberyard'
+
 interface PropsFromState {
     dataObject: string;
     cardIndex: string;
@@ -45,14 +47,28 @@ class AppData extends React.Component<AppDataProps> {
                     </div>)
                     })
                 }
+                <div className="outline-section">
+                    <div className="card-header">
+                        <label>App Data</label>
+                    </div>
+                    {/* <textarea  /> */}
+                    <textarea value={ this.props.dataObject } />
+                </div>
             </div>
         );
     }
 }
 
 function mapStateToProps(state: State): PropsFromState {
+
+    const outInventoryState: DataInventoryStore = {
+        updated: new Date(),
+        data: Lumberyard.cache_load_cardInventory()
+    }
+
     const result: PropsFromState = {
-        dataObject: "",//JSON.stringify(state.data.deckList),
+        //dataObject: "",//JSON.stringify(state.data.deckList),
+        dataObject: JSON.stringify(outInventoryState),
         cardIndex: "",//JSON.stringify(state.data.cardIndex)
         cachedSetData: Object.keys(state.addPack.apiCache).map((setKey: string) => {
             return {

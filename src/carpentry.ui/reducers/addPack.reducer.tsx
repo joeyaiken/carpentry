@@ -139,14 +139,14 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
             // let isFoil: boolean | undefined = action.payload.isFoil;
             return {
                 ...state,
-                pendingCards: Lumberjack.addCardToPending(cardToAdd, state.pendingCards)
+                pendingCards: Lumberjack.addCardToPending(cardToAdd, state.pendingCards, action.payload.isFoil)
             } as IAddPackState;
         case AP_REMOVE_CARD:
             let cardToRemove: string = action.payload.name;
             // let isFoil: boolean | undefined = action.payload.isFoil;
             return {
                 ...state,
-                pendingCards: Lumberjack.removeCardFromPending(cardToRemove, state.pendingCards)
+                pendingCards: Lumberjack.removeCardFromPending(cardToRemove, state.pendingCards, action.payload.isFoil)
             } as IAddPackState;
         case AP_SAVE_TO_INVENTORY:
             return {

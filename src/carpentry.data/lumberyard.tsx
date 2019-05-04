@@ -217,20 +217,40 @@ export class Lumberyard{
     }
 
     static cache_save_cardInventory(cards: DataInventoryCard[]): void {
-        const stringToSave: string = JSON.stringify(cards);
+        //wat
+        let itemToSave: DataInventoryStore = {
+            updated: new Date(),
+            data: cards
+        }
+
+        const stringToSave: string = JSON.stringify(itemToSave);
         localStorage.setItem("LUMBERYARD_CARD_INVENTORY_CACHE", stringToSave);
     }
 
     static cache_load_cardInventory(): DataInventoryCard[] {
         const cachedData: string|null = localStorage.getItem("LUMBERYARD_CARD_INVENTORY_CACHE");
+        //DataInventoryStore
+
+        const storedData: DataInventoryStore = require('./store/physicalCollection.json');
+        //let defaultData: ICardDeck[] = require('./legacy2/deckData_legacy.json');
+
         if(cachedData){
             console.log('found cache')
-            console.log(cachedData)
-            const cardIndex: DataInventoryCard[] = JSON.parse(cachedData);
-            return cardIndex;
+            console.log(cachedData);
+            const cachedStore: DataInventoryStore = JSON.parse(cachedData);
+
+            console.log('comparing dates')
+            console.log(cachedStore.updated)
+            console.log(storedData.updated)
+            if(cachedStore.updated > storedData.updated){
+                return cachedStore.data;
+            } else {
+                return storedData.data;
+            }
+            // return storedData.data;
         } else {
             console.log('no cache')
-            return [];
+            return storedData.data;
         }
     }
 

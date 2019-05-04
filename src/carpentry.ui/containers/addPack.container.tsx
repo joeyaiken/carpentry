@@ -24,9 +24,10 @@ import { throws } from 'assert';
 interface apCardSection {
     name: string;
     cards: apCard[];
+    //isVisible, all that stuff
 }
 interface apCard {
-    name: string;
+    // name: string;
     count: number;
     foilCount: number;
     data: ICard;
@@ -90,12 +91,12 @@ class AddPack extends React.Component<AddPackProps> {
     }
 
     //if eventually tracking foils, add an optional boolean param for isFoil?
-    handleAddCardClick(cardName: string): void {
-        this.props.dispatch(apAddCard(cardName));
+    handleAddCardClick(cardName: string, isFoil?: boolean): void {
+        this.props.dispatch(apAddCard(cardName, isFoil));
     }
 
-    handleRemoveCardClick(cardName: string): void {
-        this.props.dispatch(apRemoveCard(cardName));
+    handleRemoveCardClick(cardName: string, isFoil?: boolean): void {
+        this.props.dispatch(apRemoveCard(cardName, isFoil));
     }
 
     handleSaveClick(): void {
@@ -120,13 +121,19 @@ class AddPack extends React.Component<AddPackProps> {
     // }
 
     renderCard(card: apCard): JSX.Element {
+
         return(
             <div className="flex-row">
-                <div className="outline-section flex-section">{card.name} | {card.data.type}</div>
+                <div className="outline-section flex-section">{card.data.name} | {card.data.type}</div>
                 <div className="outline-section icon-dark">
-                <MaterialButton icon="remove_circle_outline" onClick={() => { this.handleRemoveCardClick(card.name) } } value={""} />
-                 <span>| {card.count} | </span>
-                 <MaterialButton icon="add_circle_outline" onClick={() => { this.handleAddCardClick(card.name) } } value={""} />
+                    <MaterialButton icon="remove_circle_outline" onClick={() => { this.handleRemoveCardClick(card.data.name) } } value={""} />
+                    <span>| {card.count} | </span>
+                    <MaterialButton icon="add_circle_outline" onClick={() => { this.handleAddCardClick(card.data.name) } } value={""} />
+                 </div>
+                 <div className="outline-section icon-dark">
+                    <MaterialButton icon="remove_circle_outline" onClick={() => { this.handleRemoveCardClick(card.data.name, true) } } value={""} />
+                    <span>| {card.foilCount} | </span>
+                    <MaterialButton icon="add_circle_outline" onClick={() => { this.handleAddCardClick(card.data.name, true) } } value={""} />
                  </div>
             </div>
         )
@@ -146,14 +153,51 @@ class AddPack extends React.Component<AddPackProps> {
     
 
     renderCardSection(collection: apCardSection): JSX.Element {
+
+        ////////
+
+        
+
+        
+        let typeGroups :{
+            [groupName: string]: apCard[];
+        } = {
+
+        }
+        collection.cards.forEach((card) => {
+            typeGroups = {
+                [card.data.types[0]]: [],
+                ...typeGroups
+            }
+            typeGroups[card.data.types[0]].push(card);
+        });
+        // this.props.setCards.forEach
+        
+        // cardGroup.cards.
+
+
+
         return(
             <div className="flex-col">
                 <div className="outline-section">{ collection.name } -- [Count] -- [Toggle button]</div>
-                <div className="flex-col">
+                {
+                    Object.keys(typeGroups).map((groupKey: string) => {
+                        return(<div>
+                            <div className="outline-section">{ groupKey }</div>
+                            <div className="flex-col">
+                                {typeGroups[groupKey].map((card) => {
+                                    return this.renderCard(card);
+                                })}
+                            </div>
+                        </div>)
+                    })
+
+                }
+                {/* <div className="flex-col">
                     {collection.cards.map((card) => {
                         return this.renderCard(card);
                     })}
-                </div>
+                </div> */}
             </div>
         );
     }
@@ -174,6 +218,7 @@ class AddPack extends React.Component<AddPackProps> {
     }
 
     renderSetContents(): JSX.Element {
+
         return(
             <>
                 <div className="outline-section flex-row">
@@ -328,8 +373,8 @@ function mapICardToLocal(card: ICard): apCard {
     let result: apCard = {
         count: 0,
         foilCount: 0,
-        data: card,
-        name: card.name
+        data: card
+        // name: card.name
         // name: card.name,
         // cards: []
     }

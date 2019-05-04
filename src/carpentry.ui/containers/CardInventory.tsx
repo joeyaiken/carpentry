@@ -169,11 +169,20 @@ class CardInventory extends React.Component<CardInventoryProps> {
     }
 
     renderCardGroup(cardGroup: CardInventoryGroup): JSX.Element {
+
+
+        
+
         return(
             <div className="flex-col" key={cardGroup.name}>
                 <div className="outline-section">{cardGroup.name}</div>
                 <div className="outline-section flex-row-wrap">
                     {
+                        // Object.keys(typeGroups).map((key:string) => {
+                        //     return (<div>
+
+                        //     </div>)
+                        // })
                         cardGroup.cards.map((card) => this.renderCard(card))
                     }
                 </div>
@@ -190,8 +199,8 @@ class CardInventory extends React.Component<CardInventoryProps> {
                 </div>
                 <div className="outline-section">{card.type}</div>
                 <div className="flex-row">
-                    <div className="outline-section">0 (Inv)</div>
-                    <div className="outline-section">0 (Decks)</div>
+                    <div className="outline-section">{card.inInventory + card.inInventoryFoil} in Inventory</div>
+                    {/* <div className="outline-section">0 (Decks)</div> */}
                 </div>
             </div>
         );

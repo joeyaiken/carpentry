@@ -217,6 +217,11 @@ declare interface ILandCount {
 }
 
 
+declare interface DataInventoryStore {
+    updated: Date;
+    data: DataInventoryCard[];
+}
+
 declare interface DataInventoryCard {
     set: string,
     name: string,
