@@ -3,6 +3,45 @@
 
 
 
+
+
+//interfaces for AddPack containter component
+interface IAddPackSection {
+    //cards: IAddPackCard[];
+    cards: ICard[];
+    name: string;
+    totalCount?: number;
+    color?: string;//styling info
+    isVisible?: boolean;
+    isOpen?: boolean;
+    //sort priority?
+}
+
+interface IAddPackCard {
+    data: ICard;
+    normalCount: number;
+    foilCount: number;
+    color?: string;//styling info
+}
+
+
+
+
+interface thisNewAddPackState {
+
+    //groups: all potential groups of cards
+
+
+    //cards: dictionary of cards?
+
+}
+
+
+
+
+
+
+
 declare interface IUIState {
     isNavOpen: boolean;
     isSideSheetOpen: boolean;

@@ -14,6 +14,8 @@
 
 import { Lumberyard } from '../carpentry.data/lumberyard'
 import { ninvoke } from 'q';
+import { ColorIdentity } from 'mtgsdk-ts/out/IMagic';
+
 
 
 export class Lumberjack {
@@ -94,6 +96,111 @@ export class Lumberjack {
         return mappedResult;
     }
 
+
+    static getCardAPGroup(card: ICard): string  {
+        /*
+        Sort Priority
+        T1
+            Plainswalkers
+        T2                    
+            Rares
+            Mythics
+        T3
+            Lands
+
+        T4
+            Red
+            Blue
+            Green
+            White
+            Black
+            Colorless
+            MultiColored
+        */
+
+        let result: string = "unknown";
+        if(card.types.includes("Planeswalker")){
+            result = "Planeswalker";
+        } else if (card.rarity == "Mythic"){
+            result = "Mythic";
+        } else if (card.rarity == "Rare"){
+            result = "Rare";
+        } else if (card.types.includes("Land")){
+            result = "Land";
+        } else if (card.colorIdentity.length == 1){    
+            switch(card.colorIdentity[0]){
+                case "R":
+                    result = "Red";
+                    break;
+                case "U":
+                result = "Blue";
+                    break;
+                case "G":
+                result = "Green";
+                    break;
+                case "W":
+                result = "White";
+                    break;
+                case "B":
+                result = "Black";
+                    break;
+            }
+        } else if (card.colorIdentity.length == 0){
+            result = "Colorless";
+        } else if (card.colorIdentity.length > 1){
+            result = "MultiColored";
+        }
+        return result;
+    }
+
+    static mapSetToAddPackGroups(cards: ICardDictionary): INamedCardArray[] {
+        
+        let sections: {
+            [name:string]: ICard[]
+        } = {
+            "Red": [],
+            "Blue": [],
+            "Green": [],
+            "White": [],
+            "Black": [],
+            "Colorless": [],
+            "MultiColored": [],
+            "Land": [],
+            "Planeswalker": [],
+            "Rare": [],
+            "Mythic": [],
+            "unknown": []
+        }
+
+        
+        Object.keys(cards).forEach((cardName: string) => {
+            const card: ICard = cards[cardName];
+            const cardGroup: string = Lumberjack.getCardAPGroup(card);
+            sections[cardGroup].push(card);
+            if(cardGroup == "unknown") console.log(card);
+        });
+
+
+        let results: INamedCardArray[] = [
+            { cards: sections["unknown"], name: "unknown" },
+            { cards: sections["Red"], name: "Red" },
+            { cards: sections["Blue"], name: "Blue" },
+            { cards: sections["Green"], name: "Green" },
+            { cards: sections["White"], name: "White" },
+            { cards: sections["Black"], name: "Black" },
+            { cards: sections["Colorless"], name: "Colorless" },
+            { cards: sections["MultiColored"], name: "MultiColored" },
+            { cards: sections["Land"], name: "Land" },
+            { cards: sections["Planeswalker"], name: "Planeswalker" },
+            { cards: sections["Rare"], name: "Rare" },
+            { cards: sections["Mythic"], name: "Mythic" },
+        ]
+
+        
+        return results;
+
+    }
+
     static mapInventoryCacheToNamedCardArray(data: DataInventoryCard[]): INamedCardArray[] {
         let mappedThings: {
             [set: string]: INamedCardArray
@@ -150,6 +257,7 @@ export class Lumberjack {
 
             Object.keys(dict).forEach((cardName: string) => {
                 let card = dict[cardName];
+                console.log
                 groupedCards = {
                     [card.rarity]: [],
                     ...groupedCards

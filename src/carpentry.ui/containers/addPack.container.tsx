@@ -67,11 +67,11 @@ class AddPack extends React.Component<AddPackProps> {
     
     componentDidUpdate(){
         if(this.props.selectedSet != null ){
-            console.log('there is a set');
+            // console.log('there is a set');
             if(this.props.setCards != null && this.props.setCards.length == 0){
-                console.log('There is an empty array of set cards');
+                // console.log('There is an empty array of set cards');
                 if(!this.props.searchInProgress){
-                    console.log('There is no search in progress--------------------------');
+                    // console.log('There is no search in progress--------------------------');
                     this.props.dispatch(apLoadSelectedSet())
                 }
 
@@ -148,7 +148,7 @@ class AddPack extends React.Component<AddPackProps> {
     renderCardSection(collection: apCardSection): JSX.Element {
         return(
             <div className="flex-col">
-                <div className="outline-section">{ collection.name }</div>
+                <div className="outline-section">{ collection.name } -- [Count] -- [Toggle button]</div>
                 <div className="flex-col">
                     {collection.cards.map((card) => {
                         return this.renderCard(card);
@@ -245,6 +245,7 @@ class AddPack extends React.Component<AddPackProps> {
 
 function generateTestSets(): apCardSet[] {
     return([
+        { name: "War of the Spark", code: "WAR" },
         { name: "Dominaria", code: "DOM" },
         { name: "Amonkhet", code: "AKH" }, 
         { name: "Hour of Devastation", code: "HOU" },
@@ -339,11 +340,14 @@ function mapICardToLocal(card: ICard): apCard {
 }
 
 
-function mapNamedCardCollectionToLocal(stateData: INamedCardArray[] | null, pendingCards: IntDictionary): apCardSection[] {
+function mapNamedCardCollectionToLocal(stateData: IAddPackSection[] | null, pendingCards: IntDictionary): apCardSection[] {
     if(stateData){
-        const mapped = stateData.map((group: INamedCardArray) => {
+        const mapped = stateData.map((group: IAddPackSection) => {
+            console.log(group);
             return {
                 name: group.name,
+                // cards: group.cards,
+                // name: group.name,
                 cards: group.cards.map((card) => {
                     //mapICardToLocal(card)
                     const relevantPendingCards: number[] = pendingCards[card.name] || [0,0];
@@ -404,7 +408,7 @@ interface apCardSection {
         cardSets: generateTestSets(),
         selectedSet: state.addPack.selectedSetCode,
         //setCards: tryMapSearchResultsToLocal(state.mtgApiSearch),
-        setCards: mapNamedCardCollectionToLocal(state.addPack.groupedCards, state.addPack.pendingCards),
+        setCards: mapNamedCardCollectionToLocal(state.addPack.setSections, state.addPack.pendingCards),
         //searchInProgress: ((state.mtgApiSearch && state.mtgApiSearch.searchInProgress) || false)
         searchInProgress: state.addPack.isLoadingSet,
         pendingCards: state.addPack.pendingCards

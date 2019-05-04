@@ -76,7 +76,8 @@ export class Lumberyard{
         return {
             "AKH": this.CollectionIndex_AKH(),
             "HOU": this.CollectionIndex_HOU(),
-            "DOM": this.CollectionIndex_DOM()
+            "DOM": this.CollectionIndex_DOM(),
+            "WAR": this.CollectionIndex_WAR()
             // ...this.CollectionIndex_Misc()
         }
     }
@@ -117,6 +118,8 @@ export class Lumberyard{
                 return Lumberyard.CollectionIndex_THS();
             case 'XLN':
                 return Lumberyard.CollectionIndex_XLN();
+            case 'WAR':
+                return Lumberyard.CollectionIndex_WAR();
         }
         //Lumberjack.getSet
         return null;
@@ -208,6 +211,10 @@ export class Lumberyard{
         return cardIndex;
     }
 
+    static CollectionIndex_WAR(): ICardDictionary {
+        let cardIndex: ICardDictionary = require('./index/WAR.index.json');
+        return cardIndex;
+    }
 
     static cache_save_cardInventory(cards: DataInventoryCard[]): void {
         const stringToSave: string = JSON.stringify(cards);

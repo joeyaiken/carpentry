@@ -26,7 +26,9 @@ declare interface IAddPackState {
     selectedSetCode: string | null;
     visibleSetFilters: ICardSet[] | null;
     isLoadingSet: boolean;
-    groupedCards: INamedCardArray[] | null;
+
+    // groupedCards: INamedCardArray[] | null;
+    setSections: IAddPackSection[] | null;
     
     //pendingCards: ICard[] | null;
     //pending cards is a dictionary of ints that represents the number of cards in a set that should eventually be added to the inventory

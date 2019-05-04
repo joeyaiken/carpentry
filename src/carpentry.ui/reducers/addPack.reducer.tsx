@@ -53,7 +53,15 @@ import {
 //ReducersMapObject<IAddPackState>
 
 //Reducer<ReducersMapObject<IAddPackState, Action<any>>, AnyAction>
+const cleanState = (oldState: IAddPackState): IAddPackState => {
+    return {
+        ...oldState
+    }
+}
+
 export const addPack = (state: IAddPackState, action: ReduxAction): any => {
+    
+
     switch(action.type){
         case AP_INITIALIZED:
             //no initial search filter for now, so lets just load everything?
@@ -65,6 +73,7 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
         case AP_SET_SELECTED:
             return {
                 ...state,
+                somethingWrong: "blah",
                 selectedSetCode: action.payload
             } as IAddPackState;
         case AP_CLEAR_SELECTED_SET:
@@ -72,7 +81,7 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
             return {
                 ...state,
                 selectedSetCode: null,
-                groupedCards: null
+                setSections: null,
             } as IAddPackState;
         case AP_LOAD_SET_STARTED:
             return {
@@ -83,11 +92,22 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
             //payload is going to be an array of cards
             let cardsFromAction: ICardDictionary | null = action.payload;
             let mappedCards: INamedCardArray[] = [];
+
+            //New plan: call something like
+
+            // const setName: string = state.selectedSetCode || "";
+            //let groups = Lumberjack.mapSetToAddPackGroups(cardsFromAction);
+
+
+            //I guess we needs the cards somehow
+
+
             if(state.selectedSetCode){
                 if(!cardsFromAction) {
                     cardsFromAction = state.apiCache[state.selectedSetCode];
                 } 
-                mappedCards = Lumberjack.mapCardDictionaryToGroupedNamedCardArray(cardsFromAction)
+                //mappedCards = Lumberjack.mapCardDictionaryToGroupedNamedCardArray(cardsFromAction)
+                mappedCards = Lumberjack.mapSetToAddPackGroups(cardsFromAction)
             }
 
             //Need to group / sort that payload, then apply to state
@@ -95,7 +115,8 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
             return {
                 ...state,
                 isLoadingSet: false,
-                groupedCards: mappedCards
+                // groupedCards: groups
+                setSections: mappedCards
                 //need an object for the actual cards....
             } as IAddPackState;
         case AP_CARD_LOADED:
@@ -138,9 +159,9 @@ export const addPack = (state: IAddPackState, action: ReduxAction): any => {
                 state = {
                     apiCache: {},
                     isLoadingSet: false,
-                    selectedSetCode: "AKH",
+                    selectedSetCode: "WAR",
                     visibleSetFilters: null,
-                    groupedCards: null,
+                    setSections: null,
                     pendingCards: {}
                 } as IAddPackState;
             }
