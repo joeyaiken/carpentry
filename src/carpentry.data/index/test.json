@@ -1,0 +1,45 @@
+{
+    "Angel of Sanctions":{
+
+        //identifying
+        "id":"b7535fff-0b2d-54c2-8099-1ddd0dc88ca9",
+        "multiverseid":426703,
+        "name":"Angel of Sanctions",
+        "number":"1",
+        "set":"AKH",
+        //informational
+
+        "cmc":5,
+        "colorIdentity":["W"],
+        "colors":["White"],
+        "printings":["AKH","PAKH"],
+        "rarity":"Mythic",
+        "imageUrl":"http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=426703&type=card",
+        "layout":"normal",
+        "manaCost":"{3}{W}{W}",
+        "setName":"Amonkhet",
+        "text":"Flying\nWhen Angel of Sanctions enters the battlefield, you may exile target nonland permanent an opponent controls until Angel of Sanctions leaves the battlefield.\nEmbalm {5}{W} ({5}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a white Zombie Angel with no mana cost. Embalm only as a sorcery.)",
+        "type":"Creature — Angel",
+        "types":["Creature"]
+    },
+    "Anointed Procession":{
+        "cmc":4,
+        "colorIdentity":["W"],
+        "colors":["White"],
+        "flavor":"\"The gods here may walk among the people, but they are not with them.\" —Gideon Jura",
+        "id":"bbb5bfd9-d21c-566a-9554-cb5c66fe3dd0",
+        "imageUrl":"http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=426704&type=card",
+        "layout":"normal",
+        "manaCost":"{3}{W}",
+        "multiverseid":426704,
+        "name":"Anointed Procession",
+        "number":"2",
+        "printings":["AKH", "PAKH"],
+        "rarity":"Rare",
+        "set":"AKH",
+        "setName":"Amonkhet",
+        "text":"If an effect would create one or more tokens under your control, it creates twice that many of those tokens instead.",
+        "type":"Enchantment",
+        "types":["Enchantment"]
+    }
+}
