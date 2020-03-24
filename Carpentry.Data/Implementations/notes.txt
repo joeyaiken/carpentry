@@ -1,0 +1,97 @@
+public async Task<InventoryDetailDto> GetInventoryDetailByName(string name)
+        {
+            InventoryDetailDto result = new InventoryDetailDto();
+
+            //get all of the magic cards matching this name
+            var cardQuery = _cardContext.Cards.Where(x => x.Name == name).ToList();
+            //need that logic to map things properly
+
+            //var inventoryQuery = _cardContext.InventoryCards.Where(x => x.)
+            
+            var cardQuery2 = _cardContext.Cards.Where(x => x.Name == name)
+                .SelectMany(x => x.InventoryCards).ToList();
+
+
+            var cardQuery3 = _cardContext.Cards.Where(x => x.Name == name)
+                .SelectMany(x => x.InventoryCards)
+                .SelectMany(x => x.DeckCards).ToList();
+
+
+            var allMultiverseIDs = cardQuery.Select(x => x.Id).ToList();
+            var cardQuery2a = _cardContext.InventoryCards.Where(x => allMultiverseIDs.Contains(x.MultiverseId)).ToList();
+
+
+            var allInventoryIDs = cardQuery2a.Select(x => x.Id).ToList();
+            var cardQuery3a = _cardContext.DeckCards.Where(x => allInventoryIDs.Contains(x.InventoryCardId)).ToList();
+
+
+            result.DeckCards = cardQuery3;
+            result.InventoryCards = cardQuery2;
+            result.Cards = cardQuery.Select(x => new ScryfallMagicCard() { }).ToList();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
+        {
+            if (param.GroupBy.ToLower() == "count")
+            {
+                //how many copies of each named card do I have?
+
+                //var queryNameCount = _cardContext.InventoryCards
+
+                //Approach 1 - start with Cards
+                var cardsQuery = _cardContext.Cards.AsQueryable();
+                
+                if(param.Sets != null)
+                {
+                    var matchingSetId = _cardContext.Sets.Where(x => x.Code.ToLower() == param.Set.ToLower()).Select(x => x.Id);
+                    cardsQuery = cardsQuery.Where(x => x.Set == matchingSetId);
+                }
+
+                var query = cardsQuery.Select(x => new
+                {
+                    MultiverseId = x.Id,
+                    x.Name,
+                    x.Type,
+                    x.ManaCost,
+                    Counts = x.InventoryCards.Count(),
+                    x.Variants.First().ImageUrl,
+                }).GroupBy(x => x.Name)
+                .Select(x => new InventoryOverviewDto
+                {
+                    Name = x.Key,
+                    Type = x.First().Type,
+                    Cost = x.First().ManaCost,
+                    Img = x.First().ImageUrl,
+                    Count = x.Sum(card => card.Counts)
+                }).OrderByDescending(x => x.Count);
+
+                if(param.Take > 0)
+                {
+                    //should eventually consider pagination here
+
+                    query = query.Skip(param.Skip).Take(param.Take).OrderByDescending(x => x.Count);
+                }
+
+                var result = query.ToList();
+
+                return result;
+
+                //This query is still missing Type & Cost vals (is cost really useful here?)
+
+                //take the top X results, then get the rest of the details
+
+                //approach 2 - start with inventory cards
+
+
+            }
+            else
+            {
+                return null;
+            }
+        
+            //if grouping by name...IDK yet
+
+
+        }

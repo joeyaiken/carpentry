@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Carpentry.Data.Models
+{
+    public class PricedCardDto
+    {
+        public int MultiverseId { get; set; }
+        public bool IsFoil { get; set; }
+        public decimal Price { get; set; }
+        public int Count { get; set; }
+        public string Name { get; set; }
+        public string Set { get; set; }
+    }
+}
