@@ -108,14 +108,14 @@ function GroupedDeckCardList(props: ComponentProps): JSX.Element {
 }
 
 function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
-    const { allCardOverviewNames, cardOverviewsByName, cardGroups } = state.data.deckDetail;
+    const { allCardOverviewIds, cardOverviewsById, cardGroups } = state.data.deckDetail;
 
     if(state.app.deckEditor.viewMode == "grouped"){
 
         const result = cardGroups.map(group => {
             const groupResult: CardOverviewGroup = {
                 name: group.name,
-                cardOverviews: group.cardNames.map(cardName => cardOverviewsByName[cardName]),
+                cardOverviews: group.cardOverviewIds.map(id => cardOverviewsById[id]),
             }
             return groupResult;
         });
@@ -125,7 +125,7 @@ function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
 
         return [{
             name: "All",
-            cardOverviews: allCardOverviewNames.map(name => cardOverviewsByName[name]),
+            cardOverviews: allCardOverviewIds.map(id => cardOverviewsById[id]),
         }];
 
     }

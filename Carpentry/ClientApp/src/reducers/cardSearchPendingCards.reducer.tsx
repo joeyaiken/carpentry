@@ -17,33 +17,38 @@ declare interface cardSearchPendingCardsState {
 const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): cardSearchPendingCardsState => {
     //'pending cards' is now a dictionary of 'pending card dto's
     const {
-        multiverseId, //0
+        data, //0
         isFoil, //false
         variant, //"normal"
     } = action.payload;
-
-    let cardToAdd: PendingCardsDto = state.pendingCards[multiverseId];
+    
+    const magicCardToAdd: MagicCard = data;
+    
+    let cardToAdd: PendingCardsDto = state.pendingCards[data.multiverseId];
     
     if(!cardToAdd){
         cardToAdd = {
-            multiverseId: multiverseId,
+            multiverseId: magicCardToAdd.multiverseId,
+            name: magicCardToAdd.name,
             cards: [],
         };
 
-        //If we're adding a NEW pending card, it's going to exist in the search results 
-        // const magicCardToAdd = state.searchResults.find(x => x.multiverseId == multiverseId);
-        //if we can't find a matching card, nothing gets added and this just continues silently (I guess)
-        // if(magicCardToAdd){
-        //     cardToAdd = {
-        //         multiverseId: multiverseId,
-        //         cards: [],
-        //         // data: magicCardToAdd,
-        //     };
-        // }                    
+        //OK - So I need to either pass the name, or the whole card
+        
+        
+        // const magicCardToAdd = state.
+        // if we can't find a matching card, nothing gets added and this just continues silently (I guess)
+    //     if(magicCardToAdd){
+    //         cardToAdd = {
+    //             multiverseId: multiverseId,
+    //             cards: [],
+    //             // data: magicCardToAdd,
+    //         };
+    //     }                    
     }
 
     cardToAdd.cards.push({
-        multiverseId: multiverseId, 
+        multiverseId: magicCardToAdd.multiverseId, 
         isFoil: isFoil,
         variantName: variant,
         statusId: 1,
@@ -53,7 +58,7 @@ const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): ca
         ...state,
         pendingCards: {
             ...state.pendingCards,
-            [multiverseId]: cardToAdd
+            [magicCardToAdd.multiverseId]: cardToAdd
         }
     }
     return newState;

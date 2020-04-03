@@ -6,7 +6,7 @@ export interface ComponentProps {
     title: string;
     children: ReactNode;
     isOpen: boolean;
-    onSaveClick: () => void;
+    onSaveClick?: () => void;
     onCloseClick: () => void;
     onDeleteClick?: () => void;
 }
@@ -19,7 +19,7 @@ export default function AppModal(props: ComponentProps): JSX.Element {
                     onCloseClick={props.onCloseClick}
                     onSaveClick={props.onSaveClick}
                     onDeleteClick={props.onDeleteClick}
-                    title="Add New Deck">
+                    title={props.title}>
                         {props.children}
                 </AppModalLayout>
             </Modal>

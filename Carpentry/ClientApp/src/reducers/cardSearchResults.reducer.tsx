@@ -64,8 +64,8 @@ export const apiDataReceived = (state: cardSearchResultsState, action: ReduxActi
     
     const { scope, data } = action.payload;
 
-    console.log('card search data receive');
-    console.log(`scope: ${scope}`);
+    // console.log('card search data receive');
+    // console.log(`scope: ${scope}`);
 
     if(scope as ApiScopeOption !== "cardSearchResults") return (state);
 

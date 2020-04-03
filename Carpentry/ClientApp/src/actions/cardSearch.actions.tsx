@@ -46,10 +46,10 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ma
 
 //Add pending cards
 export const CARD_SEARCH_ADD_PENDING_CARD = 'CARD_SEARCH_ADD_PENDING_CARD'
-export const cardSearchAddPendingCard = (multiverseId: number, isFoil: boolean, variant: string) =>({
+export const cardSearchAddPendingCard = (data: MagicCard, isFoil: boolean, variant: string) =>({
     type: CARD_SEARCH_ADD_PENDING_CARD,
     payload: {
-        multiverseId: multiverseId,
+        data: data,
         isFoil: isFoil,
         variant: variant
     }
@@ -188,7 +188,7 @@ export const requestMoveDeckCard = (card: InventoryCard, deckCardId: number): an
     }
 }
 
-function moveDeckCard(dispatch: Dispatch, state: AppState, card: InventoryCard, deckCardId: number): any{
+function moveDeckCard(dispatch: Dispatch, state: AppState, card: InventoryCard, deckCardId: number): any {
     //I don't realistically know what this prop will look like yet
     
     const deckCardDto: DeckCardDto = {
@@ -212,3 +212,9 @@ function moveDeckCard(dispatch: Dispatch, state: AppState, card: InventoryCard, 
        //dispatch(requestInventoryDetail(state.inventory.selectedDetailItem.cards[0].name));
     });
 }
+
+export const TOGGLE_CARD_SEARCH_VIEW_MODE = 'TOGGLE_CARD_SEARCH_VIEW_MODE';
+
+export const toggleCardSearchViewMode = (): ReduxAction => ({
+    type: TOGGLE_CARD_SEARCH_VIEW_MODE
+});

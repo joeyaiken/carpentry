@@ -26,7 +26,7 @@ declare interface AppCoreState {
 }
 
 export const apiDataRequested = (state: AppCoreState, action: ReduxAction): AppCoreState => {
-    const { scope } = action.payload;
+    const { scope, data } = action.payload;
     
     if(scope as ApiScopeOption !== "deckDetail") return (state);
 
@@ -34,7 +34,7 @@ export const apiDataRequested = (state: AppCoreState, action: ReduxAction): AppC
         ...state,
         // loadingDeckDetail: true
         visibleContainer: 'deckEditor',
-        selectedDeckId: action.payload,
+        selectedDeckId: data,
     };
     
     return newState;
@@ -73,7 +73,7 @@ export const appState = (state = initialState, action: ReduxAction): AppCoreStat
                 ...state,
                 isCardSearchShowing: false,
             }
-        case APP_BAR_ADD_CLICKED: 
+        case APP_BAR_ADD_CLICKED:
             return {
                 ...state,
                 isCardSearchShowing: !state.isCardSearchShowing
@@ -100,6 +100,6 @@ const initialState: AppCoreState = {
     selectedDeckId: null,
     isCardSearchShowing: false,
     newDeckIsSaving: false,
-    //visibleContainer: null,
-    visibleContainer: "inventory",
+    visibleContainer: null,
+    //visibleContainer: "inventory",
 }

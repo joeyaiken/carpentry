@@ -39,6 +39,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     handleCloseModalClick(): void {
+        console.log('close Modal click');
         this.props.dispatch(requestCancelDeckModalChanges());
     }
 
@@ -56,7 +57,8 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                 <React.Fragment>
 
                     <AppModal title="Add New Deck" 
-                        isOpen={Boolean(this.props.deckPropsModalOpen)} 
+                        //isOpen={Boolean(this.props.deckPropsModalOpen)} 
+                        isOpen={this.props.deckPropsModalOpen} 
                         onCloseClick={this.handleCloseModalClick} 
                         // onDeleteClick={this.handle}
                         onSaveClick={this.handleSavePropsClick}>    

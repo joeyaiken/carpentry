@@ -20,13 +20,16 @@ interface CardSearchPendingCardsProps {
 function CardSearchPendingCardsSection(props: CardSearchPendingCardsProps): JSX.Element {
     return (<Paper className="outline-section flex-row">
         {
-            Object.keys(props.pendingCards).map((id: string) => (
+            Object.keys(props.pendingCards).map((id: string) => {
+                let thisCard: PendingCardsDto = props.pendingCards[id];
+                return(
                 <Paper key={id}>
-                    <Typography variant="h5">{ props.pendingCards[id].data.name }</Typography>
-                    <Typography variant="h6">{ props.pendingCards[id].countNormal }</Typography>
-                    <Typography variant="h6">{ props.pendingCards[id].countFoil }</Typography>
+                    <Typography variant="h5">{ thisCard.name }</Typography>
+                    <Typography variant="h6">{ thisCard.cards.length }</Typography>
+                    {/* <Typography variant="h6">{ thisCard.countFoil }</Typography> */}
                 </Paper>
-            ))
+            )
+        })
         }
     </Paper>);
 }

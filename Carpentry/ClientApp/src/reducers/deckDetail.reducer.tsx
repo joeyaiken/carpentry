@@ -2,13 +2,18 @@ import { API_DATA_REQUESTED, API_DATA_RECEIVED } from '../actions/index.actions'
 import { DECK_EDITOR_CARD_SELECTED, DECK_PROPERTY_CHANGED } from '../actions/deckEditor.actions';
 
 declare interface DeckDetailState {
+
+    deckId: number;
+
     deckProps: DeckProperties | null;
 
     //This (InventoryOverviewDto) might need a GropId or something
     //THIS ISN'T GROUPED BY ID
     //It's grouped by NAME
-    cardOverviewsByName: { [name: string]: InventoryOverviewDto } //This contains a "group name" field
-    allCardOverviewNames: string[];
+    //cardOverviewsByName: { [name: string]: InventoryOverviewDto } //This contains a "group name" field
+    cardOverviewsById: { [id: number]: InventoryOverviewDto } //This contains a "group name" field
+    //allCardOverviewNames: string[];
+    allCardOverviewIds: number[];
 
     cardDetailsById: { [id: number]: InventoryCard }; 
     allCardDetailIds: number[];
@@ -37,19 +42,19 @@ export const apiDataRequested = (state: DeckDetailState, action: ReduxAction): D
     return newState;
 }
 
-function selectGroupedDeckCards(overviewsByName: { [name: string]: InventoryOverviewDto }, allOverviewNames: string[]): NamedCardGroup[] {
+function selectGroupedDeckCards(overviewsById: { [id: number]: InventoryOverviewDto }, allOverviewIds: number[]): NamedCardGroup[] {
     var result: NamedCardGroup[] = [];
-    
-    const cardGroups = ["Creatures", "Spells", "Enchantments", "Artifacts", "Planeswalkers", "Lands"];
+    // console.log('grouping deck editor cards')
+    const cardGroups = ["Commander", "Creatures", "Spells", "Enchantments", "Artifacts", "Planeswalkers", "Lands", "Sideboard"];
     
     cardGroups.forEach(groupName => {
 
-        const cardsInGroup = allOverviewNames.filter(name => overviewsByName[name].description == groupName);
+        const cardsInGroup = allOverviewIds.filter(id => overviewsById[id].description == groupName);
 
         if(cardsInGroup.length > 0){
             result.push({
                 name: groupName,
-                cardNames: cardsInGroup
+                cardOverviewIds: cardsInGroup
             });
         }
     });
@@ -64,28 +69,29 @@ export const apiDataReceived = (state: DeckDetailState, action: ReduxAction): De
 
     const dto: DeckDto = data;
 
-    let overviewsByName = {};
+    let overviewsById = {};
     let cardsById = {};
     
-    dto.cardOverviews.forEach(card => overviewsByName[card.name] = card);
+    dto.cardOverviews.forEach(card => overviewsById[card.id] = card);
     dto.cardDetails.forEach(card => cardsById[card.id] = card);
 
-    const allCardOverviewNames: string[] = dto.cardOverviews.map(card => card.name);
+    const allCardOverviewIds: number[] = dto.cardOverviews.map(card => card.id);
 
     const newState: DeckDetailState = {
         ...state,
         // selectedDeckDto: data,
+        deckId: dto.props.id,
         deckProps: dto.props,
 
         //cardOverviewsById: overviewsByName
-        cardOverviewsByName: overviewsByName,
-        allCardOverviewNames: allCardOverviewNames,
+        cardOverviewsById: overviewsById,
+        allCardOverviewIds: allCardOverviewIds,
 
         cardDetailsById: cardsById,
         allCardDetailIds: dto.cardDetails.map(card => card.id),
 
         // cardGroups: [],
-        cardGroups: selectGroupedDeckCards(overviewsByName, allCardOverviewNames),
+        cardGroups: selectGroupedDeckCards(overviewsById, allCardOverviewIds),
         // cardGroupNames: [],
         deckStats: dto.stats,
 
@@ -102,8 +108,15 @@ export const deckDetail = (state = initialState, action: ReduxAction): DeckDetai
             // let visibleCards: InventoryCard[] = [];
             // visibleCards = state.selectedDeckDto.cardDetails.filter((card) => (card.name == selectedCardOverview.name));
 
-            const visibleCardIds = state.allCardDetailIds.filter(id => state.cardDetailsById[id].name == selectedCardOverview.name);
-
+            const visibleCardIds = state.allCardDetailIds.filter(id => 
+                state.cardDetailsById[id].name == selectedCardOverview.name
+                && selectedCardOverview.description == state.cardDetailsById[id].deckCards[0].category
+                //&& state.cardDetailsById[id].
+                );
+            // console.log('visible cards!');
+            const visibleCards = visibleCardIds.map(id => state.cardDetailsById[id]);
+            // console.log(state)
+            // console.log(visibleCards);
             return {
                 ...state,
                 // selectedCard: selectedCardOverview,
@@ -141,10 +154,11 @@ export const deckDetail = (state = initialState, action: ReduxAction): DeckDetai
 }
 
 const initialState: DeckDetailState = {
+    deckId: 0,
     deckProps: null,
           
-    cardOverviewsByName: {}, //This contains a "group name" field
-    allCardOverviewNames: [],
+    cardOverviewsById: {}, //This contains a "group name" field
+    allCardOverviewIds: [],
 
     cardDetailsById: {},
     allCardDetailIds: [],

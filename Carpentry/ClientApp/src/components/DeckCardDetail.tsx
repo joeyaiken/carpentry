@@ -11,11 +11,10 @@ interface ComponentProps{
     selectedCard: InventoryOverviewDto | null;
 
     inventoryCards: InventoryCard[];
-    cardMenuAnchor: HTMLButtonElement | null;
 
     onMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onMenuClose: () => void;
-    onMenuSelect: (option: string) => void;
+    // onMenuSelect: (option: string) => void;
 }
 
 export default function DeckCardDetail(props: ComponentProps): JSX.Element {
@@ -40,19 +39,7 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
     else {
         return (
             <Box className="static-section">
-                <Menu open={Boolean(props.cardMenuAnchor)} onClose={props.onMenuClose} anchorEl={props.cardMenuAnchor} >
-                    <MenuItem onClick={() => {props.onMenuSelect("")}}>Set as Commander</MenuItem>
-                    <MenuItem onClick={() => {props.onMenuSelect("")}}>Move to Sideboard</MenuItem>
-                    <MenuItem onClick={() => {props.onMenuSelect("")}}>Move to Main Deck</MenuItem>
-                    <MenuItem onClick={() => {props.onMenuSelect("")}}>Remove from Deck</MenuItem>
-                    {/* <MenuItem onClick={() => {props.onMenuSelect("")}}></MenuItem> */}
-                    {/* <MenuItem onClick={() => {props.onMenuSelect("")}}></MenuItem> */}
-                    {/* <MenuItem onClick={() => {props.onMenuSelect("")}}></MenuItem> */}
-                    {/* <MenuItem onClick={() => {props.onMenuSelect("edit")}} value="inventory">Edit</MenuItem>
-                    <MenuItem onClick={() => {props.onMenuSelect("delete")}} value="delete">Delte</MenuItem> */}
-                    {/* Export? */}
-                    {/* Copy? */}
-                </Menu>
+                
                 <Card>
                     {/* <CardHeader 
                         titleTypographyProps={{variant:"body1"}} 
@@ -84,12 +71,16 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                                 props.inventoryCards.map(item => {
                                     // const thisCard = props.detail.cards.find(x => x.multiverseId === item.multiverseId);
 
+                                    const rowDeckCardId = item.deckCards.length > 0 ? item.deckCards[0].id : 0
+                                    // console.log(item);
                                     return(
                                     <TableRow key={item.id}>
                                         <TableCell>{item.set}</TableCell>
                                         <TableCell>{item.variantName}{item.isFoil &&" foil"}</TableCell>
                                         <TableCell size="small">
-                                            <IconButton size="small" onClick={props.onMenuClick} name={item.name} value={item.multiverseId}>
+                                            {/* <IconButton size="small" onClick={props.onMenuClick} name={item.name} value={item.multiverseId}> */}
+                                            {/* item.deckCards[0].id */}
+                                            <IconButton size="small" onClick={props.onMenuClick} name={item.name} value={rowDeckCardId}>
                                                 <MoreVert />
                                             </IconButton>
                                         </TableCell>

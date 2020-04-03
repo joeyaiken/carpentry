@@ -22,13 +22,18 @@ import {
     Table,
     TableCell,
     IconButton,
+    CardHeader,
+    CardMedia,
+    Card,
 } from '@material-ui/core';
 
 import { Star } from '@material-ui/icons';
+import VisualCard from '../components/VisualCard';
 
 interface PropsFromState { 
     searchContext: "deck" | "inventory";
     searchResults: CardListItem[];
+    viewMode: CardSearchViewMode;
 }
 
 type CardSearchProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -41,8 +46,8 @@ class CardSearch extends React.Component<CardSearchProps>{
         this.handleCardSelected = this.handleCardSelected.bind(this);
     }
 
-    handleAddPendingCard(multiverseId: number, isFoil: boolean, variant: string){
-        this.props.dispatch(cardSearchAddPendingCard(multiverseId, isFoil, variant));
+    handleAddPendingCard(data: MagicCard, isFoil: boolean, variant: string){
+        this.props.dispatch(cardSearchAddPendingCard(data,  isFoil, variant));
     }
 
     handleRemovePendingCard(multiverseId: number, isFoil: boolean, variant: string){
@@ -60,75 +65,137 @@ class CardSearch extends React.Component<CardSearchProps>{
     render() {
         return (
         <React.Fragment>
-            <Paper className="flex-section">
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            {
-                                this.props.searchContext == "inventory" &&
-                                (   <>
-                                        <TableCell># Pending</TableCell>
-                                        <TableCell>Actions</TableCell>
-                                    </>
-                                )
-                            }
-                            {
-                                this.props.searchContext == "deck" &&
-                                (   <>
-                                        {/* <TableCell>Set</TableCell> */}
-                                        <TableCell>Type</TableCell>
-                                        <TableCell>Cost</TableCell>
-                                        <TableCell></TableCell>
-                                    </>
-                                )
-                            }
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            this.props.searchResults.map(result => (
-                                <TableRow 
-                                    onClick={() => { this.handleCardSelected(result) }}
-                                    key={result.data.multiverseId}>
-                                    <TableCell>{result.data.name}</TableCell>
-                                    {
-                                            this.props.searchContext == "inventory" &&
-                                            (   <>
-                                                    <TableCell>{result.count}</TableCell>
-                                                    <TableCell>
-                                                        <Box className="flex-row">
-                                                            <Button variant="contained" size="small" onClick={() => {this.handleRemovePendingCard(result.data.multiverseId, false, "normal")} } >-</Button>
-                                                            {/* <Typography>({result.count})</Typography> */}
-                                                            <Button variant="contained" size="small" onClick={() => {this.handleAddPendingCard(result.data.multiverseId, false, "normal")} } >+</Button>       
-                                                        </Box>
-                                                    </TableCell>
-                                                </>
-                                            )
-                                        }
-                                        {
-                                            this.props.searchContext == "deck" &&
-                                            (   <>
-                                                    {/* <TableCell>{result.data.set}</TableCell> */}
-                                                    <TableCell>{result.data.type}</TableCell>
-                                                    <TableCell>{result.data.manaCost}</TableCell>
-                                                    <TableCell>{Boolean(result.count) && 
-                                                        <IconButton color="inherit" disabled={true} size="small">
-                                                            <Star />
-                                                        </IconButton> 
-                                                    }</TableCell>
-                                                </>
-                                            )
-                                        }                                            
-                                </TableRow>
-                            ))
-                        }
-                    </TableBody>
-                </Table>
-            </Paper>
+            {
+                this.props.viewMode === "list" && 
+                    <SearchResultTable 
+                        searchContext={this.props.searchContext} 
+                        searchResults={this.props.searchResults}
+                        handleAddPendingCard={this.handleAddPendingCard}
+                        handleRemovePendingCard={this.handleRemovePendingCard}
+                        onCardSelected={this.handleCardSelected}
+                        />
+            }
+            {
+                this.props.viewMode === "grid" &&
+                    <SearchResultGrid 
+                        searchResults={this.props.searchResults}
+                        onCardSelected={this.handleCardSelected}
+                        />
+            }
         </React.Fragment>);
     }
 }
+
+interface SearchResultTableProps {
+    searchContext: "deck" | "inventory";
+    searchResults: CardListItem[];
+    handleAddPendingCard: (data: MagicCard, isFoil: boolean, variant: string) => void;
+    handleRemovePendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
+    onCardSelected: (item: CardListItem) => void;
+}
+function SearchResultTable(props: SearchResultTableProps): JSX.Element {
+
+    return (
+        <Paper className="flex-section">
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        {
+                            props.searchContext == "inventory" &&
+                            (   <>
+                                    <TableCell># Pending</TableCell>
+                                    <TableCell>Actions</TableCell>
+                                </>
+                            )
+                        }
+                        {
+                            props.searchContext == "deck" &&
+                            (   <>
+                                    {/* <TableCell>Set</TableCell> */}
+                                    <TableCell>Type</TableCell>
+                                    <TableCell>Cost</TableCell>
+                                    <TableCell></TableCell>
+                                </>
+                            )
+                        }
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        props.searchResults.map(result => (
+                            <TableRow 
+                                onClick={() => { props.onCardSelected(result) }}
+                                key={result.data.multiverseId}>
+                                <TableCell>{result.data.name}</TableCell>
+                                {
+                                        props.searchContext == "inventory" &&
+                                        (   <>
+                                                <TableCell>{result.count}</TableCell>
+                                                <TableCell>
+                                                    <Box className="flex-row">
+                                                        <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.multiverseId, false, "normal")} } >-</Button>
+                                                        {/* <Typography>({result.count})</Typography> */}
+                                                        <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data, false, "normal")} } >+</Button>       
+                                                    </Box>
+                                                </TableCell>
+                                            </>
+                                        )
+                                    }
+                                    {
+                                        props.searchContext == "deck" &&
+                                        (   <>
+                                                {/* <TableCell>{result.data.set}</TableCell> */}
+                                                <TableCell>{result.data.type}</TableCell>
+                                                <TableCell>{result.data.manaCost}</TableCell>
+                                                <TableCell>{Boolean(result.count) && 
+                                                    <IconButton color="inherit" disabled={true} size="small">
+                                                        <Star />
+                                                    </IconButton> 
+                                                }</TableCell>
+                                            </>
+                                        )
+                                    }                                            
+                            </TableRow>
+                        ))
+                    }
+                </TableBody>
+            </Table>
+        </Paper>
+    );
+}
+
+interface SearchResultGridProps {
+    searchResults: CardListItem[];
+    onCardSelected: (item: CardListItem) => void;
+}
+function SearchResultGrid(props: SearchResultGridProps): JSX.Element {
+    // <VisualCard key={card.data.name} cardOverview={card} onCardSelected={() => {props.onCardSelected(card)}} />
+
+    return (
+        <Box className="flex-row-wrap">
+            {props.searchResults.map((card) => (            
+                <Card 
+                    key={card.data.name} 
+                    className="outline-section"
+                    onClick={() => props.onCardSelected(card)}
+                    >
+                    {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={ `${card.data.name} - (${props.cardOverview.count})` } /> */}
+                    {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={`${card.name} (${card.count})`}/> */}
+                    <CardMedia 
+                        style={{height:"310px", width: "223px"}}
+                        className="item-image"
+                        image={card.data.variants['normal'] || ''}
+                        title={card.data.name} />
+                    {/* {props.children} */}
+
+                </Card>
+            ))}
+        </Box>
+    );
+}
+
+
 
 function selectSearchResults(state: AppState): MagicCard[] {
     const { allSearchResultIds, searchResultsById } = state.data.cardSearchResults;
@@ -147,7 +214,12 @@ function mapStateToProps(state: AppState): PropsFromState {
 
         mappedSearchResults = selectSearchResults(state).map(card => {
 
-            const cardExistsInDeck = state.data.deckDetail.cardOverviewsByName[card.name];
+            //Apparently THIS IS BAD but I can't figure out a better approach right now
+            //Clarification, .Find() is BAD
+            //const cardExistsInDeck = state.data.deckDetail.cardOverviewsByName[card.name];
+            const { cardOverviewsById, allCardOverviewIds } = state.data.deckDetail;
+
+            const cardExistsInDeck = Boolean(allCardOverviewIds.find(id => cardOverviewsById[id].name == card.name));
 
             return ({
                 data: card,
@@ -165,6 +237,7 @@ function mapStateToProps(state: AppState): PropsFromState {
     const result: PropsFromState = {
         searchContext: (state.app.core.visibleContainer == "deckEditor") ? "deck":"inventory",
         searchResults: mappedSearchResults,
+        viewMode: state.app.cardSearch.viewMode
     }
 
     return result;

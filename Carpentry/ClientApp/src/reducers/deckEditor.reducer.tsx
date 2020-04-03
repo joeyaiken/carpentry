@@ -13,7 +13,8 @@ declare interface DeckEditorState {
     //When select but no hover -> show select
     //else show stats
 
-    selectedOverviewCardName: string | null;
+    //selectedOverviewCardName: string | null;
+    selectedOverviewCardId: number | null;
     secondarySelectedCardId: number | null;
 
     //this is the filtered inventory cards that should show for a deck
@@ -33,7 +34,7 @@ export const deckEditor = (state = initialState, action: ReduxAction): DeckEdito
             const selectedCardOverview: InventoryOverviewDto = action.payload;
             return {
                 ...state,
-                selectedOverviewCardName: selectedCardOverview.name,
+                selectedOverviewCardId: selectedCardOverview.id,
             }
             
         case TOGGLE_DECK_VIEW_MODE:            
@@ -64,7 +65,7 @@ export const deckEditor = (state = initialState, action: ReduxAction): DeckEdito
 
 const initialState: DeckEditorState = {
     viewMode: "grouped",
-    selectedOverviewCardName: null,
+    selectedOverviewCardId: null,
     secondarySelectedCardId: null,
     groupBy: null,
     sortBy: null, 

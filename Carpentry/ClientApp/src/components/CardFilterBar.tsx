@@ -16,6 +16,18 @@ export interface CardFilterBarProps{
 export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
     return(
         <Box className="flex-section flex-row">
+            {   //Text filter
+                props.visibleFilters.text &&
+                <Box className="flex-section side-padded">
+                    <TextField
+                        name="text"
+                        className="stretch"
+                        label="Text"
+                        value={props.searchFilter.text}
+                        onChange={props.handleFilterChange}
+                        margin="normal"/>
+                </Box>
+            }
             {   //SET filter
                 props.visibleFilters.set &&
                 <Box className="flex-section side-padded">
@@ -116,18 +128,6 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
                         margin="normal" >
                         { props.filterOptions.rarities.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
                     </TextField>
-                </Box>
-            }
-            {   //Text filter
-                props.visibleFilters.text &&
-                <Box className="flex-section side-padded">
-                    <TextField
-                        name="text"
-                        className="stretch"
-                        label="Text"
-                        value={props.searchFilter.text}
-                        onChange={props.handleFilterChange}
-                        margin="normal"/>
                 </Box>
             }
             {   //NAME filter - Web only

@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
-import { deckCardRequestAlternateVersions, cardMenuButtonClick, requestDeleteDeckCard } from '../actions/deckEditor.actions'
+import { deckCardRequestAlternateVersions, cardMenuButtonClick, requestDeleteDeckCard, requestUpdateDeckCardStatus } from '../actions/deckEditor.actions'
 
 import { AppState } from '../reducers'
 
@@ -45,7 +45,9 @@ class DeckEditorCardDetail extends React.Component<DeckEditorCardDetailProps> {
         this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", event.currentTarget));
     }
 
-    handleCardMenuSelected(name: string){
+    handleCardMenuSelected(name: DeckEditorCardMenuOption){
+        console.log('card anchor');
+        console.log(this.props.cardMenuAnchor);
         switch (name){
             case "search":
                 if(this.props.cardMenuAnchor != null){
@@ -60,6 +62,21 @@ class DeckEditorCardDetail extends React.Component<DeckEditorCardDetailProps> {
                         }
                     }
                     break;
+            case "sideboard":
+                if(this.props.cardMenuAnchor != null){
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "sideboard"));
+                }
+                break;
+            case "mainboard":
+                if(this.props.cardMenuAnchor != null){
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "mainboard"));
+                }
+                break;
+            case "commander":
+                if(this.props.cardMenuAnchor != null){
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "commander"));
+                }
+                break;
         }
     }
 
@@ -74,10 +91,9 @@ class DeckEditorCardDetail extends React.Component<DeckEditorCardDetailProps> {
                 <DeckCardDetail 
                     selectedCard={this.props.selectedCard} 
                     inventoryCards={this.props.selectedInventoryCards} 
-                    cardMenuAnchor={null}
                     onMenuClick={this.handleCardMenuClick}
                     onMenuClose={this.handleCardMenuClosed}
-                    onMenuSelect={this.handleCardMenuSelected}
+                    // onMenuSelect={this.handleCardMenuSelected}
                     />
             </React.Fragment>
         )
@@ -90,8 +106,8 @@ class DeckEditorCardDetail extends React.Component<DeckEditorCardDetailProps> {
 // }
 
 function getSelectedCardOverview(state: AppState): InventoryOverviewDto | null {
-    if(state.app.deckEditor.selectedOverviewCardName){
-        return state.data.deckDetail.cardOverviewsByName[state.app.deckEditor.selectedOverviewCardName];
+    if(state.app.deckEditor.selectedOverviewCardId){
+        return state.data.deckDetail.cardOverviewsById[state.app.deckEditor.selectedOverviewCardId];
     }
     return null;
 }

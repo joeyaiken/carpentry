@@ -28,7 +28,12 @@ declare type AppContainerEnum = 'deckEditor' | 'inventory' | 'buyList' | 'cardSe
 
 
 declare type AppBarButtonType = 'add' | 'filter' | 'menu';
+
+declare type CardSearchViewMode = 'grid' | 'list';
+
 declare type DeckEditorViewMode = 'grid' | 'list' | 'grouped';
+declare type DeckEditorCardMenuOption = "commander" | "sideboard" | "mainboard" | "inventory" | "delete" | "search";
+
 declare type FilterPropOptions = 'inventoryFilterProps' | 'cardSearchFilterProps';
 
 declare type MenuAnchorOptions = 'deckListMenuAnchor' | 'deckEditorMenuAnchor';
@@ -56,7 +61,7 @@ declare interface DeckViewOptions {
 //This represents grouped card names
 declare interface NamedCardGroup {
     name: string;
-    cardNames: string[];
+    cardOverviewIds: number[];
 }
 //This represents actual grouped card overviews
 declare interface CardOverviewGroup {
@@ -73,6 +78,7 @@ declare interface CardGroup {
 declare interface PendingCardsDto {
     // data: MagicCard;
     multiverseId: number;
+    name: string;
     cards: InventoryCard[];
 }
 

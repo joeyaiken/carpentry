@@ -124,7 +124,7 @@ namespace Carpentry.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> UpdateCard(DeckCardDto card)
+        public async Task<ActionResult> UpdateCard([FromBody] DeckCardDto card)
         {
             try
             {

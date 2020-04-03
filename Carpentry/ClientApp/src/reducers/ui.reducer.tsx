@@ -1,10 +1,11 @@
 import { FILTER_VALUE_CHANGED, MENU_BUTTON_CLICKED, MENU_OPTION_SELECTED } from '../actions/ui.actions';
 
 import { 
-    CARD_SEARCH_SEARCH_METHOD_CHANGED,
+    CARD_SEARCH_SEARCH_METHOD_CHANGED, API_DATA_RECEIVED,
 } from '../actions/index.actions';
-import { OPEN_NEW_DECK_MODAL, CANCLE_NEW_DECK, NEW_DECK_FIELD_CHANGE } from '../actions/core.actions';
+import { OPEN_NEW_DECK_MODAL, CANCLE_NEW_DECK, NEW_DECK_FIELD_CHANGE, APP_BAR_ADD_CLICKED } from '../actions/core.actions';
 import { CARD_MENU_BUTTON_CLICK, DECK_CARD_REQUEST_ALTERNATE_VERSIONS, OPEN_DECK_PROPS_MODAL } from '../actions/deckEditor.actions';
+import { inventoryDetail } from './inventoryDetail.reducer';
 
 declare interface uiState {
     //filters
@@ -53,6 +54,44 @@ declare interface uiState {
     // isNewDeckModalOpen: boolean; //Should be removed
 }
 
+const apiDataReceived = (state: uiState, action: ReduxAction): uiState => {
+    const { scope, data } = action.payload;
+
+    // switch(scope as ApiScopeOption){
+    //     case "inventoryDetail":
+
+    // }
+    if (scope as ApiScopeOption === "inventoryDetail"){
+        const newState: uiState = {
+            ...state,
+            isInventoryDetailModalOpen: Boolean(data),
+        };
+        return newState;
+    }
+    else if (scope as ApiScopeOption === "deckDetail"){
+        const newState: uiState = {
+            ...state,
+            deckPropsModalOpen: false,
+        };
+        return newState;
+    } else return (state);
+
+    // if(scope as ApiScopeOption !== "deckDetail") return (state);
+    // // if(!data){
+    // //     return {
+    // //         ...state,
+    // //         isInventoryDetailModalOpen: false,
+    // //     }
+    // // }
+    // console.log('closing deck props modal')
+    // const newState: uiState = {
+    //     ...state,
+    //     isInventoryDetailModalOpen: Boolean(data),
+    //     deckPropsModalOpen: false,
+    // };
+    // return newState;
+}
+
 const filterValueChanged = (state: uiState, action: ReduxAction): uiState => {
     const { type, filter, value } = action.payload;
     const existingFilter = state[type];
@@ -98,6 +137,9 @@ const resetCardSearchFilterProps = (state: uiState, action: ReduxAction): uiStat
 
 export const ui = (state = initialState, action: ReduxAction): uiState => {
     switch(action.type){
+        case API_DATA_RECEIVED:
+            return apiDataReceived(state, action);
+
         case FILTER_VALUE_CHANGED: 
             return filterValueChanged(state, action);
             
@@ -146,10 +188,35 @@ export const ui = (state = initialState, action: ReduxAction): uiState => {
             }
 
         case OPEN_DECK_PROPS_MODAL:
+            console.log('opening deck props modal')
             return {
                 ...state,
                 deckPropsModalOpen: true,
             }
+
+        case APP_BAR_ADD_CLICKED:
+            //under certain conditions, method should be set to Inventory
+            //FWIW something seems off with this approach, I can't reference state, I need to rely on a payload
+
+            const filters: FilterDescriptor[] | undefined = action.payload;
+            // let searchMethod: "set" | "web" | "inventory" = "set";
+            // console.log('app bar add click - card search');
+            // console.log(action.payload);
+            if(filters && filters.length > 0){
+                const colorFilters = filters.find(f => f.name === "Colors");
+                const formatFilter = filters.find(f => f.name === "Format");
+                return {
+                    ...state,
+                    cardSearchFilterProps: {
+                        ...state.cardSearchFilterProps,
+                        colorIdentity: colorFilters ? colorFilters.value : [],
+                        format: formatFilter ? formatFilter.value : '',
+                    }
+                }
+
+            }
+            else return (state);
+            
 
         default:
             return(state)
@@ -172,9 +239,9 @@ function initialCardSearchFilterProps(): CardFilterProps {
     return {
         set: '',
         colorIdentity: [],
-        rarity: ['mythic','rare','uncommon','common'], //
+        rarity: [], //['mythic','rare','uncommon','common'], //
         type: '',
-        exclusiveColorFilters: true,
+        exclusiveColorFilters: false,
         multiColorOnly: false,
         cardName: '',
         exclusiveName: false,
@@ -187,11 +254,11 @@ function initialCardSearchFilterProps(): CardFilterProps {
 
 function mockFilterProps(): CardFilterProps {
     return{
-        set: 'eld',
+        set: '',
         colorIdentity: ['R'],
-        rarity: ['uncommon','common'], //
-        type: 'Creature',
-        exclusiveColorFilters: true,
+        rarity: [],//['uncommon','common'], //
+        type: '',//'Creature',
+        exclusiveColorFilters: false,
         multiColorOnly: false,
         cardName: '',
         exclusiveName: false,

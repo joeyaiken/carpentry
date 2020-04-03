@@ -36,7 +36,13 @@ const apiDataReceived = (state: InventoryDetailState, action: ReduxAction): Inve
     const { scope, data } = action.payload;
     if(scope as ApiScopeOption !== "inventoryDetail") return (state);
 
-    const detailResult: InventoryDetailDto = data;
+    const detailResult: InventoryDetailDto | null = data;
+
+    if(detailResult == null){
+        return {
+            ...initialState,
+        }
+    }
 
     let inventoryCardsById = {}
     detailResult.inventoryCards.forEach(invCard => inventoryCardsById[invCard.id] = invCard);

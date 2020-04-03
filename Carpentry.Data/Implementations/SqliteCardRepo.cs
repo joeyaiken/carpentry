@@ -217,9 +217,15 @@ namespace Carpentry.Data.Implementations
 
             await existingVariants.ForEachAsync(v =>
             {
+
                 string variantName = v.Type.Name;
-                v.Price = scryfallCard.Prices[variantName];
-                v.PriceFoil = scryfallCard.Prices[$"{variantName}_foil"];
+
+                if(scryfallCard.Prices.ContainsKey(variantName))
+                    v.Price = scryfallCard.Prices[variantName];
+
+                if (scryfallCard.Prices.ContainsKey($"{variantName}_foil"))
+                    v.PriceFoil = scryfallCard.Prices[$"{variantName}_foil"];
+
             });
 
             _cardContext.CardVariants.UpdateRange(existingVariants);

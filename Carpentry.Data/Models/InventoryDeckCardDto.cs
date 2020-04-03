@@ -16,5 +16,8 @@ namespace Carpentry.Data.Models
         
         [JsonProperty("inventoryCardId")]
         public int InventoryCardId { get; set; }
+
+        [JsonProperty("category")]
+        public string DeckCardCategory { get; set; }
     }
 }

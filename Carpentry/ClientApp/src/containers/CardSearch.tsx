@@ -5,6 +5,7 @@ import { AppState } from '../reducers';
 import { 
     cardSearchSearchMethodChanged,
     cardSearchClearPendingCards,
+    toggleCardSearchViewMode,
 } from '../actions/cardSearch.actions';
 
 import CardSearchPendingCards from './CardSearchPendingCards'
@@ -39,6 +40,7 @@ class CardSearch extends React.Component<CardSearchProps>{
         this.handleSaveClick = this.handleSaveClick.bind(this);
         this.handleCancelClick = this.handleCancelClick.bind(this);
         this.handleSearchMethodTabClick = this.handleSearchMethodTabClick.bind(this);
+        this.handleToggleViewClick = this.handleToggleViewClick.bind(this);
     }
 
     handleSaveClick(){
@@ -51,6 +53,10 @@ class CardSearch extends React.Component<CardSearchProps>{
 
     handleSearchMethodTabClick(name: string): void {
         this.props.dispatch(cardSearchSearchMethodChanged(name));
+    }
+
+    handleToggleViewClick(): void {
+        this.props.dispatch(toggleCardSearchViewMode());
     }
 
     render() {
@@ -68,6 +74,9 @@ class CardSearch extends React.Component<CardSearchProps>{
                             <Tab value="web" label="Web" />
                             <Tab value="inventory" label="Inventory" />
                         </Tabs>
+                        <Button onClick={this.handleToggleViewClick} color="primary" variant="contained">
+                            Toggle View
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 {/* EndRegion - component app bar */}

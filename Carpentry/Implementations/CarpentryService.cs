@@ -340,6 +340,9 @@ namespace Carpentry.Implementations
             return deckList;
         }
 
+
+        //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
+        //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
         public async Task<DeckDto> GetDeckDetail(int deckId)
         {
             //Deck Props
@@ -361,7 +364,10 @@ namespace Carpentry.Implementations
                     DeckCardCategory = (x.CategoryId != null) ? x.Category.Name : null,
                     x.InventoryCard.Card,
                     x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
-                })
+                });
+
+            //var rawOverviews = cardOverviewsQuery.ToList();
+
             //var cardOverviewsQuery = _cardRepo.QueryInventoryCardsForDeck(deckId)
             //    .Select(x => new {
             //        x.Card,
@@ -369,18 +375,24 @@ namespace Carpentry.Implementations
 
 
             //    })
-                .GroupBy(x => x.Card.Name)
+            var cardOverviewQueryResult = cardOverviewsQuery
+                .GroupBy(x => new
+                {
+                    x.Card.Name,
+                    x.DeckCardCategory
+                })
                 .Select(x => new
                 {
-                    Name = x.Key,
+                    Name = x.Key.Name,
                     Item = x.OrderByDescending(c => c.Card.Id).FirstOrDefault(),
                     Count = x.Count(),
                 }).ToList();
 
 //#error this isnt properly mapping MultiverseId, trying to add it from github
 //I was wrong, this isn't supposed to include MID because it's deck cards grouped by NAME
-            var overviewQueryResult = cardOverviewsQuery.Select(x => new InventoryOverviewDto()
+            var overviewQueryResult = cardOverviewQueryResult.Select((x, i) => new InventoryOverviewDto()
             {
+                Id = i + 1,
                 //MultiverseId = x.Item.MultiverseId,
                 Cost = x.Item.Card.ManaCost,
                 Name = x.Name,
@@ -405,6 +417,13 @@ namespace Carpentry.Implementations
                     IsFoil = x.IsFoil,
                     VariantType = x.VariantType.Name,
                     Name = x.Card.Name,
+                    DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCardDto()
+                    {
+                        DeckId = deckCard.DeckId,
+                        Id = deckCard.Id,
+                        InventoryCardId = x.Id,
+                        DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : GetCardTypeGroup(x.Card.Type),
+                    }).ToList(),
                 }).ToList();
 
             result.CardDetails = cardDetails;
@@ -668,7 +687,7 @@ namespace Carpentry.Implementations
         {
             IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryScryfallByName(filters.Name, filters.Exclusive);
 
-            List<ScryfallMagicCard> result = await query.ToListAsync();
+            List<ScryfallMagicCard> result = query.ToList();
 
             return result;
         }

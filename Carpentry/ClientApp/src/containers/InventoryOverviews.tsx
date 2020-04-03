@@ -23,6 +23,7 @@ class Inventory extends React.Component<InventoryProps>{
     }
 
     handleCardDetailSelected(card: string | null){
+        console.log(`card selected: ${card}`);
         this.props.dispatch(requestInventoryDetail(card));
     }
 

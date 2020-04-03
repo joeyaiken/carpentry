@@ -37,6 +37,8 @@ interface PropsFromState {
 
     newDeckDto: DeckProperties;
     isNewDeckModalOpen: boolean;
+
+    filtersToDefault: FilterDescriptor[];
 }
 
 type AppProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -60,26 +62,44 @@ class App extends React.Component<AppProps>{
 
     componentDidMount() {
         //IDK what exactly would be the right time to call off 
-        // console.log('AUTOMATICALLY REDIRECTING TO DECK EDITOR, ID 36');
-        // this.props.dispatch(requestDeckDetail(36));
-        console.log('AUTOMATICALLY REDIRECTING TO INVENTORY');
+        
+        // console.log('AUTOMATICALLY REDIRECTING TO DECK EDITOR, ID 27');
+        // this.props.dispatch(requestDeckDetail(27));
+
+        // console.log('AUTOMATICALLY REDIRECTING TO INVENTORY');
         //39 == snowball
         //36 == Dino EDH
-
         // console.log('AUTOMATICALLY REDIRECTING TO INVENTORY');
         // this.props.dispatch(navigate('inventory'));
     }
 
     handleAppBarButtonClicked(type: AppBarButtonType): void {
-        console.log('handleAppBarButtonClicked - CLICK');
+        // console.log('handleAppBarButtonClicked - CLICK');
 
         switch(type){
             case "menu":
-                console.log('menu click');
+                // console.log('menu click');
                 this.props.dispatch(navigate(null));
                 break;
             case "add":
-                this.props.dispatch(appBarAddClicked())
+                // let filtersToDefault: FilterDescriptor[] = [];
+                
+                // //is a deck selected?
+                // const deck_is_selected = false;
+
+                // //what's the format & color ID?
+                // //CID can be from basic lands for now, eventually should come from Deck Stats
+
+                // if(deck_is_selected){
+                //     //filtersToDefault.push("Inventory tab","color filter","format filter")
+                //     filtersToDefault.push(
+                //         { name: "Colors", value: []},
+                //         { name: "Format", value: ""},
+                //         { name: "SearchMethod", value: "inventory"}
+                //     );
+                // }
+                this.props.dispatch(appBarAddClicked(this.props.filtersToDefault))
+
                 break;
 
             case "filter":
@@ -194,13 +214,34 @@ function mapStateToProps(state: AppState): PropsFromState {
     // console.log(state.core.availableDecks);
     // var something = state.core.visibleContainer;
     
+
+    let parsedFilters: FilterDescriptor[] = [];
+
+    const { deckId, deckProps } = state.data.deckDetail;
+
+    if(deckId > 0 && deckProps){
+        let colorIDs: string[] = [];
+        if(deckProps.basicW) colorIDs.push("W");
+        if(deckProps.basicU) colorIDs.push("U");
+        if(deckProps.basicB) colorIDs.push("B");
+        if(deckProps.basicR) colorIDs.push("R");
+        if(deckProps.basicG) colorIDs.push("G");
+        
+        parsedFilters.push(
+            { name: "Colors", value: colorIDs},
+            { name: "Format", value: deckProps.format},
+            { name: "SearchMethod", value: "inventory"}
+        );
+    }
+
     //modal is open if visibleContainer == newDeck
     const result: PropsFromState = {
         isCardSearchShowing: state.app.core.isCardSearchShowing,
         // visibleContainer: 'inventory',
         visibleContainerEnum: state.app.core.visibleContainer,
         newDeckDto: state.ui.newDeckDto,
-        isNewDeckModalOpen: (state.app.core.visibleContainer === 'newDeck')
+        isNewDeckModalOpen: (state.app.core.visibleContainer === 'newDeck'),
+        filtersToDefault: parsedFilters,
     }
     return result;
 }

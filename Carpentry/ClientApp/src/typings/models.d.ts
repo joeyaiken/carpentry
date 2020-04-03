@@ -23,6 +23,7 @@ declare interface DeckCard {
 
 
 interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
+    id: number;
     multiverseId: number;
     name: string;
     type: string;
@@ -118,7 +119,7 @@ declare interface InventoryCard {
     isFoil: boolean;
     variantName: string;
     statusId: number; //normal == 1, buylist == 2, sellList == 3
-    deckCards: InventoryDeckCardDto[];
+    deckCards: InventoryDeckCardDto[];     
 }
 
 declare interface InventoryDeckCardDto {
@@ -126,6 +127,7 @@ declare interface InventoryDeckCardDto {
     deckId: number;
     deckName: string;
     inventoryCardId: number;
+    category: string;
 }
 
 declare interface Card {
@@ -182,7 +184,7 @@ declare interface DeckProperties {
 
 declare interface FilterDescriptor {
     name: string;
-    value: string;
+    value: any;
 }
 
 declare interface MagicCardDto {

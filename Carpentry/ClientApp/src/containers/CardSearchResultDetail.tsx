@@ -39,7 +39,7 @@ interface SelectedCardDetailSectionProps {
     selectedCard: MagicCard;
     pendingCards?: PendingCardsDto;
     selectedCardDetail: InventoryDetailDto | null;
-    handleAddPendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
+    handleAddPendingCard: (data: MagicCard, isFoil: boolean, variant: string) => void;
     handleRemovePendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
     handleAddInventoryCard?: (inventoryCard: InventoryCard) => void;
     handleAddNewCard?: (multiverseId: number, isFoil: boolean, variant: string) => void;
@@ -84,14 +84,14 @@ function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element
                                     <Typography>Normal ({countNormal})</Typography>
                                     <Box className="flex-row">
                                         <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.multiverseId, false, id)} } >-</Button>
-                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard.multiverseId, false, id)} } >+</Button>
+                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, false, id)} } >+</Button>
                                     </Box>
                                 </Box>
                                 <Box className="flex-col">
                                     <Typography>Foil ({countFoil})</Typography>
                                     <Box className="flex-row">
                                         <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.multiverseId, true, id)} } >-</Button>
-                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard.multiverseId, true, id)} } >+</Button>
+                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, true, id)} } >+</Button>
                                     </Box>
                                 </Box>
                             </Box>
@@ -263,8 +263,9 @@ class CardSearch extends React.Component<CardSearchProps>{
         this.handleAddNewCardClick = this.handleAddNewCardClick.bind(this);
     }
 
-    handleAddPendingCard(multiverseId: number, isFoil: boolean, variant: string){
-        this.props.dispatch(cardSearchAddPendingCard(multiverseId, isFoil, variant));
+    //handleAddPendingCard(multiverseId: number, isFoil: boolean, variant: string){
+        handleAddPendingCard(data: MagicCard, isFoil: boolean, variant: string){
+        this.props.dispatch(cardSearchAddPendingCard(data, isFoil, variant));
     }
 
     handleRemovePendingCard(multiverseId: number, isFoil: boolean, variant: string){
@@ -306,7 +307,10 @@ class CardSearch extends React.Component<CardSearchProps>{
                 <DeckSelectedCardSection 
                     selectedCard={this.props.selectedCard}
                     pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
+                    
+                    //But decks don't support pending cards?...
                     handleAddPendingCard={this.handleAddPendingCard}
+                    
                     handleRemovePendingCard={this.handleRemovePendingCard} 
                     selectedCardDetail={this.props.selectedCardDetail}
                     handleAddInventoryCard={this.handleAddExistingCardClick}

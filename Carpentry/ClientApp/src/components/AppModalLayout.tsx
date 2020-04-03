@@ -6,7 +6,7 @@ import { Close } from '@material-ui/icons';
 export interface ComponentProps {
     title: string;
     children: ReactNode;
-    onSaveClick: () => void;
+    onSaveClick?: () => void;
     onCloseClick: () => void;
     onDeleteClick?: () => void;
 }
@@ -14,16 +14,18 @@ export interface ComponentProps {
 export default function AppModalLayout(props: ComponentProps): JSX.Element {
     return(
         <React.Fragment>
-            <Container maxWidth="sm">
-                <Card>
+            <Container maxWidth="sm" className="stretch">
+                <Card className="flex-col" style={{maxHeight:"95%", margin:"10px"}} >
+                    {/*  className="flex-col" */}
                     <CardHeader
+                        
                         title={props.title}
                         action={
                             <IconButton size="medium" onClick={props.onCloseClick}><Close /></IconButton>
                         }
                     />
                     <Divider/>
-                    <CardContent>
+                    <CardContent style={{overflow:"auto"}} className="flex-section flex-col">
                         {props.children}
                     </CardContent>
                     <Divider/>

@@ -1,7 +1,8 @@
 //TODO - Delete once refactored away
 import { CARD_SEARCH_SEARCH_METHOD_CHANGED } from '../actions/index.actions';
 import { CARD_SEARCH_SAVE_PENDING_CARDS, INVENTORY_ADD_COMPLETE } from '../actions/inventory.actions';
-import { CARD_SEARCH_SELECT_CARD } from '../actions/cardSearch.actions';
+import { CARD_SEARCH_SELECT_CARD, TOGGLE_CARD_SEARCH_VIEW_MODE } from '../actions/cardSearch.actions';
+import { APP_BAR_ADD_CLICKED } from '../actions/core.actions';
 
 //This is the reducer for the Card Search container / component / whatnot
 //Should be cleaned up, have old commented references removed
@@ -14,6 +15,7 @@ import { CARD_SEARCH_SELECT_CARD } from '../actions/cardSearch.actions';
 //      Going to try leaving it as part of this component for now, maybe even center it over the container instead of the whole app
 
 declare interface CardSearchState {
+    viewMode: CardSearchViewMode;
     pendingCardsSaving: boolean;
     cardSearchMethod: "set" | "web" | "inventory";
     selectedCard: MagicCard | null; //should probably be an AppState ID
@@ -53,7 +55,46 @@ export const cardSearch = (state = initialState, action: ReduxAction): CardSearc
             return {
                 ...state,
                 selectedCard: selectedCard,
-            } as CardSearchState;
+            };
+        case APP_BAR_ADD_CLICKED:
+            //under certain conditions, method should be set to Inventory
+            //FWIW something seems off with this approach, I can't reference state, I need to rely on a payload
+
+            const filters: FilterDescriptor[] | undefined = action.payload;
+
+            let searchMethod: "set" | "web" | "inventory" = "set";
+            // console.log('app bar add click - card search');
+            // console.log(action.payload);
+            if(filters && filters.length > 0){
+                const searchMethodFilter = filters.find(f => f.name === "SearchMethod");
+                if(searchMethodFilter){
+                    searchMethod = searchMethodFilter.value;
+                    console.log("set search method to "+searchMethod);
+                }
+            }
+            return {
+                ...state,
+                cardSearchMethod: searchMethod,
+                //need to populate Colors and Format, if data is provided
+            }
+            
+        case TOGGLE_CARD_SEARCH_VIEW_MODE:
+
+            let newViewMode: CardSearchViewMode = "list";
+
+            switch(state.viewMode){
+                case "list":
+                    newViewMode = "grid";
+                    break;
+                case "grid":
+                    newViewMode = "list";
+                    break;
+            }
+            
+            return {
+                ...state,
+                viewMode: newViewMode,
+            };
 
         default:
             return(state)
@@ -61,6 +102,7 @@ export const cardSearch = (state = initialState, action: ReduxAction): CardSearc
 }
 
 const initialState: CardSearchState = {
+    viewMode: "list",
     pendingCardsSaving: false,
     cardSearchMethod: "set",
     selectedCard:  null, //should probably be an AppState ID

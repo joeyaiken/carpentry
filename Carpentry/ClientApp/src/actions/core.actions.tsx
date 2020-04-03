@@ -14,8 +14,9 @@ export const appBarSectionToggle = (): ReduxAction => ({
 });
 
 export const APP_BAR_ADD_CLICKED = 'APP_BAR_ADD_CLICKED';
-export const appBarAddClicked = (): ReduxAction => ({
-    type: APP_BAR_ADD_CLICKED
+export const appBarAddClicked = (filters?: FilterDescriptor[]): ReduxAction => ({
+    type: APP_BAR_ADD_CLICKED,
+    payload: filters,
 });
 
 export const NAVIGATE = 'NAVIGATE';
