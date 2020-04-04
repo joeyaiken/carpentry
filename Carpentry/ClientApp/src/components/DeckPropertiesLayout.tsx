@@ -1,10 +1,10 @@
 //12~9 This was recently added to represent the edit screen of the deck properties modal. ATM it only creates new decks
-import React from 'react'
+import React,  { ChangeEvent } from 'react'
 import { Box, TextField, MenuItem, InputAdornment } from '@material-ui/core';
 
 export interface ComponentProps {
     deck: DeckProperties;
-    onChange: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void
+    onChange: (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
 }
 
 export default function DeckPropertiesLayout(props: ComponentProps): JSX.Element {

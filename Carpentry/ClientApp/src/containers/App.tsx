@@ -132,7 +132,7 @@ class App extends React.Component<AppProps>{
         this.props.dispatch(navigate(null));
     }
 
-    handleDeckModalChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+    handleDeckModalChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         // console.log('yah');
         // console.log(event);
         this.props.dispatch(newDeckFieldChange(event.target.name, event.target.value));

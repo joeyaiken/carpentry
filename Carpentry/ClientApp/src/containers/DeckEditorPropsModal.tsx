@@ -31,7 +31,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handleSavePropsClick = this.handleSavePropsClick.bind(this);
     }
 
-    handleModalPropsChanged(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+    handleModalPropsChanged(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         // console.log('prop change')
         // console.log(event.target.name)
         // console.log(event.target.value)

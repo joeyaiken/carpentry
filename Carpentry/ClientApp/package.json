@@ -3,33 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.2.0",
-    "@material-ui/icons": "^4.2.1",
+    "@material-ui/core": "^4.9.9",
+    "@material-ui/icons": "^4.9.1",
     "eslint-plugin-flowtype": "^2.50.3",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-react": "^7.19.0",
     "jquery": "^3.4.1",
     "mana-font": "^1.6.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-redux": "^7.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
-    "redux": "^4.0.1",
+    "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "rimraf": "^2.6.3",
-    "typescript": "^3.5.2"
+    "rimraf": "^2.7.1",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@types/node": "^12.0.10",
-    "@types/react": "^16.8.22",
-    "@types/react-dom": "^16.8.4",
-    "@types/react-redux": "^7.1.1",
+    "@types/node": "^12.12.34",
+    "@types/react": "^16.9.32",
+    "@types/react-dom": "^16.9.6",
+    "@types/react-redux": "^7.1.7",
     "@types/react-router": "^5.1.5",
     "@types/react-router-dom": "5.1.3",
     "@types/react-router-redux": "^5.0.18",
-    "cross-env": "^5.2.0"
+    "cross-env": "^5.2.1"
   },
   "eslintConfig": {
     "extends": "react-app"

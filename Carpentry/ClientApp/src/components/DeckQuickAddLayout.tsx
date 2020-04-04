@@ -9,7 +9,7 @@ export interface ComponentProps{
     deck: DeckProperties;
     onSaveClick: () => void;
     onCloseClick: () => void;
-    onChange: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void
+    onChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
 }
 
 //AKA DeckQuickAdd_Modal_Layout
