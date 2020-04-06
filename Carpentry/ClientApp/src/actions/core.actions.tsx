@@ -1,7 +1,7 @@
 // import { AppContainerEnum } from '../reducers/core.reducer';
 import Redux, { Store, Dispatch, compose, combineReducers } from 'redux';
 import { AppState } from '../reducers';
-import { api_Decks_Search, api_Decks_Get, api_Decks_Add } from './api';
+import { api_Decks_Search, api_Decks_Get, api_Decks_Add, api_Core_GetFilterOptions } from './api';
 import { apiDataRequested, apiDataReceived } from './data.actions';
 
 /**
@@ -88,3 +88,37 @@ function getDeckDetail(dispatch: Dispatch, deckId: number): any {
 
 
 
+export const requestCoreData = (): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return getCoreData(dispatch, getState());
+    }
+}
+function getCoreData(dispatch: Dispatch, state: AppState): any {
+    const dataIsLoading = state.data.isLoading.coreFilterOptions;
+    console.log('get core data ----------');
+    if(dataIsLoading) {
+        return;
+    }
+    dispatch(apiDataRequested('coreFilterOptions'));
+    // dispatch(newDeckSaving());
+    api_Core_GetFilterOptions().then((results) => {
+        dispatch(apiDataReceived('coreFilterOptions', results));
+    });
+    // api_Decks_Add(newDeck).then((results) => {
+    //     dispatch(newDeckSaveComplete());
+    // });
+}
+
+// export const CORE_DATA_REQUESTED = 'CORE_DATA_REQUESTED';
+// export const coreDataRequested = (): ReduxAction  => ({
+//     type: CORE_DATA_REQUESTED
+// });
+
+
+// export const coreDataRequested = (name: string, value: string): ReduxAction  => ({
+//     type: NEW_DECK_FIELD_CHANGE,
+//     payload: {
+//         name: name,
+//         value: value
+//     }
+// });

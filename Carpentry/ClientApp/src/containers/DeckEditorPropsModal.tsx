@@ -19,6 +19,7 @@ import AppModal from '../components/AppModal';
 interface PropsFromState {
     deckProperties: DeckProperties | null;
     deckPropsModalOpen: boolean;
+    formatFilterOptions: FilterOption[];
 }
 
 type DeckEditorProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -62,7 +63,10 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                         onCloseClick={this.handleCloseModalClick} 
                         // onDeleteClick={this.handle}
                         onSaveClick={this.handleSavePropsClick}>    
-                        <DeckPropertiesLayout onChange={(a) => this.handleModalPropsChanged(a)} deck={this.props.deckProperties} />
+                        <DeckPropertiesLayout 
+                            onChange={(a) => this.handleModalPropsChanged(a)} 
+                            deck={this.props.deckProperties}
+                            formatFilters={this.props.formatFilterOptions} />
                     </AppModal>
 
                     
@@ -77,6 +81,7 @@ function mapStateToProps(state: AppState): PropsFromState {
     const result: PropsFromState = {
         deckProperties: state.data.deckDetail.deckProps,
         deckPropsModalOpen: state.ui.deckPropsModalOpen,
+        formatFilterOptions: state.data.appFilterOptions.filterOptions.formats,
     }
 
     return result;

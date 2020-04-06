@@ -4,7 +4,8 @@ import { Box, TextField, MenuItem, InputAdornment } from '@material-ui/core';
 
 export interface ComponentProps {
     deck: DeckProperties;
-    onChange: (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
+    formatFilters: FilterOption[];
+    onChange: (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
 export default function DeckPropertiesLayout(props: ComponentProps): JSX.Element {
@@ -27,11 +28,18 @@ export default function DeckPropertiesLayout(props: ComponentProps): JSX.Element
                     name="format"
                     value={props.deck.format} 
                     onChange={props.onChange}>
-                        <MenuItem key="Standard" value="standard">Standard</MenuItem>
+                        {
+                            props.formatFilters.map(option => 
+                                <MenuItem key={option.value} value={option.value} style={{textTransform:"capitalize"}}>
+                                    {option.name}
+                                </MenuItem>
+                            )
+                        }
+                        {/* <MenuItem key="Standard" value="standard">Standard</MenuItem>
                         <MenuItem key="Modern" value="modern">Modern</MenuItem>
                         <MenuItem key="Commander" value="commander">Commander</MenuItem>
                         <MenuItem key="Pioneer" value="pioneer">Pioneer</MenuItem>
-                        <MenuItem key="Brawl" value="brawl">Brawl</MenuItem>
+                        <MenuItem key="Brawl" value="brawl">Brawl</MenuItem> */}
                     </TextField>
             </Box>
 

@@ -21,6 +21,16 @@ namespace Carpentry.Tests.TestClasses
         }
 
         [TestMethod]
+        public async Task CoreController_IsOnline_Test()
+        {
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync("api/Inventory/");
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual("Online", responseContent);
+        }
+
+        [TestMethod]
         public async Task CardsController_IsOnline_Test()
         {
             var client = _factory.CreateClient();

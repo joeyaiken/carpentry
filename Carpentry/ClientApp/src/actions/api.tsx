@@ -8,6 +8,14 @@
 //     }
 // }
 
+export async function api_Core_GetFilterOptions(): Promise<FilterOptionDto> {
+    const endpoint = `api/Core/GetFilterOptions`;
+    // const url = `${endpoint}?deckId=${deckId}`;
+    console.log(`requesting endpoint: ${endpoint}`);
+    const result = await Get(endpoint);
+    return result;
+}
+
 export async function api_Cards_SearchSet(filters: CardFilterProps): Promise<MagicCard[]>{
     const endpoint = `api/CardSearch/SearchSet`;
     const result = await Post(endpoint, filters);

@@ -21,6 +21,14 @@ declare interface DeckCard {
     // card: CardDto;SS
 }
 
+interface FilterOptionDto {
+        sets: FilterOption[];
+        types : FilterOption[];
+        formats : FilterOption[];
+        colors : FilterOption[];
+        rarities : FilterOption[];
+        statuses : FilterOption[];
+}
 
 interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
     id: number;

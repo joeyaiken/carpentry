@@ -21,7 +21,17 @@ namespace Carpentry.Controllers
             _carpentry = carpentry;
         }
 
-        [HttpPost("[action]")]
+        /// <summary>
+        /// This method just ensures the controller can start correctly (catches DI issues)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Online");
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult<FilterOptionDto>> GetFilterValues()
         {
             try
@@ -35,10 +45,41 @@ namespace Carpentry.Controllers
             }
         }
 
-        //TODO - This might be an appropriate place to make a request to do things like
-        //  Update card prices
-        //  Request a backup
-        //  Maybe request an import?
-        //      This could be a whole "import and validation" controller
+        //Backup DB
+        //should this be a POST since it could/should include filepath info?
+        [HttpGet("[action]")]
+        public async Task<ActionResult> BackupDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        //Restore DB
+        [HttpGet("[action]")]
+        public async Task<ActionResult> RestoreDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        //Get Set|Data Update Status
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetDatabaseUpdateStatus()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        //Update Set Scry Data
+        [HttpGet("[action]")]
+        public async Task<ActionResult> UpdateScryfallSet(string setCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        //Update Set Card Data
+        [HttpGet("[action]")]
+        public async Task<ActionResult> UpdateSetData(string setCode)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

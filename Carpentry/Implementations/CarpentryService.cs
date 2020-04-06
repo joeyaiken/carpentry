@@ -698,19 +698,22 @@ namespace Carpentry.Implementations
 
         public async Task<FilterOptionDto> GetAppFilterValues()
         {
+            
+            var sets = await _cardRepo.QuerySetFilters().ToListAsync();
+            var types = _cardRepo.QueryTypeFilters().ToList();
+            var formats = await _cardRepo.QueryFormatFilters().ToListAsync();
+            var manaColors = await _cardRepo.QueryManaColorFilters().ToListAsync();
+            var rarities = await _cardRepo.QueryRarityFilters().ToListAsync();
+            var statuses = await _cardRepo.QueryCardStatusFilters().ToListAsync();
+
             FilterOptionDto filterResults = new FilterOptionDto
             {
-                Sets = await _cardRepo.QuerySetFilters().ToListAsync(),
-
-                Types = await _cardRepo.QueryTypeFilters().ToListAsync(),
-
-                Formats = await _cardRepo.QueryFormatFilters().ToListAsync(),
-
-                ManaColors = await _cardRepo.QueryManaColorFilters().ToListAsync(),
-
-                Rarities = await _cardRepo.QueryRarityFilters().ToListAsync(),
-
-                Statuses = await _cardRepo.QueryCardStatusFilters().ToListAsync(),
+                Sets = sets,
+                Types = types,
+                Formats = formats,
+                ManaColors = manaColors,
+                Rarities = rarities,
+                Statuses = statuses,
             };
 
             return filterResults;

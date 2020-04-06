@@ -731,8 +731,8 @@ namespace Carpentry.Data.Implementations
 
         public IQueryable<FilterDescriptor> QuerySetFilters()
         {
-            //TODO - Can't get this sorting by release until I can make a DB schema update
             IQueryable<FilterDescriptor> query = _cardContext.Sets
+                .OrderByDescending(x => x.ReleaseDate)
                 .Select(x => new FilterDescriptor()
                 {
                     Name = x.Name,

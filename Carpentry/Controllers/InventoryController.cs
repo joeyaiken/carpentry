@@ -28,6 +28,16 @@ namespace Carpentry.Controllers
             _carpentry = carpentry;
         }
 
+        /// <summary>
+        /// This method just ensures the controller can start correctly (catches DI issues)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Online");
+        }
+
         //Add
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> Add([FromBody] InventoryCardDto dto)

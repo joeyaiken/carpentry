@@ -14,7 +14,7 @@ import '../App.css';
 // } from './actions/index.actions'
 
 import {
-    appBarAddClicked, navigate, requestDeckDetail, requestSaveNewDeck, newDeckFieldChange
+    appBarAddClicked, navigate, requestDeckDetail, requestSaveNewDeck, newDeckFieldChange, requestCoreData
 } from '../actions/core.actions';
 import { Typography, Modal } from '@material-ui/core';
 // import { typography } from '@material-ui/system';
@@ -39,6 +39,8 @@ interface PropsFromState {
     isNewDeckModalOpen: boolean;
 
     filtersToDefault: FilterDescriptor[];
+
+    formatFilterOptions: FilterOption[];
 }
 
 type AppProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -61,6 +63,12 @@ class App extends React.Component<AppProps>{
     //Should THIS be the thing that initializes shit? Instead of a reducer?
 
     componentDidMount() {
+        //I still don't know for sure where I should be initializing this...but w/e
+
+        this.props.dispatch(requestCoreData());
+
+
+
         //IDK what exactly would be the right time to call off 
         
         // console.log('AUTOMATICALLY REDIRECTING TO DECK EDITOR, ID 27');
@@ -178,7 +186,10 @@ class App extends React.Component<AppProps>{
                         onCloseClick={this.handleDeckModalClose}
                         onSaveClick={this.handleDeckModalSave}
                         title="Add New Deck">
-                        <DeckPropertiesLayout onChange={(a) => this.handleDeckModalChange(a)} deck={this.props.newDeckDto} />
+                        <DeckPropertiesLayout 
+                            onChange={(a) => this.handleDeckModalChange(a)} 
+                            deck={this.props.newDeckDto} 
+                            formatFilters={this.props.formatFilterOptions} />
                     </AppModalLayout>
                 </Modal>
                 <AppLayout 
@@ -242,6 +253,7 @@ function mapStateToProps(state: AppState): PropsFromState {
         newDeckDto: state.ui.newDeckDto,
         isNewDeckModalOpen: (state.app.core.visibleContainer === 'newDeck'),
         filtersToDefault: parsedFilters,
+        formatFilterOptions: state.data.appFilterOptions.filterOptions.formats,
     }
     return result;
 }

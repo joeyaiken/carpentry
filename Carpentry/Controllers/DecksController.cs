@@ -22,6 +22,10 @@ namespace Carpentry.Controllers
             _carpentry = carpentry;
         }
 
+        /// <summary>
+        /// This method just ensures the controller can start correctly (catches DI issues)
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Get()
         {
