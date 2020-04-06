@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, CardContent, Typography, CardHeader, CardMedia, CardActions, Button, Card } from '@material-ui/core';
+import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card } from '@material-ui/core';
 // import VisualCard from './VisualCard';
 import CardGridContainer from './CardGridContainer';
-import GridCard from './GridCard';
+// import GridCard from './GridCard';
 
 interface ComponentProps{
     cardOverviews: InventoryOverviewDto[];

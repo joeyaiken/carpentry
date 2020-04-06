@@ -102,7 +102,7 @@ function SearchResultTable(props: SearchResultTableProps): JSX.Element {
                     <TableRow>
                         <TableCell>Name</TableCell>
                         {
-                            props.searchContext == "inventory" &&
+                            props.searchContext === "inventory" &&
                             (   <>
                                     <TableCell># Pending</TableCell>
                                     <TableCell>Actions</TableCell>
@@ -110,7 +110,7 @@ function SearchResultTable(props: SearchResultTableProps): JSX.Element {
                             )
                         }
                         {
-                            props.searchContext == "deck" &&
+                            props.searchContext === "deck" &&
                             (   <>
                                     {/* <TableCell>Set</TableCell> */}
                                     <TableCell>Type</TableCell>
@@ -129,7 +129,7 @@ function SearchResultTable(props: SearchResultTableProps): JSX.Element {
                                 key={result.data.multiverseId}>
                                 <TableCell>{result.data.name}</TableCell>
                                 {
-                                        props.searchContext == "inventory" &&
+                                        props.searchContext === "inventory" &&
                                         (   <>
                                                 <TableCell>{result.count}</TableCell>
                                                 <TableCell>
@@ -143,7 +143,7 @@ function SearchResultTable(props: SearchResultTableProps): JSX.Element {
                                         )
                                     }
                                     {
-                                        props.searchContext == "deck" &&
+                                        props.searchContext === "deck" &&
                                         (   <>
                                                 {/* <TableCell>{result.data.set}</TableCell> */}
                                                 <TableCell>{result.data.type}</TableCell>
@@ -210,7 +210,7 @@ function mapStateToProps(state: AppState): PropsFromState {
     
     let mappedSearchResults: CardListItem[] = [];
 
-    if(state.app.core.visibleContainer == "deckEditor") { // && state.deckEditor.selectedDeckDto != null){
+    if(state.app.core.visibleContainer === "deckEditor") { // && state.deckEditor.selectedDeckDto != null){
 
         mappedSearchResults = selectSearchResults(state).map(card => {
 
@@ -219,7 +219,7 @@ function mapStateToProps(state: AppState): PropsFromState {
             //const cardExistsInDeck = state.data.deckDetail.cardOverviewsByName[card.name];
             const { cardOverviewsById, allCardOverviewIds } = state.data.deckDetail;
 
-            const cardExistsInDeck = Boolean(allCardOverviewIds.find(id => cardOverviewsById[id].name == card.name));
+            const cardExistsInDeck = Boolean(allCardOverviewIds.find(id => cardOverviewsById[id].name === card.name));
 
             return ({
                 data: card,
@@ -235,7 +235,7 @@ function mapStateToProps(state: AppState): PropsFromState {
     }
 
     const result: PropsFromState = {
-        searchContext: (state.app.core.visibleContainer == "deckEditor") ? "deck":"inventory",
+        searchContext: (state.app.core.visibleContainer === "deckEditor") ? "deck":"inventory",
         searchResults: mappedSearchResults,
         viewMode: state.app.cardSearch.viewMode
     }

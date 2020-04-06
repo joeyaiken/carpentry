@@ -11,7 +11,7 @@ declare interface CardSearchInventoryDetailState {
 
     //--First step in showing an inventory detail is to itterate over MagicCard (or even card variant)
     //--Then would need to show each inventory card for a given magic card
-    //      (all inventory cards where I.multiverseId == MC.multiverseId)
+    //      (all inventory cards where I.multiverseId === MC.multiverseId)
 
     //magic cards belonging to inventory cards
     cardsById: { [multiverseId: number]: MagicCard };

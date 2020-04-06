@@ -256,7 +256,7 @@ export default function CardList(props: CardListProps): JSX.Element {
 
 
     //This is for card search:
-    if(props.layout == "grid"){
+    if(props.layout === "grid"){
         return(
             <React.Fragment>
                 <Box className="flex-row-wrap">

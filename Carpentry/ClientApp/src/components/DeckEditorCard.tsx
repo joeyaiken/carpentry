@@ -66,7 +66,7 @@ export default function DeckEditorCard(props: MagicCardProps): JSX.Element {
     //     );
     // }
 
-    if(props.data.name == "Abundance"){
+    if(props.data.name === "Abundance"){
         console.log(props.data)
     }
     return(

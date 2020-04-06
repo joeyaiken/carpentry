@@ -55,8 +55,8 @@ function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element
             let countFoil = 0;
             if(props.pendingCards)
             {
-                countNormal = props.pendingCards.cards.filter(c => c.variantName == id && c.isFoil == false).length;
-                countFoil = props.pendingCards.cards.filter(c => c.variantName == id && c.isFoil == true).length;
+                countNormal = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === false).length;
+                countFoil = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === true).length;
             }
 
             //const thisPendingCard = (this.props.selectedCard) && this.props.pendingCards[this.props.selectedCard.multiverseId];
@@ -155,16 +155,16 @@ function InventoryDetailTable(props: InventoryDetailTableProps): JSX.Element {
                                     item.deckCards[0].deckName
                                 }
                                 {
-                                    item.deckCards.length == 0 &&
-                                    item.statusId == 1 &&
+                                    item.deckCards.length === 0 &&
+                                    item.statusId === 1 &&
                                     "Inventory"
                                 }
                                 {
-                                    item.statusId == 2 &&
+                                    item.statusId === 2 &&
                                     "Buy List"
                                 }
                                 {
-                                    item.statusId == 2 &&
+                                    item.statusId === 2 &&
                                     "Sell List"
                                 }
                             </TableCell>
@@ -294,7 +294,7 @@ class CardSearch extends React.Component<CardSearchProps>{
         return (
         <React.Fragment>
             {
-                this.props.selectedCard && this.props.searchContext == "inventory" &&
+                this.props.selectedCard && this.props.searchContext === "inventory" &&
                 <SelectedCardSection 
                     selectedCard={this.props.selectedCard}
                     pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
@@ -303,7 +303,7 @@ class CardSearch extends React.Component<CardSearchProps>{
                     selectedCardDetail={null} />
             }
             {
-                this.props.selectedCard && this.props.searchContext == "deck" &&
+                this.props.selectedCard && this.props.searchContext === "deck" &&
                 <DeckSelectedCardSection 
                     selectedCard={this.props.selectedCard}
                     pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
@@ -334,7 +334,7 @@ function selectInventoryDetail(state: AppState): InventoryDetailDto {
 function mapStateToProps(state: AppState): PropsFromState {
    
     const result: PropsFromState = {
-        searchContext: (state.app.core.visibleContainer == "deckEditor") ? "deck":"inventory",
+        searchContext: (state.app.core.visibleContainer === "deckEditor") ? "deck":"inventory",
         pendingCards: state.data.cardSearchPendingCards.pendingCards,
         selectedCard: state.app.cardSearch.selectedCard,
         selectedCardDetail: selectInventoryDetail(state),

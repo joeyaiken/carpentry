@@ -5,7 +5,7 @@ import {
     requestInventoryDetail,
 } from '../actions/inventory.actions'
 import AppModal from '../components/AppModal';
-import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, TableBody, Card, Typography } from '@material-ui/core';
+import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, TableBody, Card } from '@material-ui/core';
 
 interface PropsFromState { 
     selectedDetailItem: InventoryDetailDto;
@@ -89,7 +89,7 @@ function InventoryDetailLayout(props: InventoryDetailProps): JSX.Element {
         // console.log(`card ${card.set}`)
         return {
             card: card,
-            inventoryCards: props.selectedDetailItem.inventoryCards.filter(inventoryCard => inventoryCard.set == card.set),
+            inventoryCards: props.selectedDetailItem.inventoryCards.filter(inventoryCard => inventoryCard.set === card.set),
         } as InventoryDetailCardProps;
     });
 
@@ -205,8 +205,8 @@ function InventoryDetailLayout(props: InventoryDetailProps): JSX.Element {
                         </Typography>
                         <Typography>
                             {
-                                props.selectedDetailItem.inventoryCards.filter(item => item.multiverseId == cardInstance.multiverseId).length
-                                //this.props.selectedDetailItem.items.filter(item => item.multiverseId == cardInstance.multiverseId).length
+                                props.selectedDetailItem.inventoryCards.filter(item => item.multiverseId === cardInstance.multiverseId).length
+                                //this.props.selectedDetailItem.items.filter(item => item.multiverseId === cardInstance.multiverseId).length
                             } Total
                         </Typography>
                     </Box>

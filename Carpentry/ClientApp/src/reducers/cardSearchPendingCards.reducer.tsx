@@ -3,7 +3,7 @@ import { INVENTORY_ADD_COMPLETE } from '../actions/inventory.actions';
 
 declare interface cardSearchPendingCardsState {
 
-    pendingCards: { [key:number]: PendingCardsDto } //key == id, should this also have a list to track all keys? 
+    pendingCards: { [key:number]: PendingCardsDto } //key === id, should this also have a list to track all keys? 
     //wait ID or MID ?
 }
 
@@ -76,7 +76,7 @@ const cardSearchRemovePendingCard = (state = initialState, action: ReduxAction):
 
     if(objToRemoveFrom){
 
-        let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.variantName == variantToRemove && x.isFoil == removeFoilCard);
+        let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.variantName === variantToRemove && x.isFoil === removeFoilCard);
 
         if(thisInvCard >= 0){
             objToRemoveFrom.cards.splice(thisInvCard,1);
@@ -87,7 +87,7 @@ const cardSearchRemovePendingCard = (state = initialState, action: ReduxAction):
             [midToRemove]: objToRemoveFrom
         }
         //if this pending cards object has 0 items, it should be deleted from the dictionary
-        if(objToRemoveFrom.cards.length == 0){
+        if(objToRemoveFrom.cards.length === 0){
             delete pendingCardsAfterRemoval[midToRemove];
         }
         const newState: cardSearchPendingCardsState = {

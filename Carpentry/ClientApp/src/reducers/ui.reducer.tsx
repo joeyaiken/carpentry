@@ -5,7 +5,7 @@ import {
 } from '../actions/index.actions';
 import { OPEN_NEW_DECK_MODAL, CANCLE_NEW_DECK, NEW_DECK_FIELD_CHANGE, APP_BAR_ADD_CLICKED } from '../actions/core.actions';
 import { CARD_MENU_BUTTON_CLICK, DECK_CARD_REQUEST_ALTERNATE_VERSIONS, OPEN_DECK_PROPS_MODAL } from '../actions/deckEditor.actions';
-import { inventoryDetail } from './inventoryDetail.reducer';
+// import { inventoryDetail } from './inventoryDetail.reducer';
 
 declare interface uiState {
     //filters

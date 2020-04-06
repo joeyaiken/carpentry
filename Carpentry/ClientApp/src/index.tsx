@@ -14,7 +14,7 @@ import * as serviceWorker from './serviceWorker';
 // import './index.css';
 // import '../node_modules/material-icons/iconfont/material-icons.css';
 
-{/* <link href="css/mana.min.css" rel="stylesheet" type="text/css" /> */}
+/* <link href="css/mana.min.css" rel="stylesheet" type="text/css" /> */
 
 //Eventually this should call something that initializes the store as well...
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));

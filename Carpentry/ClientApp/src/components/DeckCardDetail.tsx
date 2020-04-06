@@ -1,4 +1,4 @@
-import {  Paper, Table, TableHead, TableRow, TableCell, TableBody, Box, CardActions, Button, Card, CardHeader, CardMedia, CardContent, Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
+import {  Table, TableHead, TableRow, TableCell, TableBody, Box, CardActions, Button, Card, CardHeader, CardMedia, CardContent, Typography, IconButton } from '@material-ui/core';
 import React from 'react';
 import { MoreVert } from '@material-ui/icons';
 
@@ -18,7 +18,7 @@ interface ComponentProps{
 }
 
 export default function DeckCardDetail(props: ComponentProps): JSX.Element {
-    if(props.selectedCard == null){
+    if(props.selectedCard === null){
         return (
             <Box className="static-section">
                 <Card>

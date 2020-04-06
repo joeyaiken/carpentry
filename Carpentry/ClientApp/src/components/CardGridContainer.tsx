@@ -19,7 +19,7 @@ import React, { ReactNode } from 'react';
 
 //These will all need to eventually use more-standardised props
 
-import { Typography, Box, Card, CardMedia, CardHeader, CardContent, IconButton, Menu, MenuItem, CardActions, Button } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 
 interface CardGridContainerProps {
     //   children: ReactNode;
@@ -41,7 +41,7 @@ export default function CardGridContainer(props: CardGridContainerProps): JSX.El
 
 
     //This is for card search:
-    if(props.layout == "grid"){
+    if(props.layout === "grid"){
         return(
             <React.Fragment>
                 <Box className="flex-row-wrap">

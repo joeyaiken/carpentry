@@ -49,7 +49,7 @@ function selectGroupedDeckCards(overviewsById: { [id: number]: InventoryOverview
     
     cardGroups.forEach(groupName => {
 
-        const cardsInGroup = allOverviewIds.filter(id => overviewsById[id].description == groupName);
+        const cardsInGroup = allOverviewIds.filter(id => overviewsById[id].description === groupName);
 
         if(cardsInGroup.length > 0){
             result.push({
@@ -106,15 +106,15 @@ export const deckDetail = (state = initialState, action: ReduxAction): DeckDetai
         case DECK_EDITOR_CARD_SELECTED:
             const selectedCardOverview: InventoryOverviewDto = action.payload;
             // let visibleCards: InventoryCard[] = [];
-            // visibleCards = state.selectedDeckDto.cardDetails.filter((card) => (card.name == selectedCardOverview.name));
+            // visibleCards = state.selectedDeckDto.cardDetails.filter((card) => (card.name === selectedCardOverview.name));
 
             const visibleCardIds = state.allCardDetailIds.filter(id => 
-                state.cardDetailsById[id].name == selectedCardOverview.name
-                && selectedCardOverview.description == state.cardDetailsById[id].deckCards[0].category
+                state.cardDetailsById[id].name === selectedCardOverview.name
+                && selectedCardOverview.description === state.cardDetailsById[id].deckCards[0].category
                 //&& state.cardDetailsById[id].
                 );
             // console.log('visible cards!');
-            const visibleCards = visibleCardIds.map(id => state.cardDetailsById[id]);
+            // const visibleCards = visibleCardIds.map(id => state.cardDetailsById[id]);
             // console.log(state)
             // console.log(visibleCards);
             return {

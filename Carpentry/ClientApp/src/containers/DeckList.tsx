@@ -1,8 +1,8 @@
 //This would be the Deck List CONTAINER
 //V1 was a literal list of buttons
 //v2 should be a table instead
-import { connect, MapStateToProps, DispatchProp } from 'react-redux'
-import React, { Component, SyntheticEvent } from 'react'
+import { connect, DispatchProp } from 'react-redux'
+import React from 'react'
 import {
     requestDeckList, 
     // deckListMenuButtonClick, 
@@ -20,7 +20,7 @@ import { requestDeckDetail } from '../actions/core.actions';
 import { AppState } from '../reducers'
 
 import DeckListLayout from '../components/DeckListLayout';
-import { deckList } from '../reducers/deckList.reducer';
+// import { deckList } from '../reducers/deckList.reducer';
 
 interface PropsFromState {
     decks: DeckProperties[];

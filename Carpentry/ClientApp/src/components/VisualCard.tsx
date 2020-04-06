@@ -1,7 +1,7 @@
 //table of deck cards
 import React, { ReactNode } from 'react';
 
-import { Box, CardHeader, CardMedia, Card } from '@material-ui/core';
+import { CardHeader, CardMedia, Card } from '@material-ui/core';
 
 interface ComponentProps{
     cardOverview: InventoryOverviewDto;

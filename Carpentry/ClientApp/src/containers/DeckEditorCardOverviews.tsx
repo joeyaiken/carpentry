@@ -110,7 +110,7 @@ function GroupedDeckCardList(props: ComponentProps): JSX.Element {
 function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
     const { allCardOverviewIds, cardOverviewsById, cardGroups } = state.data.deckDetail;
 
-    if(state.app.deckEditor.viewMode == "grouped"){
+    if(state.app.deckEditor.viewMode === "grouped"){
 
         const result = cardGroups.map(group => {
             const groupResult: CardOverviewGroup = {

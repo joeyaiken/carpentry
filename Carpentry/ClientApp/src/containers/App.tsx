@@ -67,8 +67,8 @@ class App extends React.Component<AppProps>{
         // this.props.dispatch(requestDeckDetail(27));
 
         // console.log('AUTOMATICALLY REDIRECTING TO INVENTORY');
-        //39 == snowball
-        //36 == Dino EDH
+        //39 === snowball
+        //36 === Dino EDH
         // console.log('AUTOMATICALLY REDIRECTING TO INVENTORY');
         // this.props.dispatch(navigate('inventory'));
     }
@@ -234,7 +234,7 @@ function mapStateToProps(state: AppState): PropsFromState {
         );
     }
 
-    //modal is open if visibleContainer == newDeck
+    //modal is open if visibleContainer === newDeck
     const result: PropsFromState = {
         isCardSearchShowing: state.app.core.isCardSearchShowing,
         // visibleContainer: 'inventory',

@@ -14,9 +14,9 @@ interface PropsFromState {
 type DeckEditorProps = PropsFromState & DispatchProp<ReduxAction>;
 
 class DeckEditor extends React.Component<DeckEditorProps> {
-    constructor(props: DeckEditorProps) {
-        super(props);
-    }
+    // constructor(props: DeckEditorProps) {
+    //     super(props);
+    // }
 
     render() {
         return(

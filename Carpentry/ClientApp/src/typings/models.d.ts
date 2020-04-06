@@ -118,7 +118,7 @@ declare interface InventoryCard {
     set: string;
     isFoil: boolean;
     variantName: string;
-    statusId: number; //normal == 1, buylist == 2, sellList == 3
+    statusId: number; //normal === 1, buylist === 2, sellList === 3
     deckCards: InventoryDeckCardDto[];     
 }
 

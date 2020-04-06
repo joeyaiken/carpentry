@@ -50,8 +50,8 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     render() {
-        if(this.props.deckProperties == null){
-            return(<Box><Typography>ERROR - Deck properties == null, cannot render</Typography></Box>)
+        if(this.props.deckProperties === null){
+            return(<Box><Typography>ERROR - Deck properties === null, cannot render</Typography></Box>)
         } else {
             return(
                 <React.Fragment>

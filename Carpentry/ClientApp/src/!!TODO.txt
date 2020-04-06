@@ -4,7 +4,7 @@ Deck Editor - in order  to show main/sideboard, I think I need to update the dat
 
 Instead of inventory DTOs, I should have a DeckCardDto
 	This should store its own category, maybe
-	OR - "card overview" natural key == Name + Category
+	OR - "card overview" natural key === Name + Category
 	
 	Either way, right now, if I have 1 card in mainboard and 1 in sideboard, all show in sideboard
 	
