@@ -1,4 +1,5 @@
 ﻿using Carpentry.Data.Models;
+using Carpentry.Data.QueryParameters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;

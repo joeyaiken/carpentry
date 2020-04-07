@@ -1,5 +1,6 @@
 ﻿using Carpentry.Data.DataContext;
 using Carpentry.Data.Models;
+using Carpentry.Data.QueryParameters;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

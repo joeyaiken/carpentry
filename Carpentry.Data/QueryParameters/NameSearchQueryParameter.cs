@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Carpentry.Data.Models
+namespace Carpentry.Data.QueryParameters
 {
     public class NameSearchQueryParameter
     {

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
-using Carpentry.Interfaces;
+//using Carpentry.Data.Models;
+//using Carpentry.Interfaces;
+using Carpentry.Logic.Interfaces;
+using Carpentry.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Carpentry.Controllers
+namespace Carpentry.UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -43,16 +45,16 @@ namespace Carpentry.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> Add([FromBody] InventoryCardDto dto)
         {
-
-            try
-            {
-                var updatedId = await _carpentry.AddInventoryCard(dto);
-                return Accepted(updatedId);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Add", ex));
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    var updatedId = await _carpentry.AddInventoryCard(dto);
+            //    return Accepted(updatedId);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, FormatExceptionMessage("Add", ex));
+            //}
 
 
         }
@@ -61,16 +63,16 @@ namespace Carpentry.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> AddBatch([FromBody] IEnumerable<InventoryCardDto> dto)
         {
-
-            try
-            {
-                await _carpentry.AddInventoryCardBatch(dto);
-                return Accepted();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("AddBatch", ex));
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    await _carpentry.AddInventoryCardBatch(dto);
+            //    return Accepted();
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, FormatExceptionMessage("AddBatch", ex));
+            //}
 
 
         }
@@ -80,16 +82,16 @@ namespace Carpentry.Controllers
         public async Task<ActionResult> Update([FromBody] InventoryCardDto dto)
         {
 
-
-            try
-            {
-                await _carpentry.UpdateInventoryCard(dto);
-                return Accepted();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Update", ex));
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    await _carpentry.UpdateInventoryCard(dto);
+            //    return Accepted();
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, FormatExceptionMessage("Update", ex));
+            //}
         }
 
         //Delete
@@ -113,29 +115,31 @@ namespace Carpentry.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> Search([FromBody] InventoryQueryParameter param)
         {
-            try
-            {
-                var result = await _carpentry.GetInventoryOverviews(param);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Search", ex));
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    var result = await _carpentry.GetInventoryOverviews(param);
+            //    return Ok(result);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, FormatExceptionMessage("Search", ex));
+            //}
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<InventoryDetailDto>> GetByName(string name)
         {
-            try
-            {
-                var result = await _carpentry.GetInventoryDetailByName(name);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("GetByName", ex));
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    var result = await _carpentry.GetInventoryDetailByName(name);
+            //    return Ok(result);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(500, FormatExceptionMessage("GetByName", ex));
+            //}
         }
 
 

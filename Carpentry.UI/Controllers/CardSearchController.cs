@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
-using Carpentry.Interfaces;
+using Carpentry.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Carpentry.Controllers
+namespace Carpentry.UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

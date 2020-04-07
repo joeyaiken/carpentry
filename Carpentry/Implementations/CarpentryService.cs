@@ -1,6 +1,7 @@
 using Carpentry.Data.DataContext;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.Models;
+using Carpentry.Data.QueryParameters;
 using Carpentry.Interfaces;
 using Carpentry.Models;
 using Microsoft.EntityFrameworkCore;
