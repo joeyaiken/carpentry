@@ -32,7 +32,7 @@ namespace Carpentry.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<FilterOptionDto>> GetFilterValues()
+        public async Task<ActionResult<FilterOptionDto>> GetFilterOptions()
         {
             try
             {

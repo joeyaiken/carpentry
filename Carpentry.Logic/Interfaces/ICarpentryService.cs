@@ -9,63 +9,63 @@ namespace Carpentry.Logic.Interfaces
 {
     public interface ICarpentryService
     {
-        Task EnsureCardDefinitionExists(int multiverseId);
+        //Task EnsureCardDefinitionExists(int multiverseId);
 
-        #region Deck related methods
+        //#region Deck related methods
 
-        Task<int> AddDeck(DeckProperties props);
+        //Task<int> AddDeck(DeckProperties props);
 
-        Task UpdateDeck(DeckProperties props);
+        //Task UpdateDeck(DeckProperties props);
 
-        Task DeleteDeck(int deckId);
+        //Task DeleteDeck(int deckId);
 
-        Task<IEnumerable<DeckProperties>> SearchDecks();
+        //Task<IEnumerable<DeckProperties>> SearchDecks();
 
-        Task<DeckDto> GetDeckDetail(int deckId);
+        //Task<DeckDto> GetDeckDetail(int deckId);
 
-        //Task AddDeckCard(DeckCardDto dto);
+        ////Task AddDeckCard(DeckCardDto dto);
 
-        //Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto);
+        ////Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto);
 
-        //Task UpdateDeckCard(DeckCardDto card);
+        ////Task UpdateDeckCard(DeckCardDto card);
 
-        Task DeleteDeckCard(int deckCardId);
+        //Task DeleteDeckCard(int deckCardId);
 
-        #endregion
+        //#endregion
 
-        #region Inventory related methods
+        //#region Inventory related methods
 
-        //Task<int> AddInventoryCard(InventoryCardDto dto);
+        ////Task<int> AddInventoryCard(InventoryCardDto dto);
 
-        //Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards);
+        ////Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards);
 
-        //Task UpdateInventoryCard(InventoryCardDto dto);
+        ////Task UpdateInventoryCard(InventoryCardDto dto);
 
-        Task DeleteInventoryCard(int id);
+        //Task DeleteInventoryCard(int id);
 
-        //Task<IEnumerable<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
+        ////Task<IEnumerable<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
 
-        //Task<InventoryDetailDto> GetInventoryDetailByName(string name);
+        ////Task<InventoryDetailDto> GetInventoryDetailByName(string name);
 
-        #endregion
+        //#endregion
 
-        #region Card Search related methods
+        //#region Card Search related methods
 
-        //Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters);
-        Task<IEnumerable<MagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters);
+        ////Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters);
+        //Task<IEnumerable<MagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters);
 
-        //Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters);
-        Task<IEnumerable<MagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters);
+        ////Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters);
+        //Task<IEnumerable<MagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters);
 
-        //Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters);
-        Task<IEnumerable<MagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters);
+        ////Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters);
+        //Task<IEnumerable<MagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters);
 
-        #endregion
+        //#endregion
 
-        #region Core related methods
+        //#region Core related methods
 
-        Task<FilterOptionDto> GetAppFilterValues();
+        //Task<FilterOptionDto> GetAppFilterValues();
 
-        #endregion
+        //#endregion
     }
 }

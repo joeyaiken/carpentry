@@ -34,46 +34,46 @@ namespace Carpentry.UI.Controllers
             return Ok("Online");
         }
 
-        [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
-        {
-            try
-            {
-                var cards = await _carpentry.SearchCardsFromWeb(param);
-                return Ok(cards);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("SearchWeb", ex));
-            }
-        }
+        //[HttpPost("[action]")]
+        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
+        //{
+        //    try
+        //    {
+        //        var cards = await _carpentry.SearchCardsFromWeb(param);
+        //        return Ok(cards);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("SearchWeb", ex));
+        //    }
+        //}
 
-        [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
-        {
-            try
-            {
-                var cards = await _carpentry.SearchCardsFromSet(filters);
-                return Ok(cards);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("SearchSet", ex));
-            }
-        }
+        //[HttpPost("[action]")]
+        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
+        //{
+        //    try
+        //    {
+        //        var cards = await _carpentry.SearchCardsFromSet(filters);
+        //        return Ok(cards);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("SearchSet", ex));
+        //    }
+        //}
 
-        [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchInventory([FromBody] InventoryQueryParameter filters)
-        {
-            try
-            {
-                var cards = await _carpentry.SearchCardsFromInventory(filters);
-                return Ok(cards);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("SearchInventory", ex));
-            }
-        }
+        //[HttpPost("[action]")]
+        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchInventory([FromBody] InventoryQueryParameter filters)
+        //{
+        //    try
+        //    {
+        //        var cards = await _carpentry.SearchCardsFromInventory(filters);
+        //        return Ok(cards);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("SearchInventory", ex));
+        //    }
+        //}
     }
 }

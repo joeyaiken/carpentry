@@ -7,8 +7,47 @@
 //         return result || [];
 //     }
 // }
+// export const requestCardSearchInventory = (card: MagicCard): any => {
+//     return (dispatch: Dispatch, getState: any) => {
+//         return searchCardSearchInventory(dispatch, getState(), card);
+//     }
+// }
+
+
+export const api = {
+    async core_GetFilterOptions(): Promise<FilterOptionDto> {
+        const endpoint = `api/Core/GetFilterOptions`;
+        // const url = `${endpoint}?deckId=${deckId}`;
+        console.log(`requesting endpoint: ${endpoint}`);
+        const result = await Get(endpoint);
+        return result;
+    },
+    core: {
+        async getFilterOptions(): Promise<FilterOptionDto> {
+            const endpoint = `api/Core/GetFilterOptions`;
+            // const url = `${endpoint}?deckId=${deckId}`;
+            console.log(`requesting endpoint: ${endpoint}`);
+            const result = await Get(endpoint);
+            return result;
+        },
+    }
+
+}
+
+// export class _api {
+//     static async core_GetFilterOptions(): Promise<FilterOptionDto> {
+//         const endpoint = `api/Core/GetFilterOptions`;
+//         // const url = `${endpoint}?deckId=${deckId}`;
+//         console.log(`requesting endpoint: ${endpoint}`);
+//         const result = await Get(endpoint);
+//         return result;
+//     };
+
+// }
+
 
 export async function api_Core_GetFilterOptions(): Promise<FilterOptionDto> {
+
     const endpoint = `api/Core/GetFilterOptions`;
     // const url = `${endpoint}?deckId=${deckId}`;
     console.log(`requesting endpoint: ${endpoint}`);

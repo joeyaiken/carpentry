@@ -1,7 +1,11 @@
 // import { AppContainerEnum } from '../reducers/core.reducer';
 import Redux, { Store, Dispatch, compose, combineReducers } from 'redux';
 import { AppState } from '../reducers';
-import { api_Decks_Search, api_Decks_Get, api_Decks_Add, api_Core_GetFilterOptions } from './api';
+import { api_Decks_Search, api_Decks_Get, api_Decks_Add
+       , api_Core_GetFilterOptions 
+    ,api//, _api
+
+} from './api';
 import { apiDataRequested, apiDataReceived } from './data.actions';
 
 /**
@@ -101,7 +105,9 @@ function getCoreData(dispatch: Dispatch, state: AppState): any {
     }
     dispatch(apiDataRequested('coreFilterOptions'));
     // dispatch(newDeckSaving());
-    api_Core_GetFilterOptions().then((results) => {
+    //api.core_GetFilterOptions().then((results) => {
+    api.core.getFilterOptions().then((results) => {
+        // api_Core_GetFilterOptions().then((results) => {
         dispatch(apiDataReceived('coreFilterOptions', results));
     });
     // api_Decks_Add(newDeck).then((results) => {
