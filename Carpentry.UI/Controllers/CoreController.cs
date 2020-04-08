@@ -35,7 +35,7 @@ namespace Carpentry.UI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<FilterOptionDto>> GetFilterValues()
+        public async Task<ActionResult<AppFiltersDto>> GetFilterValues()
         {
             throw new NotImplementedException();
             //try

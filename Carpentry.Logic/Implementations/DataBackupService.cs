@@ -1,6 +1,6 @@
 ﻿using Carpentry.Data.DataContext;
-using Carpentry.Interfaces;
-using Carpentry.Models.Backups;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models.Backups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Carpentry.Implementations
+namespace Carpentry.Logic.Implementations
 {
     /// <summary>
     /// This class contains the logic for saving relevant DB contents to a text file

@@ -11,16 +11,6 @@ namespace Carpentry.Logic.Interfaces
     {
         //Task EnsureCardDefinitionExists(int multiverseId);
 
-        //#region Inventory related methods
-
-        
-        //#endregion
-
-        //#region Card Search related methods
-
-        
-        //#endregion
-
         //#region Core related methods
 
         //Task<FilterOptionDto> GetAppFilterValues();

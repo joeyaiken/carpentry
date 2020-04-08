@@ -1,21 +1,12 @@
 ﻿using System;
-
 using System.IO;
 using System.Threading.Tasks;
 using Carpentry.Data.DataContext;
-using Carpentry.Implementations;
-using Carpentry.Interfaces;
+using Carpentry.Logic.Implementations;
+using Carpentry.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using Carpentry.Data.DataContext;
-//using Carpentry.Data.Implementations;
-//using Carpentry.Data.Interfaces;
-//using Carpentry.Implementations;
-//using Carpentry.Interfaces;
-//using Microsoft.EntityFrameworkCore;
-//using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
