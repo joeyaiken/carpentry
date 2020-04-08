@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.UI.Tests.TestClasses
 {
+    [TestClass]
     public class CardSearchControllerTests
     {
         readonly CarpentryFactory _factory;
@@ -23,8 +24,25 @@ namespace Carpentry.UI.Tests.TestClasses
         #region Tests - Controller methods all return Ok/Accepted
 
         [TestMethod]
-        public void CardSearch_SearchWeb_ReturnsOK_Test()
+        public async void CardSearch_SearchWeb_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            var response = await client.GetAsync("api/CardSearch/SearchWeb");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //SearchWeb
             Assert.Fail();
         }
@@ -32,6 +50,23 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public void CardSearch_SearchSet_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //SearchSet
             Assert.Fail();
         }
@@ -39,44 +74,26 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public void CardSearch_SearchInventory_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //SearchInventory
             Assert.Fail();
         }
-
-        #endregion
-
-        #region legacy
-
-        //Search by name
-        //Verify returns data
-        //Verify all results actually match the provided name
-        [TestMethod]
-        public void Cards_SearchByName_ReturnsValidCards_Test()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod]
-        public void Cards_SearchByName_ThrowsExpectedErrors_Test()
-        {
-            Assert.Fail();
-        }
-
-        //Search by set
-        //Verify returns data
-        //I guess that all results belong to the expected set
-        [TestMethod]
-        public void Cards_SearchBySet_ReturnsFullSet_Test()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod]
-        public void Cards_SearchBySet_ThrowsExpectedErrors_Test()
-        {
-            Assert.Fail();
-        }
-
 
         #endregion
 

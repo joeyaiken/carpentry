@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Carpentry.Logic.Models
 {
-    public class DeckDto //: CardCollectionDto
+    public class DeckDetail //: CardCollectionDto
     {
         //IDK if I need this since I'll have the list from the main menu, but w/e
         [JsonProperty("props")]
@@ -19,10 +19,10 @@ namespace Carpentry.Logic.Models
         //  Needs to be inventory cards so I can show the variant
 
         [JsonProperty("cardOverviews")]
-        public List<InventoryOverviewDto> CardOverviews { get; set; }
+        public List<InventoryOverview> CardOverviews { get; set; }
 
         [JsonProperty("cardDetails")]
-        public List<InventoryCardDto> CardDetails { get; set; }
+        public List<InventoryCard> CardDetails { get; set; }
 
         [JsonProperty("stats")]
         public DeckStats Stats { get; set; }

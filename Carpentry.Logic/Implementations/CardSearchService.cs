@@ -1,38 +1,25 @@
-using Carpentry.Data.DataContext;
-using Carpentry.Data.Interfaces;
-using Carpentry.Data.Models;
+﻿using Carpentry.Data.Interfaces;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
-//using Carpentry.Interfaces;
-//using Carpentry.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations
 {
-
-    public class CarpentryService : ICarpentryService
+    public class CardSearchService : ICardSearchService
     {
-        //All methods should return a model specific to THIS project, not the data project (evevntually)
-
-        //What if all data layer models were either
-        //1 -   A DB/DataContext model
-        //2 -   A DTO that contains either IDs or values but not the associations
-
         //Should have no access to data context classes, only repo classes
         //private readonly ICardRepo _cardRepo;
         //private readonly ICardStringRepo _scryRepo;
         //private readonly ILogger<CarpentryService> _logger;
 
-        public CarpentryService(
-            //ICardRepo cardRepo, ICardStringRepo scryRepo, ILogger<CarpentryService> logger
+        public CardSearchService(
+            //ICardRepo cardRepo
+            //, ICardStringRepo scryRepo
+            //, ILogger<CardSearchService> logger
             )
         {
             //_cardRepo = cardRepo;
@@ -313,97 +300,71 @@ namespace Carpentry.Logic.Implementations
 
         #region Card Search related methods
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters)
-        //        {
-        //            var cardsQuery = await _cardRepo.QueryFilteredCards(filters);
+        public async Task<IEnumerable<MagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters)
+        {
+            throw new NotImplementedException();
+            //var cardsQuery = await _cardRepo.QueryFilteredCards(filters);
 
-        //            var query = MapInventoryQueryToScryfallDto(cardsQuery);
+            //var query = MapInventoryQueryToScryfallDto(cardsQuery);
 
-        //            var groupedQuery = query
-        //                .GroupBy(x => x.Name)
-        //                .Select(x => x.OrderByDescending(i => i.MultiverseId).First());
+            //var groupedQuery = query
+            //    .GroupBy(x => x.Name)
+            //    .Select(x => x.OrderByDescending(i => i.MultiverseId).First());
 
-        //            groupedQuery = groupedQuery.OrderBy(x => x.Name);
+            //groupedQuery = groupedQuery.OrderBy(x => x.Name);
 
-        //            if (filters.Take > 0)
-        //            {
-        //                groupedQuery = groupedQuery.Skip(filters.Skip).Take(filters.Take);
-        //            }
+            //if (filters.Take > 0)
+            //{
+            //    groupedQuery = groupedQuery.Skip(filters.Skip).Take(filters.Take);
+            //}
 
-        //            var result = groupedQuery.ToList();
+            //var result = groupedQuery.ToList();
 
-        //            return result;
-        //        }
+            //return result;
+        }
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters)
-        //        {
-        //            IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryCardsBySet(filters.SetCode);
+        public async Task<IEnumerable<MagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters)
+        {
+            throw new NotImplementedException();
+            //IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryCardsBySet(filters.SetCode);
 
-        //            if (!string.IsNullOrEmpty(filters.Type))
-        //            {
-        //                query = query.Where(x => x.Type.Contains(filters.Type));
-        //            }
+            //if (!string.IsNullOrEmpty(filters.Type))
+            //{
+            //    query = query.Where(x => x.Type.Contains(filters.Type));
+            //}
 
-        //            filters.ColorIdentity.ForEach(color =>
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Contains(color));
-        //            });
+            //filters.ColorIdentity.ForEach(color =>
+            //{
+            //    query = query.Where(x => x.ColorIdentity.Contains(color));
+            //});
 
-        //            if (filters.ExclusiveColorFilters)
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Count() == filters.ColorIdentity.Count());
-        //            }
+            //if (filters.ExclusiveColorFilters)
+            //{
+            //    query = query.Where(x => x.ColorIdentity.Count() == filters.ColorIdentity.Count());
+            //}
 
-        //            if (filters.MultiColorOnly)
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Count() > 1);
-        //            }
+            //if (filters.MultiColorOnly)
+            //{
+            //    query = query.Where(x => x.ColorIdentity.Count() > 1);
+            //}
 
-        //            query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));
+            //query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));
 
-        //            var result = query.OrderBy(x => x.Name).ToList();
+            //var result = query.OrderBy(x => x.Name).ToList();
 
-        //            return result;
-        //        }
+            //return result;
+        }
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters)
-        //        {
-        //            IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryScryfallByName(filters.Name, filters.Exclusive);
+        public async Task<IEnumerable<MagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters)
+        {
+            throw new NotImplementedException();
+            //IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryScryfallByName(filters.Name, filters.Exclusive);
 
-        //            List<ScryfallMagicCard> result = query.ToList();
+            //List<ScryfallMagicCard> result = query.ToList();
 
-        //            return result;
-        //        }
-
-        #endregion
-
-        #region Core related methods
-
-        //        public async Task<FilterOptionDto> GetAppFilterValues()
-        //        {
-
-        //            var sets = await _cardRepo.QuerySetFilters().ToListAsync();
-        //            var types = _cardRepo.QueryTypeFilters().ToList();
-        //            var formats = await _cardRepo.QueryFormatFilters().ToListAsync();
-        //            var manaColors = await _cardRepo.QueryManaColorFilters().ToListAsync();
-        //            var rarities = await _cardRepo.QueryRarityFilters().ToListAsync();
-        //            var statuses = await _cardRepo.QueryCardStatusFilters().ToListAsync();
-
-        //            FilterOptionDto filterResults = new FilterOptionDto
-        //            {
-        //                Sets = sets,
-        //                Types = types,
-        //                Formats = formats,
-        //                ManaColors = manaColors,
-        //                Rarities = rarities,
-        //                Statuses = statuses,
-        //            };
-
-        //            return filterResults;
-        //        }
+            //return result;
+        }
 
         #endregion
-
     }
-
 }

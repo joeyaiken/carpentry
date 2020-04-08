@@ -32,29 +32,28 @@ namespace Carpentry.UI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //Going to actually pull the fill filepaths from app settings now
-            //TODO Eventually I could make a static config class and just read from that class
-            //TODO Everything else still needs this DB pattern
-            string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
-            
-            //DBs
-            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            ////Going to actually pull the fill filepaths from app settings now
+            ////TODO Eventually I could make a static config class and just read from that class
+            ////TODO Everything else still needs this DB pattern
+            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
 
-            //string repo & repo's HTTP client
-            services.AddScoped<ICardStringRepo, ScryfallRepo>();
-            services.AddHttpClient<ICardStringRepo, ScryfallRepo>();
+            ////DBs
+            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
+            //services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
 
-            //card DB repo
-            services.AddScoped<ICardRepo, SqliteCardRepo>();
-            
+            ////string repo & repo's HTTP client
+            //services.AddScoped<ICardStringRepo, ScryfallRepo>();
+            //services.AddHttpClient<ICardStringRepo, ScryfallRepo>();
 
-            
+            ////card DB repo
+            //services.AddScoped<ICardRepo, SqliteCardRepo>();
+
+
+
             //Services
             services.AddScoped<ICarpentryService, CarpentryService>();
-
-            
+            services.AddScoped<IDeckService, DeckService>();
 
 
 

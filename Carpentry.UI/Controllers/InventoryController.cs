@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Carpentry.Data.QueryParameters;
 //using Carpentry.Data.Models;
@@ -19,128 +20,121 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
         }
 
-        //private readonly ICardRepo _cardRepo;
-        private readonly ICarpentryService _carpentry;
+        private readonly IInventoryService _inventory;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(ICarpentryService carpentry)
+        public InventoryController(IInventoryService inventory)
         {
-            _carpentry = carpentry;
+            _inventory = inventory;
         }
 
-        ///// <summary>
-        ///// This method just ensures the controller can start correctly (catches DI issues)
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpGet]
-        //public IActionResult Get()
-        //{
-        //    return Ok("Online");
-        //}
+        /// <summary>
+        /// This method just ensures the controller can start correctly (catches DI issues)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Online");
+        }
 
-        ////Add
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult<int>> Add([FromBody] InventoryCardDto dto)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    var updatedId = await _carpentry.AddInventoryCard(dto);
-        //    //    return Accepted(updatedId);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("Add", ex));
-        //    //}
+        //Add
+        [HttpPost("[action]")]
+        public async Task<ActionResult<int>> Add([FromBody] InventoryCardDto dto)
+        {
+            try
+            {
+                var updatedId = await _inventory.AddInventoryCard(dto.ToModel());
+                return Accepted(updatedId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Add", ex));
+            }
+        }
 
-
-        //}
-
-        ////AddCardBatch
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult<int>> AddBatch([FromBody] IEnumerable<InventoryCardDto> dto)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    await _carpentry.AddInventoryCardBatch(dto);
-        //    //    return Accepted();
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("AddBatch", ex));
-        //    //}
+        //AddCardBatch
+        [HttpPost("[action]")]
+        public async Task<ActionResult<int>> AddBatch([FromBody] IEnumerable<InventoryCardDto> dto)
+        {
+            try
+            {
+                await _inventory.AddInventoryCardBatch(dto.Select(x => x.ToModel()));
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("AddBatch", ex));
+            }
 
 
-        //}
+        }
 
-        ////Update
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult> Update([FromBody] InventoryCardDto dto)
-        //{
+        //Update
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Update([FromBody] InventoryCardDto dto)
+        {
+            try
+            {
+                await _inventory.UpdateInventoryCard(dto.ToModel());
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Update", ex));
+            }
+        }
 
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    await _carpentry.UpdateInventoryCard(dto);
-        //    //    return Accepted();
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("Update", ex));
-        //    //}
-        //}
-
-        ////Delete
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> Delete(int id)
-        //{
+        //Delete
+        [HttpGet("[action]")]
+        public async Task<ActionResult> Delete(int id)
+        {
 
 
-        //    try
-        //    {
-        //        await _carpentry.DeleteInventoryCard(id);
-        //        return Accepted();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("Delete", ex));
-        //    }
-        //}
+            try
+            {
+                await _inventory.DeleteInventoryCard(id);
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Delete", ex));
+            }
+        }
 
-        ////Search
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult> Search([FromBody] InventoryQueryParameter param)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    var result = await _carpentry.GetInventoryOverviews(param);
-        //    //    return Ok(result);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("Search", ex));
-        //    //}
-        //}
+        //Search
+        [HttpPost("[action]")]
+        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> Search([FromBody] InventoryQueryParameter param)
+        {
+            try
+            {
+                var result = await _inventory.GetInventoryOverviews(param);
+                List<InventoryOverviewDto> mappedResult = result.Select(x => new InventoryOverviewDto(x)).ToList();
+                return Ok(mappedResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Search", ex));
+            }
+        }
 
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult<InventoryDetailDto>> GetByName(string name)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    var result = await _carpentry.GetInventoryDetailByName(name);
-        //    //    return Ok(result);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("GetByName", ex));
-        //    //}
-        //}
+        [HttpGet("[action]")]
+        public async Task<ActionResult<InventoryDetailDto>> GetByName(string name)
+        {
+            try
+            {
+                var result = await _inventory.GetInventoryDetailByName(name);
+                InventoryDetailDto mappedResult = new InventoryDetailDto(result);
+                return Ok(mappedResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetByName", ex));
+            }
+        }
 
 
     }

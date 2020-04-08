@@ -1,24 +1,13 @@
-using Carpentry.Data.DataContext;
-using Carpentry.Data.Interfaces;
-using Carpentry.Data.Models;
-using Carpentry.Data.QueryParameters;
-using Carpentry.Logic.Interfaces;
-//using Carpentry.Interfaces;
-//using Carpentry.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations
 {
-
-    public class CarpentryService : ICarpentryService
+    public class DeckService : IDeckService
     {
         //All methods should return a model specific to THIS project, not the data project (evevntually)
 
@@ -31,7 +20,7 @@ namespace Carpentry.Logic.Implementations
         //private readonly ICardStringRepo _scryRepo;
         //private readonly ILogger<CarpentryService> _logger;
 
-        public CarpentryService(
+        public DeckService(
             //ICardRepo cardRepo, ICardStringRepo scryRepo, ILogger<CarpentryService> logger
             )
         {
@@ -311,99 +300,202 @@ namespace Carpentry.Logic.Implementations
 
         #endregion
 
-        #region Card Search related methods
+        #region Deck related methods
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters)
-        //        {
-        //            var cardsQuery = await _cardRepo.QueryFilteredCards(filters);
+        public async Task<int> AddDeck(DeckProperties props)
+        {
+            throw new NotImplementedException();
+            //int newId = await _cardRepo.AddDeck(props);
+            //return newId;
+        }
 
-        //            var query = MapInventoryQueryToScryfallDto(cardsQuery);
+        public async Task UpdateDeck(DeckProperties props)
+        {
+            throw new NotImplementedException();
+            //await _cardRepo.UpdateDeck(props);
+        }
 
-        //            var groupedQuery = query
-        //                .GroupBy(x => x.Name)
-        //                .Select(x => x.OrderByDescending(i => i.MultiverseId).First());
+        public async Task DeleteDeck(int deckId)
+        {
+            throw new NotImplementedException();
+            //await _cardRepo.DeleteDeck(deckId);
+        }
 
-        //            groupedQuery = groupedQuery.OrderBy(x => x.Name);
+        public async Task<IEnumerable<DeckProperties>> SearchDecks()
+        {
+            throw new NotImplementedException();
+            ////var price = await CalculateInventoryTotalPrice();
 
-        //            if (filters.Take > 0)
-        //            {
-        //                groupedQuery = groupedQuery.Skip(filters.Skip).Take(filters.Take);
-        //            }
 
-        //            var result = groupedQuery.ToList();
+            //List<DeckProperties> deckList = await _cardRepo.QueryDeckProperties().ToListAsync();
 
-        //            return result;
-        //        }
+            //for (int i = 0; i < deckList.Count(); i++)
+            //{
+            //    deckList[i].Notes = await ValidateDeck(deckList[i].Id);
+            //}
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters)
-        //        {
-        //            IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryCardsBySet(filters.SetCode);
+            //return deckList;
+        }
 
-        //            if (!string.IsNullOrEmpty(filters.Type))
-        //            {
-        //                query = query.Where(x => x.Type.Contains(filters.Type));
-        //            }
 
-        //            filters.ColorIdentity.ForEach(color =>
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Contains(color));
-        //            });
+        //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
+        //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
+        public async Task<DeckDetail> GetDeckDetail(int deckId)
+        {
+            throw new NotImplementedException();
+            ////Deck Props
+            //DeckProperties targetDeck = await _cardRepo.QueryDeckProperties().Where(x => x.Id == deckId).FirstOrDefaultAsync();
 
-        //            if (filters.ExclusiveColorFilters)
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Count() == filters.ColorIdentity.Count());
-        //            }
+            //DeckDto result = new DeckDto
+            //{
+            //    CardOverviews = new List<InventoryOverviewDto>(),
+            //    CardDetails = new List<InventoryCardDto>(),
+            //    Props = targetDeck,
+            //    Stats = new DeckStats(),
+            //};
 
-        //            if (filters.MultiColorOnly)
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Count() > 1);
-        //            }
+            ////Deck Overviews
+            //var cardOverviewsQuery = _cardRepo.QueryDeckCards()
+            //    .Where(x => x.DeckId == deckId)
+            //    .Select(x => new
+            //    {
+            //        DeckCardCategory = (x.CategoryId != null) ? x.Category.Name : null,
+            //        x.InventoryCard.Card,
+            //        x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+            //    });
 
-        //            query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));
+            ////var rawOverviews = cardOverviewsQuery.ToList();
 
-        //            var result = query.OrderBy(x => x.Name).ToList();
+            ////var cardOverviewsQuery = _cardRepo.QueryInventoryCardsForDeck(deckId)
+            ////    .Select(x => new {
+            ////        x.Card,
+            ////        x.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
 
-        //            return result;
-        //        }
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters)
-        //        {
-        //            IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryScryfallByName(filters.Name, filters.Exclusive);
+            ////    })
+            //var cardOverviewQueryResult = cardOverviewsQuery
+            //    .GroupBy(x => new
+            //    {
+            //        x.Card.Name,
+            //        x.DeckCardCategory
+            //    })
+            //    .Select(x => new
+            //    {
+            //        Name = x.Key.Name,
+            //        Item = x.OrderByDescending(c => c.Card.Id).FirstOrDefault(),
+            //        Count = x.Count(),
+            //    }).ToList();
 
-        //            List<ScryfallMagicCard> result = query.ToList();
+            ////#error this isnt properly mapping MultiverseId, trying to add it from github
+            ////I was wrong, this isn't supposed to include MID because it's deck cards grouped by NAME
+            //var overviewQueryResult = cardOverviewQueryResult.Select((x, i) => new InventoryOverviewDto()
+            //{
+            //    Id = i + 1,
+            //    //MultiverseId = x.Item.MultiverseId,
+            //    Cost = x.Item.Card.ManaCost,
+            //    Name = x.Name,
+            //    Count = x.Count,
+            //    Img = x.Item.ImageUrl,
+            //    Type = x.Item.Card.Type,
+            //    Description = x.Item.DeckCardCategory ?? GetCardTypeGroup(x.Item.Card.Type),
+            //    Cmc = x.Item.Card.Cmc,
+            //}).ToList()
+            //.OrderBy(x => x.Cmc).ThenBy(x => x.Name).ToList();
 
-        //            return result;
-        //        }
+            //result.CardOverviews = overviewQueryResult;
 
-        #endregion
 
-        #region Core related methods
+            ////Deck Details
+            //List<InventoryCardDto> cardDetails = _cardRepo.QueryInventoryCardsForDeck(deckId)
+            //    .Select(x => new InventoryCardDto()
+            //    {
+            //        Id = x.Id,
+            //        MultiverseId = x.MultiverseId,
+            //        InventoryCardStatusId = x.InventoryCardStatusId,
+            //        IsFoil = x.IsFoil,
+            //        VariantType = x.VariantType.Name,
+            //        Name = x.Card.Name,
+            //        DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCardDto()
+            //        {
+            //            DeckId = deckCard.DeckId,
+            //            Id = deckCard.Id,
+            //            InventoryCardId = x.Id,
+            //            DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : GetCardTypeGroup(x.Card.Type),
+            //        }).ToList(),
+            //    }).ToList();
 
-        //        public async Task<FilterOptionDto> GetAppFilterValues()
-        //        {
+            //result.CardDetails = cardDetails;
 
-        //            var sets = await _cardRepo.QuerySetFilters().ToListAsync();
-        //            var types = _cardRepo.QueryTypeFilters().ToList();
-        //            var formats = await _cardRepo.QueryFormatFilters().ToListAsync();
-        //            var manaColors = await _cardRepo.QueryManaColorFilters().ToListAsync();
-        //            var rarities = await _cardRepo.QueryRarityFilters().ToListAsync();
-        //            var statuses = await _cardRepo.QueryCardStatusFilters().ToListAsync();
+            ////Deck Stats
+            //result.Stats = await GetDeckStats(deckId);
 
-        //            FilterOptionDto filterResults = new FilterOptionDto
-        //            {
-        //                Sets = sets,
-        //                Types = types,
-        //                Formats = formats,
-        //                ManaColors = manaColors,
-        //                Rarities = rarities,
-        //                Statuses = statuses,
-        //            };
 
-        //            return filterResults;
-        //        }
+            //return result;
+        }
+
+        //if a card already exists in a deck it is "moved" to this deck
+        public async Task AddDeckCard(DeckCard dto)
+        {
+            throw new NotImplementedException();
+            //if (dto.InventoryCard.Id > 0)
+            //{
+            //    //is this in a deck?
+            //    var existingDeckCard = await _cardRepo.QueryDeckCards()
+            //        .Where(x => x.InventoryCardId == dto.InventoryCard.Id)
+            //        .FirstOrDefaultAsync();
+
+            //    if (existingDeckCard != null)
+            //    {
+            //        await _cardRepo.UpdateDeckCard(existingDeckCard.Id, dto.DeckId, null);
+            //        return;
+            //    }
+            //}
+
+            //if (dto.InventoryCard.Id == 0)
+            //{
+            //    await EnsureCardDefinitionExists(dto.InventoryCard.MultiverseId);
+
+            //    //add inventory card
+            //    var newInventoryCardId = await _cardRepo.AddInventoryCard(dto.InventoryCard);
+
+            //    dto.InventoryCard.Id = newInventoryCardId;
+            //}
+
+            //await _cardRepo.AddDeckCard(dto);
+        }
+
+        //I think I only end up adding NEW deck cards with a batch
+        //IDR where exactly this gets called outside of console apps
+        public async Task AddDeckCardBatch(IEnumerable<DeckCard> dtoBatch)
+        {
+            throw new NotImplementedException();
+            //_logger.LogWarning("Beginning AddDeckCardBatch");
+            //var dtoArray = dtoBatch.ToArray();
+
+            //for (int i = 0; i < dtoArray.Count(); i++)
+            //{
+            //    DeckCardDto dto = dtoArray[i];
+
+            //    //console apps want to see this
+            //    _logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
+
+            //    await _cardRepo.AddDeckCard(dto);
+            //}
+        }
+
+        public async Task UpdateDeckCard(DeckCard card)
+        {
+            throw new NotImplementedException();
+            //await _cardRepo.UpdateDeckCard(card.Id, card.DeckId, card.CategoryId);
+        }
+
+        public async Task DeleteDeckCard(int deckCardId)
+        {
+            throw new NotImplementedException();
+            //await _cardRepo.DeleteDeckCard(deckCardId);
+        }
 
         #endregion
 
     }
-
 }

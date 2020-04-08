@@ -8,6 +8,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+/*
+ App thoughts:
+	What if the UI layer models all had a DTO prefix - $"{Model}Dto"
+		Controllers all exclusively send DTOs to/from the client app
+		Ensures DB models don't get to the client app
+		Have a goal of keeping UI models in-sync with ClientApp typings (someday generate typings from the models?)
+     */
 
 //I'm just going to use this as a general task section because it gets picked up by VS
 //TODO - Implement all deck notes

@@ -1,43 +1,18 @@
-using Carpentry.Data.DataContext;
-using Carpentry.Data.Interfaces;
-using Carpentry.Data.Models;
-using Carpentry.Data.QueryParameters;
+﻿using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
-//using Carpentry.Interfaces;
-//using Carpentry.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations
 {
-
-    public class CarpentryService : ICarpentryService
+    public class InventoryService : IInventoryService
     {
-        //All methods should return a model specific to THIS project, not the data project (evevntually)
 
-        //What if all data layer models were either
-        //1 -   A DB/DataContext model
-        //2 -   A DTO that contains either IDs or values but not the associations
-
-        //Should have no access to data context classes, only repo classes
-        //private readonly ICardRepo _cardRepo;
-        //private readonly ICardStringRepo _scryRepo;
-        //private readonly ILogger<CarpentryService> _logger;
-
-        public CarpentryService(
-            //ICardRepo cardRepo, ICardStringRepo scryRepo, ILogger<CarpentryService> logger
-            )
+        public InventoryService()
         {
-            //_cardRepo = cardRepo;
-            //_scryRepo = scryRepo;
-            //_logger = logger;
+
         }
 
         #region private methods
@@ -311,99 +286,144 @@ namespace Carpentry.Logic.Implementations
 
         #endregion
 
-        #region Card Search related methods
+        #region Inventory related methods
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters)
-        //        {
-        //            var cardsQuery = await _cardRepo.QueryFilteredCards(filters);
+        public async Task<int> AddInventoryCard(InventoryCard dto)
+        {
+            throw new NotImplementedException();
+            //await EnsureCardDefinitionExists(dto.MultiverseId);
 
-        //            var query = MapInventoryQueryToScryfallDto(cardsQuery);
+            //var newId = await _cardRepo.AddInventoryCard(dto);
 
-        //            var groupedQuery = query
-        //                .GroupBy(x => x.Name)
-        //                .Select(x => x.OrderByDescending(i => i.MultiverseId).First());
+            //return newId;
+        }
 
-        //            groupedQuery = groupedQuery.OrderBy(x => x.Name);
+        public async Task AddInventoryCardBatch(IEnumerable<InventoryCard> cards)
+        {
+            throw new NotImplementedException();
+            ////Ensure all cards exist in the repo
+            ////Will this break when multiple cards are called for the same set?
+            //var cardRequests = cards.Select(x => x.MultiverseId).Distinct().Select(mid => EnsureCardDefinitionExists(mid)).ToList();
+            //await Task.WhenAll(cardRequests);
 
-        //            if (filters.Take > 0)
-        //            {
-        //                groupedQuery = groupedQuery.Skip(filters.Skip).Take(filters.Take);
-        //            }
+            //await _cardRepo.AddInventoryCardBatch(cards);
+        }
 
-        //            var result = groupedQuery.ToList();
+        public async Task UpdateInventoryCard(InventoryCard dto)
+        {
+            throw new NotImplementedException();
+            //await _cardRepo.UpdateInventoryCard(dto);
+        }
 
-        //            return result;
-        //        }
+        public async Task DeleteInventoryCard(int id)
+        {
+            throw new NotImplementedException();
+            //await _cardRepo.DeleteInventoryCard(id);
+        }
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters)
-        //        {
-        //            IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryCardsBySet(filters.SetCode);
+        public async Task<IEnumerable<InventoryOverview>> GetInventoryOverviews(InventoryQueryParameter param)
+        {
+            throw new NotImplementedException();
 
-        //            if (!string.IsNullOrEmpty(filters.Type))
-        //            {
-        //                query = query.Where(x => x.Type.Contains(filters.Type));
-        //            }
+            //if (param.GroupBy.ToLower() == "quantity")
+            //{
 
-        //            filters.ColorIdentity.ForEach(color =>
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Contains(color));
-        //            });
+            //    var inventoryQuery = await _cardRepo.QueryInventoryOverviews(param);
 
-        //            if (filters.ExclusiveColorFilters)
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Count() == filters.ColorIdentity.Count());
-        //            }
+            //    //have overviews, now I need to sort things
+            //    //wait I should just filter BS by color
 
-        //            if (filters.MultiColorOnly)
-        //            {
-        //                query = query.Where(x => x.ColorIdentity.Count() > 1);
-        //            }
 
-        //            query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));
+            //    //if (param.Sort == "count")
+            //    //{
+            //    //    inventoryQuery = inventoryQuery.OrderByDescending(x => x.Count);
+            //    //}
+            //    //else if (param.Sort == "name")
+            //    //{
+            //    //    inventoryQuery = inventoryQuery.OrderBy(x => x.Name);
+            //    //}
+            //    //else if (param.Sort == "cmc")
+            //    //{
+            //    //    inventoryQuery = inventoryQuery.OrderBy(x => x.Cost);
+            //    //}
+            //    //else
+            //    //{
+            //    //    inventoryQuery = inventoryQuery.OrderByDescending(x => x.Count);
+            //    //}
 
-        //            var result = query.OrderBy(x => x.Name).ToList();
 
-        //            return result;
-        //        }
+            //    //var query = inventoryQuery.OrderByDescending(x => x.Count);
 
-        //        public async Task<IEnumerable<ScryfallMagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters)
-        //        {
-        //            IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryScryfallByName(filters.Name, filters.Exclusive);
+            //    if (param.Take > 0)
+            //    {
+            //        //should eventually consider pagination here
 
-        //            List<ScryfallMagicCard> result = query.ToList();
+            //        inventoryQuery = inventoryQuery.Skip(param.Skip).Take(param.Take);//.OrderByDescending(x => x.Count);
+            //    }
 
-        //            return result;
-        //        }
+            //    var result = await inventoryQuery.ToListAsync();
 
-        #endregion
+            //    return result;
 
-        #region Core related methods
+            //    //This query is still missing Type & Cost vals (is cost really useful here?)
 
-        //        public async Task<FilterOptionDto> GetAppFilterValues()
-        //        {
+            //    //take the top X results, then get the rest of the details
 
-        //            var sets = await _cardRepo.QuerySetFilters().ToListAsync();
-        //            var types = _cardRepo.QueryTypeFilters().ToList();
-        //            var formats = await _cardRepo.QueryFormatFilters().ToListAsync();
-        //            var manaColors = await _cardRepo.QueryManaColorFilters().ToListAsync();
-        //            var rarities = await _cardRepo.QueryRarityFilters().ToListAsync();
-        //            var statuses = await _cardRepo.QueryCardStatusFilters().ToListAsync();
+            //    //approach 2 - start with inventory cards
 
-        //            FilterOptionDto filterResults = new FilterOptionDto
-        //            {
-        //                Sets = sets,
-        //                Types = types,
-        //                Formats = formats,
-        //                ManaColors = manaColors,
-        //                Rarities = rarities,
-        //                Statuses = statuses,
-        //            };
 
-        //            return filterResults;
-        //        }
+            //}
+            //else
+            //{
+            //    return null;
+            //}
+
+            ////if grouping by name...IDK yet
+
+
+        }
+
+        public async Task<InventoryDetail> GetInventoryDetailByName(string name)
+        {
+            throw new NotImplementedException();
+            //InventoryDetailDto result = new InventoryDetailDto()
+            //{
+            //    Name = name,
+            //    Cards = new List<ScryfallMagicCard>(),
+            //    InventoryCards = new List<InventoryCardDto>(),
+            //};
+
+            //var inventoryCardsQuery = _cardRepo.QueryCardDefinitions().Where(x => x.Name == name)
+            //    .SelectMany(x => x.InventoryCards)
+            //    .Select(x => new InventoryCardDto()
+            //    {
+            //        Id = x.Id,
+            //        IsFoil = x.IsFoil,
+            //        InventoryCardStatusId = x.InventoryCardStatusId,
+            //        MultiverseId = x.MultiverseId,
+            //        VariantType = x.VariantType.Name,
+            //        Name = x.Card.Name,
+            //        Set = x.Card.Set.Code,
+            //        DeckCards = x.DeckCards.Select(c => new InventoryDeckCardDto
+            //        {
+            //            Id = c.Id,
+            //            DeckId = c.DeckId,
+            //            InventoryCardId = c.InventoryCardId,
+            //            DeckName = c.Deck.Name,
+            //        }).ToList()
+            //    })
+            //    .OrderBy(x => x.Id);
+
+            //result.InventoryCards = await inventoryCardsQuery.ToListAsync();
+
+            //var cardDefinitionsQuery = _cardRepo.QueryCardDefinitions().Where(x => x.Name == name);
+
+            //result.Cards = await MapInventoryQueryToScryfallDto(cardDefinitionsQuery).ToListAsync();
+
+            //return result;
+        }
 
         #endregion
 
     }
-
 }

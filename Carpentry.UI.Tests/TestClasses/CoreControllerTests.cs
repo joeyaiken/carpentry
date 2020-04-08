@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Carpentry.UI.Tests.TestClasses
 {
+    [TestClass]
     public class CoreControllerTests
     {
-        //readonly CarpentryFactory _factory;
+        readonly CarpentryFactory _factory;
 
         public CoreControllerTests()
         {
-            //_factory = new CarpentryFactory();
+            _factory = new CarpentryFactory();
         }
 
         //[ClassInitialize]
@@ -32,6 +33,23 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public async Task Core_GetFilterValues_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //GetFilterValues
             Assert.Fail();
         }
@@ -39,6 +57,23 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public async Task Core_BackupDatabase_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //BackupDatabase
             Assert.Fail();
         }
@@ -46,6 +81,23 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public async Task Core_RestoreDatabase_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //RestoreDatabase
             Assert.Fail();
         }
@@ -53,6 +105,23 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public async Task Core_GetDatabaseUpdateStatus_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //GetDatabaseUpdateStatus
             Assert.Fail();
         }
@@ -60,6 +129,23 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public async Task Core_UpdateScryfallSet_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //UpdateScryfallSet
             Assert.Fail();
         }
@@ -67,6 +153,23 @@ namespace Carpentry.UI.Tests.TestClasses
         [TestMethod]
         public async Task Core_UpdateSetData_ReturnsOK_Test()
         {
+            //assemble
+            var client = _factory.CreateClient();
+
+            //act
+            //var response = await client.GetAsync("api/CardSearch/");
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //assert
+            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            //Assert.AreEqual("Online", responseContent);
+
+
+
+
+
+            //Add
+            Assert.Fail();
             //UpdateSetData
             Assert.Fail();
         }

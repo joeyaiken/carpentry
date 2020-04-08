@@ -1,10 +1,41 @@
-﻿using Newtonsoft.Json;
+﻿using Carpentry.Logic.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Carpentry.UI.Models
 {
     public class InventoryCardDto
     {
+
+        public InventoryCardDto(InventoryCard model)
+        {
+            Id = model.Id;
+            DeckCards = model.DeckCards.Select(x => new InventoryDeckCardDto(x)).ToList();
+            InventoryCardStatusId = model.InventoryCardStatusId;
+            IsFoil = model.IsFoil;
+            MultiverseId = model.MultiverseId;
+            Name = model.Name;
+            Set = model.Set;
+            VariantType = model.VariantType;
+        }
+
+        public InventoryCard ToModel()
+        {
+            InventoryCard result = new InventoryCard
+            {
+                Id = Id,
+                DeckCards = DeckCards.Select(x => x.ToModel()).ToList(),
+                InventoryCardStatusId = InventoryCardStatusId,
+                IsFoil = IsFoil,
+                MultiverseId = MultiverseId,
+                Name = Name,
+                Set = Set,
+                VariantType = VariantType,
+            };
+            return result;
+        }
+
         [JsonProperty("id")]
         public int Id { get; set; }
 

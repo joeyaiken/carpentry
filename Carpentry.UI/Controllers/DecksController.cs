@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.Data.Models;
+//using Carpentry.Data.Models;
 //using Carpentry.Data.Models;
 //using Carpentry.Interfaces;
 using Carpentry.Logic.Interfaces;
+using Carpentry.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.UI.Controllers
@@ -17,11 +19,15 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
         }
 
-        private readonly ICarpentryService _carpentry;
+        //private readonly ICarpentryService _carpentry;
 
-        public DecksController(ICarpentryService carpentry)
+        private readonly IDeckService _decks;
+
+
+        public DecksController(IDeckService decks)
         {
-            _carpentry = carpentry;
+            //_carpentry = carpentry;
+            _decks = decks;
         }
 
         /// <summary>
@@ -34,131 +40,129 @@ namespace Carpentry.UI.Controllers
             return Ok("Online");
         }
 
-        ////decks/add
-        ////- add a deck
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult<int>> Add([FromBody] DeckProperties deckProps)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    int newDeckId = await _carpentry.AddDeck(deckProps);
-        //    //    return Accepted(newDeckId);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("Add", ex));
-        //    //}
-        //}
+        //decks/add
+        //- add a deck
+        [HttpPost("[action]")]
+        public async Task<ActionResult<int>> Add([FromBody] DeckPropertiesDto deckProps)
+        {
+            try
+            {
+                int newDeckId = await _decks.AddDeck(deckProps.ToModel());
+                return Accepted(newDeckId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Add", ex));
+            }
+        }
 
-        ////decks/update
-        ////- update properties of a deck
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult> Update([FromBody] DeckProperties deckProps)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    await _carpentry.UpdateDeck(deckProps);
-        //    //    return Accepted();
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("Update", ex));
-        //    //}
-        //}
+        //decks/update
+        //- update properties of a deck
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Update([FromBody] DeckPropertiesDto deckProps)
+        {
+            try
+            {
+                await _decks.UpdateDeck(deckProps.ToModel());
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Update", ex));
+            }
+        }
 
-        ////decks/delete
-        ////- delete a deck
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> Delete(int deckId)
-        //{
-        //    try
-        //    {
-        //        await _carpentry.DeleteDeck(deckId);
-        //        return Accepted();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("Delete", ex));
-        //    }
-        //}
+        //decks/delete
+        //- delete a deck
+        [HttpGet("[action]")]
+        public async Task<ActionResult> Delete(int deckId)
+        {
+            try
+            {
+                await _decks.DeleteDeck(deckId);
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Delete", ex));
+            }
+        }
 
-        ////decks/Search
-        ////- get a list of deck properties & stats
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult<IEnumerable<DeckProperties>>> Search()
-        //{
-        //    try
-        //    {
-        //        var results = await _carpentry.SearchDecks();
-        //        return Ok(results);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("Search", ex));
-        //    }
-        //}
+        //decks/Search
+        //- get a list of deck properties & stats
+        [HttpPost("[action]")]
+        public async Task<ActionResult<IEnumerable<DeckPropertiesDto>>> Search()
+        {
+            try
+            {
+                var results = await _decks.SearchDecks();
+                var mappedResults = results.Select(x => new DeckPropertiesDto(x)).ToList();
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Search", ex));
+            }
+        }
 
-        ////decks/Get
-        ////- get a deck (with cards)
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult<DeckDto>> Get(int deckId)
-        //{
-        //    try
-        //    {
-        //        var results = await _carpentry.GetDeckDetail(deckId);
-        //        return Ok(results);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("Get", ex));
-        //    }
-        //}
+        //decks/Get
+        //- get a deck (with cards)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<DeckDetailDto>> Get(int deckId)
+        {
+            try
+            {
+                var results = await _decks.GetDeckDetail(deckId);
+                DeckDetailDto mappedResults = new DeckDetailDto(results);
+                return Ok(mappedResults);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Get", ex));
+            }
+        }
 
 
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult> AddCard([FromBody] DeckCardDto dto)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    await _carpentry.AddDeckCard(dto);
-        //    //    return Accepted();
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("AddCard", ex));
-        //    //}
-        //}
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddCard([FromBody] DeckCardDto dto)
+        {
+            try
+            {
+                await _decks.AddDeckCard(dto.ToModel());
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("AddCard", ex));
+            }
+        }
 
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult> UpdateCard([FromBody] DeckCardDto card)
-        //{
-        //    throw new NotImplementedException();
-        //    //try
-        //    //{
-        //    //    await _carpentry.UpdateDeckCard(card);
-        //    //    return Accepted();
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return StatusCode(500, FormatExceptionMessage("UpdateCard", ex));
-        //    //}
-        //}
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateCard([FromBody] DeckCardDto card)
+        {
+            try
+            {
+                await _decks.UpdateDeckCard(card.ToModel());
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("UpdateCard", ex));
+            }
+        }
 
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> RemoveCard(int id)
-        //{
-        //    try
-        //    {
-        //        await _carpentry.DeleteDeckCard(id);
-        //        return Accepted();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("RemoveCard", ex));
-        //    }
-        //}
+        [HttpGet("[action]")]
+        public async Task<ActionResult> RemoveCard(int id)
+        {
+            try
+            {
+                await _decks.DeleteDeckCard(id);
+                return Accepted();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("RemoveCard", ex));
+            }
+        }
     }
 }
