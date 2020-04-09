@@ -16,7 +16,7 @@ using Carpentry.Data.QueryParameters;
 
 namespace Carpentry.Tests.TestClasses
 {
-    [TestClass]
+    //[TestClass]
     public class InventoryControllerIntegrationTests
     {
         readonly CarpentryFactory _factory;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Carpentry.UI.Tests.TestClasses
+namespace Carpentry.UI.Tests.IntegrationTests
 {
     /// <summary>
     /// These tests all verify that all controllers can initialize correctly (and that they have all dependencies loaded)

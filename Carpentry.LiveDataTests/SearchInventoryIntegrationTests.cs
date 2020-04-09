@@ -15,7 +15,7 @@ namespace Carpentry.LiveDataTests
     /// Some specific integration tests I'm interested related to the Inventory Search
     /// These are LIVE DATA tests and should be moved to the other project
     /// </summary>
-    [TestClass]
+    //[TestClass]
     public class SearchInventoryIntegrationTests
     {
         readonly LiveDataTestFactory _factory;

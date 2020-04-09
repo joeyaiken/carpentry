@@ -10,7 +10,7 @@ namespace Carpentry.Tests.TestClasses
     /// <summary>
     /// These tests all verify that all controllers can initialize correctly (and that they have all dependencies loaded)
     /// </summary>
-    [TestClass]
+    //[TestClass]
     public class ControllerStatusTests
     {
         readonly CarpentryFactory _factory;

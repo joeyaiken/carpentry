@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Carpentry.UI.Tests.TestClasses
+namespace Carpentry.UI.Tests.IntegrationTests
 {
-    [TestClass]
+    //[TestClass]
     public class CardSearchControllerTests
     {
         readonly CarpentryFactory _factory;

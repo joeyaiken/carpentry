@@ -17,11 +17,13 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
         }
 
-        private readonly ICarpentryService _carpentry;
+        //private readonly ICarpentryService _carpentry;
 
-        public CoreController(ICarpentryService carpentry)
+        public CoreController(
+            //ICarpentryService carpentry
+            )
         {
-            _carpentry = carpentry;
+            //_carpentry = carpentry;
         }
 
         /// <summary>

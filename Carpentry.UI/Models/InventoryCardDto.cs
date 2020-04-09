@@ -7,6 +7,10 @@ namespace Carpentry.UI.Models
 {
     public class InventoryCardDto
     {
+        public InventoryCardDto()
+        {
+            DeckCards = new List<InventoryDeckCardDto>();
+        }
 
         public InventoryCardDto(InventoryCard model)
         {

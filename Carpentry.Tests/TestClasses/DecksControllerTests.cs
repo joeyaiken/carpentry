@@ -16,7 +16,7 @@ using System.Text;
 
 namespace Carpentry.Tests.TestClasses
 {
-    [TestClass]
+    //[TestClass]
     public class DecksControllerIntegrationTests
     {
         readonly CarpentryFactory _factory;

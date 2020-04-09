@@ -1,4 +1,5 @@
-﻿using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Data.Interfaces;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,16 @@ namespace Carpentry.Logic.Implementations
         //2 -   A DTO that contains either IDs or values but not the associations
 
         //Should have no access to data context classes, only repo classes
-        //private readonly ICardRepo _cardRepo;
+        private readonly ICardRepo _cardRepo;
         //private readonly ICardStringRepo _scryRepo;
         //private readonly ILogger<CarpentryService> _logger;
 
         public DeckService(
-            //ICardRepo cardRepo, ICardStringRepo scryRepo, ILogger<CarpentryService> logger
+            ICardRepo cardRepo
+            //,ICardStringRepo scryRepo, ILogger<CarpentryService> logger
             )
         {
-            //_cardRepo = cardRepo;
+            _cardRepo = cardRepo;
             //_scryRepo = scryRepo;
             //_logger = logger;
         }
@@ -304,9 +306,27 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<int> AddDeck(DeckProperties props)
         {
-            throw new NotImplementedException();
-            //int newId = await _cardRepo.AddDeck(props);
-            //return newId;
+
+            //This layer knows of it's own models, but not the UI layer
+            //The DATA layer won't know of this layer's model, so we must map to a type consumable by the data layer
+            Data.DataContext.MagicFormat deckFormat = await _cardRepo.GetFormatByName(props.Format);
+
+            Data.DataContext.Deck newDeck = new Data.DataContext.Deck()
+            {
+                Name = props.Name,
+                Format = deckFormat,
+                Notes = props.Notes,
+
+                BasicW = props.BasicW,
+                BasicU = props.BasicU,
+                BasicB = props.BasicB,
+                BasicR = props.BasicR,
+                BasicG = props.BasicG,
+            };
+
+            int newId = await _cardRepo.AddDeck(newDeck);
+
+            return newId;
         }
 
         public async Task UpdateDeck(DeckProperties props)

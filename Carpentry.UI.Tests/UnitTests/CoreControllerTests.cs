@@ -1,27 +1,17 @@
-﻿//using Carpentry.Data.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
-//using Microsoft.Data.Sqlite;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-//using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
-using System.Text;
 
-
-namespace Carpentry.UI.Tests.TestClasses
+namespace Carpentry.UI.Tests.UnitTests
 {
     [TestClass]
-    public class DecksControllerIntegrationTests
+    public class CoreControllerTests
     {
         readonly CarpentryFactory _factory;
 
-        public DecksControllerIntegrationTests()
+        public CoreControllerTests()
         {
             _factory = new CarpentryFactory();
         }
@@ -32,10 +22,16 @@ namespace Carpentry.UI.Tests.TestClasses
         //    Console.WriteLine("ClassInitialize");
         //}
 
+        //[TestInitialize]
+        //public void TestInitialize()
+        //{
+
+        //}
+
         #region Tests - Controller methods all return Ok/Accepted
 
         [TestMethod]
-        public async Task Decks_Add_ReturnsOK_Test()
+        public async Task Core_GetFilterValues_ReturnsOK_Test()
         {
             //assemble
             var client = _factory.CreateClient();
@@ -54,12 +50,12 @@ namespace Carpentry.UI.Tests.TestClasses
 
             //Add
             Assert.Fail();
-            //Add
+            //GetFilterValues
             Assert.Fail();
         }
         
         [TestMethod]
-        public async Task Decks_Update_ReturnsOK_Test()
+        public async Task Core_BackupDatabase_ReturnsOK_Test()
         {
             //assemble
             var client = _factory.CreateClient();
@@ -78,12 +74,12 @@ namespace Carpentry.UI.Tests.TestClasses
 
             //Add
             Assert.Fail();
-            //Update
+            //BackupDatabase
             Assert.Fail();
         }
         
         [TestMethod]
-        public async Task Decks_Delete_ReturnsOK_Test()
+        public async Task Core_RestoreDatabase_ReturnsOK_Test()
         {
             //assemble
             var client = _factory.CreateClient();
@@ -102,12 +98,12 @@ namespace Carpentry.UI.Tests.TestClasses
 
             //Add
             Assert.Fail();
-            //Delete
+            //RestoreDatabase
             Assert.Fail();
         }
         
         [TestMethod]
-        public async Task Decks_Search_ReturnsOK_Test()
+        public async Task Core_GetDatabaseUpdateStatus_ReturnsOK_Test()
         {
             //assemble
             var client = _factory.CreateClient();
@@ -126,12 +122,12 @@ namespace Carpentry.UI.Tests.TestClasses
 
             //Add
             Assert.Fail();
-            //Search
+            //GetDatabaseUpdateStatus
             Assert.Fail();
         }
         
         [TestMethod]
-        public async Task Decks_Get_ReturnsOK_Test()
+        public async Task Core_UpdateScryfallSet_ReturnsOK_Test()
         {
             //assemble
             var client = _factory.CreateClient();
@@ -150,12 +146,12 @@ namespace Carpentry.UI.Tests.TestClasses
 
             //Add
             Assert.Fail();
-            //Get
+            //UpdateScryfallSet
             Assert.Fail();
         }
         
         [TestMethod]
-        public async Task Decks_AddCard_ReturnsOK_Test()
+        public async Task Core_UpdateSetData_ReturnsOK_Test()
         {
             //assemble
             var client = _factory.CreateClient();
@@ -174,92 +170,11 @@ namespace Carpentry.UI.Tests.TestClasses
 
             //Add
             Assert.Fail();
-            //AddCard
-            Assert.Fail();
-        }
-        
-        [TestMethod]
-        public async Task Decks_UpdateCard_ReturnsOK_Test()
-        {
-            //assemble
-            var client = _factory.CreateClient();
-
-            //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
-
-            //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
-
-
-
-
-
-            //Add
-            Assert.Fail();
-            //UpdateCard
-            Assert.Fail();
-        }
-        
-        [TestMethod]
-        public async Task Decks_RemoveCard_ReturnsOK_Test()
-        {
-            //assemble
-            var client = _factory.CreateClient();
-
-            //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
-
-            //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
-
-
-
-
-
-            //Add
-            Assert.Fail();
-            //RemoveCard
+            //UpdateSetData
             Assert.Fail();
         }
 
         #endregion
-
-        //[TestInitialize]
-        //public async Task TestInitialize()
-        //{
-        //    var client = _factory.WithWebHostBuilder(builder =>
-        //    {
-        //        builder.ConfigureServices(async services =>
-        //        {
-        //            var serviceProvider = services.BuildServiceProvider();
-
-        //            using (var scope = serviceProvider.CreateScope())
-        //            {
-        //                var scopedServices = scope.ServiceProvider;
-        //                //var testService = scopedServices.GetRequiredService<TestDataService>();
-        //                //await testService.ResetDbAsync();
-        //                //await testService.SeedDeckTestRecords();
-        //            }
-        //        });
-        //    })
-        //    .CreateClient(new WebApplicationFactoryClientOptions
-        //    {
-        //        AllowAutoRedirect = false
-        //    });
-
-        //}
-
-        //[TestMethod]
-        //public void TestsCanIn()
-        //{
-        //    Assert.IsTrue(true);
-        //}
-
-        
 
     }
 }

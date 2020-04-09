@@ -9,7 +9,7 @@ namespace Carpentry.Tests.TestClasses
     /// <summary>
     /// The Cards Controller should probably be renamed since all this does is interact with the scryfall repo
     /// </summary>
-    [TestClass]
+    //[TestClass]
     public class CardsControllerIntegrationTests
     {
         readonly CarpentryFactory _factory;

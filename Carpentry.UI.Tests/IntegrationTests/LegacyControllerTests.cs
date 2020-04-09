@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Carpentry.UI.Tests.TestClasses
+namespace Carpentry.UI.Tests.IntegrationTests
 {
     //[TestClass]
     public class LegacyControllerTests

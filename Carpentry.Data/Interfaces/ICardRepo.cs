@@ -9,6 +9,16 @@ namespace Carpentry.Data.Interfaces
 {
     public interface ICardRepo
     {
+        #region util methods
+
+        Task<MagicFormat> GetFormatByName(string formatName);
+        
+        
+        
+        
+        
+        #endregion
+
         #region Card related methdos
 
         Task AddCardDefinition(ScryfallMagicCard scryfallCard);
@@ -20,9 +30,10 @@ namespace Carpentry.Data.Interfaces
         #endregion
 
         #region Deck related methods
-
-        Task<int> AddDeck(DeckProperties props);
-
+        
+        Task<int> AddDeck(DeckProperties props); //Obsolete
+        
+        Task<int> AddDeck(Deck newDeck);
         Task UpdateDeck(DeckProperties deckDto);
 
         Task DeleteDeck(int deckId);

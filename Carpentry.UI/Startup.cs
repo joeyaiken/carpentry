@@ -35,25 +35,28 @@ namespace Carpentry.UI
             ////Going to actually pull the fill filepaths from app settings now
             ////TODO Eventually I could make a static config class and just read from that class
             ////TODO Everything else still needs this DB pattern
-            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+            string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
 
             ////DBs
-            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            //services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
+            services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
 
             ////string repo & repo's HTTP client
             //services.AddScoped<ICardStringRepo, ScryfallRepo>();
             //services.AddHttpClient<ICardStringRepo, ScryfallRepo>();
 
             ////card DB repo
-            //services.AddScoped<ICardRepo, SqliteCardRepo>();
+            services.AddScoped<ICardRepo, SqliteCardRepo>();
 
 
 
             //Services
-            services.AddScoped<ICarpentryService, CarpentryService>();
+            //services.AddScoped<ICarpentryService, CarpentryService>();
+            services.AddScoped<ICardSearchService, CardSearchService>();
             services.AddScoped<IDeckService, DeckService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+
 
 
 

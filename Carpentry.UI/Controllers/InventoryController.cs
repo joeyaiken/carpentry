@@ -48,7 +48,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 var updatedId = await _inventory.AddInventoryCard(dto.ToModel());
-                return Accepted(updatedId);
+                return Ok(updatedId);
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 await _inventory.AddInventoryCardBatch(dto.Select(x => x.ToModel()));
-                return Accepted();
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 await _inventory.UpdateInventoryCard(dto.ToModel());
-                return Accepted();
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -97,7 +97,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 await _inventory.DeleteInventoryCard(id);
-                return Accepted();
+                return Ok();
             }
             catch (Exception ex)
             {

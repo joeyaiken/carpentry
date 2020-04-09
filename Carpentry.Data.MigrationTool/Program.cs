@@ -115,8 +115,6 @@ namespace Carpentry.Data.MigrationTool
 
             var migrationService = serviceProvider.GetService<IDataMigrationService>();
 
-            await migrationService.BackupDB();
-
             //await migrationService.RestoreDB();
 
             //await migrationService.RefreshDB();

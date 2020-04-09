@@ -50,8 +50,8 @@ namespace Carpentry.UI.Tests
             {
                 //Reminder - I need this in order for the service to properly see it
                 //I'm not doing this just to try and override Startup that ALSO references the same AppSetting path
-                string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-                string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+                //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+                //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
                 //string legacyDatabaseFilepath = Configuration.GetValue<string>("AppSettings:LegacyDatabaseFilepath");
 
                 //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));

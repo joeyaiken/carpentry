@@ -21,6 +21,9 @@ namespace Carpentry.Data.Implementations
         readonly SqliteDataContext _cardContext;
         private readonly ILogger<SqliteCardRepo> _logger;
 
+        private const bool _obsoleteShouldThrowError = false;
+
+
         public SqliteCardRepo(SqliteDataContext cardContext, ILogger<SqliteCardRepo> logger)
         {
             _cardContext = cardContext;
@@ -295,24 +298,54 @@ namespace Carpentry.Data.Implementations
 
         #region Deck related methods
 
+        public async Task<MagicFormat> GetFormatByName(string formatName)
+        {
+            MagicFormat format = await _cardContext.MagicFormats.Where(x => x.Name.ToLower() == formatName.ToLower()).FirstAsync();
+            return format;
+        }
+
+
+
         /// <summary>
         /// Adds a new deck
-        /// The only way (currently) to add a new deck is through a modal that doesn't show basic lands, so they are omitted
         /// </summary>
         /// <param name="props"></param>
         /// <returns></returns>
+        [Obsolete("Deprecated method, use the one that takes a DataContext.Deck", _obsoleteShouldThrowError)]
         public async Task<int> AddDeck(DeckProperties props)
         {
 
             //TODO: Props should hold a format ID, not a format name
-            var deckFormat = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == props.Format.ToLower()).First();
+            //var deckFormat = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == props.Format.ToLower()).First();
+            var deckFormat = await GetFormatByName(props.Format);
 
             Deck newDeck = new Deck()
             {
                 Name = props.Name,
                 Format = deckFormat,
                 Notes = props.Notes,
+
+                BasicW = props.BasicW,
+                BasicU = props.BasicU,
+                BasicB = props.BasicB,
+                BasicR = props.BasicR,
+                BasicG = props.BasicG,
             };
+
+            await _cardContext.Decks.AddAsync(newDeck);
+            await _cardContext.SaveChangesAsync();
+
+            return newDeck.Id;
+        }
+
+        public async Task<int> AddDeck(Deck newDeck)
+        {
+            if(newDeck.Id > 0)
+            {
+                throw new ArgumentException("New deck cannot contain an ID");
+            }
+
+            //TODO - consider more validation
 
             await _cardContext.Decks.AddAsync(newDeck);
             await _cardContext.SaveChangesAsync();

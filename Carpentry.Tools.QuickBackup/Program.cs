@@ -13,6 +13,9 @@ using Serilog.Events;
 
 namespace Carpentry.Tools.QuickBackup
 {
+    /// <summary>
+    /// This is a simple console app that backs up the Carpentry database to a location specified in appsettings.json
+    /// </summary>
     class Program
     {
         static async Task Main(string[] args)

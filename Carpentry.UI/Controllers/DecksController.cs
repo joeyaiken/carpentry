@@ -19,14 +19,10 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
         }
 
-        //private readonly ICarpentryService _carpentry;
-
         private readonly IDeckService _decks;
-
 
         public DecksController(IDeckService decks)
         {
-            //_carpentry = carpentry;
             _decks = decks;
         }
 
@@ -48,7 +44,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 int newDeckId = await _decks.AddDeck(deckProps.ToModel());
-                return Accepted(newDeckId);
+                return Ok(newDeckId);
             }
             catch (Exception ex)
             {
@@ -64,7 +60,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 await _decks.UpdateDeck(deckProps.ToModel());
-                return Accepted();
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -80,7 +76,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 await _decks.DeleteDeck(deckId);
-                return Accepted();
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -97,7 +93,7 @@ namespace Carpentry.UI.Controllers
             {
                 var results = await _decks.SearchDecks();
                 var mappedResults = results.Select(x => new DeckPropertiesDto(x)).ToList();
-                return Ok(results);
+                return Ok(mappedResults);
             }
             catch (Exception ex)
             {
@@ -128,8 +124,10 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                await _decks.AddDeckCard(dto.ToModel());
-                return Accepted();
+                var model = dto.ToModel();
+                await _decks.AddDeckCard(model);
+                //await _decks.AddDeckCard(dto.ToModel());
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -143,7 +141,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 await _decks.UpdateDeckCard(card.ToModel());
-                return Accepted();
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -157,7 +155,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 await _decks.DeleteDeckCard(id);
-                return Accepted();
+                return Ok();
             }
             catch (Exception ex)
             {
