@@ -23,7 +23,6 @@ namespace Carpentry.UI.Tests.UnitTests
     [TestClass]
     public class DecksControllerTests
     {
-        readonly CarpentryFactory _factory;
 
         private readonly Controllers.DecksController _decksController;
 
