@@ -1,9 +1,10 @@
 ﻿using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.UI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,10 @@ namespace Carpentry.UI.Tests.UnitTests
 
         public CardSearchControllerTests()
         {
+            //mock service
             var mockService = new Mock<ICardSearchService>();
+
+            //search result payload
             IEnumerable<MagicCard> searchResults = new List<MagicCard>()
             {
                 new MagicCard{ },
@@ -44,88 +48,78 @@ namespace Carpentry.UI.Tests.UnitTests
                 .Setup(p => p.SearchCardsFromInventory(It.IsNotNull<InventoryQueryParameter>()))
                 .Returns(Task.FromResult(searchResults));
 
+            _cardSearchController = new Controllers.CardSearchController(mockService.Object);
         }
 
-        //[TestInitialize]
-        //public void TestInitialize()
-        //{
-        //}
-
-        #region Tests - Controller methods all return Ok/Accepted
 
         [TestMethod]
-        public void CardSearch_SearchWeb_ReturnsOK_Test()
+        public async Task CardSearch_SearchWeb_ReturnsOK_Test()
         {
             //assemble
-            //var client = _factory.CreateClient();
+            NameSearchQueryParameter queryParam = new NameSearchQueryParameter()
+            {
+
+            };
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/SearchWeb");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _cardSearchController.SearchWeb(queryParam);
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
 
+            var typedResult = response.Result as OkObjectResult;
 
+            IEnumerable<MagicCardDto> resultValue = typedResult.Value as IEnumerable<MagicCardDto>;
 
-
-
-            //Add
-            Assert.Fail();
-            //SearchWeb
-            Assert.Fail();
+            Assert.IsNotNull(resultValue);
+            Assert.AreEqual(5, resultValue.Count());
         }
 
         [TestMethod]
-        public void CardSearch_SearchSet_ReturnsOK_Test()
+        public async Task CardSearch_SearchSet_ReturnsOK_Test()
         {
             //assemble
-            //var client = _factory.CreateClient();
+            CardSearchQueryParameter queryParam = new CardSearchQueryParameter()
+            {
+
+            };
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _cardSearchController.SearchSet(queryParam);
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
 
+            var typedResult = response.Result as OkObjectResult;
 
+            IEnumerable<MagicCardDto> resultValue = typedResult.Value as IEnumerable<MagicCardDto>;
 
-
-
-            //Add
-            Assert.Fail();
-            //SearchSet
-            Assert.Fail();
+            Assert.IsNotNull(resultValue);
+            Assert.AreEqual(5, resultValue.Count());
         }
 
         [TestMethod]
-        public void CardSearch_SearchInventory_ReturnsOK_Test()
+        public async Task CardSearch_SearchInventory_ReturnsOK_Test()
         {
             //assemble
-            //var client = _factory.CreateClient();
+            InventoryQueryParameter queryParam = new InventoryQueryParameter()
+            {
+
+            };
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _cardSearchController.SearchInventory(queryParam);
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
 
+            var typedResult = response.Result as OkObjectResult;
 
+            IEnumerable<MagicCardDto> resultValue = typedResult.Value as IEnumerable<MagicCardDto>;
 
-
-
-            //Add
-            Assert.Fail();
-            //SearchInventory
-            Assert.Fail();
+            Assert.IsNotNull(resultValue);
+            Assert.AreEqual(5, resultValue.Count());
         }
-
-        #endregion
 
     }
 }

@@ -11,9 +11,9 @@ namespace Carpentry.UI.Models
     {
         public InventoryDetailDto(InventoryDetail model)
         {
-            Cards = Cards;
-            InventoryCards = InventoryCards;
-            Name = Name;
+            Cards = model.Cards.Select(x => new MagicCardDto(x)).ToList();
+            InventoryCards = model.InventoryCards.Select(x => new InventoryCardDto(x)).ToList();
+            Name = model.Name;
         }
 
         public InventoryDetail ToModel()

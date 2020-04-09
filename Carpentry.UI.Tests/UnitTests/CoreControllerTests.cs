@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Carpentry.Logic.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +12,22 @@ namespace Carpentry.UI.Tests.UnitTests
     [TestClass]
     public class CoreControllerTests
     {
-        readonly CarpentryFactory _factory;
+        private readonly Controllers.CoreController _coreController;
 
         public CoreControllerTests()
         {
-            _factory = new CarpentryFactory();
+            var mockBackupService = new Mock<IDataBackupService>();
+
+
+
+
+
+
+
+
+
+            _coreController = new Controllers.CoreController();
         }
-
-        //[ClassInitialize]
-        //public static void ClassInitialize(TestContext context)
-        //{
-        //    Console.WriteLine("ClassInitialize");
-        //}
-
-        //[TestInitialize]
-        //public void TestInitialize()
-        //{
-
-        //}
 
         #region Tests - Controller methods all return Ok/Accepted
 
@@ -34,144 +35,96 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_GetFilterValues_ReturnsOK_Test()
         {
             //assemble
-            var client = _factory.CreateClient();
+
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _coreController.GetFilterValues();
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response, typeof(OkResult));
 
-
-
-
-
-            //Add
-            Assert.Fail();
-            //GetFilterValues
-            Assert.Fail();
+            ////GetFilterValues
+            //Assert.Fail();
         }
         
         [TestMethod]
         public async Task Core_BackupDatabase_ReturnsOK_Test()
         {
             //assemble
-            var client = _factory.CreateClient();
+
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _coreController.BackupDatabase();
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response, typeof(OkResult));
 
-
-
-
-
-            //Add
-            Assert.Fail();
-            //BackupDatabase
-            Assert.Fail();
+            ////BackupDatabase
+            //Assert.Fail();
         }
         
         [TestMethod]
         public async Task Core_RestoreDatabase_ReturnsOK_Test()
         {
             //assemble
-            var client = _factory.CreateClient();
+
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _coreController.RestoreDatabase();
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
-
-
-
-
-
-            //Add
-            Assert.Fail();
-            //RestoreDatabase
-            Assert.Fail();
+            Assert.IsInstanceOfType(response, typeof(OkResult));
+            
+            ////RestoreDatabase
+            //Assert.Fail();
         }
         
         [TestMethod]
         public async Task Core_GetDatabaseUpdateStatus_ReturnsOK_Test()
         {
             //assemble
-            var client = _factory.CreateClient();
+
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _coreController.GetDatabaseUpdateStatus();
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response, typeof(OkResult));
 
-
-
-
-
-            //Add
-            Assert.Fail();
-            //GetDatabaseUpdateStatus
-            Assert.Fail();
+            ////GetDatabaseUpdateStatus
+            //Assert.Fail();
         }
         
         [TestMethod]
         public async Task Core_UpdateScryfallSet_ReturnsOK_Test()
         {
             //assemble
-            var client = _factory.CreateClient();
+            string setToSubmit = "THB";
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _coreController.UpdateScryfallSet(setToSubmit);
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response, typeof(OkResult));
 
-
-
-
-
-            //Add
-            Assert.Fail();
-            //UpdateScryfallSet
-            Assert.Fail();
+            ////UpdateScryfallSet
+            //Assert.Fail();
         }
         
         [TestMethod]
         public async Task Core_UpdateSetData_ReturnsOK_Test()
         {
             //assemble
-            var client = _factory.CreateClient();
+            string setToSubmit = "THB";
 
             //act
-            //var response = await client.GetAsync("api/CardSearch/");
-            //var responseContent = await response.Content.ReadAsStringAsync();
+            var response = await _coreController.UpdateSetData(setToSubmit);
 
             //assert
-            //Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            //Assert.AreEqual("Online", responseContent);
+            Assert.IsInstanceOfType(response, typeof(OkResult));
 
-
-
-
-
-            //Add
-            Assert.Fail();
-            //UpdateSetData
-            Assert.Fail();
+            ////UpdateSetData
+            //Assert.Fail();
         }
 
         #endregion
