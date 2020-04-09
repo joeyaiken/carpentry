@@ -290,6 +290,7 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<int> AddInventoryCard(InventoryCard dto)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
             //await EnsureCardDefinitionExists(dto.MultiverseId);
 
@@ -300,6 +301,7 @@ namespace Carpentry.Logic.Implementations
 
         public async Task AddInventoryCardBatch(IEnumerable<InventoryCard> cards)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
             ////Ensure all cards exist in the repo
             ////Will this break when multiple cards are called for the same set?
@@ -311,18 +313,21 @@ namespace Carpentry.Logic.Implementations
 
         public async Task UpdateInventoryCard(InventoryCard dto)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
             //await _cardRepo.UpdateInventoryCard(dto);
         }
 
         public async Task DeleteInventoryCard(int id)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
             //await _cardRepo.DeleteInventoryCard(id);
         }
 
         public async Task<IEnumerable<InventoryOverview>> GetInventoryOverviews(InventoryQueryParameter param)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
 
             //if (param.GroupBy.ToLower() == "quantity")
@@ -385,6 +390,7 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<InventoryDetail> GetInventoryDetailByName(string name)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
             //InventoryDetailDto result = new InventoryDetailDto()
             //{

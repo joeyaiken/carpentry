@@ -331,12 +331,14 @@ namespace Carpentry.Logic.Implementations
 
         public async Task UpdateDeck(DeckProperties props)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
             //await _cardRepo.UpdateDeck(props);
         }
 
         public async Task DeleteDeck(int deckId)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
             //await _cardRepo.DeleteDeck(deckId);
         }

@@ -1,4 +1,6 @@
 ﻿using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
+using Carpentry.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -16,17 +18,36 @@ namespace Carpentry.UI.Tests.UnitTests
 
         public CoreControllerTests()
         {
-            var mockBackupService = new Mock<IDataBackupService>();
+            //var mockBackupService = new Mock<IDataBackupService>();
+
+            var mockFilterService = new Mock<IFilterService>();
+
+            mockFilterService
+                .Setup(p => p.GetCardStatusFilterOptions())
+                .Returns(Task.FromResult(new List<FilterOption>()));
+
+            mockFilterService
+                .Setup(p => p.GetFormatFilterOptions())
+                .Returns(Task.FromResult(new List<FilterOption>()));
+
+            mockFilterService
+                .Setup(p => p.GetManaColorFilterOptions())
+                .Returns(Task.FromResult(new List<FilterOption>()));
+
+            mockFilterService
+                .Setup(p => p.GetRarityFilterOptions())
+                .Returns(Task.FromResult(new List<FilterOption>()));
+
+            mockFilterService
+                .Setup(p => p.GetSetFilterOptions())
+                .Returns(Task.FromResult(new List<FilterOption>()));
+
+            mockFilterService
+                .Setup(p => p.GetTypeFilterOptions())
+                .Returns(Task.FromResult(new List<FilterOption>()));
 
 
-
-
-
-
-
-
-
-            _coreController = new Controllers.CoreController();
+            _coreController = new Controllers.CoreController(mockFilterService.Object);
         }
 
         #region Tests - Controller methods all return Ok/Accepted
@@ -41,10 +62,18 @@ namespace Carpentry.UI.Tests.UnitTests
             var response = await _coreController.GetFilterValues();
 
             //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            var typedResult = response.Result as OkObjectResult;
+            AppFiltersDto resultValue = typedResult.Value as AppFiltersDto;
 
-            ////GetFilterValues
-            //Assert.Fail();
+            Assert.IsNotNull(resultValue);
+            
+            Assert.IsNotNull(resultValue.Formats);
+            Assert.IsNotNull(resultValue.ManaColors);
+            Assert.IsNotNull(resultValue.Rarities);
+            Assert.IsNotNull(resultValue.Sets);
+            Assert.IsNotNull(resultValue.Statuses);
+            Assert.IsNotNull(resultValue.Types);
         }
         
         [TestMethod]

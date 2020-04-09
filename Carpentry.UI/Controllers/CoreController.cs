@@ -5,6 +5,8 @@ using Carpentry.UI.Models;
 //using Carpentry.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Carpentry.UI.Controllers
@@ -17,13 +19,13 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
         }
 
-        //private readonly ICarpentryService _carpentry;
+        private readonly IFilterService _filterService;
 
         public CoreController(
-            //ICarpentryService carpentry
+            IFilterService filterService
             )
         {
-            //_carpentry = carpentry;
+            _filterService = filterService;
         }
 
         /// <summary>
@@ -39,16 +41,42 @@ namespace Carpentry.UI.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult<AppFiltersDto>> GetFilterValues()
         {
-            throw new NotImplementedException();
-            //try
-            //{
-            //    var filters = await _carpentry.GetAppFilterValues();
-            //    return Ok(filters);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return StatusCode(500, FormatExceptionMessage("GetFilterValues", ex));
-            //}
+            try
+            {
+                List<FilterOption> formats = await _filterService.GetFormatFilterOptions();
+
+                List<FilterOptionDto> mappedFormats = formats.Select(x => new FilterOptionDto(x)).ToList();
+
+                List<FilterOptionDto> anotherWay = (await _filterService.GetFormatFilterOptions()).Select(x => new FilterOptionDto(x)).ToList();
+
+                AppFiltersDto filters = new AppFiltersDto
+                {
+                    Formats = 
+                        (await _filterService.GetFormatFilterOptions())
+                        .Select(x => new FilterOptionDto(x)).ToList(),
+                    ManaColors = 
+                        (await _filterService.GetManaColorFilterOptions())
+                        .Select(x => new FilterOptionDto(x)).ToList(),
+                    Rarities =
+                        (await _filterService.GetRarityFilterOptions())
+                        .Select(x => new FilterOptionDto(x)).ToList(),
+                    Sets =
+                        (await _filterService.GetSetFilterOptions())
+                        .Select(x => new FilterOptionDto(x)).ToList(),
+                    Statuses =
+                        (await _filterService.GetCardStatusFilterOptions())
+                        .Select(x => new FilterOptionDto(x)).ToList(),
+                    Types =
+                        (await _filterService.GetTypeFilterOptions())
+                        .Select(x => new FilterOptionDto(x)).ToList(),
+                };
+
+                return Ok(filters);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetFilterValues", ex));
+            }
         }
 
         //Backup DB
@@ -56,6 +84,7 @@ namespace Carpentry.UI.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> BackupDatabase()
         {
+            await Task.Delay(0);
             throw new NotImplementedException();
         }
 
@@ -63,6 +92,7 @@ namespace Carpentry.UI.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> RestoreDatabase()
         {
+            await Task.Delay(0);
             throw new NotImplementedException();
         }
 
@@ -70,6 +100,7 @@ namespace Carpentry.UI.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> GetDatabaseUpdateStatus()
         {
+            await Task.Delay(0);
             throw new NotImplementedException();
         }
 
@@ -78,6 +109,7 @@ namespace Carpentry.UI.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> UpdateScryfallSet(string setCode)
         {
+            await Task.Delay(0);
             throw new NotImplementedException();
         }
 
@@ -85,6 +117,7 @@ namespace Carpentry.UI.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> UpdateSetData(string setCode)
         {
+            await Task.Delay(0);
             throw new NotImplementedException();
         }
     }

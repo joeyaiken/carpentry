@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Carpentry.UI.Models
+namespace Carpentry.Logic.Models
 {
     public class FilterOption
     {
