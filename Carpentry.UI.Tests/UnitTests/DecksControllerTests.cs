@@ -24,17 +24,17 @@ namespace Carpentry.UI.Tests.UnitTests
             //Add
             mockDeckService
                 .Setup(p => p.AddDeck(It.IsNotNull<DeckProperties>()))
-                .Returns(Task.FromResult(1));
+                .ReturnsAsync(1);
 
             //Update
             mockDeckService
-                .Setup(p => p.UpdateDeck(It.IsNotNull<DeckProperties>()))
-                .Returns(Task.CompletedTask);
+                .Setup(p => p.UpdateDeck(It.IsNotNull<DeckProperties>()));
+            //.ReturnsAsync(Task.CompletedTask);
 
             //Delete
             mockDeckService
-                .Setup(p => p.DeleteDeck(It.Is<int>(i => i > 0)))
-                .Returns(Task.CompletedTask);
+                .Setup(p => p.DeleteDeck(It.Is<int>(i => i > 0)));
+                //.ReturnsAsync(Task.CompletedTask);
 
             //Search
             IEnumerable<DeckProperties> searchResults = new List<DeckProperties>()
@@ -48,43 +48,60 @@ namespace Carpentry.UI.Tests.UnitTests
 
             mockDeckService
                 .Setup(p => p.SearchDecks())
-                .Returns(Task.FromResult(searchResults));
+                .ReturnsAsync(searchResults);
 
             //Get
             mockDeckService
                 .Setup(p => p.GetDeckDetail(It.Is<int>(i => i > 0)))
-                .Returns(Task.FromResult(new DeckDetail 
+                .ReturnsAsync(new DeckDetail 
                 { 
                     CardDetails = new List<InventoryCard>(),
                     CardOverviews = new List<InventoryOverview>(),
                     Props = new DeckProperties(),
                     Stats = new DeckStats(),
-                }));
+                });
 
 
             //AddCard
             mockDeckService
                 //.Setup(p => p.AddDeckCard(It.IsNotNull<DeckCard>()))
-                .Setup(p => p.UpdateDeckCard(It.Is<DeckCard>(c => c != null && c.Id == 0)))
-                .Returns(Task.FromResult(1));
+                .Setup(p => p.AddDeckCard(It.Is<DeckCard>(c => c != null && c.Id == 0)));
+            //.ReturnsAsync(1);
 
             //UpdateCard
             mockDeckService
                 //.Setup(p => p.UpdateDeckCard(It.IsNotNull<DeckCard>()))
-                .Setup(p => p.UpdateDeckCard(It.Is<DeckCard>(c => c != null && c.Id > 0)))
-                .Returns(Task.CompletedTask);
+                .Setup(p => p.UpdateDeckCard(It.Is<DeckCard>(c => c != null && c.Id > 0)));
+                //.ReturnsAsync(Task.CompletedTask);
 
             //RemoveCard
             mockDeckService
-                .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i > 0)))
-                .Returns(Task.CompletedTask);
+                .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i > 0)));
+                //.ReturnsAsync(Task.CompletedTask);
 
             //create controller
             _decksController = new Controllers.DecksController(mockDeckService.Object);
         }
 
         [TestMethod]
-        public async Task Decks_Add_ReturnsOK_Test()
+        public void Decks_GetStatus_ReturnsAsyncOK_Test()
+        {
+            //assemble
+
+
+            //act
+            var response = _decksController.Get();
+
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            var typedResult = response as OkObjectResult;
+            string resultValue = typedResult.Value as string;
+
+            Assert.AreEqual("Online", resultValue);
+        }
+
+        [TestMethod]
+        public async Task Decks_Add_ReturnsAsyncOK_Test()
         {
             //assemble
             DeckPropertiesDto mockDeck = new DeckPropertiesDto
@@ -104,7 +121,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_Update_ReturnsOK_Test()
+        public async Task Decks_Update_ReturnsAsyncOK_Test()
         {
             //assemble
             DeckPropertiesDto mockDeck = new DeckPropertiesDto
@@ -123,7 +140,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_Delete_ReturnsOK_Test()
+        public async Task Decks_Delete_ReturnsAsyncOK_Test()
         {
             //assemble
             int idToSubmit = 3;
@@ -136,7 +153,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Decks_Search_ReturnsOK_Test()
+        public async Task Decks_Search_ReturnsAsyncOK_Test()
         {
             //assemble
 
@@ -154,7 +171,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_Get_ReturnsOK_Test()
+        public async Task Decks_Get_ReturnsAsyncOK_Test()
         {
             //assemble
             int deckIdToRequest = 1;
@@ -171,7 +188,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_AddCard_ReturnsOK_Test()
+        public async Task Decks_AddCard_ReturnsAsyncOK_Test()
         {
             //assemble
             DeckCardDto mockCard = new DeckCardDto
@@ -192,7 +209,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_UpdateCard_ReturnsOK_Test()
+        public async Task Decks_UpdateCard_ReturnsAsyncOK_Test()
         {
             //assemble
             DeckCardDto mockCard = new DeckCardDto
@@ -214,7 +231,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_RemoveCard_ReturnsOK_Test()
+        public async Task Decks_RemoveCard_ReturnsAsyncOK_Test()
         {
             //assemble
             int idToSubmit = 3;

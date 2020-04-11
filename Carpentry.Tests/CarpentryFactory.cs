@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.DataContext;
+﻿using Carpentry.Data.LegacyDataContext;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-//using Carpentry.Data.DataContextLegacy;
+//using Carpentry.Data.LegacyDataContextLegacy;
 
 namespace Carpentry.Tests
 {

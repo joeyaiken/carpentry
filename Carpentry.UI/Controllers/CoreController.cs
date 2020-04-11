@@ -79,46 +79,46 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //Backup DB
-        //should this be a POST since it could/should include filepath info?
-        [HttpGet("[action]")]
-        public async Task<ActionResult> BackupDatabase()
-        {
-            await Task.Delay(0);
-            throw new NotImplementedException();
-        }
+        ////Backup DB
+        ////should this be a POST since it could/should include filepath info?
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> BackupDatabase()
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
 
-        //Restore DB
-        [HttpGet("[action]")]
-        public async Task<ActionResult> RestoreDatabase()
-        {
-            await Task.Delay(0);
-            throw new NotImplementedException();
-        }
+        ////Restore DB
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> RestoreDatabase()
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
 
-        //Get Set|Data Update Status
-        [HttpGet("[action]")]
-        public async Task<ActionResult> GetDatabaseUpdateStatus()
-        {
-            await Task.Delay(0);
-            throw new NotImplementedException();
-        }
+        ////Get Set|Data Update Status
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> GetDatabaseUpdateStatus()
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
 
 
-        //Update Set Scry Data
-        [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateScryfallSet(string setCode)
-        {
-            await Task.Delay(0);
-            throw new NotImplementedException();
-        }
+        ////Update Set Scry Data
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> UpdateScryfallSet(string setCode)
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
 
-        //Update Set Card Data
-        [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateSetData(string setCode)
-        {
-            await Task.Delay(0);
-            throw new NotImplementedException();
-        }
+        ////Update Set Card Data
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> UpdateSetData(string setCode)
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
     }
 }

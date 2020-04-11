@@ -36,19 +36,36 @@ namespace Carpentry.UI.Tests.UnitTests
             //SearchWeb
             mockService
                 .Setup(p => p.SearchCardsFromWeb(It.IsNotNull<NameSearchQueryParameter>()))
-                .Returns(Task.FromResult(searchResults));
+                .ReturnsAsync(searchResults);
 
             //SearchSet
             mockService
                 .Setup(p => p.SearchCardsFromSet(It.IsNotNull<CardSearchQueryParameter>()))
-                .Returns(Task.FromResult(searchResults));
+                .ReturnsAsync(searchResults);
 
             //SearchInventory
             mockService
                 .Setup(p => p.SearchCardsFromInventory(It.IsNotNull<InventoryQueryParameter>()))
-                .Returns(Task.FromResult(searchResults));
+                .ReturnsAsync(searchResults);
 
             _cardSearchController = new Controllers.CardSearchController(mockService.Object);
+        }
+
+        [TestMethod]
+        public void CardSearch_GetStatus_ReturnsOK_Test()
+        {
+            //assemble
+
+
+            //act
+            var response = _cardSearchController.Get();
+
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            var typedResult = response as OkObjectResult;
+            string resultValue = typedResult.Value as string;
+
+            Assert.AreEqual("Online", resultValue);
         }
 
 

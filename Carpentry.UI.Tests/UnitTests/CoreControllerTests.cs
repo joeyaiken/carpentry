@@ -24,27 +24,27 @@ namespace Carpentry.UI.Tests.UnitTests
 
             mockFilterService
                 .Setup(p => p.GetCardStatusFilterOptions())
-                .Returns(Task.FromResult(new List<FilterOption>()));
+                .ReturnsAsync(new List<FilterOption>());
 
             mockFilterService
                 .Setup(p => p.GetFormatFilterOptions())
-                .Returns(Task.FromResult(new List<FilterOption>()));
+                .ReturnsAsync(new List<FilterOption>());
 
             mockFilterService
                 .Setup(p => p.GetManaColorFilterOptions())
-                .Returns(Task.FromResult(new List<FilterOption>()));
+                .ReturnsAsync(new List<FilterOption>());
 
             mockFilterService
                 .Setup(p => p.GetRarityFilterOptions())
-                .Returns(Task.FromResult(new List<FilterOption>()));
+                .ReturnsAsync(new List<FilterOption>());
 
             mockFilterService
                 .Setup(p => p.GetSetFilterOptions())
-                .Returns(Task.FromResult(new List<FilterOption>()));
+                .ReturnsAsync(new List<FilterOption>());
 
             mockFilterService
                 .Setup(p => p.GetTypeFilterOptions())
-                .Returns(Task.FromResult(new List<FilterOption>()));
+                .ReturnsAsync(new List<FilterOption>());
 
 
             _coreController = new Controllers.CoreController(mockFilterService.Object);
@@ -53,7 +53,24 @@ namespace Carpentry.UI.Tests.UnitTests
         #region Tests - Controller methods all return Ok/Accepted
 
         [TestMethod]
-        public async Task Core_GetFilterValues_ReturnsOK_Test()
+        public void Core_GetStatus_ReturnsAsyncOK_Test()
+        {
+            //assemble
+
+
+            //act
+            var response = _coreController.Get();
+
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            var typedResult = response as OkObjectResult;
+            string resultValue = typedResult.Value as string;
+
+            Assert.AreEqual( "Online", resultValue);
+        }
+
+        [TestMethod]
+        public async Task Core_GetFilterValues_ReturnsAsyncOK_Test()
         {
             //assemble
 
@@ -62,7 +79,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var response = await _coreController.GetFilterValues();
 
             //assert
-            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
             var typedResult = response.Result as OkObjectResult;
             AppFiltersDto resultValue = typedResult.Value as AppFiltersDto;
 
@@ -76,85 +93,85 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.IsNotNull(resultValue.Types);
         }
         
-        [TestMethod]
-        public async Task Core_BackupDatabase_ReturnsOK_Test()
-        {
-            //assemble
+        //[TestMethod]
+        //public async Task Core_BackupDatabase_ReturnsAsyncOK_Test()
+        //{
+        //    //assemble
 
 
-            //act
-            var response = await _coreController.BackupDatabase();
+        //    //act
+        //    var response = await _coreController.BackupDatabase();
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkResult));
 
-            ////BackupDatabase
-            //Assert.Fail();
-        }
+        //    ////BackupDatabase
+        //    //Assert.Fail();
+        //}
         
-        [TestMethod]
-        public async Task Core_RestoreDatabase_ReturnsOK_Test()
-        {
-            //assemble
+        //[TestMethod]
+        //public async Task Core_RestoreDatabase_ReturnsAsyncOK_Test()
+        //{
+        //    //assemble
 
 
-            //act
-            var response = await _coreController.RestoreDatabase();
+        //    //act
+        //    var response = await _coreController.RestoreDatabase();
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkResult));
             
-            ////RestoreDatabase
-            //Assert.Fail();
-        }
+        //    ////RestoreDatabase
+        //    //Assert.Fail();
+        //}
         
-        [TestMethod]
-        public async Task Core_GetDatabaseUpdateStatus_ReturnsOK_Test()
-        {
-            //assemble
+        //[TestMethod]
+        //public async Task Core_GetDatabaseUpdateStatus_ReturnsAsyncOK_Test()
+        //{
+        //    //assemble
 
 
-            //act
-            var response = await _coreController.GetDatabaseUpdateStatus();
+        //    //act
+        //    var response = await _coreController.GetDatabaseUpdateStatus();
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkResult));
 
-            ////GetDatabaseUpdateStatus
-            //Assert.Fail();
-        }
+        //    ////GetDatabaseUpdateStatus
+        //    //Assert.Fail();
+        //}
         
-        [TestMethod]
-        public async Task Core_UpdateScryfallSet_ReturnsOK_Test()
-        {
-            //assemble
-            string setToSubmit = "THB";
+        //[TestMethod]
+        //public async Task Core_UpdateScryfallSet_ReturnsAsyncOK_Test()
+        //{
+        //    //assemble
+        //    string setToSubmit = "THB";
 
-            //act
-            var response = await _coreController.UpdateScryfallSet(setToSubmit);
+        //    //act
+        //    var response = await _coreController.UpdateScryfallSet(setToSubmit);
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkResult));
 
-            ////UpdateScryfallSet
-            //Assert.Fail();
-        }
+        //    ////UpdateScryfallSet
+        //    //Assert.Fail();
+        //}
         
-        [TestMethod]
-        public async Task Core_UpdateSetData_ReturnsOK_Test()
-        {
-            //assemble
-            string setToSubmit = "THB";
+        //[TestMethod]
+        //public async Task Core_UpdateSetData_ReturnsAsyncOK_Test()
+        //{
+        //    //assemble
+        //    string setToSubmit = "THB";
 
-            //act
-            var response = await _coreController.UpdateSetData(setToSubmit);
+        //    //act
+        //    var response = await _coreController.UpdateSetData(setToSubmit);
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkResult));
 
-            ////UpdateSetData
-            //Assert.Fail();
-        }
+        //    ////UpdateSetData
+        //    //Assert.Fail();
+        //}
 
         #endregion
 

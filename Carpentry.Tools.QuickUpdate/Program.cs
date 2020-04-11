@@ -1,85 +1,72 @@
 ﻿using System;
-
 using System.IO;
 using System.Threading.Tasks;
-//using Carpentry.Data.DataContext;
-//using Carpentry.Data.Implementations;
-//using Carpentry.Data.Interfaces;
-//using Carpentry.Implementations;
-//using Carpentry.Interfaces;
-//using Microsoft.EntityFrameworkCore;
-//using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Http;
-//using Serilog;
-//using Serilog.Events;
+//using Carpentry.Data.LegacyDataContext;
+//using Carpentry.Logic.Implementations;
+//using Carpentry.Logic.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace Carpentry.Tools.QuickUpdate
 {
     class Program
     {
-
-
-
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var serviceProvider = BuildServiceProvider();
+
+            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
+
+            logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
+
+            //var backupService = serviceProvider.GetService<IDataBackupService>();
+
+            //await backupService.BackupDatabase();
+
+            logger.LogInformation("Completed successfully");
         }
 
 
-
-        private void BuildServiceProvider()
+        private static ServiceProvider BuildServiceProvider()
         {
-            //var appConfig = new MigrationToolConfig(Configuration);
+            //var appConfig = new BackupToolConfig(Configuration);
 
-            //Log.Logger = new LoggerConfiguration()
-            //    .MinimumLevel.Warning()
-            //    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            //    .Enrich.FromLogContext()
-            //    .WriteTo.Console()
-            //    .CreateLogger();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
 
+            //string cardDatabaseLocation = $"Data Source={appConfig.DatabaseLocation}";
 
-            //string cardDbDataSourceString = $"Data Source={appConfig.BackupSourceDbLocation}";
-            //string cardDbDataSourceString = $"Data Source={appConfig.RestoreDestinationCardDbLocation}";
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(Configuration)
+                //.AddSingleton<IDataBackupConfig, BackupToolConfig>()
 
-            //string scryDbDataSourceString = $"Data Source={appConfig.RestoreDestinationScryDbLocation}";
+                .AddLogging(config => config.AddSerilog())
 
+                //.AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
+                //.AddScoped<IDataBackupService, DataBackupService>()
+                .BuildServiceProvider();
 
-            //var serviceProvider = new ServiceCollection()
-            //    .AddSingleton(Configuration)
-            //    .AddSingleton<MigrationToolConfig>()
-
-            //    .AddLogging(config => config.AddSerilog())
-
-            //    .AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDbDataSourceString))
-            //    .AddDbContext<ScryfallDataContext>(options => options.UseSqlite(scryDbDataSourceString))
-
-
-
-            //    .AddScoped<ScryfallRepo>()
-            //    .AddHttpClient<ScryfallRepo>().Services
-
-            //    .AddScoped<SqliteCardRepo>()
-
-            //    .AddScoped<IDataMigrationService, DataMigrationService>()
-
-            //    //.AddScoped<ICarpentryService, CarpentryService>()
-
-            //    .BuildServiceProvider();
-
+            return serviceProvider;
         }
 
-        //private static IConfiguration Configuration
-        //{
-        //    get
-        //    {
-        //        return new ConfigurationBuilder()
-        //            .SetBasePath(Directory.GetCurrentDirectory())
-        //            .AddJsonFile("appsettings.json")
-        //            .Build();
-        //    }
-        //}
+        private static IConfiguration Configuration
+        {
+            get
+            {
+                return new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+            }
+        }
     }
 }

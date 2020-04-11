@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Carpentry.Data.DataContext;
+using Carpentry.Data.LegacyDataContext;
 using Carpentry.Logic.Implementations;
 using Carpentry.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +24,7 @@ namespace Carpentry.Tools.QuickBackup
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
-            logger.LogInformation("\n--------------------------------------------\nCarpentry Data Integrity Tool - Initializing\n--------------------------------------------");
+            logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
 
             var backupService = serviceProvider.GetService<IDataBackupService>();
 

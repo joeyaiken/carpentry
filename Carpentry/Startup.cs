@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-//using Carpentry.Data.DataContextLegacy;
-using Carpentry.Data.DataContext;
+//using Carpentry.Data.LegacyDataContextLegacy;
+using Carpentry.Data.LegacyDataContext;
 using Carpentry.Interfaces;
 using Carpentry.Implementations;
 
@@ -39,8 +39,8 @@ namespace Carpentry
             services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
 
             //string repo
-            services.AddScoped<ICardStringRepo, ScryfallRepo>();
-            services.AddHttpClient<ICardStringRepo, ScryfallRepo>();
+            services.AddScoped<ICardStringRepo, LegacyScryfallRepo>();
+            services.AddHttpClient<ICardStringRepo, LegacyScryfallRepo>();
 
             //new & legacy DBs
             services.AddScoped<ICardRepo, SqliteCardRepo>();

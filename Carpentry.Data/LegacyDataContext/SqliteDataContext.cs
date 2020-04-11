@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Carpentry.Data.DataContext
+namespace Carpentry.Data.LegacyDataContext
 {
     public class SqliteDataContext : DbContext
     {

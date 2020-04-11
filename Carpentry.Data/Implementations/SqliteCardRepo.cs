@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.DataContext;
+﻿using Carpentry.Data.LegacyDataContext;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -92,7 +92,7 @@ namespace Carpentry.Data.Implementations
 
             }
 
-            var newCard = new DataContext.Card
+            var newCard = new LegacyDataContext.Card
             {
                 Id = scryfallCard.MultiverseId,
                 Cmc = scryfallCard.Cmc,
@@ -116,7 +116,7 @@ namespace Carpentry.Data.Implementations
 
 
                 //Color Identity
-                CardColorIdentities = relevantColorIdentityManaTypes.Select(x => new DataContext.CardColorIdentity
+                CardColorIdentities = relevantColorIdentityManaTypes.Select(x => new LegacyDataContext.CardColorIdentity
                 {
                     ManaType = x,
                 }).ToList(),
@@ -145,7 +145,7 @@ namespace Carpentry.Data.Implementations
         public async Task AddCardDefinitionBatch(List<ScryfallMagicCard> cardBatch)
         {
             //lets try some nonsense
-            IEnumerable<DataContext.Card> cardsToAdd = cardBatch.Select(scryfallCard => new DataContext.Card
+            IEnumerable<LegacyDataContext.Card> cardsToAdd = cardBatch.Select(scryfallCard => new LegacyDataContext.Card
             {
                 Id = scryfallCard.MultiverseId,
                 Cmc = scryfallCard.Cmc,
@@ -288,7 +288,7 @@ namespace Carpentry.Data.Implementations
 
         }
 
-        public IQueryable<DataContext.Card> QueryCardDefinitions()
+        public IQueryable<LegacyDataContext.Card> QueryCardDefinitions()
         {
             var query = _cardContext.Cards.AsQueryable();
             return query;
@@ -581,7 +581,7 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<DataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters)
+        public async Task<IQueryable<LegacyDataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters)
         {
             var cardsQuery = _cardContext.Cards.AsQueryable();
 
@@ -920,7 +920,7 @@ namespace Carpentry.Data.Implementations
 
             }
 
-            var newCard = new DataContext.Card
+            var newCard = new LegacyDataContext.Card
             {
                 Id = scryfallCard.MultiverseId,
                 Cmc = scryfallCard.Cmc,
@@ -944,7 +944,7 @@ namespace Carpentry.Data.Implementations
 
 
                 //Color Identity
-                CardColorIdentities = relevantColorIdentityManaTypes.Select(x => new DataContext.CardColorIdentity
+                CardColorIdentities = relevantColorIdentityManaTypes.Select(x => new LegacyDataContext.CardColorIdentity
                 {
                     ManaType = x,
                 }).ToList(),
@@ -1036,7 +1036,7 @@ namespace Carpentry.Data.Implementations
 
         }
 
-        public IQueryable<DataContext.Card> QueryCardDefinitions()
+        public IQueryable<LegacyDataContext.Card> QueryCardDefinitions()
         {
             var query = _cardContext.Cards.AsQueryable();
             return query;
@@ -1291,7 +1291,7 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<DataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters)
+        public async Task<IQueryable<LegacyDataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters)
         {
             var cardsQuery = _cardContext.Cards.AsQueryable();
 
@@ -1661,7 +1661,7 @@ namespace Carpentry.Data.Implementations
 //        public async Task AddCardDefinitionBatch(List<ScryfallMagicCard> cardBatch)
 //        {
 //            //lets try some nonsense
-//            IEnumerable<DataContext.Card> cardsToAdd = cardBatch.Select(scryfallCard => new DataContext.Card
+//            IEnumerable<LegacyDataContext.Card> cardsToAdd = cardBatch.Select(scryfallCard => new DataContext.Card
 //            {
 //                Id = scryfallCard.MultiverseId,
 //                Cmc = scryfallCard.Cmc,
@@ -1785,7 +1785,7 @@ namespace Carpentry.Data.Implementations
 
 //        }
 
-//        public IQueryable<DataContext.Card> QueryCardDefinitions()
+//        public IQueryable<LegacyDataContext.Card> QueryCardDefinitions()
 //        {
 //            var query = _cardContext.Cards.AsQueryable();
 //            return query;
@@ -2040,7 +2040,7 @@ namespace Carpentry.Data.Implementations
 //            await _cardContext.SaveChangesAsync();
 //        }
 
-//        public async Task<IQueryable<DataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters)
+//        public async Task<IQueryable<LegacyDataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters)
 //        {
 //            var cardsQuery = _cardContext.Cards.AsQueryable();
 

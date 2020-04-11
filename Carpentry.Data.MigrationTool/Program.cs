@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Carpentry.Data.DataContext;
+using Carpentry.Data.LegacyDataContext;
 using Carpentry.Data.Implementations;
 using Carpentry.Data.Interfaces;
 //using Carpentry.Data.MigrationTool.Services;
@@ -66,8 +66,8 @@ namespace Carpentry.Data.MigrationTool
 
 
 
-                .AddScoped<ScryfallRepo>()
-                .AddHttpClient<ScryfallRepo>().Services
+                .AddScoped<LegacyScryfallRepo>()
+                .AddHttpClient<LegacyScryfallRepo>().Services
 
                 .AddScoped<SqliteCardRepo>()
 

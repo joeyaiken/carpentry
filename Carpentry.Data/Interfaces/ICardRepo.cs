@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.DataContext;
+﻿using Carpentry.Data.LegacyDataContext;
 using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace Carpentry.Data.Interfaces
 
         Task UpdateCardDefinition(ScryfallMagicCard scryfallCard);
 
-        IQueryable<DataContext.Card> QueryCardDefinitions();
+        IQueryable<LegacyDataContext.Card> QueryCardDefinitions();
 
         #endregion
 
@@ -64,7 +64,7 @@ namespace Carpentry.Data.Interfaces
 
         Task DeleteInventoryCard(int id);
 
-        Task<IQueryable<DataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters);
+        Task<IQueryable<LegacyDataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters);
 
         Task<IQueryable<InventoryOverviewDto>> QueryInventoryOverviews(InventoryQueryParameter filters);
 

@@ -1,14 +1,14 @@
-using Carpentry.Data.DataContext;
+using Carpentry.Data.LegacyDataContext;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using Card = Carpentry.Data.DataContext.Card;
-using InventoryCard = Carpentry.Data.DataContext.InventoryCard;
-using InventoryCardStatus = Carpentry.Data.DataContext.InventoryCardStatus;
-using Deck = Carpentry.Data.DataContext.Deck;
-using DeckCard = Carpentry.Data.DataContext.DeckCard;
+using Card = Carpentry.Data.LegacyDataContext.Card;
+using InventoryCard = Carpentry.Data.LegacyDataContext.InventoryCard;
+using InventoryCardStatus = Carpentry.Data.LegacyDataContext.InventoryCardStatus;
+using Deck = Carpentry.Data.LegacyDataContext.Deck;
+using DeckCard = Carpentry.Data.LegacyDataContext.DeckCard;
 using System.Linq;
 using Carpentry.Data.Models;
 using Newtonsoft.Json;
@@ -18,6 +18,7 @@ using Carpentry.Data.Implementations;
 using Carpentry.Implementations;
 using Carpentry.Data.MigrationTool.Models;
 using Microsoft.EntityFrameworkCore;
+using ScryfallSet = Carpentry.Data.LegacyDataContext.ScryfallSet;
 
 namespace Carpentry.Data.MigrationTool
 {
@@ -30,7 +31,7 @@ namespace Carpentry.Data.MigrationTool
 
         private readonly MigrationToolConfig _config;
 
-        private readonly ScryfallRepo _scryRepo;
+        private readonly LegacyScryfallRepo _scryRepo;
 
         private readonly SqliteCardRepo _cardRepo;
 
@@ -40,7 +41,7 @@ namespace Carpentry.Data.MigrationTool
             ILoggerFactory loggerFactory,
             SqliteDataContext cardContext,
             MigrationToolConfig config,
-            ScryfallRepo scryRepo,
+            LegacyScryfallRepo scryRepo,
             SqliteCardRepo cardRepo
             )
         {

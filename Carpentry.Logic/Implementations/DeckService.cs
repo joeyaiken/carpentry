@@ -309,9 +309,9 @@ namespace Carpentry.Logic.Implementations
 
             //This layer knows of it's own models, but not the UI layer
             //The DATA layer won't know of this layer's model, so we must map to a type consumable by the data layer
-            Data.DataContext.MagicFormat deckFormat = await _cardRepo.GetFormatByName(props.Format);
+            Data.LegacyDataContext.MagicFormat deckFormat = await _cardRepo.GetFormatByName(props.Format);
 
-            Data.DataContext.Deck newDeck = new Data.DataContext.Deck()
+            Data.LegacyDataContext.Deck newDeck = new Data.LegacyDataContext.Deck()
             {
                 Name = props.Name,
                 Format = deckFormat,

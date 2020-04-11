@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Interfaces
 {
-    interface IDataRestoreService
+    public interface IDataRestoreService
     {
+        Task UpdateAllSets();
     }
 }

@@ -38,22 +38,19 @@ namespace Carpentry.UI.Tests.UnitTests
             //Add
             mockService
                 .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCard>()))
-                .Returns(Task.FromResult(1));
+                .ReturnsAsync(1);
 
             //AddBatch
             mockService
-                .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCard>>()))
-                .Returns(Task.CompletedTask);
+                .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCard>>()));
 
             //Update
             mockService
-                .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCard>()))
-                .Returns(Task.CompletedTask);
+                .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCard>()));
 
             //Delete
             mockService
-                .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i < 0)))
-                .Returns(Task.CompletedTask);
+                .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i < 0)));
 
             //Search
             IEnumerable<InventoryOverview> searchResult = new List<InventoryOverview>()
@@ -67,7 +64,7 @@ namespace Carpentry.UI.Tests.UnitTests
 
             mockService
                 .Setup(p => p.GetInventoryOverviews(It.IsNotNull<InventoryQueryParameter>()))
-                .Returns(Task.FromResult(searchResult));
+                .ReturnsAsync(searchResult);
 
             //GetByName
             InventoryDetail detailResult = new InventoryDetail()
@@ -79,7 +76,7 @@ namespace Carpentry.UI.Tests.UnitTests
 
             mockService
                 .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-                .Returns(Task.FromResult(detailResult));
+                .ReturnsAsync(detailResult);
 
             _inventoryController = new Controllers.InventoryController(mockService.Object);
         }
@@ -87,7 +84,24 @@ namespace Carpentry.UI.Tests.UnitTests
         #region Tests - Controller methods all return Ok/Accepted
 
         [TestMethod]
-        public async Task Inventory_Add_ReturnsOK_Test()
+        public void Inventory_GetStatus_ReturnsAsyncOK_Test()
+        {
+            //assemble
+
+
+            //act
+            var response = _inventoryController.Get();
+
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+            var typedResult = response as OkObjectResult;
+            string resultValue = typedResult.Value as string;
+
+            Assert.AreEqual("Online", resultValue);
+        }
+
+        [TestMethod]
+        public async Task Inventory_Add_ReturnsAsyncOK_Test()
         {
             //assemble
             InventoryCardDto payload = new InventoryCardDto()
@@ -105,7 +119,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Inventory_AddBatch_ReturnsOK_Test()
+        public async Task Inventory_AddBatch_ReturnsAsyncOK_Test()
         {
             //assemble
             List<InventoryCardDto> payload = new List<InventoryCardDto>()
@@ -126,7 +140,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Inventory_Update_ReturnsOK_Test()
+        public async Task Inventory_Update_ReturnsAsyncOK_Test()
         {
             //assemble
             InventoryCardDto payload = new InventoryCardDto()
@@ -143,7 +157,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Inventory_Delete_ReturnsOK_Test()
+        public async Task Inventory_Delete_ReturnsAsyncOK_Test()
         {
             //assemble
             int idToSubmit = 3;
@@ -156,7 +170,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Inventory_Search_ReturnsOK_Test()
+        public async Task Inventory_Search_ReturnsAsyncOK_Test()
         {
             //assemble
             InventoryQueryParameter param = new InventoryQueryParameter()
@@ -179,7 +193,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Inventory_GetByName_ReturnsOK_Test()
+        public async Task Inventory_GetByName_ReturnsAsyncOK_Test()
         {
             //assemble
             string nameToRequest = "Mock Card Detail";

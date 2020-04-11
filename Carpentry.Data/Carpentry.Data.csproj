@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DataContext\LegacySqliteDataContext.cs" />
+    <Compile Remove="LegacyDataContext\LegacySqliteDataContext.cs" />
     <Compile Remove="Implementations\LegacySqliteCardRepo.cs" />
     <Compile Remove="Implementations\SqliteNCardRepo.cs" />
     <Compile Remove="Interfaces\ILegacySqliteCardRepo.cs" />

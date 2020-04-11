@@ -1,4 +1,4 @@
-using Carpentry.Data.DataContext;
+using Carpentry.Data.LegacyDataContext;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
@@ -201,7 +201,7 @@ namespace Carpentry.Implementations
             //_logger.LogWarning($"EnsureCardDefinitionExists added {multiverseId} - {scryfallCard.Name}");
         }
 
-        private static IQueryable<ScryfallMagicCard> MapInventoryQueryToScryfallDto(IQueryable<Data.DataContext.Card> query)
+        private static IQueryable<ScryfallMagicCard> MapInventoryQueryToScryfallDto(IQueryable<Data.LegacyDataContext.Card> query)
         {
             IQueryable<ScryfallMagicCard> result = query.Select(card => new ScryfallMagicCard()
             {

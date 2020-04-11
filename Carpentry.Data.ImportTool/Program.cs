@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Carpentry.Data.DataContext;
+using Carpentry.Data.LegacyDataContext;
 using Carpentry.Data.Implementations;
 using Carpentry.Data.Interfaces;
 //using Carpentry.Data.MigrationTool.Services;
@@ -64,8 +64,8 @@ namespace Carpentry.Data.ImportTool
 
 
 
-                .AddScoped<ICardStringRepo, ScryfallRepo>()
-                .AddHttpClient<ICardStringRepo, ScryfallRepo>().Services
+                .AddScoped<ICardStringRepo, LegacyScryfallRepo>()
+                .AddHttpClient<ICardStringRepo, LegacyScryfallRepo>().Services
 
                 .AddScoped<ICardRepo, SqliteCardRepo>()
 

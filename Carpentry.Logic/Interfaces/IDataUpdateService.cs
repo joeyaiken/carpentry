@@ -7,6 +7,6 @@ namespace Carpentry.Logic.Interfaces
     interface IDataUpdateService
     {
 
-        
+
     }
 }

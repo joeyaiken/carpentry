@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.DataContext;
+﻿using Carpentry.Data.LegacyDataContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
