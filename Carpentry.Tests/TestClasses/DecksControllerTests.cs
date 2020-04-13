@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.Models;
+﻿using Carpentry.Data.LegacyModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -43,7 +43,7 @@ namespace Carpentry
             services.AddHttpClient<ICardStringRepo, LegacyScryfallRepo>();
 
             //new & legacy DBs
-            services.AddScoped<ICardRepo, SqliteCardRepo>();
+            services.AddScoped<ILegacyCardRepo, SqliteCardRepo>();
             //services.AddScoped<ILegacySqliteCardRepo, LegacySqliteCardRepo>();
 
 

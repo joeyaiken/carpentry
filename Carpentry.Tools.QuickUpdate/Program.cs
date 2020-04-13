@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Carpentry.Data.Interfaces;
+using Carpentry.Logic.Implementations;
+using Carpentry.Logic.Interfaces;
 //using Carpentry.Data.LegacyDataContext;
 //using Carpentry.Logic.Implementations;
 //using Carpentry.Logic.Interfaces;
@@ -10,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Carpentry.Data.Implementations;
 
 namespace Carpentry.Tools.QuickUpdate
 {
@@ -23,9 +27,9 @@ namespace Carpentry.Tools.QuickUpdate
 
             logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
 
-            //var backupService = serviceProvider.GetService<IDataBackupService>();
+            var updateService = serviceProvider.GetService<IDataUpdateService>();
 
-            //await backupService.BackupDatabase();
+            await updateService.UpdateAllSets();
 
             logger.LogInformation("Completed successfully");
         }
@@ -52,7 +56,22 @@ namespace Carpentry.Tools.QuickUpdate
                 .AddLogging(config => config.AddSerilog())
 
                 //.AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
-                //.AddScoped<IDataBackupService, DataBackupService>()
+                .AddScoped<IDataUpdateService, DataUpdateService>()
+
+                //IScryfallService scryService,
+                .AddScoped<IScryfallService, ScryfallService>()
+                .AddHttpClient<IScryfallService, ScryfallService>().Services
+
+                //ICardRepo cardRepo,
+                .AddScoped<ICardRepo, CarpentryCardRepo>() //Name TBD, this hasn't been implemented yet
+                //IScryfallRepo scryfallRepo
+                .AddScoped<IScryfallDataRepo, ScryfallRepo>()
+
+
+
+
+
+
                 .BuildServiceProvider();
 
             return serviceProvider;

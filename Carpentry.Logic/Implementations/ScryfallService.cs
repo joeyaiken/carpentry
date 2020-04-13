@@ -28,9 +28,12 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<ScryfallSetDataDto> GetFullSet(string setCode)
         {
-            ScryfallSetDataDto result = new ScryfallSetDataDto();
+            ScryfallSetDataDto result = new ScryfallSetDataDto()
+            {
+                CardTokens = new List<JToken>(),
+            };
 
-            List<JToken> rawCardResults = new List<JToken>();
+            //List<JToken> rawCardResults = new List<JToken>();
 
             var setEndpoint = $"https://api.scryfall.com/sets/{setCode}";
             var setResponseString = await _client.GetStringAsync(setEndpoint);
@@ -55,7 +58,7 @@ namespace Carpentry.Logic.Implementations
 
                 JArray dataBatch = cardSearchJobject.Value<JArray>("data");
 
-                rawCardResults.AddRange(dataBatch);
+                result.CardTokens.AddRange(dataBatch);
                 searchHasMore = cardSearchJobject.Value<bool>("has_more");
                 if (searchHasMore)
                 {
@@ -63,18 +66,16 @@ namespace Carpentry.Logic.Implementations
                 }
             }
 
-            result.Cards = MapScryfallDataToCards(rawCardResults);
+            //result.Cards = MapScryfallDataToCards(rawCardResults);
 
             return result;
         }
 
 
-        private List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData)
+        public List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData)
         {
             try
             {
-
-
                 //_logger.LogWarning("Begin MapScryfallDataToCards");
 
                 List<ScryfallMagicCard> updatedCards = new List<ScryfallMagicCard>();

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Carpentry.Data.Models
+namespace Carpentry.Data.LegacyModels
 {
     public class CardDto
     {

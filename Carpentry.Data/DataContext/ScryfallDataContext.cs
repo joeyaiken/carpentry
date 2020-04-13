@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.Models;
+﻿using Carpentry.Data.DataModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Carpentry.Data.DataContext

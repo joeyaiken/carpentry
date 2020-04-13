@@ -19,7 +19,7 @@ namespace Carpentry.Logic.Tests.UnitTests
         public CardSearchServiceTests()
         {
             //ICardRepo cardRepo
-            var mockCardRepo = new Mock<ICardRepo>();
+            var mockCardRepo = new Mock<ILegacyCardRepo>();
 
             IQueryable<Data.LegacyDataContext.Card> inventoryQueryResult = new List<Data.LegacyDataContext.Card>()
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carpentry.Data.LegacyModels;
 using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Interfaces;

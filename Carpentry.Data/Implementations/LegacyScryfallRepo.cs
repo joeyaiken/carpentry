@@ -10,6 +10,7 @@ using Carpentry.Data.LegacyDataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ScryfallSet = Carpentry.Data.LegacyDataContext.ScryfallSet;
+using Carpentry.Data.LegacyModels;
 
 namespace Carpentry.Data.Implementations
 {
@@ -176,7 +177,7 @@ namespace Carpentry.Data.Implementations
 
         #region private members
 
-        private List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData)
+        public List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData)
         {
             try
             {

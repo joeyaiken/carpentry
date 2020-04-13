@@ -1,4 +1,5 @@
 ﻿using Carpentry.Data.Interfaces;
+using Carpentry.Data.LegacyModels;
 using Carpentry.Data.Models;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,10 +24,10 @@ namespace Carpentry.Data.ImportTool
     class DataImportService
     {
         private readonly ILogger<DataImportService> _logger;
-        private readonly ICardRepo _cardRepo;
+        private readonly ILegacyCardRepo _cardRepo;
         private readonly ICardStringRepo _scryRepo;
 
-        public DataImportService(ILogger<DataImportService> logger, ICardRepo cardRepo, ICardStringRepo scryRepo)
+        public DataImportService(ILogger<DataImportService> logger, ILegacyCardRepo cardRepo, ICardStringRepo scryRepo)
         {
             _logger = logger;
             _cardRepo = cardRepo;

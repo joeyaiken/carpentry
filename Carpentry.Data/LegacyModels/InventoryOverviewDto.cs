@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Carpentry.Data.Models
+namespace Carpentry.Data.LegacyModels
 {
     public class InventoryOverviewDto // TODO : Rename to CardOverviewDto
     {

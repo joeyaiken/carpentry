@@ -1,3 +1,4 @@
+using Carpentry.Data.LegacyModels;
 using Carpentry.Data.Models;
 using Newtonsoft.Json;
 using System;

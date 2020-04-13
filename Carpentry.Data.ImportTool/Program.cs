@@ -67,7 +67,7 @@ namespace Carpentry.Data.ImportTool
                 .AddScoped<ICardStringRepo, LegacyScryfallRepo>()
                 .AddHttpClient<ICardStringRepo, LegacyScryfallRepo>().Services
 
-                .AddScoped<ICardRepo, SqliteCardRepo>()
+                .AddScoped<ILegacyCardRepo, SqliteCardRepo>()
 
 
 

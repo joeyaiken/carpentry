@@ -1,4 +1,6 @@
 ﻿using Carpentry.Logic.Models.Scryfall;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Interfaces
@@ -11,6 +13,9 @@ namespace Carpentry.Logic.Interfaces
     {
 
         Task<ScryfallSetDataDto> GetFullSet(string setCode);
+
+        List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData);
+
 
 
         //search by name

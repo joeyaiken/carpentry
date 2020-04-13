@@ -1,4 +1,4 @@
-using Carpentry.Data.Models;
+using Carpentry.Data.LegacyModels;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Models;
 using System.Collections.Generic;

@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace Carpentry.Data.Models
+namespace Carpentry.Data.LegacyModels
 {
     public class MagicCardDto
     {

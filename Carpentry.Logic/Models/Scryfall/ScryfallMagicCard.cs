@@ -233,6 +233,27 @@ namespace Carpentry.Logic.Models.Scryfall
             return JsonConvert.SerializeObject(this, Formatting.None);
         }
 
+        public MagicCard ToMagicCard()
+        {
+            MagicCard result = new MagicCard()
+            {
+                Cmc = Cmc,
+                ColorIdentity = ColorIdentity,
+                Colors = Colors,
+                Legalities = Legalities,
+                ManaCost = ManaCost,
+                MultiverseId = MultiverseId,
+                Name = Name,
+                Prices = Prices,
+                Rarity = Rarity,
+                Set = Set,
+                Text = Text,
+                Type = Type,
+                Variants = Variants,
+            };
+            return result;
+        }
+
         #region Public fields
 
         [JsonProperty("cmc")]

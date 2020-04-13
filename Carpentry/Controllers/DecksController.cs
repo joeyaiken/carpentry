@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Data.Models;
+using Carpentry.Data.LegacyModels;
 using Carpentry.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

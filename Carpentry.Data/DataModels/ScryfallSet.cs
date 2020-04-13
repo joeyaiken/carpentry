@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Carpentry.Data.Models
+namespace Carpentry.Data.DataModels
 {
     //ScryfallSet
     public class ScryfallSet

@@ -47,7 +47,7 @@ namespace Carpentry.UI
             //services.AddHttpClient<ICardStringRepo, ScryfallRepo>();
 
             ////card DB repo
-            services.AddScoped<ICardRepo, SqliteCardRepo>();
+            services.AddScoped<ILegacyCardRepo, SqliteCardRepo>();
 
 
 

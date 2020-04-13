@@ -58,7 +58,7 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Cards.Count > 100);
+            Assert.IsTrue(result.CardTokens.Count > 100);
 
 
         }

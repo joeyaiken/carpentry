@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Carpentry.Data.Models
+namespace Carpentry.Data.LegacyModels
 {
     //This will be used by the "Get Inventory Detail By Name" and "Update Deck Card" opperations
     public class InventoryDeckCardDto

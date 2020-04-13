@@ -11,10 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Carpentry.Data.QueryParameters;
+using Carpentry.Data.LegacyModels;
 
 namespace Carpentry.Data.Implementations
 {
-    public class SqliteCardRepo : ICardRepo
+    public class SqliteCardRepo : ILegacyCardRepo
     {
 
         //readonly ScryfallDataContext _scryContext;
@@ -29,6 +30,20 @@ namespace Carpentry.Data.Implementations
             _cardContext = cardContext;
             _logger = logger;
         }
+
+        public async Task<CardSet> GetSetByCode(string setCode)
+        {
+            if(setCode == null)
+            {
+                return null;
+            }
+
+            CardSet setResult = await _cardContext.Sets.FirstOrDefaultAsync(x => x.Code.ToLower() == setCode.ToLower());
+
+            return setResult;
+        }
+
+        #region Legacy
 
         #region Card related methdos
 
@@ -841,8 +856,8 @@ namespace Carpentry.Data.Implementations
 
         #endregion
 
+        #endregion
     }
-
 
     public class OtherSqliteCardRepo //: ICardRepo
     {

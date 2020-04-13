@@ -1,4 +1,5 @@
-﻿using Carpentry.Data.Models;
+﻿using Carpentry.Data.LegacyModels;
+using Carpentry.Data.Models;
 using System.Collections.Generic;
 
 namespace Carpentry.Data.Implementations

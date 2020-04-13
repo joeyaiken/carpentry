@@ -1,6 +1,5 @@
 using Carpentry.Data.LegacyDataContext;
 using Carpentry.Data.Interfaces;
-using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Interfaces;
 using Carpentry.Models;
@@ -13,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Carpentry.Data.LegacyModels;
 
 namespace Carpentry.Implementations
 {
@@ -26,11 +26,11 @@ namespace Carpentry.Implementations
         //2 -   A DTO that contains either IDs or values but not the associations
 
         //Should have no access to data context classes, only repo classes
-        private readonly ICardRepo _cardRepo;
+        private readonly ILegacyCardRepo _cardRepo;
         private readonly ICardStringRepo _scryRepo;
         private readonly ILogger<CarpentryService> _logger;
 
-        public CarpentryService(ICardRepo cardRepo, ICardStringRepo scryRepo, ILogger<CarpentryService> logger)
+        public CarpentryService(ILegacyCardRepo cardRepo, ICardStringRepo scryRepo, ILogger<CarpentryService> logger)
         {
             _cardRepo = cardRepo;
             _scryRepo = scryRepo;

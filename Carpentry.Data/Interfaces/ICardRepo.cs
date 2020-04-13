@@ -1,90 +1,42 @@
-﻿using Carpentry.Data.LegacyDataContext;
+﻿using Carpentry.Data.DataContext;
 using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Carpentry.Data.Interfaces
 {
+    //TODO - delete this
     public interface ICardRepo
     {
-        #region util methods
+        //Task<CardSet> GetSetByCode(string setCode);
 
-        Task<MagicFormat> GetFormatByName(string formatName);
+        Task<List<string>> GetAllCardSetCodes();
+
+        Task<DateTime?> GetCardSetLastUpdated(string setCode);
+
+        Task<int> AddOrUpdateCardSet(CardSet setData); //This probably doesn't actually have to return an ID
+
         
-        
-        
-        
-        
-        #endregion
 
-        #region Card related methdos
 
-        Task AddCardDefinition(ScryfallMagicCard scryfallCard);
 
-        Task UpdateCardDefinition(ScryfallMagicCard scryfallCard);
 
-        IQueryable<LegacyDataContext.Card> QueryCardDefinitions();
 
-        #endregion
+        //Check if the DB card exists
 
-        #region Deck related methods
-        
-        Task<int> AddDeck(DeckProperties props); //Obsolete
-        
-        Task<int> AddDeck(Deck newDeck);
-        Task UpdateDeck(DeckProperties deckDto);
+        //if not, add it
 
-        Task DeleteDeck(int deckId);
+        //if it does, update Price and Legality info
 
-        Task AddDeckCard(DeckCardDto dto);
 
-        Task UpdateDeckCard(int deckCardId, int deckId, char? categoryId);
+        //Thoughts:
+        //For a given card, I don't want to worry about quirks of the DB format for applying a card
+        //I want to submit a DTO that represents a card definition
 
-        Task DeleteDeckCard(int deckCardId);
 
-        IQueryable<DeckProperties> QueryDeckProperties();
-
-        IQueryable<DeckCard> QueryDeckCards();
-
-        IQueryable<InventoryCard> QueryInventoryCardsForDeck(int deckId);
-
-        IQueryable<InventoryCard> QueryInventoryCards();
-
-        #endregion
-
-        #region Inventory related methods
-
-        Task<int> AddInventoryCard(InventoryCardDto dto);
-
-        Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> dtoBatch);
-
-        Task UpdateInventoryCard(InventoryCardDto dto);
-
-        Task DeleteInventoryCard(int id);
-
-        Task<IQueryable<LegacyDataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters);
-
-        Task<IQueryable<InventoryOverviewDto>> QueryInventoryOverviews(InventoryQueryParameter filters);
-
-        #endregion
-
-        #region Core methods
-
-        IQueryable<FilterDescriptor> QuerySetFilters();
-
-        IQueryable<FilterDescriptor> QueryTypeFilters();
-
-        IQueryable<FilterDescriptor> QueryFormatFilters();
-
-        IQueryable<FilterDescriptor> QueryManaColorFilters();
-
-        IQueryable<FilterDescriptor> QueryRarityFilters();
-
-        IQueryable<FilterDescriptor> QueryCardStatusFilters();
-
-        #endregion
-
+        Task AddOrUpdateCardDefinition(CardDataDto cardDto);
     }
 }

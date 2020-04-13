@@ -13,12 +13,12 @@ namespace Carpentry.Logic.Implementations
     public class CardSearchService : ICardSearchService
     {
         //Should have no access to data context classes, only repo classes
-        private readonly ICardRepo _cardRepo;
+        private readonly ILegacyCardRepo _cardRepo;
         //private readonly ICardStringRepo _scryRepo;
         //private readonly ILogger<CarpentryService> _logger;
 
         public CardSearchService(
-            ICardRepo cardRepo
+            ILegacyCardRepo cardRepo
             //, ICardStringRepo scryRepo
             //, ILogger<CardSearchService> logger
             )

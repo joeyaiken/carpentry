@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.Models;
+﻿using Carpentry.Data.LegacyModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
@@ -85,7 +85,7 @@ namespace Carpentry.Tests
         {
             var dto = new CardDto
             {
-                Card = new Data.Models.Card
+                Card = new Data.LegacyModels.Card
                 {
                     Id = 0,
                     MultiverseId = card.MultiverseId,
