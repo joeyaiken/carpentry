@@ -19,5 +19,8 @@ namespace Carpentry.Logic.Interfaces
         /// <param name="setCode"></param>
         /// <returns></returns>
         Task UpdateSetData(string setCode);
+
+
+        Task EnsureCardDefinitionExists(int multiverseId);
     }
 }

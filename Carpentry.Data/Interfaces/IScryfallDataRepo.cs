@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Data.Interfaces
 {
+    //TODO - Ensure methods of this interface don't return anything belonging to the Carpentry.DataModels namespace
+
+
     /// <summary>
     /// A scryfall repo should be a repository for data retrieved from scryfall
     /// It doesn't handle any manipulation of the data, just simple storage
@@ -15,9 +18,9 @@ namespace Carpentry.Data.Interfaces
     {
         Task<DateTime?> GetSetDataLastUpdated(string setCode);
 
-        Task AddOrUpdateSet(ScryfallSet setData);
+        Task AddOrUpdateSet(ScryfallSetData setData);
 
-        Task<ScryfallSet> GetSetByCode(string setCode);
+        Task<ScryfallSetData> GetSetByCode(string setCode);
 
         //Task DeleteSet(int setId);
     }

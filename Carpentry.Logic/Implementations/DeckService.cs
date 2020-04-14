@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+//using Carpentry.Data.DataContext;
+//using Carpentry.Data.DataModels;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -17,18 +20,16 @@ namespace Carpentry.Logic.Implementations
         //2 -   A DTO that contains either IDs or values but not the associations
 
         //Should have no access to data context classes, only repo classes
-        private readonly ILegacyCardRepo _cardRepo;
+        //private readonly ILegacyCardRepo _cardRepo;
         //private readonly ICardStringRepo _scryRepo;
-        //private readonly ILogger<CarpentryService> _logger;
+        private readonly ILogger<DeckService> _logger;
 
-        public DeckService(
-            ILegacyCardRepo cardRepo
-            //,ICardStringRepo scryRepo, ILogger<CarpentryService> logger
-            )
+        private readonly IDeckDataRepo _deckRepo;
+
+        public DeckService(IDeckDataRepo deckRepo, ILogger<DeckService> logger)
         {
-            _cardRepo = cardRepo;
-            //_scryRepo = scryRepo;
-            //_logger = logger;
+            _deckRepo = deckRepo;
+            _logger = logger;
         }
 
         #region private methods
@@ -302,19 +303,19 @@ namespace Carpentry.Logic.Implementations
 
         #endregion
 
-        #region Deck related methods
+        #region Public methods
 
         public async Task<int> AddDeck(DeckProperties props)
         {
-
             //This layer knows of it's own models, but not the UI layer
             //The DATA layer won't know of this layer's model, so we must map to a type consumable by the data layer
-            Data.LegacyDataContext.MagicFormat deckFormat = await _cardRepo.GetFormatByName(props.Format);
+            //Data.DataModels.MagicFormat deckFormat = await _deckRepo.GetFormatByName(props.Format);
 
-            Data.LegacyDataContext.Deck newDeck = new Data.LegacyDataContext.Deck()
+            var newDeck = new Data.DataModels.DeckData()
             {
                 Name = props.Name,
-                Format = deckFormat,
+                //Format = deckFormat,
+                MagicFormatId = props.FormatId,
                 Notes = props.Notes,
 
                 BasicW = props.BasicW,
@@ -324,29 +325,54 @@ namespace Carpentry.Logic.Implementations
                 BasicG = props.BasicG,
             };
 
-            int newId = await _cardRepo.AddDeck(newDeck);
+            int newId = await _deckRepo.AddDeck(newDeck);
 
             return newId;
         }
 
-        public async Task UpdateDeck(DeckProperties props)
+        public async Task UpdateDeck(DeckProperties deckDto)
         {
-            await Task.CompletedTask;
-            throw new NotImplementedException();
-            //await _cardRepo.UpdateDeck(props);
+
+            Data.DataModels.DeckData existingDeck = await _deckRepo.GetDeckById(deckDto.Id); //.Decks.Where(x => x.Id == deckDto.Id).FirstOrDefault();
+
+            if (existingDeck == null)
+            {
+                throw new Exception("No deck found matching the specified ID");
+            }
+
+            //var deckFormat = await _deckRepo.GetFormatByName(deckDto.Format);
+
+            //TODO: Deck Properties should just hold a format ID instead of the string version of a format
+
+            existingDeck.Name = deckDto.Name;
+            //existingDeck.Format = deckFormat; // deckDto.Format;
+            existingDeck.MagicFormatId = deckDto.FormatId;
+            existingDeck.Notes = deckDto.Notes;
+            existingDeck.BasicW = deckDto.BasicW;
+            existingDeck.BasicU = deckDto.BasicU;
+            existingDeck.BasicB = deckDto.BasicB;
+            existingDeck.BasicR = deckDto.BasicR;
+            existingDeck.BasicG = deckDto.BasicG;
+
+            await _deckRepo.UpdateDeck(existingDeck);
+
         }
 
         public async Task DeleteDeck(int deckId)
         {
-            await Task.CompletedTask;
-            throw new NotImplementedException();
-            //await _cardRepo.DeleteDeck(deckId);
+            await _deckRepo.DeleteDeck(deckId);
         }
 
-        public async Task<IEnumerable<DeckProperties>> SearchDecks()
+        public async Task<IEnumerable<DeckProperties>> GetDeckOverviews() //TODO - rename to "GetDeckOverviews" or "GetDeckProperties"
         {
+
+
+
+
+
+//#error not implemented
             throw new NotImplementedException();
-            ////var price = await CalculateInventoryTotalPrice();
+            
 
 
             //List<DeckProperties> deckList = await _cardRepo.QueryDeckProperties().ToListAsync();
@@ -364,6 +390,7 @@ namespace Carpentry.Logic.Implementations
         //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
         public async Task<DeckDetail> GetDeckDetail(int deckId)
         {
+//#error not implemented
             throw new NotImplementedException();
             ////Deck Props
             //DeckProperties targetDeck = await _cardRepo.QueryDeckProperties().Where(x => x.Id == deckId).FirstOrDefaultAsync();
@@ -456,8 +483,9 @@ namespace Carpentry.Logic.Implementations
         }
 
         //if a card already exists in a deck it is "moved" to this deck
-        public async Task AddDeckCard(DeckCard dto)
+        public async Task AddDeckCard(Logic.Models.DeckCard dto)
         {
+//#error not implemented
             throw new NotImplementedException();
             //if (dto.InventoryCard.Id > 0)
             //{
@@ -490,6 +518,7 @@ namespace Carpentry.Logic.Implementations
         //IDR where exactly this gets called outside of console apps
         public async Task AddDeckCardBatch(IEnumerable<DeckCard> dtoBatch)
         {
+//#error not implemented
             throw new NotImplementedException();
             //_logger.LogWarning("Beginning AddDeckCardBatch");
             //var dtoArray = dtoBatch.ToArray();
@@ -507,14 +536,17 @@ namespace Carpentry.Logic.Implementations
 
         public async Task UpdateDeckCard(DeckCard card)
         {
-            throw new NotImplementedException();
-            //await _cardRepo.UpdateDeckCard(card.Id, card.DeckId, card.CategoryId);
+            Data.DataModels.DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
+
+            dbCard.DeckId = card.DeckId;
+            dbCard.CategoryId = card.CategoryId;
+
+            await _deckRepo.UpdateDeckCard(dbCard);
         }
 
         public async Task DeleteDeckCard(int deckCardId)
         {
-            throw new NotImplementedException();
-            //await _cardRepo.DeleteDeckCard(deckCardId);
+            await _deckRepo.DeleteDeckCard(deckCardId);
         }
 
         #endregion

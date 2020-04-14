@@ -54,38 +54,23 @@ export const api = {
         ////should this be a POST since it could/should include filepath info?
         //[HttpGet("[action]")]
         //public async Task<ActionResult> BackupDatabase()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         ////Restore DB
         //[HttpGet("[action]")]
         //public async Task<ActionResult> RestoreDatabase()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         ////Get Set|Data Update Status
         //[HttpGet("[action]")]
         //public async Task<ActionResult> GetDatabaseUpdateStatus()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
 
         ////Update Set Scry Data
         //[HttpGet("[action]")]
         //public async Task<ActionResult> UpdateScryfallSet(string setCode)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         ////Update Set Card Data
         //[HttpGet("[action]")]
         //public async Task<ActionResult> UpdateSetData(string setCode)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
 
     },
 

@@ -6,7 +6,7 @@ namespace Carpentry.Data.DataContext
     public class ScryfallDataContext : DbContext
     {
         //public DbSet<Card> Cards { get; set; }
-        public DbSet<ScryfallSet> Sets { get; set; }
+        public DbSet<ScryfallSetData> Sets { get; set; }
 
         public ScryfallDataContext(DbContextOptions<ScryfallDataContext> options) : base(options)
         {

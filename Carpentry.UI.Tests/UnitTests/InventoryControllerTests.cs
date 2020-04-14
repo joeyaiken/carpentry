@@ -18,6 +18,7 @@ using Carpentry.Logic.Models;
 using Carpentry.Data.QueryParameters;
 using Carpentry.UI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Carpentry.UI.Util;
 
 namespace Carpentry.UI.Tests.UnitTests
 {
@@ -33,7 +34,7 @@ namespace Carpentry.UI.Tests.UnitTests
             //_factory = new CarpentryFactory();
             //_client = _factory.CreateClient();
 
-            var mockService = new Mock<IInventoryService>();
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             //Add
             mockService
@@ -42,15 +43,18 @@ namespace Carpentry.UI.Tests.UnitTests
 
             //AddBatch
             mockService
-                .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCard>>()));
+                .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCard>>()))
+                .Returns(Task.CompletedTask);
 
             //Update
             mockService
-                .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCard>()));
+                .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCard>()))
+                .Returns(Task.CompletedTask);
 
             //Delete
             mockService
-                .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i < 0)));
+                .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i > 0)))
+                .Returns(Task.CompletedTask);
 
             //Search
             IEnumerable<InventoryOverview> searchResult = new List<InventoryOverview>()
@@ -78,7 +82,13 @@ namespace Carpentry.UI.Tests.UnitTests
                 .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
                 .ReturnsAsync(detailResult);
 
-            _inventoryController = new Controllers.InventoryController(mockService.Object);
+            //var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
+
+            var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
+
+            var mapperService = new MapperService(mockRefService.Object);
+
+            _inventoryController = new Controllers.InventoryController(mockService.Object, mapperService);
         }
 
         #region Tests - Controller methods all return Ok/Accepted
@@ -160,7 +170,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Inventory_Delete_ReturnsAsyncOK_Test()
         {
             //assemble
-            int idToSubmit = 3;
+            int idToSubmit = 1;
 
             //act
             var response = await _inventoryController.Delete(idToSubmit);

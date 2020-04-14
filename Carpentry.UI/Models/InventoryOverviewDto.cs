@@ -4,34 +4,6 @@ namespace Carpentry.UI.Models
 {
     public class InventoryOverviewDto // TODO : Rename to CardOverviewDto
     {
-        public InventoryOverviewDto(InventoryOverview model)
-        {
-            Cmc = model.Cmc;
-            Cost = model.Cost;
-            Count = model.Count;
-            Description = model.Description;
-            Id = model.Id;
-            Img = model.Img;
-            Name = model.Name;
-            Type = model.Type;
-        }
-
-        public InventoryOverview ToModel()
-        {
-            InventoryOverview result = new InventoryOverview
-            {
-                Cmc = Cmc,
-                Cost = Cost,
-                Count = Count,
-                Description = Description,
-                Id = Id,
-                Img = Img,
-                Name = Name,
-                Type = Type,
-            };
-            return result;
-        }
-
         public int Id { get; set; }
 
         public string Name { get; set; }

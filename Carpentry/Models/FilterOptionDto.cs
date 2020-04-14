@@ -1,30 +1,20 @@
-using Carpentry.Data.LegacyModels;
-using Carpentry.Data.Models;
+﻿using Carpentry.Logic.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Carpentry.Models
+namespace Carpentry.UI.Legacy.Models
 {
     public class FilterOptionDto
     {
-        [JsonProperty("sets")]
-        public List<FilterDescriptor> Sets { get; set; }
+        public FilterOptionDto(FilterOption model)
+        {
+            Name = model.Name;
+            Value = model.Value;
+        }
 
-        [JsonProperty("types")]
-        public List<FilterDescriptor> Types { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
-        [JsonProperty("formats")]
-        public List<FilterDescriptor> Formats { get; set; }
-
-        [JsonProperty("colors")]
-        public List<FilterDescriptor> ManaColors { get; set; }
-
-        [JsonProperty("rarities")]
-        public List<FilterDescriptor> Rarities { get; set; }
-        
-        [JsonProperty("statuses")]
-        public List<FilterDescriptor> Statuses { get; set; }
+        [JsonProperty("value")]
+        public string Value { get; set; }
     }
 }

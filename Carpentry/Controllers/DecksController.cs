@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.Data.LegacyModels;
-using Carpentry.Interfaces;
+//using Carpentry.Data.Models;
+//using Carpentry.Data.Models;
+//using Carpentry.Interfaces;
+using Carpentry.Logic.Interfaces;
+using Carpentry.UI.Legacy.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Carpentry.Controllers
+namespace Carpentry.UI.Legacy.Controllers
 {
     [Route("api/[controller]")]
     public class DecksController : ControllerBase
@@ -15,11 +19,11 @@ namespace Carpentry.Controllers
             return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
         }
 
-        private readonly ICarpentryService _carpentry;
+        private readonly IDeckService _decks;
 
-        public DecksController(ICarpentryService carpentry)
+        public DecksController(IDeckService decks)
         {
-            _carpentry = carpentry;
+            _decks = decks;
         }
 
         /// <summary>
@@ -35,12 +39,12 @@ namespace Carpentry.Controllers
         //decks/add
         //- add a deck
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> Add([FromBody] DeckProperties deckProps)
+        public async Task<ActionResult<int>> Add([FromBody] DeckPropertiesDto deckProps)
         {
             try
             {
-                int newDeckId = await _carpentry.AddDeck(deckProps);
-                return Accepted(newDeckId);
+                int newDeckId = await _decks.AddDeck(deckProps.ToModel());
+                return Ok(newDeckId);
             }
             catch (Exception ex)
             {
@@ -51,12 +55,12 @@ namespace Carpentry.Controllers
         //decks/update
         //- update properties of a deck
         [HttpPost("[action]")]
-        public async Task<ActionResult> Update([FromBody] DeckProperties deckProps)
+        public async Task<ActionResult> Update([FromBody] DeckPropertiesDto deckProps)
         {
             try
             {
-                await _carpentry.UpdateDeck(deckProps);
-                return Accepted();
+                await _decks.UpdateDeck(deckProps.ToModel());
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -71,8 +75,8 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _carpentry.DeleteDeck(deckId);
-                return Accepted();
+                await _decks.DeleteDeck(deckId);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -83,12 +87,13 @@ namespace Carpentry.Controllers
         //decks/Search
         //- get a list of deck properties & stats
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<DeckProperties>>> Search()
+        public async Task<ActionResult<IEnumerable<DeckPropertiesDto>>> Search()
         {
             try
             {
-                var results = await _carpentry.SearchDecks();
-                return Ok(results);
+                var results = await _decks.SearchDecks();
+                var mappedResults = results.Select(x => new DeckPropertiesDto(x)).ToList();
+                return Ok(mappedResults);
             }
             catch (Exception ex)
             {
@@ -99,12 +104,13 @@ namespace Carpentry.Controllers
         //decks/Get
         //- get a deck (with cards)
         [HttpGet("[action]")]
-        public async Task<ActionResult<DeckDto>> Get(int deckId)
+        public async Task<ActionResult<DeckDetailDto>> Get(int deckId)
         {
             try
             {
-                var results = await _carpentry.GetDeckDetail(deckId);
-                return Ok(results);
+                var results = await _decks.GetDeckDetail(deckId);
+                DeckDetailDto mappedResults = new DeckDetailDto(results);
+                return Ok(mappedResults);
             }
             catch (Exception ex)
             {
@@ -118,8 +124,10 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _carpentry.AddDeckCard(dto);
-                return Accepted();
+                var model = dto.ToModel();
+                await _decks.AddDeckCard(model);
+                //await _decks.AddDeckCard(dto.ToModel());
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -132,8 +140,8 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _carpentry.UpdateDeckCard(card);
-                return Accepted();
+                await _decks.UpdateDeckCard(card.ToModel());
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -146,8 +154,8 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _carpentry.DeleteDeckCard(id);
-                return Accepted();
+                await _decks.DeleteDeckCard(id);
+                return Ok();
             }
             catch (Exception ex)
             {

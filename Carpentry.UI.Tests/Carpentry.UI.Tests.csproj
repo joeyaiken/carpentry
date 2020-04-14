@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Carpentry.Data.Tests\Carpentry.Data.Tests.csproj" />
     <ProjectReference Include="..\Carpentry.UI\Carpentry.UI.csproj" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.UI.Models;
+using Carpentry.UI.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -21,7 +22,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public CardSearchControllerTests()
         {
             //mock service
-            var mockService = new Mock<ICardSearchService>();
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             //search result payload
             IEnumerable<MagicCard> searchResults = new List<MagicCard>()
@@ -48,7 +49,13 @@ namespace Carpentry.UI.Tests.UnitTests
                 .Setup(p => p.SearchCardsFromInventory(It.IsNotNull<InventoryQueryParameter>()))
                 .ReturnsAsync(searchResults);
 
-            _cardSearchController = new Controllers.CardSearchController(mockService.Object);
+            //var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
+
+            var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
+
+            var mapperService = new MapperService(mockRefService.Object);
+
+            _cardSearchController = new Controllers.CardSearchController(mockService.Object, mapperService);
         }
 
         [TestMethod]

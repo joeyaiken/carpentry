@@ -19,7 +19,7 @@ namespace Carpentry.Logic.Tests.UnitTests
         public CardSearchServiceTests()
         {
             //ICardRepo cardRepo
-            var mockCardRepo = new Mock<ILegacyCardRepo>();
+            var mockCardRepo = new Mock<ILegacyCardRepo>(MockBehavior.Strict);
 
             IQueryable<Data.LegacyDataContext.Card> inventoryQueryResult = new List<Data.LegacyDataContext.Card>()
             {
@@ -53,8 +53,8 @@ namespace Carpentry.Logic.Tests.UnitTests
             mockCardRepo
                 .Setup(p => p.QueryFilteredCards(It.IsNotNull<InventoryQueryParameter>()))
                 .ReturnsAsync(inventoryQueryResult);
-
-            _cardSearchService = new CardSearchService(mockCardRepo.Object);
+            //TODO re-add this
+            //_cardSearchService = new CardSearchService(mockCardRepo.Object);
         }
 
         [TestMethod]
@@ -80,10 +80,9 @@ namespace Carpentry.Logic.Tests.UnitTests
         {
             //<IEnumerable<MagicCard>>
             //CardSearchQueryParameter filters
-
+            await Task.CompletedTask;
             Assert.Fail();
 
-            //throw new NotImplementedException();
             //IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryCardsBySet(filters.SetCode);
 
             //if (!string.IsNullOrEmpty(filters.Type))
@@ -118,10 +117,9 @@ namespace Carpentry.Logic.Tests.UnitTests
         {
             //<IEnumerable<MagicCard>>
             //NameSearchQueryParameter filters
-
+            await Task.CompletedTask;
             Assert.Fail();
 
-            //throw new NotImplementedException();
             //IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryScryfallByName(filters.Name, filters.Exclusive);
 
             //List<ScryfallMagicCard> result = query.ToList();

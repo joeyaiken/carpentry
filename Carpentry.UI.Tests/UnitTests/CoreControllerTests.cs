@@ -1,6 +1,7 @@
 ﻿using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.UI.Models;
+using Carpentry.UI.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,9 +19,9 @@ namespace Carpentry.UI.Tests.UnitTests
 
         public CoreControllerTests()
         {
-            //var mockBackupService = new Mock<IDataBackupService>();
+            //var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
 
-            var mockFilterService = new Mock<IFilterService>();
+            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
 
             mockFilterService
                 .Setup(p => p.GetCardStatusFilterOptions())
@@ -46,8 +47,13 @@ namespace Carpentry.UI.Tests.UnitTests
                 .Setup(p => p.GetTypeFilterOptions())
                 .ReturnsAsync(new List<FilterOption>());
 
+            //var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
 
-            _coreController = new Controllers.CoreController(mockFilterService.Object);
+            var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
+
+            var mapperService = new MapperService(mockRefService.Object);
+
+            _coreController = new Controllers.CoreController(mockFilterService.Object, mapperService);
         }
 
         #region Tests - Controller methods all return Ok/Accepted

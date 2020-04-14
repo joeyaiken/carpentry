@@ -2,6 +2,7 @@
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.UI.Models;
+using Carpentry.UI.Util;
 //using Carpentry.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,12 +21,15 @@ namespace Carpentry.UI.Controllers
         }
 
         private readonly IFilterService _filterService;
+        private readonly IMapperService _mapper;
 
         public CoreController(
-            IFilterService filterService
+            IFilterService filterService,
+            IMapperService mapper
             )
         {
             _filterService = filterService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -43,32 +47,20 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                List<FilterOption> formats = await _filterService.GetFormatFilterOptions();
+                //List<FilterOption> formats = await _filterService.GetFormatFilterOptions();
 
-                List<FilterOptionDto> mappedFormats = formats.Select(x => new FilterOptionDto(x)).ToList();
+                //List<FilterOptionDto> mappedFormats = formats.Select(x => new FilterOptionDto(x)).ToList();
 
-                List<FilterOptionDto> anotherWay = (await _filterService.GetFormatFilterOptions()).Select(x => new FilterOptionDto(x)).ToList();
+                //List<FilterOptionDto> anotherWay = (await _filterService.GetFormatFilterOptions()).Select(x => new FilterOptionDto(x)).ToList();
 
                 AppFiltersDto filters = new AppFiltersDto
                 {
-                    Formats = 
-                        (await _filterService.GetFormatFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    ManaColors = 
-                        (await _filterService.GetManaColorFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Rarities =
-                        (await _filterService.GetRarityFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Sets =
-                        (await _filterService.GetSetFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Statuses =
-                        (await _filterService.GetCardStatusFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Types =
-                        (await _filterService.GetTypeFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
+                    Formats = _mapper.ToDto(await _filterService.GetFormatFilterOptions()),
+                    ManaColors = _mapper.ToDto(await _filterService.GetManaColorFilterOptions()),
+                    Rarities = _mapper.ToDto(await _filterService.GetRarityFilterOptions()),
+                    Sets = _mapper.ToDto(await _filterService.GetSetFilterOptions()),
+                    Statuses = _mapper.ToDto(await _filterService.GetCardStatusFilterOptions()),
+                    Types = _mapper.ToDto(await _filterService.GetTypeFilterOptions()),
                 };
 
                 return Ok(filters);

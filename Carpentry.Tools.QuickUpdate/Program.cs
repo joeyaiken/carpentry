@@ -63,7 +63,7 @@ namespace Carpentry.Tools.QuickUpdate
                 .AddHttpClient<IScryfallService, ScryfallService>().Services
 
                 //ICardRepo cardRepo,
-                .AddScoped<ICardRepo, CarpentryCardRepo>() //Name TBD, this hasn't been implemented yet
+                //.AddScoped<ICardRepo, CarpentryCardRepo>() //Name TBD, this hasn't been implemented yet
                 //IScryfallRepo scryfallRepo
                 .AddScoped<IScryfallDataRepo, ScryfallRepo>()
 

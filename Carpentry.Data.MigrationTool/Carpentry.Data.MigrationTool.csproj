@@ -34,7 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carpentry.Data\Carpentry.Data.csproj" />
-    <ProjectReference Include="..\Carpentry\Carpentry.csproj" />
+    <ProjectReference Include="..\Carpentry\Carpentry.UI.Legacy.csproj" />
   </ItemGroup>
 
   <ItemGroup>

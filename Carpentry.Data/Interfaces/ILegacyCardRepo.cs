@@ -42,7 +42,7 @@ namespace Carpentry.Data.Interfaces
         
         Task<int> AddDeck(DeckProperties props); //Obsolete
         
-        Task<int> AddDeck(Deck newDeck);
+        //Task<int> AddDeck(Deck newDeck);
         Task UpdateDeck(DeckProperties deckDto);
 
         Task DeleteDeck(int deckId);
@@ -65,11 +65,11 @@ namespace Carpentry.Data.Interfaces
 
         #region Inventory related methods
 
-        Task<int> AddInventoryCard(InventoryCardDto dto);
+        //Task<int> AddInventoryCard(InventoryCardDto dto);
 
         Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> dtoBatch);
 
-        Task UpdateInventoryCard(InventoryCardDto dto);
+        //Task UpdateInventoryCard(InventoryCardDto dto);
 
         Task DeleteInventoryCard(int id);
 

@@ -10,8 +10,9 @@ namespace Carpentry.Logic.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("format")]
-        public string Format { get; set; }
+        
+        //public string Format { get; set; }
+        public int FormatId { get; set; }
 
         [JsonProperty("notes")]
         public string Notes { get; set; }

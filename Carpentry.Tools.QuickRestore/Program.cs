@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Carpentry.Logic.Interfaces;
 //using Carpentry.Data.LegacyDataContext;
 //using Carpentry.Logic.Implementations;
 //using Carpentry.Logic.Interfaces;
@@ -23,9 +24,9 @@ namespace Carpentry.Tools.QuickRestore
 
             logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
 
-            //var backupService = serviceProvider.GetService<IDataBackupService>();
+            var restoreService = serviceProvider.GetService<IDataRestoreService>();
 
-            //await backupService.BackupDatabase();
+            await restoreService.RestoreDB();
 
             logger.LogInformation("Completed successfully");
         }

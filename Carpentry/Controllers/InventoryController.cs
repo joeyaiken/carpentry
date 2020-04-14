@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.Data.LegacyModels;
 using Carpentry.Data.QueryParameters;
-using Carpentry.Interfaces;
+//using Carpentry.Data.Models;
+//using Carpentry.Interfaces;
+using Carpentry.Logic.Interfaces;
+using Carpentry.UI.Legacy.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Carpentry.Controllers
+namespace Carpentry.UI.Legacy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,16 +20,15 @@ namespace Carpentry.Controllers
             return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
         }
 
-        //private readonly ICardRepo _cardRepo;
-        private readonly ICarpentryService _carpentry;
+        private readonly IInventoryService _inventory;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(ICarpentryService carpentry)
+        public InventoryController(IInventoryService inventory)
         {
-            _carpentry = carpentry;
+            _inventory = inventory;
         }
 
         /// <summary>
@@ -43,29 +45,25 @@ namespace Carpentry.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> Add([FromBody] InventoryCardDto dto)
         {
-
             try
             {
-                var updatedId = await _carpentry.AddInventoryCard(dto);
-                return Accepted(updatedId);
+                var updatedId = await _inventory.AddInventoryCard(dto.ToModel());
+                return Ok(updatedId);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, FormatExceptionMessage("Add", ex));
             }
-
-
         }
 
         //AddCardBatch
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> AddBatch([FromBody] IEnumerable<InventoryCardDto> dto)
         {
-
             try
             {
-                await _carpentry.AddInventoryCardBatch(dto);
-                return Accepted();
+                await _inventory.AddInventoryCardBatch(dto.Select(x => x.ToModel()));
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -79,12 +77,10 @@ namespace Carpentry.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> Update([FromBody] InventoryCardDto dto)
         {
-
-
             try
             {
-                await _carpentry.UpdateInventoryCard(dto);
-                return Accepted();
+                await _inventory.UpdateInventoryCard(dto.ToModel());
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -100,8 +96,8 @@ namespace Carpentry.Controllers
 
             try
             {
-                await _carpentry.DeleteInventoryCard(id);
-                return Accepted();
+                await _inventory.DeleteInventoryCard(id);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -111,12 +107,13 @@ namespace Carpentry.Controllers
 
         //Search
         [HttpPost("[action]")]
-        public async Task<ActionResult> Search([FromBody] InventoryQueryParameter param)
+        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> Search([FromBody] InventoryQueryParameter param)
         {
             try
             {
-                var result = await _carpentry.GetInventoryOverviews(param);
-                return Ok(result);
+                var result = await _inventory.GetInventoryOverviews(param);
+                List<InventoryOverviewDto> mappedResult = result.Select(x => new InventoryOverviewDto(x)).ToList();
+                return Ok(mappedResult);
             }
             catch (Exception ex)
             {
@@ -129,8 +126,9 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var result = await _carpentry.GetInventoryDetailByName(name);
-                return Ok(result);
+                var result = await _inventory.GetInventoryDetailByName(name);
+                InventoryDetailDto mappedResult = new InventoryDetailDto(result);
+                return Ok(mappedResult);
             }
             catch (Exception ex)
             {

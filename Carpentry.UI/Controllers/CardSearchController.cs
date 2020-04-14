@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.UI.Models;
+using Carpentry.UI.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.UI.Controllers
@@ -20,10 +21,12 @@ namespace Carpentry.UI.Controllers
         }
 
         private readonly ICardSearchService _cardSearch;
+        private readonly IMapperService _mapper;
 
-        public CardSearchController(ICardSearchService cardSearch)
+        public CardSearchController(ICardSearchService cardSearch, IMapperService mapper)
         {
             _cardSearch = cardSearch;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 var cards = await _cardSearch.SearchCardsFromWeb(param);
-                List<MagicCardDto> mappedCards = cards.Select(x => new MagicCardDto(x)).ToList();
+                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)
@@ -57,7 +60,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 var cards = await _cardSearch.SearchCardsFromSet(filters);
-                List<MagicCardDto> mappedCards = cards.Select(x => new MagicCardDto(x)).ToList();
+                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)
@@ -72,7 +75,7 @@ namespace Carpentry.UI.Controllers
             try
             {
                 var cards = await _cardSearch.SearchCardsFromInventory(filters);
-                List<MagicCardDto> mappedCards = cards.Select(x => new MagicCardDto(x)).ToList();
+                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)

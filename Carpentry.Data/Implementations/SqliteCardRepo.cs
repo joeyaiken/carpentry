@@ -353,20 +353,20 @@ namespace Carpentry.Data.Implementations
             return newDeck.Id;
         }
 
-        public async Task<int> AddDeck(Deck newDeck)
-        {
-            if(newDeck.Id > 0)
-            {
-                throw new ArgumentException("New deck cannot contain an ID");
-            }
+        //public async Task<int> AddDeck(Deck newDeck)
+        //{
+        //    if(newDeck.Id > 0)
+        //    {
+        //        throw new ArgumentException("New deck cannot contain an ID");
+        //    }
 
-            //TODO - consider more validation
+        //    //TODO - consider more validation
 
-            await _cardContext.Decks.AddAsync(newDeck);
-            await _cardContext.SaveChangesAsync();
+        //    await _cardContext.Decks.AddAsync(newDeck);
+        //    await _cardContext.SaveChangesAsync();
 
-            return newDeck.Id;
-        }
+        //    return newDeck.Id;
+        //}
 
         /// <summary>
         /// This method just updates the Deck data record, it does not modify the contents of a deck
@@ -462,7 +462,7 @@ namespace Carpentry.Data.Implementations
             }
             else
             {
-                throw new Exception($"Could not find deck card wit ID {deckCardId}");
+                throw new Exception($"Could not find deck card with ID {deckCardId}");
             }
         }
 
@@ -517,29 +517,29 @@ namespace Carpentry.Data.Implementations
 
         #region Inventory related methods
 
-        /// <summary>
-        /// Adds a new card to the inventory
-        /// Does not handle adding deck cards
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public async Task<int> AddInventoryCard(InventoryCardDto dto)
-        {
-            var cardVariant = await _cardContext.VariantTypes.FirstOrDefaultAsync(x => x.Name == dto.VariantType);
+        ///// <summary>
+        ///// Adds a new card to the inventory
+        ///// Does not handle adding deck cards
+        ///// </summary>
+        ///// <param name="dto"></param>
+        ///// <returns></returns>
+        //public async Task<int> AddInventoryCard(InventoryCardDto dto)
+        //{
+        //    var cardVariant = await _cardContext.VariantTypes.FirstOrDefaultAsync(x => x.Name == dto.VariantType);
 
-            InventoryCard newInventoryCard = new InventoryCard()
-            {
-                IsFoil = dto.IsFoil,
-                InventoryCardStatusId = dto.InventoryCardStatusId,
-                MultiverseId = dto.MultiverseId,
-                VariantType = cardVariant,
-            };
+        //    InventoryCard newInventoryCard = new InventoryCard()
+        //    {
+        //        IsFoil = dto.IsFoil,
+        //        InventoryCardStatusId = dto.InventoryCardStatusId,
+        //        MultiverseId = dto.MultiverseId,
+        //        VariantType = cardVariant,
+        //    };
 
-            await _cardContext.InventoryCards.AddAsync(newInventoryCard);
-            await _cardContext.SaveChangesAsync();
+        //    await _cardContext.InventoryCards.AddAsync(newInventoryCard);
+        //    await _cardContext.SaveChangesAsync();
 
-            return newInventoryCard.Id;
-        }
+        //    return newInventoryCard.Id;
+        //}
 
         public async Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> dtoBatch)
         {
@@ -558,21 +558,21 @@ namespace Carpentry.Data.Implementations
         }
 
 
-        /// <summary>
-        /// Updates an inventory card
-        /// In theory, the only fieds I'd practically want to update would be Status and maybe IsFoil??
-        /// This one might need to wait until variants are handled better...
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public async Task UpdateInventoryCard(InventoryCardDto dto)
-        {
-            var dbCard = _cardContext.InventoryCards.FirstOrDefault(x => x.Id == dto.Id);
-            //currently only expecting to change the status with this method
-            dbCard.InventoryCardStatusId = dto.InventoryCardStatusId;
-            _cardContext.InventoryCards.Update(dbCard);
-            await _cardContext.SaveChangesAsync();
-        }
+        ///// <summary>
+        ///// Updates an inventory card
+        ///// In theory, the only fieds I'd practically want to update would be Status and maybe IsFoil??
+        ///// This one might need to wait until variants are handled better...
+        ///// </summary>
+        ///// <param name="dto"></param>
+        ///// <returns></returns>
+        //public async Task UpdateInventoryCard(InventoryCardDto dto)
+        //{
+        //    var dbCard = _cardContext.InventoryCards.FirstOrDefault(x => x.Id == dto.Id);
+        //    //currently only expecting to change the status with this method
+        //    dbCard.InventoryCardStatusId = dto.InventoryCardStatusId;
+        //    _cardContext.InventoryCards.Update(dbCard);
+        //    await _cardContext.SaveChangesAsync();
+        //}
 
         /// <summary>
         /// Deletes a card from the inventory

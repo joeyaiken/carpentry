@@ -14,7 +14,7 @@ namespace Carpentry.Logic.Interfaces
 
         Task DeleteDeck(int deckId);
 
-        Task<IEnumerable<DeckProperties>> SearchDecks();
+        Task<IEnumerable<DeckProperties>> GetDeckOverviews();
 
         Task<DeckDetail> GetDeckDetail(int deckId);
 

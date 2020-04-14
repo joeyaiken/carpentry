@@ -21,7 +21,7 @@ namespace Carpentry.Logic.Tests.UnitTests
 
         public ScryfallServiceTests()
         {
-            var handlerMock = new Mock<HttpMessageHandler>(); //MockBehavior.Strict
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict); //MockBehavior.Strict
 
             //Got this approach from the following article:
             //https://gingter.org/2018/07/26/how-to-mock-httpclient-in-your-net-c-unit-tests/
@@ -61,6 +61,24 @@ namespace Carpentry.Logic.Tests.UnitTests
             Assert.IsTrue(result.CardTokens.Count > 100);
 
 
+        }
+
+        [TestMethod]
+        public async Task ScryfallService_MapScryfallDataToCards_Test()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public async Task ScryfallService_GetCardByMid_Test()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public async Task ScryfallService_SearchScryfallByName_Test()
+        {
+            Assert.Fail();
         }
 
     }

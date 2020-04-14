@@ -2,7 +2,7 @@ using Carpentry.Data.LegacyDataContext;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Interfaces;
-using Carpentry.Models;
+using Carpentry.UI.Legacy.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;

@@ -26,6 +26,25 @@ namespace Carpentry.Logic.Implementations
             _scryfallApiDelay = 200; //1000 = 1 second, scryfall requests 50-100
         }
 
+        /// <summary>
+        /// Keep in mind this doesn't return variants
+        /// </summary>
+        /// <param name="multiverseId"></param>
+        /// <returns></returns>
+        public async Task<ScryfallMagicCard> GetCardByMid(int multiverseId)
+        {
+            string endpoint = $"https://api.scryfall.com/cards/multiverse/{multiverseId}";
+
+            var responseString = await _client.GetStringAsync(endpoint);
+
+            JObject responseObject = JObject.Parse(responseString);
+
+            ScryfallMagicCard cardResult = new ScryfallMagicCard();
+            cardResult.RefreshFromToken(responseObject);
+
+            return cardResult;
+        }
+
         public async Task<ScryfallSetDataDto> GetFullSet(string setCode)
         {
             ScryfallSetDataDto result = new ScryfallSetDataDto()
@@ -70,7 +89,6 @@ namespace Carpentry.Logic.Implementations
 
             return result;
         }
-
 
         public List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData)
         {
@@ -146,5 +164,32 @@ namespace Carpentry.Logic.Implementations
                 throw;
             }
         }
+
+        public async Task<List<ScryfallMagicCard>> SearchScryfallByName(string name, bool exclusive)
+        {
+            //What does SET SEARCH return?
+            string endpoint;
+
+            string nameParam = name.Replace(' ', '+');
+
+            if (exclusive)
+            {
+                endpoint = $"https://api.scryfall.com/cards/search?q=!%22{nameParam}%22&unique=prints";
+            }
+            else
+            {
+                endpoint = $"https://api.scryfall.com/cards/search?q={nameParam}";
+            }
+
+            var responseString = await _client.GetStringAsync(endpoint);
+
+            JObject responseObject = JObject.Parse(responseString);
+            var cardResultData = responseObject.Value<JArray>("data").ToList();
+
+            List<ScryfallMagicCard> mappedCards = MapScryfallDataToCards(cardResultData);
+
+            return mappedCards;
+        }
+
     }
 }

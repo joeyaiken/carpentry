@@ -32,7 +32,7 @@ namespace Carpentry.Data.Implementations
             return setLastUpdated;
         }
 
-        public async Task AddOrUpdateSet(ScryfallSet setData)
+        public async Task AddOrUpdateSet(ScryfallSetData setData)
         {
             //do I map or blindly add/update?
             //TODO - Map between models instead of blindly applying
@@ -63,7 +63,7 @@ namespace Carpentry.Data.Implementations
             await _scryContext.SaveChangesAsync();
         }
 
-        public async Task<ScryfallSet> GetSetByCode(string setCode)
+        public async Task<ScryfallSetData> GetSetByCode(string setCode)
         {
             var set = await _scryContext
                 .Sets

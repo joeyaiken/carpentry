@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.Data.LegacyModels;
-using Carpentry.Data.Models;
+//using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
-using Carpentry.Interfaces;
+using Carpentry.Logic.Interfaces;
+using Carpentry.UI.Legacy.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Carpentry.Controllers
+namespace Carpentry.UI.Legacy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,11 +19,11 @@ namespace Carpentry.Controllers
             return $"An error occured when processing the {functionName} method of the Card Search controller: {ex.Message}";
         }
 
-        private readonly ICarpentryService _carpentry;
+        private readonly ICardSearchService _cardSearch;
 
-        public CardSearchController(ICarpentryService carpentry)
+        public CardSearchController(ICardSearchService cardSearch)
         {
-            _carpentry = carpentry;
+            _cardSearch = cardSearch;
         }
 
         /// <summary>
@@ -40,8 +41,9 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var cards = await _carpentry.SearchCardsFromWeb(param);
-                return Ok(cards);
+                var cards = await _cardSearch.SearchCardsFromWeb(param);
+                List<MagicCardDto> mappedCards = cards.Select(x => new MagicCardDto(x)).ToList();
+                return Ok(mappedCards);
             }
             catch (Exception ex)
             {
@@ -54,8 +56,9 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var cards = await _carpentry.SearchCardsFromSet(filters);
-                return Ok(cards);
+                var cards = await _cardSearch.SearchCardsFromSet(filters);
+                List<MagicCardDto> mappedCards = cards.Select(x => new MagicCardDto(x)).ToList();
+                return Ok(mappedCards);
             }
             catch (Exception ex)
             {
@@ -68,8 +71,9 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var cards = await _carpentry.SearchCardsFromInventory(filters);
-                return Ok(cards);
+                var cards = await _cardSearch.SearchCardsFromInventory(filters);
+                List<MagicCardDto> mappedCards = cards.Select(x => new MagicCardDto(x)).ToList();
+                return Ok(mappedCards);
             }
             catch (Exception ex)
             {

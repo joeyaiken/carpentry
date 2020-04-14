@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry", "Carpentry\Carpentry.csproj", "{EADC7557-9D99-4F4C-8FCB-E9713BA70749}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.UI.Legacy", "Carpentry\Carpentry.UI.Legacy.csproj", "{EADC7557-9D99-4F4C-8FCB-E9713BA70749}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Tests.Legacy", "Carpentry.Tests\Carpentry.Tests.Legacy.csproj", "{DFBB4430-3AEF-4742-941C-C17DD4EC2C8F}"
 EndProject
@@ -41,9 +41,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Carpentry.Logic", "Carpentr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Carpentry.Data", "Carpentry.Data", "{65A09C82-4A2A-4B80-A7C2-EE2E73192E92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.Logic.Tests", "Carpentry.Logic.Tests\Carpentry.Logic.Tests.csproj", "{9F2B1ABA-2EC0-430D-8518-F36F756139FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Logic.Tests", "Carpentry.Logic.Tests\Carpentry.Logic.Tests.csproj", "{9F2B1ABA-2EC0-430D-8518-F36F756139FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.Data.Tests", "Carpentry.Data.Tests\Carpentry.Data.Tests.csproj", "{8F2D4953-E92A-44EF-AD4C-66FAE09F14BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Data.Tests", "Carpentry.Data.Tests\Carpentry.Data.Tests.csproj", "{8F2D4953-E92A-44EF-AD4C-66FAE09F14BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -252,7 +252,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EADC7557-9D99-4F4C-8FCB-E9713BA70749} = {D5E83248-3356-4D63-A5F9-F234AEC31F83}
+		{EADC7557-9D99-4F4C-8FCB-E9713BA70749} = {835F1B1F-8469-483A-BE6C-3F802F0C02E7}
 		{DFBB4430-3AEF-4742-941C-C17DD4EC2C8F} = {D5E83248-3356-4D63-A5F9-F234AEC31F83}
 		{F12DE66D-A37A-45D4-8AB2-FFD9A4D7B511} = {D5E83248-3356-4D63-A5F9-F234AEC31F83}
 		{202DD975-9C95-4617-AB36-54CC9ECEAEDF} = {65A09C82-4A2A-4B80-A7C2-EE2E73192E92}

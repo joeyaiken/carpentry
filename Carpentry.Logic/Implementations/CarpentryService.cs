@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Carpentry.Logic.Implementations
 {
 
-    public class CarpentryService : ICarpentryService
+    public class CarpentryService //: ICarpentryService
     {
         //All methods should return a model specific to THIS project, not the data project (evevntually)
 

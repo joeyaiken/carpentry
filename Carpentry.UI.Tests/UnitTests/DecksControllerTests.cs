@@ -7,6 +7,7 @@ using Moq;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
+using Carpentry.UI.Util;
 
 namespace Carpentry.UI.Tests.UnitTests
 {
@@ -19,7 +20,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public DecksControllerTests()
         {
             //mock deck service
-            var mockDeckService = new Mock<IDeckService>();
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
             //Add
             mockDeckService
@@ -28,13 +29,13 @@ namespace Carpentry.UI.Tests.UnitTests
 
             //Update
             mockDeckService
-                .Setup(p => p.UpdateDeck(It.IsNotNull<DeckProperties>()));
-            //.ReturnsAsync(Task.CompletedTask);
+                .Setup(p => p.UpdateDeck(It.IsNotNull<DeckProperties>()))
+                .Returns(Task.CompletedTask);
 
             //Delete
             mockDeckService
-                .Setup(p => p.DeleteDeck(It.Is<int>(i => i > 0)));
-                //.ReturnsAsync(Task.CompletedTask);
+                .Setup(p => p.DeleteDeck(It.Is<int>(i => i > 0)))
+                .Returns(Task.CompletedTask);
 
             //Search
             IEnumerable<DeckProperties> searchResults = new List<DeckProperties>()
@@ -47,7 +48,7 @@ namespace Carpentry.UI.Tests.UnitTests
             }.AsEnumerable();
 
             mockDeckService
-                .Setup(p => p.SearchDecks())
+                .Setup(p => p.GetDeckOverviews())
                 .ReturnsAsync(searchResults);
 
             //Get
@@ -65,22 +66,31 @@ namespace Carpentry.UI.Tests.UnitTests
             //AddCard
             mockDeckService
                 //.Setup(p => p.AddDeckCard(It.IsNotNull<DeckCard>()))
-                .Setup(p => p.AddDeckCard(It.Is<DeckCard>(c => c != null && c.Id == 0)));
+                .Setup(p => p.AddDeckCard(It.Is<DeckCard>(c => c != null && c.Id == 0)))
+                .Returns(Task.CompletedTask);
+
+
             //.ReturnsAsync(1);
 
             //UpdateCard
             mockDeckService
                 //.Setup(p => p.UpdateDeckCard(It.IsNotNull<DeckCard>()))
-                .Setup(p => p.UpdateDeckCard(It.Is<DeckCard>(c => c != null && c.Id > 0)));
-                //.ReturnsAsync(Task.CompletedTask);
+                .Setup(p => p.UpdateDeckCard(It.Is<DeckCard>(c => c != null && c.Id > 0)))
+                .Returns(Task.CompletedTask);
 
             //RemoveCard
             mockDeckService
-                .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i > 0)));
-                //.ReturnsAsync(Task.CompletedTask);
+                .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i > 0)))
+                .Returns(Task.CompletedTask);
+
+            //var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
+
+            var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
+
+            var mapperService = new MapperService(mockRefService.Object);
 
             //create controller
-            _decksController = new Controllers.DecksController(mockDeckService.Object);
+            _decksController = new Controllers.DecksController(mockDeckService.Object, mapperService);
         }
 
         [TestMethod]
@@ -195,10 +205,7 @@ namespace Carpentry.UI.Tests.UnitTests
             {
                 DeckId = 1,
                 CategoryId = null,
-                InventoryCard = new InventoryCardDto
-                {
-                    
-                }
+                InventoryCard = new InventoryCardDto(),
             };
 
             //act
@@ -217,10 +224,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 Id = 5,
                 DeckId = 1,
                 CategoryId = null,
-                InventoryCard = new InventoryCardDto
-                {
-
-                }
+                InventoryCard = new InventoryCardDto(),
             };
 
             //act

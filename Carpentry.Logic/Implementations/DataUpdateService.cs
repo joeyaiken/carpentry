@@ -15,13 +15,15 @@ using Carpentry.Data.Models;
 
 namespace Carpentry.Logic.Implementations
 {
+    //TODO - consider renaming this to "DataMaintenanceService" or "DataIntegrityService"
+    //Idea being this checks if sets / cards exist
     public class DataUpdateService : IDataUpdateService
     {
         private readonly ILogger<DataBackupService> _logger;
 
         private readonly IScryfallService _scryService;
 
-        private readonly ICardRepo _cardRepo;
+        private readonly ICardDataRepo _cardRepo;
 
         private readonly IScryfallDataRepo _scryfallRepo;
 
@@ -30,7 +32,7 @@ namespace Carpentry.Logic.Implementations
         public DataUpdateService(
             ILogger<DataBackupService> logger,
             IScryfallService scryService,
-            ICardRepo cardRepo,
+            ICardDataRepo cardRepo,
             IScryfallDataRepo scryfallRepo
             )
         {
@@ -39,6 +41,23 @@ namespace Carpentry.Logic.Implementations
             _scryfallRepo = scryfallRepo;
             _cardRepo = cardRepo;
             _dbRefreshIntervalDays = 0;
+        }
+
+        public async Task EnsureCardDefinitionExists(int multiverseId)
+        {
+            //var dbCard = await _cardRepo.QueryCardDefinitions().FirstOrDefaultAsync(x => x.Id == multiverseId);
+            var dbCard = await _cardRepo.GetCardById(multiverseId);
+
+            if (dbCard != null)
+            {
+                return;
+            }
+
+            var scryfallCard = await _scryService.GetCardByMid(multiverseId);
+
+            await UpdateSetData(scryfallCard.Set);
+
+            //await _cardRepo.AddCardDefinition(scryfallCard);
         }
 
         /// <summary>
@@ -95,14 +114,14 @@ namespace Carpentry.Logic.Implementations
             //check if the scry set is up to date
             DateTime? scryDataLastUpdated = await _scryfallRepo.GetSetDataLastUpdated(setCode);
 
-            ScryfallSet scryData = null;
+            ScryfallSetData scryData = null;
 
             //If not, get from SF
             if (scryDataLastUpdated == null || scryDataLastUpdated.Value.AddDays(_dbRefreshIntervalDays) < DateTime.Today.Date)
             {
                 var scryfallPayload = await _scryService.GetFullSet(setCode);
 
-                scryData = new ScryfallSet
+                scryData = new ScryfallSetData
                 {
                     Code = scryfallPayload.Code,
                     Name = scryfallPayload.Name,
@@ -141,7 +160,7 @@ namespace Carpentry.Logic.Implementations
             }
 
             //Ensure the set definition exists / get the set ID
-            CardSet cardSet = new CardSet()
+            CardSetData cardSet = new CardSetData()
             {
                 Code = scryData.Code,
                 Name = scryData.Name,
