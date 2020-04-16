@@ -14,9 +14,9 @@ namespace Carpentry.Data.DataContext
         }
 
         //No associations to set up for this DB
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
 
     }   
 }

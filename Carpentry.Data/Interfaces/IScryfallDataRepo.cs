@@ -22,6 +22,8 @@ namespace Carpentry.Data.Interfaces
 
         Task<ScryfallSetData> GetSetByCode(string setCode);
 
+        Task EnsureDatabaseExists();
+
         //Task DeleteSet(int setId);
     }
 }

@@ -41,7 +41,8 @@ namespace Carpentry.Data.Implementations
 
         public async Task AddInventoryCardBatch(List<InventoryCardData> cardBatch)
         {
-            throw new NotImplementedException();
+            await _cardContext.InventoryCards.AddRangeAsync(cardBatch);
+            await _cardContext.SaveChangesAsync();
         }
 
 
@@ -81,14 +82,10 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
-        public IQueryable<CardData> QueryCardDefinitions()
+        public async Task<bool> DoInventoryCardsExist()
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<CardVariantTypeData> GetCardVariantTypeByName(string name)
-        {
-            throw new NotImplementedException();
+            InventoryCardData firstCard = await _cardContext.InventoryCards.FirstOrDefaultAsync();
+            return (firstCard != null);
         }
     }
 }

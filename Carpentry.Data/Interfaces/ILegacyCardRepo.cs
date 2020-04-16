@@ -75,8 +75,7 @@ namespace Carpentry.Data.Interfaces
 
         Task<IQueryable<LegacyDataContext.Card>> QueryFilteredCards(InventoryQueryParameter filters);
 
-        Task<IQueryable<InventoryOverviewDto>> QueryInventoryOverviews(InventoryQueryParameter filters);
-
+        
         #endregion
 
         #region Core methods

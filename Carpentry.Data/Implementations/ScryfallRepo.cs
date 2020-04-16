@@ -42,15 +42,15 @@ namespace Carpentry.Data.Implementations
 
             if (existingSet != null) 
             {
-                //existingSet.Code = setData.Code;
-                //existingSet.Name = setData.Name;
-                //existingSet.DataIsParsed = setData.DataIsParsed;
-                //existingSet.LastUpdated = setData.LastUpdated;
-                //existingSet.ReleasedAt = setData.ReleasedAt;
-                //existingSet.CardData = setData.CardData;
+                existingSet.Code = setData.Code;
+                existingSet.Name = setData.Name;
+                existingSet.DataIsParsed = setData.DataIsParsed;
+                existingSet.LastUpdated = setData.LastUpdated;
+                existingSet.ReleasedAt = setData.ReleasedAt;
+                existingSet.CardData = setData.CardData;
                 //_scryContext.Sets.Update(setData);
-                setData.Id = existingSet.Id;
-                _scryContext.Sets.Update(setData);
+                //setData.Id = existingSet.Id;
+                _scryContext.Sets.Update(existingSet);
             }
             else
             {
@@ -83,5 +83,10 @@ namespace Carpentry.Data.Implementations
             }
             await _scryContext.SaveChangesAsync();
         }
+        public async Task EnsureDatabaseExists()
+        {
+            await _scryContext.Database.EnsureCreatedAsync();
+        }
+
     }
 }

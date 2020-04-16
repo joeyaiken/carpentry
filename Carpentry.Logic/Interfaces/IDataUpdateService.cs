@@ -20,7 +20,10 @@ namespace Carpentry.Logic.Interfaces
         /// <returns></returns>
         Task UpdateSetData(string setCode);
 
-
         Task EnsureCardDefinitionExists(int multiverseId);
+
+        Task EnsureDatabasesCreated();
+
+        Task EnsureDefaultRecordsExist();
     }
 }

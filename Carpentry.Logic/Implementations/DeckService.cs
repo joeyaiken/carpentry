@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Carpentry.Data.DataModels;
+using System.Linq;
 //using Carpentry.Data.DataContext;
 //using Carpentry.Data.DataModels;
 
@@ -26,9 +28,15 @@ namespace Carpentry.Logic.Implementations
 
         private readonly IDeckDataRepo _deckRepo;
 
-        public DeckService(IDeckDataRepo deckRepo, ILogger<DeckService> logger)
+        private readonly IDataQueryService _queryService;
+
+        private readonly IInventoryService _inventoryService;
+
+        public DeckService(IDeckDataRepo deckRepo, IDataQueryService queryService, IInventoryService inventoryService, ILogger<DeckService> logger)
         {
             _deckRepo = deckRepo;
+            _queryService = queryService;
+            _inventoryService = inventoryService;
             _logger = logger;
         }
 
@@ -52,134 +60,146 @@ namespace Carpentry.Logic.Implementations
         //            return totalPrice;
         //        }
 
-        //        private async Task<DeckStats> GetDeckStats(int deckId)
-        //        {
-        //            DeckStats result = new DeckStats();
+        private async Task<DeckStats> GetDeckStats(int deckId)
+        {
+            DeckStats result = new DeckStats();
 
-        //            var deckProps = await _cardRepo.QueryDeckProperties().FirstOrDefaultAsync(x => x.Id == deckId);
+            //total Count
+            result.TotalCount = await _queryService.GetDeckCardCount(deckId);
 
-        //            //total Count
-        //            var deckCardCount = await _cardRepo.QueryDeckCards().Where(x => x.DeckId == deckId && x.CategoryId != 's').CountAsync();
+            var statData = await _queryService.GetDeckCardStats(deckId);
 
-        //            int basicLandCount = deckProps.BasicW + deckProps.BasicU + deckProps.BasicB + deckProps.BasicR + deckProps.BasicG;
+            //total price
+            decimal? totalPrice = statData.Sum(x => x.Price);
+            result.TotalCost = totalPrice ?? 0;
 
-        //            result.TotalCount = deckCardCount + basicLandCount;
+            //
+            //var priceQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
+            //    .Where(x => x.DeckId == deckId && x.CategoryId != 's')
+            //    .Select(x => new
+            //    {
+            //        CardName = x.InventoryCard.Card.Name,
+            //        //CardVariantName = x.InventoryCard.VariantType.Name,
+            //        //VariantTypeId = x.InventoryCard.VariantTypeId,
+            //        ////price
+            //        Price = x.InventoryCard.Card.Variants.Where(cardVariant => cardVariant.CardVariantTypeId == x.InventoryCard.VariantTypeId).FirstOrDefault().Price,
 
-        //            //total price
-        //            var priceQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-        //                .Where(x => x.DeckId == deckId && x.CategoryId != 's')
-        //                .Select(x => new
-        //                {
-        //                    CardName = x.InventoryCard.Card.Name,
-        //                    //CardVariantName = x.InventoryCard.VariantType.Name,
-        //                    //VariantTypeId = x.InventoryCard.VariantTypeId,
-        //                    ////price
-        //                    Price = x.InventoryCard.Card.Variants.Where(cardVariant => cardVariant.CardVariantTypeId == x.InventoryCard.VariantTypeId).FirstOrDefault().Price,
+            //    });
 
-        //                });
-
-        //            var totalPrice = await priceQuery.SumAsync(x => x.Price);
-
-        //            result.TotalCost = totalPrice ?? 0;
-
-        //            //type-breakdown
-        //            var cardTypes = _cardRepo.QueryDeckCards()
-        //                .Where(x => x.DeckId == deckId && x.CategoryId != 's')
-        //                .Select(x => x.InventoryCard.Card.Type)
-        //                .Select(x => GetCardTypeGroup(x))
-        //                .ToList();
-
-        //            var typeCountsDict = cardTypes
-        //                .GroupBy(x => x)
-        //                .Select(x => new
-        //                {
-        //                    Name = x.Key,
-        //                    Count = x.Count()
-        //                })
-        //                .AsEnumerable()
-        //                .ToDictionary(x => x.Name, x => x.Count);
-
-        //            if (typeCountsDict.Keys.Contains("Lands"))
-        //            {
-        //                typeCountsDict["Lands"] = typeCountsDict["Lands"] + basicLandCount;
-        //            }
-        //            else
-        //            {
-        //                typeCountsDict["Lands"] = basicLandCount;
-        //            }
-
-        //            result.TypeCounts = typeCountsDict;
+            //var totalPrice = await priceQuery.SumAsync(x => x.Price);
 
 
-        //            //cost-breakdown, probably requires re-querying everything
-        //            var deckCardCostsDict = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-        //                .Where(x => x.DeckId == deckId && x.CategoryId != 's')
-        //                .Select(x => x.InventoryCard.Card)
-        //                .Where(x => !x.Type.Contains("Land"))
-        //                .Select(x => x.Cmc)
-        //                //.ToList();
-        //                .GroupBy(x => x)
-        //                .Select(x => new
-        //                {
-        //                    Name = x.Key,
-        //                    Count = x.Count(),
-        //                })
-        //                .AsEnumerable()
-        //                .OrderByDescending(x => x.Name)
-        //                .ToDictionary(x => x.Name.ToString(), x => x.Count);
 
-        //            result.CostCounts = deckCardCostsDict;
+            //type-breakdown
+
+            List<string> cardTypes = statData
+                .Select(x => GetCardTypeGroup(x.Type))
+                .ToList();
 
 
-        //            //deck color identity
-        //            //all of the basic lands 
-        //            //+ every card's color identity
-        //            var cardCIQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-        //                .Where(x => x.DeckId == deckId)
-        //                .Select(x => x.InventoryCard.Card)
-        //                .SelectMany(card => card.CardColorIdentities.Select(ci => ci.ManaTypeId))
-        //                .Distinct();
+            //var cardTypes = _cardRepo.QueryDeckCards()
+            //    .Where(x => x.DeckId == deckId && x.CategoryId != 's')
+            //    .Select(x => x.InventoryCard.Card.Type)
+            //    .Select(x => GetCardTypeGroup(x))
+            //    .ToList();
 
-        //            result.ColorIdentity = cardCIQuery.ToList();
+            var deck = await _deckRepo.GetDeckById(deckId);
+            int basicLandCount = deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG;
 
-        //            return result;
-        //        }
 
-        //        private static string GetCardTypeGroup(string cardType)
-        //        {
-        //            if (cardType.ToLower().Contains("creature"))
-        //            {
-        //                return "Creatures";
-        //            }
-        //            else if (cardType.ToLower().Contains("land"))
-        //            {
-        //                return "Lands";
-        //            }
-        //            else if (cardType.ToLower().Contains("planeswalker"))
-        //            {
-        //                return "Planeswalkers";
-        //            }
-        //            else if (cardType.ToLower().Contains("enchantment"))
-        //            {
-        //                return "Enchantments";
-        //            }
-        //            else if (cardType.ToLower().Contains("artifact"))
-        //            {
-        //                return "Artifacts";
-        //            }
-        //            //else if (cardType.ToLower().Contains(""))
-        //            //{
-        //            //    return "";
-        //            //}
-        //            //else if (cardType.ToLower().Contains(""))
-        //            //{
-        //            //    return "";
-        //            //}
-        //            else
-        //            {
-        //                return "Spells";
-        //            }
-        //        }
+            var typeCountsDict = cardTypes
+                .GroupBy(x => x)
+                .Select(x => new
+                {
+                    Name = x.Key,
+                    Count = x.Count()
+                })
+                .AsEnumerable()
+                .ToDictionary(x => x.Name, x => x.Count);
+
+            if (typeCountsDict.Keys.Contains("Lands"))
+            {
+                typeCountsDict["Lands"] = typeCountsDict["Lands"] + basicLandCount;
+            }
+            else
+            {
+                typeCountsDict["Lands"] = basicLandCount;
+            }
+
+            result.TypeCounts = typeCountsDict;
+
+            //this is for the CMC breakdown
+            Dictionary<string,int> deckCardCostsDict = statData
+                .Where(x => x.CategoryId != 's' && !x.Type.Contains("Land"))
+                .Select(x => x.Cmc)
+                .GroupBy(x => x)
+                .Select(x => new
+                {
+                    Cmc = x.Key,
+                    Count = x.Count(),
+                })
+                .OrderBy(x => x.Cmc)
+                .ToDictionary(x => x.Cmc.ToString(), x => x.Count);
+   
+            result.CostCounts = deckCardCostsDict;
+
+
+            //deck color identity
+            //all of the basic lands 
+            //+ every card's color identity
+            //TODO - This doesn't actually include basic lands, should it?
+
+            var deckColorIdentity = statData
+                .SelectMany(card => card.ColorIdentity)
+                .Distinct().ToList();
+
+
+            //var cardCIQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
+            //    .Where(x => x.DeckId == deckId)
+            //    .Select(x => x.InventoryCard.Card)
+            //    .SelectMany(card => card.CardColorIdentities.Select(ci => ci.ManaTypeId))
+            //    .Distinct();
+
+            result.ColorIdentity = deckColorIdentity;
+
+            return result;
+        }
+
+        private static string GetCardTypeGroup(string cardType)
+        {
+            if (cardType.ToLower().Contains("creature"))
+            {
+                return "Creatures";
+            }
+            else if (cardType.ToLower().Contains("land"))
+            {
+                return "Lands";
+            }
+            else if (cardType.ToLower().Contains("planeswalker"))
+            {
+                return "Planeswalkers";
+            }
+            else if (cardType.ToLower().Contains("enchantment"))
+            {
+                return "Enchantments";
+            }
+            else if (cardType.ToLower().Contains("artifact"))
+            {
+                return "Artifacts";
+            }
+            //else if (cardType.ToLower().Contains(""))
+            //{
+            //    return "";
+            //}
+            //else if (cardType.ToLower().Contains(""))
+            //{
+            //    return "";
+            //}
+            else
+            {
+                return "Spells";
+            }
+        }
 
         //        public async Task EnsureCardDefinitionExists(int multiverseId)
         //        {
@@ -232,74 +252,71 @@ namespace Carpentry.Logic.Implementations
         //            return result;
         //        }
 
-        //        private async Task<string> ValidateDeck(int deckId)
-        //        {
-        //            string validationResult = "";
-        //            List<string> validationErrors = new List<string>();
+        private async Task<string> ValidateDeck(int deckId)
+        {
+            string validationResult = "";
+            List<string> validationErrors = new List<string>();
 
-        //            var deck = await _cardRepo.QueryDeckProperties().Where(x => x.Id == deckId).FirstOrDefaultAsync();
+            //var deck = await _cardRepo.QueryDeckProperties().Where(x => x.Id == deckId).FirstOrDefaultAsync();
+            var deck = await _deckRepo.GetDeckById(deckId);
 
-        //            string deckFormat = deck.Format.ToLower();
+            string deckFormat = deck.Format.Name.ToLower();
 
-        //            #region Validate deck size
+            #region Validate deck size
 
-        //            int basicLandCount = deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG;
+            int deckSize = await _queryService.GetDeckCardCount(deckId);
 
-        //            var cardCount = _cardRepo.QueryDeckCards().Where(x => x.DeckId == deckId).Count();
+            //what's the min deck count for this format?
+            if (deckFormat == "commander")
+            {
+                //must be exactly 100 cards to be valid
+                if (deckSize < 100)
+                {
+                    validationErrors.Add($"Below size requirement: {deckSize}/100 cards");
+                }
 
-        //            int deckSize = basicLandCount + cardCount;
+                if (deckSize > 100)
+                {
+                    validationErrors.Add($"Above size limit: {deckSize}/100 cards");
+                }
+            }
+            else
+            {
+                if ((deckFormat == "brawl" || deckFormat == "oathbreaker") && deckSize > 60)
+                {
+                    validationErrors.Add($"Above size limit: {deckSize}/60 cards");
+                }
 
-        //            //what's the min deck count for this format?
-        //            if (deckFormat == "commander")
-        //            {
-        //                //must be exactly 100 cards to be valid
-        //                if (deckSize < 100)
-        //                {
-        //                    validationErrors.Add($"Below size requirement: {deckSize}/100 cards");
-        //                }
+                if (deckSize < 60)
+                {
+                    validationErrors.Add($"Below size requirement: {deckSize}/60 cards");
+                }
+            }
 
-        //                if (deckSize > 100)
-        //                {
-        //                    validationErrors.Add($"Above size limit: {deckSize}/100 cards");
-        //                }
-        //            }
-        //            else
-        //            {
-        //                if ((deckFormat == "brawl" || deckFormat == "oathbreaker") && deckSize > 60)
-        //                {
-        //                    validationErrors.Add($"Above size limit: {deckSize}/60 cards");
-        //                }
+            #endregion
 
-        //                if (deckSize < 60)
-        //                {
-        //                    validationErrors.Add($"Below size requirement: {deckSize}/60 cards");
-        //                }
-        //            }
-
-        //            #endregion
-
-        //            #region Validate max per card (1 for singleton, 4 for other formats)
+            #region Validate max per card (1 for singleton, 4 for other formats)
 
 
 
-        //            #endregion
+            #endregion
 
-        //            #region Validate format legality
-
-
-
-        //            #endregion
-
-        //            #region Validate color rules for commander/brawl
+            #region Validate format legality
 
 
 
-        //            #endregion
+            #endregion
 
-        //            validationResult = string.Join(" ", validationErrors);
+            #region Validate color rules for commander/brawl
 
-        //            return validationResult;
-        //        }
+
+
+            #endregion
+
+            validationResult = string.Join(" ", validationErrors);
+
+            return validationResult;
+        }
 
         #endregion
 
@@ -365,152 +382,127 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<IEnumerable<DeckProperties>> GetDeckOverviews() //TODO - rename to "GetDeckOverviews" or "GetDeckProperties"
         {
+            List<DeckProperties> deckList = _deckRepo.GetAllDecks().Result.Select(x => MapDeckDataToProperties(x)).ToList();
 
+            for (int i = 0; i < deckList.Count(); i++)
+            {
+                deckList[i].Notes = await ValidateDeck(deckList[i].Id);
+            }
 
-
-
-
-//#error not implemented
-            throw new NotImplementedException();
-            
-
-
-            //List<DeckProperties> deckList = await _cardRepo.QueryDeckProperties().ToListAsync();
-
-            //for (int i = 0; i < deckList.Count(); i++)
-            //{
-            //    deckList[i].Notes = await ValidateDeck(deckList[i].Id);
-            //}
-
-            //return deckList;
+            return deckList;
         }
 
+
+        private static DeckProperties MapDeckDataToProperties(DeckData dbDeck)
+        {
+            DeckProperties mappedDeck = new DeckProperties()
+            {
+                Id = dbDeck.Id,
+                BasicB = dbDeck.BasicB,
+                BasicG = dbDeck.BasicG,
+                BasicR = dbDeck.BasicR,
+                BasicU = dbDeck.BasicU,
+                BasicW = dbDeck.BasicW,
+                FormatId = dbDeck.Format.Id
+            };
+            return mappedDeck;
+        }
 
         //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
         //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
         public async Task<DeckDetail> GetDeckDetail(int deckId)
         {
-//#error not implemented
-            throw new NotImplementedException();
-            ////Deck Props
-            //DeckProperties targetDeck = await _cardRepo.QueryDeckProperties().Where(x => x.Id == deckId).FirstOrDefaultAsync();
+            DeckProperties mappedDeckData = MapDeckDataToProperties(await _deckRepo.GetDeckById(deckId));
 
-            //DeckDto result = new DeckDto
-            //{
-            //    CardOverviews = new List<InventoryOverviewDto>(),
-            //    CardDetails = new List<InventoryCardDto>(),
-            //    Props = targetDeck,
-            //    Stats = new DeckStats(),
-            //};
+            DeckDetail result = new DeckDetail
+            {
+                CardOverviews = new List<InventoryOverview>(),
+                CardDetails = new List<InventoryCard>(),
+                Props = mappedDeckData,
+                Stats = new DeckStats(),
+            };
 
-            ////Deck Overviews
-            //var cardOverviewsQuery = _cardRepo.QueryDeckCards()
-            //    .Where(x => x.DeckId == deckId)
-            //    .Select(x => new
-            //    {
-            //        DeckCardCategory = (x.CategoryId != null) ? x.Category.Name : null,
-            //        x.InventoryCard.Card,
-            //        x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
-            //    });
+            //Card Overviews
+            result.CardOverviews = (await _queryService.GetDeckCardOverviews(deckId)).Select(x => new InventoryOverview()
+            {
+                Id = x.Id,
+                Cost = x.Cost,
+                Name = x.Name,
+                Count = x.Count,
+                Img = x.Img,
+                Type = x.Type,
+                Description = x.Category ?? GetCardTypeGroup(x.Type),
+                Cmc = x.Cmc,
+            })//.ToList()
+            .OrderBy(x => x.Cmc).ThenBy(x => x.Name).ToList();
 
-            ////var rawOverviews = cardOverviewsQuery.ToList();
+            //Card Details
+            //TODO - this REALLY needs to be refactored to use a "Deck Card Overview" / "Deck Card Detail" pattern
+            result.CardDetails = (await _queryService.GetDeckInventoryCards(deckId))
+                .Select(x => new InventoryCard()
+                {
+                    Id = x.Id,
+                    MultiverseId = x.MultiverseId,
+                    InventoryCardStatusId = x.InventoryCardStatusId,
+                    IsFoil = x.IsFoil,
+                    VariantType = x.VariantType,
+                    Name = x.Name,
+                    DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCard()
+                    {
+                        DeckId = deckCard.DeckId,
+                        Id = deckCard.Id,
+                        InventoryCardId = x.Id,
 
-            ////var cardOverviewsQuery = _cardRepo.QueryInventoryCardsForDeck(deckId)
-            ////    .Select(x => new {
-            ////        x.Card,
-            ////        x.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
-
-
-            ////    })
-            //var cardOverviewQueryResult = cardOverviewsQuery
-            //    .GroupBy(x => new
-            //    {
-            //        x.Card.Name,
-            //        x.DeckCardCategory
-            //    })
-            //    .Select(x => new
-            //    {
-            //        Name = x.Key.Name,
-            //        Item = x.OrderByDescending(c => c.Card.Id).FirstOrDefault(),
-            //        Count = x.Count(),
-            //    }).ToList();
-
-            ////#error this isnt properly mapping MultiverseId, trying to add it from github
-            ////I was wrong, this isn't supposed to include MID because it's deck cards grouped by NAME
-            //var overviewQueryResult = cardOverviewQueryResult.Select((x, i) => new InventoryOverviewDto()
-            //{
-            //    Id = i + 1,
-            //    //MultiverseId = x.Item.MultiverseId,
-            //    Cost = x.Item.Card.ManaCost,
-            //    Name = x.Name,
-            //    Count = x.Count,
-            //    Img = x.Item.ImageUrl,
-            //    Type = x.Item.Card.Type,
-            //    Description = x.Item.DeckCardCategory ?? GetCardTypeGroup(x.Item.Card.Type),
-            //    Cmc = x.Item.Card.Cmc,
-            //}).ToList()
-            //.OrderBy(x => x.Cmc).ThenBy(x => x.Name).ToList();
-
-            //result.CardOverviews = overviewQueryResult;
+                        DeckCardCategory = deckCard.DeckCardCategory ??  GetCardTypeGroup(x.Type), //What is this uesd for?
+                        //OH, I need category for filtering inventory cards on the client app
+                    }).ToList(),
 
 
-            ////Deck Details
-            //List<InventoryCardDto> cardDetails = _cardRepo.QueryInventoryCardsForDeck(deckId)
-            //    .Select(x => new InventoryCardDto()
-            //    {
-            //        Id = x.Id,
-            //        MultiverseId = x.MultiverseId,
-            //        InventoryCardStatusId = x.InventoryCardStatusId,
-            //        IsFoil = x.IsFoil,
-            //        VariantType = x.VariantType.Name,
-            //        Name = x.Card.Name,
-            //        DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCardDto()
-            //        {
-            //            DeckId = deckCard.DeckId,
-            //            Id = deckCard.Id,
-            //            InventoryCardId = x.Id,
-            //            DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : GetCardTypeGroup(x.Card.Type),
-            //        }).ToList(),
-            //    }).ToList();
+                }).ToList();
 
-            //result.CardDetails = cardDetails;
+            //Deck Stats
+            result.Stats = await GetDeckStats(deckId);
 
-            ////Deck Stats
-            //result.Stats = await GetDeckStats(deckId);
-
-
-            //return result;
+            return result;
         }
 
-        //if a card already exists in a deck it is "moved" to this deck
-        public async Task AddDeckCard(Logic.Models.DeckCard dto)
+        
+        public async Task AddDeckCard(DeckCard dto)
         {
-//#error not implemented
-            throw new NotImplementedException();
-            //if (dto.InventoryCard.Id > 0)
-            //{
-            //    //is this in a deck?
-            //    var existingDeckCard = await _cardRepo.QueryDeckCards()
-            //        .Where(x => x.InventoryCardId == dto.InventoryCard.Id)
-            //        .FirstOrDefaultAsync();
+            //Don't need to add an inventory card
+            if (dto.InventoryCard.Id > 0)
+            {
+                //if a card already exists in a deck it is "moved" to this deck
+                var existingDeckCard = await _deckRepo.GetDeckCardByInventoryId(dto.InventoryCard.Id);
 
-            //    if (existingDeckCard != null)
-            //    {
-            //        await _cardRepo.UpdateDeckCard(existingDeckCard.Id, dto.DeckId, null);
-            //        return;
-            //    }
-            //}
+                if (existingDeckCard != null)
+                {
+                    existingDeckCard.DeckId = dto.DeckId;
+                    existingDeckCard.CategoryId = null;
 
-            //if (dto.InventoryCard.Id == 0)
-            //{
-            //    await EnsureCardDefinitionExists(dto.InventoryCard.MultiverseId);
+                    await _deckRepo.UpdateDeckCard(existingDeckCard);
+                    return;
+                }
 
-            //    //add inventory card
-            //    var newInventoryCardId = await _cardRepo.AddInventoryCard(dto.InventoryCard);
+                //nothing needs to be created, the deck and inventory cards already exist
+            }
+            
+            //Need to add a new inventory card for this deck card
+            //(check how I'm adding inventory cards atm)
+            if (dto.InventoryCard.Id == 0)
+            {
+                int newInventoryCardId = await _inventoryService.AddInventoryCard(dto.InventoryCard);
+                dto.InventoryCard.Id = newInventoryCardId;
+            }
 
-            //    dto.InventoryCard.Id = newInventoryCardId;
-            //}
+            DeckCardData cardToAdd = new DeckCardData()
+            {
+                CategoryId = dto.CategoryId,
+                DeckId = dto.DeckId,
+                InventoryCardId = dto.InventoryCard.Id,
+            };
 
+            await _deckRepo.AddDeckCard(cardToAdd);
             //await _cardRepo.AddDeckCard(dto);
         }
 
@@ -518,20 +510,20 @@ namespace Carpentry.Logic.Implementations
         //IDR where exactly this gets called outside of console apps
         public async Task AddDeckCardBatch(IEnumerable<DeckCard> dtoBatch)
         {
-//#error not implemented
-            throw new NotImplementedException();
-            //_logger.LogWarning("Beginning AddDeckCardBatch");
-            //var dtoArray = dtoBatch.ToArray();
+            ////#error not implemented
+            //            throw new NotImplementedException();
+            _logger.LogWarning("Beginning AddDeckCardBatch");
+            var dtoArray = dtoBatch.ToArray();
 
-            //for (int i = 0; i < dtoArray.Count(); i++)
-            //{
-            //    DeckCardDto dto = dtoArray[i];
+            for (int i = 0; i < dtoArray.Count(); i++)
+            {
+                DeckCard dto = dtoArray[i];
 
-            //    //console apps want to see this
-            //    _logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
+                //console apps want to see this
+                _logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
 
-            //    await _cardRepo.AddDeckCard(dto);
-            //}
+                await AddDeckCard(dto);
+            }
         }
 
         public async Task UpdateDeckCard(DeckCard card)

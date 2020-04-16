@@ -11,17 +11,35 @@ namespace Carpentry.Data.Interfaces
     //TODO - Ensure methods of this interface don't return anything belonging to the Carpentry.DataModels namespace
     public interface ICardDataRepo
     {
-        //Task<CardSet> GetSetByCode(string setCode);
-
+        //Sets
         Task<List<string>> GetAllCardSetCodes();
-
-        Task<DateTime?> GetCardSetLastUpdated(string setCode);
-
+        Task<DateTime?> GetCardSetLastUpdated(string setCode); //why isn't this a GetSetByCode ?
         Task<int> AddOrUpdateCardSet(CardSetData setData); //This probably doesn't actually have to return an ID
 
+        //Cards
         Task AddOrUpdateCardDefinition(CardDataDto cardDto);
-
-
         Task<CardData> GetCardById(int multiverseId);
+        Task<IEnumerable<CardData>> GetCardsByName(string cardName);
+
+
+
+        Task EnsureDatabaseExists();
+
+
+
+        //Task<CardSet> GetSetByCode(string setCode);
+
+        //
+
+
+
+
+
+
+
+
+
+
+
     }
 }

@@ -4,6 +4,6 @@ namespace Carpentry.Logic.Interfaces
 {
     public interface IDataRestoreService
     {
-        Task RestoreDB();
+        Task RestoreDatabase();
     }
 }

@@ -34,7 +34,6 @@ namespace Carpentry.Data.Implementations
         //    return matchingFormat;
         //}
 
-
         public async Task<MagicFormatData> GetMagicFormat(string formatName)
         {
             var matchingFormat = await _cardContext.MagicFormats.Where(x => x.Name.ToLower() == formatName.ToLower()).FirstOrDefaultAsync();
@@ -51,6 +50,16 @@ namespace Carpentry.Data.Implementations
             return results;
         }
 
+        public async Task<CardVariantTypeData> GetCardVariantTypeByName(string name)
+        {
+            var result = await _cardContext.VariantTypes.FirstOrDefaultAsync(x => x.Name == name);
+            return result;
+        }
 
+        public async Task<List<CardVariantTypeData>> GetAllCardVariantTypes()
+        {
+            var result = await _cardContext.VariantTypes.ToListAsync();
+            return result;
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task<int> AddDeck(DeckData newDeck)
         {
-            await _cardContext.Decks.AddAsync(newDeck);
+            _cardContext.Decks.Add(newDeck);
             await _cardContext.SaveChangesAsync();
             return newDeck.Id;
         }
@@ -56,6 +56,11 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Deletes a Deck, and any associated Deck Cards
+        /// </summary>
+        /// <param name="deckId"></param>
+        /// <returns></returns>
         public async Task DeleteDeck(int deckId)
         {
             var deckCardsToDelete = _cardContext.DeckCards.Where(x => x.DeckId == deckId).ToList();
@@ -72,9 +77,18 @@ namespace Carpentry.Data.Implementations
 
         public async Task<DeckData> GetDeckById(int deckId)
         {
-            var matchingDeck = await _cardContext.Decks.Where(x => x.Id == deckId).FirstOrDefaultAsync();
+            var matchingDeck = await _cardContext.Decks.Where(x => x.Id == deckId)
+                .Include(x => x.Format)
+                .FirstOrDefaultAsync();
             return matchingDeck;
         }
+
+        public async Task<IEnumerable<DeckData>> GetAllDecks()
+        {
+            var result = await _cardContext.Decks.Include(x => x.Format).ToListAsync();
+            return result;
+        }
+
 
 
         public async Task AddDeckCard(DeckCardData newDeckCard)
@@ -90,7 +104,7 @@ namespace Carpentry.Data.Implementations
             //    InventoryCardId = dto.InventoryCard.Id,
             //};
 
-            await _cardContext.DeckCards.AddAsync(newDeckCard);
+            _cardContext.DeckCards.Add(newDeckCard);
             await _cardContext.SaveChangesAsync();
         }
 
@@ -122,8 +136,13 @@ namespace Carpentry.Data.Implementations
             return matchingDeckCard;
         }
 
+        public async Task<DeckCardData> GetDeckCardByInventoryId(int inventoryCardId)
+        {
+            var matchingDeckCard = await _cardContext.DeckCards.Where(x => x.InventoryCardId == inventoryCardId).FirstOrDefaultAsync();
+            return matchingDeckCard;
+        }
 
-        
+
 
 
     }

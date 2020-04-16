@@ -16,7 +16,7 @@ using Carpentry.Data.Models;
 namespace Carpentry.Logic.Implementations
 {
     //TODO - consider renaming this to "DataMaintenanceService" or "DataIntegrityService"
-    //Idea being this checks if sets / cards exist
+    //Idea being this checks if sets / cards exist, and can check if DB defaults
     public class DataUpdateService : IDataUpdateService
     {
         private readonly ILogger<DataBackupService> _logger;
@@ -29,18 +29,22 @@ namespace Carpentry.Logic.Implementations
 
         private readonly int _dbRefreshIntervalDays;
 
+        private readonly IDataReferenceRepo _dataReferenceRepo;
+
         public DataUpdateService(
             ILogger<DataBackupService> logger,
             IScryfallService scryService,
             ICardDataRepo cardRepo,
-            IScryfallDataRepo scryfallRepo
+            IScryfallDataRepo scryfallRepo,
+            IDataReferenceRepo dataReferenceRepo
             )
         {
             _logger = logger;
             _scryService = scryService;
             _scryfallRepo = scryfallRepo;
             _cardRepo = cardRepo;
-            _dbRefreshIntervalDays = 0;
+            _dataReferenceRepo = dataReferenceRepo;
+            _dbRefreshIntervalDays = 0; //TODO - move to a config
         }
 
         public async Task EnsureCardDefinitionExists(int multiverseId)
@@ -85,7 +89,7 @@ namespace Carpentry.Logic.Implementations
                 else
                 {
                     string replaceReason = dbLastUpdated == null ? "has never been updated" : $"was last updated {dbLastUpdated.ToString()}";
-                    _logger.LogInformation($"Set code {replaceReason}.  Set will now be updated");
+                    _logger.LogInformation($"Set code {setCodes[i]} {replaceReason}.  Set will now be updated");
                     await UpdateSetData(setCodes[i]);
                 }
             }
@@ -156,6 +160,7 @@ namespace Carpentry.Logic.Implementations
 
                 //Serialize & apply to set
                 scryData.CardData = JsonConvert.SerializeObject(magicCards);
+                scryData.DataIsParsed = true;
                 await _scryfallRepo.AddOrUpdateSet(scryData);
             }
 
@@ -230,6 +235,187 @@ namespace Carpentry.Logic.Implementations
             //await _scryRepo.UpdateScrySet(existingScryfallSet);
 
             //_logger.LogError($"Refresh Set Data - Completed process of refreshing {setCode}");
+        }
+
+        public async Task EnsureDatabasesCreated()
+        {
+            
+            await _scryfallRepo.EnsureDatabaseExists();
+            await _cardRepo.EnsureDatabaseExists();
+            //await _cardContext.Database.EnsureCreatedAsync();
+            //await _scryRepo.EnsureDatabaseCreated();
+        }
+
+        public async Task EnsureDefaultRecordsExist()
+        {
+            _logger.LogWarning("Adding default records");
+
+            List<Task> defaultRecordTasks = new List<Task>()
+            {
+                EnsureDbCardStatusesExist(),
+                EnsureDbRaritiesExist(),
+                EnsureDbManaTypesExist(),
+                EnsureDbMagicFormatsExist(),
+                EnsureDbVariantTypesExist(),
+                EnsureDbDeckCardCategoriesExist(),
+            };
+
+            await Task.WhenAll(defaultRecordTasks);
+
+            _logger.LogInformation("Finished adding default records");
+        }
+        private async Task EnsureDbCardStatusesExist()
+        {
+            /*
+             Statuses:
+             1 - Inventory/Owned
+             2 - Buylist
+             3 - SellList
+             */
+
+            List<InventoryCardStatusData> allStatuses = new List<InventoryCardStatusData>()
+            {
+                new InventoryCardStatusData { Id = 1, Name = "Inventory" },
+                new InventoryCardStatusData { Id = 2, Name = "Buy List" },
+                new InventoryCardStatusData { Id = 3, Name = "Sell List" },
+            };
+
+            var statusTasks = allStatuses.Select(s => _dataReferenceRepo.TryAddInventoryCardStatus(s));
+
+            await Task.WhenAll(statusTasks);
+
+            _logger.LogInformation("Finished adding card statuses");
+        }
+
+        private async Task EnsureDbRaritiesExist()
+        {
+            List<CardRarityData> allRarities = new List<CardRarityData>()
+            {
+                new CardRarityData
+                {
+                    Id = 'M',
+                    Name = "mythic",
+                },
+                new CardRarityData
+                {
+                    Id = 'R',
+                    Name = "rare",
+                },
+                new CardRarityData
+                {
+                    Id = 'U',
+                    Name = "uncommon",
+                },
+                new CardRarityData
+                {
+                    Id = 'C',
+                    Name = "common",
+                },
+            };
+
+            var tasks = allRarities.Select(r => _dataReferenceRepo.TryAddCardRarity(r));
+
+            await Task.WhenAll(tasks);
+
+            _logger.LogInformation("Finished adding card rarities");
+        }
+
+        private async Task EnsureDbManaTypesExist()
+        {
+            List<ManaTypeData> allManaTypes = new List<ManaTypeData>()
+            {
+                new ManaTypeData{
+                    Id = 'W',
+                    Name = "White"
+                },
+                new ManaTypeData{
+                    Id = 'U',
+                    Name = "Blue"
+                },
+                new ManaTypeData{
+                    Id = 'B',
+                    Name = "Black"
+                },
+                new ManaTypeData{
+                    Id = 'R',
+                    Name = "Red"
+                },
+                new ManaTypeData{
+                    Id = 'G',
+                    Name = "Green"
+                },
+            };
+
+            var tasks = allManaTypes.Select(x => _dataReferenceRepo.TryAddManaType(x));
+
+            await Task.WhenAll(tasks);
+
+            _logger.LogInformation("Finished adding mana types");
+        }
+
+        private async Task EnsureDbMagicFormatsExist()
+        {
+            //Should I just comment out formats I don't care about?
+            List<MagicFormatData> allFormats = new List<MagicFormatData>()
+            {
+                new MagicFormatData { Name = "standard" },
+                //new MagicFormat { Name = "future" },
+                //new MagicFormat { Name = "historic" },
+                new MagicFormatData { Name = "pioneer" },
+                new MagicFormatData { Name = "modern" },
+                //new MagicFormat { Name = "legacy" },
+                new MagicFormatData { Name = "pauper" },
+                //new MagicFormat { Name = "vintage" },
+                //new MagicFormat { Name = "penny" },
+                new MagicFormatData { Name = "commander" },
+                new MagicFormatData { Name = "brawl" },
+                //new MagicFormat { Name = "duel" },
+                //new MagicFormat { Name = "oldschool" },
+            };
+
+            var tasks = allFormats.Select(x => _dataReferenceRepo.TryAddMagicFormat(x));
+
+            await Task.WhenAll(tasks);
+
+            _logger.LogInformation("Finished adding formats");
+        }
+
+        private async Task EnsureDbVariantTypesExist()
+        {
+            List<CardVariantTypeData> allVariants = new List<CardVariantTypeData>()
+            {
+                new CardVariantTypeData { Name = "normal" },
+                new CardVariantTypeData { Name = "borderless" },
+                new CardVariantTypeData { Name = "showcase" },
+                new CardVariantTypeData { Name = "extendedart" },
+                new CardVariantTypeData { Name = "inverted" },
+                new CardVariantTypeData { Name = "promo" },
+                new CardVariantTypeData { Name = "ja" },
+            };
+
+            var tasks = allVariants.Select(x => _dataReferenceRepo.TryAddCardVariantType(x));
+
+            await Task.WhenAll(tasks);
+
+            _logger.LogInformation("Finished adding card variants");
+        }
+
+        private async Task EnsureDbDeckCardCategoriesExist()
+        {
+            List<DeckCardCategoryData> allCategories = new List<DeckCardCategoryData>()
+            {
+                //null == mainboard new DeckCardCategory { Id = '', Name = "" },
+                new DeckCardCategoryData { Id = 'c', Name = "Commander" },
+                new DeckCardCategoryData { Id = 's', Name = "Sideboard" },
+                //new DeckCardCategory { Id = '', Name = "" },
+                //new DeckCardCategory { Id = '', Name = "" },
+            };//TryAddDeckCardCategory
+
+            var tasks = allCategories.Select(x => _dataReferenceRepo.TryAddDeckCardCategory(x));
+
+            await Task.WhenAll(tasks);
+
+            _logger.LogInformation("Finished adding card categories");
         }
 
     }

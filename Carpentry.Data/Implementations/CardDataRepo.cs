@@ -42,8 +42,14 @@ namespace Carpentry.Data.Implementations
             var existingSet = _cardContext.Sets.Where(x => x.Code.ToLower() == setData.Code.ToLower()).FirstOrDefault();
             if (existingSet != null)
             {
-                setData.Id = existingSet.Id;
-                _cardContext.Sets.Update(setData);
+                existingSet.Cards = setData.Cards;
+                existingSet.Code = setData.Code;
+                existingSet.LastUpdated = setData.LastUpdated;
+                existingSet.Name = setData.Name;
+                existingSet.ReleaseDate = setData.ReleaseDate;
+
+                //setData.Id = existingSet.Id;
+                _cardContext.Sets.Update(existingSet);
             }
             else
             {
@@ -108,6 +114,17 @@ namespace Carpentry.Data.Implementations
         public async Task<CardData> GetCardById(int multiverseId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<CardData>> GetCardsByName(string cardName)
+        {
+            var result = await _cardContext.Cards.Where(x => x.Name == cardName).ToListAsync();
+            return result;
+        }
+
+        public async Task EnsureDatabaseExists()
+        {
+            await _cardContext.Database.EnsureCreatedAsync();
         }
 
         #region Card related methdos

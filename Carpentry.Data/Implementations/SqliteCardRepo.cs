@@ -669,61 +669,6 @@ namespace Carpentry.Data.Implementations
             return cardsQuery;
         }
 
-        public async Task<IQueryable<InventoryOverviewDto>> QueryInventoryOverviews(InventoryQueryParameter filters)
-        {
-            var cardsQuery = await QueryFilteredCards(filters);
-
-            var query = cardsQuery.Select(x => new
-            {
-                MultiverseId = x.Id,
-                x.Name,
-                x.Type,
-                x.ManaCost,
-                Counts = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
-                x.Variants.First().ImageUrl,
-                x.Cmc,
-            }).GroupBy(x => x.Name)
-            .Select(x => new InventoryOverviewDto
-            {
-                Name = x.Key,
-                Type = x.First().Type,
-                Cost = x.First().ManaCost,
-                Img = x.First().ImageUrl,
-                Count = x.Sum(card => card.Counts),
-                Cmc = x.First().Cmc,
-            });
-
-            if (filters.MinCount > 0)
-            {
-                query = query.Where(x => x.Count >= filters.MinCount);
-            }
-
-            if (filters.MaxCount > 0)
-            {
-                query = query.Where(x => x.Count <= filters.MinCount);
-            }
-
-            if (filters.Sort == "count")
-            {
-                query = query.OrderByDescending(x => x.Count);
-            }
-            else if (filters.Sort == "name")
-            {
-                query = query.OrderBy(x => x.Name);
-            }
-            else if (filters.Sort == "cmc")
-            {
-                query = query.OrderBy(x => x.Cmc)
-                    .ThenBy(x => x.Name);
-            }
-            else
-            {
-                query = query.OrderByDescending(x => x.Count);
-            }
-
-            return query;
-        }
-
         #endregion
 
         #region Private Reference lookups

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Carpentry.Data.Interfaces;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Carpentry.Data.QueryResults;
 //using Carpentry.Data.DataContext;
 
 namespace Carpentry.Logic.Implementations
@@ -18,20 +19,34 @@ namespace Carpentry.Logic.Implementations
         
         private readonly IDataUpdateService _dataUpdateService;
 
+        private readonly IDataQueryService _queryService;
 
+        //data reference service?
+        private readonly IDataReferenceService _referenceService;
 
+        private readonly ICardDataRepo _cardDataRepo;
 
-        public InventoryService()
+        public InventoryService(
+            IInventoryDataRepo inventoryRepo,
+            IDataUpdateService dataUpdateService,
+            IDataQueryService queryService,
+            IDataReferenceService referenceService,
+            ICardDataRepo cardDataRepo
+        )
         {
-
+            _inventoryRepo = inventoryRepo;
+            _dataUpdateService = dataUpdateService;
+            _queryService = queryService;
+            _referenceService = referenceService;
+            _cardDataRepo = cardDataRepo;
         }
 
         #region private methods
 
 
-        private static IQueryable<MagicCard> MapInventoryQueryToMagicCardObject(IQueryable<Data.DataModels.CardData> query)
+        private static IEnumerable<MagicCard> MapInventoryQueryToMagicCardObject(IEnumerable<Data.DataModels.CardData> query)
         {
-            IQueryable<MagicCard> result = query.Select(card => new MagicCard()
+            IEnumerable<MagicCard> result = query.Select(card => new MagicCard()
             {
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
@@ -73,7 +88,7 @@ namespace Carpentry.Logic.Implementations
         {
             await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
 
-            Data.DataModels.CardVariantTypeData cardVariant = await _inventoryRepo.GetCardVariantTypeByName(dto.VariantType);
+            Data.DataModels.CardVariantTypeData cardVariant = await _referenceService.GetCardVariantTypeByName(dto.VariantType);
 
             var newInventoryCard = new Data.DataModels.InventoryCardData()
             {
@@ -109,7 +124,7 @@ namespace Carpentry.Logic.Implementations
                 InventoryCardStatusId = x.InventoryCardStatusId,
                 MultiverseId = x.MultiverseId,
                 //VariantType = _cardContext.VariantTypes.FirstOrDefault(v => v.Name == x.VariantType),
-                VariantType = await _inventoryRepo.GetCardVariantTypeByName(x.VariantType),
+                VariantType = await _referenceService.GetCardVariantTypeByName(x.VariantType),
 
             }).ToList();
 
@@ -148,68 +163,35 @@ namespace Carpentry.Logic.Implementations
             await _inventoryRepo.DeleteInventoryCard(id);
         }
 
+
+        private static InventoryOverview MapCardResultToInventoryOverview(CardOverviewResult data)
+        {
+            InventoryOverview result = new InventoryOverview()
+            {
+                Cmc = data.Cmc,
+                Cost = data.Cost,
+                Count = data.Count,
+                //Description = data.,
+                Id = data.Id,
+                Img = data.Img,
+                Name = data.Name,
+                Type = data.Type,
+            };
+            return result;
+        }
+
         public async Task<IEnumerable<InventoryOverview>> GetInventoryOverviews(InventoryQueryParameter param)
         {
-            //#error not implemented
-                        await Task.CompletedTask;
-                        throw new NotImplementedException();
+            if(param == null)
+            {
+                throw new ArgumentNullException("param");
+            }
 
-            //if (param.GroupBy.ToLower() == "quantity")
-            //{
+            IEnumerable<CardOverviewResult> result = await _queryService.GetInventoryOverviews(param);
 
-            //    var inventoryQuery = await _cardRepo.QueryInventoryOverviews(param);
+            IEnumerable<InventoryOverview> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x));
 
-            //    //have overviews, now I need to sort things
-            //    //wait I should just filter BS by color
-
-
-            //    //if (param.Sort == "count")
-            //    //{
-            //    //    inventoryQuery = inventoryQuery.OrderByDescending(x => x.Count);
-            //    //}
-            //    //else if (param.Sort == "name")
-            //    //{
-            //    //    inventoryQuery = inventoryQuery.OrderBy(x => x.Name);
-            //    //}
-            //    //else if (param.Sort == "cmc")
-            //    //{
-            //    //    inventoryQuery = inventoryQuery.OrderBy(x => x.Cost);
-            //    //}
-            //    //else
-            //    //{
-            //    //    inventoryQuery = inventoryQuery.OrderByDescending(x => x.Count);
-            //    //}
-
-
-            //    //var query = inventoryQuery.OrderByDescending(x => x.Count);
-
-            //    if (param.Take > 0)
-            //    {
-            //        //should eventually consider pagination here
-
-            //        inventoryQuery = inventoryQuery.Skip(param.Skip).Take(param.Take);//.OrderByDescending(x => x.Count);
-            //    }
-
-            //    var result = await inventoryQuery.ToListAsync();
-
-            //    return result;
-
-            //    //This query is still missing Type & Cost vals (is cost really useful here?)
-
-            //    //take the top X results, then get the rest of the details
-
-            //    //approach 2 - start with inventory cards
-
-
-            //}
-            //else
-            //{
-            //    return null;
-            //}
-
-            ////if grouping by name...IDK yet
-
-
+            return mappedResult;
         }
 
         public async Task<InventoryDetail> GetInventoryDetailByName(string name)
@@ -221,32 +203,60 @@ namespace Carpentry.Logic.Implementations
                 InventoryCards = new List<InventoryCard>(),
             };
 
-            var inventoryCardsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name)
-                .SelectMany(x => x.InventoryCards)
+            //inv cards
+
+            //GetInventoryCardsByName -> InventoryCardResult
+
+            List<InventoryCard> inventoryCards = (await _queryService.GetInventoryCardsByName(name))
                 .Select(x => new InventoryCard()
                 {
                     Id = x.Id,
                     IsFoil = x.IsFoil,
                     InventoryCardStatusId = x.InventoryCardStatusId,
                     MultiverseId = x.MultiverseId,
-                    VariantType = x.VariantType.Name,
-                    Name = x.Card.Name,
-                    Set = x.Card.Set.Code,
+                    VariantType = x.VariantType,
+                    Name = x.Name,
+                    Set = x.Set,
                     DeckCards = x.DeckCards.Select(c => new InventoryDeckCard
                     {
                         Id = c.Id,
                         DeckId = c.DeckId,
                         InventoryCardId = c.InventoryCardId,
-                        DeckName = c.Deck.Name,
+                        DeckName = c.DeckName,
                     }).ToList()
                 })
-                .OrderBy(x => x.Id);
+                .OrderBy(x => x.Id).ToList();
 
-            result.InventoryCards = await inventoryCardsQuery.ToListAsync();
+            //var inventoryCardsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name)
+            //    .SelectMany(x => x.InventoryCards)
+            //    .Select(x => new InventoryCard()
+            //    {
+            //        Id = x.Id,
+            //        IsFoil = x.IsFoil,
+            //        InventoryCardStatusId = x.InventoryCardStatusId,
+            //        MultiverseId = x.MultiverseId,
+            //        VariantType = x.VariantType.Name,
+            //        Name = x.Card.Name,
+            //        Set = x.Card.Set.Code,
+            //        DeckCards = x.DeckCards.Select(c => new InventoryDeckCard
+            //        {
+            //            Id = c.Id,
+            //            DeckId = c.DeckId,
+            //            InventoryCardId = c.InventoryCardId,
+            //            DeckName = c.Deck.Name,
+            //        }).ToList()
+            //    })
+            //    .OrderBy(x => x.Id);
 
-            var cardDefinitionsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name);
+            result.InventoryCards = inventoryCards;
 
-            result.Cards = await MapInventoryQueryToMagicCardObject(cardDefinitionsQuery).ToListAsync();
+            //card definitions
+            //GetCardsByName | GetCardDefinitionsByName | GetCardDataByName -> CardData
+            //Should this be from the query service or cardDataRepo?
+            //var cardDefinitionsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name);
+            var cardDefinitions = await _cardDataRepo.GetCardsByName(name);
+
+            result.Cards = MapInventoryQueryToMagicCardObject(cardDefinitions).ToList();
 
             return result;
         }

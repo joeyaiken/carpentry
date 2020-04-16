@@ -13,7 +13,7 @@ namespace Carpentry.Data.DataModels
 
         public int InventoryCardStatusId { get; set; }
 
-        public char VariantTypeId { get; set; }
+        public int VariantTypeId { get; set; }
 
 
         //is 'foil' a variant type, or an inventory card property?

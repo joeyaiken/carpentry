@@ -11,7 +11,7 @@ namespace Carpentry.Data.DataModels
     {
         public int Id { get; set; }
         public int CardId { get; set; }
-        public char CardVariantTypeId { get; set; }
+        public int CardVariantTypeId { get; set; }
 
         public decimal? Price { get; set; }
         public decimal? PriceFoil { get; set; }
