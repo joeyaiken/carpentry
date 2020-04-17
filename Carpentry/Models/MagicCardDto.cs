@@ -6,44 +6,6 @@ namespace Carpentry.UI.Legacy.Models
 {
     public class MagicCardDto
     {
-        public MagicCardDto(MagicCard model)
-        {
-            Name = model.Name;
-            Cmc = model.Cmc;
-            ColorIdentity = model.ColorIdentity;
-            Colors = model.Colors;
-            Legalities = model.Legalities;
-            ManaCost = model.ManaCost;
-            MultiverseId = model.MultiverseId;
-            Prices = model.Prices;
-            Rarity = model.Rarity;
-            Set = model.Set;
-            Text = model.Text;
-            Type = model.Type;
-            Variants = model.Variants;
-        }
-
-        public MagicCard ToModel()
-        {
-            MagicCard result = new MagicCard
-            {
-                Name = Name,
-                Cmc = Cmc,
-                ColorIdentity = ColorIdentity,
-                Colors = Colors,
-                Legalities = Legalities,
-                ManaCost = ManaCost,
-                MultiverseId = MultiverseId,
-                Prices = Prices,
-                Rarity = Rarity,
-                Set = Set,
-                Text = Text,
-                Type = Type,
-                Variants = Variants,
-            };
-            return result;
-        }
-
         [JsonProperty("cmc")]
         public int? Cmc { get; set; }
 

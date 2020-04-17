@@ -12,29 +12,6 @@ namespace Carpentry.UI.Legacy.Models
     
     public class DeckStatsDto
     {
-
-        public DeckStatsDto(DeckStats model)
-        {
-            ColorIdentity = model.ColorIdentity;
-            CostCounts = model.CostCounts;
-            TotalCost = model.TotalCost;
-            TotalCount = model.TotalCount;
-            TypeCounts = model.TypeCounts;
-        }
-
-        public DeckStats ToModel()
-        {
-            DeckStats deckStats = new DeckStats
-            {
-                ColorIdentity = ColorIdentity,
-                CostCounts = CostCounts,
-                TotalCost = TotalCost,
-                TotalCount = TotalCount,
-                TypeCounts = TypeCounts,
-            };
-            return deckStats;
-        }
-
         [JsonProperty("totalCount")]
         public int TotalCount { get; set; }
     

@@ -1,6 +1,9 @@
-﻿using Carpentry.Logic.Interfaces;
+﻿//using Carpentry.Interfaces;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.UI.Legacy.Models;
+using Carpentry.UI.Legacy.Util;
+//using Carpentry.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,12 +21,15 @@ namespace Carpentry.UI.Legacy.Controllers
         }
 
         private readonly IFilterService _filterService;
+        private readonly IMapperService _mapper;
 
         public CoreController(
-            IFilterService filterService
+            IFilterService filterService,
+            IMapperService mapper
             )
         {
             _filterService = filterService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -41,32 +47,20 @@ namespace Carpentry.UI.Legacy.Controllers
         {
             try
             {
-                List<FilterOption> formats = await _filterService.GetFormatFilterOptions();
+                //List<FilterOption> formats = await _filterService.GetFormatFilterOptions();
 
-                List<FilterOptionDto> mappedFormats = formats.Select(x => new FilterOptionDto(x)).ToList();
+                //List<FilterOptionDto> mappedFormats = formats.Select(x => new FilterOptionDto(x)).ToList();
 
-                List<FilterOptionDto> anotherWay = (await _filterService.GetFormatFilterOptions()).Select(x => new FilterOptionDto(x)).ToList();
+                //List<FilterOptionDto> anotherWay = (await _filterService.GetFormatFilterOptions()).Select(x => new FilterOptionDto(x)).ToList();
 
                 AppFiltersDto filters = new AppFiltersDto
                 {
-                    Formats = 
-                        (await _filterService.GetFormatFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    ManaColors = 
-                        (await _filterService.GetManaColorFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Rarities =
-                        (await _filterService.GetRarityFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Sets =
-                        (await _filterService.GetSetFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Statuses =
-                        (await _filterService.GetCardStatusFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
-                    Types =
-                        (await _filterService.GetTypeFilterOptions())
-                        .Select(x => new FilterOptionDto(x)).ToList(),
+                    Formats = _mapper.ToDto(await _filterService.GetFormatFilterOptions()),
+                    ManaColors = _mapper.ToDto(await _filterService.GetManaColorFilterOptions()),
+                    Rarities = _mapper.ToDto(await _filterService.GetRarityFilterOptions()),
+                    Sets = _mapper.ToDto(await _filterService.GetSetFilterOptions()),
+                    Statuses = _mapper.ToDto(await _filterService.GetCardStatusFilterOptions()),
+                    Types = _mapper.ToDto(await _filterService.GetTypeFilterOptions()),
                 };
 
                 return Ok(filters);
@@ -76,5 +70,47 @@ namespace Carpentry.UI.Legacy.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetFilterValues", ex));
             }
         }
+
+        ////Backup DB
+        ////should this be a POST since it could/should include filepath info?
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> BackupDatabase()
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
+
+        ////Restore DB
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> RestoreDatabase()
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
+
+        ////Get Set|Data Update Status
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> GetDatabaseUpdateStatus()
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
+
+
+        ////Update Set Scry Data
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> UpdateScryfallSet(string setCode)
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
+
+        ////Update Set Card Data
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> UpdateSetData(string setCode)
+        //{
+        //    await Task.Delay(0);
+        //    throw new NotImplementedException();
+        //}
     }
 }

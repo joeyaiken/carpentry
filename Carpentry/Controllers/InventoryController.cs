@@ -7,6 +7,7 @@ using Carpentry.Data.QueryParameters;
 //using Carpentry.Interfaces;
 using Carpentry.Logic.Interfaces;
 using Carpentry.UI.Legacy.Models;
+using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.UI.Legacy.Controllers
@@ -21,14 +22,16 @@ namespace Carpentry.UI.Legacy.Controllers
         }
 
         private readonly IInventoryService _inventory;
+        private readonly IMapperService _mapper;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryService inventory)
+        public InventoryController(IInventoryService inventory, IMapperService mapper)
         {
             _inventory = inventory;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace Carpentry.UI.Legacy.Controllers
         {
             try
             {
-                var updatedId = await _inventory.AddInventoryCard(dto.ToModel());
+                var updatedId = await _inventory.AddInventoryCard(_mapper.ToModel(dto));
                 return Ok(updatedId);
             }
             catch (Exception ex)
@@ -58,19 +61,17 @@ namespace Carpentry.UI.Legacy.Controllers
 
         //AddCardBatch
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> AddBatch([FromBody] IEnumerable<InventoryCardDto> dto)
+        public async Task<ActionResult<int>> AddBatch([FromBody] List<InventoryCardDto> dto)
         {
             try
             {
-                await _inventory.AddInventoryCardBatch(dto.Select(x => x.ToModel()));
+                await _inventory.AddInventoryCardBatch(_mapper.ToModel(dto));
                 return Ok();
             }
             catch (Exception ex)
             {
                 return StatusCode(500, FormatExceptionMessage("AddBatch", ex));
             }
-
-
         }
 
         //Update
@@ -79,7 +80,7 @@ namespace Carpentry.UI.Legacy.Controllers
         {
             try
             {
-                await _inventory.UpdateInventoryCard(dto.ToModel());
+                await _inventory.UpdateInventoryCard(_mapper.ToModel(dto));
                 return Ok();
             }
             catch (Exception ex)
@@ -92,8 +93,6 @@ namespace Carpentry.UI.Legacy.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> Delete(int id)
         {
-
-
             try
             {
                 await _inventory.DeleteInventoryCard(id);
@@ -112,7 +111,7 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var result = await _inventory.GetInventoryOverviews(param);
-                List<InventoryOverviewDto> mappedResult = result.Select(x => new InventoryOverviewDto(x)).ToList();
+                List<InventoryOverviewDto> mappedResult = _mapper.ToDto(result);
                 return Ok(mappedResult);
             }
             catch (Exception ex)
@@ -127,7 +126,8 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var result = await _inventory.GetInventoryDetailByName(name);
-                InventoryDetailDto mappedResult = new InventoryDetailDto(result);
+                //InventoryDetailDto mappedResult = new InventoryDetailDto(result);
+                InventoryDetailDto mappedResult = _mapper.ToDto(result);
                 return Ok(mappedResult);
             }
             catch (Exception ex)
@@ -135,7 +135,5 @@ namespace Carpentry.UI.Legacy.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetByName", ex));
             }
         }
-
-
     }
 }

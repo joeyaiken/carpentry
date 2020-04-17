@@ -5,41 +5,6 @@ namespace Carpentry.UI.Legacy.Models
 {
     public class DeckPropertiesDto
     {
-        public DeckPropertiesDto()
-        {
-
-        }
-
-        public DeckPropertiesDto(DeckProperties props)
-        {
-            BasicB = props.BasicB;
-            BasicG = props.BasicG;
-            BasicR = props.BasicR;
-            BasicU = props.BasicU;
-            BasicW = props.BasicW;
-            Format = props.Format;
-            Id = props.Id;
-            Name = props.Name;
-            Notes = props.Notes;
-        }
-
-        public DeckProperties ToModel()
-        {
-            DeckProperties result = new DeckProperties()
-            {
-                BasicB = BasicB,
-                BasicG = BasicG,
-                BasicR = BasicR,
-                BasicU = BasicU,
-                BasicW = BasicW,
-                Format = Format,
-                Id = Id,
-                Name = Name,
-                Notes = Notes,
-            };
-            return result;
-        }
-
         [JsonProperty("id")]
         public int Id { get; set; }
 
