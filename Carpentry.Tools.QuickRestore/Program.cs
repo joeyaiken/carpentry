@@ -72,11 +72,11 @@ namespace Carpentry.Tools.QuickRestore
 
                 //data services
                 //.AddScoped<IScryfallService>
-                .AddScoped<ICardDataRepo, CardDataRepo>()
-                .AddScoped<IDeckDataRepo, DeckDataRepo>()
-                .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
-                .AddScoped<IScryfallDataRepo, ScryfallRepo>()
-                .AddScoped<IDataReferenceService, DataReferenceService>()
+                .AddSingleton<ICardDataRepo, CardDataRepo>()
+                .AddSingleton<IDeckDataRepo, DeckDataRepo>()
+                .AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
+                .AddSingleton<IScryfallDataRepo, ScryfallRepo>()
+                .AddSingleton<IDataReferenceService, DataReferenceService>()
 
                 .AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
 

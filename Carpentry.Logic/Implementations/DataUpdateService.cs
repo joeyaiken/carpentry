@@ -84,7 +84,7 @@ namespace Carpentry.Logic.Implementations
                 if (dbLastUpdated != null && dbLastUpdated.Value.AddDays(_dbRefreshIntervalDays) > DateTime.Today.Date)
                 {
                     _logger.LogInformation($"Set code {setCodes[i]} was last updated {dbLastUpdated.ToString()}, nothing will be updated.");
-                    return;
+                    //continue;
                 } 
                 else
                 {

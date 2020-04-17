@@ -262,17 +262,35 @@ namespace Carpentry.Logic.Implementations
                 InventoryCardStatusId = x.InventoryCardStatusId,
                 IsFoil = x.IsFoil,
                 MultiverseId = x.MultiverseId,
-                VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
-                DeckCards = x.DeckCards.Select(d => new DeckCardData()
-                {
-                    DeckId = d.DeckId,
-                    CategoryId = d.Category,
-                }).ToList()
+                //VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
+                VariantType = allVariants.FirstOrDefault(v => v.Name == x.VariantName),
+
+                DeckCards = 
+                    //x.DeckCards.Count() > 0 ?
+                    x.DeckCards.Select(d => new DeckCardData()
+                    {
+                        DeckId = d.DeckId,
+                        CategoryId = d.Category,
+                    }).ToList(),// : null,
             }).ToList();
 
-            await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);
+            for(int i = 0; i < mappedInventoryCards.Count(); i++)
+            {
+                await _inventoryDataRepo.AddInventoryCard(mappedInventoryCards[i]);
+            }
 
-            _logger.LogWarning("RestoreDb - LoadCardBackups...COMPLETE!");
+
+
+            //var cardsInDecks = mappedInventoryCards.Where(x => x.DeckCards.Count() > 0).ToList();
+
+            //var cardsNotInDecks = mappedInventoryCards.Where(x => x.DeckCards.Count() == 0).ToList();
+
+            //await _inventoryDataRepo.AddInventoryCardBatch(cardsNotInDecks);
+            //await _inventoryDataRepo.AddInventoryCardBatch(cardsInDecks);
+
+            ////await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);
+
+            //_logger.LogWarning("RestoreDb - LoadCardBackups...COMPLETE!");
         }
 
     }
