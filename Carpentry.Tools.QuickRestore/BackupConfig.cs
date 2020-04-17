@@ -11,7 +11,6 @@ namespace Carpentry.Tools.QuickRestore
 
         public BackupConfig(IConfiguration appConfig)
         {
-            
             //Backups
             string backupFolderRoot = appConfig.GetValue<string>("AppSettings:BackupFolderRoot");
             string deckBackupFilename = appConfig.GetValue<string>("AppSettings:DeckBackupFilename");

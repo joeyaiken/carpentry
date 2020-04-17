@@ -33,20 +33,12 @@ namespace Carpentry.Data.Implementations
         /// <returns></returns>
         public async Task<int> AddInventoryCard(InventoryCardData cardToAdd)
         {
-            try
-            {
-                var matchingCard = _cardContext.Cards.FirstOrDefault(x => x.Id == cardToAdd.MultiverseId);
-                var first6Card = _cardContext.Cards.FirstOrDefault();
-                _cardContext.InventoryCards.Add(cardToAdd);
-                await _cardContext.SaveChangesAsync();
+            var matchingCard = _cardContext.Cards.FirstOrDefault(x => x.Id == cardToAdd.MultiverseId);
+            var first6Card = _cardContext.Cards.FirstOrDefault();
+            _cardContext.InventoryCards.Add(cardToAdd);
+            await _cardContext.SaveChangesAsync();
 
-                return cardToAdd.Id;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            
+            return cardToAdd.Id;
         }
 
         public async Task AddInventoryCardBatch(List<InventoryCardData> cardBatch)

@@ -1,11 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Carpentry.Data.DataContext;
 using Carpentry.Logic.Interfaces;
-//using Carpentry.Data.LegacyDataContext;
-//using Carpentry.Logic.Implementations;
-//using Carpentry.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,14 +47,9 @@ namespace Carpentry.Tools.QuickRestore
                 .WriteTo.Console()
                 .CreateLogger();
 
-            //string cardDatabaseLocation = $"Data Source={appConfig.DatabaseLocation}";
-
             string cardDatabaseLocation = $"Data Source={appConfig.DatabaseLocation}";
 
             string scryDatabaseLocation = $"Data Source={appConfig.ScryDataLocation}";
-
-            //what else
-            //backup locations can be stored in some config
 
             var serviceProvider = new ServiceCollection()
                 .AddSingleton(Configuration)
@@ -69,34 +60,21 @@ namespace Carpentry.Tools.QuickRestore
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlite(cardDatabaseLocation))
                 .AddDbContext<ScryfallDataContext>(options => options.UseSqlite(scryDatabaseLocation))
 
-
                 //data services
-                //.AddScoped<IScryfallService>
                 .AddSingleton<ICardDataRepo, CardDataRepo>()
                 .AddSingleton<IDeckDataRepo, DeckDataRepo>()
                 .AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
                 .AddSingleton<IScryfallDataRepo, ScryfallRepo>()
                 .AddSingleton<IDataReferenceService, DataReferenceService>()
-
                 .AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
 
                 //logic services
                 .AddScoped<IDataRestoreService, DataRestoreService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
-                /*
-                
-                IDataReferenceService dataReferenceService,
-                IDataBackupConfig config,
-                
-                */
 
                 .AddScoped<IScryfallService, ScryfallService>()
                 .AddHttpClient<IScryfallService, ScryfallService>().Services
 
-
-
-                //.AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
-                //.AddScoped<IDataBackupService, DataBackupService>()
                 .BuildServiceProvider();
 
             return serviceProvider;

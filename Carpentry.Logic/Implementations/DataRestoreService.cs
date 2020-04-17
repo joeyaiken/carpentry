@@ -16,25 +16,9 @@ namespace Carpentry.Logic.Implementations
     public class DataRestoreService : IDataRestoreService
     {
         private readonly ILogger<DataRestoreService> _logger;
-
-        //private readonly CarpentryDataContext _cardContext;
-        //private readonly ScryfallDataContext _scryContext;
-
-        //private readonly MigrationToolConfig _config;
-
-        //private readonly LegacyScryfallRepo _scryRepo;
-
-        //private readonly SqliteCardRepo _cardRepo;
-
-        //private readonly CarpentryService _carpentryService;
-
         private readonly IDataUpdateService _dataUpdateService;
-
         private readonly IDataBackupConfig _config;
-
-        //
         private readonly IDataReferenceService _dataReferenceService;
-
         private readonly ICardDataRepo _cardDataRepo;
         private readonly IDeckDataRepo _deckDataRepo;
         private readonly IInventoryDataRepo _inventoryDataRepo;
@@ -47,10 +31,6 @@ namespace Carpentry.Logic.Implementations
             ICardDataRepo cardDataRepo, 
             IDeckDataRepo deckDataRepo,
             IInventoryDataRepo inventoryDataRepo
-            //SqliteDataContext cardContext,
-            //MigrationToolConfig config,
-            //CarpentryDataContext cardContext,
-            //ScryfallDataContext scryContext
             )
         {
             _logger = logger;
@@ -60,11 +40,6 @@ namespace Carpentry.Logic.Implementations
             _cardDataRepo = cardDataRepo;
             _deckDataRepo = deckDataRepo;
             _inventoryDataRepo = inventoryDataRepo;
-            //_cardContext = cardContext;
-            //_scryContext = scryContext;
-            //_config = config;
-            //_scryRepo = scryRepo;
-            //_cardRepo = cardRepo;
         }
 
         public async Task RestoreDatabase()
@@ -118,7 +93,6 @@ namespace Carpentry.Logic.Implementations
                 Name = x.Name,
                 Notes = x.Notes,
 
-                //Format = _cardContext.MagicFormats.Where(f => f.Name.ToLower() == x.Format.ToLower()).FirstOrDefault(),
                 Format = _dataReferenceService.GetMagicFormat(x.Format).Result,
 
                 Id = x.ExportId
@@ -176,8 +150,6 @@ namespace Carpentry.Logic.Implementations
             //If I own a card from a set, all definitions for that set should exist in the DB at this point
             //I can safely grab any backup card by MID
 
-
-            //int cardCount = await _cardContext.InventoryCards.Select(x => x.Id).CountAsync();
             bool cardsExist = await _inventoryDataRepo.DoInventoryCardsExist();
             if (cardsExist)
             {
@@ -189,71 +161,7 @@ namespace Carpentry.Logic.Implementations
             string cardBackupsDataString = await System.IO.File.ReadAllTextAsync(_config.CardBackupLocation);
             List<BackupInventoryCard> parseCardsBackups = JArray.Parse(cardBackupsDataString).ToObject<List<BackupInventoryCard>>();
 
-            //_logger.LogWarning("Load Card Backups - ensuring definitions exist (this could take some time)");
-
-            //var uniqueMIDs = parseCardsBackups
-            //    .Select(x => x.MultiverseId)
-            //    .Distinct().ToList();
-
-            //int idCount = uniqueMIDs.Count();
-
-            //_logger.LogWarning($"Load Card Backups - adding {idCount} cards");
-
-            //for (int i = 0; i < idCount; i++)
-            //{
-            //    if (i % 100 == 0)
-            //    {
-            //        _logger.LogWarning($"RestoreDb - LoadCardBackups...{i} / {idCount} cards loaded");
-            //    }
-            //    await EnsureCardDefinitionExists(uniqueMIDs[i]);
-            //}
-
-            //_logger.LogWarning($"Load Card Backups - adding {idCount} cards.  Querying card definitions...");
-
-
-
-            //////////////////////////////
-            ///// In the case of restoring the DB, there's no initial card definition to check
-
-            ////I still need a collection of all scryfall cards
-            ////in theory these should all exist in the scry DB, but they still have to be mapped to a magic card
-
-            //var getScryCardTasks = uniqueMIDs.Select(mid => _scryRepo.GetCardById(mid)).ToList();
-
-            //var CardsDefinitionsToAdd = await Task.WhenAll(getScryCardTasks);
-
-            //await _cardRepo.AddCardDefinitionBatch(CardsDefinitionsToAdd.ToList());
-
-
-            ////for (int i = 0; i < idCount; i++)
-            ////{
-            ////    if (i % 100 == 0)
-            ////    {
-            ////        _logger.LogWarning($"RestoreDb - LoadCardBackups...{i} / {idCount} cards loaded");
-            ////    }
-
-
-            ////    int multiverseId = uniqueMIDs[i];
-
-
-            ////    // In the case of restoring the DB, there's no initial card definition to check
-            ////    //var dbCard = await _cardRepo.QueryCardDefinitions().FirstOrDefaultAsync(x => x.Id == multiverseId);
-            ////    //if (dbCard != null) return;
-
-
-            ////    var scryfallCard = await _scryRepo.GetCardById(multiverseId);
-
-            ////    await _cardRepo.AddCardDefinition(scryfallCard);
-
-            ////}
-
-            //////////////////////////////
-
             _logger.LogWarning("RestoreDb - LoadCardBackups...definitions exist, mapping & saving");
-
-
-
-            //refService.getAllVariants
 
             List<CardVariantTypeData> allVariants = await _dataReferenceService.GetAllCardVariantTypes();
 
@@ -262,31 +170,14 @@ namespace Carpentry.Logic.Implementations
                 InventoryCardStatusId = x.InventoryCardStatusId,
                 IsFoil = x.IsFoil,
                 MultiverseId = x.MultiverseId,
-                //VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
                 VariantType = allVariants.FirstOrDefault(v => v.Name == x.VariantName),
-
                 DeckCards = 
-                    //x.DeckCards.Count() > 0 ?
                     x.DeckCards.Select(d => new DeckCardData()
                     {
                         DeckId = d.DeckId,
                         CategoryId = d.Category,
-                    }).ToList(),// : null,
+                    }).ToList(),
             }).ToList();
-
-            //for(int i = 0; i < mappedInventoryCards.Count(); i++)
-            //{
-            //    await _inventoryDataRepo.AddInventoryCard(mappedInventoryCards[i]);
-            //}
-
-
-
-            //var cardsInDecks = mappedInventoryCards.Where(x => x.DeckCards.Count() > 0).ToList();
-
-            //var cardsNotInDecks = mappedInventoryCards.Where(x => x.DeckCards.Count() == 0).ToList();
-
-            //await _inventoryDataRepo.AddInventoryCardBatch(cardsNotInDecks);
-            //await _inventoryDataRepo.AddInventoryCardBatch(cardsInDecks);
 
             await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);
 
