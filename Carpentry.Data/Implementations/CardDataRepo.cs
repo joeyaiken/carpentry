@@ -42,7 +42,6 @@ namespace Carpentry.Data.Implementations
             var existingSet = _cardContext.Sets.Where(x => x.Code.ToLower() == setData.Code.ToLower()).FirstOrDefault();
             if (existingSet != null)
             {
-                existingSet.Cards = setData.Cards;
                 existingSet.Code = setData.Code;
                 existingSet.LastUpdated = setData.LastUpdated;
                 existingSet.Name = setData.Name;
@@ -219,6 +218,7 @@ namespace Carpentry.Data.Implementations
 
             };
 
+            int preSaveId = newCard.Id;
             _cardContext.Cards.Add(newCard);
             await _cardContext.SaveChangesAsync();
         }

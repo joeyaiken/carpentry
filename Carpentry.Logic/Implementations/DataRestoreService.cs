@@ -274,10 +274,10 @@ namespace Carpentry.Logic.Implementations
                     }).ToList(),// : null,
             }).ToList();
 
-            for(int i = 0; i < mappedInventoryCards.Count(); i++)
-            {
-                await _inventoryDataRepo.AddInventoryCard(mappedInventoryCards[i]);
-            }
+            //for(int i = 0; i < mappedInventoryCards.Count(); i++)
+            //{
+            //    await _inventoryDataRepo.AddInventoryCard(mappedInventoryCards[i]);
+            //}
 
 
 
@@ -288,9 +288,9 @@ namespace Carpentry.Logic.Implementations
             //await _inventoryDataRepo.AddInventoryCardBatch(cardsNotInDecks);
             //await _inventoryDataRepo.AddInventoryCardBatch(cardsInDecks);
 
-            ////await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);
+            await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);
 
-            //_logger.LogWarning("RestoreDb - LoadCardBackups...COMPLETE!");
+            _logger.LogWarning("RestoreDb - LoadCardBackups...COMPLETE!");
         }
 
     }

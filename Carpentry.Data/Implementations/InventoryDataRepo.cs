@@ -36,7 +36,7 @@ namespace Carpentry.Data.Implementations
             try
             {
                 var matchingCard = _cardContext.Cards.FirstOrDefault(x => x.Id == cardToAdd.MultiverseId);
-                var firstCard = _cardContext.Cards.FirstOrDefault();
+                var first6Card = _cardContext.Cards.FirstOrDefault();
                 _cardContext.InventoryCards.Add(cardToAdd);
                 await _cardContext.SaveChangesAsync();
 
