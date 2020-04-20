@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-//using Carpentry.Data.Models;
-//using Carpentry.Data.Models;
-//using Carpentry.Interfaces;
-using Carpentry.Logic.Interfaces;
-using Carpentry.UI.Models;
-using Carpentry.UI.Util;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.UI.Controllers
@@ -21,12 +16,10 @@ namespace Carpentry.UI.Controllers
         }
 
         private readonly IDeckService _decks;
-        private readonly IMapperService _mapper;
 
-        public DecksController(IDeckService decks, IMapperService mapper)
+        public DecksController(IDeckService decks)
         {
             _decks = decks;
-            _mapper = mapper;
         }
 
         /// <summary>
@@ -46,7 +39,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                int newDeckId = await _decks.AddDeck(await _mapper.ToModel(deckProps));
+                int newDeckId = await _decks.AddDeck(deckProps);
                 return Ok(newDeckId);
             }
             catch (Exception ex)
@@ -62,7 +55,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                await _decks.UpdateDeck(await _mapper.ToModel(deckProps));
+                await _decks.UpdateDeck(deckProps);
                 return Ok();
             }
             catch (Exception ex)
@@ -94,9 +87,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var results = await _decks.GetDeckOverviews();
-                IEnumerable<DeckPropertiesDto> mappedResults = await _mapper.ToDto(results);
-                return Ok(mappedResults);
+                IEnumerable<DeckPropertiesDto> results = await _decks.GetDeckOverviews();
+                return Ok(results);
             }
             catch (Exception ex)
             {
@@ -111,9 +103,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var results = await _decks.GetDeckDetail(deckId);
-                DeckDetailDto mappedResults = await _mapper.ToDto(results);
-                return Ok(mappedResults);
+                DeckDetailDto results = await _decks.GetDeckDetail(deckId);
+                return Ok(results);
             }
             catch (Exception ex)
             {
@@ -127,9 +118,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var model = _mapper.ToModel(dto);
-                await _decks.AddDeckCard(model);
-                //await _decks.AddDeckCard(dto.ToModel());
+                await _decks.AddDeckCard(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -143,8 +132,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var cardModel = _mapper.ToModel(card);
-                await _decks.UpdateDeckCard(cardModel);
+                await _decks.UpdateDeckCard(card);
                 return Ok();
             }
             catch (Exception ex)

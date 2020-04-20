@@ -34,7 +34,7 @@ namespace Carpentry.UI.Legacy.Controllers
 
         /// <summary>
         /// This method just ensures the controller can start correctly (catches DI issues)
-        /// </summary>
+        /// </summary> 
         /// <returns></returns>
         [HttpGet]
         public IActionResult Get()
@@ -43,7 +43,7 @@ namespace Carpentry.UI.Legacy.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<AppFiltersDto>> GetFilterValues()
+        public async Task<ActionResult<LegacyAppFiltersDto>> GetFilterValues()
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Carpentry.UI.Legacy.Controllers
 
                 //List<FilterOptionDto> anotherWay = (await _filterService.GetFormatFilterOptions()).Select(x => new FilterOptionDto(x)).ToList();
 
-                AppFiltersDto filters = new AppFiltersDto
+                LegacyAppFiltersDto filters = new LegacyAppFiltersDto
                 {
                     Formats = _mapper.ToDto(await _filterService.GetFormatFilterOptions()),
                     ManaColors = _mapper.ToDto(await _filterService.GetManaColorFilterOptions()),
@@ -70,47 +70,5 @@ namespace Carpentry.UI.Legacy.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetFilterValues", ex));
             }
         }
-
-        ////Backup DB
-        ////should this be a POST since it could/should include filepath info?
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> BackupDatabase()
-        //{
-        //    await Task.Delay(0);
-        //    throw new NotImplementedException();
-        //}
-
-        ////Restore DB
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> RestoreDatabase()
-        //{
-        //    await Task.Delay(0);
-        //    throw new NotImplementedException();
-        //}
-
-        ////Get Set|Data Update Status
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> GetDatabaseUpdateStatus()
-        //{
-        //    await Task.Delay(0);
-        //    throw new NotImplementedException();
-        //}
-
-
-        ////Update Set Scry Data
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> UpdateScryfallSet(string setCode)
-        //{
-        //    await Task.Delay(0);
-        //    throw new NotImplementedException();
-        //}
-
-        ////Update Set Card Data
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> UpdateSetData(string setCode)
-        //{
-        //    await Task.Delay(0);
-        //    throw new NotImplementedException();
-        //}
     }
 }

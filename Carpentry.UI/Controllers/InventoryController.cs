@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.Data.QueryParameters;
-//using Carpentry.Data.Models;
-//using Carpentry.Interfaces;
-using Carpentry.Logic.Interfaces;
-using Carpentry.UI.Models;
-using Carpentry.UI.Util;
 using Microsoft.AspNetCore.Mvc;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 
 namespace Carpentry.UI.Controllers
 {
@@ -22,16 +17,14 @@ namespace Carpentry.UI.Controllers
         }
 
         private readonly IInventoryService _inventory;
-        private readonly IMapperService _mapper;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryService inventory, IMapperService mapper)
+        public InventoryController(IInventoryService inventory)
         {
             _inventory = inventory;
-            _mapper = mapper;
         }
 
         /// <summary>
@@ -50,7 +43,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var updatedId = await _inventory.AddInventoryCard(_mapper.ToModel(dto));
+                var updatedId = await _inventory.AddInventoryCard(dto);
                 return Ok(updatedId);
             }
             catch (Exception ex)
@@ -65,7 +58,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                await _inventory.AddInventoryCardBatch(_mapper.ToModel(dto));
+                await _inventory.AddInventoryCardBatch(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -80,7 +73,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                await _inventory.UpdateInventoryCard(_mapper.ToModel(dto));
+                await _inventory.UpdateInventoryCard(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -110,9 +103,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var result = await _inventory.GetInventoryOverviews(param);
-                List<InventoryOverviewDto> mappedResult = _mapper.ToDto(result);
-                return Ok(mappedResult);
+                IEnumerable<InventoryOverviewDto> result = await _inventory.GetInventoryOverviews(param);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -125,10 +117,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var result = await _inventory.GetInventoryDetailByName(name);
-                //InventoryDetailDto mappedResult = new InventoryDetailDto(result);
-                InventoryDetailDto mappedResult = _mapper.ToDto(result);
-                return Ok(mappedResult);
+                InventoryDetailDto result = await _inventory.GetInventoryDetailByName(name);
+                return Ok(result);
             }
             catch (Exception ex)
             {

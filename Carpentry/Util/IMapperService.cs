@@ -12,42 +12,42 @@ namespace Carpentry.UI.Legacy.Util
 
         //AppFilters
         //DeckCard
-        DeckCard ToModel(DeckCardDto dto);
+        DeckCard ToModel(LegacyDeckCardDto dto);
 
         //DeckDetail
-        Task<DeckDetailDto> ToDto(DeckDetail detail);
+        Task<LegacyDeckDetailDto> ToDto(DeckDetail detail);
 
         //DeckProperties
-        Task<DeckProperties> ToModel(DeckPropertiesDto props);
-        Task<DeckPropertiesDto> ToDto(DeckProperties props);
-        Task<List<DeckPropertiesDto>> ToDto(IEnumerable<DeckProperties> props);
+        Task<DeckProperties> ToModel(LegacyDeckPropertiesDto props);
+        Task<LegacyDeckPropertiesDto> ToDto(DeckProperties props);
+        Task<List<LegacyDeckPropertiesDto>> ToDto(IEnumerable<DeckProperties> props);
 
         //DeckStats
-        DeckStatsDto ToDto(DeckStats dto);
+        LegacyDeckStatsDto ToDto(DeckStats dto);
 
         //FilterOption
-        List<FilterOptionDto> ToDto(IEnumerable<FilterOption> filters);
+        List<LegacyFilterOptionDto> ToDto(IEnumerable<FilterOption> filters);
 
         //InventoryCard
-        InventoryCard ToModel(InventoryCardDto card);
-        List<InventoryCard> ToModel(List<InventoryCardDto> cards);
-        InventoryCardDto ToDto(InventoryCard card);
-        List<InventoryCardDto> ToDto(List<InventoryCard> cards);
+        InventoryCard ToModel(LegacyInventoryCardDto card);
+        List<InventoryCard> ToModel(List<LegacyInventoryCardDto> cards);
+        LegacyInventoryCardDto ToDto(InventoryCard card);
+        List<LegacyInventoryCardDto> ToDto(List<InventoryCard> cards);
 
         //InventoryDeckCard
-        InventoryDeckCardDto ToDto(InventoryDeckCard invDeckCard);
-        InventoryDeckCard ToModel(InventoryDeckCardDto invDeckCard);
+        LegacyInventoryDeckCardDto ToDto(InventoryDeckCard invDeckCard);
+        InventoryDeckCard ToModel(LegacyInventoryDeckCardDto invDeckCard);
 
         //InventoryDetail
-        InventoryDetailDto ToDto(InventoryDetail inventoryDetail);
+        LegacyInventoryDetailDto ToDto(InventoryDetail inventoryDetail);
 
         //InventoryOverview
-        List<InventoryOverviewDto> ToDto(IEnumerable<InventoryOverview> overviews);
+        List<LegacyInventoryOverviewDto> ToDto(IEnumerable<InventoryOverview> overviews);
 
         //MagicCard
-        MagicCardDto ToDto(MagicCard card);
-        List<MagicCardDto> ToDto(IEnumerable<MagicCard> cardList);
-        MagicCard ToModel(MagicCardDto card);
+        LegacyMagicCardDto ToDto(MagicCard card);
+        List<LegacyMagicCardDto> ToDto(IEnumerable<MagicCard> cardList);
+        MagicCard ToModel(LegacyMagicCardDto card);
 
 
 

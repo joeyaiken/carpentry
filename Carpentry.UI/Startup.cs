@@ -11,13 +11,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 //using Carpentry.Data.LegacyDataContextLegacy;
 //using Carpentry.Data.LegacyDataContext;
-using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Implementations;
+//using Carpentry.Logic.Interfaces;
+//using Carpentry.Logic.Implementations;
 //using Carpentry.Interfaces;
 //using Carpentry.Implementations;
 using Microsoft.Extensions.Hosting;
 using Carpentry.Data.DataContext;
-using Carpentry.UI.Util;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Implementations;
+//using Carpentry.UI.Util;
 
 namespace Carpentry.UI
 {
@@ -37,21 +39,21 @@ namespace Carpentry.UI
             //Going to actually pull the fill filepaths from app settings now
             //TODO Eventually I could make a static config class and just read from that class
             //TODO Everything else still needs this DB pattern
-            string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
 
-            //DBs
-            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            ////DBs
+            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
+            //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
 
-            //DB repos
-            services.AddScoped<ICardDataRepo, CardDataRepo>();
-            services.AddScoped<IDeckDataRepo, DeckDataRepo>();
-            services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
-            services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
+            ////DB repos
+            //services.AddScoped<ICardDataRepo, CardDataRepo>();
+            //services.AddScoped<IDeckDataRepo, DeckDataRepo>();
+            //services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
+            //services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
 
             //DB services
-            services.AddScoped<IDataReferenceService, DataReferenceService>();
+            //services.AddScoped<IDataReferenceService, DataReferenceService>();
 
 
 
@@ -69,13 +71,21 @@ namespace Carpentry.UI
 
 
             //Logic services
-            services.AddScoped<ICardSearchService, CardSearchService>();
-            services.AddScoped<IDeckService, DeckService>();
-            services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<IFilterService, FilterService>();
+            //services.AddScoped<ICardSearchService, CardSearchService>();
+            //services.AddScoped<IDeckService, DeckService>();
+            //services.AddScoped<IInventoryService, InventoryService>();
+            //services.AddScoped<IFilterService, FilterService>();
 
             //Util services
-            services.AddScoped<IMapperService, MapperService>();
+            //services.AddScoped<IMapperService, MapperService>();
+
+            //Service layer services
+            services.AddScoped<ICoreService, CoreService>();
+            services.AddScoped<IDeckService, DeckService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ICardSearchService, CardSearchService>();
+
+
 
 
             services.AddControllersWithViews();

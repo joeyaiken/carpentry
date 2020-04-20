@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Carpentry.UI.Legacy.Models
+namespace Carpentry.Service.Models
 {
     public class AppFiltersDto
     {

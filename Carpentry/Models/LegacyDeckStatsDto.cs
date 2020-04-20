@@ -10,7 +10,7 @@ namespace Carpentry.UI.Legacy.Models
     //    public int Count { get; set; }
     //}
     
-    public class DeckStatsDto
+    public class LegacyDeckStatsDto
     {
         [JsonProperty("totalCount")]
         public int TotalCount { get; set; }

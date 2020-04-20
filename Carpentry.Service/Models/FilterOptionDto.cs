@@ -1,7 +1,6 @@
-﻿using Carpentry.Logic.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Carpentry.UI.Legacy.Models
+namespace Carpentry.Service.Models
 {
     public class FilterOptionDto
     {

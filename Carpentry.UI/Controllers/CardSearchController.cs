@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-//using Carpentry.Data.Models;
-using Carpentry.Data.QueryParameters;
-using Carpentry.Logic.Interfaces;
-using Carpentry.UI.Models;
-using Carpentry.UI.Util;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.UI.Controllers
@@ -21,12 +17,10 @@ namespace Carpentry.UI.Controllers
         }
 
         private readonly ICardSearchService _cardSearch;
-        private readonly IMapperService _mapper;
 
-        public CardSearchController(ICardSearchService cardSearch, IMapperService mapper)
+        public CardSearchController(ICardSearchService cardSearch)
         {
             _cardSearch = cardSearch;
-            _mapper = mapper;
         }
 
         /// <summary>
@@ -44,9 +38,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var cards = await _cardSearch.SearchCardsFromWeb(param);
-                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
-                return Ok(mappedCards);
+                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromWeb(param);
+                return Ok(cards);
             }
             catch (Exception ex)
             {
@@ -59,9 +52,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var cards = await _cardSearch.SearchCardsFromSet(filters);
-                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
-                return Ok(mappedCards);
+                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromSet(filters);
+                return Ok(cards);
             }
             catch (Exception ex)
             {
@@ -74,9 +66,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var cards = await _cardSearch.SearchCardsFromInventory(filters);
-                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
-                return Ok(mappedCards);
+                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromInventory(filters);
+                return Ok(cards);
             }
             catch (Exception ex)
             {

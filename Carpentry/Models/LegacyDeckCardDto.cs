@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Carpentry.UI.Legacy.Models
 {
     //TODO - Figure out if this is used, I'd like to have a version that doesn't include an inventory card
-    public class DeckCardDto
+    public class LegacyDeckCardDto
     {
 
         [JsonProperty("id")]
@@ -17,6 +17,6 @@ namespace Carpentry.UI.Legacy.Models
         public char? CategoryId { get; set; }
 
         [JsonProperty("inventoryCard")]
-        public InventoryCardDto InventoryCard { get; set; }
+        public LegacyInventoryCardDto InventoryCard { get; set; }
     }
 }

@@ -40,12 +40,12 @@ namespace Carpentry.UI.Legacy.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
+        public async Task<ActionResult<IEnumerable<LegacyMagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
         {
             try
             {
                 var cards = await _cardSearch.SearchCardsFromWeb(param);
-                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
+                List<LegacyMagicCardDto> mappedCards = _mapper.ToDto(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)
@@ -55,12 +55,12 @@ namespace Carpentry.UI.Legacy.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
+        public async Task<ActionResult<IEnumerable<LegacyMagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
         {
             try
             {
                 var cards = await _cardSearch.SearchCardsFromSet(filters);
-                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
+                List<LegacyMagicCardDto> mappedCards = _mapper.ToDto(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)
@@ -70,12 +70,12 @@ namespace Carpentry.UI.Legacy.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchInventory([FromBody] InventoryQueryParameter filters)
+        public async Task<ActionResult<IEnumerable<LegacyMagicCardDto>>> SearchInventory([FromBody] InventoryQueryParameter filters)
         {
             try
             {
                 var cards = await _cardSearch.SearchCardsFromInventory(filters);
-                List<MagicCardDto> mappedCards = _mapper.ToDto(cards);
+                List<LegacyMagicCardDto> mappedCards = _mapper.ToDto(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)

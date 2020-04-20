@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Carpentry.UI\Carpentry.UI.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MockClasses\" />
-  </ItemGroup>
-
 </Project>

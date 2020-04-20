@@ -1,11 +1,7 @@
-﻿using Carpentry.Logic.Models;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Carpentry.UI.Legacy.Models
+namespace Carpentry.Service.Models
 {
     public class InventoryDetailDto
     {

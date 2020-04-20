@@ -2,7 +2,7 @@
 
 namespace Carpentry.UI.Legacy.Models
 {
-    public class InventoryOverviewDto // TODO : Rename to CardOverviewDto
+    public class LegacyInventoryOverviewDto // TODO : Rename to CardOverviewDto
     {
         public int Id { get; set; }
 

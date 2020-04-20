@@ -10,7 +10,7 @@ using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Carpentry.UI.Controllers
+namespace Carpentry.UI.Legacy.Controllers
 {
     [Route("api/[controller]")]
     public class DecksController : ControllerBase
@@ -42,7 +42,7 @@ namespace Carpentry.UI.Controllers
         //decks/add
         //- add a deck
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> Add([FromBody] DeckPropertiesDto deckProps)
+        public async Task<ActionResult<int>> Add([FromBody] LegacyDeckPropertiesDto deckProps)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Carpentry.UI.Controllers
         //decks/update
         //- update properties of a deck
         [HttpPost("[action]")]
-        public async Task<ActionResult> Update([FromBody] DeckPropertiesDto deckProps)
+        public async Task<ActionResult> Update([FromBody] LegacyDeckPropertiesDto deckProps)
         {
             try
             {
@@ -90,12 +90,12 @@ namespace Carpentry.UI.Controllers
         //decks/Search
         //- get a list of deck properties & stats
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<DeckPropertiesDto>>> Search()
+        public async Task<ActionResult<IEnumerable<LegacyDeckPropertiesDto>>> Search()
         {
             try
             {
                 var results = await _decks.GetDeckOverviews();
-                IEnumerable<DeckPropertiesDto> mappedResults = await _mapper.ToDto(results);
+                IEnumerable<LegacyDeckPropertiesDto> mappedResults = await _mapper.ToDto(results);
                 return Ok(mappedResults);
             }
             catch (Exception ex)
@@ -107,12 +107,12 @@ namespace Carpentry.UI.Controllers
         //decks/Get
         //- get a deck (with cards)
         [HttpGet("[action]")]
-        public async Task<ActionResult<DeckDetailDto>> Get(int deckId)
+        public async Task<ActionResult<LegacyDeckDetailDto>> Get(int deckId)
         {
             try
             {
                 var results = await _decks.GetDeckDetail(deckId);
-                DeckDetailDto mappedResults = await _mapper.ToDto(results);
+                LegacyDeckDetailDto mappedResults = await _mapper.ToDto(results);
                 return Ok(mappedResults);
             }
             catch (Exception ex)
@@ -123,7 +123,7 @@ namespace Carpentry.UI.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> AddCard([FromBody] DeckCardDto dto)
+        public async Task<ActionResult> AddCard([FromBody] LegacyDeckCardDto dto)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace Carpentry.UI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> UpdateCard([FromBody] DeckCardDto card)
+        public async Task<ActionResult> UpdateCard([FromBody] LegacyDeckCardDto card)
         {
             try
             {

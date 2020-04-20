@@ -46,7 +46,7 @@ namespace Carpentry.UI.Legacy.Controllers
 
         //Add
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> Add([FromBody] InventoryCardDto dto)
+        public async Task<ActionResult<int>> Add([FromBody] LegacyInventoryCardDto dto)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Carpentry.UI.Legacy.Controllers
 
         //AddCardBatch
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> AddBatch([FromBody] List<InventoryCardDto> dto)
+        public async Task<ActionResult<int>> AddBatch([FromBody] List<LegacyInventoryCardDto> dto)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace Carpentry.UI.Legacy.Controllers
 
         //Update
         [HttpPost("[action]")]
-        public async Task<ActionResult> Update([FromBody] InventoryCardDto dto)
+        public async Task<ActionResult> Update([FromBody] LegacyInventoryCardDto dto)
         {
             try
             {
@@ -106,12 +106,12 @@ namespace Carpentry.UI.Legacy.Controllers
 
         //Search
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> Search([FromBody] InventoryQueryParameter param)
+        public async Task<ActionResult<IEnumerable<LegacyInventoryOverviewDto>>> Search([FromBody] InventoryQueryParameter param)
         {
             try
             {
                 var result = await _inventory.GetInventoryOverviews(param);
-                List<InventoryOverviewDto> mappedResult = _mapper.ToDto(result);
+                List<LegacyInventoryOverviewDto> mappedResult = _mapper.ToDto(result);
                 return Ok(mappedResult);
             }
             catch (Exception ex)
@@ -121,13 +121,13 @@ namespace Carpentry.UI.Legacy.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<InventoryDetailDto>> GetByName(string name)
+        public async Task<ActionResult<LegacyInventoryDetailDto>> GetByName(string name)
         {
             try
             {
                 var result = await _inventory.GetInventoryDetailByName(name);
                 //InventoryDetailDto mappedResult = new InventoryDetailDto(result);
-                InventoryDetailDto mappedResult = _mapper.ToDto(result);
+                LegacyInventoryDetailDto mappedResult = _mapper.ToDto(result);
                 return Ok(mappedResult);
             }
             catch (Exception ex)

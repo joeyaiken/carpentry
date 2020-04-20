@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.UI.Models;
 using Moq;
-using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Models;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 using Microsoft.AspNetCore.Mvc;
-using Carpentry.UI.Util;
 
 namespace Carpentry.UI.Tests.UnitTests
 {
@@ -15,92 +13,91 @@ namespace Carpentry.UI.Tests.UnitTests
     public class DecksControllerTests
     {
 
-        private readonly Controllers.DecksController _decksController;
+        //private readonly Controllers.DecksController _decksController;
 
+        /// <summary>
+        /// I initially created a single mock service & controller intance in the test constructor
+        /// Instead, I want to arrange & mock only the service methods I expect to see called
+        /// </summary>
         public DecksControllerTests()
         {
-            //mock deck service
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            ////mock deck service
+            //var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
-            //Add
-            mockDeckService
-                .Setup(p => p.AddDeck(It.IsNotNull<DeckProperties>()))
-                .ReturnsAsync(1);
+            ////Add
+            //mockDeckService
+            //    .Setup(p => p.AddDeck(It.IsNotNull<DeckPropertiesDto>()))
+            //    .ReturnsAsync(1);
 
-            //Update
-            mockDeckService
-                .Setup(p => p.UpdateDeck(It.IsNotNull<DeckProperties>()))
-                .Returns(Task.CompletedTask);
+            ////Update
+            //mockDeckService
+            //    .Setup(p => p.UpdateDeck(It.IsNotNull<DeckPropertiesDto>()))
+            //    .Returns(Task.CompletedTask);
 
-            //Delete
-            mockDeckService
-                .Setup(p => p.DeleteDeck(It.Is<int>(i => i > 0)))
-                .Returns(Task.CompletedTask);
+            ////Delete
+            //mockDeckService
+            //    .Setup(p => p.DeleteDeck(It.Is<int>(i => i > 0)))
+            //    .Returns(Task.CompletedTask);
 
-            //Search
-            IEnumerable<DeckProperties> searchResults = new List<DeckProperties>()
-            {
-                new DeckProperties{ },
-                new DeckProperties{ },
-                new DeckProperties{ },
-                new DeckProperties{ },
-                new DeckProperties{ },
-            }.AsEnumerable();
+            ////Search
+            //IEnumerable<DeckPropertiesDto> searchResults = new List<DeckPropertiesDto>()
+            //{
+            //    new DeckPropertiesDto{ },
+            //    new DeckPropertiesDto{ },
+            //    new DeckPropertiesDto{ },
+            //    new DeckPropertiesDto{ },
+            //    new DeckPropertiesDto{ },
+            //}.AsEnumerable();
 
-            mockDeckService
-                .Setup(p => p.GetDeckOverviews())
-                .ReturnsAsync(searchResults);
+            //mockDeckService
+            //    .Setup(p => p.GetDeckOverviews())
+            //    .ReturnsAsync(searchResults);
 
-            //Get
-            mockDeckService
-                .Setup(p => p.GetDeckDetail(It.Is<int>(i => i > 0)))
-                .ReturnsAsync(new DeckDetail 
-                { 
-                    CardDetails = new List<InventoryCard>(),
-                    CardOverviews = new List<InventoryOverview>(),
-                    Props = new DeckProperties(),
-                    Stats = new DeckStats(),
-                });
-
-
-            //AddCard
-            mockDeckService
-                //.Setup(p => p.AddDeckCard(It.IsNotNull<DeckCard>()))
-                .Setup(p => p.AddDeckCard(It.Is<DeckCard>(c => c != null && c.Id == 0)))
-                .Returns(Task.CompletedTask);
+            ////Get
+            //mockDeckService
+            //    .Setup(p => p.GetDeckDetail(It.Is<int>(i => i > 0)))
+            //    .ReturnsAsync(new DeckDetailDto
+            //    { 
+            //        CardDetails = new List<InventoryCardDto>(),
+            //        CardOverviews = new List<InventoryOverviewDto>(),
+            //        Props = new DeckPropertiesDto(),
+            //        Stats = new DeckStatsDto(),
+            //    });
 
 
-            //.ReturnsAsync(1);
+            ////AddCard
+            //mockDeckService
+            //    //.Setup(p => p.AddDeckCard(It.IsNotNull<DeckCard>()))
+            //    .Setup(p => p.AddDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id == 0)))
+            //    .Returns(Task.CompletedTask);
 
-            //UpdateCard
-            mockDeckService
-                //.Setup(p => p.UpdateDeckCard(It.IsNotNull<DeckCard>()))
-                .Setup(p => p.UpdateDeckCard(It.Is<DeckCard>(c => c != null && c.Id > 0)))
-                .Returns(Task.CompletedTask);
 
-            //RemoveCard
-            mockDeckService
-                .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i > 0)))
-                .Returns(Task.CompletedTask);
+            ////.ReturnsAsync(1);
 
-            //var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
+            ////UpdateCard
+            //mockDeckService
+            //    //.Setup(p => p.UpdateDeckCard(It.IsNotNull<DeckCard>()))
+            //    .Setup(p => p.UpdateDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id > 0)))
+            //    .Returns(Task.CompletedTask);
 
-            var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
+            ////RemoveCard
+            //mockDeckService
+            //    .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i > 0)))
+            //    .Returns(Task.CompletedTask);
 
-            var mapperService = new MapperService(mockRefService.Object);
-
-            //create controller
-            _decksController = new Controllers.DecksController(mockDeckService.Object, mapperService);
+            ////create controller
+            //_decksController = new Controllers.DecksController(mockDeckService.Object, mapperService);
         }
 
         [TestMethod]
         public void Decks_GetStatus_ReturnsAsyncOK_Test()
         {
-            //assemble
-
+            //Arrange            
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
 
             //act
-            var response = _decksController.Get();
+            var response = decksController.Get();
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
@@ -113,27 +110,44 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Decks_Add_ReturnsAsyncOK_Test()
         {
-            //assemble
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            int expectedNewId = 1;
+
+            mockDeckService
+                .Setup(p => p.AddDeck(It.IsNotNull<DeckPropertiesDto>()))
+                .ReturnsAsync(expectedNewId);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
             DeckPropertiesDto mockDeck = new DeckPropertiesDto
             {
                 Name = "A Mock Deck",
                 Notes = "A mock deck for unit testing",
-                Format = "Modern", //CAN a format be null?? I hope so, otherwise I need to query a format
+                Format = "modern",
             };
 
             //act
-            ActionResult<int> response = await _decksController.Add(mockDeck);
+            ActionResult<int> response = await decksController.Add(mockDeck);
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
             var typedResult = response.Result as OkObjectResult;
-            Assert.AreEqual(1, typedResult.Value);
+            Assert.AreEqual(expectedNewId, typedResult.Value);
         }
         
         [TestMethod]
         public async Task Decks_Update_ReturnsAsyncOK_Test()
         {
-            //assemble
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            mockDeckService
+                .Setup(p => p.UpdateDeck(It.IsNotNull<DeckPropertiesDto>()))
+                .Returns(Task.CompletedTask);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+
             DeckPropertiesDto mockDeck = new DeckPropertiesDto
             {
                 Id = 3,
@@ -143,7 +157,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await _decksController.Update(mockDeck);
+            var response = await decksController.Update(mockDeck);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
@@ -152,11 +166,19 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Decks_Delete_ReturnsAsyncOK_Test()
         {
-            //assemble
-            int idToSubmit = 3;
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            
+            int idToSubmit = 1;
 
+            mockDeckService
+                .Setup(p => p.DeleteDeck(It.Is<int>(i => i == idToSubmit)))
+                .Returns(Task.CompletedTask);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+            
             //act
-            var response = await _decksController.Delete(idToSubmit);
+            var response = await decksController.Delete(idToSubmit);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
@@ -165,10 +187,26 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Decks_Search_ReturnsAsyncOK_Test()
         {
-            //assemble
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
+            IEnumerable<DeckPropertiesDto> expectedSearchResults = new List<DeckPropertiesDto>()
+            {
+                new DeckPropertiesDto{ },
+                new DeckPropertiesDto{ },
+                new DeckPropertiesDto{ },
+                new DeckPropertiesDto{ },
+                new DeckPropertiesDto{ },
+            }.AsEnumerable();
+
+            mockDeckService
+                .Setup(p => p.GetDeckOverviews())
+                .ReturnsAsync(expectedSearchResults);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+            
             //act
-            var response = await _decksController.Search();
+            var response = await decksController.Search();
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
@@ -183,11 +221,26 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Decks_Get_ReturnsAsyncOK_Test()
         {
-            //assemble
+            //arrange
             int deckIdToRequest = 1;
 
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            mockDeckService
+                .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
+                .ReturnsAsync(new DeckDetailDto
+                {
+                    CardDetails = new List<InventoryCardDto>(),
+                    CardOverviews = new List<InventoryOverviewDto>(),
+                    Props = new DeckPropertiesDto(),
+                    Stats = new DeckStatsDto(),
+                });
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+            
+
             //act
-            var response = await _decksController.Get(deckIdToRequest);
+            var response = await decksController.Get(deckIdToRequest);
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
@@ -200,7 +253,15 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Decks_AddCard_ReturnsAsyncOK_Test()
         {
-            //assemble
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            mockDeckService
+                .Setup(p => p.AddDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id == 0)))
+                .Returns(Task.CompletedTask);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+
             DeckCardDto mockCard = new DeckCardDto
             {
                 DeckId = 1,
@@ -209,7 +270,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await _decksController.AddCard(mockCard);
+            var response = await decksController.AddCard(mockCard);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
@@ -218,7 +279,15 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Decks_UpdateCard_ReturnsAsyncOK_Test()
         {
-            //assemble
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            mockDeckService
+                .Setup(p => p.UpdateDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id > 0)))
+                .Returns(Task.CompletedTask);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+
             DeckCardDto mockCard = new DeckCardDto
             {
                 Id = 5,
@@ -228,7 +297,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await _decksController.UpdateCard(mockCard);
+            var response = await decksController.UpdateCard(mockCard);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
@@ -237,11 +306,19 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Decks_RemoveCard_ReturnsAsyncOK_Test()
         {
-            //assemble
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
             int idToSubmit = 3;
 
+            mockDeckService
+                .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i == idToSubmit)))
+                .Returns(Task.CompletedTask);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+
             //act
-            var response = await _decksController.RemoveCard(idToSubmit);
+            var response = await decksController.RemoveCard(idToSubmit);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));

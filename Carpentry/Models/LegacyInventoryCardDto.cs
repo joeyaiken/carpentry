@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Carpentry.UI.Legacy.Models
 {
-    public class InventoryCardDto
+    public class LegacyInventoryCardDto
     {
-        public InventoryCardDto()
+        public LegacyInventoryCardDto()
         {
-            DeckCards = new List<InventoryDeckCardDto>();
+            DeckCards = new List<LegacyInventoryDeckCardDto>();
         }
 
         [JsonProperty("id")]
@@ -38,6 +38,6 @@ namespace Carpentry.UI.Legacy.Models
         //public List<int> DeckCardIds { get; set; }
 
         [JsonProperty("deckCards")]
-        public List<InventoryDeckCardDto> DeckCards { get; set; }
+        public List<LegacyInventoryDeckCardDto> DeckCards { get; set; }
     }
 }

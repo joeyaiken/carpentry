@@ -1,7 +1,5 @@
-﻿using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Models;
-using Carpentry.UI.Models;
-using Carpentry.UI.Util;
+﻿using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -15,45 +13,45 @@ namespace Carpentry.UI.Tests.UnitTests
     [TestClass]
     public class CoreControllerTests
     {
-        private readonly Controllers.CoreController _coreController;
+        //private readonly Controllers.CoreController _coreController;
 
         public CoreControllerTests()
         {
             //var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
 
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
+            //var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
 
-            mockFilterService
-                .Setup(p => p.GetCardStatusFilterOptions())
-                .ReturnsAsync(new List<FilterOption>());
+            //mockFilterService
+            //    .Setup(p => p.GetCardStatusFilterOptions())
+            //    .ReturnsAsync(new List<FilterOption>());
 
-            mockFilterService
-                .Setup(p => p.GetFormatFilterOptions())
-                .ReturnsAsync(new List<FilterOption>());
+            //mockFilterService
+            //    .Setup(p => p.GetFormatFilterOptions())
+            //    .ReturnsAsync(new List<FilterOption>());
 
-            mockFilterService
-                .Setup(p => p.GetManaColorFilterOptions())
-                .ReturnsAsync(new List<FilterOption>());
+            //mockFilterService
+            //    .Setup(p => p.GetManaColorFilterOptions())
+            //    .ReturnsAsync(new List<FilterOption>());
 
-            mockFilterService
-                .Setup(p => p.GetRarityFilterOptions())
-                .ReturnsAsync(new List<FilterOption>());
+            //mockFilterService
+            //    .Setup(p => p.GetRarityFilterOptions())
+            //    .ReturnsAsync(new List<FilterOption>());
 
-            mockFilterService
-                .Setup(p => p.GetSetFilterOptions())
-                .ReturnsAsync(new List<FilterOption>());
+            //mockFilterService
+            //    .Setup(p => p.GetSetFilterOptions())
+            //    .ReturnsAsync(new List<FilterOption>());
 
-            mockFilterService
-                .Setup(p => p.GetTypeFilterOptions())
-                .ReturnsAsync(new List<FilterOption>());
+            //mockFilterService
+            //    .Setup(p => p.GetTypeFilterOptions())
+            //    .ReturnsAsync(new List<FilterOption>());
 
-            //var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
+            ////var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
 
-            var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
+            //var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
 
-            var mapperService = new MapperService(mockRefService.Object);
+            //var mapperService = new MapperService(mockRefService.Object);
 
-            _coreController = new Controllers.CoreController(mockFilterService.Object, mapperService);
+            //_coreController = new Controllers.CoreController(mockFilterService.Object, mapperService);
         }
 
         #region Tests - Controller methods all return Ok/Accepted
@@ -62,10 +60,12 @@ namespace Carpentry.UI.Tests.UnitTests
         public void Core_GetStatus_ReturnsAsyncOK_Test()
         {
             //assemble
+            var mockCoreService = new Mock<ICoreService>(MockBehavior.Strict);
 
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
-            var response = _coreController.Get();
+            var response = coreController.Get();
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
@@ -79,10 +79,26 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_GetFilterValues_ReturnsAsyncOK_Test()
         {
             //assemble
+            var mockCoreService = new Mock<ICoreService>(MockBehavior.Strict);
 
+            var expectedResult = new AppFiltersDto()
+            {
+                Formats = new List<FilterOptionDto>(),
+                ManaColors = new List<FilterOptionDto>(),
+                Rarities = new List<FilterOptionDto>(),
+                Sets = new List<FilterOptionDto>(),
+                Statuses = new List<FilterOptionDto>(),
+                Types = new List<FilterOptionDto>(),
+            };
+
+            mockCoreService
+                .Setup(p => p.GetAppFilterValues())
+                .ReturnsAsync(expectedResult);
+
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
-            var response = await _coreController.GetFilterValues();
+            var response = await coreController.GetFilterValues();
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));

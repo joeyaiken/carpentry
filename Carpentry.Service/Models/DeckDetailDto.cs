@@ -1,10 +1,7 @@
-﻿//using Carpentry.Data.Models;
-using Carpentry.Logic.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Carpentry.UI.Legacy.Models
+namespace Carpentry.Service.Models
 {
     public class DeckDetailDto //: CardCollectionDto
     {

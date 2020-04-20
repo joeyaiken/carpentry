@@ -11,11 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 //using Carpentry.Data.LegacyDataContextLegacy;
 using Carpentry.Data.LegacyDataContext;
-using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Implementations;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Implementations;
 //using Carpentry.Interfaces;
 //using Carpentry.Implementations;
 using Microsoft.Extensions.Hosting;
+using Carpentry.UI.Legacy.Util;
 
 namespace Carpentry
 {
@@ -31,29 +32,39 @@ namespace Carpentry
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Going to actually pull the fill filepaths from app settings now
-            //TODO Eventually I could make a static config class and just read from that class
-            //TODO Everything else still needs this DB pattern
-            string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
-            //string legacyDatabaseFilepath = Configuration.GetValue<string>("AppSettings:LegacyDatabaseFilepath");
+            ////Going to actually pull the fill filepaths from app settings now
+            ////TODO Eventually I could make a static config class and just read from that class
+            ////TODO Everything else still needs this DB pattern
+            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+            ////string legacyDatabaseFilepath = Configuration.GetValue<string>("AppSettings:LegacyDatabaseFilepath");
 
-            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            //services.AddDbContext<LegacySqliteDataContext>(options => options.UseSqlite($"Data Source={legacyDatabaseFilepath}"));
-            services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
+            ////services.AddDbContext<LegacySqliteDataContext>(options => options.UseSqlite($"Data Source={legacyDatabaseFilepath}"));
+            //services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
 
-            //string repo
-            services.AddScoped<ICardStringRepo, LegacyScryfallRepo>();
-            services.AddHttpClient<ICardStringRepo, LegacyScryfallRepo>();
+            ////string repo
+            //services.AddScoped<ICardStringRepo, LegacyScryfallRepo>();
+            //services.AddHttpClient<ICardStringRepo, LegacyScryfallRepo>();
 
-            //new & legacy DBs
-            services.AddScoped<ILegacyCardRepo, SqliteCardRepo>();
-            //services.AddScoped<ILegacySqliteCardRepo, LegacySqliteCardRepo>();
+            ////new & legacy DBs
+            //services.AddScoped<ILegacyCardRepo, SqliteCardRepo>();
+            ////services.AddScoped<ILegacySqliteCardRepo, LegacySqliteCardRepo>();
 
 
 
             //carpentry service
-            services.AddScoped<ICarpentryService, CarpentryService>();
+            //services.AddScoped<ICarpentryService, CarpentryService>();
+
+            //Service layer services
+            services.AddScoped<ICoreService, CoreService>();
+            services.AddScoped<IDeckService, DeckService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ICardSearchService, CardSearchService>();
+
+            //Util services
+            services.AddScoped<IMapperService, MapperService>();
+
 
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

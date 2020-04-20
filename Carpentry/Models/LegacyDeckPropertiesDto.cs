@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Carpentry.UI.Legacy.Models
 {
-    public class DeckPropertiesDto
+    public class LegacyDeckPropertiesDto
     {
         [JsonProperty("id")]
         public int Id { get; set; }
