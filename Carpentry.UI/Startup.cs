@@ -53,15 +53,15 @@ namespace Carpentry.UI
             services.AddScoped<IDeckDataRepo, DeckDataRepo>();
             services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
             services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
-
             services.AddScoped<IDataReferenceRepo, DataReferenceRepo>();
+
 
             //DB services
             services.AddScoped<IDataReferenceService, DataReferenceService>();
             services.AddScoped<IDataQueryService, DataQueryService>();
 
 
-            //Logic services
+            ////Logic services
             services.AddScoped<ICardSearchService, CardSearchService>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
@@ -82,7 +82,6 @@ namespace Carpentry.UI
             services.AddScoped<IDeckControllerService, DeckControllerService>();
             services.AddScoped<IInventoryControllerService, InventoryControllerService>();
             services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
-
 
 
 

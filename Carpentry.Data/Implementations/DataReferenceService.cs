@@ -16,12 +16,14 @@ namespace Carpentry.Data.Implementations
     {
         //readonly ScryfallDataContext _scryContext;
         private readonly CarpentryDataContext _cardContext;
-        private readonly ILogger<DataReferenceService> _logger;
+        //private readonly ILogger<DataReferenceService> _logger;
 
-        public DataReferenceService(CarpentryDataContext cardContext, ILogger<DataReferenceService> logger)
+        public DataReferenceService(CarpentryDataContext cardContext
+            //, ILogger<DataReferenceService> logger
+            )
         {
             _cardContext = cardContext;
-            _logger = logger;
+            //_logger = logger;
         }
 
         //public async Task<MagicFormat> GetFormatByName(string formatName)
