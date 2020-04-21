@@ -1,4 +1,5 @@
 ﻿using Carpentry.Data.Interfaces;
+using Carpentry.Data.QueryResults;
 using Carpentry.Service.Implementations;
 using Carpentry.Service.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,13 +21,29 @@ namespace Carpentry.Service.Tests.UnitTests
             //Arrange
             var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
 
-            //AppFiltersDto expectedResult = new AppFiltersDto();
+            mockReferenceService
+                .Setup(p => p.GetAllMagicFormats())
+                .ReturnsAsync(new List<DataReferenceValue<int>>());
 
-            //mockReferenceService
-            //    .Setup(p => p.GetAllCardVariantTypes())
-            //    .ReturnsAsync(new List<Data.DataModels.CardVariantTypeData>())
+            mockReferenceService
+                .Setup(p => p.GetAllManaColors())
+                .ReturnsAsync(new List<DataReferenceValue<char>>());
 
+            mockReferenceService
+                .Setup(p => p.GetAllRarities())
+                .ReturnsAsync(new List<DataReferenceValue<char>>());
 
+            mockReferenceService
+                .Setup(p => p.GetAllSets())
+                .ReturnsAsync(new List<DataReferenceValue<int>>());
+
+            mockReferenceService
+                .Setup(p => p.GetAllStatuses())
+                .ReturnsAsync(new List<DataReferenceValue<int>>());
+
+            mockReferenceService
+                .Setup(p => p.GetAllTypes())
+                .Returns(new List<DataReferenceValue<string>>());
 
             CoreControllerService service = new CoreControllerService(mockReferenceService.Object);
 

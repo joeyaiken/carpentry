@@ -73,6 +73,16 @@ namespace Carpentry.Service.Implementations
                 })
                 .ToList();
 
+            var allManaTypes = await _dataReferenceService.GetAllManaColors();
+
+            result.ManaColors = allManaTypes
+                .Select(x => new FilterOptionDto()
+                {
+                    Value = x.Id.ToString(),
+                    Name = x.Name
+                })
+                .ToList();
+
             return result;
         }
     }
