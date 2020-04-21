@@ -318,6 +318,22 @@ namespace Carpentry.Logic.Implementations
             return validationResult;
         }
 
+        private static DeckProperties MapDeckDataToProperties(DeckData dbDeck)
+        {
+            DeckProperties mappedDeck = new DeckProperties()
+            {
+                Id = dbDeck.Id,
+                BasicB = dbDeck.BasicB,
+                BasicG = dbDeck.BasicG,
+                BasicR = dbDeck.BasicR,
+                BasicU = dbDeck.BasicU,
+                BasicW = dbDeck.BasicW,
+                FormatId = dbDeck.Format.Id
+            };
+            return mappedDeck;
+        }
+
+
         #endregion
 
         #region Public methods
@@ -394,21 +410,7 @@ namespace Carpentry.Logic.Implementations
         }
 
 
-        private static DeckProperties MapDeckDataToProperties(DeckData dbDeck)
-        {
-            DeckProperties mappedDeck = new DeckProperties()
-            {
-                Id = dbDeck.Id,
-                BasicB = dbDeck.BasicB,
-                BasicG = dbDeck.BasicG,
-                BasicR = dbDeck.BasicR,
-                BasicU = dbDeck.BasicU,
-                BasicW = dbDeck.BasicW,
-                FormatId = dbDeck.Format.Id
-            };
-            return mappedDeck;
-        }
-
+        
         //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
         //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
         public async Task<DeckDetail> GetDeckDetail(int deckId)
@@ -467,7 +469,15 @@ namespace Carpentry.Logic.Implementations
             return result;
         }
 
-        
+        /// <summary>
+        /// Adds a card to a deck
+        /// If the dto references an existing deck card, and that card is ALREADY in a deck, no new card is added
+        ///     Instead, the existing card is moved to this deck
+        /// If the card exists, but isn't in a deck, then a new deck card is created
+        /// If the inventory card doesn't exist, then a new one is mapped
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         public async Task AddDeckCard(DeckCard dto)
         {
             //Don't need to add an inventory card
@@ -529,7 +539,7 @@ namespace Carpentry.Logic.Implementations
 
         public async Task UpdateDeckCard(DeckCard card)
         {
-            Data.DataModels.DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
+            DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
 
             dbCard.DeckId = card.DeckId;
             dbCard.CategoryId = card.CategoryId;

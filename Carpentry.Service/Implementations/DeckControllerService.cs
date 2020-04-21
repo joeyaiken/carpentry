@@ -8,6 +8,7 @@ using Carpentry.Logic.Models;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.QueryResults;
+using System.Linq;
 
 namespace Carpentry.Service.Implementations
 {
@@ -86,22 +87,91 @@ namespace Carpentry.Service.Implementations
 
         public async Task AddDeckCard(DeckCardDto dto)
         {
-            throw new NotImplementedException();
+            DeckCard mappedCard = MapDeckCardDto(dto);
+
+            await _deckService.AddDeckCard(mappedCard);
         }
 
         public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto)
         {
-            throw new NotImplementedException();
+            List<DeckCard> mappedCards = dto.Select(x => MapDeckCardDto(x)).ToList();
+
+            await _deckService.AddDeckCardBatch(mappedCards);
         }
 
-        public async Task UpdateDeckCard(DeckCardDto card)
+        public async Task UpdateDeckCard(DeckCardDto dto)
         {
-            throw new NotImplementedException();
+            DeckCard mappedCard = MapDeckCardDto(dto);
+
+            await _deckService.UpdateDeckCard(mappedCard);
         }
 
         public async Task DeleteDeckCard(int deckCardId)
         {
-            throw new NotImplementedException();
+            await _deckService.DeleteDeckCard(deckCardId);
         }
+
+        #region private
+
+        private static DeckCard MapDeckCardDto(DeckCardDto dto)
+        {
+            if(dto == null)
+            {
+                return null;
+            }
+
+            DeckCard result = new DeckCard()
+            {
+                CategoryId = dto.CategoryId,
+                DeckId = dto.DeckId,
+                InventoryCard = MapInventoryCardDto(dto.InventoryCard),
+            };
+
+            return result;
+        }
+
+        private static InventoryCard MapInventoryCardDto(InventoryCardDto dto)
+        {
+            if(dto == null)
+            {
+                return null;
+            }
+
+            InventoryCard result = new InventoryCard()
+            {
+                IsFoil = dto.IsFoil,
+                InventoryCardStatusId = dto.InventoryCardStatusId,
+                MultiverseId = dto.MultiverseId,
+                VariantType = dto.VariantType,
+                Name = dto.Name,
+                Set = dto.Set,
+                Id = dto.Id,
+                DeckCards = MapInventoryDeckCardDtos(dto.DeckCards),
+            };
+
+            return result;
+        }
+
+        private static List<InventoryDeckCard> MapInventoryDeckCardDtos(List<InventoryDeckCardDto> cards)
+        {
+            if(cards == null)
+            {
+                return null;
+            }
+
+            List<InventoryDeckCard> result = cards.Select(x => new InventoryDeckCard()
+            {
+                DeckCardCategory = x.DeckCardCategory,
+                DeckId = x.DeckId,
+                DeckName = x.DeckName,
+                Id = x.Id,
+                InventoryCardId = x.InventoryCardId,
+            }).ToList();
+
+            return result;
+        }
+
+        #endregion
+
     }
 }

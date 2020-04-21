@@ -221,9 +221,16 @@ namespace Carpentry.Service.Tests.UnitTests
 
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
+            mockDeckService
+                .Setup(p => p.AddDeckCard(It.IsAny<DeckCard>()))
+                .Returns(Task.CompletedTask);
+
             var deckService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
 
-            DeckCardDto cardToAdd = new DeckCardDto();
+            DeckCardDto cardToAdd = new DeckCardDto()
+            {
+                InventoryCard = new InventoryCardDto(),
+            };
 
             //Act
             await deckService.AddDeckCard(cardToAdd);
@@ -239,6 +246,10 @@ namespace Carpentry.Service.Tests.UnitTests
             var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
 
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            mockDeckService
+                .Setup(p => p.AddDeckCardBatch(It.IsNotNull<IEnumerable<DeckCard>>()))
+                .Returns(Task.CompletedTask);
 
             var deckService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
 
@@ -259,6 +270,10 @@ namespace Carpentry.Service.Tests.UnitTests
 
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
+            mockDeckService
+                .Setup(p => p.UpdateDeckCard(It.IsNotNull<DeckCard>()))
+                .Returns(Task.CompletedTask);
+
             var deckService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
 
             DeckCardDto card = new DeckCardDto();
@@ -274,13 +289,17 @@ namespace Carpentry.Service.Tests.UnitTests
         public async Task DeckControllerService_DeleteDeckCard_Test()
         {
             //Arrange
+            int idToDelete = 1;
+
             var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
 
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
-            var deckService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
+            mockDeckService
+                .Setup(p => p.DeleteDeckCard(It.Is<int>(x => x == idToDelete)))
+                .Returns(Task.CompletedTask);
 
-            int idToDelete = 1;
+            var deckService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
 
             //Act
             await deckService.DeleteDeckCard(idToDelete);
