@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -178,9 +179,30 @@ namespace Carpentry.Service.Tests.UnitTests
         public async Task DeckControllerService_GetDeckOverviews_Test()
         {
             //Arrange
+            List<DeckProperties> expectedServiceResult = new List<DeckProperties>()
+            {
+                new DeckProperties(){ FormatId = 1 },
+                new DeckProperties(){ FormatId = 1 },
+                new DeckProperties(){ FormatId = 2 },
+            };
+
             var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
 
+            List<DataReferenceValue<int>> magicFormats = new List<DataReferenceValue<int>>()
+            {
+                new DataReferenceValue<int>{ Id = 1, Name = "modern" },
+                new DataReferenceValue<int>{ Id = 2, Name = "standard" },
+            };
+
+            mockReferenceService
+                .Setup(p => p.GetAllMagicFormats())
+                .ReturnsAsync(magicFormats);
+
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            mockDeckService
+                .Setup(p => p.GetDeckOverviews())
+                .ReturnsAsync(expectedServiceResult);
 
             var deckService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
 
@@ -189,28 +211,43 @@ namespace Carpentry.Service.Tests.UnitTests
 
             //Assert
             Assert.IsNotNull(result);
-            
-            Assert.Fail("want this to keep failing untill I have more conditions - like number of expected records"); //want this to keep failing
+            Assert.AreEqual(expectedServiceResult.Count, result.Count());
         }
 
         [TestMethod]
         public async Task DeckControllerService_GetDeckDetail_Test()
         {
             //Arrange
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            DataReferenceValue<int> expectedFormat = new DataReferenceValue<int>() { Id = 1, Name = "commander" };
 
+            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            
+            mockReferenceService.Setup(p => p.GetMagicFormat(It.IsNotNull<int>()))
+                .ReturnsAsync(expectedFormat);
+            
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
-            var deckService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
+            DeckDetail expectedDetailResult = new DeckDetail()
+            {
+                Props = new DeckProperties() { FormatId = 1 },
+                CardDetails = new List<InventoryCard>(),
+                CardOverviews = new List<InventoryOverview>(),
+                Stats = new DeckStats(),
+            };
+
+            mockDeckService
+                .Setup(p => p.GetDeckDetail(It.IsNotNull<int>()))
+                .ReturnsAsync(expectedDetailResult);
+                
+            var deckControllerService = new DeckControllerService(mockReferenceService.Object, mockDeckService.Object);
 
             int idToRequest = 1;
 
             //Act
-            var result = await deckService.GetDeckDetail(idToRequest);
+            var result = await deckControllerService.GetDeckDetail(idToRequest);
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.Fail("Must add more assert conditions");
         }
 
         [TestMethod]

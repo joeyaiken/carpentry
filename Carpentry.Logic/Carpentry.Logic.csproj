@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Implementations\FilterService.cs" />
+    <Compile Remove="Interfaces\IFilterService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Carpentry.Data\Carpentry.Data.csproj" />
   </ItemGroup>
 
