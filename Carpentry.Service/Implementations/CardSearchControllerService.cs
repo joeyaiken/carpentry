@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Service.Implementations
 {
-    public class CardSearchService : ICardSearchService
+    public class CardSearchControllerService : ICardSearchControllerService
     {
+        public CardSearchControllerService()
+        {
+
+        }
+
         public async Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters)
         {
             throw new NotImplementedException();

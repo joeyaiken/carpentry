@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Service.Interfaces
 {
-    public interface ICardSearchService
+    public interface ICardSearchControllerService
     {
         Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters);
 

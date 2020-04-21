@@ -16,9 +16,9 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
         }
 
-        private readonly ICoreService _coreService;
+        private readonly ICoreControllerService _coreService;
 
-        public CoreController(ICoreService coreService)
+        public CoreController(ICoreControllerService coreService)
         {
             _coreService = coreService;
         }

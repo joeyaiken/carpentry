@@ -1,17 +1,8 @@
-﻿//using Carpentry.Data.LegacyDataContext;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-//using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-//using Carpentry.Data.LegacyDataContextLegacy;
 
 namespace Carpentry.UI.Tests.Legacy
 {
@@ -24,7 +15,6 @@ namespace Carpentry.UI.Tests.Legacy
                 return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
-                //.AddUserSecrets<CarpentryFactory>()
                 .AddEnvironmentVariables()
                 .Build();
             }
@@ -33,8 +23,7 @@ namespace Carpentry.UI.Tests.Legacy
         protected override IWebHostBuilder CreateWebHostBuilder()
         {
             return WebHost.CreateDefaultBuilder()
-                .UseConfiguration(Configuration) // Necessary for properly loading service endpoints
-                                                 //.UseSerilog()
+                .UseConfiguration(Configuration)
                 .UseStartup<Startup>();
         }
 

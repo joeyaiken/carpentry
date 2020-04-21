@@ -54,13 +54,11 @@ namespace Carpentry.UI.Tests.UnitTests
             //_coreController = new Controllers.CoreController(mockFilterService.Object, mapperService);
         }
 
-        #region Tests - Controller methods all return Ok/Accepted
-
         [TestMethod]
         public void Core_GetStatus_ReturnsAsyncOK_Test()
         {
             //assemble
-            var mockCoreService = new Mock<ICoreService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICoreControllerService>(MockBehavior.Strict);
 
             var coreController = new Controllers.CoreController(mockCoreService.Object);
 
@@ -79,7 +77,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_GetFilterValues_ReturnsAsyncOK_Test()
         {
             //assemble
-            var mockCoreService = new Mock<ICoreService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICoreControllerService>(MockBehavior.Strict);
 
             var expectedResult = new AppFiltersDto()
             {
@@ -195,7 +193,6 @@ namespace Carpentry.UI.Tests.UnitTests
         //    //Assert.Fail();
         //}
 
-        #endregion
 
     }
 }

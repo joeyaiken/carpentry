@@ -15,9 +15,9 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
         }
 
-        private readonly IDeckService _decks;
+        private readonly IDeckControllerService _decks;
 
-        public DecksController(IDeckService decks)
+        public DecksController(IDeckControllerService decks)
         {
             _decks = decks;
         }

@@ -1,6 +1,6 @@
 ﻿//using Carpentry.Interfaces;
-using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Models;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 //using Carpentry.Models;
@@ -20,15 +20,15 @@ namespace Carpentry.UI.Legacy.Controllers
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
         }
 
-        private readonly IFilterService _filterService;
-        private readonly IMapperService _mapper;
+        private readonly ICoreControllerService _coreService;
+        private readonly MapperService _mapper;
 
         public CoreController(
-            IFilterService filterService,
-            IMapperService mapper
+            ICoreControllerService coreService,
+            MapperService mapper
             )
         {
-            _filterService = filterService;
+            _coreService = coreService;
             _mapper = mapper;
         }
 
@@ -47,23 +47,19 @@ namespace Carpentry.UI.Legacy.Controllers
         {
             try
             {
-                //List<FilterOption> formats = await _filterService.GetFormatFilterOptions();
+                AppFiltersDto result = await _coreService.GetAppFilterValues();
 
-                //List<FilterOptionDto> mappedFormats = formats.Select(x => new FilterOptionDto(x)).ToList();
-
-                //List<FilterOptionDto> anotherWay = (await _filterService.GetFormatFilterOptions()).Select(x => new FilterOptionDto(x)).ToList();
-
-                LegacyAppFiltersDto filters = new LegacyAppFiltersDto
+                LegacyAppFiltersDto mappedResult = new LegacyAppFiltersDto
                 {
-                    Formats = _mapper.ToDto(await _filterService.GetFormatFilterOptions()),
-                    ManaColors = _mapper.ToDto(await _filterService.GetManaColorFilterOptions()),
-                    Rarities = _mapper.ToDto(await _filterService.GetRarityFilterOptions()),
-                    Sets = _mapper.ToDto(await _filterService.GetSetFilterOptions()),
-                    Statuses = _mapper.ToDto(await _filterService.GetCardStatusFilterOptions()),
-                    Types = _mapper.ToDto(await _filterService.GetTypeFilterOptions()),
+                    Formats = _mapper.ToLegacy(result.Formats),
+                    ManaColors = _mapper.ToLegacy(result.ManaColors),
+                    Rarities = _mapper.ToLegacy(result.Rarities),
+                    Sets = _mapper.ToLegacy(result.Sets),
+                    Statuses = _mapper.ToLegacy(result.Statuses),
+                    Types = _mapper.ToLegacy(result.Types),
                 };
 
-                return Ok(filters);
+                return Ok(mappedResult);
             }
             catch (Exception ex)
             {

@@ -19,6 +19,8 @@ using Microsoft.Extensions.Hosting;
 using Carpentry.Data.DataContext;
 using Carpentry.Service.Interfaces;
 using Carpentry.Service.Implementations;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Implementations;
 //using Carpentry.UI.Util;
 
 namespace Carpentry.UI
@@ -39,51 +41,47 @@ namespace Carpentry.UI
             //Going to actually pull the fill filepaths from app settings now
             //TODO Eventually I could make a static config class and just read from that class
             //TODO Everything else still needs this DB pattern
-            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+            string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
 
             ////DBs
-            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
+            services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
 
             ////DB repos
-            //services.AddScoped<ICardDataRepo, CardDataRepo>();
-            //services.AddScoped<IDeckDataRepo, DeckDataRepo>();
-            //services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
-            //services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
+            services.AddScoped<ICardDataRepo, CardDataRepo>();
+            services.AddScoped<IDeckDataRepo, DeckDataRepo>();
+            services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
+            services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
+
+            services.AddScoped<IDataReferenceRepo, DataReferenceRepo>();
 
             //DB services
-            //services.AddScoped<IDataReferenceService, DataReferenceService>();
-
-
-
-
-            //private readonly IInventoryDataRepo _inventoryRepo;
-
-
-            ////string repo & repo's HTTP client
-            //services.AddScoped<ICardStringRepo, ScryfallRepo>();
-            //services.AddHttpClient<ICardStringRepo, ScryfallRepo>();
-
-            //card DB repo
-            //services.AddScoped<ILegacyCardRepo, SqliteCardRepo>();
-
+            services.AddScoped<IDataReferenceService, DataReferenceService>();
+            services.AddScoped<IDataQueryService, DataQueryService>();
 
 
             //Logic services
-            //services.AddScoped<ICardSearchService, CardSearchService>();
-            //services.AddScoped<IDeckService, DeckService>();
-            //services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ICardSearchService, CardSearchService>();
+            services.AddScoped<IDeckService, DeckService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+
+
+            services.AddScoped<IDataUpdateService, DataUpdateService>();
+
+            services.AddScoped<IScryfallService, ScryfallService>();
+            services.AddHttpClient<IScryfallService, ScryfallService>();
+
             //services.AddScoped<IFilterService, FilterService>();
 
             //Util services
             //services.AddScoped<IMapperService, MapperService>();
 
             //Service layer services
-            services.AddScoped<ICoreService, CoreService>();
-            services.AddScoped<IDeckService, DeckService>();
-            services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<ICardSearchService, CardSearchService>();
+            services.AddScoped<ICoreControllerService, CoreControllerService>();
+            services.AddScoped<IDeckControllerService, DeckControllerService>();
+            services.AddScoped<IInventoryControllerService, InventoryControllerService>();
+            services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
 
 
 

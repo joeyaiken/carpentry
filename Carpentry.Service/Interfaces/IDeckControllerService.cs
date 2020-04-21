@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Service.Interfaces
 {
-    public interface IDeckService
+    public interface IDeckControllerService
     {
         Task<int> AddDeck(DeckPropertiesDto props);
 

@@ -7,10 +7,20 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Service.Implementations
 {
-    public class InventoryService : IInventoryService
+    public class InventoryControllerService : IInventoryControllerService
     {
+
+
+        public InventoryControllerService(
+            
+            )
+        {
+
+        }
+
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
+
             throw new NotImplementedException();
         }
 

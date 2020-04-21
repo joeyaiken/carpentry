@@ -16,9 +16,9 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Card Search controller: {ex.Message}";
         }
 
-        private readonly ICardSearchService _cardSearch;
+        private readonly ICardSearchControllerService _cardSearch;
 
-        public CardSearchController(ICardSearchService cardSearch)
+        public CardSearchController(ICardSearchControllerService cardSearch)
         {
             _cardSearch = cardSearch;
         }

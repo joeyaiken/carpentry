@@ -1,4 +1,4 @@
-﻿using Carpentry.Logic.Models;
+﻿using Carpentry.Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using Carpentry.Data.Interfaces;
 
 namespace Carpentry.UI.Legacy.Util
 {
-    public class MapperService : IMapperService
+    public class MapperService // : IMapperService
     {
         //IDataReferenceService _refs;
         public MapperService(
@@ -19,9 +19,9 @@ namespace Carpentry.UI.Legacy.Util
         }
         //AppFilters
         //DeckCard
-        public DeckCard ToModel(LegacyDeckCardDto dto)
+        public DeckCardDto ToModel(LegacyDeckCardDto dto)
         {
-            DeckCard deckCard = new DeckCard
+            DeckCardDto deckCard = new DeckCardDto
             {
                 InventoryCard = ToModel(dto.InventoryCard),
                 CategoryId = dto.CategoryId,
@@ -32,28 +32,29 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //DeckDetail
-        public async Task<LegacyDeckDetailDto> ToDto(DeckDetail detail)
+        public LegacyDeckDetailDto ToLegacy(DeckDetailDto detail)
         {
             LegacyDeckDetailDto result = new LegacyDeckDetailDto()
             {
-                CardDetails = ToDto(detail.CardDetails),
-                CardOverviews = ToDto(detail.CardOverviews),
-                Props = await ToDto(detail.Props),
-                Stats = ToDto(detail.Stats),
+                CardDetails = ToLegacy(detail.CardDetails),
+                CardOverviews = ToLegacy(detail.CardOverviews),
+                Props = ToLegacy(detail.Props),
+                Stats = ToLegacy(detail.Stats),
             };
             return result;
         }
 
         //DeckProperties
-        public async Task<DeckProperties> ToModel(LegacyDeckPropertiesDto props)
+        public DeckPropertiesDto ToModel(LegacyDeckPropertiesDto props)
         {
-            DeckProperties result = new DeckProperties()
+            DeckPropertiesDto result = new DeckPropertiesDto()
             {
                 BasicB = props.BasicB,
                 BasicG = props.BasicG,
                 BasicR = props.BasicR,
                 BasicU = props.BasicU,
                 BasicW = props.BasicW,
+                Format = props.Format,
                 //FormatId = (await _refs.GetMagicFormat(props.Format)).Id,
                 //props.Format,
                 Id = props.Id,
@@ -62,7 +63,7 @@ namespace Carpentry.UI.Legacy.Util
             };
             return result;
         }
-        public async Task<LegacyDeckPropertiesDto> ToDto(DeckProperties props)
+        public LegacyDeckPropertiesDto ToLegacy(DeckPropertiesDto props)
         {
             //var magicFormat = await _refs.GetMagicFormat(props.FormatId);
 
@@ -73,7 +74,7 @@ namespace Carpentry.UI.Legacy.Util
                 BasicR = props.BasicR,
                 BasicU = props.BasicU,
                 BasicW = props.BasicW,
-                //Format = x.Format,
+                Format = props.Format,
                 //Format = magicFormat.Name,
                 Id = props.Id,
                 Name = props.Name,
@@ -82,7 +83,7 @@ namespace Carpentry.UI.Legacy.Util
 
             return result;
         }
-        public async Task<List<LegacyDeckPropertiesDto>> ToDto(IEnumerable<DeckProperties> props)
+        public List<LegacyDeckPropertiesDto> ToLegacy(IEnumerable<DeckPropertiesDto> props)
         {
             //var allFormats = await _refs.GetAllMagicFormats();
 
@@ -104,7 +105,7 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //DeckStats
-        public LegacyDeckStatsDto ToDto(DeckStats dto)
+        public LegacyDeckStatsDto ToLegacy(DeckStatsDto dto)
         {
             LegacyDeckStatsDto result = new LegacyDeckStatsDto
             {
@@ -118,7 +119,7 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //FilterOption
-        public List<LegacyFilterOptionDto> ToDto(IEnumerable<FilterOption> filters)
+        public List<LegacyFilterOptionDto> ToLegacy(IEnumerable<FilterOptionDto> filters)
         {
             List<LegacyFilterOptionDto> result = filters.Select(model => new LegacyFilterOptionDto
             {
@@ -130,9 +131,9 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //InventoryCard
-        public InventoryCard ToModel(LegacyInventoryCardDto card)
+        public InventoryCardDto ToModel(LegacyInventoryCardDto card)
         {
-            InventoryCard result = new InventoryCard
+            InventoryCardDto result = new InventoryCardDto
             {
                 Id = card.Id,
                 DeckCards = card.DeckCards.Select(x => ToModel(x)).ToList(),
@@ -145,17 +146,17 @@ namespace Carpentry.UI.Legacy.Util
             };
             return result;
         }
-        public List<InventoryCard> ToModel(List<LegacyInventoryCardDto> cards)
+        public List<InventoryCardDto> ToModel(List<LegacyInventoryCardDto> cards)
         {
-            List<InventoryCard> result = cards.Select(x => ToModel(x)).ToList();
+            List<InventoryCardDto> result = cards.Select(x => ToModel(x)).ToList();
             return result;
         }
-        public LegacyInventoryCardDto ToDto(InventoryCard card)
+        public LegacyInventoryCardDto ToLegacy(InventoryCardDto card)
         {
             LegacyInventoryCardDto result = new LegacyInventoryCardDto
             {
                 Id = card.Id,
-                DeckCards = card.DeckCards.Select(x => ToDto(x)).ToList(),
+                DeckCards = card.DeckCards.Select(x => ToLegacy(x)).ToList(),
                 InventoryCardStatusId = card.InventoryCardStatusId,
                 IsFoil = card.IsFoil,
                 MultiverseId = card.MultiverseId,
@@ -165,14 +166,14 @@ namespace Carpentry.UI.Legacy.Util
             };
             return result;
         }
-        public List<LegacyInventoryCardDto> ToDto(List<InventoryCard> cards)
+        public List<LegacyInventoryCardDto> ToLegacy(List<InventoryCardDto> cards)
         {
-            List<LegacyInventoryCardDto> result = cards.Select(x => ToDto(x)).ToList();
+            List<LegacyInventoryCardDto> result = cards.Select(x => ToLegacy(x)).ToList();
             return result;
         }
 
         //InventoryDeckCard
-        public LegacyInventoryDeckCardDto ToDto(InventoryDeckCard invDeckCard)
+        public LegacyInventoryDeckCardDto ToLegacy(InventoryDeckCardDto invDeckCard)
         {
             LegacyInventoryDeckCardDto result = new LegacyInventoryDeckCardDto()
             {
@@ -184,9 +185,9 @@ namespace Carpentry.UI.Legacy.Util
             };
             return result;
         }
-        public InventoryDeckCard ToModel(LegacyInventoryDeckCardDto invDeckCard)
+        public InventoryDeckCardDto ToModel(LegacyInventoryDeckCardDto invDeckCard)
         {
-            InventoryDeckCard result = new InventoryDeckCard()
+            InventoryDeckCardDto result = new InventoryDeckCardDto()
             {
                 DeckCardCategory = invDeckCard.DeckCardCategory,
                 DeckId = invDeckCard.DeckId,
@@ -198,19 +199,19 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //InventoryDetail
-        public LegacyInventoryDetailDto ToDto(InventoryDetail inventoryDetail)
+        public LegacyInventoryDetailDto ToLegacy(InventoryDetailDto inventoryDetail)
         {
             LegacyInventoryDetailDto result = new LegacyInventoryDetailDto()
             {
-                Cards = inventoryDetail.Cards.Select(x => ToDto(x)).ToList(),
-                InventoryCards = inventoryDetail.InventoryCards.Select(x => ToDto(x)).ToList(),
+                Cards = inventoryDetail.Cards.Select(x => ToLegacy(x)).ToList(),
+                InventoryCards = inventoryDetail.InventoryCards.Select(x => ToLegacy(x)).ToList(),
                 Name = inventoryDetail.Name,
             };
             return result;
         }
 
         //InventoryOverview
-        public List<LegacyInventoryOverviewDto> ToDto(IEnumerable<InventoryOverview> overviews)
+        public List<LegacyInventoryOverviewDto> ToLegacy(IEnumerable<InventoryOverviewDto> overviews)
         {
             List<LegacyInventoryOverviewDto> result = overviews.Select(x => new LegacyInventoryOverviewDto
             {
@@ -228,7 +229,7 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //MagicCard
-        public LegacyMagicCardDto ToDto(MagicCard card)
+        public LegacyMagicCardDto ToLegacy(MagicCardDto card)
         {
             LegacyMagicCardDto result = new LegacyMagicCardDto
             {
@@ -249,32 +250,14 @@ namespace Carpentry.UI.Legacy.Util
 
             return result;
         }
-        public List<LegacyMagicCardDto> ToDto(IEnumerable<MagicCard> cardList)
+        public List<LegacyMagicCardDto> ToLegacy(IEnumerable<MagicCardDto> cardList)
         {
-            List<LegacyMagicCardDto> result = cardList.Select(card => ToDto(card)).ToList();
-
-            //List<MagicCardDto> result = cardList.Select(card => new MagicCardDto
-            //{
-            //    Name = card.Name,
-            //    Cmc = card.Cmc,
-            //    ColorIdentity = card.ColorIdentity,
-            //    Colors = card.Colors,
-            //    Legalities = card.Legalities,
-            //    ManaCost = card.ManaCost,
-            //    MultiverseId = card.MultiverseId,
-            //    Prices = card.Prices,
-            //    Rarity = card.Rarity,
-            //    Set = card.Set,
-            //    Text = card.Text,
-            //    Type = card.Type,
-            //    Variants = card.Variants,
-            //}).ToList();
-
+            List<LegacyMagicCardDto> result = cardList.Select(card => ToLegacy(card)).ToList();
             return result;
         }
-        public MagicCard ToModel(LegacyMagicCardDto card)
+        public MagicCardDto ToModel(LegacyMagicCardDto card)
         {
-            MagicCard result = new MagicCard
+            MagicCardDto result = new MagicCardDto
             {
                 Name = card.Name,
                 Cmc = card.Cmc,

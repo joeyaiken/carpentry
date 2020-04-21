@@ -7,7 +7,7 @@ using Carpentry.Service.Models;
 namespace Carpentry.Service.Interfaces
 {
     //Maybe this can also be what the TOOL apps calls??
-    public interface ICoreService
+    public interface ICoreControllerService
     {
         Task<AppFiltersDto> GetAppFilterValues();
     }

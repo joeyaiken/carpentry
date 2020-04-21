@@ -328,10 +328,11 @@ namespace Carpentry.Logic.Implementations
             //The DATA layer won't know of this layer's model, so we must map to a type consumable by the data layer
             //Data.DataModels.MagicFormat deckFormat = await _deckRepo.GetFormatByName(props.Format);
 
-            var newDeck = new Data.DataModels.DeckData()
+            //?? Is any validation necessary?
+
+            var newDeck = new DeckData()
             {
                 Name = props.Name,
-                //Format = deckFormat,
                 MagicFormatId = props.FormatId,
                 Notes = props.Notes,
 

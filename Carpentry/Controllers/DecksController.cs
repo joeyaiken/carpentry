@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-//using Carpentry.Data.Models;
-//using Carpentry.Data.Models;
-//using Carpentry.Interfaces;
-using Carpentry.Logic.Interfaces;
+using Carpentry.Service.Interfaces;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +16,10 @@ namespace Carpentry.UI.Legacy.Controllers
             return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
         }
 
-        private readonly IDeckService _decks;
-        private readonly IMapperService _mapper;
+        private readonly IDeckControllerService _decks;
+        private readonly MapperService _mapper;
 
-        public DecksController(IDeckService decks, IMapperService mapper)
+        public DecksController(IDeckControllerService decks, MapperService mapper)
         {
             _decks = decks;
             _mapper = mapper;
@@ -46,7 +42,7 @@ namespace Carpentry.UI.Legacy.Controllers
         {
             try
             {
-                int newDeckId = await _decks.AddDeck(await _mapper.ToModel(deckProps));
+                int newDeckId = await _decks.AddDeck(_mapper.ToModel(deckProps));
                 return Ok(newDeckId);
             }
             catch (Exception ex)
@@ -62,7 +58,7 @@ namespace Carpentry.UI.Legacy.Controllers
         {
             try
             {
-                await _decks.UpdateDeck(await _mapper.ToModel(deckProps));
+                await _decks.UpdateDeck(_mapper.ToModel(deckProps));
                 return Ok();
             }
             catch (Exception ex)
@@ -95,7 +91,7 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var results = await _decks.GetDeckOverviews();
-                IEnumerable<LegacyDeckPropertiesDto> mappedResults = await _mapper.ToDto(results);
+                IEnumerable<LegacyDeckPropertiesDto> mappedResults = _mapper.ToLegacy(results);
                 return Ok(mappedResults);
             }
             catch (Exception ex)
@@ -112,7 +108,7 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var results = await _decks.GetDeckDetail(deckId);
-                LegacyDeckDetailDto mappedResults = await _mapper.ToDto(results);
+                LegacyDeckDetailDto mappedResults = _mapper.ToLegacy(results);
                 return Ok(mappedResults);
             }
             catch (Exception ex)

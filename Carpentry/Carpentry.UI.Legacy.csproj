@@ -41,8 +41,7 @@
   <ItemGroup>
     <Compile Remove="Controllers\LegacyCardsController.cs" />
     <Compile Remove="Controllers\LegacyCoreController.cs" />
-    <Compile Remove="Implementations\CarpentryService.cs" />
-    <Compile Remove="Interfaces\ICarpentryService.cs" />
+    <Compile Remove="Util\IMapperService.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,11 +61,6 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Implementations\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

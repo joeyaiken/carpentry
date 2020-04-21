@@ -53,7 +53,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public void CardSearch_GetStatus_ReturnsOK_Test()
         {
             //arrange
-            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
 
             var cardSearchController = new Controllers.CardSearchController(mockService.Object);
 
@@ -82,7 +82,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.SearchCardsFromWeb(It.IsNotNull<NameSearchQueryParameter>()))
@@ -119,7 +119,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
             
             mockService
                 .Setup(p => p.SearchCardsFromSet(It.IsNotNull<CardSearchQueryParameter>()))
@@ -156,7 +156,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
 
             //SearchInventory
             mockService

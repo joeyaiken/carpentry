@@ -16,13 +16,13 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
         }
 
-        private readonly IInventoryService _inventory;
+        private readonly IInventoryControllerService _inventory;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryService inventory)
+        public InventoryController(IInventoryControllerService inventory)
         {
             _inventory = inventory;
         }

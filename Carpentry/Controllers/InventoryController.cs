@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.Data.QueryParameters;
-//using Carpentry.Data.Models;
-//using Carpentry.Interfaces;
-using Carpentry.Logic.Interfaces;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +18,14 @@ namespace Carpentry.UI.Legacy.Controllers
             return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
         }
 
-        private readonly IInventoryService _inventory;
-        private readonly IMapperService _mapper;
+        private readonly IInventoryControllerService _inventory;
+        private readonly MapperService _mapper;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryService inventory, IMapperService mapper)
+        public InventoryController(IInventoryControllerService inventory, MapperService mapper)
         {
             _inventory = inventory;
             _mapper = mapper;
@@ -111,7 +108,7 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var result = await _inventory.GetInventoryOverviews(param);
-                List<LegacyInventoryOverviewDto> mappedResult = _mapper.ToDto(result);
+                List<LegacyInventoryOverviewDto> mappedResult = _mapper.ToLegacy(result);
                 return Ok(mappedResult);
             }
             catch (Exception ex)
@@ -127,7 +124,7 @@ namespace Carpentry.UI.Legacy.Controllers
             {
                 var result = await _inventory.GetInventoryDetailByName(name);
                 //InventoryDetailDto mappedResult = new InventoryDetailDto(result);
-                LegacyInventoryDetailDto mappedResult = _mapper.ToDto(result);
+                LegacyInventoryDetailDto mappedResult = _mapper.ToLegacy(result);
                 return Ok(mappedResult);
             }
             catch (Exception ex)

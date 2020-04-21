@@ -1,6 +1,7 @@
 ﻿using Carpentry.Data.DataContext;
 using Carpentry.Data.DataModels;
 using Carpentry.Data.Interfaces;
+using Carpentry.Data.QueryResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -34,19 +35,36 @@ namespace Carpentry.Data.Implementations
         //    return matchingFormat;
         //}
 
-        public async Task<MagicFormatData> GetMagicFormat(string formatName)
+        public async Task<DataReferenceValue<int>> GetMagicFormat(string formatName)
         {
-            var matchingFormat = await _cardContext.MagicFormats.Where(x => x.Name.ToLower() == formatName.ToLower()).FirstOrDefaultAsync();
+            DataReferenceValue<int> matchingFormat = await _cardContext.MagicFormats.Where(x => x.Name.ToLower() == formatName.ToLower())
+                .Select(x => new DataReferenceValue<int>(){
+                    Id = x.Id,
+                    Name = x.Name,
+                }).FirstOrDefaultAsync();
+            
             return matchingFormat;
         }
-        public async Task<MagicFormatData> GetMagicFormat(int formatId)
+        public async Task<DataReferenceValue<int>> GetMagicFormat(int formatId)
         {
-            var matchingFormat = await _cardContext.MagicFormats.Where(x => x.Id == formatId).FirstOrDefaultAsync();
+            DataReferenceValue<int> matchingFormat = await _cardContext.MagicFormats.Where(x => x.Id == formatId)
+                .Select(x => new DataReferenceValue<int>()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).FirstOrDefaultAsync();
+
             return matchingFormat;
         }
-        public async Task<IEnumerable<MagicFormatData>> GetAllMagicFormats()
+        public async Task<IEnumerable<DataReferenceValue<int>>> GetAllMagicFormats()
         {
-            List<MagicFormatData> results = await _cardContext.MagicFormats.ToListAsync();
+            List<DataReferenceValue<int>> results = await _cardContext.MagicFormats
+                .Select(x => new DataReferenceValue<int>()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
             return results;
         }
 
@@ -61,5 +79,71 @@ namespace Carpentry.Data.Implementations
             var result = await _cardContext.VariantTypes.ToListAsync();
             return result;
         }
+
+        public async Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors()
+        {
+            List<DataReferenceValue<char>> results = await _cardContext.ManaTypes
+                .Select(x => new DataReferenceValue<char>()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
+            return results;
+        }
+
+        public async Task<IEnumerable<DataReferenceValue<char>>> GetAllRarities()
+        {
+            List<DataReferenceValue<char>> results = await _cardContext.Rarities
+                .Select(x => new DataReferenceValue<char>()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
+            return results;
+        }
+
+        public async Task<IEnumerable<DataReferenceValue<int>>> GetAllSets()
+        {
+            List<DataReferenceValue<int>> results = await _cardContext.Sets
+                .Select(x => new DataReferenceValue<int>()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
+            return results;
+        }
+
+        public async Task<IEnumerable<DataReferenceValue<int>>> GetAllStatuses()
+        {
+            List<DataReferenceValue<int>> results = await _cardContext.CardStatuses
+                .Select(x => new DataReferenceValue<int>()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
+            return results;
+        }
+
+        public List<DataReferenceValue<string>> GetAllTypes()
+        {
+            List<DataReferenceValue<string>> results = new List<DataReferenceValue<string>>()
+            {
+                new DataReferenceValue<string>(){ Id = "Creature", Name = "Creature" },
+                new DataReferenceValue<string>(){ Id = "Instant", Name = "Instant" },
+                new DataReferenceValue<string>(){ Id = "Sorcery", Name = "Sorcery" },
+                new DataReferenceValue<string>(){ Id = "Enchantment", Name = "Enchantment" },
+                new DataReferenceValue<string>(){ Id = "Land", Name = "Land" },
+                new DataReferenceValue<string>(){ Id = "Planeswalker", Name = "Planeswalker" },
+                new DataReferenceValue<string>(){ Id = "Artifact", Name = "Artifact" },
+                new DataReferenceValue<string>(){ Id = "Legendary", Name = "Legendary" },
+            };
+
+            return results;
+        }
+
     }
 }

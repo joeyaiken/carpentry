@@ -93,7 +93,7 @@ namespace Carpentry.Logic.Implementations
                 Name = x.Name,
                 Notes = x.Notes,
 
-                Format = _dataReferenceService.GetMagicFormat(x.Format).Result,
+                MagicFormatId = _dataReferenceService.GetMagicFormat(x.Format).Result.Id,
 
                 Id = x.ExportId
             }).ToList();

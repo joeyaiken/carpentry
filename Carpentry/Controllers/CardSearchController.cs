@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 //using Carpentry.Data.Models;
-using Carpentry.Data.QueryParameters;
-using Carpentry.Logic.Interfaces;
+//using Carpentry.Data.QueryParameters;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Models;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +21,10 @@ namespace Carpentry.UI.Legacy.Controllers
             return $"An error occured when processing the {functionName} method of the Card Search controller: {ex.Message}";
         }
 
-        private readonly ICardSearchService _cardSearch;
-        private readonly IMapperService _mapper;
+        private readonly ICardSearchControllerService _cardSearch;
+        private readonly MapperService _mapper;
 
-        public CardSearchController(ICardSearchService cardSearch, IMapperService mapper)
+        public CardSearchController(ICardSearchControllerService cardSearch, MapperService mapper)
         {
             _cardSearch = cardSearch;
             _mapper = mapper;
@@ -45,7 +46,7 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var cards = await _cardSearch.SearchCardsFromWeb(param);
-                List<LegacyMagicCardDto> mappedCards = _mapper.ToDto(cards);
+                List<LegacyMagicCardDto> mappedCards = _mapper.ToLegacy(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)
@@ -60,7 +61,7 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var cards = await _cardSearch.SearchCardsFromSet(filters);
-                List<LegacyMagicCardDto> mappedCards = _mapper.ToDto(cards);
+                List<LegacyMagicCardDto> mappedCards = _mapper.ToLegacy(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)
@@ -75,7 +76,7 @@ namespace Carpentry.UI.Legacy.Controllers
             try
             {
                 var cards = await _cardSearch.SearchCardsFromInventory(filters);
-                List<LegacyMagicCardDto> mappedCards = _mapper.ToDto(cards);
+                List<LegacyMagicCardDto> mappedCards = _mapper.ToLegacy(cards);
                 return Ok(mappedCards);
             }
             catch (Exception ex)

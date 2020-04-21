@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Service.Interfaces
 {
-    public interface IInventoryService
+    public interface IInventoryControllerService
     {
         Task<int> AddInventoryCard(InventoryCardDto dto);
 
