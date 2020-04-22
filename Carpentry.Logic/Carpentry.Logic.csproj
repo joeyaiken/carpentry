@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Carpentry.Data\Carpentry.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Dto\" />
+  </ItemGroup>
+
 </Project>

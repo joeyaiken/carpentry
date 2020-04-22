@@ -1,7 +1,10 @@
 ﻿using Carpentry.Data.Interfaces;
+using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Implementations;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Logic.Models.Scryfall;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -15,118 +18,131 @@ namespace Carpentry.Logic.Tests.UnitTests
     [TestClass]
     public class CardSearchServiceTests
     {
-        private readonly CardSearchService _cardSearchService;
-        public CardSearchServiceTests()
+        private static CardDataDto CardInstance()
         {
-            //ICardRepo cardRepo
-            var mockCardRepo = new Mock<ILegacyCardRepo>(MockBehavior.Strict);
-
-            IQueryable<Data.LegacyDataContext.Card> inventoryQueryResult = new List<Data.LegacyDataContext.Card>()
+            CardDataDto result = new CardDataDto()
             {
-                new Data.LegacyDataContext.Card()
+                Name = "Card",
+                Variants = new List<CardVariantDto>()
                 {
-                    Name = "Card1",
-                },
-                new Data.LegacyDataContext.Card()
-                {
-                    Name = "Card2",
-                },
-                new Data.LegacyDataContext.Card()
-                {
-                    Name = "Card3",
-                },
-                new Data.LegacyDataContext.Card()
-                {
-                    Name = "Card4",
-                },
-                new Data.LegacyDataContext.Card()
-                {
-                    Name = "Card5",
-                },
-                new Data.LegacyDataContext.Card()
-                {
-                    Name = "Card5",
-                },
-
-            }.AsQueryable();
-
-            mockCardRepo
-                .Setup(p => p.QueryFilteredCards(It.IsNotNull<InventoryQueryParameter>()))
-                .ReturnsAsync(inventoryQueryResult);
-            //TODO re-add this
-            //_cardSearchService = new CardSearchService(mockCardRepo.Object);
+                    new CardVariantDto()
+                    {
+                        Name = "normal",
+                    }
+                }
+            };
+            return result;
         }
 
         [TestMethod]
         public async Task CardSearchService_SearchCardsFromInventory_Test()
         {
             //Assemble
+            List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
+            {
+                CardInstance(),
+                CardInstance(),
+                CardInstance(),
+                CardInstance(),
+                CardInstance(),
+            };
+
+            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
+
+            mockQueryService
+                .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
+                .ReturnsAsync(expectedSearchResult);
+
+            var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
+
+            var cardSearchService = new CardSearchService(mockQueryService.Object, mockScryService.Object);
+
             InventoryQueryParameter filters = new InventoryQueryParameter()
             {
 
             };
 
             //Act
-            IEnumerable<MagicCard> result = await _cardSearchService.SearchCardsFromInventory(filters);
+            IEnumerable<MagicCard> result = await cardSearchService.SearchCardsFromInventory(filters);
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(5, result.Count());
+            Assert.AreEqual(expectedSearchResult.Count, result.Count());
 
         }
 
         [TestMethod]
         public async Task CardSearchService_SearchCardsFromSet_Test()
         {
-            //<IEnumerable<MagicCard>>
-            //CardSearchQueryParameter filters
-            await Task.CompletedTask;
-            Assert.Fail();
+            //Assemble
+            List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
+            {
+                CardInstance(),
+                CardInstance(),
+                CardInstance(),
+                CardInstance(),
+                CardInstance(),
+            };
 
-            //IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryCardsBySet(filters.SetCode);
+            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
 
-            //if (!string.IsNullOrEmpty(filters.Type))
-            //{
-            //    query = query.Where(x => x.Type.Contains(filters.Type));
-            //}
+            mockQueryService
+                .Setup(p => p.SearchCardSet(It.IsNotNull<CardSearchQueryParameter>()))
+                .ReturnsAsync(expectedSearchResult);
 
-            //filters.ColorIdentity.ForEach(color =>
-            //{
-            //    query = query.Where(x => x.ColorIdentity.Contains(color));
-            //});
+            var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            //if (filters.ExclusiveColorFilters)
-            //{
-            //    query = query.Where(x => x.ColorIdentity.Count() == filters.ColorIdentity.Count());
-            //}
+            var cardSearchService = new CardSearchService(mockQueryService.Object, mockScryService.Object);
 
-            //if (filters.MultiColorOnly)
-            //{
-            //    query = query.Where(x => x.ColorIdentity.Count() > 1);
-            //}
+            CardSearchQueryParameter filters = new CardSearchQueryParameter()
+            {
 
-            //query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));
+            };
 
-            //var result = query.OrderBy(x => x.Name).ToList();
+            //Act
+            IEnumerable<MagicCard> result = await cardSearchService.SearchCardsFromSet(filters);
 
-            //return result;
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedSearchResult.Count, result.Count());
+
         }
 
         [TestMethod]
         public async Task CardSearchService_SearchCardsFromWeb_Test()
         {
-            //<IEnumerable<MagicCard>>
-            //NameSearchQueryParameter filters
-            await Task.CompletedTask;
-            Assert.Fail();
+            //Assemble
+            List<ScryfallMagicCard> expectedSearchResult = new List<ScryfallMagicCard>()
+            {
+                new ScryfallMagicCard(){ Name = "Card" },
+                new ScryfallMagicCard(){ Name = "Card" },
+                new ScryfallMagicCard(){ Name = "Card" },
+                new ScryfallMagicCard(){ Name = "Card" },
+                new ScryfallMagicCard(){ Name = "Card" },
+            };
 
-            //IQueryable<ScryfallMagicCard> query = await _scryRepo.QueryScryfallByName(filters.Name, filters.Exclusive);
+            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
 
-            //List<ScryfallMagicCard> result = query.ToList();
+            var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            //return result;
+            mockScryService
+                .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
+                .ReturnsAsync(expectedSearchResult);
+
+            var cardSearchService = new CardSearchService(mockQueryService.Object, mockScryService.Object);
+
+            NameSearchQueryParameter filters = new NameSearchQueryParameter()
+            {
+                Name = "",
+                Exclusive = false,
+            };
+
+            //Act
+            IEnumerable<MagicCard> result = await cardSearchService.SearchCardsFromWeb(filters);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedSearchResult.Count, result.Count());
         }
-
-
     }
 }
