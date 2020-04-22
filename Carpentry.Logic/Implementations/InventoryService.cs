@@ -16,12 +16,11 @@ namespace Carpentry.Logic.Implementations
     {
 
         private readonly IInventoryDataRepo _inventoryRepo;
-        
+
         private readonly IDataUpdateService _dataUpdateService;
 
         private readonly IDataQueryService _queryService;
 
-        //data reference service?
         private readonly IDataReferenceService _referenceService;
 
         private readonly ICardDataRepo _cardDataRepo;
@@ -43,6 +42,22 @@ namespace Carpentry.Logic.Implementations
 
         #region private methods
 
+
+        private static InventoryOverviewDto MapCardResultToInventoryOverview(CardOverviewResult data)
+        {
+            InventoryOverviewDto result = new InventoryOverviewDto()
+            {
+                Cmc = data.Cmc,
+                Cost = data.Cost,
+                Count = data.Count,
+                //Description = data.,
+                Id = data.Id,
+                Img = data.Img,
+                Name = data.Name,
+                Type = data.Type,
+            };
+            return result;
+        }
 
         private static IEnumerable<MagicCardDto> MapInventoryQueryToMagicCardObject(IEnumerable<Data.DataModels.CardData> query)
         {
@@ -163,22 +178,6 @@ namespace Carpentry.Logic.Implementations
             await _inventoryRepo.DeleteInventoryCard(id);
         }
 
-
-        private static InventoryOverviewDto MapCardResultToInventoryOverview(CardOverviewResult data)
-        {
-            InventoryOverviewDto result = new InventoryOverviewDto()
-            {
-                Cmc = data.Cmc,
-                Cost = data.Cost,
-                Count = data.Count,
-                //Description = data.,
-                Id = data.Id,
-                Img = data.Img,
-                Name = data.Name,
-                Type = data.Type,
-            };
-            return result;
-        }
 
         public async Task<IEnumerable<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
         {

@@ -20,7 +20,6 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
         public void Core_GetStatus_ReturnsAsyncOK_Test()
         {
             //assemble
-            //var mockCoreService = new Mock<ICoreControllerService>(MockBehavior.Strict);
             var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
 
             var mapperService = new MapperService();

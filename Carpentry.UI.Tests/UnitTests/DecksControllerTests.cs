@@ -11,86 +11,13 @@ using Carpentry.Logic.Models;
 
 namespace Carpentry.UI.Tests.UnitTests
 {
+    /// <summary>
+    /// I initially created a single mock service & controller intance in the test constructor
+    /// Instead, I want to arrange & mock only the service methods I expect to see called
+    /// </summary>
     [TestClass]
     public class DecksControllerTests
     {
-
-        //private readonly Controllers.DecksController _decksController;
-
-        /// <summary>
-        /// I initially created a single mock service & controller intance in the test constructor
-        /// Instead, I want to arrange & mock only the service methods I expect to see called
-        /// </summary>
-        public DecksControllerTests()
-        {
-            ////mock deck service
-            //var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-
-            ////Add
-            //mockDeckService
-            //    .Setup(p => p.AddDeck(It.IsNotNull<DeckPropertiesDto>()))
-            //    .ReturnsAsync(1);
-
-            ////Update
-            //mockDeckService
-            //    .Setup(p => p.UpdateDeck(It.IsNotNull<DeckPropertiesDto>()))
-            //    .Returns(Task.CompletedTask);
-
-            ////Delete
-            //mockDeckService
-            //    .Setup(p => p.DeleteDeck(It.Is<int>(i => i > 0)))
-            //    .Returns(Task.CompletedTask);
-
-            ////Search
-            //IEnumerable<DeckPropertiesDto> searchResults = new List<DeckPropertiesDto>()
-            //{
-            //    new DeckPropertiesDto{ },
-            //    new DeckPropertiesDto{ },
-            //    new DeckPropertiesDto{ },
-            //    new DeckPropertiesDto{ },
-            //    new DeckPropertiesDto{ },
-            //}.AsEnumerable();
-
-            //mockDeckService
-            //    .Setup(p => p.GetDeckOverviews())
-            //    .ReturnsAsync(searchResults);
-
-            ////Get
-            //mockDeckService
-            //    .Setup(p => p.GetDeckDetail(It.Is<int>(i => i > 0)))
-            //    .ReturnsAsync(new DeckDetailDto
-            //    { 
-            //        CardDetails = new List<InventoryCardDto>(),
-            //        CardOverviews = new List<InventoryOverviewDto>(),
-            //        Props = new DeckPropertiesDto(),
-            //        Stats = new DeckStatsDto(),
-            //    });
-
-
-            ////AddCard
-            //mockDeckService
-            //    //.Setup(p => p.AddDeckCard(It.IsNotNull<DeckCard>()))
-            //    .Setup(p => p.AddDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id == 0)))
-            //    .Returns(Task.CompletedTask);
-
-
-            ////.ReturnsAsync(1);
-
-            ////UpdateCard
-            //mockDeckService
-            //    //.Setup(p => p.UpdateDeckCard(It.IsNotNull<DeckCard>()))
-            //    .Setup(p => p.UpdateDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id > 0)))
-            //    .Returns(Task.CompletedTask);
-
-            ////RemoveCard
-            //mockDeckService
-            //    .Setup(p => p.DeleteDeckCard(It.Is<int>(i => i > 0)))
-            //    .Returns(Task.CompletedTask);
-
-            ////create controller
-            //_decksController = new Controllers.DecksController(mockDeckService.Object, mapperService);
-        }
-
         [TestMethod]
         public void Decks_GetStatus_ReturnsAsyncOK_Test()
         {

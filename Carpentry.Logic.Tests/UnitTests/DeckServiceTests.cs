@@ -38,6 +38,12 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
 
+            DataReferenceValue<int> formatResult = new DataReferenceValue<int>() { Id = 1 };
+
+            mockReferenceService
+                .Setup(p => p.GetMagicFormat(It.IsAny<string>()))
+                .ReturnsAsync(formatResult);
+
             var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
 
             DeckPropertiesDto props = new DeckPropertiesDto();
@@ -70,6 +76,12 @@ namespace Carpentry.Logic.Tests.UnitTests
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+
+            DataReferenceValue<int> formatResult = new DataReferenceValue<int>() { Id = 1 };
+
+            mockReferenceService
+                .Setup(p => p.GetMagicFormat(It.IsAny<string>()))
+                .ReturnsAsync(formatResult);
 
             var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
 

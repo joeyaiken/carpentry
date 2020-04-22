@@ -15,47 +15,6 @@ namespace Carpentry.UI.Tests.UnitTests
     [TestClass]
     public class CoreControllerTests
     {
-        //private readonly Controllers.CoreController _coreController;
-
-        public CoreControllerTests()
-        {
-            //var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-
-            //var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-
-            //mockFilterService
-            //    .Setup(p => p.GetCardStatusFilterOptions())
-            //    .ReturnsAsync(new List<FilterOption>());
-
-            //mockFilterService
-            //    .Setup(p => p.GetFormatFilterOptions())
-            //    .ReturnsAsync(new List<FilterOption>());
-
-            //mockFilterService
-            //    .Setup(p => p.GetManaColorFilterOptions())
-            //    .ReturnsAsync(new List<FilterOption>());
-
-            //mockFilterService
-            //    .Setup(p => p.GetRarityFilterOptions())
-            //    .ReturnsAsync(new List<FilterOption>());
-
-            //mockFilterService
-            //    .Setup(p => p.GetSetFilterOptions())
-            //    .ReturnsAsync(new List<FilterOption>());
-
-            //mockFilterService
-            //    .Setup(p => p.GetTypeFilterOptions())
-            //    .ReturnsAsync(new List<FilterOption>());
-
-            ////var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
-
-            //var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
-
-            //var mapperService = new MapperService(mockRefService.Object);
-
-            //_coreController = new Controllers.CoreController(mockFilterService.Object, mapperService);
-        }
-
         [TestMethod]
         public void Core_GetStatus_ReturnsAsyncOK_Test()
         {

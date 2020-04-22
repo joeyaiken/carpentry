@@ -12,79 +12,13 @@ using Carpentry.Data.QueryParameters;
 
 namespace Carpentry.UI.Tests.UnitTests
 {
+    /// <summary>
+    /// I initially created a single mock service & controller intance in the test constructor
+    /// Instead, I want to arrange & mock only the service methods I expect to see called
+    /// </summary>
     [TestClass]
     public class InventoryControllerTests
     {
-        //readonly CarpentryFactory _factory;
-        //readonly HttpClient _client;
-        //private readonly Controllers.InventoryController _inventoryController;
-
-        /// <summary>
-        /// I initially created a single mock service & controller intance in the test constructor
-        /// Instead, I want to arrange & mock only the service methods I expect to see called
-        /// </summary>
-        public InventoryControllerTests()
-        {
-            ////_factory = new CarpentryFactory();
-            ////_client = _factory.CreateClient();
-
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
-
-            ////Add
-            //mockService
-            //    .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCard>()))
-            //    .ReturnsAsync(1);
-
-            ////AddBatch
-            //mockService
-            //    .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCard>>()))
-            //    .Returns(Task.CompletedTask);
-
-            ////Update
-            //mockService
-            //    .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCard>()))
-            //    .Returns(Task.CompletedTask);
-
-            ////Delete
-            //mockService
-            //    .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i > 0)))
-            //    .Returns(Task.CompletedTask);
-
-            ////Search
-            //IEnumerable<InventoryOverview> searchResult = new List<InventoryOverview>()
-            //{
-            //    new InventoryOverview() { },
-            //    new InventoryOverview() { },
-            //    new InventoryOverview() { },
-            //    new InventoryOverview() { },
-            //    new InventoryOverview() { },
-            //}.AsEnumerable();
-
-            //mockService
-            //    .Setup(p => p.GetInventoryOverviews(It.IsNotNull<InventoryQueryParameter>()))
-            //    .ReturnsAsync(searchResult);
-
-            ////GetByName
-            //InventoryDetail detailResult = new InventoryDetail()
-            //{
-            //    Cards = new List<MagicCard>(),
-            //    InventoryCards = new List<InventoryCard>(),
-            //    Name = "Mock Card Detail",
-            //};
-
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
-
-            ////var mockMapper = new Mock<IMapperService>(MockBehavior.Strict);
-
-            //var mockRefService = Carpentry.Data.Tests.MockClasses.MockDataServices.MockDataReferenceService();
-
-            //var mapperService = new MapperService(mockRefService.Object);
-
-            //_inventoryController = new Controllers.InventoryController(mockService.Object, mapperService);
-        }
-
         [TestMethod]
         public void Inventory_GetStatus_ReturnsAsyncOK_Test()
         {
