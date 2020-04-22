@@ -27,268 +27,268 @@ namespace Carpentry.Service.Implementations
             _referenceService = referenceService;
             _deckService = deckService;
         }
-        public async Task<int> AddDeck(DeckPropertiesDto props)
-        {
-            DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(props.Format);
-            
-            DeckProperties deckModel = MapDeckPropertiesDto(props, deckFormat.Id);
-            
-            int newId = await _deckService.AddDeck(deckModel);
+        //public async Task<int> AddDeck(DeckPropertiesDto props)
+        //{
+        //    DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(props.Format);
 
-            return newId;
-        }
+        //    DeckProperties deckModel = MapDeckPropertiesDto(props, deckFormat.Id);
 
-        public async Task UpdateDeck(DeckPropertiesDto props)
-        {
-            DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(props.Format);
+        //    int newId = await _deckService.AddDeck(deckModel);
 
-            DeckProperties deckModel = MapDeckPropertiesDto(props, deckFormat.Id);
+        //    return newId;
+        //}
 
-            await _deckService.UpdateDeck(deckModel);
-        }
+        //public async Task UpdateDeck(DeckPropertiesDto props)
+        //{
+        //    DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(props.Format);
 
-        public async Task DeleteDeck(int deckId)
-        {
-            await _deckService.DeleteDeck(deckId);
-        }
+        //    DeckProperties deckModel = MapDeckPropertiesDto(props, deckFormat.Id);
 
-        public async Task<IEnumerable<DeckPropertiesDto>> GetDeckOverviews()
-        {
-            var serviceResult = await _deckService.GetDeckOverviews();
+        //    await _deckService.UpdateDeck(deckModel);
+        //}
 
-            var formats = await _referenceService.GetAllMagicFormats();
+        //public async Task DeleteDeck(int deckId)
+        //{
+        //    await _deckService.DeleteDeck(deckId);
+        //}
 
-            List<DeckPropertiesDto> mappedResults = serviceResult
-                .Select(props => MapDeckPropertiesDto(props, formats.FirstOrDefault(f => f.Id == props.FormatId).Name))
-                .ToList();
+        //public async Task<IEnumerable<DeckPropertiesDto>> GetDeckOverviews()
+        //{
+        //    var serviceResult = await _deckService.GetDeckOverviews();
 
-            return mappedResults;
-        }
+        //    var formats = await _referenceService.GetAllMagicFormats();
 
-        public async Task<DeckDetailDto> GetDeckDetail(int deckId)
-        {
-            var serviceResult = await _deckService.GetDeckDetail(deckId);
+        //    List<DeckPropertiesDto> mappedResults = serviceResult
+        //        .Select(props => MapDeckPropertiesDto(props, formats.FirstOrDefault(f => f.Id == props.FormatId).Name))
+        //        .ToList();
 
-            var deckFormat = await _referenceService.GetMagicFormat(serviceResult.Props.FormatId);
+        //    return mappedResults;
+        //}
 
-            DeckDetailDto mappedResult = MapDeckDetailDto(serviceResult, deckFormat.Name);
+        //public async Task<DeckDetailDto> GetDeckDetail(int deckId)
+        //{
+        //    var serviceResult = await _deckService.GetDeckDetail(deckId);
 
-            return mappedResult;
-        }
+        //    var deckFormat = await _referenceService.GetMagicFormat(serviceResult.Props.FormatId);
 
-        public async Task AddDeckCard(DeckCardDto dto)
-        {
-            DeckCard mappedCard = MapDeckCardDto(dto);
+        //    DeckDetailDto mappedResult = MapDeckDetailDto(serviceResult, deckFormat.Name);
 
-            await _deckService.AddDeckCard(mappedCard);
-        }
+        //    return mappedResult;
+        //}
 
-        public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto)
-        {
-            List<DeckCard> mappedCards = dto.Select(x => MapDeckCardDto(x)).ToList();
+        //public async Task AddDeckCard(DeckCardDto dto)
+        //{
+        //    DeckCard mappedCard = MapDeckCardDto(dto);
 
-            await _deckService.AddDeckCardBatch(mappedCards);
-        }
+        //    await _deckService.AddDeckCard(mappedCard);
+        //}
 
-        public async Task UpdateDeckCard(DeckCardDto dto)
-        {
-            DeckCard mappedCard = MapDeckCardDto(dto);
+        //public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto)
+        //{
+        //    List<DeckCard> mappedCards = dto.Select(x => MapDeckCardDto(x)).ToList();
 
-            await _deckService.UpdateDeckCard(mappedCard);
-        }
+        //    await _deckService.AddDeckCardBatch(mappedCards);
+        //}
 
-        public async Task DeleteDeckCard(int deckCardId)
-        {
-            await _deckService.DeleteDeckCard(deckCardId);
-        }
+        //public async Task UpdateDeckCard(DeckCardDto dto)
+        //{
+        //    DeckCard mappedCard = MapDeckCardDto(dto);
+
+        //    await _deckService.UpdateDeckCard(mappedCard);
+        //}
+
+        //public async Task DeleteDeckCard(int deckCardId)
+        //{
+        //    await _deckService.DeleteDeckCard(deckCardId);
+        //}
 
         #region private
 
-        private static DeckCard MapDeckCardDto(DeckCardDto dto)
-        {
-            if (dto == null)
-            {
-                return null;
-            }
+        //private static DeckCard MapDeckCardDto(DeckCardDto dto)
+        //{
+        //    if (dto == null)
+        //    {
+        //        return null;
+        //    }
 
-            DeckCard result = new DeckCard()
-            {
-                CategoryId = dto.CategoryId,
-                DeckId = dto.DeckId,
-                InventoryCard = MapInventoryCardDto(dto.InventoryCard),
-            };
+        //    DeckCard result = new DeckCard()
+        //    {
+        //        CategoryId = dto.CategoryId,
+        //        DeckId = dto.DeckId,
+        //        InventoryCard = MapInventoryCardDto(dto.InventoryCard),
+        //    };
 
-            return result;
-        }
-        
-        private static DeckCardDto MapDeckCardDto(DeckCard dto)
-        {
-            if (dto == null)
-            {
-                return null;
-            }
+        //    return result;
+        //}
 
-            DeckCardDto result = new DeckCardDto()
-            {
-                CategoryId = dto.CategoryId,
-                DeckId = dto.DeckId,
-                InventoryCard = MapInventoryCardDto(dto.InventoryCard),
-            };
+        //private static DeckCardDto MapDeckCardDto(DeckCard dto)
+        //{
+        //    if (dto == null)
+        //    {
+        //        return null;
+        //    }
 
-            return result;
-        }
+        //    DeckCardDto result = new DeckCardDto()
+        //    {
+        //        CategoryId = dto.CategoryId,
+        //        DeckId = dto.DeckId,
+        //        InventoryCard = MapInventoryCardDto(dto.InventoryCard),
+        //    };
 
-        private static DeckDetailDto MapDeckDetailDto(DeckDetail detail, string formatName)
-        {
+        //    return result;
+        //}
+
+        //private static DeckDetailDto MapDeckDetailDto(DeckDetail detail, string formatName)
+        //{
 
 
-            DeckDetailDto result = new DeckDetailDto()
-            {
-                CardDetails = detail.CardDetails.Select(x => MapInventoryCardDto(x)).ToList(),
-                CardOverviews = MapInventoryOverviewDtos(detail.CardOverviews),
-                Props = MapDeckPropertiesDto(detail.Props, formatName),
-                Stats = MapDeckStatsDto(detail.Stats),
-            };
+        //    DeckDetailDto result = new DeckDetailDto()
+        //    {
+        //        CardDetails = detail.CardDetails.Select(x => MapInventoryCardDto(x)).ToList(),
+        //        CardOverviews = MapInventoryOverviewDtos(detail.CardOverviews),
+        //        Props = MapDeckPropertiesDto(detail.Props, formatName),
+        //        Stats = MapDeckStatsDto(detail.Stats),
+        //    };
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        private static DeckProperties MapDeckPropertiesDto(DeckPropertiesDto props, int formatId)
-        {
-            DeckProperties deckModel = new DeckProperties()
-            {
-                Id = props.Id,
-                Name = props.Name,
-                FormatId = formatId,
-                Notes = props.Notes,
+        //private static DeckProperties MapDeckPropertiesDto(DeckPropertiesDto props, int formatId)
+        //{
+        //    DeckProperties deckModel = new DeckProperties()
+        //    {
+        //        Id = props.Id,
+        //        Name = props.Name,
+        //        FormatId = formatId,
+        //        Notes = props.Notes,
 
-                BasicW = props.BasicW,
-                BasicU = props.BasicU,
-                BasicB = props.BasicB,
-                BasicR = props.BasicR,
-                BasicG = props.BasicG,
-            };
-            return deckModel;
-        }
+        //        BasicW = props.BasicW,
+        //        BasicU = props.BasicU,
+        //        BasicB = props.BasicB,
+        //        BasicR = props.BasicR,
+        //        BasicG = props.BasicG,
+        //    };
+        //    return deckModel;
+        //}
 
-        private static DeckPropertiesDto MapDeckPropertiesDto(DeckProperties props, string formatName)
-        {
-            DeckPropertiesDto deckModel = new DeckPropertiesDto()
-            {
-                Id = props.Id,
-                Name = props.Name,
-                Format = formatName,
-                Notes = props.Notes,
+        //private static DeckPropertiesDto MapDeckPropertiesDto(DeckProperties props, string formatName)
+        //{
+        //    DeckPropertiesDto deckModel = new DeckPropertiesDto()
+        //    {
+        //        Id = props.Id,
+        //        Name = props.Name,
+        //        Format = formatName,
+        //        Notes = props.Notes,
 
-                BasicW = props.BasicW,
-                BasicU = props.BasicU,
-                BasicB = props.BasicB,
-                BasicR = props.BasicR,
-                BasicG = props.BasicG,
-            };
-            return deckModel;
-        }
+        //        BasicW = props.BasicW,
+        //        BasicU = props.BasicU,
+        //        BasicB = props.BasicB,
+        //        BasicR = props.BasicR,
+        //        BasicG = props.BasicG,
+        //    };
+        //    return deckModel;
+        //}
 
-        private static DeckStatsDto MapDeckStatsDto(DeckStats dto)
-        {
-            DeckStatsDto result = new DeckStatsDto
-            {
-                ColorIdentity = dto.ColorIdentity,
-                CostCounts = dto.CostCounts,
-                TotalCost = dto.TotalCost,
-                TotalCount = dto.TotalCount,
-                TypeCounts = dto.TypeCounts,
-            };
-            return result;
-        }
+        //private static DeckStatsDto MapDeckStatsDto(DeckStats dto)
+        //{
+        //    DeckStatsDto result = new DeckStatsDto
+        //    {
+        //        ColorIdentity = dto.ColorIdentity,
+        //        CostCounts = dto.CostCounts,
+        //        TotalCost = dto.TotalCost,
+        //        TotalCount = dto.TotalCount,
+        //        TypeCounts = dto.TypeCounts,
+        //    };
+        //    return result;
+        //}
 
-        private static InventoryCard MapInventoryCardDto(InventoryCardDto dto)
-        {
-            if(dto == null)
-            {
-                return null;
-            }
+        //private static InventoryCard MapInventoryCardDto(InventoryCardDto dto)
+        //{
+        //    if(dto == null)
+        //    {
+        //        return null;
+        //    }
 
-            InventoryCard result = new InventoryCard()
-            {
-                IsFoil = dto.IsFoil,
-                InventoryCardStatusId = dto.InventoryCardStatusId,
-                MultiverseId = dto.MultiverseId,
-                VariantType = dto.VariantType,
-                Name = dto.Name,
-                Set = dto.Set,
-                Id = dto.Id,
-                DeckCards = MapInventoryDeckCardDtos(dto.DeckCards),
-            };
+        //    InventoryCard result = new InventoryCard()
+        //    {
+        //        IsFoil = dto.IsFoil,
+        //        InventoryCardStatusId = dto.InventoryCardStatusId,
+        //        MultiverseId = dto.MultiverseId,
+        //        VariantType = dto.VariantType,
+        //        Name = dto.Name,
+        //        Set = dto.Set,
+        //        Id = dto.Id,
+        //        DeckCards = MapInventoryDeckCardDtos(dto.DeckCards),
+        //    };
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        private static InventoryCardDto MapInventoryCardDto(InventoryCard card)
-        {
-            InventoryCardDto result = new InventoryCardDto
-            {
-                Id = card.Id,
-                DeckCards = card.DeckCards.Select(x => MapInventoryDeckCardDto(x)).ToList(),
-                InventoryCardStatusId = card.InventoryCardStatusId,
-                IsFoil = card.IsFoil,
-                MultiverseId = card.MultiverseId,
-                Name = card.Name,
-                Set = card.Set,
-                VariantType = card.VariantType,
-            };
-            return result;
-        }
+        //private static InventoryCardDto MapInventoryCardDto(InventoryCard card)
+        //{
+        //    InventoryCardDto result = new InventoryCardDto
+        //    {
+        //        Id = card.Id,
+        //        DeckCards = card.DeckCards.Select(x => MapInventoryDeckCardDto(x)).ToList(),
+        //        InventoryCardStatusId = card.InventoryCardStatusId,
+        //        IsFoil = card.IsFoil,
+        //        MultiverseId = card.MultiverseId,
+        //        Name = card.Name,
+        //        Set = card.Set,
+        //        VariantType = card.VariantType,
+        //    };
+        //    return result;
+        //}
 
-        private static List<InventoryDeckCard> MapInventoryDeckCardDtos(List<InventoryDeckCardDto> cards)
-        {
-            if(cards == null)
-            {
-                return null;
-            }
+        //private static List<InventoryDeckCard> MapInventoryDeckCardDtos(List<InventoryDeckCardDto> cards)
+        //{
+        //    if(cards == null)
+        //    {
+        //        return null;
+        //    }
 
-            List<InventoryDeckCard> result = cards.Select(x => new InventoryDeckCard()
-            {
-                DeckCardCategory = x.DeckCardCategory,
-                DeckId = x.DeckId,
-                DeckName = x.DeckName,
-                Id = x.Id,
-                InventoryCardId = x.InventoryCardId,
-            }).ToList();
+        //    List<InventoryDeckCard> result = cards.Select(x => new InventoryDeckCard()
+        //    {
+        //        DeckCardCategory = x.DeckCardCategory,
+        //        DeckId = x.DeckId,
+        //        DeckName = x.DeckName,
+        //        Id = x.Id,
+        //        InventoryCardId = x.InventoryCardId,
+        //    }).ToList();
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        private static List<InventoryOverviewDto> MapInventoryOverviewDtos(IEnumerable<InventoryOverview> overviews)
-        {
-            List<InventoryOverviewDto> result = overviews.Select(x => new InventoryOverviewDto
-            {
-                Cmc = x.Cmc,
-                Cost = x.Cost,
-                Count = x.Count,
-                Description = x.Description,
-                Id = x.Id,
-                Img = x.Img,
-                Name = x.Name,
-                Type = x.Type,
-            }).ToList();
+        //private static List<InventoryOverviewDto> MapInventoryOverviewDtos(IEnumerable<InventoryOverview> overviews)
+        //{
+        //    List<InventoryOverviewDto> result = overviews.Select(x => new InventoryOverviewDto
+        //    {
+        //        Cmc = x.Cmc,
+        //        Cost = x.Cost,
+        //        Count = x.Count,
+        //        Description = x.Description,
+        //        Id = x.Id,
+        //        Img = x.Img,
+        //        Name = x.Name,
+        //        Type = x.Type,
+        //    }).ToList();
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        private static InventoryDeckCardDto MapInventoryDeckCardDto(InventoryDeckCard invDeckCard)
-        {
-            InventoryDeckCardDto result = new InventoryDeckCardDto()
-            {
-                DeckCardCategory = invDeckCard.DeckCardCategory,
-                DeckId = invDeckCard.DeckId,
-                DeckName = invDeckCard.DeckName,
-                Id = invDeckCard.Id,
-                InventoryCardId = invDeckCard.InventoryCardId,
-            };
-            return result;
-        }
-        
+        //private static InventoryDeckCardDto MapInventoryDeckCardDto(InventoryDeckCard invDeckCard)
+        //{
+        //    InventoryDeckCardDto result = new InventoryDeckCardDto()
+        //    {
+        //        DeckCardCategory = invDeckCard.DeckCardCategory,
+        //        DeckId = invDeckCard.DeckId,
+        //        DeckName = invDeckCard.DeckName,
+        //        Id = invDeckCard.Id,
+        //        InventoryCardId = invDeckCard.InventoryCardId,
+        //    };
+        //    return result;
+        //}
+
         #endregion
 
     }

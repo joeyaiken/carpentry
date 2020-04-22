@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Models;
+using Carpentry.Data.QueryParameters;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.UI.Controllers
@@ -16,9 +17,9 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Card Search controller: {ex.Message}";
         }
 
-        private readonly ICardSearchControllerService _cardSearch;
+        private readonly ICardSearchService _cardSearch;
 
-        public CardSearchController(ICardSearchControllerService cardSearch)
+        public CardSearchController(ICardSearchService cardSearch)
         {
             _cardSearch = cardSearch;
         }

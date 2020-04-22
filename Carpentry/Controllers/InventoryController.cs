@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Models;
+using Carpentry.Data.QueryParameters;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -18,14 +19,14 @@ namespace Carpentry.UI.Legacy.Controllers
             return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
         }
 
-        private readonly IInventoryControllerService _inventory;
+        private readonly IInventoryService _inventory;
         private readonly MapperService _mapper;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryControllerService inventory, MapperService mapper)
+        public InventoryController(IInventoryService inventory, MapperService mapper)
         {
             _inventory = inventory;
             _mapper = mapper;

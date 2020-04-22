@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Models;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 
 namespace Carpentry.UI.Controllers
 {
@@ -16,11 +16,11 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
         }
 
-        private readonly ICoreControllerService _coreService;
+        private readonly IFilterService _filterService;
 
-        public CoreController(ICoreControllerService coreService)
+        public CoreController(IFilterService filterService)
         {
-            _coreService = coreService;
+            _filterService = filterService;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                AppFiltersDto result = await _coreService.GetAppFilterValues();
+                AppFiltersDto result = await _filterService.GetAppFilterValues();
                 return Ok(result);
 
                 ////List<FilterOption> formats = await _filterService.GetFormatFilterOptions();

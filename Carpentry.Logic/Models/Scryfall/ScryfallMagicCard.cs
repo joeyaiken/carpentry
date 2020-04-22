@@ -233,9 +233,9 @@ namespace Carpentry.Logic.Models.Scryfall
             return JsonConvert.SerializeObject(this, Formatting.None);
         }
 
-        public MagicCard ToMagicCard()
+        public MagicCardDto ToMagicCard()
         {
-            MagicCard result = new MagicCard()
+            MagicCardDto result = new MagicCardDto()
             {
                 Cmc = Cmc,
                 ColorIdentity = ColorIdentity,

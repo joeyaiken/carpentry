@@ -1,49 +1,87 @@
-﻿using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Data.Interfaces;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations
 {
     public class FilterService : IFilterService
     {
-        public async Task<List<FilterOption>> GetSetFilterOptions()
+        private readonly IDataReferenceService _dataReferenceService;
+
+        public FilterService(IDataReferenceService dataReferenceService)
         {
-//#error not implemented
-            await Task.CompletedTask;
-            throw new NotImplementedException();
+            _dataReferenceService = dataReferenceService;
         }
-        public async Task<List<FilterOption>> GetTypeFilterOptions()
+
+        public async Task<AppFiltersDto> GetAppFilterValues()
         {
-//#error not implemented
-            await Task.CompletedTask;
-            throw new NotImplementedException();
+            AppFiltersDto result = new AppFiltersDto();
+
+            var allFormats = await _dataReferenceService.GetAllMagicFormats();
+
+            result.Formats = allFormats
+                .Select(x => new FilterOption()
+                {
+                    Value = x.Id.ToString(),
+                    Name = x.Name
+                })
+                .ToList();
+
+            var allRarities = await _dataReferenceService.GetAllRarities();
+
+            result.Rarities = allRarities
+                .Select(x => new FilterOption()
+                {
+                    Value = x.Id.ToString(),
+                    Name = x.Name
+                })
+                .ToList();
+
+            var allSets = await _dataReferenceService.GetAllSets();
+
+            result.Sets = allSets
+                .Select(x => new FilterOption()
+                {
+                    Value = x.Id.ToString(),
+                    Name = x.Name
+                })
+                .ToList();
+
+            var allStatuses = await _dataReferenceService.GetAllStatuses();
+
+            result.Statuses = allStatuses
+                .Select(x => new FilterOption()
+                {
+                    Value = x.Id.ToString(),
+                    Name = x.Name
+                })
+                .ToList();
+
+
+            var allTypes = _dataReferenceService.GetAllTypes();
+
+            result.Types = allTypes
+                .Select(x => new FilterOption()
+                {
+                    Value = x.Id.ToLower(),
+                    Name = x.Name
+                })
+                .ToList();
+
+            var allManaTypes = await _dataReferenceService.GetAllManaColors();
+
+            result.ManaColors = allManaTypes
+                .Select(x => new FilterOption()
+                {
+                    Value = x.Id.ToString(),
+                    Name = x.Name
+                })
+                .ToList();
+
+            return result;
         }
-        public async Task<List<FilterOption>> GetFormatFilterOptions()
-        {
-//#error not implemented
-            await Task.CompletedTask;
-            throw new NotImplementedException();
-        }
-        public async Task<List<FilterOption>> GetManaColorFilterOptions()
-        {
-//#error not implemented
-            await Task.CompletedTask;
-            throw new NotImplementedException();
-        }
-        public async Task<List<FilterOption>> GetRarityFilterOptions()
-        {
-//#error not implemented
-            await Task.CompletedTask;
-            throw new NotImplementedException();
-        }
-        public async Task<List<FilterOption>> GetCardStatusFilterOptions()
-        {
-//#error not implemented
-            await Task.CompletedTask;
-            throw new NotImplementedException();
-        }
+
     }
 }

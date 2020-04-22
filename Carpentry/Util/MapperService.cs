@@ -1,4 +1,4 @@
-﻿using Carpentry.Service.Models;
+﻿using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,7 +119,7 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //FilterOption
-        public List<LegacyFilterOptionDto> ToLegacy(IEnumerable<FilterOptionDto> filters)
+        public List<LegacyFilterOptionDto> ToLegacy(IEnumerable<FilterOption> filters)
         {
             List<LegacyFilterOptionDto> result = filters.Select(model => new LegacyFilterOptionDto
             {

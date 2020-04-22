@@ -1,6 +1,6 @@
 ﻿//using Carpentry.Interfaces;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Models;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 //using Carpentry.Models;
@@ -20,15 +20,15 @@ namespace Carpentry.UI.Legacy.Controllers
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
         }
 
-        private readonly ICoreControllerService _coreService;
+        private readonly IFilterService _filterService;
         private readonly MapperService _mapper;
 
         public CoreController(
-            ICoreControllerService coreService,
+            IFilterService filterService,
             MapperService mapper
             )
         {
-            _coreService = coreService;
+            _filterService = filterService;
             _mapper = mapper;
         }
 
@@ -47,7 +47,7 @@ namespace Carpentry.UI.Legacy.Controllers
         {
             try
             {
-                AppFiltersDto result = await _coreService.GetAppFilterValues();
+                AppFiltersDto result = await _filterService.GetAppFilterValues();
 
                 LegacyAppFiltersDto mappedResult = new LegacyAppFiltersDto
                 {

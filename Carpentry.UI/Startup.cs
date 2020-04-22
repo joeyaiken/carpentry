@@ -17,8 +17,8 @@ using Microsoft.EntityFrameworkCore;
 //using Carpentry.Implementations;
 using Microsoft.Extensions.Hosting;
 using Carpentry.Data.DataContext;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Implementations;
+//using Carpentry.Service.Interfaces;
+//using Carpentry.Service.Implementations;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Implementations;
 //using Carpentry.UI.Util;
@@ -68,6 +68,7 @@ namespace Carpentry.UI
 
 
             services.AddScoped<IDataUpdateService, DataUpdateService>();
+            services.AddScoped<IFilterService, FilterService>();
 
             services.AddScoped<IScryfallService, ScryfallService>();
             services.AddHttpClient<IScryfallService, ScryfallService>();
@@ -78,10 +79,10 @@ namespace Carpentry.UI
             //services.AddScoped<IMapperService, MapperService>();
 
             //Service layer services
-            services.AddScoped<ICoreControllerService, CoreControllerService>();
-            services.AddScoped<IDeckControllerService, DeckControllerService>();
-            services.AddScoped<IInventoryControllerService, InventoryControllerService>();
-            services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
+            //services.AddScoped<ICoreControllerService, CoreControllerService>();
+            //services.AddScoped<IDeckControllerService, DeckControllerService>();
+            //services.AddScoped<IInventoryControllerService, InventoryControllerService>();
+            //services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
 
 
 

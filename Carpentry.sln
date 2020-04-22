@@ -47,11 +47,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Data.Tests", "Car
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{164B34E2-256A-4A5F-B9A5-116C346EF944}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.Service", "Carpentry.Service\Carpentry.Service.csproj", "{FD18C452-2383-4B83-9DA4-38A7EB9D0356}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Service", "Carpentry.Service\Carpentry.Service.csproj", "{FD18C452-2383-4B83-9DA4-38A7EB9D0356}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.Service.Tests", "Carpentry.Service.Tests\Carpentry.Service.Tests.csproj", "{C62CC8B8-F2C0-4E72-8A03-17C504342B1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Service.Tests", "Carpentry.Service.Tests\Carpentry.Service.Tests.csproj", "{C62CC8B8-F2C0-4E72-8A03-17C504342B1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.UI.Tests.Legacy", "Carpentry.UI.Tests.Legacy\Carpentry.UI.Tests.Legacy.csproj", "{88321027-9969-4C5D-BDA8-E6D04C568216}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.UI.Tests.Legacy", "Carpentry.UI.Tests.Legacy\Carpentry.UI.Tests.Legacy.csproj", "{88321027-9969-4C5D-BDA8-E6D04C568216}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

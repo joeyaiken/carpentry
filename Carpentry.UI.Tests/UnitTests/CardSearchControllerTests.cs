@@ -1,5 +1,8 @@
-﻿using Carpentry.Service.Interfaces;
-using Carpentry.Service.Models;
+﻿using Carpentry.Data.QueryParameters;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
+//using Carpentry.Service.Interfaces;
+//using Carpentry.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -9,51 +12,18 @@ using System.Threading.Tasks;
 
 namespace Carpentry.UI.Tests.UnitTests
 {
+    /// <summary>
+    /// I initially created a single mock service & controller intance in the test constructor
+    /// Instead, I want to arrange & mock only the service methods I expect to see called
+    /// </summary>
     [TestClass]
     public class CardSearchControllerTests
     {
-        /// <summary>
-        /// I initially created a single mock service & controller intance in the test constructor
-        /// Instead, I want to arrange & mock only the service methods I expect to see called
-        /// </summary>
-        public CardSearchControllerTests()
-        {
-            ////mock service
-            //var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
-
-            ////search result payload
-            //IEnumerable<MagicCardDto> searchResults = new List<MagicCardDto>()
-            //{
-            //    new MagicCardDto{ },
-            //    new MagicCardDto{ },
-            //    new MagicCardDto{ },
-            //    new MagicCardDto{ },
-            //    new MagicCardDto{ },
-            //}.AsEnumerable();
-
-            ////SearchWeb
-            //mockService
-            //    .Setup(p => p.SearchCardsFromWeb(It.IsNotNull<NameSearchQueryParameter>()))
-            //    .ReturnsAsync(searchResults);
-
-            ////SearchSet
-            //mockService
-            //    .Setup(p => p.SearchCardsFromSet(It.IsNotNull<CardSearchQueryParameter>()))
-            //    .ReturnsAsync(searchResults);
-
-            ////SearchInventory
-            //mockService
-            //    .Setup(p => p.SearchCardsFromInventory(It.IsNotNull<InventoryQueryParameter>()))
-            //    .ReturnsAsync(searchResults);
-
-            //_cardSearchController = new Controllers.CardSearchController(mockService.Object);
-        }
-
         [TestMethod]
         public void CardSearch_GetStatus_ReturnsOK_Test()
         {
             //arrange
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             var cardSearchController = new Controllers.CardSearchController(mockService.Object);
 
@@ -68,7 +38,6 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.AreEqual("Online", resultValue);
         }
 
-
         [TestMethod]
         public async Task CardSearch_SearchWeb_ReturnsOK_Test()
         {
@@ -82,7 +51,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.SearchCardsFromWeb(It.IsNotNull<NameSearchQueryParameter>()))
@@ -119,7 +88,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
             
             mockService
                 .Setup(p => p.SearchCardsFromSet(It.IsNotNull<CardSearchQueryParameter>()))
@@ -156,7 +125,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             //SearchInventory
             mockService
@@ -183,6 +152,5 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.IsNotNull(resultValue);
             Assert.AreEqual(5, resultValue.Count());
         }
-
     }
 }

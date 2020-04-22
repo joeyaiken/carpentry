@@ -7,8 +7,9 @@ using Carpentry.UI.Legacy.Models;
 using Microsoft.AspNetCore.Mvc;
 using Carpentry.UI.Legacy.Util;
 using Carpentry.UI.Legacy.Controllers;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Models;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
+using Carpentry.Data.QueryParameters;
 
 namespace Carpentry.UI.Tests.Legacy.UnitTests
 {
@@ -19,7 +20,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
         public void Inventory_GetStatus_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockService = new Mock<IInventoryControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             var mapperService = new MapperService();
 
@@ -42,7 +43,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
             //arrange
             int idToExpect = 1;
 
-            var mockService = new Mock<IInventoryControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCardDto>()))
@@ -70,7 +71,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
         public async Task Inventory_AddBatch_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockService = new Mock<IInventoryControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCardDto>>()))
@@ -101,7 +102,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
         public async Task Inventory_Update_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockService = new Mock<IInventoryControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCardDto>()))
@@ -130,7 +131,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
             //arrange
             var idToExpect = 1;
 
-            var mockService = new Mock<IInventoryControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i == idToExpect)))
@@ -151,7 +152,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
         public async Task Inventory_Search_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockService = new Mock<IInventoryControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             IEnumerable<InventoryOverviewDto> searchResult = new List<InventoryOverviewDto>()
             {
@@ -193,7 +194,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
         public async Task Inventory_GetByName_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockService = new Mock<IInventoryControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             InventoryDetailDto detailResult = new InventoryDetailDto()
             {

@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Carpentry.Logic.Models
 {
-    public class InventoryDetail
+    public class InventoryDetailDto
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -14,7 +12,7 @@ namespace Carpentry.Logic.Models
         public List<MagicCardDto> Cards { get; set; }
 
         [JsonProperty("inventoryCards")]
-        public List<InventoryCard> InventoryCards { get; set; }
+        public List<InventoryCardDto> InventoryCards { get; set; }
 
         //Deck Cards
         //for now, just storing IDs under an inventory card

@@ -1,5 +1,5 @@
-﻿using Carpentry.Service.Models;
-using Carpentry.Service.Interfaces;
+﻿//using Carpentry.Service.Models;
+//using Carpentry.Service.Interfaces;
 using Carpentry.UI.Legacy.Controllers;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
@@ -9,6 +9,9 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
+using Carpentry.Data.QueryParameters;
 
 namespace Carpentry.UI.Tests.Legacy.UnitTests
 {
@@ -19,7 +22,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
         public void CardSearch_GetStatus_ReturnsOK_Test()
         {
             //arrange
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             var mapperService = new MapperService();
 
@@ -49,7 +52,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.SearchCardsFromWeb(It.IsNotNull<NameSearchQueryParameter>()))
@@ -88,7 +91,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             mockService
                 .Setup(p => p.SearchCardsFromSet(It.IsNotNull<CardSearchQueryParameter>()))
@@ -127,7 +130,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
                 new MagicCardDto{ },
             }.AsEnumerable();
 
-            var mockService = new Mock<ICardSearchControllerService>(MockBehavior.Strict);
+            var mockService = new Mock<ICardSearchService>(MockBehavior.Strict);
 
             //SearchInventory
             mockService

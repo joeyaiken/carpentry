@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carpentry.Data.QueryParameters;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Models;
+//using Carpentry.Service.Interfaces;
+//using Carpentry.Service.Models;
 
 namespace Carpentry.UI.Controllers
 {
@@ -16,13 +19,13 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
         }
 
-        private readonly IInventoryControllerService _inventory;
+        private readonly IInventoryService _inventory;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryControllerService inventory)
+        public InventoryController(IInventoryService inventory)
         {
             _inventory = inventory;
         }

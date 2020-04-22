@@ -6,10 +6,10 @@ namespace Carpentry.Service.Interfaces
 {
     public interface ICardSearchControllerService
     {
-        Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters);
+        //Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters);
 
-        Task<IEnumerable<MagicCardDto>> SearchCardsFromSet(CardSearchQueryParameter filters);
+        //Task<IEnumerable<MagicCardDto>> SearchCardsFromSet(CardSearchQueryParameter filters);
 
-        Task<IEnumerable<MagicCardDto>> SearchCardsFromWeb(NameSearchQueryParameter filters);
+        //Task<IEnumerable<MagicCardDto>> SearchCardsFromWeb(NameSearchQueryParameter filters);
     }
 }

@@ -44,9 +44,9 @@ namespace Carpentry.Logic.Implementations
         #region private methods
 
 
-        private static IEnumerable<MagicCard> MapInventoryQueryToMagicCardObject(IEnumerable<Data.DataModels.CardData> query)
+        private static IEnumerable<MagicCardDto> MapInventoryQueryToMagicCardObject(IEnumerable<Data.DataModels.CardData> query)
         {
-            IEnumerable<MagicCard> result = query.Select(card => new MagicCard()
+            IEnumerable<MagicCardDto> result = query.Select(card => new MagicCardDto()
             {
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
@@ -84,7 +84,7 @@ namespace Carpentry.Logic.Implementations
 
         #region Inventory related methods
 
-        public async Task<int> AddInventoryCard(InventoryCard dto)
+        public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
             await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
 
@@ -105,7 +105,7 @@ namespace Carpentry.Logic.Implementations
             //return newId;
         }
 
-        public async Task AddInventoryCardBatch(IEnumerable<InventoryCard> cards)
+        public async Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards)
         {
 
             //Ensure all cards exist in the repo
@@ -133,7 +133,7 @@ namespace Carpentry.Logic.Implementations
             await _inventoryRepo.AddInventoryCardBatch(newCards);
         }
 
-        public async Task UpdateInventoryCard(InventoryCard dto)
+        public async Task UpdateInventoryCard(InventoryCardDto dto)
         {
             //This probably should just:
             //  Take DTO from the UI layer
@@ -164,9 +164,9 @@ namespace Carpentry.Logic.Implementations
         }
 
 
-        private static InventoryOverview MapCardResultToInventoryOverview(CardOverviewResult data)
+        private static InventoryOverviewDto MapCardResultToInventoryOverview(CardOverviewResult data)
         {
-            InventoryOverview result = new InventoryOverview()
+            InventoryOverviewDto result = new InventoryOverviewDto()
             {
                 Cmc = data.Cmc,
                 Cost = data.Cost,
@@ -180,7 +180,7 @@ namespace Carpentry.Logic.Implementations
             return result;
         }
 
-        public async Task<IEnumerable<InventoryOverview>> GetInventoryOverviews(InventoryQueryParameter param)
+        public async Task<IEnumerable<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
         {
             if(param == null)
             {
@@ -189,26 +189,26 @@ namespace Carpentry.Logic.Implementations
 
             IEnumerable<CardOverviewResult> result = await _queryService.GetInventoryOverviews(param);
 
-            IEnumerable<InventoryOverview> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x));
+            IEnumerable<InventoryOverviewDto> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x));
 
             return mappedResult;
         }
 
-        public async Task<InventoryDetail> GetInventoryDetailByName(string name)
+        public async Task<InventoryDetailDto> GetInventoryDetailByName(string name)
         {
-            InventoryDetail result = new InventoryDetail()
+            InventoryDetailDto result = new InventoryDetailDto()
             {
                 Name = name,
-                Cards = new List<MagicCard>(),
-                InventoryCards = new List<InventoryCard>(),
+                Cards = new List<MagicCardDto>(),
+                InventoryCards = new List<InventoryCardDto>(),
             };
 
             //inv cards
 
             //GetInventoryCardsByName -> InventoryCardResult
 
-            List<InventoryCard> inventoryCards = (await _queryService.GetInventoryCardsByName(name))
-                .Select(x => new InventoryCard()
+            List<InventoryCardDto> inventoryCards = (await _queryService.GetInventoryCardsByName(name))
+                .Select(x => new InventoryCardDto()
                 {
                     Id = x.Id,
                     IsFoil = x.IsFoil,
@@ -217,7 +217,7 @@ namespace Carpentry.Logic.Implementations
                     VariantType = x.VariantType,
                     Name = x.Name,
                     Set = x.Set,
-                    DeckCards = x.DeckCards.Select(c => new InventoryDeckCard
+                    DeckCards = x.DeckCards.Select(c => new InventoryDeckCardDto
                     {
                         Id = c.Id,
                         DeckId = c.DeckId,

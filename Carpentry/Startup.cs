@@ -11,8 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 //using Carpentry.Data.LegacyDataContextLegacy;
 //using Carpentry.Data.LegacyDataContext;
-using Carpentry.Service.Interfaces;
-using Carpentry.Service.Implementations;
+//using Carpentry.Service.Interfaces;
+//using Carpentry.Service.Implementations;
 //using Carpentry.Interfaces;
 //using Carpentry.Implementations;
 using Microsoft.Extensions.Hosting;
@@ -87,19 +87,18 @@ namespace Carpentry
             services.AddScoped<ICardSearchService, CardSearchService>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
-            //services.AddScoped<IFilterService, FilterService>();
-
-
+            
             services.AddScoped<IDataUpdateService, DataUpdateService>();
+            services.AddScoped<IFilterService, FilterService>();
 
             services.AddScoped<IScryfallService, ScryfallService>();
             services.AddHttpClient<IScryfallService, ScryfallService>();
 
             //Service layer services
-            services.AddScoped<ICoreControllerService, CoreControllerService>();
-            services.AddScoped<IDeckControllerService, DeckControllerService>();
-            services.AddScoped<IInventoryControllerService, InventoryControllerService>();
-            services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
+            //services.AddScoped<ICoreControllerService, CoreControllerService>();
+            //services.AddScoped<IDeckControllerService, DeckControllerService>();
+            //services.AddScoped<IInventoryControllerService, InventoryControllerService>();
+            //services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
 
 
 

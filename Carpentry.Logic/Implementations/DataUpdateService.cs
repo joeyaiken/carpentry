@@ -142,13 +142,13 @@ namespace Carpentry.Logic.Implementations
                 scryData = await _scryfallRepo.GetSetByCode(setCode);
             }
 
-            List<MagicCard> magicCards = null;
+            List<MagicCardDto> magicCards = null;
 
             //check if the scry set is parsed
             if (scryData.DataIsParsed)
             {
                 //deserialize as MagicCard
-                magicCards = JsonConvert.DeserializeObject<List<MagicCard>>(scryData.CardData);
+                magicCards = JsonConvert.DeserializeObject<List<MagicCardDto>>(scryData.CardData);
             }
             else
             {

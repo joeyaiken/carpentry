@@ -6,22 +6,22 @@ namespace Carpentry.Service.Interfaces
 {
     public interface IDeckControllerService
     {
-        Task<int> AddDeck(DeckPropertiesDto props);
+        //Task<int> AddDeck(DeckPropertiesDto props);
 
-        Task UpdateDeck(DeckPropertiesDto props);
+        //Task UpdateDeck(DeckPropertiesDto props);
 
-        Task DeleteDeck(int deckId);
+        //Task DeleteDeck(int deckId);
 
-        Task<IEnumerable<DeckPropertiesDto>> GetDeckOverviews();
+        //Task<IEnumerable<DeckPropertiesDto>> GetDeckOverviews();
 
-        Task<DeckDetailDto> GetDeckDetail(int deckId);
+        //Task<DeckDetailDto> GetDeckDetail(int deckId);
 
-        Task AddDeckCard(DeckCardDto dto);
+        //Task AddDeckCard(DeckCardDto dto);
 
-        Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto);
+        //Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto);
 
-        Task UpdateDeckCard(DeckCardDto card);
+        //Task UpdateDeckCard(DeckCardDto card);
 
-        Task DeleteDeckCard(int deckCardId);
+        //Task DeleteDeckCard(int deckCardId);
     }
 }

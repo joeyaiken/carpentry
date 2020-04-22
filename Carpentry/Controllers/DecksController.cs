@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Service.Interfaces;
+using Carpentry.Logic.Interfaces;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +16,10 @@ namespace Carpentry.UI.Legacy.Controllers
             return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
         }
 
-        private readonly IDeckControllerService _decks;
+        private readonly IDeckService _decks;
         private readonly MapperService _mapper;
 
-        public DecksController(IDeckControllerService decks, MapperService mapper)
+        public DecksController(IDeckService decks, MapperService mapper)
         {
             _decks = decks;
             _mapper = mapper;

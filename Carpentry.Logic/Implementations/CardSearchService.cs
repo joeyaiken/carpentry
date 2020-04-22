@@ -78,7 +78,7 @@ namespace Carpentry.Logic.Implementations
         //    return result;
         //}
 
-        private static MagicCard MapCardDataToDto(CardDataDto card)
+        private static MagicCardDto MapCardDataToDto(CardDataDto card)
         {
             //private static IQueryable<MagicCard> MapInventoryQueryToScryfallDto(IQueryable<Data.LegacyDataContext.Card> query)
             //{
@@ -116,7 +116,7 @@ namespace Carpentry.Logic.Implementations
             //    return result;
             //}
 
-            MagicCard result = new MagicCard()
+            MagicCardDto result = new MagicCardDto()
             {
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
@@ -160,13 +160,13 @@ namespace Carpentry.Logic.Implementations
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<MagicCard>> SearchCardsFromInventory(InventoryQueryParameter filters)
+        public async Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters)
         {
             //throw new NotImplementedException();
 
             var dbCards = await _dataQueryService.SearchInventoryCards(filters);
 
-            List<MagicCard> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
+            List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
 
 
             //var cardsQuery = await _inventoryRepo.QueryFilteredCards(filters);
@@ -194,12 +194,12 @@ namespace Carpentry.Logic.Implementations
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<MagicCard>> SearchCardsFromSet(CardSearchQueryParameter filters)
+        public async Task<IEnumerable<MagicCardDto>> SearchCardsFromSet(CardSearchQueryParameter filters)
         {
 
             var dbCards = await _dataQueryService.SearchCardSet(filters);
 
-            List<MagicCard> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
+            List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
 
 
 
@@ -234,11 +234,11 @@ namespace Carpentry.Logic.Implementations
         }
 
 
-        public async Task<IEnumerable<MagicCard>> SearchCardsFromWeb(NameSearchQueryParameter filters)
+        public async Task<IEnumerable<MagicCardDto>> SearchCardsFromWeb(NameSearchQueryParameter filters)
         {
             List<ScryfallMagicCard> queryResult = await _scryService.SearchScryfallByName(filters.Name, filters.Exclusive);
 
-            List<MagicCard> mappedResult = queryResult.Select(x => x.ToMagicCard()).ToList();
+            List<MagicCardDto> mappedResult = queryResult.Select(x => x.ToMagicCard()).ToList();
 
             return mappedResult;
         }

@@ -63,7 +63,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             };
 
             //Act
-            IEnumerable<MagicCard> result = await cardSearchService.SearchCardsFromInventory(filters);
+            IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromInventory(filters);
 
             //Assert
             Assert.IsNotNull(result);
@@ -100,7 +100,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             };
 
             //Act
-            IEnumerable<MagicCard> result = await cardSearchService.SearchCardsFromSet(filters);
+            IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromSet(filters);
 
             //Assert
             Assert.IsNotNull(result);
@@ -138,7 +138,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             };
 
             //Act
-            IEnumerable<MagicCard> result = await cardSearchService.SearchCardsFromWeb(filters);
+            IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromWeb(filters);
 
             //Assert
             Assert.IsNotNull(result);

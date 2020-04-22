@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Carpentry.Data.DataModels;
 using System.Linq;
+using Carpentry.Data.QueryResults;
 //using Carpentry.Data.DataContext;
 //using Carpentry.Data.DataModels;
 
@@ -32,12 +33,21 @@ namespace Carpentry.Logic.Implementations
 
         private readonly IInventoryService _inventoryService;
 
-        public DeckService(IDeckDataRepo deckRepo, IDataQueryService queryService, IInventoryService inventoryService, ILogger<DeckService> logger)
+        public IDataReferenceService _referenceService;
+
+        public DeckService(
+            IDeckDataRepo deckRepo, 
+            IDataQueryService queryService, 
+            IInventoryService inventoryService, 
+            ILogger<DeckService> logger,
+            IDataReferenceService referenceService
+            )
         {
             _deckRepo = deckRepo;
             _queryService = queryService;
             _inventoryService = inventoryService;
             _logger = logger;
+            _referenceService = referenceService;
         }
 
         #region private methods
@@ -60,9 +70,9 @@ namespace Carpentry.Logic.Implementations
         //            return totalPrice;
         //        }
 
-        private async Task<DeckStats> GetDeckStats(int deckId)
+        private async Task<DeckStatsDto> GetDeckStats(int deckId)
         {
-            DeckStats result = new DeckStats();
+            DeckStatsDto result = new DeckStatsDto();
 
             //total Count
             result.TotalCount = await _queryService.GetDeckCardCount(deckId);
@@ -318,38 +328,34 @@ namespace Carpentry.Logic.Implementations
             return validationResult;
         }
 
-        private static DeckProperties MapDeckDataToProperties(DeckData dbDeck)
-        {
-            DeckProperties mappedDeck = new DeckProperties()
-            {
-                Id = dbDeck.Id,
-                BasicB = dbDeck.BasicB,
-                BasicG = dbDeck.BasicG,
-                BasicR = dbDeck.BasicR,
-                BasicU = dbDeck.BasicU,
-                BasicW = dbDeck.BasicW,
-                FormatId = dbDeck.Format.Id
-            };
-            return mappedDeck;
-        }
+        //private static DeckPropertiesDto MapDeckDataToProperties(DeckData dbDeck)
+        //{
+        //    DeckPropertiesDto mappedDeck = new DeckPropertiesDto()
+        //    {
+        //        Id = dbDeck.Id,
+        //        BasicB = dbDeck.BasicB,
+        //        BasicG = dbDeck.BasicG,
+        //        BasicR = dbDeck.BasicR,
+        //        BasicU = dbDeck.BasicU,
+        //        BasicW = dbDeck.BasicW,
+        //        FormatId = dbDeck.Format.Id
+        //    };
+        //    return mappedDeck;
+        //}
 
 
         #endregion
 
         #region Public methods
 
-        public async Task<int> AddDeck(DeckProperties props)
+        public async Task<int> AddDeck(DeckPropertiesDto props)
         {
-            //This layer knows of it's own models, but not the UI layer
-            //The DATA layer won't know of this layer's model, so we must map to a type consumable by the data layer
-            //Data.DataModels.MagicFormat deckFormat = await _deckRepo.GetFormatByName(props.Format);
-
-            //?? Is any validation necessary?
+            DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(props.Format);
 
             var newDeck = new DeckData()
             {
                 Name = props.Name,
-                MagicFormatId = props.FormatId,
+                MagicFormatId = deckFormat.Id,
                 Notes = props.Notes,
 
                 BasicW = props.BasicW,
@@ -364,23 +370,19 @@ namespace Carpentry.Logic.Implementations
             return newId;
         }
 
-        public async Task UpdateDeck(DeckProperties deckDto)
+        public async Task UpdateDeck(DeckPropertiesDto deckDto)
         {
-
-            Data.DataModels.DeckData existingDeck = await _deckRepo.GetDeckById(deckDto.Id); //.Decks.Where(x => x.Id == deckDto.Id).FirstOrDefault();
+            DeckData existingDeck = await _deckRepo.GetDeckById(deckDto.Id);
 
             if (existingDeck == null)
             {
                 throw new Exception("No deck found matching the specified ID");
             }
 
-            //var deckFormat = await _deckRepo.GetFormatByName(deckDto.Format);
-
-            //TODO: Deck Properties should just hold a format ID instead of the string version of a format
+            DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(deckDto.Format);
 
             existingDeck.Name = deckDto.Name;
-            //existingDeck.Format = deckFormat; // deckDto.Format;
-            existingDeck.MagicFormatId = deckDto.FormatId;
+            existingDeck.MagicFormatId = deckFormat.Id;
             existingDeck.Notes = deckDto.Notes;
             existingDeck.BasicW = deckDto.BasicW;
             existingDeck.BasicU = deckDto.BasicU;
@@ -389,7 +391,6 @@ namespace Carpentry.Logic.Implementations
             existingDeck.BasicG = deckDto.BasicG;
 
             await _deckRepo.UpdateDeck(existingDeck);
-
         }
 
         public async Task DeleteDeck(int deckId)
@@ -397,9 +398,24 @@ namespace Carpentry.Logic.Implementations
             await _deckRepo.DeleteDeck(deckId);
         }
 
-        public async Task<IEnumerable<DeckProperties>> GetDeckOverviews() //TODO - rename to "GetDeckOverviews" or "GetDeckProperties"
+        public async Task<IEnumerable<DeckPropertiesDto>> GetDeckOverviews() //TODO - rename to "GetDeckOverviews" or "GetDeckProperties"
         {
-            List<DeckProperties> deckList = _deckRepo.GetAllDecks().Result.Select(x => MapDeckDataToProperties(x)).ToList();
+
+
+            //List<DeckPropertiesDto> deckList = _deckRepo.GetAllDecks().Result.Select(x => MapDeckDataToProperties(x)).ToList();
+
+
+
+            List<DeckPropertiesDto> deckList = _deckRepo.GetAllDecks().Result.Select(dbDeck => new DeckPropertiesDto()
+            {
+                Id = dbDeck.Id,
+                BasicB = dbDeck.BasicB,
+                BasicG = dbDeck.BasicG,
+                BasicR = dbDeck.BasicR,
+                BasicU = dbDeck.BasicU,
+                BasicW = dbDeck.BasicW,
+                Format = dbDeck.Format.Name
+            }).ToList();
 
             for (int i = 0; i < deckList.Count(); i++)
             {
@@ -413,20 +429,46 @@ namespace Carpentry.Logic.Implementations
         
         //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
         //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
-        public async Task<DeckDetail> GetDeckDetail(int deckId)
+        public async Task<DeckDetailDto> GetDeckDetail(int deckId)
         {
-            DeckProperties mappedDeckData = MapDeckDataToProperties(await _deckRepo.GetDeckById(deckId));
+            //var dbDeck = await _deckRepo.GetDeckById(deckId);
 
-            DeckDetail result = new DeckDetail
+
+            //DeckPropertiesDto mappedDeckData = MapDeckDataToProperties(await _deckRepo.GetDeckById(deckId));
+
+            var dbDeck = await _deckRepo.GetDeckById(deckId);
+            DeckPropertiesDto mappedDeckData = new DeckPropertiesDto()
             {
-                CardOverviews = new List<InventoryOverview>(),
-                CardDetails = new List<InventoryCard>(),
+                Id = dbDeck.Id,
+                BasicB = dbDeck.BasicB,
+                BasicG = dbDeck.BasicG,
+                BasicR = dbDeck.BasicR,
+                BasicU = dbDeck.BasicU,
+                BasicW = dbDeck.BasicW,
+                Format = dbDeck.Format.Name
+            };
+
+            //DeckPropertiesDto mappedDeckData = new DeckPropertiesDto()
+            //{
+            //    Id = dbDeck.Id,
+            //    BasicB = dbDeck.BasicB,
+            //    BasicG = dbDeck.BasicG,
+            //    BasicR = dbDeck.BasicR,
+            //    BasicU = dbDeck.BasicU,
+            //    BasicW = dbDeck.BasicW,
+            //    Format = dbDeck.Format.Name
+            //};
+
+            DeckDetailDto result = new DeckDetailDto
+            {
+                CardOverviews = new List<InventoryOverviewDto>(),
+                CardDetails = new List<InventoryCardDto>(),
                 Props = mappedDeckData,
-                Stats = new DeckStats(),
+                Stats = new DeckStatsDto(),
             };
 
             //Card Overviews
-            result.CardOverviews = (await _queryService.GetDeckCardOverviews(deckId)).Select(x => new InventoryOverview()
+            result.CardOverviews = (await _queryService.GetDeckCardOverviews(deckId)).Select(x => new InventoryOverviewDto()
             {
                 Id = x.Id,
                 Cost = x.Cost,
@@ -442,7 +484,7 @@ namespace Carpentry.Logic.Implementations
             //Card Details
             //TODO - this REALLY needs to be refactored to use a "Deck Card Overview" / "Deck Card Detail" pattern
             result.CardDetails = (await _queryService.GetDeckInventoryCards(deckId))
-                .Select(x => new InventoryCard()
+                .Select(x => new InventoryCardDto()
                 {
                     Id = x.Id,
                     MultiverseId = x.MultiverseId,
@@ -450,7 +492,7 @@ namespace Carpentry.Logic.Implementations
                     IsFoil = x.IsFoil,
                     VariantType = x.VariantType,
                     Name = x.Name,
-                    DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCard()
+                    DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCardDto()
                     {
                         DeckId = deckCard.DeckId,
                         Id = deckCard.Id,
@@ -478,7 +520,7 @@ namespace Carpentry.Logic.Implementations
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        public async Task AddDeckCard(DeckCard dto)
+        public async Task AddDeckCard(DeckCardDto dto)
         {
             //Don't need to add an inventory card
             if (dto.InventoryCard.Id > 0)
@@ -519,7 +561,7 @@ namespace Carpentry.Logic.Implementations
 
         //I think I only end up adding NEW deck cards with a batch
         //IDR where exactly this gets called outside of console apps
-        public async Task AddDeckCardBatch(IEnumerable<DeckCard> dtoBatch)
+        public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dtoBatch)
         {
             ////#error not implemented
             //            throw new NotImplementedException();
@@ -528,7 +570,7 @@ namespace Carpentry.Logic.Implementations
 
             for (int i = 0; i < dtoArray.Count(); i++)
             {
-                DeckCard dto = dtoArray[i];
+                DeckCardDto dto = dtoArray[i];
 
                 //console apps want to see this
                 _logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
@@ -537,7 +579,7 @@ namespace Carpentry.Logic.Implementations
             }
         }
 
-        public async Task UpdateDeckCard(DeckCard card)
+        public async Task UpdateDeckCard(DeckCardDto card)
         {
             DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
 
