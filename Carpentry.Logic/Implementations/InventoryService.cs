@@ -103,14 +103,14 @@ namespace Carpentry.Logic.Implementations
         {
             await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
 
-            Data.DataModels.CardVariantTypeData cardVariant = await _referenceService.GetCardVariantTypeByName(dto.VariantType);
+            DataReferenceValue<int> cardVariant = await _referenceService.GetCardVariantTypeByName(dto.VariantType);
 
             var newInventoryCard = new Data.DataModels.InventoryCardData()
             {
                 IsFoil = dto.IsFoil,
                 InventoryCardStatusId = dto.InventoryCardStatusId,
                 MultiverseId = dto.MultiverseId,
-                VariantType = cardVariant,
+                VariantTypeId = cardVariant.Id,
             };
 
             newInventoryCard.Id = await _inventoryRepo.AddInventoryCard(newInventoryCard);
@@ -133,17 +133,16 @@ namespace Carpentry.Logic.Implementations
                 await _dataUpdateService.EnsureCardDefinitionExists(distinctIDs[i]);
             }
 
-            var newCardsTasks = cards.Select(async x => new Data.DataModels.InventoryCardData()
+            var variantTypes = await _referenceService.GetAllCardVariantTypes();
+
+            var newCards = cards.Select(x => new Data.DataModels.InventoryCardData()
             {
                 IsFoil = x.IsFoil,
                 InventoryCardStatusId = x.InventoryCardStatusId,
                 MultiverseId = x.MultiverseId,
-                //VariantType = _cardContext.VariantTypes.FirstOrDefault(v => v.Name == x.VariantType),
-                VariantType = await _referenceService.GetCardVariantTypeByName(x.VariantType),
+                VariantTypeId = variantTypes.FirstOrDefault(v => v.Name == x.VariantType).Id,
 
             }).ToList();
-
-            var newCards = (await Task.WhenAll(newCardsTasks)).ToList();
 
             await _inventoryRepo.AddInventoryCardBatch(newCards);
         }

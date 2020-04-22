@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Carpentry.Data.DataModels;
 using System.Linq;
 using Carpentry.Data.Interfaces;
+using Carpentry.Data.QueryResults;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -163,14 +164,14 @@ namespace Carpentry.Logic.Implementations
 
             _logger.LogWarning("RestoreDb - LoadCardBackups...definitions exist, mapping & saving");
 
-            List<CardVariantTypeData> allVariants = await _dataReferenceService.GetAllCardVariantTypes();
+            List<DataReferenceValue<int>> allVariants = await _dataReferenceService.GetAllCardVariantTypes();
 
             var mappedInventoryCards = parseCardsBackups.Select(x => new InventoryCardData
             {
                 InventoryCardStatusId = x.InventoryCardStatusId,
                 IsFoil = x.IsFoil,
                 MultiverseId = x.MultiverseId,
-                VariantType = allVariants.FirstOrDefault(v => v.Name == x.VariantName),
+                VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
                 DeckCards = 
                     x.DeckCards.Select(d => new DeckCardData()
                     {

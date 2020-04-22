@@ -10,8 +10,8 @@ namespace Carpentry.Data.Interfaces
         Task<DataReferenceValue<int>> GetMagicFormat(string formatName);
         Task<DataReferenceValue<int>> GetMagicFormat(int formatId);
         Task<IEnumerable<DataReferenceValue<int>>> GetAllMagicFormats();
-        Task<CardVariantTypeData> GetCardVariantTypeByName(string name);
-        Task<List<CardVariantTypeData>> GetAllCardVariantTypes();
+        Task<DataReferenceValue<int>> GetCardVariantTypeByName(string name);
+        Task<List<DataReferenceValue<int>>> GetAllCardVariantTypes();
 
         Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors();
         Task<IEnumerable<DataReferenceValue<char>>> GetAllRarities();

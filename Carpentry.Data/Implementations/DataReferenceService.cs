@@ -70,15 +70,23 @@ namespace Carpentry.Data.Implementations
             return results;
         }
 
-        public async Task<CardVariantTypeData> GetCardVariantTypeByName(string name)
+        public async Task<DataReferenceValue<int>> GetCardVariantTypeByName(string name)
         {
             var result = await _cardContext.VariantTypes.FirstOrDefaultAsync(x => x.Name == name);
-            return result;
+            DataReferenceValue<int> mappedResult = new DataReferenceValue<int>
+            {
+                Id = result.Id,
+                Name = result.Name,
+            };
+            return mappedResult;
         }
 
-        public async Task<List<CardVariantTypeData>> GetAllCardVariantTypes()
+        public async Task<List<DataReferenceValue<int>>> GetAllCardVariantTypes()
         {
-            var result = await _cardContext.VariantTypes.ToListAsync();
+            List<DataReferenceValue<int>> result = await _cardContext.VariantTypes.Select(x => new DataReferenceValue<int>()
+            {
+
+            }).ToListAsync();
             return result;
         }
 
