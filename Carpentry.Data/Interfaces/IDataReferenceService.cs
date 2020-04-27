@@ -18,8 +18,5 @@ namespace Carpentry.Data.Interfaces
         Task<IEnumerable<DataReferenceValue<int>>> GetAllSets();
         Task<IEnumerable<DataReferenceValue<int>>> GetAllStatuses();
         List<DataReferenceValue<string>> GetAllTypes();
-
-
-        //Task<DataReferenceValue<int>> GetINTThings();
     }
 }

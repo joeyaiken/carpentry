@@ -83,6 +83,7 @@ namespace Carpentry.Data.Implementations
             }
             await _scryContext.SaveChangesAsync();
         }
+        
         public async Task EnsureDatabaseExists()
         {
             await _scryContext.Database.EnsureCreatedAsync();

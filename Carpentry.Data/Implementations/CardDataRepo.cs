@@ -15,6 +15,7 @@ namespace Carpentry.Data.Implementations
     public class CardDataRepo : ICardDataRepo
     {
         private readonly CarpentryDataContext _cardContext;
+        
         private readonly ILogger<CardDataRepo> _logger;
 
         public CardDataRepo(CarpentryDataContext cardContext, ILogger<CardDataRepo> logger)
@@ -73,9 +74,26 @@ namespace Carpentry.Data.Implementations
 
         }
 
-        //CardDataDto
-        //private async Task AddCardDefinition(ScryfallMagicCard scryfallCard)
-        public async Task AddCardDefinition(CardDataDto dto)
+        public async Task<CardData> GetCardById(int multiverseId)
+        {
+            CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
+            return result;
+        }
+
+        public async Task<IEnumerable<CardData>> GetCardsByName(string cardName)
+        {
+            var result = await _cardContext.Cards.Where(x => x.Name == cardName).ToListAsync();
+            return result;
+        }
+
+        public async Task EnsureDatabaseExists()
+        {
+            await _cardContext.Database.EnsureCreatedAsync();
+        }
+
+        #region private
+
+        private async Task AddCardDefinition(CardDataDto dto)
         {
             //ScryfallMagicCard scryfallCard = JsonConvert.DeserializeObject<ScryfallMagicCard>(scryfallDBCard.StringData);
 
@@ -200,8 +218,7 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
-        //private async Task UpdateCardDefinition(ScryfallMagicCard scryfallCard)
-        public async Task UpdateCardDefinition(CardDataDto dto)
+        private async Task UpdateCardDefinition(CardDataDto dto)
         {
             var cardToUpdate = _cardContext.Cards.FirstOrDefault(x => x.Id == dto.MultiverseId);
 
@@ -284,24 +301,7 @@ namespace Carpentry.Data.Implementations
 
         }
 
+        #endregion
 
-
-
-        public async Task<CardData> GetCardById(int multiverseId)
-        {
-            CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
-            return result;
-        }
-
-        public async Task<IEnumerable<CardData>> GetCardsByName(string cardName)
-        {
-            var result = await _cardContext.Cards.Where(x => x.Name == cardName).ToListAsync();
-            return result;
-        }
-
-        public async Task EnsureDatabaseExists()
-        {
-            await _cardContext.Database.EnsureCreatedAsync();
-        }
     }
 }

@@ -414,7 +414,10 @@ namespace Carpentry.Logic.Implementations
                 BasicR = dbDeck.BasicR,
                 BasicU = dbDeck.BasicU,
                 BasicW = dbDeck.BasicW,
-                Format = dbDeck.Format.Name
+                Format = dbDeck.Format.Name,
+                Name = dbDeck.Name,
+                //don't want to populate notes here right?
+                
             }).ToList();
 
             for (int i = 0; i < deckList.Count(); i++)

@@ -29,16 +29,9 @@ namespace Carpentry.Data.Interfaces
 
         Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName);
 
-
-
-
         //Card Search queries
-
         Task<IEnumerable<CardDataDto>> SearchInventoryCards(InventoryQueryParameter filters);
 
         Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);
-
-
-
     }
 }

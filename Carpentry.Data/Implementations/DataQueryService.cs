@@ -189,7 +189,7 @@ namespace Carpentry.Data.Implementations
                     DeckCardCategory = (x.CategoryId != null) ? x.Category.Name : null,
                     x.InventoryCard.Card,
                     x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
-                });
+                }).Include(x => x.Card).ToList();
 
             //var rawOverviews = cardOverviewsQuery.ToList();
 
@@ -200,7 +200,7 @@ namespace Carpentry.Data.Implementations
 
 
             //    })
-            var cardOverviewQueryResult = await cardOverviewsQuery
+            var cardOverviewQueryResult = cardOverviewsQuery
                 .GroupBy(x => new
                 {
                     x.Card.Name,
@@ -211,7 +211,7 @@ namespace Carpentry.Data.Implementations
                     Name = x.Key.Name,
                     Item = x.OrderByDescending(c => c.Card.Id).FirstOrDefault(),
                     Count = x.Count(),
-                }).ToListAsync();
+                }).ToList();
 
             //remember "InventoryOverview" could be renamed to "CardOverview"
 
