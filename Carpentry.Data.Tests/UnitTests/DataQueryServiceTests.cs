@@ -1,8 +1,17 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using Carpentry.Data.DataContext;
+using Carpentry.Data.DataModels;
+using Carpentry.Data.Implementations;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+//using System;
 using System.Collections.Generic;
-using System.Text;
+//using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+
 
 namespace Carpentry.Data.Tests.UnitTests
 {
@@ -29,6 +38,69 @@ namespace Carpentry.Data.Tests.UnitTests
         public async Task DataQueryService_GetDeckCardOverviews_Test()
         {
             //Arrange
+
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            try
+            {
+                //Arrange
+                var contextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
+                    .UseSqlite(connection)
+                    .Options;
+
+                using(var context = new CarpentryDataContext(contextOptions))
+                {
+                    context.Database.EnsureCreated();
+                    
+                    //add default records
+
+                }
+
+                int deckIdToRequest = 1;
+
+                List<QueryResults.CardOverviewResult> serviceResult = null;
+
+                //Act
+                using (var context = new CarpentryDataContext(contextOptions))
+                {
+                    var mockLogger = new Mock<ILogger<DataQueryService>>(MockBehavior.Loose);
+
+                    var queryService = new DataQueryService(context, mockLogger.Object);
+
+                    var result = await queryService.GetDeckCardOverviews(deckIdToRequest);
+                    
+                    serviceResult = result.ToList();
+                }
+
+                //Assert
+                Assert.Fail();
+                //var dbContext = new CarpentryDataContext(contextOptions);
+
+                //var mockLogger = new Mock<ILogger<DataQueryService>>(MockBehavior.Loose);
+
+                //var queryService = new DataQueryService(dbContext, mockLogger.Object);
+
+
+            }
+            finally
+            {
+                connection.Close();
+            }
+            
+
+            //List<DeckCardData> deckCards = new List<DeckCardData>()
+            //{
+            //    new DeckCardData
+            //    {
+                    
+            //    },
+                
+            //};
+
+
+            
+            
 
 
             //Act
