@@ -189,7 +189,9 @@ namespace Carpentry.Data.Implementations
                     DeckCardCategory = (x.CategoryId != null) ? x.Category.Name : null,
                     x.InventoryCard.Card,
                     x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
-                }).Include(x => x.Card).ToList();
+                })
+                //.Include(x => x.Card)
+                .ToList();
 
             //var rawOverviews = cardOverviewsQuery.ToList();
 
@@ -256,9 +258,9 @@ namespace Carpentry.Data.Implementations
                     Name = x.Card.Name,
                     DeckCards = x.DeckCards.Select(deckCard => new DeckCardResult()
                     {
-                        DeckId = deckCard.DeckId,
-                        Id = deckCard.Id,
-                        InventoryCardId = x.Id,
+                        //DeckId = deckCard.DeckId,
+                        //Id = deckCard.Id,
+                        //InventoryCardId = x.Id,
                         DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : null,
                     }).ToList(),
                 }).ToListAsync();

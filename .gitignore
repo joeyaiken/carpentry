@@ -381,3 +381,7 @@ Carpentry.Service.Tests/bin/Debug/netcoreapp3.1/runtimes/linux-musl-x64/native/l
 Carpentry.Service.Tests/bin/Debug/netcoreapp3.1/runtimes/linux-x64/native/libe_sqlite3.so
 Carpentry.Service.Tests/bin/Debug/netcoreapp3.1/runtimes/linux-x86/native/libe_sqlite3.so
 Carpentry.Service.Tests/bin/Debug/netcoreapp3.1/runtimes/osx-x64/native/libe_sqlite3.dylib
+Carpentry.Data/bin/Debug/netcoreapp2.2/Carpentry.Data.deps.json
+Carpentry.Data/bin/Debug/netcoreapp3.1/Carpentry.Data.deps.json
+Carpentry.Data/obj/Debug/netcoreapp3.1/Carpentry.Data.AssemblyInfo.cs
+Carpentry.Data/obj/Debug/netcoreapp3.1/Carpentry.Data.csproj.FileListAbsolute.txt

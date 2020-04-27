@@ -486,7 +486,10 @@ namespace Carpentry.Logic.Implementations
 
             //Card Details
             //TODO - this REALLY needs to be refactored to use a "Deck Card Overview" / "Deck Card Detail" pattern
-            result.CardDetails = (await _queryService.GetDeckInventoryCards(deckId))
+
+            var queryResult = await _queryService.GetDeckInventoryCards(deckId);
+
+            result.CardDetails = queryResult
                 .Select(x => new InventoryCardDto()
                 {
                     Id = x.Id,
@@ -495,17 +498,17 @@ namespace Carpentry.Logic.Implementations
                     IsFoil = x.IsFoil,
                     VariantType = x.VariantType,
                     Name = x.Name,
-                    DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCardDto()
-                    {
-                        DeckId = deckCard.DeckId,
-                        Id = deckCard.Id,
-                        InventoryCardId = x.Id,
 
-                        DeckCardCategory = deckCard.DeckCardCategory ??  GetCardTypeGroup(x.Type), //What is this uesd for?
-                        //OH, I need category for filtering inventory cards on the client app
-                    }).ToList(),
+                    DeckCards = x.DeckCards != null ?
+                        x.DeckCards.Select(deckCard => new InventoryDeckCardDto()
+                        {
+                            DeckId = deckCard.DeckId,
+                            Id = deckCard.Id,
+                            InventoryCardId = x.Id,
 
-
+                            DeckCardCategory = deckCard.DeckCardCategory ?? GetCardTypeGroup(x.Type), //What is this uesd for?
+                            //OH, I need category for filtering inventory cards on the client app
+                        }).ToList() : null,
                 }).ToList();
 
             //Deck Stats
