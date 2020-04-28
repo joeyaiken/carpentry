@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Carpentry.Service\Carpentry.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="UnitTests\" />
   </ItemGroup>
 

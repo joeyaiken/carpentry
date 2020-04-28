@@ -177,6 +177,10 @@ namespace Carpentry.Logic.Implementations
 
         private static string GetCardTypeGroup(string cardType)
         {
+            if(cardType == null)
+            {
+                return null;
+            }
             if (cardType.ToLower().Contains("creature"))
             {
                 return "Creatures";
@@ -398,7 +402,7 @@ namespace Carpentry.Logic.Implementations
             await _deckRepo.DeleteDeck(deckId);
         }
 
-        public async Task<IEnumerable<DeckPropertiesDto>> GetDeckOverviews() //TODO - rename to "GetDeckOverviews" or "GetDeckProperties"
+        public async Task<IEnumerable<DeckOverviewDto>> GetDeckOverviews()
         {
 
 
@@ -406,23 +410,44 @@ namespace Carpentry.Logic.Implementations
 
 
 
-            List<DeckPropertiesDto> deckList = _deckRepo.GetAllDecks().Result.Select(dbDeck => new DeckPropertiesDto()
+            List<DeckOverviewDto> deckList = _deckRepo.GetAllDecks().Result.Select(dbDeck => new DeckOverviewDto()
             {
                 Id = dbDeck.Id,
-                BasicB = dbDeck.BasicB,
-                BasicG = dbDeck.BasicG,
-                BasicR = dbDeck.BasicR,
-                BasicU = dbDeck.BasicU,
-                BasicW = dbDeck.BasicW,
+                //BasicB = dbDeck.BasicB,
+                //BasicG = dbDeck.BasicG,
+                //BasicR = dbDeck.BasicR,
+                //BasicU = dbDeck.BasicU,
+                //BasicW = dbDeck.BasicW,
                 Format = dbDeck.Format.Name,
                 Name = dbDeck.Name,
+                
                 //don't want to populate notes here right?
                 
             }).ToList();
 
             for (int i = 0; i < deckList.Count(); i++)
             {
-                deckList[i].Notes = await ValidateDeck(deckList[i].Id);
+                var deckToUdpate = deckList[i];
+
+                //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
+                deckToUdpate.Colors = await _queryService.GetDeckColorIdentity(deckToUdpate.Id);
+
+                //string validationResults = await ValidateDeck(deckList[i].Id);
+                string validationResults = await ValidateDeck(deckToUdpate.Id);
+
+                if (string.IsNullOrEmpty(validationResults))
+                {
+                    //deckList[i].IsValid = true;
+                    deckToUdpate.IsValid = true;
+                }
+                else
+                {
+                    deckToUdpate.ValidationIssues = validationResults;
+                }
+                
+
+
+                //deckList[i].Notes = await ValidateDeck(deckList[i].Id);
             }
 
             return deckList;
@@ -440,6 +465,7 @@ namespace Carpentry.Logic.Implementations
             //DeckPropertiesDto mappedDeckData = MapDeckDataToProperties(await _deckRepo.GetDeckById(deckId));
 
             var dbDeck = await _deckRepo.GetDeckById(deckId);
+
             DeckPropertiesDto mappedDeckData = new DeckPropertiesDto()
             {
                 Id = dbDeck.Id,
@@ -448,7 +474,9 @@ namespace Carpentry.Logic.Implementations
                 BasicR = dbDeck.BasicR,
                 BasicU = dbDeck.BasicU,
                 BasicW = dbDeck.BasicW,
-                Format = dbDeck.Format.Name
+                Format = dbDeck.Format.Name,
+                Name = dbDeck.Name,
+                Notes = dbDeck.Notes,
             };
 
             //DeckPropertiesDto mappedDeckData = new DeckPropertiesDto()
@@ -464,52 +492,74 @@ namespace Carpentry.Logic.Implementations
 
             DeckDetailDto result = new DeckDetailDto
             {
-                CardOverviews = new List<InventoryOverviewDto>(),
-                CardDetails = new List<InventoryCardDto>(),
+                //CardOverviews = new List<InventoryOverviewDto>(),
+                CardOverviews = new List<DeckCardOverview>(),
+                //CardDetails = new List<InventoryCardDto>(),
+                Cards = new List<DeckCard>(),
                 Props = mappedDeckData,
                 Stats = new DeckStatsDto(),
             };
 
+            var deckCardData = await _queryService.GetDeckCards(deckId);
+
+
             //Card Overviews
-            result.CardOverviews = (await _queryService.GetDeckCardOverviews(deckId)).Select(x => new InventoryOverviewDto()
+            //var deckOverviewsResult = await _queryService.GetDeckCardOverviews(deckId);
+
+            var groupedCards = deckCardData
+                .GroupBy(x => new
+                {
+                    x.Name,
+                    x.Category,
+                })
+                .Select(x => new
+                {
+                    Name = x.Key.Name,
+                    Count = x.Count(),
+                    Item = x.OrderByDescending(c => c.MultiverseId).FirstOrDefault(),
+                }).ToList();
+
+            List<DeckCardOverview> mappedCardOverviews = groupedCards.Select((x, i) => new DeckCardOverview()
             {
-                Id = x.Id,
-                Cost = x.Cost,
-                Name = x.Name,
+                Id = i + 1, //Incremented because I want it to start at 1 instead of 0
+                Cost = x.Item.Cost,
+                Name = x.Item.Name,
                 Count = x.Count,
-                Img = x.Img,
-                Type = x.Type,
-                Description = x.Category ?? GetCardTypeGroup(x.Type),
-                Cmc = x.Cmc,
-            })//.ToList()
-            .OrderBy(x => x.Cmc).ThenBy(x => x.Name).ToList();
+                Img = x.Item.Img,
+                Type = x.Item.Type,
+                Category = x.Item.Category ?? GetCardTypeGroup(x.Item.Type),
+                Cmc = x.Item.Cmc,
+            }).ToList();
+
+            result.CardOverviews = mappedCardOverviews;
+
+            ////InventoryOverviewDto
+            //result.CardOverviews = deckOverviewsResult.Select(x => new DeckCardOverview()
+            //{
+            //    Id = x.Id,
+            //    Cost = x.Cost,
+            //    Name = x.Name,
+            //    Count = x.Count,
+            //    Img = x.Img,
+            //    Type = x.Type,
+            //    Category = x.Category ?? GetCardTypeGroup(x.Type),
+            //    Cmc = x.Cmc,
+            //})//.ToList()
+            //.OrderBy(x => x.Cmc).ThenBy(x => x.Name).ToList();
 
             //Card Details
-            //TODO - this REALLY needs to be refactored to use a "Deck Card Overview" / "Deck Card Detail" pattern
+            List<DeckCard> mappedCards = deckCardData.Select(x => new DeckCard()
+            {
+                Id = x.Id,
+                MultiverseId = x.MultiverseId,
+                IsFoil = x.IsFoil,
+                VariantType = x.VariantType,
+                Name = x.Name,
+                Category = x.Category,
+                Set = x.Set,
+            }).ToList();
 
-            var queryResult = await _queryService.GetDeckInventoryCards(deckId);
-
-            result.CardDetails = queryResult
-                .Select(x => new InventoryCardDto()
-                {
-                    Id = x.Id,
-                    MultiverseId = x.MultiverseId,
-                    InventoryCardStatusId = x.InventoryCardStatusId,
-                    IsFoil = x.IsFoil,
-                    VariantType = x.VariantType,
-                    Name = x.Name,
-
-                    DeckCards = x.DeckCards != null ?
-                        x.DeckCards.Select(deckCard => new InventoryDeckCardDto()
-                        {
-                            DeckId = deckCard.DeckId,
-                            Id = deckCard.Id,
-                            InventoryCardId = x.Id,
-
-                            DeckCardCategory = deckCard.DeckCardCategory ?? GetCardTypeGroup(x.Type), //What is this uesd for?
-                            //OH, I need category for filtering inventory cards on the client app
-                        }).ToList() : null,
-                }).ToList();
+            result.Cards = mappedCards;
 
             //Deck Stats
             result.Stats = await GetDeckStats(deckId);

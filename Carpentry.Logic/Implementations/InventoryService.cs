@@ -215,13 +215,13 @@ namespace Carpentry.Logic.Implementations
                     VariantType = x.VariantType,
                     Name = x.Name,
                     Set = x.Set,
-                    DeckCards = x.DeckCards.Select(c => new InventoryDeckCardDto
-                    {
-                        Id = c.Id,
-                        DeckId = c.DeckId,
-                        InventoryCardId = c.InventoryCardId,
-                        DeckName = c.DeckName,
-                    }).ToList()
+                    //DeckCards = x.DeckCards.Select(c => new InventoryDeckCardDto
+                    //{
+                    //    Id = c.Id,
+                    //    DeckId = c.DeckId,
+                    //    InventoryCardId = c.InventoryCardId,
+                    //    DeckName = c.DeckName,
+                    //}).ToList()
                 })
                 .OrderBy(x => x.Id).ToList();
 

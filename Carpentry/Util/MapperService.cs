@@ -152,7 +152,17 @@ namespace Carpentry.UI.Legacy.Util
             LegacyInventoryCardDto result = new LegacyInventoryCardDto
             {
                 Id = card.Id,
-                DeckCards = card.DeckCards != null ? card.DeckCards.Select(x => ToLegacy(x)).ToList() : null,
+                DeckCards = card.DeckCards != null ? card.DeckCards.Select(invDeckCard => 
+                    //ToLegacy(x)
+                    new LegacyInventoryDeckCardDto 
+                    {
+                        DeckCardCategory = invDeckCard.DeckCardCategory,
+                        DeckId = invDeckCard.DeckId,
+                        DeckName = invDeckCard.DeckName,
+                        Id = invDeckCard.Id,
+                        InventoryCardId = card.Id,
+                    }
+                ).ToList() : null,
                 InventoryCardStatusId = card.InventoryCardStatusId,
                 IsFoil = card.IsFoil,
                 MultiverseId = card.MultiverseId,

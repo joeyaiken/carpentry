@@ -26,6 +26,6 @@ namespace Carpentry.Data.QueryResults
         //[JsonProperty("deckCardIds")]
         //public List<int> DeckCardIds { get; set; }
 
-        public List<DeckCardResult> DeckCards { get; set; }
+        //public List<DeckCardResult> DeckCards { get; set; }
     }
 }

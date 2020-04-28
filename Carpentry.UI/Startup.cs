@@ -61,7 +61,7 @@ namespace Carpentry.UI
             services.AddScoped<IDataQueryService, DataQueryService>();
 
 
-            ////Logic services
+            //Logic services
             services.AddScoped<ICardSearchService, CardSearchService>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
@@ -72,17 +72,6 @@ namespace Carpentry.UI
 
             services.AddScoped<IScryfallService, ScryfallService>();
             services.AddHttpClient<IScryfallService, ScryfallService>();
-
-            //services.AddScoped<IFilterService, FilterService>();
-
-            //Util services
-            //services.AddScoped<IMapperService, MapperService>();
-
-            //Service layer services
-            //services.AddScoped<ICoreControllerService, CoreControllerService>();
-            //services.AddScoped<IDeckControllerService, DeckControllerService>();
-            //services.AddScoped<IInventoryControllerService, InventoryControllerService>();
-            //services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
 
 
 

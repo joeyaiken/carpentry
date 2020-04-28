@@ -19,11 +19,21 @@ namespace Carpentry.Logic.Models
         //I still need to itterate over the Deck/Inventory cards for each overview
         //  Needs to be inventory cards so I can show the variant
 
-        [JsonProperty("cardOverviews")]
-        public List<InventoryOverviewDto> CardOverviews { get; set; }
+        //[JsonProperty("cardOverviews")]
+        //public List<InventoryOverviewDto> CardOverviews { get; set; }
 
-        [JsonProperty("cardDetails")]
-        public List<InventoryCardDto> CardDetails { get; set; }
+        //[JsonProperty("cardDetails")]
+        //public List<InventoryCardDto> CardDetails { get; set; }
+
+
+        [JsonProperty("cardOverviews")]
+        public List<DeckCardOverview> CardOverviews { get; set; }
+
+
+        [JsonProperty("cards")]
+        public List<DeckCard> Cards { get; set; }
+
+
 
         [JsonProperty("stats")]
         public DeckStatsDto Stats { get; set; }

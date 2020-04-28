@@ -32,6 +32,11 @@ namespace Carpentry.Data.Implementations
             _logger = logger;
         }
 
+
+        
+
+
+
         private async Task<IQueryable<CardData>> QueryFilteredCards(InventoryQueryParameter filters)
         {
             var cardsQuery = _cardContext.Cards.AsQueryable();
@@ -178,61 +183,176 @@ namespace Carpentry.Data.Implementations
             return result;
         }
 
-        public async Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId)
+        //public async Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId)
+        //{
+        //    //throw new NotImplementedException();
+        //    //Deck Overviews
+        //    var cardOverviewsQuery = _cardContext.DeckCards
+        //        .Where(x => x.DeckId == deckId)
+        //        .Select(x => new
+        //        {
+        //            DeckCardCategory = (x.CategoryId != null) ? x.Category.Name : null,
+        //            x.InventoryCard.Card,
+        //            x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+        //        })
+        //        //.Include(x => x.Card)
+        //        .ToList();
+
+        //    //var rawOverviews = cardOverviewsQuery.ToList();
+
+        //    //var cardOverviewsQuery = _cardRepo.QueryInventoryCardsForDeck(deckId)
+        //    //    .Select(x => new {
+        //    //        x.Card,
+        //    //        x.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+
+
+        //    //    })
+        //    var cardOverviewQueryResult = cardOverviewsQuery
+        //        .GroupBy(x => new
+        //        {
+        //            x.Card.Name,
+        //            x.DeckCardCategory
+        //        })
+        //        .Select(x => new
+        //        {
+        //            Name = x.Key.Name,
+        //            Item = x.OrderByDescending(c => c.Card.Id).FirstOrDefault(),
+        //            Count = x.Count(),
+        //        }).ToList();
+
+        //    //remember "InventoryOverview" could be renamed to "CardOverview"
+
+        //    //#error this isnt properly mapping MultiverseId, trying to add it from github
+        //    //I was wrong, this isn't supposed to include MID because it's deck cards grouped by NAME
+        //    List<CardOverviewResult> result = cardOverviewQueryResult.Select((x, i) => new CardOverviewResult()
+        //    {
+        //        Id = i + 1,
+        //        Cost = x.Item.Card.ManaCost,
+        //        Name = x.Name,
+        //        Count = x.Count,
+        //        Img = x.Item.ImageUrl,
+        //        Type = x.Item.Card.Type,
+        //        Category = x.Item.DeckCardCategory,
+        //        Cmc = x.Item.Card.Cmc,
+        //    })//.ToList()
+        //    .OrderBy(x => x.Cmc).ThenBy(x => x.Name).ToList();
+
+        //    return result;
+        //}
+
+        //public async Task<IEnumerable<InventoryCardResult>> GetDeckInventoryCards(int deckId)
+        //{
+        //    List<InventoryCardResult> cardDetails = await _cardContext.DeckCards
+        //        .Where(d => d.DeckId == deckId)
+        //        .Select(c => c.InventoryCard)
+
+        //        .Select(x => new InventoryCardResult()
+        //        {
+        //            Id = x.Id,
+        //            MultiverseId = x.MultiverseId,
+        //            InventoryCardStatusId = x.InventoryCardStatusId,
+        //            IsFoil = x.IsFoil,
+        //            VariantType = x.VariantType.Name,
+        //            Name = x.Card.Name,
+        //            DeckCards = x.DeckCards.Select(deckCard => new DeckCardResult()
+        //            {
+        //                DeckId = deckCard.DeckId,
+        //                Id = deckCard.Id,
+        //                //InventoryCardId = x.Id,
+        //                DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : null,
+        //            }).ToList(),
+        //            Type = x.Card.Type,
+        //            Set = x.Card.Set.Code,
+        //        }).ToListAsync();
+
+        //    return cardDetails;
+        //    //.Include(x => x.Card.Variants)
+
+
+
+
+
+        //    //List<InventoryCard> cardDetails = _cardRepo.QueryInventoryCardsForDeck(deckId)
+        //    //    .Select(x => new InventoryCard()
+        //    //    {
+        //    //        Id = x.Id,
+        //    //        MultiverseId = x.MultiverseId,
+        //    //        InventoryCardStatusId = x.InventoryCardStatusId,
+        //    //        IsFoil = x.IsFoil,
+        //    //        VariantType = x.VariantType.Name,
+        //    //        Name = x.Card.Name,
+        //    //        DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCard()
+        //    //        {
+        //    //            DeckId = deckCard.DeckId,
+        //    //            Id = deckCard.Id,
+        //    //            InventoryCardId = x.Id,
+        //    //            DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : GetCardTypeGroup(x.Card.Type),
+        //    //        }).ToList(),
+        //    //    }).ToList();
+
+
+        //}
+
+        public async Task<List<DeckCardResult>> GetDeckCards(int deckId)
         {
-            //throw new NotImplementedException();
-            //Deck Overviews
-            var cardOverviewsQuery = _cardContext.DeckCards
+            var deckCards = await _cardContext.DeckCards
                 .Where(x => x.DeckId == deckId)
-                .Select(x => new
+                .Select(x => new DeckCardResult()
                 {
-                    DeckCardCategory = (x.CategoryId != null) ? x.Category.Name : null,
-                    x.InventoryCard.Card,
-                    x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
-                })
-                //.Include(x => x.Card)
-                .ToList();
+                    Id = x.Id,
+                    Category = x.CategoryId == null ? null : x.Category.Name,
+                    Cmc = x.InventoryCard.Card.Cmc,
+                    Cost = x.InventoryCard.Card.ManaCost,
+                    Img = x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+                    IsFoil = x.InventoryCard.IsFoil,
+                    MultiverseId = x.InventoryCard.MultiverseId,
+                    Name = x.InventoryCard.Card.Name,
+                    Set = x.InventoryCard.Card.Set.Code,
+                    Type = x.InventoryCard.Card.Type,
+                    VariantType = x.InventoryCard.VariantType.Name,
+                }).ToListAsync();
 
-            //var rawOverviews = cardOverviewsQuery.ToList();
+            return deckCards;
+        }
 
-            //var cardOverviewsQuery = _cardRepo.QueryInventoryCardsForDeck(deckId)
-            //    .Select(x => new {
-            //        x.Card,
-            //        x.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+        public async Task<List<string>> GetDeckColorIdentity(int deckId)
+        {
 
+            var deckCardColors = await _cardContext.DeckCards
+                .Where(x => x.DeckId == deckId)
+                .SelectMany(x => x.InventoryCard.Card.CardColorIdentities)
+                .Select(ci => ci.ManaTypeId.ToString())
+                .Distinct()
+                .ToListAsync();
 
-            //    })
-            var cardOverviewQueryResult = cardOverviewsQuery
-                .GroupBy(x => new
-                {
-                    x.Card.Name,
-                    x.DeckCardCategory
-                })
-                .Select(x => new
-                {
-                    Name = x.Key.Name,
-                    Item = x.OrderByDescending(c => c.Card.Id).FirstOrDefault(),
-                    Count = x.Count(),
-                }).ToList();
+            var dbDeck = _cardContext.Decks.Where(x => x.Id == deckId).FirstOrDefault();
 
-            //remember "InventoryOverview" could be renamed to "CardOverview"
-
-            //#error this isnt properly mapping MultiverseId, trying to add it from github
-            //I was wrong, this isn't supposed to include MID because it's deck cards grouped by NAME
-            List<CardOverviewResult> result = cardOverviewQueryResult.Select((x, i) => new CardOverviewResult()
+            if(dbDeck.BasicW > 0 && !deckCardColors.Contains("W"))
             {
-                Id = i + 1,
-                Cost = x.Item.Card.ManaCost,
-                Name = x.Name,
-                Count = x.Count,
-                Img = x.Item.ImageUrl,
-                Type = x.Item.Card.Type,
-                Category = x.Item.DeckCardCategory,
-                Cmc = x.Item.Card.Cmc,
-            })//.ToList()
-            .OrderBy(x => x.Cmc).ThenBy(x => x.Name).ToList();
+                deckCardColors.Add("W");
+            }
 
-            return result;
+            if (dbDeck.BasicU > 0 && !deckCardColors.Contains("U"))
+            {
+                deckCardColors.Add("U");
+            }
+
+            if (dbDeck.BasicB > 0 && !deckCardColors.Contains("B"))
+            {
+                deckCardColors.Add("B");
+            }
+
+            if (dbDeck.BasicR > 0 && !deckCardColors.Contains("R"))
+            {
+                deckCardColors.Add("R");
+            }
+
+            if (dbDeck.BasicG > 0 && !deckCardColors.Contains("G"))
+            {
+                deckCardColors.Add("G");
+            }
+
+            return deckCardColors;
         }
 
         public async Task<int> GetDeckCardCount(int deckId)
@@ -242,56 +362,6 @@ namespace Carpentry.Data.Implementations
             return basicLandCount + cardCount;
         }
 
-        public async Task<IEnumerable<InventoryCardResult>> GetDeckInventoryCards(int deckId)
-        {
-            List<InventoryCardResult> cardDetails = await _cardContext.DeckCards
-                .Where(x => x.DeckId == deckId)
-                .Select(x => x.InventoryCard)
-
-                .Select(x => new InventoryCardResult()
-                {
-                    Id = x.Id,
-                    MultiverseId = x.MultiverseId,
-                    InventoryCardStatusId = x.InventoryCardStatusId,
-                    IsFoil = x.IsFoil,
-                    VariantType = x.VariantType.Name,
-                    Name = x.Card.Name,
-                    DeckCards = x.DeckCards.Select(deckCard => new DeckCardResult()
-                    {
-                        //DeckId = deckCard.DeckId,
-                        //Id = deckCard.Id,
-                        //InventoryCardId = x.Id,
-                        DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : null,
-                    }).ToList(),
-                }).ToListAsync();
-
-            return cardDetails;
-            //.Include(x => x.Card.Variants)
-
-
-
-
-
-            //List<InventoryCard> cardDetails = _cardRepo.QueryInventoryCardsForDeck(deckId)
-            //    .Select(x => new InventoryCard()
-            //    {
-            //        Id = x.Id,
-            //        MultiverseId = x.MultiverseId,
-            //        InventoryCardStatusId = x.InventoryCardStatusId,
-            //        IsFoil = x.IsFoil,
-            //        VariantType = x.VariantType.Name,
-            //        Name = x.Card.Name,
-            //        DeckCards = x.DeckCards.Select(deckCard => new InventoryDeckCard()
-            //        {
-            //            DeckId = deckCard.DeckId,
-            //            Id = deckCard.Id,
-            //            InventoryCardId = x.Id,
-            //            DeckCardCategory = (deckCard.Category != null) ? deckCard.Category.Name : GetCardTypeGroup(x.Card.Type),
-            //        }).ToList(),
-            //    }).ToList();
-
-
-        }
         public async Task<IEnumerable<DeckCardStatResult>> GetDeckCardStats(int deckId)
         {
             var query = _cardContext.DeckCards.Where(x => x.DeckId == deckId)
@@ -347,13 +417,13 @@ namespace Carpentry.Data.Implementations
                     VariantType = x.VariantType.Name,
                     Name = x.Card.Name,
                     Set = x.Card.Set.Code,
-                    DeckCards = x.DeckCards.Select(c => new DeckCardResult()
-                    {
-                        Id = c.Id,
-                        DeckId = c.DeckId,
-                        InventoryCardId = c.InventoryCardId,
-                        DeckName = c.Deck.Name,
-                    }).ToList()
+                    //DeckCards = x.DeckCards.Select(c => new DeckCardResult()
+                    //{
+                    //    Id = c.Id,
+                    //    DeckId = c.DeckId,
+                    //    InventoryCardId = c.InventoryCardId,
+                    //    DeckName = c.Deck.Name,
+                    //}).ToList()
                 })
                 .OrderBy(x => x.Id)
                 .ToListAsync();

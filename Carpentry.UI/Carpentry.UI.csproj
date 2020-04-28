@@ -30,7 +30,7 @@
     <Content Remove="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Carpentry.Service\Carpentry.Service.csproj" />
+    <ProjectReference Include="..\Carpentry.Logic\Carpentry.Logic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

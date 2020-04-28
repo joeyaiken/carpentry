@@ -158,6 +158,11 @@ namespace Carpentry.Logic.Tests.UnitTests
                 .Setup(p => p.GetDeckCardCount(It.Is<int>(i => i > 0)))
                 .ReturnsAsync(expectedDeckCardCountResult);
 
+
+            mockQueryService
+                .Setup(p => p.GetDeckColorIdentity(It.Is<int>(i => i > 0)))
+                .ReturnsAsync(new List<string>() { "U", "R", "G" });
+
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);

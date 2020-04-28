@@ -33,185 +33,185 @@ namespace Carpentry.Data.Tests.UnitTests
             Assert.Fail();
         }
 
-        //Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId);
-        [TestMethod]
-        public async Task DataQueryService_GetDeckCardOverviews_Test()
-        {
-            //Want to ensure an in-memory DB is used
-            var connection = new SqliteConnection("DataSource=:memory:");
+        ////Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId);
+        //[TestMethod]
+        //public async Task DataQueryService_GetDeckCardOverviews_Test()
+        //{
+        //    //Want to ensure an in-memory DB is used
+        //    var connection = new SqliteConnection("DataSource=:memory:");
 
-            connection.Open();
+        //    connection.Open();
 
-            try
-            {
-                //Arrange
-                var contextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
-                    .UseSqlite(connection)
-                    .Options;
+        //    try
+        //    {
+        //        //Arrange
+        //        var contextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
+        //            .UseSqlite(connection)
+        //            .Options;
 
-                DeckData testDeck = new DeckData()
-                {
-                    Name = "Test Deck",
-                    Format = new MagicFormatData()
-                    {
-                        Name = "Modern",
-                    },
+        //        DeckData testDeck = new DeckData()
+        //        {
+        //            Name = "Test Deck",
+        //            Format = new MagicFormatData()
+        //            {
+        //                Name = "Modern",
+        //            },
                     
-                };
+        //        };
 
-                InventoryCardStatusData testStatus = new InventoryCardStatusData()
-                {
-                    Name = "Test Status",
-                };
+        //        InventoryCardStatusData testStatus = new InventoryCardStatusData()
+        //        {
+        //            Name = "Test Status",
+        //        };
 
-                CardVariantTypeData testVariantType = new CardVariantTypeData()
-                {
-                    Name = "Test Variant Type",
-                };
+        //        CardVariantTypeData testVariantType = new CardVariantTypeData()
+        //        {
+        //            Name = "Test Variant Type",
+        //        };
 
-                CardSetData testSet = new CardSetData()
-                {
-                    Name = "Test Set",
-                    Code = "TST",
-                };
+        //        CardSetData testSet = new CardSetData()
+        //        {
+        //            Name = "Test Set",
+        //            Code = "TST",
+        //        };
 
-                CardRarityData testRarity = new CardRarityData()
-                {
-                    Id = 'T',
-                    Name = "Test",
-                };
+        //        CardRarityData testRarity = new CardRarityData()
+        //        {
+        //            Id = 'T',
+        //            Name = "Test",
+        //        };
 
-                List<DeckCardData> deckCards = new List<DeckCardData>()
-                {
-                    //Card 1
-                    new DeckCardData
-                    {
-                        InventoryCard = new InventoryCardData()
-                        {
-                            Card = new CardData()
-                            {
-                                Name = "Card 1",
-                                Rarity = testRarity,
-                                Set = testSet,
-                            },
-                            Status = testStatus,
-                            IsFoil = false,
-                            VariantType = testVariantType,
-                        },
-                        Deck = testDeck,
-                        CategoryId = null,
-                    },
-                    //Card 2
-                    new DeckCardData
-                    {
-                        InventoryCard = new InventoryCardData()
-                        {
-                            Card = new CardData()
-                            {
-                                Name = "Card 2",
-                                Rarity = testRarity,
-                                Set = testSet,
-                            },
-                            Status = testStatus,
-                            IsFoil = false,
-                            VariantType = testVariantType,
-                        },
-                        Deck = testDeck,
-                        CategoryId = null,
-                    },
-                    //Card 3
-                    new DeckCardData
-                    {
-                        InventoryCard = new InventoryCardData()
-                        {
-                            Card = new CardData()
-                            {
-                                Name = "Card 3",
-                                Rarity = testRarity,
-                                Set = testSet,
-                            },
-                            Status = testStatus,
-                            IsFoil = false,
-                            VariantType = testVariantType,
-                        },
-                        Deck = testDeck,
-                        CategoryId = null,
-                    },
-                    //Card 4
-                    new DeckCardData
-                    {
-                        InventoryCard = new InventoryCardData()
-                        {
-                            Card = new CardData()
-                            {
-                                Name = "Card 4",
-                                Rarity = testRarity,
-                                Set = testSet,
-                            },
-                            Status = testStatus,
-                            IsFoil = false,
-                            VariantType = testVariantType,
-                        },
-                        Deck = testDeck,
-                        CategoryId = null,
-                    },
-                };
-
-
-                using (var context = new CarpentryDataContext(contextOptions))
-                {
-                    context.Database.EnsureCreated();
-
-                    //add default records
-                    context.Decks.Add(testDeck);
-                    context.CardStatuses.Add(testStatus);
-                    context.VariantTypes.Add(testVariantType);
-                    context.Sets.Add(testSet);
-                    context.Rarities.Add(testRarity);
-                    context.DeckCards.AddRange(deckCards);
-                    context.SaveChanges();
+        //        List<DeckCardData> deckCards = new List<DeckCardData>()
+        //        {
+        //            //Card 1
+        //            new DeckCardData
+        //            {
+        //                InventoryCard = new InventoryCardData()
+        //                {
+        //                    Card = new CardData()
+        //                    {
+        //                        Name = "Card 1",
+        //                        Rarity = testRarity,
+        //                        Set = testSet,
+        //                    },
+        //                    Status = testStatus,
+        //                    IsFoil = false,
+        //                    VariantType = testVariantType,
+        //                },
+        //                Deck = testDeck,
+        //                CategoryId = null,
+        //            },
+        //            //Card 2
+        //            new DeckCardData
+        //            {
+        //                InventoryCard = new InventoryCardData()
+        //                {
+        //                    Card = new CardData()
+        //                    {
+        //                        Name = "Card 2",
+        //                        Rarity = testRarity,
+        //                        Set = testSet,
+        //                    },
+        //                    Status = testStatus,
+        //                    IsFoil = false,
+        //                    VariantType = testVariantType,
+        //                },
+        //                Deck = testDeck,
+        //                CategoryId = null,
+        //            },
+        //            //Card 3
+        //            new DeckCardData
+        //            {
+        //                InventoryCard = new InventoryCardData()
+        //                {
+        //                    Card = new CardData()
+        //                    {
+        //                        Name = "Card 3",
+        //                        Rarity = testRarity,
+        //                        Set = testSet,
+        //                    },
+        //                    Status = testStatus,
+        //                    IsFoil = false,
+        //                    VariantType = testVariantType,
+        //                },
+        //                Deck = testDeck,
+        //                CategoryId = null,
+        //            },
+        //            //Card 4
+        //            new DeckCardData
+        //            {
+        //                InventoryCard = new InventoryCardData()
+        //                {
+        //                    Card = new CardData()
+        //                    {
+        //                        Name = "Card 4",
+        //                        Rarity = testRarity,
+        //                        Set = testSet,
+        //                    },
+        //                    Status = testStatus,
+        //                    IsFoil = false,
+        //                    VariantType = testVariantType,
+        //                },
+        //                Deck = testDeck,
+        //                CategoryId = null,
+        //            },
+        //        };
 
 
+        //        using (var context = new CarpentryDataContext(contextOptions))
+        //        {
+        //            context.Database.EnsureCreated();
 
-                }
+        //            //add default records
+        //            context.Decks.Add(testDeck);
+        //            context.CardStatuses.Add(testStatus);
+        //            context.VariantTypes.Add(testVariantType);
+        //            context.Sets.Add(testSet);
+        //            context.Rarities.Add(testRarity);
+        //            context.DeckCards.AddRange(deckCards);
+        //            context.SaveChanges();
 
-                int deckIdToRequest = 1;
 
-                List<QueryResults.CardOverviewResult> serviceResult = null;
 
-                //Act
-                using (var context = new CarpentryDataContext(contextOptions))
-                {
-                    var mockLogger = new Mock<ILogger<DataQueryService>>(MockBehavior.Loose);
+        //        }
 
-                    var queryService = new DataQueryService(context, mockLogger.Object);
+        //        int deckIdToRequest = 1;
 
-                    var result = await queryService.GetDeckCardOverviews(deckIdToRequest);
+        //        List<QueryResults.CardOverviewResult> serviceResult = null;
+
+        //        //Act
+        //        using (var context = new CarpentryDataContext(contextOptions))
+        //        {
+        //            var mockLogger = new Mock<ILogger<DataQueryService>>(MockBehavior.Loose);
+
+        //            var queryService = new DataQueryService(context, mockLogger.Object);
+
+        //            var result = await queryService.GetDeckCardOverviews(deckIdToRequest);
                     
-                    serviceResult = result.ToList();
-                }
+        //            serviceResult = result.ToList();
+        //        }
 
-                //Assert
+        //        //Assert
 
-                Assert.AreEqual(4, serviceResult.Count());
+        //        Assert.AreEqual(4, serviceResult.Count());
 
-                //var dbContext = new CarpentryDataContext(contextOptions);
+        //        //var dbContext = new CarpentryDataContext(contextOptions);
 
-                //var mockLogger = new Mock<ILogger<DataQueryService>>(MockBehavior.Loose);
+        //        //var mockLogger = new Mock<ILogger<DataQueryService>>(MockBehavior.Loose);
 
-                //var queryService = new DataQueryService(dbContext, mockLogger.Object);
+        //        //var queryService = new DataQueryService(dbContext, mockLogger.Object);
 
 
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Exception thrown: {ex.Message}");
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Assert.Fail($"Exception thrown: {ex.Message}");
+        //    }
+        //    finally
+        //    {
+        //        connection.Close();
+        //    }
+        //}
 
         //Task<int> GetDeckCardCount(int deckId);
         [TestMethod]
@@ -229,7 +229,7 @@ namespace Carpentry.Data.Tests.UnitTests
 
         //Task<IEnumerable<InventoryCardResult>> GetDeckInventoryCards(int deckId);
         [TestMethod]
-        public async Task DataQueryService_GetDeckInventoryCards_Test()
+        public async Task DataQueryService_GetDeckCards_Test()
         {
             //Arrange
 
@@ -383,9 +383,9 @@ namespace Carpentry.Data.Tests.UnitTests
 
                     var queryService = new DataQueryService(context, mockLogger.Object);
 
-                    var result = await queryService.GetDeckInventoryCards(deckIdToRequest);
+                    var result = await queryService.GetDeckCards(deckIdToRequest);
 
-                    serviceResult = result.ToList();
+                    //serviceResult = result.ToList();
                 }
 
                 //Assert
