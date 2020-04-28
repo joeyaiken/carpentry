@@ -182,9 +182,7 @@ namespace Carpentry.Logic.Tests.UnitTests
         public async Task DeckService_GetDeckDetail_Test()
         {
             //Arrange
-            List<CardOverviewResult> dbOverviews = new List<CardOverviewResult>();
-
-            List<InventoryCardResult> dbCardDetails = new List<InventoryCardResult>();
+            List<DeckCardResult> dbCards = new List<DeckCardResult>();
 
             DeckData expectedDbDeck = new DeckData()
             {
@@ -207,12 +205,8 @@ namespace Carpentry.Logic.Tests.UnitTests
             var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
 
             mockQueryService
-                .Setup(p => p.GetDeckCardOverviews(It.Is<int>(i => i == idToRequest)))
-                .ReturnsAsync(dbOverviews);
-
-            mockQueryService
-                .Setup(p => p.GetDeckInventoryCards(It.Is<int>(i => i == idToRequest)))
-                .ReturnsAsync(dbCardDetails);
+                .Setup(p => p.GetDeckCards(It.Is<int>(i => i == idToRequest)))
+                .ReturnsAsync(dbCards);
 
             int expectedDeckCardCountResult = 60;
 

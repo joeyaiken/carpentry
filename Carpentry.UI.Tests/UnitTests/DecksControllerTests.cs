@@ -119,13 +119,13 @@ namespace Carpentry.UI.Tests.UnitTests
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
-            IEnumerable<DeckPropertiesDto> expectedSearchResults = new List<DeckPropertiesDto>()
+            IEnumerable<DeckOverviewDto> expectedSearchResults = new List<DeckOverviewDto>()
             {
-                new DeckPropertiesDto{ },
-                new DeckPropertiesDto{ },
-                new DeckPropertiesDto{ },
-                new DeckPropertiesDto{ },
-                new DeckPropertiesDto{ },
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
             }.AsEnumerable();
 
             mockDeckService
@@ -159,8 +159,10 @@ namespace Carpentry.UI.Tests.UnitTests
                 .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
                 .ReturnsAsync(new DeckDetailDto
                 {
-                    CardDetails = new List<InventoryCardDto>(),
-                    CardOverviews = new List<InventoryOverviewDto>(),
+                    CardOverviews = new List<DeckCardOverview>(),
+                    Cards = new List<DeckCard>(),
+                    //CardDetails = new List<InventoryCardDto>(),
+                    //CardOverviews = new List<InventoryOverviewDto>(),
                     Props = new DeckPropertiesDto(),
                     Stats = new DeckStatsDto(),
                 });

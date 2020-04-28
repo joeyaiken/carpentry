@@ -32,17 +32,17 @@ namespace Carpentry.UI.Legacy.Util
         }
 
         //DeckDetail
-        public LegacyDeckDetailDto ToLegacy(DeckDetailDto detail)
-        {
-            LegacyDeckDetailDto result = new LegacyDeckDetailDto()
-            {
-                CardDetails = ToLegacy(detail.CardDetails),
-                CardOverviews = ToLegacy(detail.CardOverviews),
-                Props = ToLegacy(detail.Props),
-                Stats = ToLegacy(detail.Stats),
-            };
-            return result;
-        }
+        //public LegacyDeckDetailDto ToLegacy(DeckDetailDto detail)
+        //{
+        //    LegacyDeckDetailDto result = new LegacyDeckDetailDto()
+        //    {
+        //        CardDetails = ToLegacy(detail.CardDetails),
+        //        CardOverviews = ToLegacy(detail.CardOverviews),
+        //        Props = ToLegacy(detail.Props),
+        //        Stats = ToLegacy(detail.Stats),
+        //    };
+        //    return result;
+        //}
 
         //DeckProperties
         public DeckPropertiesDto ToModel(LegacyDeckPropertiesDto props)

@@ -259,10 +259,14 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             List<InventoryCardResult> inventoryQueryResult = new List<InventoryCardResult>()
             {
-                new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
-                new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
-                new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
-                new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
+                new InventoryCardResult(),
+                new InventoryCardResult(),
+                new InventoryCardResult(),
+                new InventoryCardResult(),
+                //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
+                //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
+                //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
+                //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
             };
 
             mockQueryService

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Carpentry.UI.Legacy.Models;
 using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -86,13 +87,13 @@ namespace Carpentry.UI.Legacy.Controllers
         //decks/Search
         //- get a list of deck properties & stats
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<LegacyDeckPropertiesDto>>> Search()
+        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> Search()
         {
             try
             {
                 var results = await _decks.GetDeckOverviews();
-                IEnumerable<LegacyDeckPropertiesDto> mappedResults = _mapper.ToLegacy(results);
-                return Ok(mappedResults);
+                //IEnumerable<LegacyDeckPropertiesDto> mappedResults = _mapper.ToLegacy(results);
+                return Ok(results);
             }
             catch (Exception ex)
             {
@@ -103,13 +104,13 @@ namespace Carpentry.UI.Legacy.Controllers
         //decks/Get
         //- get a deck (with cards)
         [HttpGet("[action]")]
-        public async Task<ActionResult<LegacyDeckDetailDto>> Get(int deckId)
+        public async Task<ActionResult<DeckDetailDto>> Get(int deckId)
         {
             try
             {
                 var results = await _decks.GetDeckDetail(deckId);
-                LegacyDeckDetailDto mappedResults = _mapper.ToLegacy(results);
-                return Ok(mappedResults);
+                //LegacyDeckDetailDto mappedResults = _mapper.ToLegacy(results);
+                return Ok(results);
             }
             catch (Exception ex)
             {

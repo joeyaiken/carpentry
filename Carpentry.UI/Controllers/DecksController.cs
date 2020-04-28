@@ -85,11 +85,11 @@ namespace Carpentry.UI.Controllers
         //decks/Search
         //- get a list of deck properties & stats
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<DeckPropertiesDto>>> Search()
+        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> Search()
         {
             try
             {
-                IEnumerable<DeckPropertiesDto> results = await _decks.GetDeckOverviews();
+                IEnumerable<DeckOverviewDto> results = await _decks.GetDeckOverviews();
                 return Ok(results);
             }
             catch (Exception ex)
