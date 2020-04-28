@@ -66,7 +66,7 @@ declare interface NamedCardGroup {
 //This represents actual grouped card overviews
 declare interface CardOverviewGroup {
     name: string;
-    cardOverviews: InventoryOverviewDto[];
+    cardOverviews: DeckCardOverview[];
 }
 
 

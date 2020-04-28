@@ -7,8 +7,8 @@ interface ComponentProps{
     //totalPrice: number;
     // deckProperties: DeckProperties;
     // onEditClick: () => void;
-    cardOverviews: InventoryOverviewDto[];
-    onCardSelected: (card: InventoryOverviewDto) => void;
+    cardOverviews: DeckCardOverview[];
+    onCardSelected: (card: DeckCardOverview) => void;
 }
 
 export default function DeckCardList(props: ComponentProps): JSX.Element {
@@ -29,12 +29,12 @@ export default function DeckCardList(props: ComponentProps): JSX.Element {
                     {
                         props.cardOverviews.map(cardItem => 
                             <TableRow onClick={() => props.onCardSelected(cardItem)} onMouseEnter={() => props.onCardSelected(cardItem)}
-                                key={cardItem.multiverseId+cardItem.name}>
+                                key={cardItem.id+cardItem.name}>
                                 <TableCell>{cardItem.name}</TableCell>
                                 <TableCell>{cardItem.count}</TableCell>
                                 <TableCell>{cardItem.type}</TableCell>
                                 <TableCell>{cardItem.cost}</TableCell>
-                                <TableCell>{cardItem.description}</TableCell>
+                                <TableCell>{cardItem.category}</TableCell>
                             </TableRow>
                         )
                     }

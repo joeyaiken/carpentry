@@ -23,7 +23,7 @@ import DeckListLayout from '../components/DeckListLayout';
 // import { deckList } from '../reducers/deckList.reducer';
 
 interface PropsFromState {
-    decks: DeckProperties[];
+    decks: DeckOverviewDto[];
     deckMenuAnchor: HTMLButtonElement | null;
 }
 
@@ -108,9 +108,9 @@ class DeckList extends React.Component<DeckListProps> {
 
 }
 
-function selectDeckList(state: AppState): DeckProperties[] {
+function selectDeckList(state: AppState): DeckOverviewDto[] {
     const { deckIds, decksById } = state.data.deckList;
-    const result: DeckProperties[] = deckIds.map( id => decksById[id]);
+    const result: DeckOverviewDto[] = deckIds.map( id => decksById[id]);
     return result;
 }
 

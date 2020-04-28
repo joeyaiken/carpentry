@@ -26,8 +26,8 @@ interface PropsFromState {
     // cardOverviews: InventoryOverviewDto[];
     cardMenuAnchor: HTMLButtonElement | null;
     // deckPropsModalOpen: boolean;
-    selectedCard: InventoryOverviewDto | null;
-    selectedInventoryCards: InventoryCard[];
+    selectedCard: DeckCardOverview | null;
+    selectedInventoryCards: DeckCard[];
     // deckStats: DeckStats | null;
 }
 
@@ -105,14 +105,14 @@ class DeckEditorCardDetail extends React.Component<DeckEditorCardDetailProps> {
 //     return allCardOverviewNames.map(name => cardOverviewsByName[name]);
 // }
 
-function getSelectedCardOverview(state: AppState): InventoryOverviewDto | null {
+function getSelectedCardOverview(state: AppState): DeckCardOverview | null {
     if(state.app.deckEditor.selectedOverviewCardId){
         return state.data.deckDetail.cardOverviewsById[state.app.deckEditor.selectedOverviewCardId];
     }
     return null;
 }
 
-function getSelectedDeckDetails(state: AppState): InventoryCard[] {
+function getSelectedDeckDetails(state: AppState): DeckCard[] {
     const { selectedInventoryCardIds, cardDetailsById } = state.data.deckDetail;
     return selectedInventoryCardIds.map(id => cardDetailsById[id]);
     //selectedInventoryCards: state.deckEditor.selectedInventoryCards,

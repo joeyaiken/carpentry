@@ -97,13 +97,13 @@ export async function api_Decks_Delete(deckId: number): Promise<void> {
     return;
 }
 
-export async function api_Decks_Search(filters: FilterDescriptor[]): Promise<DeckProperties[]> {
+export async function api_Decks_Search(filters: FilterDescriptor[]): Promise<DeckOverviewDto[]> {
     const endpoint = `api/Decks/Search`;
     const result = await Post(endpoint, filters);
     return result;
 }
 
-export async function api_Decks_Get(deckId: number): Promise<DeckDto> {
+export async function api_Decks_Get(deckId: number): Promise<DeckDetailDto> {
     const endpoint = `api/Decks/Get`;
     const url = `${endpoint}?deckId=${deckId}`;
     const result = await Get(url);

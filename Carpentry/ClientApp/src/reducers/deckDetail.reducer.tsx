@@ -11,11 +11,11 @@ declare interface DeckDetailState {
     //THIS ISN'T GROUPED BY ID
     //It's grouped by NAME
     //cardOverviewsByName: { [name: string]: InventoryOverviewDto } //This contains a "group name" field
-    cardOverviewsById: { [id: number]: InventoryOverviewDto } //This contains a "group name" field
+    cardOverviewsById: { [id: number]: DeckCardOverview } //This contains a "group name" field
     //allCardOverviewNames: string[];
     allCardOverviewIds: number[];
 
-    cardDetailsById: { [id: number]: InventoryCard }; 
+    cardDetailsById: { [id: number]: DeckCard }; 
     allCardDetailIds: number[];
 
     selectedInventoryCardIds: number[];
@@ -42,14 +42,14 @@ export const apiDataRequested = (state: DeckDetailState, action: ReduxAction): D
     return newState;
 }
 
-function selectGroupedDeckCards(overviewsById: { [id: number]: InventoryOverviewDto }, allOverviewIds: number[]): NamedCardGroup[] {
+function selectGroupedDeckCards(overviewsById: { [id: number]: DeckCardOverview }, allOverviewIds: number[]): NamedCardGroup[] {
     var result: NamedCardGroup[] = [];
     // console.log('grouping deck editor cards')
     const cardGroups = ["Commander", "Creatures", "Spells", "Enchantments", "Artifacts", "Planeswalkers", "Lands", "Sideboard"];
     
     cardGroups.forEach(groupName => {
 
-        const cardsInGroup = allOverviewIds.filter(id => overviewsById[id].description === groupName);
+        const cardsInGroup = allOverviewIds.filter(id => overviewsById[id].category === groupName);
 
         if(cardsInGroup.length > 0){
             result.push({
@@ -104,13 +104,13 @@ export const deckDetail = (state = initialState, action: ReduxAction): DeckDetai
     switch(action.type){
 
         case DECK_EDITOR_CARD_SELECTED:
-            const selectedCardOverview: InventoryOverviewDto = action.payload;
+            const selectedCardOverview: DeckCardOverview = action.payload;
             // let visibleCards: InventoryCard[] = [];
             // visibleCards = state.selectedDeckDto.cardDetails.filter((card) => (card.name === selectedCardOverview.name));
 
             const visibleCardIds = state.allCardDetailIds.filter(id => 
                 state.cardDetailsById[id].name === selectedCardOverview.name
-                && selectedCardOverview.description === state.cardDetailsById[id].deckCards[0].category
+                && selectedCardOverview.category === state.cardDetailsById[id].category  //.deckCards[0].category
                 //&& state.cardDetailsById[id].
                 );
             // console.log('visible cards!');

@@ -8,9 +8,9 @@ interface ComponentProps{
     // onEditClick: () => void;
     // cardOverviews: InventoryOverviewDto[];
     // onCardSelected: (card: InventoryOverviewDto) => void;
-    selectedCard: InventoryOverviewDto | null;
+    selectedCard: DeckCardOverview | null;
 
-    inventoryCards: InventoryCard[];
+    inventoryCards: DeckCard[];
 
     onMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onMenuClose: () => void;
@@ -71,7 +71,7 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                                 props.inventoryCards.map(item => {
                                     // const thisCard = props.detail.cards.find(x => x.multiverseId === item.multiverseId);
 
-                                    const rowDeckCardId = item.deckCards.length > 0 ? item.deckCards[0].id : 0
+                                    const rowDeckCardId = item.id;
                                     // console.log(item);
                                     return(
                                     <TableRow key={item.id}>

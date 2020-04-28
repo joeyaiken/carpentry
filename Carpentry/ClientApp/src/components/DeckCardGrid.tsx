@@ -3,8 +3,8 @@ import { Box } from '@material-ui/core';
 import VisualCard from './VisualCard';
 
 interface ComponentProps{
-    cardOverviews: InventoryOverviewDto[];
-    onCardSelected: (card: InventoryOverviewDto) => void;
+    cardOverviews: DeckCardOverview[];
+    onCardSelected: (card: DeckCardOverview) => void;
 }
 
 export default function DeckCardGrid(props: ComponentProps): JSX.Element {

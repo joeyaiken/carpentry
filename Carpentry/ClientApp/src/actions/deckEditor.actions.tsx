@@ -100,7 +100,17 @@ function updateDeckCardStatus(dispatch: Dispatch, state: AppState, deckCardId: n
 
     let dto: DeckCardDto = {
         id: deckCardId,
-        inventoryCard: something,
+        inventoryCard: {
+            deckCards: [],
+            id: 0,
+            isFoil: false,
+            multiverseId: 0,
+            name: "",
+            set: "",
+            statusId: 0,
+            variantName: ""
+        },
+        //inventoryCard: something, 
         deckId: state.data.deckDetail.deckId,
         categoryId: categoryId,
         //categoryId        
@@ -125,7 +135,7 @@ function updateDeckCardStatus(dispatch: Dispatch, state: AppState, deckCardId: n
 */
 
 export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED';
-export const deckEditorCardSelected = (cardOverview: InventoryOverviewDto): ReduxAction => ({
+export const deckEditorCardSelected = (cardOverview: DeckCardOverview): ReduxAction => ({
     type: DECK_EDITOR_CARD_SELECTED,
     payload: cardOverview
 })

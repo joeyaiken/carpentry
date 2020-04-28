@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 import { CardHeader, CardMedia, Card } from '@material-ui/core';
 
 interface ComponentProps{
-    cardOverview: InventoryOverviewDto;
+    cardOverview: DeckCardOverview;
     //onCardSelected: ((card: InventoryOverviewDto) => void) | undefined;
     onCardSelected?: () => void;
     children?: ReactNode;

@@ -23,7 +23,7 @@ class DeckEditorCardOverviews extends React.Component<DeckEditorCardOverviewProp
         this.handleCardSelected = this.handleCardSelected.bind(this);
     }
 
-    handleCardSelected(cardOverview: InventoryOverviewDto) {
+    handleCardSelected(cardOverview: DeckCardOverview) {
         this.props.dispatch(deckEditorCardSelected(cardOverview))
     }
 
@@ -54,7 +54,7 @@ interface ComponentProps{
 
     // cardGroups: GroupedInventoryOverview[];
 
-    onCardSelected: (card: InventoryOverviewDto) => void;
+    onCardSelected: (card: DeckCardOverview) => void;
 }
 
 function GroupedDeckCardList(props: ComponentProps): JSX.Element {
@@ -84,7 +84,7 @@ function GroupedDeckCardList(props: ComponentProps): JSX.Element {
                                 {
                                     group.cardOverviews.map(cardItem => 
                                         <TableRow onClick={() => props.onCardSelected(cardItem)} onMouseEnter={() => props.onCardSelected(cardItem)}
-                                            key={cardItem.multiverseId+cardItem.name}>
+                                            key={cardItem.id+cardItem.name}>
                                             <TableCell>{(cardItem.count > 1) && cardItem.count}</TableCell>
                                             <TableCell>{cardItem.name}</TableCell>
                                             {/* <TableCell>{cardItem.count}</TableCell> */}

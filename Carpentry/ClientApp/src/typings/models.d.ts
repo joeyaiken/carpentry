@@ -3,22 +3,61 @@
 /// <reference types="react-redux" />
 /// <reference types="redux-thunk" />
 
+
+
+///New models after testing refactor
+
+
+declare interface DeckCard
+{
+    id: number;
+    multiverseId: number;
+    name: string;
+    set: string;
+    isFoil: boolean;
+    variantName: string;
+    category: string;
+}
+
+declare interface DeckCardOverview
+{
+    id: number;
+    name: string;
+    type: string;
+    cost: string;
+    cmc: number | null;
+    img: string;
+    count: number;
+    category: string;
+}
+
+declare interface DeckOverviewDto
+{
+    id: number;
+    name: string;
+    format: string;
+    colors: string[];
+    isValid: boolean;
+    validationIssues: string;
+}
+declare interface DeckDetailDto //: CardCollectionDto
+{
+    props: DeckProperties;
+    cardOverviews: DeckCardOverview[];
+    cardDetails: DeckCard[];
+    stats: DeckStats;
+}
+
 ///////
 //Models from the data layer
 
 // interface DeckCardDto
 
-declare interface DeckCardDto {
+declare interface DeckCardDto { //NOTE - this is a LEGACY model
     id: number;
     deckId: number;
     categoryId: string | null;
     inventoryCard: InventoryCard;
-}
-
-declare interface DeckCard {
-    // id: number;
-    // deckId: number;
-    // card: CardDto;SS
 }
 
 interface FilterOptionDto {

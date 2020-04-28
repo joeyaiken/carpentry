@@ -6,7 +6,7 @@ import { MoreVert } from '@material-ui/icons';
 export interface ComponentProps{
     onDeckClick: (deckId: number) => void;
     
-    decks: DeckProperties[];
+    decks: DeckOverviewDto[];
     ///
     deckMenuAnchor: HTMLButtonElement | null;
 
@@ -49,15 +49,19 @@ export default function DeckListLayout(props: ComponentProps): JSX.Element {
                                     <TableCell onClick={() => {props.onDeckClick(deck.id)}}>{deck.format}</TableCell>
                                     <TableCell onClick={() => {props.onDeckClick(deck.id)}}>
                                         {
+                                            deck.colors.map(color => manaIcon(color))
+                                        }
+                                        
+                                        {
                                             //deckList.
                                         }
-                                        {deck.basicW > 0 && manaIcon("W")}
+                                        {/* {deck.basicW > 0 && manaIcon("W")}
                                         {deck.basicU > 0 && manaIcon("U")}
                                         {deck.basicB > 0 && manaIcon("B")}
                                         {deck.basicR > 0 && manaIcon("R")}
-                                        {deck.basicG > 0 && manaIcon("G")}
+                                        {deck.basicG > 0 && manaIcon("G")} */}
                                     </TableCell>
-                                    <TableCell onClick={() => {props.onDeckClick(deck.id)}}>{deck.notes}</TableCell>
+                                    <TableCell onClick={() => {props.onDeckClick(deck.id)}}>{deck.validationIssues}</TableCell>
                                     <TableCell>
                                         <IconButton size="small" onClick={props.onMenuClick} name={deck.name} value={deck.id}>
                                             <MoreVert />

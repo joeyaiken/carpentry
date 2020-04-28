@@ -14,7 +14,7 @@ declare interface DeckListState {
     //decks: DeckProperties[]; //key = id
 
     //NEW
-    decksById: { [id: number]: DeckProperties }
+    decksById: { [id: number]: DeckOverviewDto }
     deckIds: number[]
 
 }
@@ -39,9 +39,9 @@ export const apiDataReceived = (state: DeckListState, action: ReduxAction): Deck
     if(scope as ApiScopeOption !== "deckList") return (state);
 
     //I guess this is normally where Normalizr should be used?
-    const apiDecks: DeckProperties[] = data;
+    const apiDecks: DeckOverviewDto[] = data;
 
-    let decksById = {};
+    let decksById: { [key:number]: DeckOverviewDto } = {};
 
     apiDecks.forEach(deck => {
         decksById[deck.id] = deck;
