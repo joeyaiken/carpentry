@@ -73,7 +73,7 @@ export const apiDataReceived = (state: DeckDetailState, action: ReduxAction): De
     let cardsById = {};
     
     dto.cardOverviews.forEach(card => overviewsById[card.id] = card);
-    dto.cardDetails.forEach(card => cardsById[card.id] = card);
+    dto.cards.forEach(card => cardsById[card.id] = card);
 
     const allCardOverviewIds: number[] = dto.cardOverviews.map(card => card.id);
 
@@ -88,7 +88,7 @@ export const apiDataReceived = (state: DeckDetailState, action: ReduxAction): De
         allCardOverviewIds: allCardOverviewIds,
 
         cardDetailsById: cardsById,
-        allCardDetailIds: dto.cardDetails.map(card => card.id),
+        allCardDetailIds: dto.cards.map(card => card.id),
 
         // cardGroups: [],
         cardGroups: selectGroupedDeckCards(overviewsById, allCardOverviewIds),

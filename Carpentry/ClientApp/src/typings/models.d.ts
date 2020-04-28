@@ -200,7 +200,7 @@ declare interface DeckDto
     // cards: Card[];
     // data: { [key: number]: MagicCard };
     cardOverviews: InventoryOverviewDto[];
-    cardDetails: InventoryCard[];
+    cards: InventoryCard[];
     stats: DeckStats;
 }
 
