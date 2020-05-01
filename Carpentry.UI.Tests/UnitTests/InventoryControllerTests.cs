@@ -28,7 +28,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var inventoryController = new Controllers.InventoryController(mockService.Object);
 
             //act
-            var response = inventoryController.Get();
+            var response = inventoryController.GetStatus();
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
@@ -39,7 +39,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Inventory_Add_ReturnsAsyncOK_Test()
+        public async Task Inventory_AddCard_ReturnsAsyncOK_Test()
         {
             //arrange
             int idToExpect = 1;
@@ -58,7 +58,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await inventoryController.Add(payload);
+            var response = await inventoryController.AddCard(payload);
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
@@ -67,7 +67,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Inventory_AddBatch_ReturnsAsyncOK_Test()
+        public async Task Inventory_AddCardBatch_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
@@ -88,7 +88,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await inventoryController.AddBatch(payload);
+            var response = await inventoryController.AddCardBatch(payload);
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkResult));
@@ -96,7 +96,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Inventory_Update_ReturnsAsyncOK_Test()
+        public async Task Inventory_UpdateCard_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
@@ -112,7 +112,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await inventoryController.Update(payload);
+            var response = await inventoryController.UpdateCard(payload);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
@@ -120,7 +120,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Inventory_Delete_ReturnsAsyncOK_Test()
+        public async Task Inventory_DeleteCard_ReturnsAsyncOK_Test()
         {
             //arrange
             var idToExpect = 1;
@@ -134,14 +134,14 @@ namespace Carpentry.UI.Tests.UnitTests
             var inventoryController = new Controllers.InventoryController(mockService.Object);
 
             //act
-            var response = await inventoryController.Delete(idToExpect);
+            var response = await inventoryController.DeleteCard(idToExpect);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
         
         [TestMethod]
-        public async Task Inventory_Search_ReturnsAsyncOK_Test()
+        public async Task Inventory_SearchCards_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
@@ -167,7 +167,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await inventoryController.Search(param);
+            var response = await inventoryController.SearchCards(param);
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
@@ -181,7 +181,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Inventory_GetByName_ReturnsAsyncOK_Test()
+        public async Task Inventory_GetCardsByName_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
@@ -202,7 +202,7 @@ namespace Carpentry.UI.Tests.UnitTests
             string nameToRequest = "Mock Card Detail";
 
             //act
-            var response = await inventoryController.GetByName(nameToRequest);
+            var response = await inventoryController.GetCardsByName(nameToRequest);
 
             //assert
             var typedResult = response.Result as OkObjectResult;

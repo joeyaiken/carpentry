@@ -29,7 +29,7 @@ namespace Carpentry.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetStatus()
         {
             return Ok("Online");
         }
@@ -37,7 +37,7 @@ namespace Carpentry.UI.Controllers
         //decks/add
         //- add a deck
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> Add([FromBody] DeckPropertiesDto deckProps)
+        public async Task<ActionResult<int>> AddDeck([FromBody] DeckPropertiesDto deckProps)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Carpentry.UI.Controllers
         //decks/update
         //- update properties of a deck
         [HttpPost("[action]")]
-        public async Task<ActionResult> Update([FromBody] DeckPropertiesDto deckProps)
+        public async Task<ActionResult> UpdateDeck([FromBody] DeckPropertiesDto deckProps)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Carpentry.UI.Controllers
         //decks/delete
         //- delete a deck
         [HttpGet("[action]")]
-        public async Task<ActionResult> Delete(int deckId)
+        public async Task<ActionResult> DeleteDeck(int deckId)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Carpentry.UI.Controllers
         //decks/Search
         //- get a list of deck properties & stats
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> Search()
+        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews()
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Carpentry.UI.Controllers
         //decks/Get
         //- get a deck (with cards)
         [HttpGet("[action]")]
-        public async Task<ActionResult<DeckDetailDto>> Get(int deckId)
+        public async Task<ActionResult<DeckDetailDto>> GetDeckDetail(int deckId)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Carpentry.UI.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> AddCard([FromBody] DeckCardDto dto)
+        public async Task<ActionResult> AddDeckCard([FromBody] DeckCardDto dto)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace Carpentry.UI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> UpdateCard([FromBody] DeckCardDto card)
+        public async Task<ActionResult> UpdateDeckCard([FromBody] DeckCardDto card)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace Carpentry.UI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveCard(int id)
+        public async Task<ActionResult> RemoveDeckCard(int id)
         {
             try
             {

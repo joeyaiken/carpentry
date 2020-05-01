@@ -35,14 +35,14 @@ namespace Carpentry.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetStatus()
         {
             return Ok("Online");
         }
 
         //Add
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> Add([FromBody] InventoryCardDto dto)
+        public async Task<ActionResult<int>> AddCard([FromBody] InventoryCardDto dto)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Carpentry.UI.Controllers
 
         //AddCardBatch
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> AddBatch([FromBody] List<InventoryCardDto> dto)
+        public async Task<ActionResult<int>> AddCardBatch([FromBody] List<InventoryCardDto> dto)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace Carpentry.UI.Controllers
 
         //Update
         [HttpPost("[action]")]
-        public async Task<ActionResult> Update([FromBody] InventoryCardDto dto)
+        public async Task<ActionResult> UpdateCard([FromBody] InventoryCardDto dto)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Carpentry.UI.Controllers
 
         //Delete
         [HttpGet("[action]")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteCard(int id)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace Carpentry.UI.Controllers
 
         //Search
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> Search([FromBody] InventoryQueryParameter param)
+        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> SearchCards([FromBody] InventoryQueryParameter param)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Carpentry.UI.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<InventoryDetailDto>> GetByName(string name)
+        public async Task<ActionResult<InventoryDetailDto>> GetCardsByName(string name)
         {
             try
             {

@@ -29,11 +29,16 @@ namespace Carpentry.UI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetStatus()
         {
             return Ok("Online");
         }
 
+        /// <summary>
+        /// Will call the scryfall API to get cards by name, returning mapped results
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         [HttpPost("[action]")]
         public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
         {
@@ -48,6 +53,13 @@ namespace Carpentry.UI.Controllers
             }
         }
 
+        /// <summary>
+        /// Searches all cards in a given set.
+        /// In earlier versions, this involved searching the cached scryfall repo, but now we can just search the regular card repo
+        /// This could / should probably be merged with SearchInventory
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
         [HttpPost("[action]")]
         public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
         {
@@ -62,6 +74,12 @@ namespace Carpentry.UI.Controllers
             }
         }
 
+        /// <summary>
+        /// Searches cards in the inventory
+        /// This could / should probably be merged with SearchSet
+        /// </summary>
+        /// <param name="filters"></param>
+        /// <returns></returns>
         [HttpPost("[action]")]
         public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchInventory([FromBody] InventoryQueryParameter filters)
         {

@@ -28,7 +28,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var cardSearchController = new Controllers.CardSearchController(mockService.Object);
 
             //act
-            var response = cardSearchController.Get();
+            var response = cardSearchController.GetStatus();
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));

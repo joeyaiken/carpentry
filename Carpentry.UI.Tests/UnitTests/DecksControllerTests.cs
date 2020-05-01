@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
-//using Carpentry.Service.Interfaces;
-//using Carpentry.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
@@ -26,7 +24,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var decksController = new Controllers.DecksController(mockDeckService.Object);
 
             //act
-            var response = decksController.Get();
+            var response = decksController.GetStatus();
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
@@ -37,7 +35,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
 
         [TestMethod]
-        public async Task Decks_Add_ReturnsAsyncOK_Test()
+        public async Task Decks_AddDeck_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
@@ -57,7 +55,7 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            ActionResult<int> response = await decksController.Add(mockDeck);
+            ActionResult<int> response = await decksController.AddDeck(mockDeck);
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
@@ -66,7 +64,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_Update_ReturnsAsyncOK_Test()
+        public async Task Decks_UpdateDeck_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
@@ -86,14 +84,14 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await decksController.Update(mockDeck);
+            var response = await decksController.UpdateDeck(mockDeck);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
         
         [TestMethod]
-        public async Task Decks_Delete_ReturnsAsyncOK_Test()
+        public async Task Decks_DeleteDeck_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
@@ -107,14 +105,14 @@ namespace Carpentry.UI.Tests.UnitTests
             var decksController = new Controllers.DecksController(mockDeckService.Object);
             
             //act
-            var response = await decksController.Delete(idToSubmit);
+            var response = await decksController.DeleteDeck(idToSubmit);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
         [TestMethod]
-        public async Task Decks_Search_ReturnsAsyncOK_Test()
+        public async Task Decks_GetDeckOverviews_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
@@ -135,7 +133,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var decksController = new Controllers.DecksController(mockDeckService.Object);
             
             //act
-            var response = await decksController.Search();
+            var response = await decksController.GetDeckOverviews();
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
@@ -148,7 +146,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_Get_ReturnsAsyncOK_Test()
+        public async Task Decks_GetDeckDetail_ReturnsAsyncOK_Test()
         {
             //arrange
             int deckIdToRequest = 1;
@@ -171,7 +169,7 @@ namespace Carpentry.UI.Tests.UnitTests
             
 
             //act
-            var response = await decksController.Get(deckIdToRequest);
+            var response = await decksController.GetDeckDetail(deckIdToRequest);
 
             //assert
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
@@ -182,7 +180,7 @@ namespace Carpentry.UI.Tests.UnitTests
         }
         
         [TestMethod]
-        public async Task Decks_AddCard_ReturnsAsyncOK_Test()
+        public async Task Decks_AddDeckCard_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
@@ -201,14 +199,14 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await decksController.AddCard(mockCard);
+            var response = await decksController.AddDeckCard(mockCard);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
         
         [TestMethod]
-        public async Task Decks_UpdateCard_ReturnsAsyncOK_Test()
+        public async Task Decks_UpdateDeckCard_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
@@ -228,14 +226,14 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             //act
-            var response = await decksController.UpdateCard(mockCard);
+            var response = await decksController.UpdateDeckCard(mockCard);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
         
         [TestMethod]
-        public async Task Decks_RemoveCard_ReturnsAsyncOK_Test()
+        public async Task Decks_RemoveDeckCard_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
@@ -249,7 +247,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var decksController = new Controllers.DecksController(mockDeckService.Object);
 
             //act
-            var response = await decksController.RemoveCard(idToSubmit);
+            var response = await decksController.RemoveDeckCard(idToSubmit);
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));

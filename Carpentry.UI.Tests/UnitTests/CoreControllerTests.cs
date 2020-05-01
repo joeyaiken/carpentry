@@ -24,7 +24,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var coreController = new Controllers.CoreController(mockFilterService.Object);
 
             //act
-            var response = coreController.Get();
+            var response = coreController.GetStatus();
 
             //assert
             Assert.IsInstanceOfType(response, typeof(OkObjectResult));
