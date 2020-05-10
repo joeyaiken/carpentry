@@ -1,4 +1,8 @@
 import { combineReducers } from 'redux';
+
+//domain data
+import { deckOverviews, DeckOverviewsState } from './deckOverviews.reducer';
+
 ////Domain data
 //import { dataLoadingState } from './dataLoadingState.reducer'
 //import { appFilterOptions } from './appFilterOptions.reducer';
@@ -15,10 +19,26 @@ import { combineReducers } from 'redux';
 //import { inventory } from './inventory.reducer';
 //import { cardSearch } from './cardSearch.reducer';
 ////ui
-//import { ui } from './ui.reducer';
+// import { ui } from './ui.reducer';
 
-const rootReducer = combineReducers({
-    
+//export const reducers = combineReducers({
+
+// export type { AppState } from './configureStore';
+
+export interface AppState {
+    data: {
+        deckOverviews: DeckOverviewsState
+    }
+}
+
+export const reducers = {
+    data: combineReducers({
+        //isLoading: null,
+        deckOverviews,
+    }),
+
+
+
     //data: combineReducers({
     //    isLoading: dataLoadingState,
     //    appFilterOptions,
@@ -40,7 +60,8 @@ const rootReducer = combineReducers({
 
     //ui,
 
-})
+};
+//})
 
 //type AppContainerEnum = 'deckEditor' | 'inventory' | 'buyList' | 'cardSearch' | 'newDeck' | null;
 
@@ -483,6 +504,7 @@ const rootReducer = combineReducers({
 //    }
 //}
 
-export default rootReducer;
+// export default reducers;
 
-export type AppState = ReturnType<typeof rootReducer>
+// export type AppState = ReturnType<typeof reducers>
+

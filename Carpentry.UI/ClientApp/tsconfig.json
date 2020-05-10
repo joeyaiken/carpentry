@@ -22,8 +22,8 @@
       "suppressImplicitAnyIndexErrors": true
     },
     "include": [
-      "src"//,
-      //"typings/*"
+      "src",
+      "typings/*"
     ]
   }
   

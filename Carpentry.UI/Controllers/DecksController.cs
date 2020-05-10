@@ -84,7 +84,7 @@ namespace Carpentry.UI.Controllers
 
         //decks/Search
         //- get a list of deck properties & stats
-        [HttpPost("[action]")]
+        [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews()
         {
             try
