@@ -15,6 +15,9 @@ import React from 'react'
 import { AppState } from '../reducers'
 
 import { Typography, Box } from '@material-ui/core';
+
+import { useLocation } from 'react-router-dom';
+import { ensureDeckDetailLoaded } from '../actions/deckEditor.actions';
 // import DeckPropertiesLayout from '../components/DeckPropertiesLayout';
 // import DeckPropsBar from '../components/DeckPropsBar';
 // import DeckCardList from '../components/DeckCardList';
@@ -32,7 +35,9 @@ import { Typography, Box } from '@material-ui/core';
 /**
  * The Deck Editor is basically a fancy data table
  */
-
+// function useQuery() {
+//     return new URLSearchParams(useLocation().search);
+// }
 interface PropsFromState {
     // viewMode: DeckEditorViewMode;//"list" | "grid";
     deckProperties: DeckDetailDto | null;
@@ -51,9 +56,22 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         super(props);
     }
 
-    // componentDidMount() {
-    //     this.props.dispatch(ensureDeckOverviewsLoaded())
-    // }
+    componentDidMount() {
+        // this.props.dispatch(ensureDeckOverviewsLoaded())
+        console.log('deck editor mount');
+        //load deck detail: id, view
+        //const location = useLocation();
+
+        // const query = new URLSearchParams(location.search);
+        
+        // console.log(location);
+        // this.props.dispatch(ensureDeckDetailLoaded());
+        
+
+    }
+
+
+    //React.CssProperties
 
     render() {
         if(this.props.deckProperties === null){
@@ -121,6 +139,8 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
 function mapStateToProps(state: AppState): PropsFromState {
 
+    console.log('DE state to props');
+    console.log(state);
     const result: PropsFromState = {
         // viewMode: state.app.deckEditor.viewMode,
         // cardMenuAnchor: state.ui.deckEditorMenuAnchor,

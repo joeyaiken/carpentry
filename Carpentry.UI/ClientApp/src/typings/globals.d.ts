@@ -12,10 +12,16 @@ declare type ApiScopeOption =
     "cardSearchResults" | 
     "cardSearchInventoryDetail" ;
 
+declare type DeckFormatOption = 'Standard' | 'Legacy' | 'Modern' | 'Commander' | 'Oathbreaker';
 
 declare interface ReduxAction extends AnyAction {
     type: any, //Should be combined type of all fuckin action types?
     error?: any,
     payload?: any,
     meta?: any
+}
+
+declare interface NamedCardGroup {
+    name: string;
+    cardOverviewIds: number[];
 }

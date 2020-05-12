@@ -3,8 +3,33 @@
 /// <reference types="react-redux" />
 /// <reference types="redux-thunk" />
 
+declare interface DeckCard {
+    id: number;
+    multiverseId: number;
+    name: string;
+    set: string;
+    isFoil: boolean;
+    variantName: string;
+    category: string;
+}
 
+declare interface DeckCardOverview {
+    id: number;
+    name: string;
+    type: string;
+    cost: string;
+    cmc: number;
+    category: string;
+    img: string;
+    count: number;
+}
 
+declare interface DeckDetailDto {
+    props: DeckProperties;
+    cardOverviews: DeckCardOverview[];
+    cards: DeckCard[];
+    stats: DeckStats;
+}
 
 declare interface DeckOverviewDto {
     id: number;
@@ -15,16 +40,26 @@ declare interface DeckOverviewDto {
     validationIssues: string;
 }
 
+declare interface DeckProperties {
+    id: number;
+    name: string;
+    //format: DeckFormats;
+    format: null | DeckFormatOption;
+    notes: string;
 
-declare interface DeckDetailDto {
-
+    basicW: number;
+    basicU: number;
+    basicB: number;
+    basicR: number;
+    basicG: number;
 }
 
-
-
-
-
-
+declare interface DeckStats {
+    totalCount: number;
+    typeCounts: {[type: string]: number};
+    costCounts: {[type: string]: number};
+    totalCost: number;
+}
 
 
 
@@ -69,19 +104,6 @@ declare interface DeckDetailDto {
 //     stats: DeckStats;
 // }
 
-// declare interface DeckProperties {
-//     id: number;
-//     name: string;
-//     //format: DeckFormats;
-//     format: null | 'Standard' | 'Legacy' | 'Modern' | 'Commander' | 'Oathbreaker';
-//     notes: string;
-
-//     basicW: number;
-//     basicU: number;
-//     basicB: number;
-//     basicR: number;
-//     basicG: number;
-// }
 
 // declare interface DeckStats {
 //     totalCount: number;
