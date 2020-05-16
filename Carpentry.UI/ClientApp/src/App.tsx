@@ -9,6 +9,7 @@ import Home from './containers/Home';
 
 import './styles/App.css';
 import DeckEditor from './containers/DeckEditor';
+import Backups from './containers/Backups';
 
 export default function App(): JSX.Element {
     return(
@@ -24,6 +25,18 @@ export default function App(): JSX.Element {
 
                 <Route path='/Inventory' >
                     Inventory
+                </Route>
+
+                <Route path='/settings/sets' >
+                    Sets
+                </Route>
+
+                <Route path='/settings/backups' >
+                    <Backups />
+                </Route>
+
+                <Route path='/settings' >
+                    Settings
                 </Route>
 
                 <Route path='/' >

@@ -13,21 +13,35 @@ namespace Carpentry.Tools.QuickBackup
             DatabaseLocation = $"{backupSourceDbRoot}{backupSourceDbLocation}";
 
             //Backups
-            string backupFolderPath = appConfig.GetValue<string>("AppSettings:BackupFolderPath");
-            string deckBackupFilename = appConfig.GetValue<string>("AppSettings:DeckBackupFilename");
-            string cardsBackupFilename = appConfig.GetValue<string>("AppSettings:CardBackupFilename");
-            string propsBackupFilename = appConfig.GetValue<string>("AppSettings:PropsBackupFilename");
-            DeckBackupLocation = $"{backupFolderPath}{deckBackupFilename}";
-            CardBackupLocation = $"{backupFolderPath}{cardsBackupFilename}";
-            PropsBackupLocation = $"{backupFolderPath}{propsBackupFilename}";
-        }
+            BackupDirectory = appConfig.GetValue<string>("AppSettings:BackupFolderPath");
 
+            DeckBackupFilename = appConfig.GetValue<string>("AppSettings:DeckBackupFilename");
+            CardBackupFilename = appConfig.GetValue<string>("AppSettings:CardBackupFilename");
+            PropsBackupFilename = appConfig.GetValue<string>("AppSettings:PropsBackupFilename");
+            //DeckBackupLocation = $"{backupFolderPath}{deckBackupFilename}";
+            //CardBackupLocation = $"{backupFolderPath}{cardsBackupFilename}";
+            //PropsBackupLocation = $"{backupFolderPath}{propsBackupFilename}";
+        }
+        //DB
         public string DatabaseLocation { get; set; }
 
-        public string DeckBackupLocation { get; set; }
 
-        public string CardBackupLocation { get; set; }
+        //Backups
+        public string BackupDirectory { get; set; }
 
-        public string PropsBackupLocation { get; set; }        
+        public string DeckBackupFilename { get; set; }
+        public string CardBackupFilename { get; set; }
+        public string PropsBackupFilename { get; set; }
+
+
+
+
+
+
+        //public string DeckBackupLocation { get; set; }
+
+        //public string CardBackupLocation { get; set; }
+
+        //public string PropsBackupLocation { get; set; }        
     }
 }

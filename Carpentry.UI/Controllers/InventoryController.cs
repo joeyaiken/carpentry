@@ -128,5 +128,25 @@ namespace Carpentry.UI.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetByName", ex));
             }
         }
+
+        //Get Backup Details / Settings
+
+        //Request Backup
+
+        //Request Restore
+        //  Defaults
+        //  Decks
+        //  Set shells
+        //      Update scry sets 1 at a time
+        //  inv & deck cards
+
+        //get tracked sets
+
+        //get all sets
+
+        //change set tracking
+
+        //update set data / prices / whatnot
+
     }
 }

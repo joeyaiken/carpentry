@@ -21,10 +21,12 @@ namespace Carpentry.UI.Controllers
         }
 
         private readonly IFilterService _filterService;
+        private readonly IDataBackupService _backupService;
 
-        public CoreController(IFilterService filterService)
+        public CoreController(IFilterService filterService, IDataBackupService backupService)
         {
             _filterService = filterService;
+            _backupService = backupService;
         }
 
         /// <summary>
@@ -55,6 +57,39 @@ namespace Carpentry.UI.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetFilterValues", ex));
             }
         }
+
+        //get backup details / props (string directory)
+        [HttpPost("[action]")]
+        public async Task <ActionResult<BackupDetailDto>> GetBackupDetails(string directory)
+        {
+            try
+            {
+                BackupDetailDto result = await _backupService.GetBackupDetail(directory);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetBackupDetails", ex));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> BackupInventoryData(string directory)
+        {
+            try
+            {
+                await _backupService.BackupDatabase(directory);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetBackupDetails", ex));
+            }
+        }
+
+
+
+
 
     }
 }

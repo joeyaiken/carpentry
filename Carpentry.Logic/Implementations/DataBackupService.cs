@@ -1,5 +1,6 @@
 ﻿using Carpentry.Data.LegacyDataContext;
 using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Backups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -32,11 +33,21 @@ namespace Carpentry.Logic.Implementations
             _config = config;
         }
 
-        public async Task BackupDatabase()
+        public async Task<BackupDetailDto> GetBackupDetail(string directory)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task BackupDatabase(string directory)
         {
             _logger.LogInformation("DataBackupService - SaveDb...");
 
-            await BackupDatabaseToTextFiles(_config.DeckBackupLocation, _config.CardBackupLocation, _config.PropsBackupLocation);
+            string backupDirectory = directory != null ? directory : _config.BackupDirectory;
+            
+            string deckBackupLocation = $"{backupDirectory}{_config.DeckBackupFilename}";
+            string cardBackupLocation = $"{backupDirectory}{_config.CardBackupFilename}";
+            string propsBackupLocation = $"{backupDirectory}{_config.PropsBackupFilename}";
+
+            await BackupDatabaseToTextFiles(deckBackupLocation, cardBackupLocation, propsBackupLocation);
 
             _logger.LogInformation("DataBackupService - SaveDb...completed successfully");
         }
