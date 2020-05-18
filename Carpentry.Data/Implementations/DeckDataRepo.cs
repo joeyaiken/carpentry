@@ -86,10 +86,11 @@ namespace Carpentry.Data.Implementations
         public async Task<IEnumerable<DeckData>> GetAllDecks()
         {
             var result = await _cardContext.Decks.Include(x => x.Format).ToListAsync();
+
+            //var count = await _cardContext.InventoryCards.CountAsync();
+
             return result;
         }
-
-
 
         public async Task AddDeckCard(DeckCardData newDeckCard)
         {
@@ -141,9 +142,6 @@ namespace Carpentry.Data.Implementations
             var matchingDeckCard = await _cardContext.DeckCards.Where(x => x.InventoryCardId == inventoryCardId).FirstOrDefaultAsync();
             return matchingDeckCard;
         }
-
-
-
 
     }
 }

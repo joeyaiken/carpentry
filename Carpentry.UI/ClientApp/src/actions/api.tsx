@@ -102,12 +102,12 @@ export const api = {
             return result;
         },
 
-        // async get(deckId: number): Promise<DeckDto> {
-        //     const endpoint = `api/Decks/Get`;
-        //     const url = `${endpoint}?deckId=${deckId}`;
-        //     const result = await Get(url);
-        //     return result;
-        // },
+        async getDetail(deckId: number): Promise<DeckDetailDto> {
+            const endpoint = `api/Decks/GetDeckDetail`;
+            const url = `${endpoint}?deckId=${deckId}`;
+            const result = await Get(url);
+            return result;
+        },
 
         // async addCard(deckCardProps: DeckCardDto): Promise<void> {
         //     const endpoint = `api/Decks/AddCard`;

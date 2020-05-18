@@ -85,7 +85,8 @@ namespace Carpentry.Data.Implementations
         {
             List<DataReferenceValue<int>> result = await _cardContext.VariantTypes.Select(x => new DataReferenceValue<int>()
             {
-
+                Id = x.Id,
+                Name = x.Name,
             }).ToListAsync();
             return result;
         }

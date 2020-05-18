@@ -80,7 +80,9 @@ namespace Carpentry.Logic.Implementations
 
             _logger.LogWarning("LoadDeckBackups - Loading parsed decks");
 
-            string deckBackupsDataString = await System.IO.File.ReadAllTextAsync(_config.DeckBackupLocation);
+            string deckBackupLocation = $"{_config.BackupDirectory}{_config.DeckBackupFilename}";
+
+            string deckBackupsDataString = await System.IO.File.ReadAllTextAsync(deckBackupLocation);
             List<BackupDeck> parsedBackupDecks = JArray.Parse(deckBackupsDataString).ToObject<List<BackupDeck>>();
 
             List<DeckData> newDecks = parsedBackupDecks.Select(x => new DeckData()
@@ -126,7 +128,9 @@ namespace Carpentry.Logic.Implementations
 
             _logger.LogWarning("LoadSetTempData - Adding set placeholder records...");
 
-            string propsBackupDataString = await System.IO.File.ReadAllTextAsync(_config.PropsBackupLocation);
+            string propsBackupLocation = $"{_config.BackupDirectory}{_config.PropsBackupFilename}";
+
+            string propsBackupDataString = await System.IO.File.ReadAllTextAsync(propsBackupLocation);
             BackupDataProps parsedPropsBackups = JObject.Parse(propsBackupDataString).ToObject<BackupDataProps>();
 
 
@@ -159,7 +163,9 @@ namespace Carpentry.Logic.Implementations
             }
             _logger.LogWarning("LoadCardBackups - preparing to load backups...");
 
-            string cardBackupsDataString = await System.IO.File.ReadAllTextAsync(_config.CardBackupLocation);
+            string cardBackupLocation = $"{_config.BackupDirectory}{_config.CardBackupFilename}";
+
+            string cardBackupsDataString = await System.IO.File.ReadAllTextAsync(cardBackupLocation);
             List<BackupInventoryCard> parseCardsBackups = JArray.Parse(cardBackupsDataString).ToObject<List<BackupInventoryCard>>();
 
             _logger.LogWarning("RestoreDb - LoadCardBackups...definitions exist, mapping & saving");

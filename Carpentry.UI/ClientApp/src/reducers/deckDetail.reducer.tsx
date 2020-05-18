@@ -1,7 +1,10 @@
 import { API_DATA_REQUESTED, API_DATA_RECEIVED } from '../actions/';
 import { DECK_EDITOR_CARD_SELECTED, DECK_PROPERTY_CHANGED } from '../actions/deckEditor.actions';
 
-declare interface DeckDetailState {
+export interface DeckDetailState {
+
+    isLoading: boolean;
+
 
     deckId: number;
 
@@ -66,6 +69,8 @@ export const apiDataReceived = (state: DeckDetailState, action: ReduxAction): De
     const { scope, data } = action.payload;
     
     if(scope as ApiScopeOption !== "deckDetail") return (state);
+
+    console.log('----------------')
 
     const dto: DeckDetailDto = data;
 
@@ -154,6 +159,8 @@ export const deckDetail = (state = initialState, action: ReduxAction): DeckDetai
 }
 
 const initialState: DeckDetailState = {
+    isLoading: false,
+
     deckId: 0,
     deckProps: null,
           

@@ -15,64 +15,64 @@ namespace Carpentry.UI.Tests.UnitTests
     [TestClass]
     public class CoreControllerTests
     {
-        [TestMethod]
-        public void Core_GetStatus_ReturnsAsyncOK_Test()
-        {
-            //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
+        //[TestMethod]
+        //public void Core_GetStatus_ReturnsAsyncOK_Test()
+        //{
+        //    //assemble
+        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object);
+        //    var coreController = new Controllers.CoreController(mockFilterService.Object);
 
-            //act
-            var response = coreController.GetStatus();
+        //    //act
+        //    var response = coreController.GetStatus();
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
-            var typedResult = response as OkObjectResult;
-            string resultValue = typedResult.Value as string;
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkObjectResult));
+        //    var typedResult = response as OkObjectResult;
+        //    string resultValue = typedResult.Value as string;
 
-            Assert.AreEqual( "Online", resultValue);
-        }
+        //    Assert.AreEqual( "Online", resultValue);
+        //}
 
-        [TestMethod]
-        public async Task Core_GetFilterValues_ReturnsAsyncOK_Test()
-        {
-            //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
+        //[TestMethod]
+        //public async Task Core_GetFilterValues_ReturnsAsyncOK_Test()
+        //{
+        //    //assemble
+        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
 
-            var expectedResult = new AppFiltersDto()
-            {
-                Formats = new List<FilterOption>(),
-                ManaColors = new List<FilterOption>(),
-                Rarities = new List<FilterOption>(),
-                Sets = new List<FilterOption>(),
-                Statuses = new List<FilterOption>(),
-                Types = new List<FilterOption>(),
-            };
+        //    var expectedResult = new AppFiltersDto()
+        //    {
+        //        Formats = new List<FilterOption>(),
+        //        ManaColors = new List<FilterOption>(),
+        //        Rarities = new List<FilterOption>(),
+        //        Sets = new List<FilterOption>(),
+        //        Statuses = new List<FilterOption>(),
+        //        Types = new List<FilterOption>(),
+        //    };
 
-            mockFilterService
-                .Setup(p => p.GetAppFilterValues())
-                .ReturnsAsync(expectedResult);
+        //    mockFilterService
+        //        .Setup(p => p.GetAppFilterValues())
+        //        .ReturnsAsync(expectedResult);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object);
+        //    var coreController = new Controllers.CoreController(mockFilterService.Object);
 
-            //act
-            var response = await coreController.GetFilterValues();
+        //    //act
+        //    var response = await coreController.GetFilterValues();
 
-            //assert
-            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
-            var typedResult = response.Result as OkObjectResult;
-            AppFiltersDto resultValue = typedResult.Value as AppFiltersDto;
+        //    //assert
+        //    Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
+        //    var typedResult = response.Result as OkObjectResult;
+        //    AppFiltersDto resultValue = typedResult.Value as AppFiltersDto;
 
-            Assert.IsNotNull(resultValue);
+        //    Assert.IsNotNull(resultValue);
             
-            Assert.IsNotNull(resultValue.Formats);
-            Assert.IsNotNull(resultValue.ManaColors);
-            Assert.IsNotNull(resultValue.Rarities);
-            Assert.IsNotNull(resultValue.Sets);
-            Assert.IsNotNull(resultValue.Statuses);
-            Assert.IsNotNull(resultValue.Types);
-        }
+        //    Assert.IsNotNull(resultValue.Formats);
+        //    Assert.IsNotNull(resultValue.ManaColors);
+        //    Assert.IsNotNull(resultValue.Rarities);
+        //    Assert.IsNotNull(resultValue.Sets);
+        //    Assert.IsNotNull(resultValue.Statuses);
+        //    Assert.IsNotNull(resultValue.Types);
+        //}
         
         //[TestMethod]
         //public async Task Core_BackupDatabase_ReturnsAsyncOK_Test()

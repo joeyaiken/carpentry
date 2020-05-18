@@ -37,6 +37,12 @@ namespace Carpentry.Logic.Implementations
         {
             throw new NotImplementedException();
         }
+
+        public async Task BackupDatabase()
+        {
+            await BackupDatabase(null);
+        }
+
         public async Task BackupDatabase(string directory)
         {
             _logger.LogInformation("DataBackupService - SaveDb...");

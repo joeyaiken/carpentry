@@ -89,6 +89,26 @@ namespace Carpentry.UI.Controllers
 
 
 
+        //Possible controller methods
+
+        //Get tracked sets
+        //  
+        
+        //Get all possible sets (there are like 500)
+        //  Paginated?
+        //  Query scryfall directly for this, or cache it?
+        //      Maybe it's something that's ALSO updated daily?
+
+
+        //add tracked set
+
+        //update tracked set
+
+        //update the prices of a single set
+        //  ??break this down??
+
+
+
 
 
     }

@@ -11,10 +11,17 @@ import {
 } from '@material-ui/core';
 
 import { Add, AddBox, Menu, FilterList } from '@material-ui/icons';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
+import { ConnectedComponent } from 'react-redux';
 
 interface LayoutProps {
     children: ReactNode;
+
+    routes: {
+        path: string,
+        component: ConnectedComponent<any, any>,
+        name: string;
+    }[];
     // isAddSelected: boolean;
     // showAddButton: boolean;
     // showFilterButton: boolean;
@@ -49,7 +56,9 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
             </IconButton>
             
             <Typography variant="h5" className="flex-section">
-                Carpentry                
+                {<Switch>{
+                        props.routes.map(route => <Route path={route.path}>{route.name}</Route>)
+                }</Switch>}
             </Typography>
         
             <Route

@@ -2,6 +2,9 @@ import { combineReducers } from 'redux';
 
 //domain data
 import { deckOverviews, DeckOverviewsState } from './deckOverviews.reducer';
+import { deckDetail, DeckDetailState } from './deckDetail.reducer';
+
+import { inventoryDataReducer, InventoryDataReducerState } from './inventoryDataReducer';
 
 ////Domain data
 //import { dataLoadingState } from './dataLoadingState.reducer'
@@ -27,7 +30,10 @@ import { deckOverviews, DeckOverviewsState } from './deckOverviews.reducer';
 
 export interface AppState {
     data: {
-        deckOverviews: DeckOverviewsState
+        deckOverviews: DeckOverviewsState,
+        deckDetail: DeckDetailState,
+        
+        inventory: InventoryDataReducerState,
     }
 }
 
@@ -35,6 +41,9 @@ export const reducers = {
     data: combineReducers({
         //isLoading: null,
         deckOverviews,
+        deckDetail,
+
+        inventory: inventoryDataReducer,
     }),
 
 

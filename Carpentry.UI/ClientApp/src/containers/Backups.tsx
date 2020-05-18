@@ -46,7 +46,7 @@ class Backups extends React.Component<BackupsProps> {
                     [backup] [restore]
                 </Typography> */}
                 <Box>
-                    <Button>Request Backup</Button><Button>Request Restore</Button>
+                    <Button variant="contained" color="primary">Request Backup</Button><Button color="primary">Request Restore</Button>
                 </Box>
                 <Paper>
                     [ ---- progress info ---- ]

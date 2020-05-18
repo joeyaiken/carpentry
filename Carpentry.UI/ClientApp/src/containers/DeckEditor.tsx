@@ -38,9 +38,29 @@ import { ensureDeckDetailLoaded } from '../actions/deckEditor.actions';
 // function useQuery() {
 //     return new URLSearchParams(useLocation().search);
 // }
-interface PropsFromState {
+
+interface OwnProps {
+    match: {
+        params: {
+            deckId: number
+        }
+    }
     // viewMode: DeckEditorViewMode;//"list" | "grid";
-    deckProperties: DeckDetailDto | null;
+    // deckProperties: DeckDetailDto | null;
+    // cardOverviews: InventoryOverviewDto[];
+    // cardMenuAnchor: HTMLButtonElement | null;
+    // deckPropsModalOpen: boolean;
+    // selectedCard: InventoryOverviewDto | null;
+    // selectedInventoryCards: InventoryCard[];
+    // deckStats: DeckStats | null;
+}
+
+
+interface PropsFromState {
+    deckId: number;
+    // viewMode: DeckEditorViewMode;//"list" | "grid";
+    //deckProperties: DeckDetailDto | null;
+    deckProperties: DeckProperties | null;
     // cardOverviews: InventoryOverviewDto[];
     // cardMenuAnchor: HTMLButtonElement | null;
     // deckPropsModalOpen: boolean;
@@ -65,7 +85,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         // const query = new URLSearchParams(location.search);
         
         // console.log(location);
-        // this.props.dispatch(ensureDeckDetailLoaded());
+        this.props.dispatch(ensureDeckDetailLoaded(this.props.deckId));
         
 
     }
@@ -75,7 +95,10 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
     render() {
         if(this.props.deckProperties === null){
-            return(<Box><Typography>ERROR - Deck properties === null, cannot render</Typography></Box>)
+            return(<Box>
+                <Typography>ERROR - Deck properties === null, cannot render</Typography>
+            <Typography>Selected ID == {this.props.deckId}</Typography>
+                </Box>)
         } else {
             return(
                 <React.Fragment>
@@ -87,6 +110,8 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                     {/* <DeckEditorPropsModal />
 
                     <DeckEditorPropsBar /> */}
+
+                    {/* { this.renderPropsBar() } */}
 
                     <Box className="flex-row flex-section" style={{
                         overflow:'auto',
@@ -101,7 +126,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                                 flex:'1 1 70%'
                             }}
                         >
-                            {/* <DeckEditorCardOverviews /> */}
+                            { this.renderCardOverviews() }
                         </div>
                         <div className="flex-section" 
                             style={{
@@ -109,10 +134,75 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                                 flex:'1 1 30%'
                             }}
                         >
-                            {/* <DeckEditorCardDetail /> */}
+                            { this.renderCardDetail() }
                         </div>
                     </Box>
-                    {/* <DeckEditorStatsBar /> */}
+                    { this.renderStatsBar() }
+                </React.Fragment>
+            )
+        }
+    }
+
+    renderPropsBar() {
+        // if(this.props.deckProperties === null){
+        //     return(<Box><Typography>ERROR - Deck properties === null, cannot render</Typography></Box>)
+        // } else {
+        //     return(
+        //         <React.Fragment>
+        //             <DeckPropsBar deckProperties={this.props.deckProperties} onEditClick={this.handleEditPropsClick} onToggleViewClick={this.handleToggleDeckView} />
+        //         </React.Fragment>
+        //     )
+        // }
+    }
+
+    renderCardOverviews() {
+        return(
+            <React.Fragment>
+                {this.props.viewMode === "list" && 
+                    <DeckCardList 
+                        //cardOverviews={this.props.cardOverviews} 
+                        cardOverviews={this.props.groupedCardOverviews[0].cardOverviews} 
+                        onCardSelected={this.handleCardSelected} 
+                    />}
+                {/* {this.props.viewMode === "grid" && <DeckCardGrid cardOverviews={this.props.cardOverviews} onCardSelected={this.handleCardSelected} />} */}
+                {this.props.viewMode === "grid" && <DeckCardGrid cardOverviews={this.props.groupedCardOverviews[0].cardOverviews} onCardSelected={this.handleCardSelected} />}
+                {this.props.viewMode === "grouped" && <GroupedDeckCardList groupedCardOverviews={this.props.groupedCardOverviews} onCardSelected={this.handleCardSelected} />}
+            </React.Fragment>
+        );
+    }
+
+    renderCardDetail() {
+
+    }
+
+    renderStatsBar() {
+
+    }
+
+}
+
+class DeckEditorPropsBar extends React.Component<DeckEditorPropsBarProps> {
+    constructor(props: DeckEditorPropsBarProps) {
+        super(props);
+        this.handleEditPropsClick = this.handleEditPropsClick.bind(this);
+        this.handleToggleDeckView = this.handleToggleDeckView.bind(this);
+    }
+
+    handleEditPropsClick(): void {
+        this.props.dispatch(openDeckPropsModal());
+    }
+
+    handleToggleDeckView(): void {
+        this.props.dispatch(toggleDeckViewMode());
+    }
+
+    render() {
+        if(this.props.deckProperties === null){
+            return(<Box><Typography>ERROR - Deck properties === null, cannot render</Typography></Box>)
+        } else {
+            return(
+                <React.Fragment>
+                    <DeckPropsBar deckProperties={this.props.deckProperties} onEditClick={this.handleEditPropsClick} onToggleViewClick={this.handleToggleDeckView} />
                 </React.Fragment>
             )
         }
@@ -137,16 +227,20 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 //     //selectedInventoryCards: state.deckEditor.selectedInventoryCards,
 // }
 
-function mapStateToProps(state: AppState): PropsFromState {
 
-    console.log('DE state to props');
-    console.log(state);
+
+function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+
+    // console.log('DE state to props');
+    // console.log(state);
+    // console.log(ownProps);
     const result: PropsFromState = {
+        deckId: ownProps.match.params.deckId,
         // viewMode: state.app.deckEditor.viewMode,
         // cardMenuAnchor: state.ui.deckEditorMenuAnchor,
         // selectedCard: getSelectedCardOverview(state),
         // selectedInventoryCards: getSelectedDeckDetails(state),
-        deckProperties: null //state.data.deckDetail.deckProps,
+        deckProperties: state.data.deckDetail.deckProps,
         // cardOverviews: selectDeckOverviews(state),
         // deckStats: state.data.deckDetail.deckStats,
         // deckPropsModalOpen: state.ui.deckPropsModalOpen,

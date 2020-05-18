@@ -5,6 +5,8 @@ import Redux, { Store, Dispatch, compose, combineReducers } from 'redux';
 import { AppState } from '../reducers';
 
 import { useLocation } from 'react-router-dom';
+import { apiDataRequested, apiDataReceived } from './data.actions';
+import { api } from './api';
 
 // import { AppState } from "../reducers";
 // import { api_Decks_Get, api_Decks_Update, api_Decks_RemoveCard, api_Decks_UpdateCard } from './api';
@@ -178,20 +180,42 @@ export const deckPropertyChanged = (name: string, value: string): ReduxAction =>
 
 
 
-export const ensureDeckDetailLoaded = (): any => {
+export const ensureDeckDetailLoaded = (deckId: number): any => {
     return(dispatch: Dispatch, getState: any) => {
-        tryLoadDeckDetail(dispatch, getState());
+        tryLoadDeckDetail(dispatch, getState(), deckId);
     }
 }
 
-function tryLoadDeckDetail(dispatch: Dispatch, state: AppState): void {
-    console.log('lets make sure nothing breaks');
+function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number): void {
+    const _localApiScope: ApiScopeOption = "deckDetail";
 
-    const location = useLocation();
+    if(state.data.deckDetail.isLoading || state.data.deckDetail.deckId === deckId){
+        console.log('tryLoadDeckDetail returning');
+        return;
+    }
 
+    dispatch(apiDataRequested(_localApiScope, deckId));
+    
+    api.Decks.getDetail(deckId).then((result) => {
+        dispatch(apiDataReceived(_localApiScope, result));
+    });
 }
 
-
+// export const requestDeckDetail = (deckId: number): any => {
+//     console.log('requesting deck detail')
+//     return (dispatch: Dispatch, getState: any) => {
+//         return getDeckDetail(dispatch, getState(), deckId);
+//     }
+// }
+// function getDeckDetail(dispatch: Dispatch, state: AppState, deckId: number): any {    
+//     const _localApiScope: ApiScopeOption = "deckDetail";
+//     // dispatch(navigate(AppContainerEnum.DeckEditor));
+//     dispatch(apiDataRequested(_localApiScope ,deckId));
+    
+//     api.Decks.getDetail(deckId).then((result) => {
+//         dispatch(apiDataReceived(_localApiScope, result));
+//     });
+// }
 
 // export const ensureDeckOverviewsLoaded = (): any => {
 //     console.log('ensureDeckOverviewsLoaded')

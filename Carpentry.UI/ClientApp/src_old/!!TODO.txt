@@ -1,0 +1,12 @@
+Carpentry TODO:
+
+Deck Editor - in order  to show main/sideboard, I think I need to update the data structure of the deck detail
+
+Instead of inventory DTOs, I should have a DeckCardDto
+	This should store its own category, maybe
+	OR - "card overview" natural key === Name + Category
+	
+	Either way, right now, if I have 1 card in mainboard and 1 in sideboard, all show in sideboard
+	
+	I MIGHT be able to keep this same structure and just change how I group cards client-sideboard
+	I'd also want to filter details when a card is selected, to match the same category
