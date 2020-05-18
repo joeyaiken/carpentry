@@ -173,10 +173,10 @@ export const deckPropertyChanged = (name: string, value: string): ReduxAction =>
 //     type: OPEN_DECK_PROPS_MODAL,
 // });
 
-// export const TOGGLE_DECK_VIEW_MODE = 'TOGGLE_DECK_VIEW_MODE';
-// export const toggleDeckViewMode = (): ReduxAction => ({
-//     type: TOGGLE_DECK_VIEW_MODE,
-// });
+export const TOGGLE_DECK_VIEW_MODE = 'TOGGLE_DECK_VIEW_MODE';
+export const toggleDeckViewMode = (): ReduxAction => ({
+    type: TOGGLE_DECK_VIEW_MODE,
+});
 
 
 

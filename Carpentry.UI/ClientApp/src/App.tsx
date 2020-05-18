@@ -2,17 +2,18 @@ import * as React from 'react';
 import { Route, Switch } from 'react-router';
 import AppLayout from './components/AppLayout';
 // import AppHomeLayout from './components/AppHomeLayout';
-import Home from './containers/Home';
+
 // import Home from './components/Home';
 // import Counter from './components/Counter';
 // import FetchData from './components/FetchData';
 
 import './styles/App.css';
-import DeckEditor from './containers/DeckEditor';
 import Backups from './containers/Backups';
 import CardSetSettings from './containers/CardSetSettings';
 import Inventory from './containers/Inventory';
 import { ConnectedComponent } from 'react-redux';
+import DeckEditorContainer from './containers/DeckEditor/DeckEditorContainer';
+import HomeContainer from './containers/Home/HomeContainer';
 
 export default function App(): JSX.Element {
 
@@ -23,7 +24,7 @@ export default function App(): JSX.Element {
     }[] = [
         {
             path: '/Decks/:deckId',
-            component: DeckEditor,
+            component: DeckEditorContainer,
             name: 'Carpentry - Deck Editor'
         },
         {
@@ -48,7 +49,7 @@ export default function App(): JSX.Element {
         // },
         {
             path: '/',
-            component: Home,
+            component: HomeContainer,
             name: 'Carpentry'
         },
         // {

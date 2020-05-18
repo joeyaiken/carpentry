@@ -5,6 +5,7 @@ import { deckOverviews, DeckOverviewsState } from './deckOverviews.reducer';
 import { deckDetail, DeckDetailState } from './deckDetail.reducer';
 
 import { inventoryDataReducer, InventoryDataReducerState } from './inventoryDataReducer';
+import { deckEditorReducer, DeckEditorReducerState } from './deckEditorReducer';
 
 ////Domain data
 //import { dataLoadingState } from './dataLoadingState.reducer'
@@ -34,6 +35,9 @@ export interface AppState {
         deckDetail: DeckDetailState,
         
         inventory: InventoryDataReducerState,
+    },
+    app: {
+        deckEditor: DeckEditorReducerState,
     }
 }
 
@@ -44,6 +48,14 @@ export const reducers = {
         deckDetail,
 
         inventory: inventoryDataReducer,
+    }),
+    app: combineReducers({
+            //    core: appState,
+        //    deckEditor,
+        deckEditor: deckEditorReducer,
+        //    inventory,
+        //    cardSearch,
+
     }),
 
 
@@ -70,6 +82,28 @@ export const reducers = {
     //ui,
 
 };
+
+
+
+// import { combineReducers } from 'redux';
+// //Domain data
+// import { dataLoadingState } from './dataLoadingState.reducer'
+// import { appFilterOptions } from './appFilterOptions.reducer';
+// import { inventoryOverviews } from './inventoryOverviews.reducer';
+// import { inventoryDetail } from './inventoryDetail.reducer';
+// import { cardSearchResults } from './cardSearchResults.reducer';
+// import { cardSearchPendingCards } from './cardSearchPendingCards.reducer';
+// import { cardSearchInventoryDetail } from './cardSearchInventoryDetail.reducer';
+// import { deckList } from './deckList.reducer';
+// import { deckDetail } from './deckDetail.reducer';
+// //App state
+// import { appState  } from './appState.reducer';
+// import { deckEditor } from './deckEditor.reducer';
+// import { inventory } from './inventory.reducer';
+// import { cardSearch } from './cardSearch.reducer';
+// //ui
+// import { ui } from './ui.reducer';
+
 //})
 
 //type AppContainerEnum = 'deckEditor' | 'inventory' | 'buyList' | 'cardSearch' | 'newDeck' | null;

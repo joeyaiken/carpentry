@@ -160,16 +160,16 @@ declare interface DeckStats {
 // }
 
 
-// interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
-//     id: number;
-//     multiverseId: number;
-//     name: string;
-//     type: string;
-//     cost: string;
-//     img: string;
-//     count: number;
-//     description: string;
-// }
+interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
+    id: number;
+    multiverseId: number;
+    name: string;
+    type: string;
+    cost: string;
+    img: string;
+    count: number;
+    description: string;
+}
 
 // declare interface InventoryQueryParameter {
 //     //
