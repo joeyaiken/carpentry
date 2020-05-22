@@ -151,18 +151,18 @@ export const api = {
         //     return;
         // },
         
-        async api_Inventory_Delete(id: number): Promise<void> {
-            const endpoint = `api/Inventory/Delete`;
-            const url = `${endpoint}?id=${id}`;
-            await Get(url);
-            return;
-        },
-        
-        // async api_Inventory_Search(param: InventoryQueryParameter): Promise<InventoryOverviewDto[]> {
-        //     const endpoint = `api/Inventory/Search`;
-        //     const result = await Post(endpoint, param);
-        //     return result;
+        // async api_Inventory_Delete(id: number): Promise<void> {
+        //     const endpoint = `api/Inventory/Delete`;
+        //     const url = `${endpoint}?id=${id}`;
+        //     await Get(url);
+        //     return;
         // },
+        
+        async searchCards(param: InventoryQueryParameter): Promise<InventoryOverviewDto[]> {
+            const endpoint = `api/Inventory/SearchCards`;
+            const result = await Post(endpoint, param);
+            return result;
+        },
 
         // async api_Inventory_GetByName(name: string): Promise<InventoryDetailDto> {
         //     const endpoint = `api/Inventory/GetByName?name=${name}`;

@@ -30,6 +30,31 @@ declare interface NamedCardGroup {
     cardOverviewIds: number[];
 }
 
+
+interface CardFilterProps {
+    set: string;
+
+    type: string;
+
+    text: string;
+
+    colorIdentity: string[];
+    exclusiveColorFilters: boolean;
+    multiColorOnly: boolean;
+
+    rarity: string[];
+
+    cardName: string;
+    exclusiveName: boolean;
+
+    format: string;
+
+    minCount: number | null;
+    maxCount: number | null;
+}
+
+
+
 ///////
 // /// <reference types="react-scripts" />
 // /// <reference types="redux" />

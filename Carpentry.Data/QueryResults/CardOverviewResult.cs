@@ -25,5 +25,13 @@ namespace Carpentry.Data.QueryResults
 
 
         public string Category { get; set; }
+
+
+        public decimal? Price { get; set; }
+
+        public bool? IsFoil { get; set; }
+
+        public string Variant { get; set; }
+
     }
 }

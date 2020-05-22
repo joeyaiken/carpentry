@@ -9,7 +9,7 @@ namespace Carpentry.Data.QueryParameters
     public class InventoryQueryParameter
     {
         [JsonProperty("groupBy")]
-        public string GroupBy { get; set; }
+        public string GroupBy { get; set; } //options: name | MID/printing | unique/print
 
         [JsonProperty("colors")]
         public List<string> Colors { get; set; }

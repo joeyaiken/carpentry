@@ -65,29 +65,6 @@ declare interface DeckStats {
 
 
 
-///////////
-// interface CardFilterProps {
-//     set: string;
-
-//     type: string;
-
-//     text: string;
-
-//     colorIdentity: string[];
-//     exclusiveColorFilters: boolean;
-//     multiColorOnly: boolean;
-
-//     rarity: string[];
-
-//     cardName: string;
-//     exclusiveName: boolean;
-
-//     format: string;
-
-//     minCount: number | null;
-//     maxCount: number | null;
-// }
-
 // declare interface DeckCardDto {
 //     id: number;
 //     deckId: number;
@@ -134,16 +111,16 @@ declare interface DeckStats {
 //     statuses: FilterOption[];
 // }
 
-// declare interface InventoryCard {
-//     id: number;
-//     multiverseId: number;
-//     name: string;
-//     set: string;
-//     isFoil: boolean;
-//     variantName: string;
-//     statusId: number; //normal === 1, buylist === 2, sellList === 3
-//     deckCards: InventoryDeckCardDto[];
-// }
+declare interface InventoryCard {
+    id: number;
+    multiverseId: number;
+    name: string;
+    set: string;
+    isFoil: boolean;
+    variantName: string;
+    statusId: number; //normal === 1, buylist === 2, sellList === 3
+    deckCards: InventoryDeckCardDto[];
+}
 
 // declare interface InventoryDeckCardDto {
 //     id: number;
@@ -153,11 +130,10 @@ declare interface DeckStats {
 //     category: string;
 // }
 
-// interface InventoryDetailDto {
-//     cards: MagicCard[];
-//     inventoryCards: InventoryCard[];
-//     // deckCards: any[];
-// }
+interface InventoryDetailDto {
+    cards: MagicCard[];
+    inventoryCards: InventoryCard[];
+}
 
 
 interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
@@ -171,45 +147,43 @@ interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
     description: string;
 }
 
-// declare interface InventoryQueryParameter {
-//     //
+declare interface InventoryQueryParameter {
+    //
 
-//     groupBy: string;
-//     colors: string[];
-//     types: string[];
-//     type: string;
-//     exclusiveColorFilters: boolean;
-//     multiColorOnly: boolean;
-//     rarity: string[];
+    groupBy: "name" | "mid" | "unique";
+    colors: string[];
+    types: string[];
+    type: string;
+    exclusiveColorFilters: boolean;
+    multiColorOnly: boolean;
+    rarity: string[];
 
-//     //sets: string[];
-//     set: string;
-//     text: string;
-//     skip: number;
-//     take: number;
-//     format: string | null;
-//     sort: string
-//     //other things to add?
-//     //Format / Legality
-//     minCount: number;
-//     maxCount: number;
+    //sets: string[];
+    set: string;
+    text: string;
+    skip: number;
+    take: number;
+    format: string | null;
+    sort: string
+    //other things to add?
+    //Format / Legality
+    minCount: number;
+    maxCount: number;
 
-// }
+}
 
-
-
-// declare interface MagicCard {
-//     cmc: number | null;
-//     colorIdentity: string[];
-//     colors: string[];
-//     manaCost: string;
-//     multiverseId: number;
-//     name: string;
-//     prices: { [key: string]: number | null }
-//     variants: { [key: string]: string | null }
-//     legalities: string[];
-//     rarity: string;
-//     set: string;
-//     text: string;
-//     type: string;
-// }
+declare interface MagicCard {
+    cmc: number | null;
+    colorIdentity: string[];
+    colors: string[];
+    manaCost: string;
+    multiverseId: number;
+    name: string;
+    prices: { [key: string]: number | null }
+    variants: { [key: string]: string | null }
+    legalities: string[];
+    rarity: string;
+    set: string;
+    text: string;
+    type: string;
+}

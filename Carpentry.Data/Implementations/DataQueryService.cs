@@ -124,25 +124,78 @@ namespace Carpentry.Data.Implementations
         {
             var cardsQuery = await QueryFilteredCards(param);
 
-            var query = cardsQuery.Select(x => new
+            IQueryable<CardOverviewResult> query;
+
+            switch (param.GroupBy)
             {
-                MultiverseId = x.Id,
-                x.Name,
-                x.Type,
-                x.ManaCost,
-                Counts = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
-                x.Variants.First().ImageUrl,
-                x.Cmc,
-            }).GroupBy(x => x.Name)
-            .Select(x => new CardOverviewResult
-            {
-                Name = x.Key,
-                Type = x.First().Type,
-                Cost = x.First().ManaCost,
-                Img = x.First().ImageUrl,
-                Count = x.Sum(card => card.Counts),
-                Cmc = x.First().Cmc,
-            });
+                case "name":
+
+                    query = cardsQuery.Select(x => new
+                    {
+                        MultiverseId = x.Id,
+                        x.Name,
+                        x.Type,
+                        x.ManaCost,
+                        Counts = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
+                        x.Variants.First().ImageUrl,
+                        x.Cmc,
+                    }).GroupBy(x => x.Name)
+                    .Select(x => new CardOverviewResult
+                    {
+                        Name = x.Key,
+                        Type = x.First().Type,
+                        Cost = x.First().ManaCost,
+                        Img = x.First().ImageUrl,
+                        Count = x.Sum(card => card.Counts),
+                        Cmc = x.First().Cmc,
+                    });
+
+                    break;
+               
+                case "unique":
+
+                    query = cardsQuery.SelectMany(x => x.Variants.SelectMany(b => new List<CardOverviewResult>
+                    {
+                        new CardOverviewResult {
+                            Name = x.Name,
+                            Price = b.Price,
+                            Cmc = x.Cmc,
+                            Cost = x.ManaCost,
+                            Count = x.InventoryCards.Where(c => c.VariantTypeId == b.CardVariantTypeId && c.IsFoil == false).Count(),
+                            Img = b.ImageUrl,
+                            IsFoil = false,
+                            Variant = b.Type.Name,
+                        },
+                        new CardOverviewResult
+                        {
+                            Name = x.Name,
+                            Price = b.PriceFoil,
+                            Cmc = x.Cmc,
+                            Cost = x.ManaCost,
+                            Count = x.InventoryCards.Where(c => c.VariantTypeId == b.CardVariantTypeId && c.IsFoil == true).Count(),
+                            Img = b.ImageUrl,
+                            IsFoil = true,
+                            Variant = b.Type.Name,
+                        }
+                    }));
+
+                    break;
+
+                //case "mid":
+                default: //assuming group by mid for default
+
+                    query = cardsQuery.Select(x => new CardOverviewResult
+                    {
+                        Name = x.Name,
+                        Type = x.Type,
+                        Cost = x.ManaCost,
+                        Img = x.Variants.First().ImageUrl,
+                        Count = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
+                        Cmc = x.Cmc,
+                    });
+
+                    break;
+            }
 
             if (param.MinCount > 0)
             {
@@ -154,28 +207,28 @@ namespace Carpentry.Data.Implementations
                 query = query.Where(x => x.Count <= param.MinCount);
             }
 
-            if (param.Sort == "count")
+            switch (param.Sort)
             {
-                query = query.OrderByDescending(x => x.Count);
-            }
-            else if (param.Sort == "name")
-            {
-                query = query.OrderBy(x => x.Name);
-            }
-            else if (param.Sort == "cmc")
-            {
-                query = query.OrderBy(x => x.Cmc)
+                case "count":
+                    query = query.OrderByDescending(x => x.Count);
+                    break;
+
+                case "name":
+                    query = query.OrderBy(x => x.Name);
+                    break;
+
+                case "cmc":
+                    query = query.OrderBy(x => x.Cmc)
                     .ThenBy(x => x.Name);
-            }
-            else
-            {
-                query = query.OrderByDescending(x => x.Count);
+                    break;
+
+                default:
+                    query = query.OrderByDescending(x => x.Count);
+                    break;
             }
 
             if (param.Take > 0)
             {
-                //should eventually consider pagination here
-
                 query = query.Skip(param.Skip).Take(param.Take);//.OrderByDescending(x => x.Count);
             }
 

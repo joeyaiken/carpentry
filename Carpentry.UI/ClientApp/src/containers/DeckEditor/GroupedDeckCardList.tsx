@@ -15,7 +15,7 @@ interface ComponentProps{
     onCardSelected: (card: DeckCardOverview) => void;
 }
 
-function GroupedDeckCardList(props: ComponentProps): JSX.Element {
+export default function GroupedDeckCardList(props: ComponentProps): JSX.Element {
     // className="flex-section"
     return (
         <Paper>

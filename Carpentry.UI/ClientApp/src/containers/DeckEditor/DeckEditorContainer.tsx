@@ -20,12 +20,16 @@ import { useLocation } from 'react-router-dom';
 import { 
     ensureDeckDetailLoaded,
     openDeckPropsModal, 
-    toggleDeckViewMode 
+    toggleDeckViewMode, 
+    deckEditorCardSelected
 } from '../../actions/deckEditor.actions';
 import DeckStatsBar from './DeckStatsBar';
 import DeckPropsBar from './DeckPropsBar';
 import DeckCardDetail from './DeckCardDetail';
 import CardMenu from './CardMenu';
+import DeckCardGrid from './DeckCardGrid';
+import GroupedDeckCardList from './GroupedDeckCardList';
+import DeckCardList from '../../components/DeckCardList';
 // import DeckPropertiesLayout from '../components/DeckPropertiesLayout';
 // import DeckPropsBar from '../components/DeckPropsBar';
 // import DeckCardList from '../components/DeckCardList';
@@ -75,6 +79,17 @@ interface PropsFromState {
     // selectedCard: InventoryOverviewDto | null;
     // selectedInventoryCards: InventoryCard[];
     deckStats: DeckStats | null;
+
+
+    //Overview
+    groupedCardOverviews: CardOverviewGroup[];
+    //Non-grouped views will just snag cards from item at position 0
+
+
+    //Detail
+    cardMenuAnchor: HTMLButtonElement | null;
+    selectedCard: DeckCardOverview | null;
+    selectedInventoryCards: DeckCard[];
 }
 
 type DeckEditorProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -92,12 +107,60 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.props.dispatch(ensureDeckDetailLoaded(this.props.deckId));
     }
 
+    handleCardSelected(cardOverview: DeckCardOverview) {
+        this.props.dispatch(deckEditorCardSelected(cardOverview))
+    }
+
     handleEditPropsClick(): void {
         this.props.dispatch(openDeckPropsModal());
     }
 
     handleToggleDeckView(): void {
         this.props.dispatch(toggleDeckViewMode());
+    }
+
+    handleCardMenuClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+        this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", event.currentTarget));
+    }
+
+    handleCardMenuSelected(name: DeckEditorCardMenuOption){
+        console.log('card anchor');
+        console.log(this.props.cardMenuAnchor);
+        switch (name){
+            case "search":
+                if(this.props.cardMenuAnchor != null){
+                    this.props.dispatch(deckCardRequestAlternateVersions(this.props.cardMenuAnchor.name))
+                }
+                break;
+            case "delete":
+                    if(this.props.cardMenuAnchor != null){
+                        const confirmText = `Are you sure you want to delete ${this.props.cardMenuAnchor.name}?`;
+                        if(window.confirm(confirmText)){
+                            this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+                        }
+                    }
+                    break;
+            case "sideboard":
+                if(this.props.cardMenuAnchor != null){
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "sideboard"));
+                }
+                break;
+            case "mainboard":
+                if(this.props.cardMenuAnchor != null){
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "mainboard"));
+                }
+                break;
+            case "commander":
+                if(this.props.cardMenuAnchor != null){
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "commander"));
+                }
+                break;
+        }
+    }
+
+    handleCardMenuClosed(): void {
+        // this.props.dispatch(cardMenuButtonClick(null));
+        this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", null));
     }
 
     render() {
@@ -225,7 +288,42 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 //     //selectedInventoryCards: state.deckEditor.selectedInventoryCards,
 // }
 
+function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
+    const { allCardOverviewIds, cardOverviewsById, cardGroups } = state.data.deckDetail;
 
+    if(state.app.deckEditor.viewMode === "grouped"){
+
+        const result = cardGroups.map(group => {
+            const groupResult: CardOverviewGroup = {
+                name: group.name,
+                cardOverviews: group.cardOverviewIds.map(id => cardOverviewsById[id]),
+            }
+            return groupResult;
+        });
+        return result;
+
+    } else {
+
+        return [{
+            name: "All",
+            cardOverviews: allCardOverviewIds.map(id => cardOverviewsById[id]),
+        }];
+
+    }
+}
+
+function getSelectedCardOverview(state: AppState): DeckCardOverview | null {
+    if(state.app.deckEditor.selectedOverviewCardId){
+        return state.data.deckDetail.cardOverviewsById[state.app.deckEditor.selectedOverviewCardId];
+    }
+    return null;
+}
+
+function getSelectedDeckDetails(state: AppState): DeckCard[] {
+    const { selectedInventoryCardIds, cardDetailsById } = state.data.deckDetail;
+    return selectedInventoryCardIds.map(id => cardDetailsById[id]);
+    //selectedInventoryCards: state.deckEditor.selectedInventoryCards,
+}
 
 function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
 
@@ -242,6 +340,14 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         // cardOverviews: selectDeckOverviews(state),
         deckStats: state.data.deckDetail.deckStats,
         // deckPropsModalOpen: state.ui.deckPropsModalOpen,
+        
+        //Overview
+        groupedCardOverviews: selectDeckOverviews(state),
+
+        //Detail
+        cardMenuAnchor: state.ui.deckEditorMenuAnchor,
+        selectedCard: getSelectedCardOverview(state),
+        selectedInventoryCards: getSelectedDeckDetails(state),
     }
 
     return result;

@@ -1,107 +1,19 @@
-import { connect, DispatchProp } from 'react-redux';
+// import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { AppState } from '../reducers'
+// import { AppState } from '../../reducers'
 
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
-import CheckBoxIcon from '@material-ui/icons/CheckBox'
+// import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+// import CheckBoxIcon from '@material-ui/icons/CheckBox'
 
-import {
-    requestInventoryItems, 
-    // inventoryFilterChanged,
-} from '../actions/inventory.actions'
+// import {
+//     requestInventoryItems, 
+//     // inventoryFilterChanged,
+// } from '../actions/inventory.actions'
 
-import {
-    filterValueChanged
-} from '../actions/ui.actions'
 
-import CardFilterBar from '../components/CardFilterBar';
+// import CardFilterBar from '../components/CardFilterBar';
 import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button } from '@material-ui/core';
-import FilterBarSearchButton from '../components/FilterBarSearchButton';
-
-interface PropsFromState { 
-    searchFilterProps: CardFilterProps;
-    filterOptions: CoreFilterOptions;
-    visibleFilters: CardFilterVisibilities;
-}
-
-type InventoryProps = PropsFromState & DispatchProp<ReduxAction>;
-
-class InventoryFilterBar extends React.Component<InventoryProps>{
-    constructor(props: InventoryProps) {
-        super(props);
-        this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
-        this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
-    }
-
-    handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        this.props.dispatch(filterValueChanged("inventoryFilterProps", event.target.name, event.target.value));
-    }
-
-    handleBoolFilterChange(filter: string, value: boolean): void {
-        this.props.dispatch(filterValueChanged("inventoryFilterProps", filter, value));
-    }
-
-    handleSearchButtonClick() {
-        this.props.dispatch(requestInventoryItems());
-    }
-
-    render() {
-        return (
-            <Paper className="outline-section flex-col">
-
-            {/* <Box className="flex-col"> */}
-                {/* <Paper className="outline-section flex-row"> */}
-                {/* <Paper className="outline-section"> */}
-                <CardFilterBar 
-                    filterOptions={this.props.filterOptions}
-                    handleBoolFilterChange={this.handleBoolFilterChange}
-                    handleFilterChange={this.handleFilterChange}
-                    // handleSearchButtonClick={this.handleSearchButtonClick}
-                    searchFilter={this.props.searchFilterProps}
-                    visibleFilters={this.props.visibleFilters}
-                />
-                {/* </Paper> */}
-                
-                    
-
-                {/* </Paper> */}
-
-                
-                {/* <Paper className="outline-section">
-                    <InventoryFilterBar 
-                        filterOptions={this.props.filterOptions}
-                        handleBoolFilterChange={this.handleBoolFilterChange}
-                        handleFilterChange={this.handleFilterChange}
-                        searchFilter={this.props.searchFilterProps}
-                        visibleFilters={this.props.visibleFilters}
-                    />
-                </Paper> */}
-                <Box className="flex-section flex-row">
-                    {/* <Box className="flex-section">
-
-                    </Box> */}
-
-                    <InventoryFilterBar
-                        filterOptions={this.props.filterOptions}
-                        handleBoolFilterChange={this.handleBoolFilterChange}
-                        handleFilterChange={this.handleFilterChange}
-                        searchFilter={this.props.searchFilterProps}
-                        visibleFilters={this.props.visibleFilters}
-                    />
-                    <FilterBarSearchButton handleSearchButtonClick={this.handleSearchButtonClick}/>
-                </Box>
-            {/* </Box> */}
-                {/* </Box> */}
-            </Paper>
-        );
-    }
-}
-
-
-
-
-
+// import FilterBarSearchButton from '../components/FilterBarSearchButton';
 
 interface InventoryFilterBarProps{
     searchFilter: CardFilterProps,
@@ -113,7 +25,7 @@ interface InventoryFilterBarProps{
 
 //This bar should just be a flex-grid of filter elements
 //It probably shouldn't even have the "search" button
-function InventoryFilterBar(props: InventoryFilterBarProps): JSX.Element {
+export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.Element {
     // Need this to cache?
     // try this?
     // https://material-ui.com/components/autocomplete
@@ -328,54 +240,4 @@ function InventoryFilterBar(props: InventoryFilterBarProps): JSX.Element {
             
     </Box>);
 }
-
-function mapStateToProps(state: AppState): PropsFromState {
-
-    let visibleFilters: CardFilterVisibilities = {
-        name: false,
-        color: false,
-        rarity: false,
-        set: false,
-        type: false,
-        count: false,
-        format: false,
-        text: false,
-    }
-
-    switch(state.app.inventory.searchMethod){
-        case "quantity":
-            visibleFilters = {
-                ...visibleFilters,
-                set: true,
-                count: true,
-                color: true,
-                type: true,
-                rarity: true,
-                format: true,
-                text: true,
-            }
-            break;
-        case "name":
-            visibleFilters = {
-                ...visibleFilters,
-            }
-            break;
-        case "price":
-            visibleFilters = {
-                ...visibleFilters,
-            }
-            break;
-    }
-
-    const result: PropsFromState = {
-        searchFilterProps: state.ui.inventoryFilterProps,
-        visibleFilters: visibleFilters,
-        filterOptions: state.data.appFilterOptions.filterOptions,
-    }
-    return result;
-}
-
-export default connect(mapStateToProps)(InventoryFilterBar);
-
-
 
