@@ -19,7 +19,7 @@ import { Typography, Box } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
 import { 
     ensureDeckDetailLoaded,
-    openDeckPropsModal, 
+    // openDeckPropsModal, 
     toggleDeckViewMode, 
     deckEditorCardSelected
 } from '../../actions/deckEditor.actions';

@@ -28,7 +28,7 @@ interface PropsFromState {
     searchResults: InventoryOverviewDto[];
 
     searchFilterProps: CardFilterProps;
-    filterOptions: CoreFilterOptions;
+    filterOptions: AppFiltersDto;
     visibleFilters: CardFilterVisibilities;
 }
 
@@ -75,16 +75,18 @@ class Inventory extends React.Component<InventoryProps>{
                     <AppBar color="default" position="relative">
                         <Toolbar>
                             <Typography variant="h6">
-                                {props.title}
+                                Inventory
                             </Typography>
-                            {
+                            {/* {
                                 props.tabNames &&
                                 <Tabs value={props.activeTab} onChange={(e, value) => {props.onTabClick && props.onTabClick(value)}} >
+                                    <Tab value={tabName} label={tabName} />
+
                                     {
                                         props.tabNames.map(tabName =><Tab value={tabName} label={tabName} /> )
                                     }
                                 </Tabs>
-                            }
+                            } */}
                         </Toolbar>
                     </AppBar>
                     <Box>
@@ -323,20 +325,64 @@ class Inventory extends React.Component<InventoryProps>{
 }
 
 function selectInventoryOverviews(state: AppState): InventoryOverviewDto[] {
-    const { byName, allNames } = state.data.inventory.inventoryOverviews;
-    const result: InventoryOverviewDto[] = allNames.map(id => byName[id]);
+    const { byId, allIds } = state.data.inventory.overviews;
+    const result: InventoryOverviewDto[] = allIds.map(id => byId[id]);
     return result;
 }
 
+function getFilterVisibilities(searchMethod: string): CardFilterVisibilities {
+    let visibleFilters: CardFilterVisibilities = {
+        name: false,
+        color: false,
+        rarity: false,
+        set: false,
+        type: false,
+        count: false,
+        format: false,
+        text: false,
+    }
 
+    switch(searchMethod){
+        case "quantity":
+            visibleFilters = {
+                ...visibleFilters,
+                set: true,
+                count: true,
+                color: true,
+                type: true,
+                rarity: true,
+                format: true,
+                text: true,
+            }
+            break;
+        case "name":
+            visibleFilters = {
+                ...visibleFilters,
+            }
+            break;
+        case "price":
+            visibleFilters = {
+                ...visibleFilters,
+            }
+            break;
+    }
+
+    return visibleFilters;
+}
 
 //State
 function mapStateToProps(state: AppState): PropsFromState {
+
     const result: PropsFromState = {
         searchResults: selectInventoryOverviews(state),
         
         // isLoading: state.data.
-        isLoading: state.data.inventory.isLoadingOverviews,
+        isLoading: state.data.inventory.overviews.isLoading,
+
+
+        searchFilterProps: state.ui.inventoryFilterProps,
+        visibleFilters: getFilterVisibilities(state.app.inventory.searchMethod),
+        filterOptions: state.data.appFilterOptions.filterOptions,
         // searchMethod: state.app.inventory.searchMethod,
     }
     return result;

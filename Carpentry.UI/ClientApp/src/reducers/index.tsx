@@ -7,6 +7,9 @@ import { deckDetail, DeckDetailState } from './deckDetail.reducer';
 import { inventoryDataReducer, InventoryDataReducerState } from './inventoryDataReducer';
 import { deckEditorReducer, DeckEditorReducerState } from './deckEditorReducer';
 
+import { inventoryAppReducer, InventoryAppReducerState } from './inventoryAppReducer';
+import { appFilterOptionsReducer, AppFilterOptionsReducerState } from './appFilterOptionsReducer';
+
 ////Domain data
 //import { dataLoadingState } from './dataLoadingState.reducer'
 //import { appFilterOptions } from './appFilterOptions.reducer';
@@ -31,18 +34,21 @@ import { deckEditorReducer, DeckEditorReducerState } from './deckEditorReducer';
 
 export interface AppState {
     data: {
+        appFilterOptions: AppFilterOptionsReducerState,
         deckOverviews: DeckOverviewsState,
         deckDetail: DeckDetailState,
         
         inventory: InventoryDataReducerState,
     },
     app: {
+        inventory: InventoryAppReducerState,
         deckEditor: DeckEditorReducerState,
     }
 }
 
 export const reducers = {
     data: combineReducers({
+        appFilterOptions: appFilterOptionsReducer,
         //isLoading: null,
         deckOverviews,
         deckDetail,
@@ -55,6 +61,7 @@ export const reducers = {
         deckEditor: deckEditorReducer,
         //    inventory,
         //    cardSearch,
+        inventory: inventoryAppReducer
 
     }),
 

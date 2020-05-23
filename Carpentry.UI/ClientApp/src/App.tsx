@@ -10,13 +10,26 @@ import AppLayout from './components/AppLayout';
 import './styles/App.css';
 import Backups from './containers/Backups';
 import CardSetSettings from './containers/CardSetSettings';
-import Inventory from './containers/Inventory';
+import InventoryContainer from './containers/Inventory/InventoryContainer';
 import { ConnectedComponent } from 'react-redux';
 import DeckEditorContainer from './containers/DeckEditor/DeckEditorContainer';
 import HomeContainer from './containers/Home/HomeContainer';
 
 export default function App(): JSX.Element {
 
+    /*
+    
+    /decks/add/
+    /decks/import/
+    /decks/:id/props/
+    /decks/:id/addCards/
+    /decks/:id/
+    /inventory/addCards/
+    /inventory/:detail/
+    /inventory/
+    /
+    
+    */
     const routes: {
         path: string,
         component: ConnectedComponent<any, any>,
@@ -29,7 +42,7 @@ export default function App(): JSX.Element {
         },
         {
             path: '/Inventory',
-            component: Inventory,
+            component: InventoryContainer,
             name: 'Inventory'
         },
         {

@@ -2,8 +2,8 @@ import {
     // INVENTORY_SEARCH_METHOD_CHANGED,
 } from '../actions/';
 
-declare interface InventoryState {
-    // searchMethod: InventorySearchMethod;
+export interface InventoryAppReducerState {
+    searchMethod: InventorySearchMethod;
     // viewMode: InventoryViewMode;
 
     // //selectedDetailItem
@@ -16,16 +16,16 @@ declare interface InventoryState {
 
 }
 
-const inventorySearchMethodChanged = (state: InventoryState, action: ReduxAction): InventoryState => {
+const inventorySearchMethodChanged = (state: InventoryAppReducerState, action: ReduxAction): InventoryAppReducerState => {
     const newSearchMethod = action.payload;
-    const newState: InventoryState = {
+    const newState: InventoryAppReducerState = {
         ...state,
         searchMethod: newSearchMethod,
     };
     return newState;
 }
 
-export const inventory = (state = initialState, action: ReduxAction): InventoryState => {
+export const inventoryAppReducer = (state = initialState, action: ReduxAction): InventoryAppReducerState => {
     switch(action.type){
 
         // case INVENTORY_SEARCH_METHOD_CHANGED:
@@ -36,8 +36,8 @@ export const inventory = (state = initialState, action: ReduxAction): InventoryS
     }
 }
 
-const initialState: InventoryState = {
-    // searchMethod: "quantity",
+const initialState: InventoryAppReducerState = {
+    searchMethod: "quantity",
     // viewMode: "grid",
     // selectedDetailItemName: null,
 }

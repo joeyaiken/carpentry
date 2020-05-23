@@ -62,8 +62,21 @@ declare interface DeckStats {
 }
 
 
+declare interface AppFiltersDto
+{
+    sets: FilterOption[];
+    types: FilterOption[];
+    formats: FilterOption[];
+    colors: FilterOption[];
+    rarities: FilterOption[];
+    statuses: FilterOption[];
+}
 
-
+declare interface FilterOption
+{
+    Name: string;
+    Value: string;
+}
 
 // declare interface DeckCardDto {
 //     id: number;

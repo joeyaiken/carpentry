@@ -53,7 +53,16 @@ interface CardFilterProps {
     maxCount: number | null;
 }
 
-
+interface CardFilterVisibilities {
+    set: boolean;
+    type: boolean;
+    color: boolean;
+    rarity: boolean;
+    name: boolean;
+    count: boolean;
+    format: boolean;
+    text: boolean;
+}
 
 ///////
 // /// <reference types="react-scripts" />
@@ -96,7 +105,7 @@ interface CardFilterProps {
 
 // declare type MenuAnchorOptions = 'deckListMenuAnchor' | 'deckEditorMenuAnchor';
 
-// declare type InventorySearchMethod =  "name" | "quantity" | "price"; // | "sellList";
+declare type InventorySearchMethod =  "name" | "quantity" | "price"; // | "sellList";
 // declare type InventoryViewMode = "list" | "grid";
 
 
