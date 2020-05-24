@@ -112,7 +112,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     handleEditPropsClick(): void {
-        this.props.dispatch(openDeckPropsModal());
+        // this.props.dispatch(openDeckPropsModal());
     }
 
     handleToggleDeckView(): void {
@@ -120,7 +120,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     handleCardMenuClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", event.currentTarget));
+        // this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", event.currentTarget));
     }
 
     handleCardMenuSelected(name: DeckEditorCardMenuOption){
@@ -129,30 +129,30 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         switch (name){
             case "search":
                 if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(deckCardRequestAlternateVersions(this.props.cardMenuAnchor.name))
+                    // this.props.dispatch(deckCardRequestAlternateVersions(this.props.cardMenuAnchor.name))
                 }
                 break;
             case "delete":
                     if(this.props.cardMenuAnchor != null){
                         const confirmText = `Are you sure you want to delete ${this.props.cardMenuAnchor.name}?`;
                         if(window.confirm(confirmText)){
-                            this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+                            // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
                         }
                     }
                     break;
             case "sideboard":
                 if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "sideboard"));
+                    // this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "sideboard"));
                 }
                 break;
             case "mainboard":
                 if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "mainboard"));
+                    // this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "mainboard"));
                 }
                 break;
             case "commander":
                 if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "commander"));
+                    // this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "commander"));
                 }
                 break;
         }
@@ -160,7 +160,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
     handleCardMenuClosed(): void {
         // this.props.dispatch(cardMenuButtonClick(null));
-        this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", null));
+        // this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", null));
     }
 
     render() {
@@ -345,7 +345,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         groupedCardOverviews: selectDeckOverviews(state),
 
         //Detail
-        cardMenuAnchor: state.ui.deckEditorMenuAnchor,
+        cardMenuAnchor: null, //state.ui.deckEditorMenuAnchor,
         selectedCard: getSelectedCardOverview(state),
         selectedInventoryCards: getSelectedDeckDetails(state),
     }

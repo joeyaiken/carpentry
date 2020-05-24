@@ -37,7 +37,7 @@ export const inventoryAppReducer = (state = initialState, action: ReduxAction): 
 }
 
 const initialState: InventoryAppReducerState = {
-    searchMethod: "quantity",
+    searchMethod: "mid",
     // viewMode: "grid",
     // selectedDetailItemName: null,
 }

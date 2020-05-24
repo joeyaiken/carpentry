@@ -56,13 +56,12 @@ namespace Carpentry.Data.QueryParameters
         //other things to add?
         //Format / Legality
 
-
-
         //Sort ?
         [JsonProperty("sort")]
         public string Sort { get; set; }
 
-
+        [JsonProperty("sortDescending")]
+        public bool SortDescending { get; set; }
 
         [JsonProperty("minCount")]
         public int MinCount { get; set; }

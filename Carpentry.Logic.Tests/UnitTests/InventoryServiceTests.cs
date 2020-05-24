@@ -209,7 +209,12 @@ namespace Carpentry.Logic.Tests.UnitTests
             //Assemble
             InventoryQueryParameter queryParamToRequest = new InventoryQueryParameter()
             {
-
+                //GroupBy = "unique",
+                //Sort = "price",
+                //SortDescending = true,
+                //Skip = 0,
+                //Take = 100,
+                //Rarity = new List<string>() { "common", "uncommon" },
             };
             var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
@@ -219,7 +224,7 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             List<CardOverviewResult> inventoryOverviewResult = new List<CardOverviewResult>()
             {
-
+                
             };
 
             mockQueryService

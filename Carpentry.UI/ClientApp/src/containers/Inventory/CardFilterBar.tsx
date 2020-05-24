@@ -8,7 +8,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox'
 export interface CardFilterBarProps{
     searchFilter: CardFilterProps,
     visibleFilters: CardFilterVisibilities;
-    filterOptions: CoreFilterOptions,
+    filterOptions: AppFiltersDto,
     handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleBoolFilterChange: (filter: string, value: boolean) => void;
 }

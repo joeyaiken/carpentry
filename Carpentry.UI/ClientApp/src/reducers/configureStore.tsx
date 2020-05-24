@@ -10,7 +10,8 @@ import {
 const rootReducer = (history: History) => combineReducers({
     //reducers,
     data: reducers.data,
-    //...reducers,
+    app: reducers.app,
+    ui: reducers.ui,
     router: connectRouter(history)
 });
 

@@ -52,7 +52,7 @@ namespace Carpentry.Data.Implementations
                 //cardsQuery = cardsQuery.Where(x => x.)
             }
 
-            if (filters.Colors.Any())
+            if (filters.Colors != null && filters.Colors.Any())
             {
                 //var allowedColorIDs = filters.Colors.
 
@@ -90,7 +90,7 @@ namespace Carpentry.Data.Implementations
                 cardsQuery = cardsQuery.Where(x => x.Type.Contains(filters.Type));
             }
 
-            if (filters.Rarity.Any())
+            if (filters.Rarity != null && filters.Rarity.Any())
             {
                 cardsQuery = cardsQuery.Where(x => filters.Rarity.Contains(x.Rarity.Name.ToLower()));
 
@@ -140,8 +140,9 @@ namespace Carpentry.Data.Implementations
                         x.Variants.First().ImageUrl,
                         x.Cmc,
                     }).GroupBy(x => x.Name)
-                    .Select(x => new CardOverviewResult
+                    .Select((x,i) => new CardOverviewResult
                     {
+                        Id = i + 1,
                         Name = x.Key,
                         Type = x.First().Type,
                         Cost = x.First().ManaCost,
@@ -154,38 +155,56 @@ namespace Carpentry.Data.Implementations
                
                 case "unique":
 
-                    query = cardsQuery.SelectMany(x => x.Variants.SelectMany(b => new List<CardOverviewResult>
-                    {
-                        new CardOverviewResult {
-                            Name = x.Name,
-                            Price = b.Price,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.InventoryCards.Where(c => c.VariantTypeId == b.CardVariantTypeId && c.IsFoil == false).Count(),
-                            Img = b.ImageUrl,
-                            IsFoil = false,
-                            Variant = b.Type.Name,
-                        },
-                        new CardOverviewResult
+                    var filteredCards = cardsQuery.SelectMany(
+                        card => card.InventoryCards, (card, invCard) => new
                         {
-                            Name = x.Name,
-                            Price = b.PriceFoil,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.InventoryCards.Where(c => c.VariantTypeId == b.CardVariantTypeId && c.IsFoil == true).Count(),
-                            Img = b.ImageUrl,
-                            IsFoil = true,
-                            Variant = b.Type.Name,
-                        }
-                    }));
+                            Card = card,
+                            Variant = card.Variants.Where(v => v.CardVariantTypeId == invCard.VariantTypeId).FirstOrDefault(),
+                            InventoryCard = invCard,
+                        }).Select(x => new
+                        {
+                            x.Card,
+                            x.Variant,
+                            x.InventoryCard,
+                            VariantName = x.Variant.Type.Name,
+                        }).ToList();
+
+                        query = filteredCards.GroupBy(x => new
+                        {
+                            x.Card.Id,
+                            x.InventoryCard.IsFoil,
+                            x.Variant.CardVariantTypeId
+                        })
+                        .Select(x => new
+                        {
+                            Card = x.FirstOrDefault().Card,
+                            Variant = x.FirstOrDefault().Variant,
+                            IsFoil = x.Key.IsFoil,
+                            Count = x.Count(),
+                            x.FirstOrDefault().VariantName,
+                        })
+                        .Select((x, i) => new CardOverviewResult
+                        {
+                            Id = i+1,
+                            Name = x.Card.Name,
+                            Price = (x.IsFoil) ? x.Variant.PriceFoil : x.Variant.Price,
+                            Cmc = x.Card.Cmc,
+                            Cost = x.Card.ManaCost,
+                            Count = x.Count,
+                            Img = x.Variant.ImageUrl,
+                            IsFoil = false,
+                            Variant = x.VariantName,
+                        })
+                        .Where(x => x.Count > 0).AsQueryable();
 
                     break;
 
                 //case "mid":
                 default: //assuming group by mid for default
 
-                    query = cardsQuery.Select(x => new CardOverviewResult
+                    query = cardsQuery.Select((x,i) => new CardOverviewResult
                     {
+                        Id = i+1,
                         Name = x.Name,
                         Type = x.Type,
                         Cost = x.ManaCost,
@@ -219,7 +238,20 @@ namespace Carpentry.Data.Implementations
 
                 case "cmc":
                     query = query.OrderBy(x => x.Cmc)
-                    .ThenBy(x => x.Name);
+                        .ThenBy(x => x.Name);
+                    break;
+
+                case "price":
+                    if (param.SortDescending)
+                    {
+                        query = query.OrderByDescending(x => x.Price)
+                            .ThenBy(x => x.Name);
+                    }
+                    else
+                    {
+                        query = query.OrderBy(x => x.Price)
+                            .ThenBy(x => x.Name);
+                    }
                     break;
 
                 default:

@@ -31,5 +31,13 @@ namespace Carpentry.Logic.Models
         //category / status / group
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("category")]
+        public string Category { get; set; }
+        [JsonProperty("price")]
+        public decimal? Price { get; set; }
+        [JsonProperty("isFoil")]
+        public bool? IsFoil { get; set; }
+        [JsonProperty("variant")]
+        public string Variant { get; set; }
     }
 }

@@ -164,11 +164,11 @@ export const api = {
             return result;
         },
 
-        // async api_Inventory_GetByName(name: string): Promise<InventoryDetailDto> {
-        //     const endpoint = `api/Inventory/GetByName?name=${name}`;
-        //     const result = await Get(endpoint);
-        //     return result;
-        // },
+        async getCardsByName(name: string): Promise<InventoryDetailDto> {
+            const endpoint = `api/Inventory/GetCardsByName?name=${name}`;
+            const result = await Get(endpoint);
+            return result;
+        },
 
     },
 }

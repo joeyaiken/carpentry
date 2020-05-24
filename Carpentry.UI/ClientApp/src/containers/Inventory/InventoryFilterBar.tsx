@@ -18,7 +18,7 @@ import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbo
 interface InventoryFilterBarProps{
     searchFilter: CardFilterProps,
     visibleFilters: CardFilterVisibilities;
-    filterOptions: CoreFilterOptions,
+    filterOptions: AppFiltersDto,
     handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleBoolFilterChange: (filter: string, value: boolean) => void;
 }

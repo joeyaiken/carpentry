@@ -74,8 +74,8 @@ declare interface AppFiltersDto
 
 declare interface FilterOption
 {
-    Name: string;
-    Value: string;
+    name: string;
+    value: string;
 }
 
 // declare interface DeckCardDto {
@@ -163,7 +163,8 @@ interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
 declare interface InventoryQueryParameter {
     //
 
-    groupBy: "name" | "mid" | "unique";
+    //groupBy: "name" | "mid" | "unique";
+    groupBy: InventorySearchMethod;
     colors: string[];
     types: string[];
     type: string;
@@ -171,18 +172,21 @@ declare interface InventoryQueryParameter {
     multiColorOnly: boolean;
     rarity: string[];
 
-    //sets: string[];
+    // //sets: string[];
     set: string;
     text: string;
     skip: number;
     take: number;
     format: string | null;
-    sort: string
-    //other things to add?
-    //Format / Legality
+    sort: string;
+    sortDescending: boolean;
+    // //other things to add?
+    // //Format / Legality
     minCount: number;
     maxCount: number;
 
+    // [JsonProperty("statusId")]
+    // public int StatusId { get; set; }
 }
 
 declare interface MagicCard {

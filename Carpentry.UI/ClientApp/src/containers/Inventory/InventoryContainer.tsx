@@ -1,14 +1,21 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
 import { AppState } from '../../reducers'
-import { Paper, Box, Tabs, AppBar, Typography, Toolbar } from '@material-ui/core';
+import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem } from '@material-ui/core';
 import CardFilterBar from './CardFilterBar';
 import InventoryCardGrid from './InventoryCardGrid';
 import LoadingBox from '../../components/LoadingBox';
 
 import {
+    requestInventoryOverviews,
     requestInventoryDetail,
 } from '../../actions/inventory.actions'
+
+
+import {
+    // requestInventoryOverviews,
+    // requestInventoryDetail,
+} from '../../actions/'
 
 
 // import SectionLayout from '../components/SectionLayout';
@@ -27,7 +34,7 @@ interface PropsFromState {
 
     searchResults: InventoryOverviewDto[];
 
-    searchFilterProps: CardFilterProps;
+    searchFilter: CardFilterProps;
     filterOptions: AppFiltersDto;
     visibleFilters: CardFilterVisibilities;
 }
@@ -40,10 +47,10 @@ class Inventory extends React.Component<InventoryProps>{
         // this.handleSearchTabClick = this.handleSearchTabClick.bind(this);
     }
 
-    // componentDidMount() {
-    //     //IDK what exactly would be the right time to call off 
-    //     this.props.dispatch(requestInventoryItems());
-    // }
+    componentDidMount() {
+        //IDK what exactly would be the right time to call off 
+        this.props.dispatch(requestInventoryOverviews());
+    }
 
     // handleSearchTabClick(name: string): void {
     //     this.props.dispatch(inventorySearchMethodChanged(name));
@@ -55,15 +62,15 @@ class Inventory extends React.Component<InventoryProps>{
     }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        this.props.dispatch(filterValueChanged("inventoryFilterProps", event.target.name, event.target.value));
+        // this.props.dispatch(filterValueChanged("inventoryFilterProps", event.target.name, event.target.value));
     }
 
     handleBoolFilterChange(filter: string, value: boolean): void {
-        this.props.dispatch(filterValueChanged("inventoryFilterProps", filter, value));
+        // this.props.dispatch(filterValueChanged("inventoryFilterProps", filter, value));
     }
 
     handleSearchButtonClick() {
-        this.props.dispatch(requestInventoryItems());
+        // this.props.dispatch(requestInventoryItems());
     }
 
     render() {
@@ -169,7 +176,7 @@ class Inventory extends React.Component<InventoryProps>{
                                 select
                                 label="Sort by"
                                 // value={props.searchFilter.group}
-                                onChange={props.handleFilterChange}
+                                onChange={this.handleFilterChange}
                                 margin="normal" >
                                     {
                                         ["name","quantity", "price"].map(
@@ -196,7 +203,7 @@ class Inventory extends React.Component<InventoryProps>{
                             label="Status"
                             // value={props.searchFilter.rarity}
                             value={["deck","inventory"]}
-                            onChange={props.handleFilterChange}
+                            onChange={this.handleFilterChange}
                             margin="normal" >
                             { 
                                 ["deck","sellList","buyList","inventory"].map(
@@ -243,26 +250,26 @@ class Inventory extends React.Component<InventoryProps>{
                     }
         
                     {   //Min Count
-                        props.visibleFilters.count &&
+                        this.props.visibleFilters.count &&
                         <Box className="flex-section side-padded">
                             <TextField
                                 name="minCount"
                                 className="stretch"
                                 label="Min"
-                                value={props.searchFilter.minCount}
-                                onChange={props.handleFilterChange}
+                                value={this.props.searchFilter.minCount}
+                                onChange={this.handleFilterChange}
                                 margin="normal"/>
                         </Box>
                     }
                     {   //Max Count
-                        props.visibleFilters.count &&
+                        this.props.visibleFilters.count &&
                         <Box className="flex-section side-padded">
                             <TextField
                                 name="maxCount"
                                 className="stretch"
                                 label="Max"
-                                value={props.searchFilter.maxCount}
-                                onChange={props.handleFilterChange}
+                                value={this.props.searchFilter.maxCount}
+                                onChange={this.handleFilterChange}
                                 margin="normal"/>
                         </Box>
                     }
@@ -295,8 +302,8 @@ class Inventory extends React.Component<InventoryProps>{
                             name="text"
                             className="stretch"
                             label="Skip"
-                            value={props.searchFilter.text}
-                            onChange={props.handleFilterChange}
+                            value={this.props.searchFilter.text}
+                            onChange={this.handleFilterChange}
                             margin="normal"/>
                     </Box>
         
@@ -305,15 +312,14 @@ class Inventory extends React.Component<InventoryProps>{
                             name="text"
                             className="stretch"
                             label="Take"
-                            value={props.searchFilter.text}
-                            onChange={props.handleFilterChange}
+                            value={this.props.searchFilter.text}
+                            onChange={this.handleFilterChange}
                             margin="normal"/>
                     </Box>
         
                     
             </Box>);
     }
-        
 
     renderCardOverviews() {
         return (
@@ -372,7 +378,8 @@ function getFilterVisibilities(searchMethod: string): CardFilterVisibilities {
 
 //State
 function mapStateToProps(state: AppState): PropsFromState {
-
+    // console.log('---state-----');
+    // console.log(state);
     const result: PropsFromState = {
         searchResults: selectInventoryOverviews(state),
         
@@ -380,7 +387,7 @@ function mapStateToProps(state: AppState): PropsFromState {
         isLoading: state.data.inventory.overviews.isLoading,
 
 
-        searchFilterProps: state.ui.inventoryFilterProps,
+        searchFilter: state.ui.inventoryFilterProps,
         visibleFilters: getFilterVisibilities(state.app.inventory.searchMethod),
         filterOptions: state.data.appFilterOptions.filterOptions,
         // searchMethod: state.app.inventory.searchMethod,

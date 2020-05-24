@@ -9,7 +9,7 @@ import { deckEditorReducer, DeckEditorReducerState } from './deckEditorReducer';
 
 import { inventoryAppReducer, InventoryAppReducerState } from './inventoryAppReducer';
 import { appFilterOptionsReducer, AppFilterOptionsReducerState } from './appFilterOptionsReducer';
-
+import { uiReducer, UiReducerState } from './uiReducer';
 ////Domain data
 //import { dataLoadingState } from './dataLoadingState.reducer'
 //import { appFilterOptions } from './appFilterOptions.reducer';
@@ -43,7 +43,8 @@ export interface AppState {
     app: {
         inventory: InventoryAppReducerState,
         deckEditor: DeckEditorReducerState,
-    }
+    },
+    ui: UiReducerState,
 }
 
 export const reducers = {
@@ -65,6 +66,7 @@ export const reducers = {
 
     }),
 
+    ui: uiReducer,
 
 
     //data: combineReducers({

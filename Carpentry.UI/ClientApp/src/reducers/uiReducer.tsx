@@ -1,13 +1,13 @@
-import { FILTER_VALUE_CHANGED, MENU_BUTTON_CLICKED, MENU_OPTION_SELECTED } from '../actions/ui.actions';
+// import { FILTER_VALUE_CHANGED, MENU_BUTTON_CLICKED, MENU_OPTION_SELECTED } from '../actions/ui.actions';
 
-import { 
-    CARD_SEARCH_SEARCH_METHOD_CHANGED, API_DATA_RECEIVED,
-} from '../actions/index.actions';
-import { OPEN_NEW_DECK_MODAL, CANCLE_NEW_DECK, NEW_DECK_FIELD_CHANGE, APP_BAR_ADD_CLICKED } from '../actions/core.actions';
-import { CARD_MENU_BUTTON_CLICK, DECK_CARD_REQUEST_ALTERNATE_VERSIONS, OPEN_DECK_PROPS_MODAL } from '../actions/deckEditor.actions';
+// import { 
+//     CARD_SEARCH_SEARCH_METHOD_CHANGED, API_DATA_RECEIVED,
+// } from '../actions/index.actions';
+// import { OPEN_NEW_DECK_MODAL, CANCLE_NEW_DECK, NEW_DECK_FIELD_CHANGE, APP_BAR_ADD_CLICKED } from '../actions/core.actions';
+// import { CARD_MENU_BUTTON_CLICK, DECK_CARD_REQUEST_ALTERNATE_VERSIONS, OPEN_DECK_PROPS_MODAL } from '../actions/deckEditor.actions';
 // import { inventoryDetail } from './inventoryDetail.reducer';
 
-declare interface uiState {
+export interface UiReducerState {
     //filters
     inventoryFilterProps: CardFilterProps;
     cardSearchFilterProps: CardFilterProps;
@@ -54,7 +54,7 @@ declare interface uiState {
     // isNewDeckModalOpen: boolean; //Should be removed
 }
 
-const apiDataReceived = (state: uiState, action: ReduxAction): uiState => {
+const apiDataReceived = (state: UiReducerState, action: ReduxAction): UiReducerState => {
     const { scope, data } = action.payload;
 
     // switch(scope as ApiScopeOption){
@@ -62,14 +62,14 @@ const apiDataReceived = (state: uiState, action: ReduxAction): uiState => {
 
     // }
     if (scope as ApiScopeOption === "inventoryDetail"){
-        const newState: uiState = {
+        const newState: UiReducerState = {
             ...state,
             isInventoryDetailModalOpen: Boolean(data),
         };
         return newState;
     }
     else if (scope as ApiScopeOption === "deckDetail"){
-        const newState: uiState = {
+        const newState: UiReducerState = {
             ...state,
             deckPropsModalOpen: false,
         };
@@ -84,7 +84,7 @@ const apiDataReceived = (state: uiState, action: ReduxAction): uiState => {
     // //     }
     // // }
     // console.log('closing deck props modal')
-    // const newState: uiState = {
+    // const newState: UiReducerState = {
     //     ...state,
     //     isInventoryDetailModalOpen: Boolean(data),
     //     deckPropsModalOpen: false,
@@ -92,10 +92,10 @@ const apiDataReceived = (state: uiState, action: ReduxAction): uiState => {
     // return newState;
 }
 
-const filterValueChanged = (state: uiState, action: ReduxAction): uiState => {
+const filterValueChanged = (state: UiReducerState, action: ReduxAction): UiReducerState => {
     const { type, filter, value } = action.payload;
     const existingFilter = state[type];
-    const newState: uiState = {
+    const newState: UiReducerState = {
         ...state,
         [type]: {
             ...existingFilter, 
@@ -105,11 +105,11 @@ const filterValueChanged = (state: uiState, action: ReduxAction): uiState => {
     return newState;
 }
 
-const menuButtonClicked = (state: uiState, action: ReduxAction): uiState => {
+const menuButtonClicked = (state: UiReducerState, action: ReduxAction): UiReducerState => {
     const { type, anchor } = action.payload;
 
     // console.log(`menuButtonClicked :${type}`);
-    const newState: uiState = {
+    const newState: UiReducerState = {
         ...state,
         //deckListMenuAnchor: action.payload
         [type]: anchor
@@ -117,9 +117,9 @@ const menuButtonClicked = (state: uiState, action: ReduxAction): uiState => {
     return newState;
 }
 
-const menuOptionSelected = (state: uiState, action: ReduxAction): uiState => {
+const menuOptionSelected = (state: UiReducerState, action: ReduxAction): UiReducerState => {
     const anchorType = action.payload;
-    const newState: uiState = {
+    const newState: UiReducerState = {
         ...state,
         //deckListMenuAnchor: null
         [anchorType]: null
@@ -127,95 +127,95 @@ const menuOptionSelected = (state: uiState, action: ReduxAction): uiState => {
     return newState;
 }
 
-const resetCardSearchFilterProps = (state: uiState, action: ReduxAction): uiState => {
-    const newState: uiState = {
+const resetCardSearchFilterProps = (state: UiReducerState, action: ReduxAction): UiReducerState => {
+    const newState: UiReducerState = {
         ...state,
         cardSearchFilterProps: initialCardSearchFilterProps(),
     }
     return newState;
 }
 
-export const ui = (state = initialState, action: ReduxAction): uiState => {
+export const uiReducer = (state = initialState, action: ReduxAction): UiReducerState => {
     switch(action.type){
-        case API_DATA_RECEIVED:
-            return apiDataReceived(state, action);
+        // case API_DATA_RECEIVED:
+        //     return apiDataReceived(state, action);
 
-        case FILTER_VALUE_CHANGED: 
-            return filterValueChanged(state, action);
+        // case FILTER_VALUE_CHANGED: 
+        //     return filterValueChanged(state, action);
             
-        case MENU_BUTTON_CLICKED:
-            return menuButtonClicked(state, action);
+        // case MENU_BUTTON_CLICKED:
+        //     return menuButtonClicked(state, action);
 
-        case MENU_OPTION_SELECTED:
-            return menuOptionSelected(state, action);
+        // case MENU_OPTION_SELECTED:
+        //     return menuOptionSelected(state, action);
 
-        case CARD_SEARCH_SEARCH_METHOD_CHANGED:
-            return resetCardSearchFilterProps(state, action);
+        // case CARD_SEARCH_SEARCH_METHOD_CHANGED:
+        //     return resetCardSearchFilterProps(state, action);
 
-        case OPEN_NEW_DECK_MODAL:
-            return {
-                ...state,
-                isNewDeckModalOpen: true,
-                newDeckDto: emptyDeckDto(),
-            }
+        // case OPEN_NEW_DECK_MODAL:
+        //     return {
+        //         ...state,
+        //         isNewDeckModalOpen: true,
+        //         newDeckDto: emptyDeckDto(),
+        //     }
 
-        case CANCLE_NEW_DECK: 
-            return {
-                ...state,
-                isNewDeckModalOpen: false,
-            }
+        // case CANCLE_NEW_DECK: 
+        //     return {
+        //         ...state,
+        //         isNewDeckModalOpen: false,
+        //     }
 
-        case NEW_DECK_FIELD_CHANGE:
-            const modalPropName: string = action.payload.name;
-            const modalPropValue: string = action.payload.value;
-            return {
-                ...state,
-                newDeckDto: {
-                    ...state.newDeckDto,
-                    [modalPropName]: modalPropValue
-                }
-            }
-        case CARD_MENU_BUTTON_CLICK:
-            return {
-                ...state,
-                deckEditorMenuAnchor: action.payload
-            }
+        // case NEW_DECK_FIELD_CHANGE:
+        //     const modalPropName: string = action.payload.name;
+        //     const modalPropValue: string = action.payload.value;
+        //     return {
+        //         ...state,
+        //         newDeckDto: {
+        //             ...state.newDeckDto,
+        //             [modalPropName]: modalPropValue
+        //         }
+        //     }
+        // case CARD_MENU_BUTTON_CLICK:
+        //     return {
+        //         ...state,
+        //         deckEditorMenuAnchor: action.payload
+        //     }
 
-        case DECK_CARD_REQUEST_ALTERNATE_VERSIONS:
-            return {
-                ...state,
-                deckEditorMenuAnchor: null,
-            }
+        // case DECK_CARD_REQUEST_ALTERNATE_VERSIONS:
+        //     return {
+        //         ...state,
+        //         deckEditorMenuAnchor: null,
+        //     }
 
-        case OPEN_DECK_PROPS_MODAL:
-            console.log('opening deck props modal')
-            return {
-                ...state,
-                deckPropsModalOpen: true,
-            }
+        // case OPEN_DECK_PROPS_MODAL:
+        //     console.log('opening deck props modal')
+        //     return {
+        //         ...state,
+        //         deckPropsModalOpen: true,
+        //     }
 
-        case APP_BAR_ADD_CLICKED:
-            //under certain conditions, method should be set to Inventory
-            //FWIW something seems off with this approach, I can't reference state, I need to rely on a payload
+        // case APP_BAR_ADD_CLICKED:
+        //     //under certain conditions, method should be set to Inventory
+        //     //FWIW something seems off with this approach, I can't reference state, I need to rely on a payload
 
-            const filters: FilterDescriptor[] | undefined = action.payload;
-            // let searchMethod: "set" | "web" | "inventory" = "set";
-            // console.log('app bar add click - card search');
-            // console.log(action.payload);
-            if(filters && filters.length > 0){
-                const colorFilters = filters.find(f => f.name === "Colors");
-                const formatFilter = filters.find(f => f.name === "Format");
-                return {
-                    ...state,
-                    cardSearchFilterProps: {
-                        ...state.cardSearchFilterProps,
-                        colorIdentity: colorFilters ? colorFilters.value : [],
-                        format: formatFilter ? formatFilter.value : '',
-                    }
-                }
+        //     const filters: FilterDescriptor[] | undefined = action.payload;
+        //     // let searchMethod: "set" | "web" | "inventory" = "set";
+        //     // console.log('app bar add click - card search');
+        //     // console.log(action.payload);
+        //     if(filters && filters.length > 0){
+        //         const colorFilters = filters.find(f => f.name === "Colors");
+        //         const formatFilter = filters.find(f => f.name === "Format");
+        //         return {
+        //             ...state,
+        //             cardSearchFilterProps: {
+        //                 ...state.cardSearchFilterProps,
+        //                 colorIdentity: colorFilters ? colorFilters.value : [],
+        //                 format: formatFilter ? formatFilter.value : '',
+        //             }
+        //         }
 
-            }
-            else return (state);
+        //     }
+        //     else return (state);
             
 
         default:
@@ -269,7 +269,7 @@ function mockFilterProps(): CardFilterProps {
     } as CardFilterProps;
 }
 
-const initialState: uiState = {
+const initialState: UiReducerState = {
     inventoryFilterProps: defaultSearchFilterProps(),
     cardSearchFilterProps: mockFilterProps(),
     deckListMenuAnchor: null,

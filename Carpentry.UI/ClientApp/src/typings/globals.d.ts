@@ -105,7 +105,7 @@ interface CardFilterVisibilities {
 
 // declare type MenuAnchorOptions = 'deckListMenuAnchor' | 'deckEditorMenuAnchor';
 
-declare type InventorySearchMethod =  "name" | "quantity" | "price"; // | "sellList";
+declare type InventorySearchMethod =  "name" | "mid" | "unique"; //"name" | "quantity" | "price"; // | "sellList";
 // declare type InventoryViewMode = "list" | "grid";
 
 

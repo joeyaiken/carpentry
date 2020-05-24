@@ -98,63 +98,64 @@ import { apiDataRequested, apiDataReceived } from './data.actions';
 
 // //Thunks
 
-// //InventoryItems = Overview
-// export const requestInventoryItems = (): any => {
-//     return (dispatch: Dispatch, getState: any) => {
-//         return getInventoryItems(dispatch, getState());
-//     }
-// }
+//InventoryItems = Overview
+export const requestInventoryOverviews = (): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return getInventoryOverviews(dispatch, getState());
+    }
+}
 
-// function getInventoryItems(dispatch: Dispatch, state: AppState): any {
-//     const _localApiScope: ApiScopeOption = "inventoryOverview";
-//     // console.log('actions - getInventoryItems START');
-//     //const dataQueryInProgress = state.inventory.overviewIsLoading;
-//     const dataQueryInProgress = state.data.isLoading.inventoryOverview;
-//     if(dataQueryInProgress){
-//         return;
-//     }
-//     // console.log('actions - getInventoryItems - calling inventoryItemsRequested');
+//"search inventory"
+function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
+    const _localApiScope: ApiScopeOption = "inventoryOverview";
+    // console.log('actions - getInventoryItems START');
+    //const dataQueryInProgress = state.inventory.overviewIsLoading;
+    const dataQueryInProgress = state.data.inventory.overviews.isLoading;  //.isLoading.inventoryOverview;
+    if(dataQueryInProgress){
+        return;
+    }
+    // console.log('actions - getInventoryItems - calling inventoryItemsRequested');
 
-//     //dispatch(inventoryItemsRequested());
-//     dispatch(apiDataRequested(_localApiScope));
+    //dispatch(inventoryItemsRequested());
+    dispatch(apiDataRequested(_localApiScope));
     
-//     // console.log('actions - getInventoryItems - calling api_getAllInventoryItems');
+    // console.log('actions - getInventoryItems - calling api_getAllInventoryItems');
 
-//     const param: InventoryQueryParameter = {
-//         //groupBy: state.inventory.searchFilter.searchMethod,
-//         //groupBy: state.inventory.searchMethod,
-//         groupBy: state.app.inventory.searchMethod,
-//         text: state.ui.inventoryFilterProps.text,
-//         //sets: [],
-//         colors: state.ui.inventoryFilterProps.colorIdentity,
-//         types: [],
-//         skip: 0,
-//         take: 100,
-//         format: state.ui.inventoryFilterProps.format,
-//         sort: '',//state.inventory.searchFilter.sort,
-//         //sort: 'name',
-//         //set: 'eld'
-//         set: state.ui.inventoryFilterProps.set,
-//         exclusiveColorFilters: state.ui.inventoryFilterProps.exclusiveColorFilters,
-//         multiColorOnly: state.ui.inventoryFilterProps.multiColorOnly,
-//         maxCount: state.ui.inventoryFilterProps.maxCount || 0,
-//         minCount: state.ui.inventoryFilterProps.minCount || 0,
-//         type: state.ui.inventoryFilterProps.type,
-//         //rarity: state.cardSearch.cardSearchFilter.props.rarity,
-//         rarity: state.ui.inventoryFilterProps.rarity,
-        
-//     }
+    const param: InventoryQueryParameter = {
+        //groupBy: state.inventory.searchFilter.searchMethod,
+        //groupBy: state.inventory.searchMethod,
+        groupBy: 'unique',//state.app.inventory.searchMethod,
+        text: state.ui.inventoryFilterProps.text,
+        //sets: [],
+        colors: state.ui.inventoryFilterProps.colorIdentity,
+        types: [],
+        skip: 0,
+        take: 100,
+        format: state.ui.inventoryFilterProps.format,
+        sort: 'price',//state.inventory.searchFilter.sort,
+        sortDescending: true,
+        //sort: 'name',
+        //set: 'eld'
+        set: state.ui.inventoryFilterProps.set,
+        exclusiveColorFilters: state.ui.inventoryFilterProps.exclusiveColorFilters,
+        multiColorOnly: state.ui.inventoryFilterProps.multiColorOnly,
+        maxCount: state.ui.inventoryFilterProps.maxCount || 0,
+        minCount: state.ui.inventoryFilterProps.minCount || 0,
+        type: state.ui.inventoryFilterProps.type,
+        //rarity: state.cardSearch.cardSearchFilter.props.rarity,
+        rarity: state.ui.inventoryFilterProps.rarity,
+        //rarity: ['c','u']
+    }
 
+    api.Inventory.searchCards(param).then((result) => {
 
-//     api_Inventory_Search(param).then((result) => {
+        //InventoryQueryResult[]
 
-//         //InventoryQueryResult[]
+        //dispatch(inventoryItemsReceived(result));
+        dispatch(apiDataReceived(_localApiScope,result));
+    });
 
-//         //dispatch(inventoryItemsReceived(result));
-//         dispatch(apiDataReceived(_localApiScope,result));
-//     });
-
-// }
+}
 export const requestInventoryDetail = (name: string | null): any => {
     return (dispatch: Dispatch, getState: any) => {
         return getInventoryDetail(dispatch, getState(), name);
@@ -165,7 +166,7 @@ function getInventoryDetail(dispatch: Dispatch, state: AppState, name: string | 
     const _localApiScope: ApiScopeOption = "inventoryDetail";
 
     //const queryInProgress = state.inventory.detailIsLoading;
-    const queryInProgress = state.data.isLoading.inventoryDetail;
+    const queryInProgress = state.data.inventory.detail.isLoading;
 
     if(queryInProgress){
         return;
@@ -178,7 +179,7 @@ function getInventoryDetail(dispatch: Dispatch, state: AppState, name: string | 
         // dispatch(inventoryDetailRequested());
         dispatch(apiDataRequested(_localApiScope));
 
-        api_Inventory_GetByName(name).then((result) => {
+        api.Inventory.getCardsByName(name).then((result) => {
             dispatch(apiDataReceived(_localApiScope, result));
         });
     }

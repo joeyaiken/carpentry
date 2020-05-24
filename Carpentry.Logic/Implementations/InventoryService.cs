@@ -55,6 +55,11 @@ namespace Carpentry.Logic.Implementations
                 Img = data.Img,
                 Name = data.Name,
                 Type = data.Type,
+                Price = data.Price,
+                IsFoil = data.IsFoil,
+                Category = data.Category,
+                Description = data.Category,
+                Variant = data.Variant,
             };
             return result;
         }
@@ -187,7 +192,7 @@ namespace Carpentry.Logic.Implementations
 
             IEnumerable<CardOverviewResult> result = await _queryService.GetInventoryOverviews(param);
 
-            IEnumerable<InventoryOverviewDto> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x));
+            IEnumerable<InventoryOverviewDto> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x)).ToList();
 
             return mappedResult;
         }
