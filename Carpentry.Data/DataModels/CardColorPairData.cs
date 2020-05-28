@@ -15,10 +15,10 @@ namespace Carpentry.Data.DataModels
         //Associations
 
         //CardColorIdentity -- ManaType
-        public ManaTypeData ManaType { get; set; }
+        public virtual ManaTypeData ManaType { get; set; }
 
         //Card -- CardColorIdentity
-        public CardData Card { get; set; }
+        public virtual CardData Card { get; set; }
 
     }
 

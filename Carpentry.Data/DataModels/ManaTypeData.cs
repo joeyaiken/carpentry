@@ -18,10 +18,10 @@ namespace Carpentry.Data.DataModels
         //Associations
 
         //CardColorIdentity -- ManaType
-        public List<CardColorIdentityData> CardColorIdentities { get; set; }
+        public virtual ICollection<CardColorIdentityData> CardColorIdentities { get; set; }
 
         //cards whose colors contain this mana type
-        public List<CardColorData> CardColors { get; set; }
+        public virtual ICollection<CardColorData> CardColors { get; set; }
     }
 
 }

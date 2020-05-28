@@ -6,7 +6,7 @@ import {
     CardHeader,
     CardContent,
 } from '@material-ui/core';
-import DeckList from '../../containers/DeckList';
+import DeckList from '../DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 
 interface LayoutProps {

@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux';
 import React, { ReactNode} from 'react';
-import { AppState } from '../reducers';
+import { AppState } from '../../reducers';
 
 // import { 
 //     cardSearchSearchMethodChanged,
@@ -32,10 +32,10 @@ interface PropsFromState {
     // cardSearchMethod: "set" | "web" | "inventory";
 }
 
-type CardSearchProps = PropsFromState & DispatchProp<ReduxAction>;
+type CardSearchContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 
-class CardSearch extends React.Component<CardSearchProps>{
-    constructor(props: CardSearchProps) {
+class CardSearchContainer extends React.Component<CardSearchContainerProps>{
+    constructor(props: CardSearchContainerProps) {
         super(props);
         // this.handleSaveClick = this.handleSaveClick.bind(this);
         // this.handleCancelClick = this.handleCancelClick.bind(this);
@@ -132,4 +132,4 @@ function mapStateToProps(state: AppState): PropsFromState {
     return result;
 }
 
-export default connect(mapStateToProps)(CardSearch);
+export default connect(mapStateToProps)(CardSearchContainer);

@@ -34,7 +34,7 @@ namespace Carpentry.Data.DataModels
         //cards of this variant
         //do I really need an association in this direction?
         //'all cards of a given variant'
-        public List<CardVariantData> VariantCards { get; set; }
-        public List<InventoryCardData> InventoryCards { get; set; }
+        public virtual ICollection<CardVariantData> VariantCards { get; set; }
+        public virtual ICollection<InventoryCardData> InventoryCards { get; set; }
     }
 }

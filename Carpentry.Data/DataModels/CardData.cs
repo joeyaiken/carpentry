@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Carpentry.Data.DataModels
 {
     public class CardData
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         public int? Cmc { get; set; }
@@ -33,23 +36,23 @@ namespace Carpentry.Data.DataModels
         //Associations
 
         //Card -- Set
-        public CardSetData Set { get; set; }
+        public virtual CardSetData Set { get; set; }
 
         //Card -- Rarity
-        public CardRarityData Rarity { get; set; }
+        public virtual CardRarityData Rarity { get; set; }
 
         //Card -- CardColorIdentity
-        public List<CardColorIdentityData> CardColorIdentities { get; set; }
+        public virtual ICollection<CardColorIdentityData> CardColorIdentities { get; set; }
 
-        public List<CardColorData> CardColors { get; set; }
+        public virtual ICollection<CardColorData> CardColors { get; set; }
 
         //InventoryCard -- Card
-        public List<InventoryCardData> InventoryCards { get; set; }
+        public virtual ICollection<InventoryCardData> InventoryCards { get; set; }
 
         //variant
-        public List<CardVariantData> Variants { get; set; }
+        public virtual ICollection<CardVariantData> Variants { get; set; }
 
         //legal sets
-        public List<CardLegalityData> Legalities { get; set; }
+        public virtual ICollection<CardLegalityData> Legalities { get; set; }
     }
 }

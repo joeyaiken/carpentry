@@ -6,7 +6,7 @@ import {
     // // deckListMenuButtonClick, 
     // // deckListMenuSelect, 
     // requestDeleteDeck,
-} from '../actions/deckOverviews.actions'
+} from '../../actions/deckOverviews.actions'
 
 // import {
 //     menuButtonClicked,
@@ -15,8 +15,8 @@ import {
 
 // import { requestDeckDetail } from '../actions/core.actions';
 
-import DeckListTable from '../components/DeckListTable';
-import { AppState } from '../reducers';
+import DeckListTable from './DeckListTable';
+import { AppState } from '../../reducers';
 import { 
     // MenuItem, 
     // Menu, 

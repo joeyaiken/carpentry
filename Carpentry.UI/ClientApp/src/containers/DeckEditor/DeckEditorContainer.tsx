@@ -1,5 +1,5 @@
 import { connect, DispatchProp } from 'react-redux'
-import React from 'react'
+import React, { ReactNode } from 'react'
 // import {
 //     // requestSaveDeck,
 //     // deckEditorCardSelected,
@@ -13,6 +13,7 @@ import React from 'react'
 // } from '../actions/deckEditor.actions'
 
 import { AppState } from '../../reducers'
+import { appStyles } from '../../styles/appStyles';
 
 import { Typography, Box } from '@material-ui/core';
 
@@ -97,10 +98,12 @@ type DeckEditorProps = PropsFromState & DispatchProp<ReduxAction>;
 class DeckEditor extends React.Component<DeckEditorProps> {
     constructor(props: DeckEditorProps) {
         super(props);
-        
+        this.handleCardSelected = this.handleCardSelected.bind(this);
         this.handleEditPropsClick = this.handleEditPropsClick.bind(this);
         this.handleToggleDeckView = this.handleToggleDeckView.bind(this);
-
+        this.handleCardMenuClick = this.handleCardMenuClick.bind(this);
+        this.handleCardMenuSelected = this.handleCardMenuSelected.bind(this);
+        this.handleCardMenuClosed = this.handleCardMenuClosed.bind(this);
     }
 
     componentDidMount() {
@@ -164,6 +167,9 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
     render() {
+
+        // const classes = appStyles();
+
         if(this.props.deckProperties === null){
             return(
                 <Box>
@@ -184,31 +190,14 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                     { this.renderPropsModal() }
 
                     { this.renderPropsBar() }
-
-                    <Box className="flex-row flex-section" style={{
-                        overflow:'auto',
-                        alignItems:'stretch'
-                        }}>
-                        {/* Does this need to be flex 1 0 ? */}
-    
-                        {/* <Box className="flex-row" > */}
-                        <div className="flex-section" 
-                            style={{
-                                overflow:'auto',
-                                flex:'1 1 70%'
-                            }}
-                        >
+                    <ContainerLayout>
+                        <LeftShell>
                             { this.renderCardOverviews() }
-                        </div>
-                        <div className="flex-section" 
-                            style={{
-                                overflow:'auto',
-                                flex:'1 1 30%'
-                            }}
-                        >
+                        </LeftShell>
+                        <RightShell>
                             { this.renderCardDetail() }
-                        </div>
-                    </Box>
+                        </RightShell>
+                    </ContainerLayout>
                     { this.renderStatsBar() }
                 </React.Fragment>
             )
@@ -269,6 +258,38 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 
 }
+
+interface LayoutShellProps {
+    children: ReactNode;
+}
+
+function ContainerLayout(props: LayoutShellProps): JSX.Element {
+    const classes = appStyles();
+    return(
+        <Box
+            className={ `${classes.flexRow} ${classes.flexSection}` } 
+            style={{ overflow:'auto', alignItems:'stretch' }}>
+            { props.children }
+        </Box>
+    );
+}
+function LeftShell(props: LayoutShellProps): JSX.Element {
+    const classes = appStyles();
+    return(
+        <div className={classes.flexSection} style={{ overflow:'auto', flex:'1 1 70%' }} >
+            { props.children }
+        </div>
+    );
+}
+function RightShell(props: LayoutShellProps): JSX.Element {
+    const classes = appStyles();
+    return(
+        <div className={classes.flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
+            { props.children }
+        </div>
+    );
+}
+
 
 // function selectDeckOverviews(state: AppState): InventoryOverviewDto[] {
 //     const { allCardOverviewNames, cardOverviewsByName } = state.data.deckDetail;
@@ -353,4 +374,4 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     return result;
 }
 
-export default connect(mapStateToProps)(DeckEditor)
+export default connect(mapStateToProps)(DeckEditor);

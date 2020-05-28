@@ -12,6 +12,7 @@ namespace Carpentry.Data.Interfaces
     {
         //Deck CRUD
         Task<int> AddDeck(DeckData newDeck);
+        Task AddImportedDeckBatch(IEnumerable<DeckData> deckList);
         Task UpdateDeck(DeckData deck);
         Task DeleteDeck(int deckId);
         Task<DeckData> GetDeckById(int deckid);

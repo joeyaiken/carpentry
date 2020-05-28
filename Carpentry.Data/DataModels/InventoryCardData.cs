@@ -21,13 +21,13 @@ namespace Carpentry.Data.DataModels
         public bool IsFoil { get; set; }
 
         //Associations
-        public CardData Card { get; set; }
+        public virtual CardData Card { get; set; }
 
-        public List<DeckCardData> DeckCards { get; set; }
+        public virtual ICollection<DeckCardData> DeckCards { get; set; }
 
-        public InventoryCardStatusData Status { get; set; }
+        public virtual InventoryCardStatusData Status { get; set; }
 
-        public CardVariantTypeData VariantType { get; set; }
+        public virtual CardVariantTypeData VariantType { get; set; }
     }
 
 }

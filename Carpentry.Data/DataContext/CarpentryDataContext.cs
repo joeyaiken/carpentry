@@ -39,6 +39,11 @@ namespace Carpentry.Data.DataContext
 
         public DbSet<DeckCardCategoryData> DeckCardCategories { get; set; }
 
+        //Views
+        public DbSet<DataModels.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByMidResult> InventoryCardByMid { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
+
         #endregion
 
         public CarpentryDataContext(DbContextOptions<CarpentryDataContext> options) : base(options)
@@ -151,6 +156,34 @@ namespace Carpentry.Data.DataContext
                 .HasOne(x => x.Format)
                 .WithMany(x => x.Decks)
                 .HasForeignKey(x => x.MagicFormatId);
+
+            #endregion
+
+
+            #region Views
+
+            modelBuilder.Entity<DataModels.QueryResults.InventoryCardByNameResult>(eb =>
+            {
+                eb.HasNoKey();
+                eb.ToView("vInventoryCardsByName");
+            });
+
+            modelBuilder.Entity<DataModels.QueryResults.InventoryCardByMidResult>(eb =>
+            {
+                eb.HasNoKey();
+                eb.ToView("vInventoryCardsByMid");
+            });
+
+            modelBuilder.Entity < DataModels.QueryResults.InventoryCardByUniqueResult> (eb =>
+            {
+                eb.HasNoKey();
+                eb.ToView("vInventoryCardsUniquePrints");
+            });
+
+            #endregion
+
+            #region procs?
+
 
             #endregion
         }

@@ -4,33 +4,35 @@ import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card } fr
 import CardGridContainer from './CardGridContainer';
 // import GridCard from './GridCard';
 
+import { appStyles } from '../../styles/appStyles';
+
 interface ComponentProps{
     cardOverviews: InventoryOverviewDto[];
     onCardSelected: (cardName: string) => void;
 }
 
 export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
+    const classes = appStyles();
     return (
         <React.Fragment>
             <CardGridContainer layout="grid">
                 {
                     props.cardOverviews.map(cardItem => 
-                        <Card key={cardItem.name} className="outline-section">
+                        <Card key={cardItem.name} className={classes.outlineSection}>
                             <CardMedia 
                                 style={{height:"310px", width: "223px"}}
-                                className="item-image"
                                 //image={`https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=${props.card.}&type=card`}
                                 image={cardItem.img}
                                 title={cardItem.name} />
-                            <Box className="flex-row">
-                                <CardContent className="flex-section">
-                                    <Box className="flex-col ">
-                                        <Box className="flex-row">
+                            <Box className={classes.flexRow}>
+                                <CardContent className={classes.flexSection}>
+                                    <Box className={classes.flexCol}>
+                                        <Box className={classes.flexRow}>
                                             {cardItem.count && (<Typography>{cardItem.count} Total</Typography>)}
                                         </Box>
                                     </Box>
                                 </CardContent>
-                                <CardActions className="flex-section">
+                                <CardActions className={classes.flexSection}>
                                     <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.name)}} >
                                         Details
                                     </Button>

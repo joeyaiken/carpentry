@@ -14,8 +14,8 @@ namespace Carpentry.Data.DataModels
 
         //Associations
         //card legalities
-        public List<CardLegalityData> LegalCards { get; set; }
-        public List<DeckData> Decks { get; set; }
+        public virtual ICollection<CardLegalityData> LegalCards { get; set; }
+        public virtual ICollection<DeckData> Decks { get; set; }
     }
 
 }

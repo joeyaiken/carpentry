@@ -16,8 +16,8 @@ namespace Carpentry.Data.DataModels
         public int FormatId { get; set; }
 
         //Associations
-        public CardData Card { get; set; }
-        public MagicFormatData Format { get; set; }
+        public virtual CardData Card { get; set; }
+        public virtual MagicFormatData Format { get; set; }
     }
 
 }

@@ -101,10 +101,11 @@ namespace Carpentry.Logic.Implementations
                 Id = x.ExportId
             }).ToList();
 
+            await _deckDataRepo.AddImportedDeckBatch(newDecks);
 
-            List<Task<int>> newDeckTasks = newDecks.Select(deck => _deckDataRepo.AddDeck(deck)).ToList();
+            //List<Task<int>> newDeckTasks = newDecks.Select(deck => _deckDataRepo.AddDeck(deck)).ToList();
 
-            await Task.WhenAll(newDeckTasks);
+            //await Task.WhenAll(newDeckTasks);
 
             _logger.LogWarning("LoadDeckBackups - Complete");
         }
@@ -133,18 +134,25 @@ namespace Carpentry.Logic.Implementations
             string propsBackupDataString = await System.IO.File.ReadAllTextAsync(propsBackupLocation);
             BackupDataProps parsedPropsBackups = JObject.Parse(propsBackupDataString).ToObject<BackupDataProps>();
 
+            var newSets = parsedPropsBackups.SetCodes.Select(code => new CardSetData()
+            {
+                Code = code,
+            }).ToList();
 
+            for(int i = 0; i < newSets.Count(); i++)
+            {
+                await _cardDataRepo.AddOrUpdateCardSet(newSets[i]);
+            }
 
+            //var newSetRequests = parsedPropsBackups.SetCodes
+            //    .Select(code => new CardSetData()
+            //    {
+            //        Code = code
+            //    })
+            //    .Select(tempSet => _cardDataRepo.AddOrUpdateCardSet(tempSet))
+            //    .ToList();
 
-            var newSetRequests = parsedPropsBackups.SetCodes
-                .Select(code => new CardSetData()
-                {
-                    Code = code
-                })
-                .Select(tempSet => _cardDataRepo.AddOrUpdateCardSet(tempSet))
-                .ToList();
-
-            await Task.WhenAll(newSetRequests);
+            //await Task.WhenAll(newSetRequests);
 
             _logger.LogWarning("RestoreDb - LoadSetTempData...completed");
         }

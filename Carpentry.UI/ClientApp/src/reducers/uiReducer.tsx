@@ -298,7 +298,7 @@ const initialState: UiReducerState = {
 
 function defaultSearchFilterProps(): CardFilterProps {
     return {
-        set: 'thb',
+        set: '',//'thb',
         colorIdentity: [],
         //rarity: ['mythic','rare','uncommon','common'], //
         rarity: [], //

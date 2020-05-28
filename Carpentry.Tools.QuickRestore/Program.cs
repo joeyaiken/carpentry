@@ -57,8 +57,11 @@ namespace Carpentry.Tools.QuickRestore
 
                 .AddLogging(config => config.AddSerilog())
 
-                .AddDbContext<CarpentryDataContext>(options => options.UseSqlite(cardDatabaseLocation))
-                .AddDbContext<ScryfallDataContext>(options => options.UseSqlite(scryDatabaseLocation))
+                //.AddDbContext<CarpentryDataContext>(options => options.UseSqlite(cardDatabaseLocation))
+                //.AddDbContext<ScryfallDataContext>(options => options.UseSqlite(scryDatabaseLocation))
+
+                .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
+                .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
                 //data services
                 .AddSingleton<ICardDataRepo, CardDataRepo>()

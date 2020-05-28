@@ -19,7 +19,7 @@ namespace Carpentry.Data.DataModels
         //Associations
 
         //Card -- Rarity
-        public List<CardData> Cards { get; set; }
+        public virtual ICollection<CardData> Cards { get; set; }
     }
 
 }

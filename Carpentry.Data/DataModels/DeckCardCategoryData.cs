@@ -15,7 +15,7 @@ namespace Carpentry.Data.DataModels
         public string Name { get; set; }
 
         //Associations
-        public List<DeckCardData> Cards { get; set; }
+        public virtual ICollection<DeckCardData> Cards { get; set; }
     }
 
 }

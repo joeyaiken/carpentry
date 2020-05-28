@@ -175,9 +175,8 @@ namespace Carpentry.Logic.Implementations
             cardSet.Id = await _cardRepo.AddOrUpdateCardSet(cardSet);
 
             //AddOrUpdate all card definitions in card DB
-            var cardTasks = magicCards.Select(card =>
+            foreach(var card in magicCards)
             {
-                //_cardRepo.add
                 CardDataDto cardDefinition = new CardDataDto()
                 {
                     Cmc = card.Cmc,
@@ -200,10 +199,40 @@ namespace Carpentry.Logic.Implementations
                     }).ToList(),
                 };
 
-                return _cardRepo.AddOrUpdateCardDefinition(cardDefinition);
-            }).ToList();
+                await _cardRepo.AddOrUpdateCardDefinition(cardDefinition);
+            }
 
-            await Task.WhenAll(cardTasks);
+
+
+            //var cardTasks = magicCards.Select(card =>
+            //{
+            //    //_cardRepo.add
+            //    CardDataDto cardDefinition = new CardDataDto()
+            //    {
+            //        Cmc = card.Cmc,
+            //        ColorIdentity = card.ColorIdentity,
+            //        Colors = card.Colors,
+            //        Legalities = card.Legalities,
+            //        ManaCost = card.ManaCost,
+            //        MultiverseId = card.MultiverseId,
+            //        Name = card.Name,
+            //        Rarity = card.Rarity,
+            //        Set = card.Set,
+            //        Text = card.Text,
+            //        Type = card.Type,
+            //        Variants = card.Variants.Keys.Select(x => new CardVariantDto
+            //        {
+            //            Name = x,
+            //            Image = card.Variants[x],
+            //            Price = card.Prices[x],
+            //            PriceFoil = card.Prices[$"{x}_foil"],
+            //        }).ToList(),
+            //    };
+
+            //    return _cardRepo.AddOrUpdateCardDefinition(cardDefinition);
+            //}).ToList();
+
+            //await Task.WhenAll(cardTasks);
 
             //Update the LastUpdated timestamp after cards have been successfully updated
             cardSet.LastUpdated = DateTime.Now;
@@ -250,17 +279,25 @@ namespace Carpentry.Logic.Implementations
         {
             _logger.LogWarning("Adding default records");
 
-            List<Task> defaultRecordTasks = new List<Task>()
-            {
-                EnsureDbCardStatusesExist(),
-                EnsureDbRaritiesExist(),
-                EnsureDbManaTypesExist(),
-                EnsureDbMagicFormatsExist(),
-                EnsureDbVariantTypesExist(),
-                EnsureDbDeckCardCategoriesExist(),
-            };
+            await EnsureDbCardStatusesExist();
+            await EnsureDbRaritiesExist();
+            await EnsureDbManaTypesExist();
+            await EnsureDbMagicFormatsExist();
+            await EnsureDbVariantTypesExist();
+            await EnsureDbDeckCardCategoriesExist();
 
-            await Task.WhenAll(defaultRecordTasks);
+
+            //List<Task> defaultRecordTasks = new List<Task>()
+            //{
+            //    EnsureDbCardStatusesExist(),
+            //    EnsureDbRaritiesExist(),
+            //    EnsureDbManaTypesExist(),
+            //    EnsureDbMagicFormatsExist(),
+            //    EnsureDbVariantTypesExist(),
+            //    EnsureDbDeckCardCategoriesExist(),
+            //};
+
+            //await Task.WhenAll(defaultRecordTasks);
 
             _logger.LogInformation("Finished adding default records");
         }
@@ -280,9 +317,14 @@ namespace Carpentry.Logic.Implementations
                 new InventoryCardStatusData { Id = 3, Name = "Sell List" },
             };
 
-            var statusTasks = allStatuses.Select(s => _dataReferenceRepo.TryAddInventoryCardStatus(s));
+            for(int i = 0; i < allStatuses.Count(); i++)
+            {
+                await _dataReferenceRepo.TryAddInventoryCardStatus(allStatuses[i]);
+            }
 
-            await Task.WhenAll(statusTasks);
+            //var statusTasks = allStatuses.Select(s => _dataReferenceRepo.TryAddInventoryCardStatus(s));
+
+            //await Task.WhenAll(statusTasks);
 
             _logger.LogInformation("Finished adding card statuses");
         }
@@ -313,9 +355,14 @@ namespace Carpentry.Logic.Implementations
                 },
             };
 
-            var tasks = allRarities.Select(r => _dataReferenceRepo.TryAddCardRarity(r));
+            for(int i = 0; i < allRarities.Count(); i++)
+            {
+                await _dataReferenceRepo.TryAddCardRarity(allRarities[i]);
+            }
 
-            await Task.WhenAll(tasks);
+            //var tasks = allRarities.Select(r => _dataReferenceRepo.TryAddCardRarity(r));
+
+            //await Task.WhenAll(tasks);
 
             _logger.LogInformation("Finished adding card rarities");
         }
@@ -345,10 +392,15 @@ namespace Carpentry.Logic.Implementations
                     Name = "Green"
                 },
             };
+            
+            for(int i = 0; i < allManaTypes.Count(); i++)
+            {
+                await _dataReferenceRepo.TryAddManaType(allManaTypes[i]);
+            }
 
-            var tasks = allManaTypes.Select(x => _dataReferenceRepo.TryAddManaType(x));
+            //var tasks = allManaTypes.Select(x => _dataReferenceRepo.TryAddManaType(x));
 
-            await Task.WhenAll(tasks);
+            //await Task.WhenAll(tasks);
 
             _logger.LogInformation("Finished adding mana types");
         }
@@ -373,9 +425,14 @@ namespace Carpentry.Logic.Implementations
                 //new MagicFormat { Name = "oldschool" },
             };
 
-            var tasks = allFormats.Select(x => _dataReferenceRepo.TryAddMagicFormat(x));
+            for(int i = 0; i < allFormats.Count(); i++)
+            {
+                await _dataReferenceRepo.TryAddMagicFormat(allFormats[i]);
+            }
 
-            await Task.WhenAll(tasks);
+            //var tasks = allFormats.Select(x => _dataReferenceRepo.TryAddMagicFormat(x));
+
+            //await Task.WhenAll(tasks);
 
             _logger.LogInformation("Finished adding formats");
         }
@@ -393,9 +450,14 @@ namespace Carpentry.Logic.Implementations
                 new CardVariantTypeData { Name = "ja" },
             };
 
-            var tasks = allVariants.Select(x => _dataReferenceRepo.TryAddCardVariantType(x));
+            for(int i = 0; i < allVariants.Count(); i++)
+            {
+                await _dataReferenceRepo.TryAddCardVariantType(allVariants[i]);
+            }
 
-            await Task.WhenAll(tasks);
+            //var tasks = allVariants.Select(x => _dataReferenceRepo.TryAddCardVariantType(x));
+
+            //await Task.WhenAll(tasks);
 
             _logger.LogInformation("Finished adding card variants");
         }
@@ -407,13 +469,20 @@ namespace Carpentry.Logic.Implementations
                 //null == mainboard new DeckCardCategory { Id = '', Name = "" },
                 new DeckCardCategoryData { Id = 'c', Name = "Commander" },
                 new DeckCardCategoryData { Id = 's', Name = "Sideboard" },
+                //Companion
+
                 //new DeckCardCategory { Id = '', Name = "" },
                 //new DeckCardCategory { Id = '', Name = "" },
             };//TryAddDeckCardCategory
 
-            var tasks = allCategories.Select(x => _dataReferenceRepo.TryAddDeckCardCategory(x));
+            for(int i = 0; i < allCategories.Count(); i++)
+            {
+                await _dataReferenceRepo.TryAddDeckCardCategory(allCategories[i]);
+            }
 
-            await Task.WhenAll(tasks);
+            //var tasks = allCategories.Select(x => _dataReferenceRepo.TryAddDeckCardCategory(x));
+
+            //await Task.WhenAll(tasks);
 
             _logger.LogInformation("Finished adding card categories");
         }

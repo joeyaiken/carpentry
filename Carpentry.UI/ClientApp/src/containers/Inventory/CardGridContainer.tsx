@@ -20,6 +20,7 @@ import React, { ReactNode } from 'react';
 //These will all need to eventually use more-standardised props
 
 import { Typography, Box } from '@material-ui/core';
+import { appStyles } from '../../styles/appStyles';
 
 interface CardGridContainerProps {
     //   children: ReactNode;
@@ -38,13 +39,13 @@ export default function CardGridContainer(props: CardGridContainerProps): JSX.El
     //How do I handle the variety of card options?
     //Maybe when I need to show a count, I just pass in a string
 
-
+    const classes = appStyles();
 
     //This is for card search:
     if(props.layout === "grid"){
         return(
             <React.Fragment>
-                <Box className="flex-row-wrap">
+                <Box className={classes.flexRowWrap}>
                     {props.children}
                 </Box>
             </React.Fragment>

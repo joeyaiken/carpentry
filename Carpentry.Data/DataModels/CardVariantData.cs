@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Carpentry.Data.DataModels
@@ -9,18 +10,23 @@ namespace Carpentry.Data.DataModels
     //An inventory card is an instance of a card of a specific variant type
     public class CardVariantData
     {
+        
         public int Id { get; set; }
         public int CardId { get; set; }
         public int CardVariantTypeId { get; set; }
 
+        //[HasColumnType()]
+        [Column(TypeName="Decimal(6,2)")] //lets hope I don't own an individual card worth more than $9,999.99
         public decimal? Price { get; set; }
+
+        [Column(TypeName = "Decimal(6,2)")] //lets hope I don't own an individual card worth more than $9,999.99
         public decimal? PriceFoil { get; set; }
 
         public string ImageUrl { get; set; }
 
         //associations
-        public CardData Card { get; set; }
-        public CardVariantTypeData Type { get; set; }
+        public virtual CardData Card { get; set; }
+        public virtual CardVariantTypeData Type { get; set; }
     }
 
 }

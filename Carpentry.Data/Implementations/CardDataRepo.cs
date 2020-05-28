@@ -88,6 +88,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task EnsureDatabaseExists()
         {
+            //await _cardContext.Database.EnsureDeletedAsync();
             await _cardContext.Database.EnsureCreatedAsync();
         }
 

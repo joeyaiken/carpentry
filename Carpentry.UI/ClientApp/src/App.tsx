@@ -8,7 +8,7 @@ import AppLayout from './components/AppLayout';
 // import FetchData from './components/FetchData';
 
 import './styles/App.css';
-import Backups from './containers/Backups';
+import Backups from './components/Backups';
 import CardSetSettings from './containers/CardSetSettings';
 import InventoryContainer from './containers/Inventory/InventoryContainer';
 import { ConnectedComponent } from 'react-redux';

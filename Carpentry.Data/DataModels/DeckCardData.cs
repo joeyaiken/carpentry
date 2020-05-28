@@ -17,12 +17,12 @@ namespace Carpentry.Data.DataModels
         //Associations
 
         //DeckInventoryCard -- InventoryCard
-        public InventoryCardData InventoryCard { get; set; }
+        public virtual InventoryCardData InventoryCard { get; set; }
 
         //Deck -- DeckInventoryCard
-        public DeckData Deck { get; set; }
+        public virtual DeckData Deck { get; set; }
         //DeckCard - Status
-        public DeckCardCategoryData Category { get; set; }
+        public virtual DeckCardCategoryData Category { get; set; }
 
     }
 

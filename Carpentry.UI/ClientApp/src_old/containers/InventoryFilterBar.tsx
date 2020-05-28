@@ -82,7 +82,7 @@ class InventoryFilterBar extends React.Component<InventoryProps>{
 
                     </Box> */}
 
-                    <InventoryFilterBar
+                    <InventoryFilterBarLayout
                         filterOptions={this.props.filterOptions}
                         handleBoolFilterChange={this.handleBoolFilterChange}
                         handleFilterChange={this.handleFilterChange}
@@ -113,7 +113,7 @@ interface InventoryFilterBarProps{
 
 //This bar should just be a flex-grid of filter elements
 //It probably shouldn't even have the "search" button
-function InventoryFilterBar(props: InventoryFilterBarProps): JSX.Element {
+function InventoryFilterBarLayout(props: InventoryFilterBarProps): JSX.Element {
     // Need this to cache?
     // try this?
     // https://material-ui.com/components/autocomplete

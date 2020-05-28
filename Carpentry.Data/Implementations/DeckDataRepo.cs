@@ -30,6 +30,23 @@ namespace Carpentry.Data.Implementations
             return newDeck.Id;
         }
 
+        public async Task AddImportedDeckBatch(IEnumerable<DeckData> deckList)
+        {
+            using (var transaction = _cardContext.Database.BeginTransaction())
+            {
+                _cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] ON");
+
+                _cardContext.Decks.AddRange(deckList);
+
+                await _cardContext.SaveChangesAsync();
+
+                _cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] OFF");
+
+                transaction.Commit();
+            }
+            
+        }
+
         public async Task UpdateDeck(DeckData deck)
         {
             //Deck existingDeck = _cardContext.Decks.Where(x => x.Id == deck.Id).FirstOrDefault();

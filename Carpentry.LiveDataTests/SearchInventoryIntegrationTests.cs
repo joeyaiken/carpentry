@@ -39,7 +39,7 @@ namespace Carpentry.LiveDataTests
         {
             InventoryQueryParameter queryParamToRequest = new InventoryQueryParameter()
             {
-                Set = "m20",
+                Set = "",
                 GroupBy = "unique",
                 Sort = "price",
                 SortDescending = true,

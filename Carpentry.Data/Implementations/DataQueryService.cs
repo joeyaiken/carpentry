@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Carpentry.Data.DataContext;
 using Carpentry.Data.DataModels;
+using Carpentry.Data.DataModels.QueryResults;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
@@ -31,11 +32,6 @@ namespace Carpentry.Data.Implementations
             _cardContext = cardContext;
             _logger = logger;
         }
-
-
-        
-
-
 
         private async Task<IQueryable<CardData>> QueryFilteredCards(InventoryQueryParameter filters)
         {
@@ -122,99 +118,228 @@ namespace Carpentry.Data.Implementations
 
         public async Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param)
         {
-            var cardsQuery = await QueryFilteredCards(param);
+            //var cardsQuery = await QueryFilteredCards(param);
 
-            IQueryable<CardOverviewResult> query;
+            IEnumerable<CardOverviewResult> query;
 
             switch (param.GroupBy)
             {
                 case "name":
 
-                    query = cardsQuery.Select(x => new
-                    {
-                        MultiverseId = x.Id,
-                        x.Name,
-                        x.Type,
-                        x.ManaCost,
-                        Counts = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
-                        x.Variants.First().ImageUrl,
-                        x.Cmc,
-                    }).GroupBy(x => x.Name)
-                    .Select((x,i) => new CardOverviewResult
-                    {
-                        Id = i + 1,
-                        Name = x.Key,
-                        Type = x.First().Type,
-                        Cost = x.First().ManaCost,
-                        Img = x.First().ImageUrl,
-                        Count = x.Sum(card => card.Counts),
-                        Cmc = x.First().Cmc,
-                    });
+                    query = QueryCardsByName()
+
+                        .Select((x, i) => new CardOverviewResult
+                        {
+                            Id = i + 1,
+                            Cmc = x.Cmc,
+                            Cost = x.ManaCost,
+                            Count = x.OwnedCount,
+                            Img = x.ImageUrl,
+                            Name = x.Name,
+                            Type = x.Type,
+                        });
 
                     break;
                
                 case "unique":
+                    query = QueryCardsByUnique()
 
-                    var filteredCards = cardsQuery.SelectMany(
-                        card => card.InventoryCards, (card, invCard) => new
+                        .Select(x => new CardOverviewResult()
                         {
-                            Card = card,
-                            Variant = card.Variants.Where(v => v.CardVariantTypeId == invCard.VariantTypeId).FirstOrDefault(),
-                            InventoryCard = invCard,
-                        }).Select(x => new
-                        {
-                            x.Card,
-                            x.Variant,
-                            x.InventoryCard,
-                            VariantName = x.Variant.Type.Name,
-                        }).ToList();
-
-                        query = filteredCards.GroupBy(x => new
-                        {
-                            x.Card.Id,
-                            x.InventoryCard.IsFoil,
-                            x.Variant.CardVariantTypeId
-                        })
-                        .Select(x => new
-                        {
-                            Card = x.FirstOrDefault().Card,
-                            Variant = x.FirstOrDefault().Variant,
-                            IsFoil = x.Key.IsFoil,
-                            Count = x.Count(),
-                            x.FirstOrDefault().VariantName,
-                        })
-                        .Select((x, i) => new CardOverviewResult
-                        {
-                            Id = i+1,
-                            Name = x.Card.Name,
-                            Price = (x.IsFoil) ? x.Variant.PriceFoil : x.Variant.Price,
-                            Cmc = x.Card.Cmc,
-                            Cost = x.Card.ManaCost,
-                            Count = x.Count,
-                            Img = x.Variant.ImageUrl,
-                            IsFoil = false,
+                            Id = x.MultiverseId,
+                            SetCode = x.SetCode,
+                            Cmc = x.Cmc,
+                            Cost = x.ManaCost,
+                            Count = x.CardCount,
+                            Img = x.ImageUrl,
+                            Name = x.Name,
+                            Type = x.Type,
+                            IsFoil = x.IsFoil,
+                            Price = x.Price,
                             Variant = x.VariantName,
-                        })
-                        .Where(x => x.Count > 0).AsQueryable();
+                        });
+
+
+                    //var filteredCards = cardsQuery.SelectMany(
+                    //    card => card.InventoryCards, (card, invCard) => new
+                    //    {
+                    //        Card = card,
+                    //        Variant = card.Variants.Where(v => v.CardVariantTypeId == invCard.VariantTypeId).FirstOrDefault(),
+                    //        InventoryCard = invCard,
+                    //    }).Select(x => new
+                    //    {
+                    //        x.Card,
+                    //        x.Variant,
+                    //        x.InventoryCard,
+                    //        VariantName = x.Variant.Type.Name,
+                    //    });
+                        //.Include(c => c.Variant)
+                        
+                        //.ToList();
+
+
+                    //var qAnother = filteredCards.Select(x => new
+                    //{
+                    //    x.Card,
+                    //    x.Variant,
+                    //    x.InventoryCard.IsFoil,
+                    //}).ToList();
+
+                    //var qPartial = filteredCards.GroupBy(x => new
+                    //{
+                    //    x.Card.Id,
+                    //    x.InventoryCard.IsFoil,
+                    //    x.Variant.CardVariantTypeId
+                    //})
+                    //    .Select(x => new
+                    //    {
+                    //        Card = x.FirstOrDefault().Card,
+                    //        Variant = x.FirstOrDefault().Variant,
+                    //        IsFoil = x.Key.IsFoil,
+                    //        Count = x.Count(),
+                    //        x.FirstOrDefault().VariantName,
+                    //    }).ToList();
+
+
+
+
+                    //query = filteredCards.GroupBy(x => new
+                    //    {
+                    //        x.Card.Id,
+                    //        x.InventoryCard.IsFoil,
+                    //        x.Variant.CardVariantTypeId
+                    //    })
+                    //    .Select(x => new
+                    //    {
+                    //        Card = x.FirstOrDefault().Card,
+                    //        Variant = x.FirstOrDefault().Variant,
+                    //        IsFoil = x.Key.IsFoil,
+                    //        Count = x.Count(),
+                    //        x.FirstOrDefault().VariantName,
+                    //    })
+                    //    .Select((x, i) => new CardOverviewResult
+                    //    {
+                    //        Id = i+1,
+                    //        Name = x.Card.Name,
+                    //        Price = (x.IsFoil) ? x.Variant.PriceFoil : x.Variant.Price,
+                    //        Cmc = x.Card.Cmc,
+                    //        Cost = x.Card.ManaCost,
+                    //        Count = x.Count,
+                    //        Img = x.Variant.ImageUrl,
+                    //        IsFoil = false,
+                    //        Variant = x.VariantName,
+                    //    })
+                    //    .Where(x => x.Count > 0);//.AsQueryable();
+
+
+                    
 
                     break;
 
                 //case "mid":
                 default: //assuming group by mid for default
 
-                    query = cardsQuery.Select((x,i) => new CardOverviewResult
-                    {
-                        Id = i+1,
-                        Name = x.Name,
-                        Type = x.Type,
-                        Cost = x.ManaCost,
-                        Img = x.Variants.First().ImageUrl,
-                        Count = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
-                        Cmc = x.Cmc,
-                    });
+                    query = QueryCardsByMid()
+
+                        .Select(x => new CardOverviewResult()
+                        {
+                            Id = x.MultiverseId,
+                            SetCode = x.SetCode,
+                            Cmc = x.Cmc,
+                            Cost = x.ManaCost,
+                            Count = x.OwnedCount,
+                            Img = x.ImageUrl,
+                            Name = x.Name,
+                            Type = x.Type,
+                        });
+
+                    //query = cardsQuery.Select((x,i) => new CardOverviewResult
+                    //{
+                    //    Id = i+1,
+                    //    Name = x.Name,
+                    //    Type = x.Type,
+                    //    Cost = x.ManaCost,
+                    //    Img = x.Variants.First().ImageUrl,
+                    //    Count = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
+                    //    Cmc = x.Cmc,
+                    //});
 
                     break;
             }
+
+
+            #region Filters
+
+            if (!string.IsNullOrEmpty(param.Set))
+            {
+                //var matchingSetId = _cardContext.Sets.Where(x => x.Code.ToLower() == param.Set.ToLower()).Select(x => x.Id).FirstOrDefault();
+                query = query.Where(x => x.SetCode == param.Set.ToLower());
+            }
+
+            if (param.StatusId > 0)
+            {
+                //cardsQuery = cardsQuery.Where(x => x.)
+            }
+
+            if (param.Colors != null && param.Colors.Any())
+            {
+                ////var allowedColorIDs = param.Colors.
+
+                //var excludedColors = await _cardContext.ManaTypes.Where(x => !param.Colors.Contains(x.Id.ToString())).Select(x => x.Id).ToListAsync();
+
+                ////var includedColors = param.Colors;
+
+                ////only want cards where every color is an included color
+                ////cardsQuery = cardsQuery.Where(x => !x.CardColorIdentities.Any() || x.CardColorIdentities.Any(color => includedColors.Contains(color.ManaTypeId.ToString())));
+
+                ////alternative query, no excluded colors
+                //cardsQuery = cardsQuery.Where(x => !(x.CardColorIdentities.Any(color => excludedColors.Contains(color.ManaTypeId))));
+
+            }
+
+            if (!string.IsNullOrEmpty(param.Format))
+            {
+                ////var matchingLegality = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == param.Format.ToLower()).FirstOrDefault();
+                //var matchingFormatId = await GetFormatIdByName(param.Format);
+                //cardsQuery = cardsQuery.Where(x => x.Legalities.Where(l => l.FormatId == matchingFormatId).Any());
+            }
+
+            if (param.ExclusiveColorFilters)
+            {
+                //cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() == param.Colors.Count());
+            }
+
+            if (param.MultiColorOnly)
+            {
+                //cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() > 1);
+            }
+
+            if (!string.IsNullOrEmpty(param.Type))
+            {
+                //cardsQuery = cardsQuery.Where(x => x.Type.Contains(param.Type));
+            }
+
+            if (param.Rarity != null && param.Rarity.Any())
+            {
+                //cardsQuery = cardsQuery.Where(x => param.Rarity.Contains(x.Rarity.Name.ToLower()));
+
+            }
+
+            if (!string.IsNullOrEmpty(param.Text))
+            {
+                //cardsQuery = cardsQuery.Where(x =>
+                //    x.Text.ToLower().Contains(param.Text.ToLower())
+                //    ||
+                //    x.Name.ToLower().Contains(param.Text.ToLower())
+                //    ||
+                //    x.Type.ToLower().Contains(param.Text.ToLower())
+                //);
+            }
+
+
+            #endregion
+
+            var executed = query.ToList();
 
             if (param.MinCount > 0)
             {
@@ -266,6 +391,22 @@ namespace Carpentry.Data.Implementations
 
             IEnumerable<CardOverviewResult> result = query.ToList();
             return result;
+        }
+
+
+        public IEnumerable<InventoryCardByNameResult> QueryCardsByName()
+        {
+            return _cardContext.InventoryCardByName.AsQueryable();
+        }
+
+        public IEnumerable<InventoryCardByMidResult> QueryCardsByMid()
+        {
+            return _cardContext.InventoryCardByMid.AsQueryable();
+        }
+
+        public IEnumerable<InventoryCardByUniqueResult> QueryCardsByUnique()
+        {
+            return _cardContext.InventoryCardByUnique.AsQueryable();
         }
 
         //public async Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId)

@@ -2,7 +2,7 @@ import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
 import { AppState } from '../reducers';
 import { Typography, Box, CardContent, Card, CardHeader, Paper, Button } from '@material-ui/core';
-import DeckList from '../containers/DeckList';
+import DeckList from './DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 
 //Should this manage the modal?

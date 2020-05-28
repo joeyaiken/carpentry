@@ -27,9 +27,9 @@ namespace Carpentry.Data.DataModels
         //Associations
 
         //Deck -- DeckInventoryCard
-        public List<DeckCardData> Cards { get; set; }
+        public virtual ICollection<DeckCardData> Cards { get; set; }
 
         //Deck -- MagicFormat
-        public MagicFormatData Format { get; set; }
+        public virtual MagicFormatData Format { get; set; }
     }
 }
