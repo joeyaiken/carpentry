@@ -116,6 +116,7 @@ namespace Carpentry.Data.Implementations
             return format.Id;
         }
 
+        //TODO - this should be moved to the logic layer
         public async Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param)
         {
             //var cardsQuery = await QueryFilteredCards(param);
@@ -159,81 +160,6 @@ namespace Carpentry.Data.Implementations
                             Variant = x.VariantName,
                         });
 
-
-                    //var filteredCards = cardsQuery.SelectMany(
-                    //    card => card.InventoryCards, (card, invCard) => new
-                    //    {
-                    //        Card = card,
-                    //        Variant = card.Variants.Where(v => v.CardVariantTypeId == invCard.VariantTypeId).FirstOrDefault(),
-                    //        InventoryCard = invCard,
-                    //    }).Select(x => new
-                    //    {
-                    //        x.Card,
-                    //        x.Variant,
-                    //        x.InventoryCard,
-                    //        VariantName = x.Variant.Type.Name,
-                    //    });
-                        //.Include(c => c.Variant)
-                        
-                        //.ToList();
-
-
-                    //var qAnother = filteredCards.Select(x => new
-                    //{
-                    //    x.Card,
-                    //    x.Variant,
-                    //    x.InventoryCard.IsFoil,
-                    //}).ToList();
-
-                    //var qPartial = filteredCards.GroupBy(x => new
-                    //{
-                    //    x.Card.Id,
-                    //    x.InventoryCard.IsFoil,
-                    //    x.Variant.CardVariantTypeId
-                    //})
-                    //    .Select(x => new
-                    //    {
-                    //        Card = x.FirstOrDefault().Card,
-                    //        Variant = x.FirstOrDefault().Variant,
-                    //        IsFoil = x.Key.IsFoil,
-                    //        Count = x.Count(),
-                    //        x.FirstOrDefault().VariantName,
-                    //    }).ToList();
-
-
-
-
-                    //query = filteredCards.GroupBy(x => new
-                    //    {
-                    //        x.Card.Id,
-                    //        x.InventoryCard.IsFoil,
-                    //        x.Variant.CardVariantTypeId
-                    //    })
-                    //    .Select(x => new
-                    //    {
-                    //        Card = x.FirstOrDefault().Card,
-                    //        Variant = x.FirstOrDefault().Variant,
-                    //        IsFoil = x.Key.IsFoil,
-                    //        Count = x.Count(),
-                    //        x.FirstOrDefault().VariantName,
-                    //    })
-                    //    .Select((x, i) => new CardOverviewResult
-                    //    {
-                    //        Id = i+1,
-                    //        Name = x.Card.Name,
-                    //        Price = (x.IsFoil) ? x.Variant.PriceFoil : x.Variant.Price,
-                    //        Cmc = x.Card.Cmc,
-                    //        Cost = x.Card.ManaCost,
-                    //        Count = x.Count,
-                    //        Img = x.Variant.ImageUrl,
-                    //        IsFoil = false,
-                    //        Variant = x.VariantName,
-                    //    })
-                    //    .Where(x => x.Count > 0);//.AsQueryable();
-
-
-                    
-
                     break;
 
                 //case "mid":
@@ -252,17 +178,6 @@ namespace Carpentry.Data.Implementations
                             Name = x.Name,
                             Type = x.Type,
                         });
-
-                    //query = cardsQuery.Select((x,i) => new CardOverviewResult
-                    //{
-                    //    Id = i+1,
-                    //    Name = x.Name,
-                    //    Type = x.Type,
-                    //    Cost = x.ManaCost,
-                    //    Img = x.Variants.First().ImageUrl,
-                    //    Count = x.InventoryCards.Where(c => c.InventoryCardStatusId == 1).Count(),
-                    //    Cmc = x.Cmc,
-                    //});
 
                     break;
             }

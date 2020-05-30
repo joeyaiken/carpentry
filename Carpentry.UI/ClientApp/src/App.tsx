@@ -14,6 +14,7 @@ import InventoryContainer from './containers/Inventory/InventoryContainer';
 import { ConnectedComponent } from 'react-redux';
 import DeckEditorContainer from './containers/DeckEditor/DeckEditorContainer';
 import HomeContainer from './containers/Home/HomeContainer';
+import CardSearchContainer from './containers/CardSearch/CardSearchContainer';
 
 export default function App(): JSX.Element {
 
@@ -26,7 +27,11 @@ export default function App(): JSX.Element {
     /decks/:id/
     /inventory/addCards/
     /inventory/:detail/
+    /inventory/import/
     /inventory/
+    /settings/???
+    /settings/cardData|trackedSets
+    /settings/backups
     /
     
     */
@@ -39,6 +44,11 @@ export default function App(): JSX.Element {
             path: '/Decks/:deckId',
             component: DeckEditorContainer,
             name: 'Carpentry - Deck Editor'
+        },
+        {
+            path: '/Inventory/addCards',
+            component: CardSearchContainer,
+            name: 'Inventory - Add Cards'
         },
         {
             path: '/Inventory',

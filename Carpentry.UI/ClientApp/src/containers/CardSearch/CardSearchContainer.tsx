@@ -105,6 +105,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     renderAppBar(){
         return(
             <AppBar color="default" position="relative">
+                <Typography variant="h5">Card Search</Typography>
                 {/* <Toolbar>
                     <Typography variant="h6">
                         Card Search

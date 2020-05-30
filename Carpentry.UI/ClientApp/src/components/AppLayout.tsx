@@ -66,6 +66,7 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
                 render={
                     ({location}) => (
                         <Fragment>
+                            {/* TODO - These all need to be NavLink components instead of Tabs */}
                             <Tabs value={location.pathname}>
                                 <Tab value='/inventory' label='Inventory' component={Link} to={'/inventory'} />
                                 <Tab value='/decks' label='Decks' component={Link} to={'/decks'} />

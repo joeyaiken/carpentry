@@ -74,7 +74,30 @@ namespace Carpentry.Logic.Implementations
 
             var setCodes = await _cardRepo.GetAllCardSetCodes();
 
-            _logger.LogInformation($"Found {setCodes.Count()} sets in the database, checking last updated");
+            _logger.LogInformation($"Found {setCodes.Count()} sets in the database, checking scry definitions");
+
+            //What if, instead of doing everything for 1 set at a time, why not...
+            //  Update the scry definitions of all sets (not parsing anything)
+            //  THEN, 1 at a time, parsing the scry definitions, seeing what doesn't get handled properly
+            //      I should prevent this from saving a given set if there is a SINGLE unhandled card
+
+            //Note - I know there's no way the scry data will be OLDER than the card data
+
+            //Get all un-parsed scry data
+            for (int i = 0; i < setCodes.Count(); i++)
+            {
+                //get scry set last updated, don't parse
+
+            }
+
+
+            //try to parse every scryfall set, expecting an error if anything doesn't parse properly
+            for (int i = 0; i < setCodes.Count(); i++)
+            {
+                
+
+            }
+
 
             for (int i = 0; i < setCodes.Count(); i++)
             {
@@ -448,6 +471,7 @@ namespace Carpentry.Logic.Implementations
                 new CardVariantTypeData { Name = "inverted" },
                 new CardVariantTypeData { Name = "promo" },
                 new CardVariantTypeData { Name = "ja" },
+                new CardVariantTypeData { Name = "unknown" }
             };
 
             for(int i = 0; i < allVariants.Count(); i++)
