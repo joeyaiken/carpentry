@@ -43,6 +43,7 @@ namespace Carpentry.Data.DataContext
         public DbSet<DataModels.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByMidResult> InventoryCardByMid { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByCustomResult> InventoryCardByCustom { get; set; }
 
         #endregion
 
@@ -174,10 +175,16 @@ namespace Carpentry.Data.DataContext
                 eb.ToView("vInventoryCardsByMid");
             });
 
-            modelBuilder.Entity < DataModels.QueryResults.InventoryCardByUniqueResult> (eb =>
+            modelBuilder.Entity <DataModels.QueryResults.InventoryCardByUniqueResult> (eb =>
             {
                 eb.HasNoKey();
                 eb.ToView("vInventoryCardsUniquePrints");
+            });
+
+            modelBuilder.Entity<DataModels.QueryResults.InventoryCardByCustomResult>(eb =>
+            {
+                eb.HasNoKey();
+                eb.ToView("vInventoryCardsCustom");
             });
 
             #endregion

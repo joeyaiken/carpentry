@@ -112,10 +112,10 @@ declare type InventorySearchMethod =  "name" | "mid" | "unique"; //"name" | "qua
 // declare type ApiScopeOption = 'coreFilterOptions' | "deckList" | "deckDetail" | "inventoryOverview" | "inventoryDetail" | "cardSearchResults" | "cardSearchInventoryDetail" ;
 
 
-// declare interface CardListItem {
-//     data: MagicCard;
-//     count?: number;
-// }
+declare interface CardListItem {
+    data: MagicCard;
+    count?: number;
+}
 
 // declare interface DeckViewOptions {
 //     view: "img" | "list";
@@ -143,12 +143,12 @@ declare interface CardOverviewGroup {
 //    name: string;
 // }
 
-// declare interface PendingCardsDto {
-//     // data: MagicCard;
-//     multiverseId: number;
-//     name: string;
-//     cards: InventoryCard[];
-// }
+declare interface PendingCardsDto {
+    // data: MagicCard;
+    multiverseId: number;
+    name: string;
+    cards: InventoryCard[]; //this might need to be something else
+}
 
 // declare interface CoreFilterOptions {
 //     sets: FilterOption[];

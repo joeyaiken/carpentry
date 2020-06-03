@@ -44,7 +44,7 @@ namespace Carpentry.Logic.Implementations
             _scryfallRepo = scryfallRepo;
             _cardRepo = cardRepo;
             _dataReferenceRepo = dataReferenceRepo;
-            _dbRefreshIntervalDays = 0; //TODO - move to a config
+            _dbRefreshIntervalDays = 30; //TODO - move to a config
         }
 
         public async Task EnsureCardDefinitionExists(int multiverseId)
@@ -104,11 +104,16 @@ namespace Carpentry.Logic.Implementations
 
                 DateTime? dbLastUpdated = await _cardRepo.GetCardSetLastUpdated(setCodes[i]);
 
-                if (dbLastUpdated != null && dbLastUpdated.Value.AddDays(_dbRefreshIntervalDays) > DateTime.Today.Date)
+                //if (dbLastUpdated != null && dbLastUpdated.Value.AddDays(_dbRefreshIntervalDays) > DateTime.Today.Date)
+                //{
+                //    _logger.LogInformation($"Set code {setCodes[i]} was last updated {dbLastUpdated.ToString()}, nothing will be updated.");
+                //    //continue;
+                //} 
+                if (dbLastUpdated != null)
                 {
                     _logger.LogInformation($"Set code {setCodes[i]} was last updated {dbLastUpdated.ToString()}, nothing will be updated.");
                     //continue;
-                } 
+                }
                 else
                 {
                     string replaceReason = dbLastUpdated == null ? "has never been updated" : $"was last updated {dbLastUpdated.ToString()}";

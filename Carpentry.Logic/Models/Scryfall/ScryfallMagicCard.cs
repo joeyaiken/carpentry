@@ -177,16 +177,17 @@ namespace Carpentry.Logic.Models.Scryfall
             string variantKey;
             //{[lang, {ja}]}
 
+            string name = variantProps.Value<string>("name");
 
             if (borderColor != null && borderColor == "borderless")
             {
                 variantKey = "borderless";
             }
-            else if (rawFrameEffect != null && rawFrameEffect.ToObject<List<string>>()[0] == "showcase")
+            else if (rawFrameEffect != null && rawFrameEffect.ToObject<List<string>>().Contains("showcase"))
             {
                 variantKey = "showcase";
             }
-            else if (rawFrameEffect != null && rawFrameEffect.ToObject<List<string>>()[0] == "extendedart")
+            else if (rawFrameEffect != null && rawFrameEffect.ToObject<List<string>>().Contains("extendedart"))
             {
                 variantKey = "extendedart";
             }

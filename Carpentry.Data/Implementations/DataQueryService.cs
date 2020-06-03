@@ -145,9 +145,29 @@ namespace Carpentry.Data.Implementations
                 case "unique":
                     query = QueryCardsByUnique()
 
-                        .Select(x => new CardOverviewResult()
+                        .Select((x, i) => new CardOverviewResult()
                         {
-                            Id = x.MultiverseId,
+                            Id = i + 1, //When querying by unique, the MID is NOT a unique value
+                            SetCode = x.SetCode,
+                            Cmc = x.Cmc,
+                            Cost = x.ManaCost,
+                            Count = x.CardCount,
+                            Img = x.ImageUrl,
+                            Name = x.Name,
+                            Type = x.Type,
+                            IsFoil = x.IsFoil,
+                            Price = x.Price,
+                            Variant = x.VariantName,
+                        });
+
+                    break;
+
+                case "custom":
+                    query = QueryCardsByCustom()
+
+                        .Select((x, i) => new CardOverviewResult()
+                        {
+                            Id = i + 1, //When querying by unique, the MID is NOT a unique value
                             SetCode = x.SetCode,
                             Cmc = x.Cmc,
                             Cost = x.ManaCost,
@@ -295,7 +315,7 @@ namespace Carpentry.Data.Implementations
                     break;
 
                 default:
-                    query = query.OrderByDescending(x => x.Count);
+                    query = query.OrderByDescending(x => x.Id);
                     break;
             }
 
@@ -322,6 +342,11 @@ namespace Carpentry.Data.Implementations
         public IEnumerable<InventoryCardByUniqueResult> QueryCardsByUnique()
         {
             return _cardContext.InventoryCardByUnique.AsQueryable();
+        }
+
+        public IEnumerable<InventoryCardByCustomResult> QueryCardsByCustom()
+        {
+            return _cardContext.InventoryCardByCustom.AsQueryable();
         }
 
         //public async Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId)

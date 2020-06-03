@@ -248,6 +248,7 @@ namespace Carpentry.Data.Implementations
 
             _cardContext.CardVariants.UpdateRange(existingVariants);
 
+            //what if there are new variants to add?(hint hint)
 
             //.Select
             //.Select(x => new CardVariant()

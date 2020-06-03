@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Carpentry.Data.Implementations;
+using Carpentry.Data.DataContext;
 
 namespace Carpentry.Tools.QuickUpdate
 {
@@ -51,25 +52,45 @@ namespace Carpentry.Tools.QuickUpdate
 
             var serviceProvider = new ServiceCollection()
                 .AddSingleton(Configuration)
+
+
+
+
                 //.AddSingleton<IDataBackupConfig, BackupToolConfig>()
 
                 .AddLogging(config => config.AddSerilog())
 
-                //.AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
+                ////.AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
+                //.AddScoped<IDataUpdateService, DataUpdateService>()
+
+                ////IScryfallService scryService,
+                //.AddScoped<IScryfallService, ScryfallService>()
+                //.AddHttpClient<IScryfallService, ScryfallService>().Services
+
+                ////ICardRepo cardRepo,
+                ////.AddScoped<ICardRepo, CarpentryCardRepo>() //Name TBD, this hasn't been implemented yet
+                ////IScryfallRepo scryfallRepo
+                //.AddScoped<IScryfallDataRepo, ScryfallRepo>()
+
+
+
+                .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
+                .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
+
+                //data services
+                .AddSingleton<ICardDataRepo, CardDataRepo>()
+                .AddSingleton<IDeckDataRepo, DeckDataRepo>()
+                .AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
+                .AddSingleton<IScryfallDataRepo, ScryfallRepo>()
+                .AddSingleton<IDataReferenceService, DataReferenceService>()
+                .AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
+
+                //logic services
+                .AddScoped<IDataRestoreService, DataRestoreService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
 
-                //IScryfallService scryService,
                 .AddScoped<IScryfallService, ScryfallService>()
                 .AddHttpClient<IScryfallService, ScryfallService>().Services
-
-                //ICardRepo cardRepo,
-                //.AddScoped<ICardRepo, CarpentryCardRepo>() //Name TBD, this hasn't been implemented yet
-                //IScryfallRepo scryfallRepo
-                .AddScoped<IScryfallDataRepo, ScryfallRepo>()
-
-
-
-
 
 
                 .BuildServiceProvider();
