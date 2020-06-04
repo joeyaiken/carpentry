@@ -50,17 +50,48 @@ interface PropsFromState {
     searchResults: CardListItem[];
     viewMode: CardSearchViewMode;
 
+    
+    filterOptions: AppFiltersDto;
+    searchFilterProps: CardFilterProps;
+    visibleFilters: CardFilterVisibilities;
 }
+
+interface OwnProps {
+    searchContext: "deck" | "inventory";
+    
+    // match: {
+    //     params: {
+    //         deckId: number
+    //     }
+    // }
+    // viewMode: DeckEditorViewMode;//"list" | "grid";
+    // deckProperties: DeckDetailDto | null;
+    // cardOverviews: InventoryOverviewDto[];
+    // cardMenuAnchor: HTMLButtonElement | null;
+    // deckPropsModalOpen: boolean;
+    // selectedCard: InventoryOverviewDto | null;
+    // selectedInventoryCards: InventoryCard[];
+    // deckStats: DeckStats | null;
+}
+
 
 type CardSearchContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 
 class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     constructor(props: CardSearchContainerProps) {
         super(props);
-        // this.handleSaveClick = this.handleSaveClick.bind(this);
-        // this.handleCancelClick = this.handleCancelClick.bind(this);
-        // this.handleSearchMethodTabClick = this.handleSearchMethodTabClick.bind(this);
-        // this.handleToggleViewClick = this.handleToggleViewClick.bind(this);
+        this.handleSaveClick = this.handleSaveClick.bind(this);
+        this.handleCancelClick = this.handleCancelClick.bind(this);
+        this.handleSearchMethodTabClick = this.handleSearchMethodTabClick.bind(this);
+        this.handleToggleViewClick = this.handleToggleViewClick.bind(this);
+        this.handleAddPendingCard = this.handleAddPendingCard.bind(this);
+        this.handleRemovePendingCard = this.handleRemovePendingCard.bind(this);
+        this.handleCardSelected = this.handleCardSelected.bind(this);
+        this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
+        this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
+        this.handleAddExistingCardClick = this.handleAddExistingCardClick.bind(this);
+        this.handleAddNewCardClick = this.handleAddNewCardClick.bind(this);
     }
 
     handleSaveClick(){
@@ -258,7 +289,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
 }
 
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
-    const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.data.cardSearchInventoryDetail;
+    const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.data.cardSearch.inventoryDetail;
     const result: InventoryDetailDto = {
         cards: allCardIds.map(id => cardsById[id]),
         inventoryCards: inventoryCardAllIds.map(id => inventoryCardsById[id]),
@@ -267,19 +298,23 @@ function selectInventoryDetail(state: AppState): InventoryDetailDto {
 }
 
 function selectSearchResults(state: AppState): MagicCard[] {
-    const { allSearchResultIds, searchResultsById } = state.data.cardSearchResults;
+    const { allSearchResultIds, searchResultsById } = state.data.cardSearch.searchResults;
     const result: MagicCard[] = allSearchResultIds.map(mid => searchResultsById[mid])
     return result;
 }
 
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+    //Notes: "visibleContainer" now needs to be determined by the route & "ownProps"
+
+
+
     // console.log(state.cardSearch.inventoryDetail);
 
     //I'm going to need to map pending card totals to the inventory query result
     
     let mappedSearchResults: CardListItem[] = [];
 
-    if(state.app.core.visibleContainer === "deckEditor") { // && state.deckEditor.selectedDeckDto != null){
+    if(ownProps.searchContext === "deck") { // && state.deckEditor.selectedDeckDto != null){
 
         mappedSearchResults = selectSearchResults(state).map(card => {
 
@@ -299,22 +334,66 @@ function mapStateToProps(state: AppState): PropsFromState {
     } else {
         mappedSearchResults = selectSearchResults(state).map(card => ({
             data: card,
-            count: state.data.cardSearchPendingCards.pendingCards[card.multiverseId] && state.data.cardSearchPendingCards.pendingCards[card.multiverseId].cards.length
+            count: state.data.cardSearch.pendingCards[card.multiverseId] && state.data.cardSearch.pendingCards[card.multiverseId].cards.length
         }) as CardListItem);
+    }
+
+    let visibleFilters: CardFilterVisibilities = {
+        name: false,
+        color: false,
+        rarity: false,
+        set: false,
+        type: false,
+        count: false,
+        format: false,
+        text: false,
+    }
+
+    switch(state.app.cardSearch.cardSearchMethod){
+        case "inventory":
+            visibleFilters = {
+                ...visibleFilters,
+                format: true,
+                color: true,
+                type: true,
+                set: true,
+                rarity: true,
+                text: true,
+            }
+            break;
+        case "set":
+            visibleFilters = {
+                ...visibleFilters,
+                color: true,
+                rarity: true,
+                set: true,
+                type: true,
+            }
+            break;
+        case "web":
+            visibleFilters = {
+                ...visibleFilters,
+                name: true,
+            }
+            break;
     }
 
     const result: PropsFromState = {
         // cardSearchMethod: state.app.cardSearch.cardSearchMethod,
         cardSearchMethod: state.app.cardSearch.cardSearchMethod,
         
-        pendingCards: state.data.cardSearchPendingCards.pendingCards,
+        pendingCards: state.data.cardSearch.pendingCards,
 
-        searchContext: (state.app.core.visibleContainer === "deckEditor") ? "deck":"inventory",
+        //searchContext: (state.app.core.visibleContainer === "deckEditor") ? "deck":"inventory",
+        searchContext: ownProps.searchContext,
         selectedCard: state.app.cardSearch.selectedCard,
         selectedCardDetail: selectInventoryDetail(state),
 
         searchResults: mappedSearchResults,
-        viewMode: state.app.cardSearch.viewMode
+        viewMode: state.app.cardSearch.viewMode,
+        filterOptions: state.data.appFilterOptions.filterOptions,
+        searchFilterProps: state.ui.cardSearchFilterProps,
+        visibleFilters: visibleFilters,
     }
 
     return result;

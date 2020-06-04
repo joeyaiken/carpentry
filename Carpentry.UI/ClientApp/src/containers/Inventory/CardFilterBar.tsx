@@ -14,6 +14,9 @@ export interface CardFilterBarProps{
 }
 
 export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
+    console.log('card filter bar, filter options:');
+    console.log(props.filterOptions);
+
     return(
         <Box className="flex-section flex-row">
             {   //Text filter
@@ -40,7 +43,9 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
                         onChange={props.handleFilterChange}
                         margin="normal" >
                             <MenuItem key="null" value=""></MenuItem>
-                            { props.filterOptions.sets.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
+                            {   props.filterOptions.sets &&
+                                props.filterOptions.sets.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) 
+                            }
                         </TextField>
                 </Box>
             }
@@ -58,7 +63,9 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
                         value={props.searchFilter.type}
                         onChange={props.handleFilterChange}
                         margin="normal">
-                            { props.filterOptions.types.map((item) => (<MenuItem key={item.name} value={item.value}> {item.name} </MenuItem>))}
+                            {   props.filterOptions.types &&
+                                props.filterOptions.types.map((item) => (<MenuItem key={item.name} value={item.value}> {item.name} </MenuItem>))
+                            }
                     </TextField>
                 </Box>
             }
@@ -76,7 +83,8 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
                         value={props.searchFilter.colorIdentity}
                         onChange={props.handleFilterChange}
                         margin="normal" >
-                        { props.filterOptions.colors.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
+                        {   props.filterOptions.colors &&
+                            props.filterOptions.colors.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
                     </TextField>
                 </Box>
             }
@@ -126,7 +134,8 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
                         value={props.searchFilter.rarity}
                         onChange={props.handleFilterChange}
                         margin="normal" >
-                        { props.filterOptions.rarities.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
+                        {   props.filterOptions.rarities &&
+                            props.filterOptions.rarities.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
                     </TextField>
                 </Box>
             }

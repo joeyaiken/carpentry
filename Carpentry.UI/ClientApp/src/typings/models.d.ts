@@ -70,6 +70,24 @@ declare interface AppFiltersDto
     colors: FilterOption[];
     rarities: FilterOption[];
     statuses: FilterOption[];
+
+    // [JsonProperty("sets")]
+    // public List<FilterOption> Sets { get; set; }
+
+    // [JsonProperty("types")]
+    // public List<FilterOption> Types { get; set; }
+
+    // [JsonProperty("formats")]
+    // public List<FilterOption> Formats { get; set; }
+
+    // [JsonProperty("colors")]
+    // public List<FilterOption> ManaColors { get; set; }
+
+    // [JsonProperty("rarities")]
+    // public List<FilterOption> Rarities { get; set; }
+
+    // [JsonProperty("statuses")]
+    // public List<FilterOption> Statuses { get; set; }
 }
 
 declare interface FilterOption

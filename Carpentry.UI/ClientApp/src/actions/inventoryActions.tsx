@@ -53,14 +53,14 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
     let newCards: InventoryCard[] = [];
 
     //Object.keys(state.cardSearch.pendingCards).forEach((key: string) => {
-    Object.keys(state.data.cardSearchPendingCards.pendingCards).forEach((key: string) => {
+    Object.keys(state.data.cardSearch.pendingCards).forEach((key: string) => {
 
         //need to rethink this
 
 
         //see if it exists in the current inventory
 
-        let itemToAdd: PendingCardsDto = state.data.cardSearchPendingCards.pendingCards[key];
+        let itemToAdd: PendingCardsDto = state.data.cardSearch.pendingCards[key];
         
         itemToAdd.cards.forEach(card => {
             const newCard: InventoryCard = {
@@ -80,7 +80,7 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
     });
     api.Inventory.AddBatch(newCards).then(() => {
         dispatch(inventoryAddComplete());
-        dispatch(requestInventoryItems());
+        dispatch(requestInventoryOverviews());
     });
 
 }

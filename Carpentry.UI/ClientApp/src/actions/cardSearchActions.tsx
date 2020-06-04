@@ -152,29 +152,34 @@ export const requestAddDeckCard = (inventoryCard: InventoryCard): any => {
 function addDeckCard(dispatch: Dispatch, state: AppState, inventoryCard: InventoryCard): any{
     // dispatch(cardSearchAddingDeckCard());
 
-    const deckCardDto: DeckCardDto = {
-        deckId: state.app.core.selectedDeckId || 0,
-        //deckId: state.de,
-        id: 0,
-        inventoryCard: inventoryCard,
-        categoryId: null,
-    }
-    //console.log
-    api.Decks.addCard(deckCardDto).then(() => {
-        //After response, need to re-request inventory
+    alert('broken code hit - cardSearchActions - addDeckCard')
 
-        // console.log('done requesting card, calling inventory?');
-        // console.log(state.app.cardSearch.selectedCard);
-        if(state.app.cardSearch.selectedCard){
-            dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
-        }
+    // const deckCardDto: DeckCardDto = {
+    //     deckId: state.app.core.selectedDeckId || 0,
+    //     //deckId: state.de,
+    //     id: 0,
+    //     inventoryCard: inventoryCard,
+    //     categoryId: null,
+    // }
+    // //console.log
+    // api.Decks.addCard(deckCardDto).then(() => {
+    //     //After response, need to re-request inventory
 
-        if(state.app.core.visibleContainer === "deckEditor" && state.data.deckDetail.deckProps != null){
-            //This should be a "navigate to deck detail"
-            dispatch(requestDeckDetail(state.data.deckDetail.deckProps.id));
-        }
+    //     // console.log('done requesting card, calling inventory?');
+    //     // console.log(state.app.cardSearch.selectedCard);
+    //     if(state.app.cardSearch.selectedCard){
+    //         dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
+    //     }
 
-    })
+    //     alert('broken code hit - CardSearchActions - addDeckCard (should be added, wont nav)');
+
+    //     // if(state.app.core.visibleContainer === "deckEditor" && state.data.deckDetail.deckProps != null){
+            
+    //     //     //This should be a "navigate to deck detail"
+    //     //     dispatch(requestDeckDetail(state.data.deckDetail.deckProps.id));
+    //     // }
+
+    // })
 }
 
 export const CARD_SEARCH_ADDING_DECK_CARD = 'CARD_SEARCH_ADDING_DECK_CARD';
@@ -194,27 +199,29 @@ export const requestMoveDeckCard = (card: InventoryCard, deckCardId: number): an
 function moveDeckCard(dispatch: Dispatch, state: AppState, card: InventoryCard, deckCardId: number): any {
     //I don't realistically know what this prop will look like yet
     
-    const deckCardDto: DeckCardDto = {
-        deckId: state.app.core.selectedDeckId || 0,
-        // deckId: state.data.deckDetail.,
-        id: deckCardId,
-        inventoryCard: card,
-        categoryId: null,
-    }
+    alert('broken code hit - cardSearchActions - moveDeckCard')
+
+    // const deckCardDto: DeckCardDto = {
+    //     deckId: state.app.core.selectedDeckId || 0,
+    //     // deckId: state.data.deckDetail.,
+    //     id: deckCardId,
+    //     inventoryCard: card,
+    //     categoryId: null,
+    // }
 
 
-    //maybe build a DTO
-    api.Decks.updateCard(deckCardDto).then(() => {
+    // //maybe build a DTO
+    // api.Decks.updateCard(deckCardDto).then(() => {
 
-        if(state.app.cardSearch.selectedCard)
-            dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
+    //     if(state.app.cardSearch.selectedCard)
+    //         dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
             
-       //dispatch - update card search inventory 
-        //What do I do when a deck card is added from here?
+    //    //dispatch - update card search inventory 
+    //     //What do I do when a deck card is added from here?
 
-        //inv does
-       //dispatch(requestInventoryDetail(state.inventory.selectedDetailItem.cards[0].name));
-    });
+    //     //inv does
+    //    //dispatch(requestInventoryDetail(state.inventory.selectedDetailItem.cards[0].name));
+    // });
 }
 
 export const TOGGLE_CARD_SEARCH_VIEW_MODE = 'TOGGLE_CARD_SEARCH_VIEW_MODE';

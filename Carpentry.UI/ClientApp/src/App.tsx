@@ -1,12 +1,10 @@
+//This is the core "app" component.
+//I need some place to load core values from the API
+//Because of that, it might make more sense for this to be a connected component, even if it just displays the routing functional component
+
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
 import AppLayout from './components/AppLayout';
-// import AppHomeLayout from './components/AppHomeLayout';
-
-// import Home from './components/Home';
-// import Counter from './components/Counter';
-// import FetchData from './components/FetchData';
-
 import './styles/App.css';
 import Backups from './components/Backups';
 import CardSetSettings from './containers/CardSetSettings';
@@ -15,8 +13,33 @@ import { ConnectedComponent } from 'react-redux';
 import DeckEditorContainer from './containers/DeckEditor/DeckEditorContainer';
 import HomeContainer from './containers/Home/HomeContainer';
 import CardSearchContainer from './containers/CardSearch/CardSearchContainer';
+import { connect, DispatchProp } from 'react-redux';
+import { AppState } from './reducers'
+import { requestCoreData } from './actions/coreActions';
 
-export default function App(): JSX.Element {
+
+
+interface PropsFromState {
+}
+
+type AppContainerProps = PropsFromState & DispatchProp<ReduxAction>;
+
+class AppContainer extends React.Component<AppContainerProps>{
+    constructor(props: AppContainerProps) {
+        super(props);
+    }
+
+    componentDidMount() {
+        console.log('calling core data')
+        this.props.dispatch(requestCoreData());
+    }
+
+    render() {
+        return (<App />);
+    }
+}
+
+function App(): JSX.Element {
 
     /*
     
@@ -39,31 +62,39 @@ export default function App(): JSX.Element {
         path: string,
         component: ConnectedComponent<any, any>,
         name: string;
+        customProps: any;
     }[] = [
         {
             path: '/Decks/:deckId',
             component: DeckEditorContainer,
-            name: 'Carpentry - Deck Editor'
+            name: 'Carpentry - Deck Editor',
+            customProps: {}
         },
         {
             path: '/Inventory/addCards',
             component: CardSearchContainer,
-            name: 'Inventory - Add Cards'
+            name: 'Inventory - Add Cards',
+            customProps: {
+                searchContext: "inventory"
+            }
         },
         {
             path: '/Inventory',
             component: InventoryContainer,
-            name: 'Inventory'
+            name: 'Inventory',
+            customProps: {}
         },
         {
             path: '/settings/sets',
             component: CardSetSettings,
-            name: 'Carpentry'
+            name: 'Carpentry',
+            customProps: {}
         },
         {
             path: '/settings/backups',
             component: Backups,
-            name: 'Carpentry'
+            name: 'Carpentry',
+            customProps: {}
         },
         // {
         //     path: '/settings',
@@ -73,7 +104,8 @@ export default function App(): JSX.Element {
         {
             path: '/',
             component: HomeContainer,
-            name: 'Carpentry'
+            name: 'Carpentry',
+            customProps: {}
         },
         // {
         //     path: '',
@@ -88,8 +120,13 @@ export default function App(): JSX.Element {
         <AppLayout routes={routes}>
             <Switch>
                 {
-                    routes.map(route => <Route path={route.path} component={route.component} />)
+                    //routes.map(route => <Route path={route.path} component={route.component} />)
+                    //No idea if this will actually work...
+                    routes.map(route => <Route path={route.path} render={(props) => <route.component {...props} {...route.customProps} />} component={route.component} />)
                 }
+
+
+                {/* <Route path='/Inventory/addCards' render={(props) => <CardSearchContainer {...props} searchContext="inventory" />} /> */}
 
                 {/* <Route path='/Decks/:deckId' component={DeckEditor} /> */}
                 
@@ -121,3 +158,10 @@ export default function App(): JSX.Element {
         </AppLayout>
     )
 }
+
+function mapStateToProps(state: AppState): PropsFromState {
+    const result: PropsFromState = {
+    }
+    return result;
+}
+export default connect(mapStateToProps)(AppContainer);

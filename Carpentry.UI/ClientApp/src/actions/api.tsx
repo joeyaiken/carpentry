@@ -44,11 +44,12 @@ export const api = {
 
     core: {
 
-        // async getFilterValues(): Promise<FilterOptionDto> {
-        //     const endpoint = `api/Core/GetFilterValues`;
-        //     const result = await Get(endpoint);
-        //     return result;
-        // },
+        async getFilterValues(): Promise<AppFiltersDto> {
+            console.log('why no filter values?')
+            const endpoint = `api/Core/GetFilterValues`;
+            const result = await Get(endpoint);
+            return result;
+        },
 
         ////Backup DB
         ////should this be a POST since it could/should include filepath info?
@@ -138,11 +139,11 @@ export const api = {
         //     return;
         // },
         
-        // async api_Inventory_AddBatch(dto: InventoryCard[]): Promise<void> {
-        //     const url = `api/Inventory/AddBatch`;
-        //     await Post(url, dto);
-        //     return;
-        // },
+        async AddBatch(dto: InventoryCard[]): Promise<void> {
+            const url = `api/Inventory/AddBatch`;
+            await Post(url, dto);
+            return;
+        },
         
         // async api_Inventory_Update(dto: InventoryCard): Promise<void> {
         //     const url = `api/Inventory/Update`;
@@ -173,6 +174,7 @@ export const api = {
 }
 
 async function Get(url: string): Promise<any> {
+    console.log(`get fetching URL ${url}`)
     const response = await fetch(url);
     if (response.status === 202) {
         return;

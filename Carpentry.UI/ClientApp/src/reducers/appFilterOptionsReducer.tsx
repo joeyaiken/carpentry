@@ -17,7 +17,7 @@ export interface AppFilterOptionsReducerState {
     //     byName: {[name:string]: FilterOption}
     //     allKeys: string[]
     // }
-
+    isLoading: boolean;
     filterOptions: AppFiltersDto;
 }
 
@@ -29,6 +29,7 @@ export const apiDataRequested = (state: AppFilterOptionsReducerState, action: Re
     const newState: AppFilterOptionsReducerState = {
         ...state,
         ...initialState,
+        isLoading: true,
     }
 
     return newState;
@@ -42,16 +43,18 @@ export const apiDataReceived = (state: AppFilterOptionsReducerState, action: Red
     // console.log(`scope: ${scope}`);
 
     if(scope as ApiScopeOption !== "coreFilterOptions") return (state);
-
+    console.log('filters recieved')
     // const searchResultPayload: MagicCard[] = data || [];
     // let resultsById = {};
     // searchResultPayload.forEach(card => resultsById[card.multiverseId] = card);
 
     const searchResultPayload: AppFiltersDto = data || {};
 
+    console.log(searchResultPayload)
     const newState: AppFilterOptionsReducerState = {
         ...state,
         filterOptions: searchResultPayload,
+        isLoading: false,
         // searchResultsById: resultsById,
         // allSearchResultIds: searchResultPayload.map(card => card.multiverseId),
         // isLoading: false,
@@ -104,4 +107,5 @@ const initialState: AppFilterOptionsReducerState = {
         formats: [],
         statuses: [],
     },
+    isLoading: false,
 }
