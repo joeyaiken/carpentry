@@ -9,7 +9,7 @@ import LoadingBox from '../../components/LoadingBox';
 import {
     requestInventoryOverviews,
     requestInventoryDetail,
-} from '../../actions/inventory.actions'
+} from '../../actions/inventoryActions'
 
 
 import {

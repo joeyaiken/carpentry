@@ -1,15 +1,22 @@
 import { combineReducers } from 'redux';
 
-//domain data
+//Domain data
 import { deckOverviews, DeckOverviewsState } from './deckOverviews.reducer';
 import { deckDetail, DeckDetailState } from './deckDetail.reducer';
-
 import { inventoryDataReducer, InventoryDataReducerState } from './inventoryDataReducer';
+import { cardSearchDataReducer, CardSearchDataReducerState } from './cardSearchDataReducer'
+//App state
 import { deckEditorReducer, DeckEditorReducerState } from './deckEditorReducer';
-
 import { inventoryAppReducer, InventoryAppReducerState } from './inventoryAppReducer';
+import { cardSearchAppReducer, CardSearchAppReducerState } from './cardSearchAppReducer'
+
 import { appFilterOptionsReducer, AppFilterOptionsReducerState } from './appFilterOptionsReducer';
+
+//ui
 import { uiReducer, UiReducerState } from './uiReducer';
+
+
+
 ////Domain data
 //import { dataLoadingState } from './dataLoadingState.reducer'
 //import { appFilterOptions } from './appFilterOptions.reducer';
@@ -37,12 +44,13 @@ export interface AppState {
         appFilterOptions: AppFilterOptionsReducerState,
         deckOverviews: DeckOverviewsState,
         deckDetail: DeckDetailState,
-        
         inventory: InventoryDataReducerState,
+        cardSearch: CardSearchDataReducerState,
     },
     app: {
         inventory: InventoryAppReducerState,
         deckEditor: DeckEditorReducerState,
+        cardSearch: CardSearchAppReducerState,
     },
     ui: UiReducerState,
 }
@@ -55,15 +63,13 @@ export const reducers = {
         deckDetail,
 
         inventory: inventoryDataReducer,
+        cardSearch: cardSearchDataReducer,
     }),
     app: combineReducers({
-            //    core: appState,
-        //    deckEditor,
+        //core: appState,
         deckEditor: deckEditorReducer,
-        //    inventory,
-        //    cardSearch,
-        inventory: inventoryAppReducer
-
+        inventory: inventoryAppReducer,
+        cardSearch: cardSearchAppReducer,
     }),
 
     ui: uiReducer,

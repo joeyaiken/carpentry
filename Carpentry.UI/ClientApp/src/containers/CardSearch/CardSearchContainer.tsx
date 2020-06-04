@@ -9,9 +9,9 @@ import { AppState } from '../../reducers';
 // } from '../actions/cardSearch.actions';
 
 // import CardSearchPendingCards from './CardSearchPendingCards'
-// import { 
-//     requestAddCardsFromSearch
-// } from '../actions/inventory.actions';
+import { 
+    requestAddCardsFromSearch
+} from '../../actions/inventoryActions';
 
 import {
     Button,
@@ -26,6 +26,12 @@ import {
 import SearchResultTable from './SearchResultTable';
 import SearchResultGrid from './SearchResultGrid';
 import PendingCardsSection from './PendingCardsSection';
+import DeckSelectedCardSection from './DeckSelectedCardSection';
+import SelectedCardSection from './SelectedCardSection';
+import { cardSearchClearPendingCards, cardSearchSearchMethodChanged, toggleCardSearchViewMode, cardSearchAddPendingCard, cardSearchRemovePendingCard, cardSearchSelectCard, requestCardSearchInventory, requestCardSearch, requestAddDeckCard } from '../../actions/cardSearchActions';
+import CardFilterBar from '../Inventory/CardFilterBar';
+import FilterBarSearchButton from '../../components/FilterBarSearchButton';
+import { filterValueChanged } from '../../actions/ui.actions';
 
 // import CardSearchFilterBar from './CardSearchFilterBar';
 // import CardSearchResultDetail from './CardSearchResultDetail';
@@ -212,7 +218,34 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
 
     renderSearchResultDetail(){
         return(
-            <CardSearchResultDetail />
+            <React.Fragment>
+            {
+                this.props.selectedCard && this.props.searchContext === "inventory" &&
+                <SelectedCardSection 
+                    selectedCard={this.props.selectedCard}
+                    pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
+                    handleAddPendingCard={this.handleAddPendingCard}
+                    handleRemovePendingCard={this.handleRemovePendingCard}
+                    selectedCardDetail={null} />
+            }
+            {
+                this.props.selectedCard && this.props.searchContext === "deck" &&
+                <DeckSelectedCardSection 
+                    selectedCard={this.props.selectedCard}
+                    pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
+                    
+                    //But decks don't support pending cards?...
+                    handleAddPendingCard={this.handleAddPendingCard}
+                    
+                    handleRemovePendingCard={this.handleRemovePendingCard} 
+                    selectedCardDetail={this.props.selectedCardDetail}
+                    handleAddInventoryCard={this.handleAddExistingCardClick}
+                    handleAddNewCard={this.handleAddNewCardClick}
+                    // handleMoveCard={this.handleMoveCardClick}
+                    
+                    />
+            }
+            </React.Fragment>
         );
     }
 
@@ -222,6 +255,21 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
             <PendingCardsSection pendingCards={this.props.pendingCards} />
         </React.Fragment>);
     }
+}
+
+function selectInventoryDetail(state: AppState): InventoryDetailDto {
+    const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.data.cardSearchInventoryDetail;
+    const result: InventoryDetailDto = {
+        cards: allCardIds.map(id => cardsById[id]),
+        inventoryCards: inventoryCardAllIds.map(id => inventoryCardsById[id]),
+    }
+    return result;
+}
+
+function selectSearchResults(state: AppState): MagicCard[] {
+    const { allSearchResultIds, searchResultsById } = state.data.cardSearchResults;
+    const result: MagicCard[] = allSearchResultIds.map(mid => searchResultsById[mid])
+    return result;
 }
 
 function mapStateToProps(state: AppState): PropsFromState {
@@ -273,94 +321,3 @@ function mapStateToProps(state: AppState): PropsFromState {
 }
 
 export default connect(mapStateToProps)(CardSearchContainer);
-
-
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-
-class CardSearch_selectedCardSection extends React.Component<CardSearchProps>{
-    constructor(props: CardSearchProps) {
-        super(props);
-        this.handleAddPendingCard = this.handleAddPendingCard.bind(this);
-        this.handleRemovePendingCard = this.handleRemovePendingCard.bind(this);
-        this.handleAddExistingCardClick = this.handleAddExistingCardClick.bind(this);
-        this.handleAddNewCardClick = this.handleAddNewCardClick.bind(this);
-    }
-
-    //handleAddPendingCard(multiverseId: number, isFoil: boolean, variant: string){
-    handleAddPendingCard(data: MagicCard, isFoil: boolean, variant: string){
-        this.props.dispatch(cardSearchAddPendingCard(data, isFoil, variant));
-    }
-
-    handleRemovePendingCard(multiverseId: number, isFoil: boolean, variant: string){
-        this.props.dispatch(cardSearchRemovePendingCard(multiverseId, isFoil, variant));
-    }
-
-    handleAddExistingCardClick(inventoryCard: InventoryCard): void{
-        this.props.dispatch(requestAddDeckCard(inventoryCard));
-    }
-    
-    handleAddNewCardClick(multiverseId: number, isFoil: boolean, variant: string): void{
-        let inventoryCard: InventoryCard = {
-            id: 0,
-            deckCards: [],
-            isFoil: isFoil,
-            variantName: variant,
-            multiverseId: multiverseId,
-            statusId: 1,
-            name: '',
-            set: '',
-        }
-        this.props.dispatch(requestAddDeckCard(inventoryCard));
-    }
-
-    render() {
-        return (
-        <React.Fragment>
-            {
-                this.props.selectedCard && this.props.searchContext === "inventory" &&
-                <SelectedCardSection 
-                    selectedCard={this.props.selectedCard}
-                    pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
-                    handleAddPendingCard={this.handleAddPendingCard}
-                    handleRemovePendingCard={this.handleRemovePendingCard}
-                    selectedCardDetail={null} />
-            }
-            {
-                this.props.selectedCard && this.props.searchContext === "deck" &&
-                <DeckSelectedCardSection 
-                    selectedCard={this.props.selectedCard}
-                    pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
-                    
-                    //But decks don't support pending cards?...
-                    handleAddPendingCard={this.handleAddPendingCard}
-                    
-                    handleRemovePendingCard={this.handleRemovePendingCard} 
-                    selectedCardDetail={this.props.selectedCardDetail}
-                    handleAddInventoryCard={this.handleAddExistingCardClick}
-                    handleAddNewCard={this.handleAddNewCardClick}
-                    // handleMoveCard={this.handleMoveCardClick}
-                    
-                    />
-            }
-        </React.Fragment>);
-    }
-}
-
-function selectInventoryDetail(state: AppState): InventoryDetailDto {
-    const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.data.cardSearchInventoryDetail;
-    const result: InventoryDetailDto = {
-        cards: allCardIds.map(id => cardsById[id]),
-        inventoryCards: inventoryCardAllIds.map(id => inventoryCardsById[id]),
-    }
-    return result;
-}
-
-function selectSearchResults(state: AppState): MagicCard[] {
-    const { allSearchResultIds, searchResultsById } = state.data.cardSearchResults;
-    const result: MagicCard[] = allSearchResultIds.map(mid => searchResultsById[mid])
-    return result;
-}

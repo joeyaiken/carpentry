@@ -78,12 +78,12 @@ declare interface FilterOption
     value: string;
 }
 
-// declare interface DeckCardDto {
-//     id: number;
-//     deckId: number;
-//     categoryId: string | null;
-//     inventoryCard: InventoryCard;
-// }
+declare interface DeckCardDto {
+    id: number;
+    deckId: number;
+    categoryId: string | null;
+    inventoryCard: InventoryCard;
+}
 
 // declare interface DeckDto {
 //     props: DeckProperties;

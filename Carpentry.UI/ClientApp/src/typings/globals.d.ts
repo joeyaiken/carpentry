@@ -96,7 +96,7 @@ interface CardFilterVisibilities {
 
 // declare type AppBarButtonType = 'add' | 'filter' | 'menu';
 
-// declare type CardSearchViewMode = 'grid' | 'list';
+declare type CardSearchViewMode = 'grid' | 'list';
 
 
 

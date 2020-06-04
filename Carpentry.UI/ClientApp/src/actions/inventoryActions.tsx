@@ -25,70 +25,70 @@ import { apiDataRequested, apiDataReceived } from './data.actions';
 //     payload: method
 // });
 
-// export const requestAddCardsFromSearch = (): any => {
-//     return (dispatch: Dispatch, getState: any) => {
-//         addCardsFromSearch(dispatch, getState());
-//     }
-// }
-// export const CARD_SEARCH_SAVE_PENDING_CARDS = 'CARD_SEARCH_SAVE_PENDING_CARDS';
-// export const cardSearchSavingPendingCards = (): ReduxAction => ({
-//     type: CARD_SEARCH_SAVE_PENDING_CARDS
-// });
+export const requestAddCardsFromSearch = (): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        addCardsFromSearch(dispatch, getState());
+    }
+}
+export const CARD_SEARCH_SAVE_PENDING_CARDS = 'CARD_SEARCH_SAVE_PENDING_CARDS';
+export const cardSearchSavingPendingCards = (): ReduxAction => ({
+    type: CARD_SEARCH_SAVE_PENDING_CARDS
+});
 
-// function addCardsFromSearch(dispatch: Dispatch, state: AppState){
-//     if(state.app.cardSearch.pendingCardsSaving){
-//         return;
-//     }
+function addCardsFromSearch(dispatch: Dispatch, state: AppState){
+    if(state.app.cardSearch.pendingCardsSaving){
+        return;
+    }
 
-//     dispatch(cardSearchSavingPendingCards())
+    dispatch(cardSearchSavingPendingCards())
 
-//     // console.log('addingCards');
-//     // console.log(state.cardSearch.pendingCards);
+    // console.log('addingCards');
+    // console.log(state.cardSearch.pendingCards);
 
-//     //cards to add from pending
-//     //var cardsToTryAdding = state.cardSearch.cardSearchPendingCards
+    //cards to add from pending
+    //var cardsToTryAdding = state.cardSearch.cardSearchPendingCards
 
-//     //for each of the keys in pending cards...
+    //for each of the keys in pending cards...
 
-//     let newCards: InventoryCard[] = [];
+    let newCards: InventoryCard[] = [];
 
-//     //Object.keys(state.cardSearch.pendingCards).forEach((key: string) => {
-//     Object.keys(state.data.cardSearchPendingCards.pendingCards).forEach((key: string) => {
+    //Object.keys(state.cardSearch.pendingCards).forEach((key: string) => {
+    Object.keys(state.data.cardSearchPendingCards.pendingCards).forEach((key: string) => {
 
-//         //need to rethink this
+        //need to rethink this
 
 
-//         //see if it exists in the current inventory
+        //see if it exists in the current inventory
 
-//         let itemToAdd: PendingCardsDto = state.data.cardSearchPendingCards.pendingCards[key];
+        let itemToAdd: PendingCardsDto = state.data.cardSearchPendingCards.pendingCards[key];
         
-//         itemToAdd.cards.forEach(card => {
-//             const newCard: InventoryCard = {
-//                 id: 0,
-//                 isFoil: card.isFoil,
-//                 multiverseId: card.multiverseId,
-//                 statusId: card.statusId,
-//                 variantName: card.variantName,
-//                 deckCards: [],
-//                 name: card.name,
-//                 set: card.set,
-//             }
+        itemToAdd.cards.forEach(card => {
+            const newCard: InventoryCard = {
+                id: 0,
+                isFoil: card.isFoil,
+                multiverseId: card.multiverseId,
+                statusId: card.statusId,
+                variantName: card.variantName,
+                deckCards: [],
+                name: card.name,
+                set: card.set,
+            }
 
-//             newCards.push(newCard);
+            newCards.push(newCard);
 
-//         })
-//     });
-//     api_Inventory_AddBatch(newCards).then(() => {
-//         dispatch(inventoryAddComplete());
-//         dispatch(requestInventoryItems());
-//     });
+        })
+    });
+    api.Inventory.AddBatch(newCards).then(() => {
+        dispatch(inventoryAddComplete());
+        dispatch(requestInventoryItems());
+    });
 
-// }
+}
 
-// export const INVENTORY_ADD_COMPLETE = 'INVENTORY_ADD_COMPLETE';
-// export const inventoryAddComplete = (): ReduxAction => ({
-//     type: INVENTORY_ADD_COMPLETE
-// });
+export const INVENTORY_ADD_COMPLETE = 'INVENTORY_ADD_COMPLETE';
+export const inventoryAddComplete = (): ReduxAction => ({
+    type: INVENTORY_ADD_COMPLETE
+});
 
 // /**
 //  * 
