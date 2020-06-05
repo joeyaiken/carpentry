@@ -13,6 +13,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox'
 
 // import CardFilterBar from '../components/CardFilterBar';
 import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button } from '@material-ui/core';
+import { appStyles, combineStyles } from '../../styles/appStyles';
 // import FilterBarSearchButton from '../components/FilterBarSearchButton';
 
 interface InventoryFilterBarProps{
@@ -27,23 +28,23 @@ interface InventoryFilterBarProps{
 //This bar should just be a flex-grid of filter elements
 //It probably shouldn't even have the "search" button
 export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.Element {
+    const { outlineSection, flexCol, flexRow, flexSection, sidePadded, stretch, staticSection, center } = appStyles();
     // Need this to cache?
     // try this?
     // https://material-ui.com/components/autocomplete
 
     return(
-<Paper className="outline-section flex-col">
+<Paper className={combineStyles(outlineSection, flexCol)}>
 
-{/* <Box className="flex-col"> */}
-    {/* <Paper className="outline-section flex-row"> */}
-    {/* <Paper className="outline-section"> */}
-    <Box className="flex-section flex-row">
+{/* <Box className={flexCol}> */}
+
+    <Box className={combineStyles(flexSection, flexRow)}>
             {   //Text filter
                 props.visibleFilters.text &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="text"
-                        className="stretch"
+                        className={stretch}
                         label="Text"
                         value={props.searchFilter.text}
                         onChange={props.handleFilterChange}
@@ -52,10 +53,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //SET filter
                 props.visibleFilters.set &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="set"
-                        className="stretch"
+                        className={stretch}
                         select
                         label="Set filter"
                         value={props.searchFilter.set}
@@ -68,10 +69,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //Type filter
                 props.visibleFilters.type &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="type"
-                        className="stretch"
+                        className={stretch}
                         select
                         SelectProps={{
                             displayEmpty: true
@@ -86,10 +87,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //Color Color Identity
                 props.visibleFilters.color &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="colorIdentity"
-                        className="stretch"
+                        className={stretch}
                         label="Color filter"
                         select
                         SelectProps={{
@@ -104,7 +105,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //color booleans
                 props.visibleFilters.color &&
-                <Box className="static-section side-padded">
+                <Box className={combineStyles(staticSection, sidePadded)}>
                     <FormControl component="fieldset">
                         <FormControlLabel
                             name="exclusiveColorFilters"
@@ -138,10 +139,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             
             {   //RARITY filter
                 props.visibleFilters.rarity &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="rarity"
-                        className="stretch"
+                        className={stretch}
                         select
                         SelectProps={{ multiple: true }}
                         label="Rarity filter"
@@ -154,10 +155,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //NAME filter - Web only
                 props.visibleFilters.name &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="cardName"
-                        className="stretch"
+                        className={stretch}
                         label="Web"
                         value={props.searchFilter.cardName}
                         onChange={props.handleFilterChange}
@@ -166,7 +167,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //NAME IS EXCLUSIVE filter - Web only
                 props.visibleFilters.name &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <FormControl component="fieldset">
                         <FormControlLabel
                             name="exclusiveName"
@@ -187,10 +188,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
 {/* 
             {   //Min Count
                 props.visibleFilters.count &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="minCount"
-                        className="stretch"
+                        className={stretch}
                         label="Min"
                         value={props.searchFilter.minCount}
                         onChange={props.handleFilterChange}
@@ -199,10 +200,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //Max Count
                 props.visibleFilters.count &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="maxCount"
-                        className="stretch"
+                        className={stretch}
                         label="Max"
                         value={props.searchFilter.maxCount}
                         onChange={props.handleFilterChange}
@@ -211,10 +212,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             } */}
             {   //Format
                 props.visibleFilters.format &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="format"
-                        className="stretch"
+                        className={stretch}
                         select
                         label="Format"
                         value={props.searchFilter.format}
@@ -240,7 +241,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
     {/* </Paper> */}
 
     
-    {/* <Paper className="outline-section">
+    {/* <Paper className={outlineSection}>
         <InventoryFilterBar 
             filterOptions={this.props.filterOptions}
             handleBoolFilterChange={this.handleBoolFilterChange}
@@ -249,14 +250,11 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             visibleFilters={this.props.visibleFilters}
         />
     </Paper> */}
-    <Box className="flex-section flex-row">
-        {/* <Box className="flex-section">
+    <Box className={combineStyles(flexSection, flexRow)}>
 
-        </Box> */}
-
-<Box className="flex-section flex-row">
+<Box className={combineStyles(flexSection, flexRow)}>
 {/* 
-            <Box className="flex-section outline-section">
+            <Box className ="flex-section outline-section">
                 [x] Exclude Lands
             </Box>
 
@@ -267,7 +265,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             */}
 
             {/* exclude lands / include unowned / exclude owned */}
-            {/* <Box className="static-section side-padded">
+            {/* <Box className ="static-section side-padded">
                     <FormControl component="fieldset">
                         <FormControlLabel
                             name="exclusiveColorFilters"
@@ -300,10 +298,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
              */}
 
             {/*  Group by Name / Group by MID / unique prints */}
-            {/* <Box className="flex-section side-padded">
+            {/* <Box className={`${flexSection} ${sidePadded}`}>
                 <TextField
                     name="text"
-                    className="stretch"
+                    className={stretch}
                     label="Group"
                     value={props.searchFilter.text}
                     onChange={props.handleFilterChange}
@@ -311,10 +309,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             </Box> */}
 
             {/* Sort by name/quantity/price */}
-            <Box className="flex-section side-padded">
+            <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="group"
-                        className="stretch"
+                        className={stretch}
                         select
                         label="Sort by"
                         // value={props.searchFilter.group}
@@ -327,19 +325,19 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                             }
                         </TextField>
                 </Box>
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     
-                    <Box className="outline-section">
+                    <Box className={outlineSection}>
                         Filter idea: Hide non-normal variants
                         {/* Can be used when trying to see what I have > 4 or 6 or whatever of */}
                     </Box>
                 </Box>
 
             {/* cardStatus (deck/sellList/buyList/inventory) */}
-            <Box className="flex-section side-padded">
+            <Box className={`${flexSection} ${sidePadded}`}>
                 <TextField
                     name="status"
-                    className="stretch"
+                    className={stretch}
                     select
                     SelectProps={{ multiple: true }}
                     label="Status"
@@ -357,10 +355,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
 
             {/* {
                 this.props.searchFilter.group != "quantity" &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="group"
-                        className="stretch"
+                        className={stretch}
                         select
                         label="Group by"
                         value={this.props.searchFilter.group}
@@ -374,10 +372,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             } */}
             {
                 // this.props.searchFilter.group != "quantity" &&
-                // <Box className="flex-section side-padded">
+                // <Box className={`${flexSection} ${sidePadded}`}>
                 //     <TextField
                 //         name="sort"
-                //         className="stretch"
+                //         className={stretch}
                 //         select
                 //         label="Sort by"
                 //         value={this.props.searchFilter.sort}
@@ -393,10 +391,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
 
             {   //Min Count
                 props.visibleFilters.count &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="minCount"
-                        className="stretch"
+                        className={stretch}
                         label="Min"
                         value={props.searchFilter.minCount}
                         onChange={props.handleFilterChange}
@@ -405,10 +403,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {   //Max Count
                 props.visibleFilters.count &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="maxCount"
-                        className="stretch"
+                        className={stretch}
                         label="Max"
                         value={props.searchFilter.maxCount}
                         onChange={props.handleFilterChange}
@@ -417,10 +415,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             }
             {/* {   //Format
                 props.visibleFilters.format &&
-                <Box className="flex-section side-padded">
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="format"
-                        className="stretch"
+                        className={stretch}
                         select
                         label="Format"
                         value={props.searchFilter.format}
@@ -439,20 +437,20 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 </Box>
             } */}
 
-            <Box className="flex-section side-padded">
+            <Box className={`${flexSection} ${sidePadded}`}>
                 <TextField
                     name="text"
-                    className="stretch"
+                    className={stretch}
                     label="Skip"
                     value={props.searchFilter.text}
                     onChange={props.handleFilterChange}
                     margin="normal"/>
             </Box>
 
-            <Box className="flex-section side-padded">
+            <Box className={`${flexSection} ${sidePadded}`}>
                 <TextField
                     name="text"
-                    className="stretch"
+                    className={stretch}
                     label="Take"
                     value={props.searchFilter.text}
                     onChange={props.handleFilterChange}
@@ -461,7 +459,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
 
             
     </Box>
-    <Box className="static-section center side-padded">
+    <Box className={combineStyles(staticSection, center, sidePadded)}>
             <Button variant="contained" size="medium" color="primary" onClick={() => props.handleSearchButtonClick()}>
                 Search
             </Button>

@@ -13,6 +13,7 @@ import {
 import { Add, AddBox, Menu, FilterList } from '@material-ui/icons';
 import { Link, Route, Switch } from 'react-router-dom';
 import { ConnectedComponent } from 'react-redux';
+import { appStyles, combineStyles } from '../styles/appStyles';
 
 interface LayoutProps {
     children: ReactNode;
@@ -31,12 +32,12 @@ interface LayoutProps {
     // onButtonClick: (type: AppBarButtonType) => void;
 }
 // const appHeader: JSX.Element = (
-//   <div className="app-header app-bar bar-dark">
-//       <div className="header-section">
+//   <div className= "app-header app-bar bar-dark">
+//       <div className= "header-section">
 //           {/* <MaterialButton value="" isSelected={this.props.isNavOpen} onClick={this.handleNavClick} icon="menu"  />
 //           <AppIcon /> */}
 //       </div>
-//       <div className="header-section pull-right">
+//       <div className= "header-section pull-right">
 //           {/* <MaterialButton value="data" icon="save" onClick={this.handleSheetToggle} />
 //           <MaterialButton value="detail" icon="list" onClick={this.handleSheetToggle} />
 //           <MaterialButton value="search" icon="search" onClick={this.handleSheetToggle} />
@@ -45,17 +46,18 @@ interface LayoutProps {
 //   </div>
 // );
 export default function AppLayout(props: LayoutProps): JSX.Element {
+    const { stretch, flexCol, flexSection } = appStyles();
 //   console.log('is add selected? ' + props.isAddSelected)
   //flex-col flex-section 
   return(
-  <div className="stretch flex-col">
+  <div className={combineStyles(stretch, flexCol)}>
       <AppBar position="static">
           <Toolbar>
             <IconButton color="inherit" component={Link} to={'/'} >
                 <Menu />
             </IconButton>
             
-            <Typography variant="h5" className="flex-section">
+            <Typography variant="h5" className={flexSection}>
                 {<Switch>{
                         props.routes.map(route => <Route path={route.path}>{route.name}</Route>)
                 }</Switch>}
@@ -78,15 +80,15 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
             />
 
             {/* {
-            <Typography variant="h5" className="flex-section">
+            <Typography variant="h5" className= "flex-section">
                 Inventory
             </Typography>
             
-            <Typography variant="h5" className="flex-section">
+            <Typography variant="h5" className= "flex-section">
                 Decks
             </Typography>
 
-            <Typography variant="h6" className="flex-section">
+            <Typography variant="h6" className= "flex-section">
                 A Deck Name
             </Typography>
             
@@ -103,7 +105,7 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
             } */}
           </Toolbar>
         </AppBar>
-        <Container maxWidth="xl" className="flex-section flex-col" style={{overflow:'auto'}}>
+        <Container maxWidth="xl" className={combineStyles(flexSection, flexCol)} style={{overflow:'auto'}}>
             {props.children}
         </Container>
     </div>

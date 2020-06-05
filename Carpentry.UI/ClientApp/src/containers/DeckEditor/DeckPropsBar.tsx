@@ -24,7 +24,7 @@ export default function DeckPropsBar(props: ComponentProps): JSX.Element {
                 {/* &nbsp; */}
                 {/* <Typography variant="h6">--{props.deckProperties && props.deckProperties.name+ ' - '+ props.deckProperties.notes}</Typography> */}
                 <Box>
-                {/* <div className="flex-section flex-25"> */}
+                {/* <div className= "flex-section flex-25"> */}
                     { basicW > 0 && ManaChip('W',basicW)}
                     { basicU > 0 && ManaChip('U',basicU)}
                     { basicB > 0 && ManaChip('B',basicB)}

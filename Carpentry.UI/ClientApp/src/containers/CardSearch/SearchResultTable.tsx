@@ -41,7 +41,7 @@ interface SearchResultTableProps {
 export default function SearchResultTable(props: SearchResultTableProps): JSX.Element {
 
     return (
-        <Paper className="flex-section">
+        <Paper className={flexSection}>
             <Table size="small">
                 <TableHead>
                     <TableRow>
@@ -78,7 +78,7 @@ export default function SearchResultTable(props: SearchResultTableProps): JSX.El
                                         (   <>
                                                 <TableCell>{result.count}</TableCell>
                                                 <TableCell>
-                                                    <Box className="flex-row">
+                                                    <Box className={classes.flexRow}>
                                                         <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.multiverseId, false, "normal")} } >-</Button>
                                                         {/* <Typography>({result.count})</Typography> */}
                                                         <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data, false, "normal")} } >+</Button>       

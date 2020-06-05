@@ -10,7 +10,7 @@ interface ComponentProps{
 export default function DeckCardGrid(props: ComponentProps): JSX.Element {
     return (
         <React.Fragment>
-            <Box className="flex-row-wrap">
+            <Box className={flexRowWrap}>
                 {props.cardOverviews.map((card) => (
                     <VisualCard key={card.name} cardOverview={card} onCardSelected={() => {props.onCardSelected(card)}} />
                 ))}

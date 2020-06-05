@@ -30,7 +30,7 @@ export default function DeckListTable(props: ComponentProps): JSX.Element {
                 <MenuItem onClick={() => {props.onMenuSelect("delete")}} value="delete">Delte</MenuItem>
             </Menu> */}
         
-            {/* <Paper className="flex-section"> */}
+            {/* <Paper className= "flex-section"> */}
                 <Table size="small">
                     <TableHead>
                         <TableRow>

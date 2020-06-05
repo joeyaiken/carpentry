@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Typography, Box, Paper, TextField, TableRow, TableHead, Table, TableCell, Tab, TableBody } from '@material-ui/core';
+import { combineStyles } from '../../styles/appStyles';
 
 interface ComponentProps{
     deckStats: DeckStats;
@@ -8,8 +9,8 @@ interface ComponentProps{
 
 export default function DeckStatsBar(props: ComponentProps): JSX.Element {
     return (
-        <Paper className="flex-row outline-section">
-            <Box className="outline-section">
+        <Paper className={combineStyles(flexRow, outlineSection)}>
+            <Box className={outlineSection}>
                 <Typography variant="h6">Card Count</Typography>
                 <Typography variant="h5">{props.deckStats.totalCount}</Typography>
                 {/* <TextField 
@@ -19,7 +20,7 @@ export default function DeckStatsBar(props: ComponentProps): JSX.Element {
                 /> */}
             </Box>
 
-            <Box className="outline-section">
+            <Box className={outlineSection}>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
@@ -49,7 +50,7 @@ export default function DeckStatsBar(props: ComponentProps): JSX.Element {
                 } */}
             </Box>
 
-            <Box className="outline-section">
+            <Box className={outlineSection}>
                 {/* <Typography>CMC Breakdown</Typography> */}
                 <Table size="small">
                     <TableHead>
@@ -82,7 +83,7 @@ export default function DeckStatsBar(props: ComponentProps): JSX.Element {
                 } */}
             </Box>
 
-            <Box className="outline-section flex-col">
+            <Box className={combineStyles(outlineSection, flexCol)}>
                 <Typography variant="h6">Total Cost</Typography>
                 <Typography variant="h5">{props.deckStats.totalCost}</Typography>
                 {/* <TextField 

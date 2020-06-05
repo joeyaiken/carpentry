@@ -20,12 +20,12 @@ interface ComponentProps{
 export default function DeckCardDetail(props: ComponentProps): JSX.Element {
     if(props.selectedCard === null){
         return (
-            <Box className="static-section">
+            <Box className={staticSection}>
                 <Card>
                     <CardHeader titleTypographyProps={{variant:"body1"}} title={"no card selected"}/>
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className="item-image" />
+                        className={itemImage} />
                     <CardContent>
                         <Typography>select a card</Typography>
                     </CardContent>
@@ -38,7 +38,7 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
     }
     else {
         return (
-            <Box className="static-section">
+            <Box className={staticSection}>
                 
                 <Card>
                     {/* <CardHeader 
@@ -55,7 +55,7 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                     /> */}
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className="item-image"
+                        className={itemImage}
                         image={props.selectedCard.img} />
                     <CardContent>
                         <Table size="small">

@@ -2,6 +2,7 @@
 import React, { ReactNode } from 'react';
 
 import { CardHeader, CardMedia, Card } from '@material-ui/core';
+import { appStyles } from '../styles/appStyles';
 
 interface ComponentProps{
     cardOverview: DeckCardOverview;
@@ -11,19 +12,19 @@ interface ComponentProps{
 }
 
 export default function VisualCard(props: ComponentProps): JSX.Element {
-    
+    const { outlineSection, itemImage } = appStyles();
     return (
         <React.Fragment>
             <Card 
                 key={props.cardOverview.name} 
-                className="outline-section"
+                className={outlineSection}
                 onClick={props.onCardSelected}
                 >
                 <CardHeader titleTypographyProps={{variant:"body1"}} title={ `${props.cardOverview.name} - (${props.cardOverview.count})` } />
                 {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={`${card.name} (${card.count})`}/> */}
                 <CardMedia 
                     style={{height:"310px", width: "223px"}}
-                    className="item-image"
+                    className={itemImage}
                     image={props.cardOverview.img}
                     title={props.cardOverview.name} />
                 {props.children}

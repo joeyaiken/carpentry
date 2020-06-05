@@ -104,7 +104,7 @@ class DeckList extends React.Component<DeckListProps> {
                 <MenuItem onClick={() => {props.onMenuSelect("delete")}} value="delete">Delte</MenuItem>
             </Menu>
          */}
-            {/* <Paper className="flex-section"> */}
+            {/* <Paper className= "flex-section"> */}
                 <DeckListTable
                     decks={this.props.decks}
                     onDeckClick={() => {}}

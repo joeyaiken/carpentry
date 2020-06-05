@@ -33,18 +33,18 @@ export default function SearchResultGrid(props: SearchResultGridProps): JSX.Elem
     // <VisualCard key={card.data.name} cardOverview={card} onCardSelected={() => {props.onCardSelected(card)}} />
 
     return (
-        <Box className="flex-row-wrap">
+        <Box className={flexRowWrap}>
             {props.searchResults.map((card) => (            
                 <Card 
                     key={card.data.name} 
-                    className="outline-section"
+                    className={outlineSection}
                     onClick={() => props.onCardSelected(card)}
                     >
                     {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={ `${card.data.name} - (${props.cardOverview.count})` } /> */}
                     {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={`${card.name} (${card.count})`}/> */}
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className="item-image"
+                        className={itemImage}
                         image={card.data.variants['normal'] || ''}
                         title={card.data.name} />
                     {/* {props.children} */}

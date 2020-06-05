@@ -13,8 +13,8 @@ interface SelectedCardDetailSectionProps {
 }
 
 export default function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
-    return(<Paper className="static-section">
-    <Box className="flex-column">
+    return(<Paper className={staticSection}>
+    <Box className={flexColumn}>
         {   Object.keys(props.selectedCard.variants).map((id: string) => {
                
             let countNormal = 0;
@@ -27,7 +27,7 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
 
             //const thisPendingCard = (this.props.selectedCard) && this.props.pendingCards[this.props.selectedCard.multiverseId];
             return (
-                <Card key={id} className="outline-section flex-row">
+                <Card key={id} className={combineStyles(outlineSection, flexRow)}>
                     {/* <Box>
 
                     </Box> */}
@@ -38,36 +38,36 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
 
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className="item-image"
+                        className={itemImage}
                         image={(props.selectedCard.variants[id]) || undefined} />
                     <CardContent>
-                        <Box className="flex-col">
-                            <Box className="flex-col">
-                                <Box className="flex-col">
+                        <Box className={flexCol}>
+                            <Box className={flexCol}>
+                                <Box className={flexCol}>
                                     <Typography>{`${props.selectedCard.prices[id]} | ${props.selectedCard.prices[`${id}_foil`]}`}</Typography>
                                 </Box>
-                                <Box className="flex-col">
+                                <Box className={flexCol}>
                                     <Typography>Normal ({countNormal})</Typography>
-                                    <Box className="flex-row">
+                                    <Box className={flexRow}>
                                         <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.multiverseId, false, id)} } >-</Button>
                                         <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, false, id)} } >+</Button>
                                     </Box>
                                 </Box>
-                                <Box className="flex-col">
+                                <Box className={flexCol}>
                                     <Typography>Foil ({countFoil})</Typography>
-                                    <Box className="flex-row">
+                                    <Box className={flexRow}>
                                         <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.multiverseId, true, id)} } >-</Button>
                                         <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, true, id)} } >+</Button>
                                     </Box>
                                 </Box>
                             </Box>
-                            {/* <Box className="flex-row">
-                                <div className="outline-section">
+                            {/* <Box className={classes.flexRow}>
+                                <div className={classes.outlineSection}>
                                     
                                     <span>Count ({countNormal}</span>
                                     
                                 </div>
-                                <div className="outline-section">
+                                <div className={classes.outlineSection}>
                                     <span>Foil ({countFoil})</span>
                                 </div>
                             </Box> */}

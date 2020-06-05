@@ -16,7 +16,7 @@ interface ComponentProps{
 }
 
 export default function GroupedDeckCardList(props: ComponentProps): JSX.Element {
-    // className="flex-section"
+    // className= "flex-section"
     return (
         <Paper>
             <Table size="small">

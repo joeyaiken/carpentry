@@ -34,4 +34,16 @@ export const appStyles = makeStyles({
         margin: "8px",
         backgroundColor: "#FFFFFF",
     },
+    stretch:{
+        width: '100%',
+        height: '100%',
+    },
+    sidePadded: {
+        padding: "0px 8px 0px 8px"
+    },
 });
+
+export function combineStyles(...styles: string[]): string {
+    let result = styles.join(' ');
+    return result;
+}

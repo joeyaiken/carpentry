@@ -87,7 +87,7 @@ class Inventory extends React.Component<InventoryProps>{
             <React.Fragment>
                 {/* <InventoryDetailModal /> */}
                 
-                <Box className="flex-col">
+                <Box className={classes.flexCol}>
                     <AppBar color="default" position="relative">
                         <Toolbar>
                             <Typography variant="h6">

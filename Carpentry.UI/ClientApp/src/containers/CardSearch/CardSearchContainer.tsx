@@ -32,6 +32,7 @@ import { cardSearchClearPendingCards, cardSearchSearchMethodChanged, toggleCardS
 import CardFilterBar from '../Inventory/CardFilterBar';
 import FilterBarSearchButton from '../../components/FilterBarSearchButton';
 import { filterValueChanged } from '../../actions/ui.actions';
+import { combineStyles } from '../../styles/appStyles';
 
 // import CardSearchFilterBar from './CardSearchFilterBar';
 // import CardSearchResultDetail from './CardSearchResultDetail';
@@ -158,23 +159,24 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     render() {
+        const {  } = appStyles();
         return (
         <React.Fragment>
-            <div className="flex-col">
+            <div className={classes.flexCol}>
                 { this.renderAppBar() }
 
                 <div>
                 
                     { this.renderFilterBar() }
 
-                <Box className="flex-row">
+                <Box className={classes.flexRow}>
                     { this.renderSearchResults() }
                     { this.renderSearchResultDetail() }
                 </Box>
 
                 { this.renderPendingCards() }
 
-                <Paper className="outline-section flex-row">
+                <Paper className={combineStyles(outlineSection, flexRow)}>
                     <Button onClick={this.handleCancelClick}>
                         Cancel
                     </Button>
@@ -210,7 +212,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
 
     renderFilterBar(){
         return(<React.Fragment>
-            <Paper className="outline-section flex-row">
+            <Paper className={combineStyles(classes.outlineSection, classes.flexRow)}>
                 <CardFilterBar 
                     filterOptions={this.props.filterOptions}
                     handleBoolFilterChange={this.handleBoolFilterChange}

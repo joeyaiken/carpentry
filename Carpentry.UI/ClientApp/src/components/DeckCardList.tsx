@@ -12,7 +12,6 @@ interface ComponentProps{
 }
 
 export default function DeckCardList(props: ComponentProps): JSX.Element {
-    // className="flex-section"
     return (
         <Paper>
             <Table size="small">
