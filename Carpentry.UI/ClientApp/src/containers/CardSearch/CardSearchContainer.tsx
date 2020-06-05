@@ -159,35 +159,29 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     render() {
-        const { flexCol, flexRow, outlineSection } = appStyles();
+        // const { flexCol, flexRow, outlineSection } = appStyles();
         return (
-        <React.Fragment>
-            <div className={flexCol}>
-                { this.renderAppBar() }
+            <ContainerLayout
+                appBar={this.renderAppBar()}
+                filterBar={this.renderFilterBar()}
+                handleCancelClick={this.handleCancelClick}
+                handleSaveClick={this.handleSaveClick}
+                pendingCards={ this.renderPendingCards() }
+                searchResults={<React.Fragment>
+                    {this.renderSearchResults()}
+                    {this.renderSearchResultDetail()}
+                </React.Fragment>}
 
-                <div>
-                
-                    { this.renderFilterBar() }
 
-                <Box className={flexRow}>
-                    { this.renderSearchResults() }
-                    { this.renderSearchResultDetail() }
-                </Box>
+            />
 
-                { this.renderPendingCards() }
 
-                <Paper className={combineStyles(outlineSection, flexRow)}>
-                    <Button onClick={this.handleCancelClick}>
-                        Cancel
-                    </Button>
-                    <Button color="primary" variant="contained" onClick={this.handleSaveClick}>
-                        Save
-                    </Button>
-                </Paper>
 
-                </div>
-            </div>
-        </React.Fragment>);
+
+
+
+        
+        );
     }
 
     renderAppBar(){
@@ -211,21 +205,17 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     renderFilterBar(){
-        const {  flexRow, outlineSection } = appStyles();
-        return(<React.Fragment>
-            <Paper className={combineStyles(outlineSection, flexRow)}>
-                <CardFilterBar 
-                    filterOptions={this.props.filterOptions}
+        // const {  flexRow, outlineSection } = appStyles();
+        return(
+            <FilterBar 
+                filterOptions={this.props.filterOptions}
                     handleBoolFilterChange={this.handleBoolFilterChange}
                     handleFilterChange={this.handleFilterChange}
-                    
-                    searchFilter={this.props.searchFilterProps}
+                    searchFilterProps={this.props.searchFilterProps}
                     visibleFilters={this.props.visibleFilters}
-                />
-                <FilterBarSearchButton handleSearchButtonClick={this.handleSearchButtonClick}/>
-
-            </Paper>
-        </React.Fragment>);
+            
+                    handleSearchButtonClick={this.handleSearchButtonClick}
+            />);
     }
 
     renderSearchResults(){
@@ -289,6 +279,74 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
             <PendingCardsSection pendingCards={this.props.pendingCards} />
         </React.Fragment>);
     }
+}
+
+interface FilterBarProps {
+    filterOptions: AppFiltersDto;
+    handleBoolFilterChange: (filter: string, value: boolean) => void;
+    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+
+    searchFilterProps: CardFilterProps;
+
+    visibleFilters: CardFilterVisibilities;
+    handleSearchButtonClick: () => void;
+
+}
+
+function FilterBar(props: FilterBarProps): JSX.Element{
+        const {  flexRow, outlineSection } = appStyles();
+        return(<React.Fragment>
+            <Paper className={combineStyles(outlineSection, flexRow)}>
+                <CardFilterBar 
+                    filterOptions={props.filterOptions}
+                    handleBoolFilterChange={props.handleBoolFilterChange}
+                    handleFilterChange={props.handleFilterChange}
+                    
+                    searchFilter={props.searchFilterProps}
+                    visibleFilters={props.visibleFilters}
+                />
+                <FilterBarSearchButton handleSearchButtonClick={props.handleSearchButtonClick}/>
+
+            </Paper>
+        </React.Fragment>);
+    }
+
+
+
+interface ContainerLayoutProps {
+    appBar: ReactNode;
+    filterBar: ReactNode;
+    pendingCards: ReactNode;
+    searchResults: ReactNode;
+    handleCancelClick: () => void;
+    handleSaveClick: () => void;
+}
+
+function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
+    const {  flexRow, outlineSection, flexCol } = appStyles();
+    return(<React.Fragment>
+        <div className={flexCol}>
+            { props.appBar }
+            <div>
+                { props.filterBar }
+            <Box className={flexRow}>
+                {props.searchResults}
+            </Box>
+            {props.pendingCards}
+            <Paper className={combineStyles(outlineSection, flexRow)}>
+                <Button onClick={props.handleCancelClick}>
+                    Cancel
+                </Button>
+                <Button color="primary" variant="contained" onClick={props.handleSaveClick}>
+                    Save
+                </Button>
+            </Paper>
+
+            </div>
+        </div>
+    </React.Fragment>);
+
+
 }
 
 function selectInventoryDetail(state: AppState): InventoryDetailDto {

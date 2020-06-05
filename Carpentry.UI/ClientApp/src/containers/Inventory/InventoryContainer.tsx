@@ -48,7 +48,7 @@ interface PropsFromState {
 
 type InventoryProps = PropsFromState & DispatchProp<ReduxAction>;
 
-class Inventory extends React.Component<InventoryProps>{
+class InventoryContainer extends React.Component<InventoryProps>{
     constructor(props: InventoryProps) {
         super(props);
         this.handleCardDetailSelected = this.handleCardDetailSelected.bind(this);
@@ -84,12 +84,13 @@ class Inventory extends React.Component<InventoryProps>{
     }
 
     render() {
-        const {  flexCol } = appStyles();
+        // const {  flexCol } = appStyles();
         return (
             <React.Fragment>
                 {/* <InventoryDetailModal /> */}
                 
-                <Box className={flexCol}>
+                {/* <Box className={flexCol}> */}
+                <Box >
                     <AppBar color="default" position="relative">
                         <Toolbar>
                             <Typography variant="h6">
@@ -210,4 +211,4 @@ function mapStateToProps(state: AppState): PropsFromState {
     return result;
 }
 
-export default connect(mapStateToProps)(Inventory);
+export default connect(mapStateToProps)(InventoryContainer);
