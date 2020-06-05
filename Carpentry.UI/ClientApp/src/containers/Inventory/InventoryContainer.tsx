@@ -18,6 +18,7 @@ import {
 } from '../../actions/'
 import InventoryFilterBar from './InventoryFilterBar';
 import { Link } from 'react-router-dom';
+import { appStyles } from '../../styles/appStyles';
 
 
 // import SectionLayout from '../components/SectionLayout';
@@ -83,11 +84,12 @@ class Inventory extends React.Component<InventoryProps>{
     }
 
     render() {
+        const {  flexCol } = appStyles();
         return (
             <React.Fragment>
                 {/* <InventoryDetailModal /> */}
                 
-                <Box className={classes.flexCol}>
+                <Box className={flexCol}>
                     <AppBar color="default" position="relative">
                         <Toolbar>
                             <Typography variant="h6">

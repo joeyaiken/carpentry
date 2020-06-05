@@ -41,6 +41,10 @@ export const appStyles = makeStyles({
     sidePadded: {
         padding: "0px 8px 0px 8px"
     },
+    center: {
+        alignSelf: "center",
+    },
+      
 });
 
 export function combineStyles(...styles: string[]): string {

@@ -4,7 +4,7 @@ import { Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox } fro
 
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import { appStyles } from '../../styles/appStyles';
+import { appStyles, combineStyles } from '../../styles/appStyles';
 
 export interface CardFilterBarProps{
     searchFilter: CardFilterProps,
@@ -15,15 +15,15 @@ export interface CardFilterBarProps{
 }
 
 export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
-    const classes = appStyles();
+    const { flexSection, flexRow, stretch, sidePadded, staticSection } = appStyles();
     return(
         <Box className={combineStyles(flexSection, flexRow)}>
             {   //Text filter
                 props.visibleFilters.text &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="text"
-                        className={classes.stretch}
+                        className={stretch}
                         label="Text"
                         value={props.searchFilter.text}
                         onChange={props.handleFilterChange}
@@ -32,10 +32,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             }
             {   //SET filter
                 props.visibleFilters.set &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="set"
-                        className={classes.stretch}
+                        className={stretch}
                         select
                         label="Set filter"
                         value={props.searchFilter.set}
@@ -50,10 +50,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             }
             {   //Type filter
                 props.visibleFilters.type &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="type"
-                        className={classes.stretch}
+                        className={stretch}
                         select
                         SelectProps={{
                             displayEmpty: true
@@ -70,10 +70,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             }
             {   //Color Color Identity
                 props.visibleFilters.color &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="colorIdentity"
-                        className={classes.stretch}
+                        className={stretch}
                         label="Color filter"
                         select
                         SelectProps={{
@@ -123,10 +123,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             
             {   //RARITY filter
                 props.visibleFilters.rarity &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="rarity"
-                        className={classes.stretch}
+                        className={stretch}
                         select
                         SelectProps={{ multiple: true }}
                         label="Rarity filter"
@@ -140,10 +140,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             }
             {   //NAME filter - Web only
                 props.visibleFilters.name &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="cardName"
-                        className={classes.stretch}
+                        className={stretch}
                         label="Web"
                         value={props.searchFilter.cardName}
                         onChange={props.handleFilterChange}
@@ -152,7 +152,7 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             }
             {   //NAME IS EXCLUSIVE filter - Web only
                 props.visibleFilters.name &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <FormControl component="fieldset">
                         <FormControlLabel
                             name="exclusiveName"
@@ -173,10 +173,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
 {/* 
             {   //Min Count
                 props.visibleFilters.count &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="minCount"
-                        className={classes.stretch}
+                        className={stretch}
                         label="Min"
                         value={props.searchFilter.minCount}
                         onChange={props.handleFilterChange}
@@ -185,10 +185,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             }
             {   //Max Count
                 props.visibleFilters.count &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="maxCount"
-                        className={classes.stretch}
+                        className={stretch}
                         label="Max"
                         value={props.searchFilter.maxCount}
                         onChange={props.handleFilterChange}
@@ -197,10 +197,10 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
             } */}
             {   //Format
                 props.visibleFilters.format &&
-                <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="format"
-                        className={classes.stretch}
+                        className={stretch}
                         select
                         label="Format"
                         value={props.searchFilter.format}

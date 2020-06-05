@@ -29,6 +29,7 @@ import {
 } from '@material-ui/core';
 
 import { Star } from '@material-ui/icons';
+import { appStyles } from '../../styles/appStyles';
 
 interface SearchResultTableProps {
     searchContext: "deck" | "inventory";
@@ -39,7 +40,7 @@ interface SearchResultTableProps {
 }
 
 export default function SearchResultTable(props: SearchResultTableProps): JSX.Element {
-
+    const { flexSection, flexRow } = appStyles();
     return (
         <Paper className={flexSection}>
             <Table size="small">
@@ -78,7 +79,7 @@ export default function SearchResultTable(props: SearchResultTableProps): JSX.El
                                         (   <>
                                                 <TableCell>{result.count}</TableCell>
                                                 <TableCell>
-                                                    <Box className={classes.flexRow}>
+                                                    <Box className={flexRow}>
                                                         <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.multiverseId, false, "normal")} } >-</Button>
                                                         {/* <Typography>({result.count})</Typography> */}
                                                         <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data, false, "normal")} } >+</Button>       

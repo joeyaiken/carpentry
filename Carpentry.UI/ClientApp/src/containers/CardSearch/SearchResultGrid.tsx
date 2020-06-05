@@ -23,6 +23,7 @@ import {
     Card,
     CardMedia,
 } from '@material-ui/core';
+import { appStyles } from '../../styles/appStyles';
 
 interface SearchResultGridProps {
     searchResults: CardListItem[];
@@ -31,7 +32,7 @@ interface SearchResultGridProps {
 
 export default function SearchResultGrid(props: SearchResultGridProps): JSX.Element {
     // <VisualCard key={card.data.name} cardOverview={card} onCardSelected={() => {props.onCardSelected(card)}} />
-
+    const { outlineSection, flexRowWrap, } = appStyles();
     return (
         <Box className={flexRowWrap}>
             {props.searchResults.map((card) => (            
@@ -44,7 +45,7 @@ export default function SearchResultGrid(props: SearchResultGridProps): JSX.Elem
                     {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={`${card.name} (${card.count})`}/> */}
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className={itemImage}
+                        // className={itemImage}
                         image={card.data.variants['normal'] || ''}
                         title={card.data.name} />
                     {/* {props.children} */}

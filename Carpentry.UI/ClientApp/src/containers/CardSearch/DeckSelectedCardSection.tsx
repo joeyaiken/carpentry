@@ -15,7 +15,7 @@ interface SelectedCardDetailSectionProps {
 }
 
 export default function DeckSelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
-    const { outlineSection, flexCol, staticSection, } = appStyles();
+    const { outlineSection, flexCol, staticSection, flexRow, } = appStyles();
     
     return(<Paper className={staticSection}>
     <Box className={flexCol}>
@@ -48,7 +48,7 @@ export default function DeckSelectedCardSection(props: SelectedCardDetailSection
                         <Box key={variant} className={combineStyles(outlineSection, flexRow)}>
                             <CardMedia 
                                 style={{height:"310px", width: "223px"}}
-                                className={itemImage}
+                                // className={itemImage}
                                 image={(props.selectedCard.variants[variant]) || undefined} />
                             <CardContent>
                                 <Box className={flexCol}>

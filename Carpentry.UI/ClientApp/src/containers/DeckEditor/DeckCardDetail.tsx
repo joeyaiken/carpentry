@@ -1,6 +1,7 @@
 import {  Table, TableHead, TableRow, TableCell, TableBody, Box, CardActions, Button, Card, CardHeader, CardMedia, CardContent, Typography, IconButton } from '@material-ui/core';
 import React from 'react';
 import { MoreVert } from '@material-ui/icons';
+import { appStyles } from '../../styles/appStyles';
 
 interface ComponentProps{
     //totalPrice: number;
@@ -18,6 +19,7 @@ interface ComponentProps{
 }
 
 export default function DeckCardDetail(props: ComponentProps): JSX.Element {
+    const { staticSection } = appStyles();
     if(props.selectedCard === null){
         return (
             <Box className={staticSection}>
@@ -25,7 +27,8 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                     <CardHeader titleTypographyProps={{variant:"body1"}} title={"no card selected"}/>
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className={itemImage} />
+                        // className={itemImage} 
+                        />
                     <CardContent>
                         <Typography>select a card</Typography>
                     </CardContent>
@@ -55,7 +58,7 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                     /> */}
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className={itemImage}
+                        // className={itemImage}
                         image={props.selectedCard.img} />
                     <CardContent>
                         <Table size="small">

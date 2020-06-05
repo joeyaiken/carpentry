@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { Typography, Box, Paper, TextField, TableRow, TableHead, Table, TableCell, Tab, TableBody } from '@material-ui/core';
-import { combineStyles } from '../../styles/appStyles';
+import { combineStyles, appStyles } from '../../styles/appStyles';
 
 interface ComponentProps{
     deckStats: DeckStats;
 }
 
 export default function DeckStatsBar(props: ComponentProps): JSX.Element {
+    const { outlineSection, flexCol, flexRow, } = appStyles();
     return (
         <Paper className={combineStyles(flexRow, outlineSection)}>
             <Box className={outlineSection}>

@@ -4,14 +4,15 @@ import {
     Typography,
     Paper,
 } from '@material-ui/core';
-import { combineStyles } from '../../styles/appStyles';
+import { combineStyles, appStyles } from '../../styles/appStyles';
 
 interface CardSearchPendingCardsProps {
     pendingCards: { [key:number]: PendingCardsDto }
 }
 
 export default function PendingCardsSection(props: CardSearchPendingCardsProps): JSX.Element {
-    return (<Paper className={combineStyles(outlineSection, flexRow}>
+    const { outlineSection, flexRow } = appStyles();
+    return (<Paper className={combineStyles(outlineSection, flexRow)}>
         {
             Object.keys(props.pendingCards).map((id: string) => {
                 let thisCard: PendingCardsDto = props.pendingCards[id];

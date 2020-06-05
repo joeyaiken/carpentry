@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, Box, Card, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
+import { appStyles, combineStyles } from '../../styles/appStyles';
 
 interface SelectedCardDetailSectionProps {
     selectedCard: MagicCard;
@@ -13,8 +14,9 @@ interface SelectedCardDetailSectionProps {
 }
 
 export default function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
+    const { outlineSection, flexRow, staticSection, flexCol } = appStyles();
     return(<Paper className={staticSection}>
-    <Box className={flexColumn}>
+    <Box className={flexCol}>
         {   Object.keys(props.selectedCard.variants).map((id: string) => {
                
             let countNormal = 0;
@@ -38,7 +40,7 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
 
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
-                        className={itemImage}
+                        // className={itemImage}
                         image={(props.selectedCard.variants[id]) || undefined} />
                     <CardContent>
                         <Box className={flexCol}>

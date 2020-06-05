@@ -12,7 +12,7 @@ interface ComponentProps{
 }
 
 export default function VisualCard(props: ComponentProps): JSX.Element {
-    const { outlineSection, itemImage } = appStyles();
+    const { outlineSection, } = appStyles();
     return (
         <React.Fragment>
             <Card 
@@ -24,7 +24,7 @@ export default function VisualCard(props: ComponentProps): JSX.Element {
                 {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={`${card.name} (${card.count})`}/> */}
                 <CardMedia 
                     style={{height:"310px", width: "223px"}}
-                    className={itemImage}
+                    // className={itemImage}
                     image={props.cardOverview.img}
                     title={props.cardOverview.name} />
                 {props.children}
