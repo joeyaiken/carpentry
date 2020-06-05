@@ -9,7 +9,10 @@ namespace Carpentry.Data.QueryParameters
     public class CardSearchQueryParameter
     {
         [JsonProperty("set")]
-        public string SetCode { get; set; }
+        public string Set { get; set; }
+
+        //[JsonProperty("setId")]
+        //public int SetId { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }

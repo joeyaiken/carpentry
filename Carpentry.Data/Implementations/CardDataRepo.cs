@@ -80,9 +80,16 @@ namespace Carpentry.Data.Implementations
             return result;
         }
 
-        public async Task<IEnumerable<CardData>> GetCardsByName(string cardName)
+        public async Task<List<CardData>> GetCardsByName(string cardName)
         {
-            var result = await _cardContext.Cards.Where(x => x.Name == cardName).ToListAsync();
+            var result = await _cardContext.Cards.Where(x => x.Name == cardName)
+                .Include(c => c.Variants).ThenInclude(v => v.Type)
+                .Include(c => c.CardColorIdentities).ThenInclude(ci => ci.ManaType)
+                .Include(c => c.CardColors).ThenInclude(c => c.ManaType)
+                .Include(c => c.Legalities).ThenInclude(l => l.Format)
+                .Include(c => c.Rarity)
+                .Include(c => c.Set)
+                .ToListAsync();
             return result;
         }
 

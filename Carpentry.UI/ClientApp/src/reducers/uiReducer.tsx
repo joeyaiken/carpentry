@@ -1,4 +1,7 @@
-// import { FILTER_VALUE_CHANGED, MENU_BUTTON_CLICKED, MENU_OPTION_SELECTED } from '../actions/ui.actions';
+import { FILTER_VALUE_CHANGED
+  //  , MENU_BUTTON_CLICKED
+//    , MENU_OPTION_SELECTED 
+} from '../actions/ui.actions';
 
 // import { 
 //     CARD_SEARCH_SEARCH_METHOD_CHANGED, API_DATA_RECEIVED,
@@ -140,8 +143,8 @@ export const uiReducer = (state = initialState, action: ReduxAction): UiReducerS
         // case API_DATA_RECEIVED:
         //     return apiDataReceived(state, action);
 
-        // case FILTER_VALUE_CHANGED: 
-        //     return filterValueChanged(state, action);
+        case FILTER_VALUE_CHANGED: 
+            return filterValueChanged(state, action);
             
         // case MENU_BUTTON_CLICKED:
         //     return menuButtonClicked(state, action);
@@ -237,6 +240,7 @@ const emptyDeckDto = (): DeckProperties   =>  ({
 
 function initialCardSearchFilterProps(): CardFilterProps {
     return {
+        // setId: null,
         set: '',
         colorIdentity: [],
         rarity: [], //['mythic','rare','uncommon','common'], //
@@ -254,6 +258,7 @@ function initialCardSearchFilterProps(): CardFilterProps {
 
 function mockFilterProps(): CardFilterProps {
     return{
+        // setId: null,
         set: '',
         colorIdentity: ['R'],
         rarity: [],//['uncommon','common'], //
@@ -298,7 +303,8 @@ const initialState: UiReducerState = {
 
 function defaultSearchFilterProps(): CardFilterProps {
     return {
-        set: '',//'thb',
+        // setId: null,
+        set: '',
         colorIdentity: [],
         //rarity: ['mythic','rare','uncommon','common'], //
         rarity: [], //

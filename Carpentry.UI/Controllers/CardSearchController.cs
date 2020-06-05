@@ -5,6 +5,7 @@ using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Carpentry.UI.Controllers
 {
@@ -61,10 +62,14 @@ namespace Carpentry.UI.Controllers
         /// <param name="filters"></param>
         /// <returns></returns>
         [HttpPost("[action]")]
+        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
         public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
+        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] JsonObj filters)
+        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] JObject filters)
         {
             try
             {
+                //CardSearchQueryParameter newFilters = new CardSearchQueryParameter();
                 IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromSet(filters);
                 return Ok(cards);
             }

@@ -3,6 +3,15 @@
 /// <reference types="react-redux" />
 /// <reference types="redux-thunk" />
 
+declare interface CardSearchQueryParameter {
+    set: string;
+    type: string;
+    colorIdentity: string[];
+    exclusiveColorFilters: boolean;
+    multiColorOnly: boolean;
+    rarity: string[];
+}
+
 declare interface DeckCard {
     id: number;
     multiverseId: number;
@@ -192,6 +201,7 @@ declare interface InventoryQueryParameter {
 
     // //sets: string[];
     set: string;
+    // setId: number | null;
     text: string;
     skip: number;
     take: number;

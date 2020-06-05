@@ -196,9 +196,9 @@ namespace Carpentry.Logic.Implementations
         /// <returns></returns>
         public async Task<IEnumerable<MagicCardDto>> SearchCardsFromSet(CardSearchQueryParameter filters)
         {
-            if (string.IsNullOrEmpty(filters.SetCode))
+            if (string.IsNullOrEmpty(filters.Set))
             {
-                throw new ArgumentNullException("Set Code filter cannot be null");
+                throw new ArgumentNullException("Set code filter cannot be null");
             }
 
             var dbCards = await _dataQueryService.SearchCardSet(filters);

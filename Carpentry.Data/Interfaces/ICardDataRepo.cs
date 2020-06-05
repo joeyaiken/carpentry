@@ -19,7 +19,7 @@ namespace Carpentry.Data.Interfaces
         //Cards
         Task AddOrUpdateCardDefinition(CardDataDto cardDto);
         Task<CardData> GetCardById(int multiverseId);
-        Task<IEnumerable<CardData>> GetCardsByName(string cardName);
+        Task<List<CardData>> GetCardsByName(string cardName);
 
 
 

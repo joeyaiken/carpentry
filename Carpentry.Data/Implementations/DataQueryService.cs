@@ -766,7 +766,7 @@ namespace Carpentry.Data.Implementations
         public async Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters)
         {
             int matchingSetId = _cardContext.Sets
-                .Where(x => x.Code.ToLower() == filters.SetCode.ToLower())
+                .Where(x => x.Code.ToLower() == filters.Set.ToLower())
                 .Select(x => x.Id)
                 .FirstOrDefault();
 
@@ -824,7 +824,7 @@ namespace Carpentry.Data.Implementations
 
             //query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));
 
-            if (filters.Rarity.DefaultIfEmpty().Any())
+            if (filters.Rarity.DefaultIfEmpty().Any() && filters.Rarity.Count() > 0)
             {
                 query = query.Where(x => filters.Rarity.Contains(x.Rarity.Name.ToLower()));
 

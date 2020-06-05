@@ -419,3 +419,5 @@ Carpentry.Tools.QuickUpdate/bin/Debug/netcoreapp3.1/runtimes/linux-x64/native/li
 Carpentry.Tools.QuickUpdate/bin/Debug/netcoreapp3.1/runtimes/linux-x86/native/libe_sqlite3.so
 Carpentry.Tools.QuickUpdate/bin/Debug/netcoreapp3.1/runtimes/osx-x64/native/libe_sqlite3.dylib
 Carpentry.UI/obj/Debug/netcoreapp3.1/Carpentry.UI.MvcApplicationPartsAssemblyInfo.cs
+Carpentry.LiveDataTests/bin/Debug/netcoreapp3.1/Properties/launchSettings.json
+Carpentry.LiveDataTests/bin/Debug/netcoreapp3.1/Properties/launchSettings.json

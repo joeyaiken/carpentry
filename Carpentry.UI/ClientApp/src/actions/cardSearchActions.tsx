@@ -122,6 +122,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
             format: state.ui.cardSearchFilterProps.format,
             sort: '',
             set: state.ui.cardSearchFilterProps.set,
+            // setId: state.ui.cardSearchFilterProps.setId,
             exclusiveColorFilters: state.ui.cardSearchFilterProps.exclusiveColorFilters,
             multiColorOnly: state.ui.cardSearchFilterProps.multiColorOnly,
             maxCount:0,
@@ -136,7 +137,22 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
         });
 
     } else {
-        api.cardSearch.searchSet(state.ui.cardSearchFilterProps).then((results) => {
+        const currentFilterProps = state.ui.cardSearchFilterProps;
+        //CardSearchQueryParameter
+        const param: CardSearchQueryParameter = {
+            colorIdentity: currentFilterProps.colorIdentity,
+            exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
+            multiColorOnly: currentFilterProps.multiColorOnly,
+            rarity: currentFilterProps.rarity,
+            // set: currentFilterProps.set,
+            set: currentFilterProps.set,
+            // setId: currentFilterProps.setId,
+            type: currentFilterProps.type,
+        }
+
+        console.log('serch by set')
+        console.log(param);
+        api.cardSearch.searchSet(param).then((results) => {
             dispatch(apiDataReceived(_localApiScope, results));
         })
     }

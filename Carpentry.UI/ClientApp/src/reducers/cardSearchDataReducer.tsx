@@ -89,8 +89,9 @@ const apiDataReceived = (state: CardSearchDataReducerState, action: ReduxAction)
         return newState;
     } 
     else if (scope as ApiScopeOption === "cardSearchResults"){
-
-        if(scope as ApiScopeOption !== "cardSearchResults") return (state);
+        console.log('card search results')
+        console.log(data);
+        // if(scope as ApiScopeOption !== "cardSearchResults") return (state);
 
         const searchResultPayload: MagicCard[] = data || [];
 

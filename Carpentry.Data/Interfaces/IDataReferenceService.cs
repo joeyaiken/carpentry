@@ -15,7 +15,7 @@ namespace Carpentry.Data.Interfaces
 
         Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors();
         Task<IEnumerable<DataReferenceValue<char>>> GetAllRarities();
-        Task<IEnumerable<DataReferenceValue<int>>> GetAllSets();
+        Task<IEnumerable<DataReferenceValue<string>>> GetAllSets();
         Task<IEnumerable<DataReferenceValue<int>>> GetAllStatuses();
         List<DataReferenceValue<string>> GetAllTypes();
     }

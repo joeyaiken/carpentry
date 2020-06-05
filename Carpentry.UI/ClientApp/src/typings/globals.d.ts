@@ -33,6 +33,7 @@ declare interface NamedCardGroup {
 
 interface CardFilterProps {
     set: string;
+    // setId: number | null;
 
     type: string;
 

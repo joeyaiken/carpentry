@@ -115,12 +115,13 @@ namespace Carpentry.Data.Implementations
             return results;
         }
 
-        public async Task<IEnumerable<DataReferenceValue<int>>> GetAllSets()
+        public async Task<IEnumerable<DataReferenceValue<string>>> GetAllSets()
         {
-            List<DataReferenceValue<int>> results = await _cardContext.Sets
-                .Select(x => new DataReferenceValue<int>()
+            List<DataReferenceValue<string>> results = await _cardContext.Sets
+                .OrderByDescending(s => s.ReleaseDate)
+                .Select(x => new DataReferenceValue<string>()
                 {
-                    Id = x.Id,
+                    Id = x.Code,
                     Name = x.Name,
                 }).ToListAsync();
 

@@ -24,7 +24,9 @@ export const api = {
             return result || [];
         },
 
-        async searchSet(filters: CardFilterProps): Promise<MagicCard[]> {
+        async searchSet(filters: CardSearchQueryParameter): Promise<MagicCard[]> {
+            console.log('searchSet');
+            console.log(filters);
             const endpoint = `api/CardSearch/SearchSet`;
             const result = await Post(endpoint, filters);
             return result || [];
@@ -184,6 +186,8 @@ async function Get(url: string): Promise<any> {
 }
 
 async function Post(endpoint: string, payload: any): Promise<any> {
+    // console.log('post');
+    // console.log(payload);
     const bodyToAdd = JSON.stringify(payload);
     const response = await fetch(endpoint, {
         method: 'post',

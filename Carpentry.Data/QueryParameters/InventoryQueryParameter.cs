@@ -40,6 +40,9 @@ namespace Carpentry.Data.QueryParameters
         [JsonProperty("set")]
         public string Set { get; set; }
 
+        //[JsonProperty("setId")]
+        //public int SetId { get; set; }
+
         [JsonProperty("text")]
         public string Text { get; set; }
 

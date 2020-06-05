@@ -15,6 +15,8 @@ interface SelectedCardDetailSectionProps {
 
 export default function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
     const { outlineSection, flexRow, staticSection, flexCol } = appStyles();
+
+    console.log('rendering card search selected card section')
     return(<Paper className={staticSection}>
     <Box className={flexCol}>
         {   Object.keys(props.selectedCard.variants).map((id: string) => {

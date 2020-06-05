@@ -64,9 +64,9 @@ namespace Carpentry.Logic.Implementations
             return result;
         }
 
-        private static IEnumerable<MagicCardDto> MapInventoryQueryToMagicCardObject(IEnumerable<Data.DataModels.CardData> query)
+        private static List<MagicCardDto> MapInventoryQueryToMagicCardObject(List<Data.DataModels.CardData> query)
         {
-            IEnumerable<MagicCardDto> result = query.Select(card => new MagicCardDto()
+            List<MagicCardDto> result = query.Select(card => new MagicCardDto()
             {
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
@@ -96,7 +96,7 @@ namespace Carpentry.Logic.Implementations
                 Type = card.Type,
                 ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),
                 Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
-            });
+            }).ToList();
             return result;
         }
 

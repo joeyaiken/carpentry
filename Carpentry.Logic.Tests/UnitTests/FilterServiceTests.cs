@@ -34,7 +34,7 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             mockReferenceService
                 .Setup(p => p.GetAllSets())
-                .ReturnsAsync(new List<DataReferenceValue<int>>());
+                .ReturnsAsync(new List<DataReferenceValue<string>>());
 
             mockReferenceService
                 .Setup(p => p.GetAllStatuses())
