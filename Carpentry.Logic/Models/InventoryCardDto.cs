@@ -26,10 +26,10 @@ namespace Carpentry.Logic.Models
         public bool IsFoil { get; set; }
 
         [JsonProperty("variantName")]
-        public string VariantType { get; set; }
+        public string VariantName { get; set; }
 
         [JsonProperty("statusId")]
-        public int InventoryCardStatusId { get; set; }
+        public int StatusId { get; set; }
 
         //Should this be "deck cards" instead of "deck card IDs"
         //[JsonProperty("deckCardIds")]

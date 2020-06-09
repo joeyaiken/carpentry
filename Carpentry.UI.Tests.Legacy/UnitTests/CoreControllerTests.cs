@@ -46,7 +46,7 @@ namespace Carpentry.UI.Tests.Legacy.UnitTests
             var expectedResult = new AppFiltersDto()
             {
                 Formats = new List<FilterOption>(),
-                ManaColors = new List<FilterOption>(),
+                Colors = new List<FilterOption>(),
                 Rarities = new List<FilterOption>(),
                 Sets = new List<FilterOption>(),
                 Statuses = new List<FilterOption>(),

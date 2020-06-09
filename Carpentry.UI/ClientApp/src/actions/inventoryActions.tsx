@@ -52,6 +52,9 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
 
     let newCards: InventoryCard[] = [];
 
+    console.log('adding items, should include variant names');
+    console.log(state.data.cardSearch.pendingCards)
+
     //Object.keys(state.cardSearch.pendingCards).forEach((key: string) => {
     Object.keys(state.data.cardSearch.pendingCards).forEach((key: string) => {
 
@@ -62,6 +65,8 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
 
         let itemToAdd: PendingCardsDto = state.data.cardSearch.pendingCards[key];
         
+        
+
         itemToAdd.cards.forEach(card => {
             const newCard: InventoryCard = {
                 id: 0,

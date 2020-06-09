@@ -64,7 +64,7 @@ const apiDataReceived = (state: CardSearchDataReducerState, action: ReduxAction)
     const { scope, data } = action.payload;
 
     if(scope as ApiScopeOption === "cardSearchInventoryDetail"){
-
+        console.log('inventory detail received')
         const detailResult: InventoryDetailDto = data;
 
         let inventoryCardsById = {}
@@ -85,7 +85,8 @@ const apiDataReceived = (state: CardSearchDataReducerState, action: ReduxAction)
             }
             
         };
-
+        console.log('new card search state');
+        console.log(newState);
         return newState;
     } 
     else if (scope as ApiScopeOption === "cardSearchResults"){

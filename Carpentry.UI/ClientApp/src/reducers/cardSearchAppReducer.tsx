@@ -52,6 +52,8 @@ export const cardSearchAppReducer = (state = initialState, action: ReduxAction):
 
         case CARD_SEARCH_SELECT_CARD:
             const selectedCard: MagicCard = action.payload;
+            // console.log('card search - card selected')
+            // console.log(selectedCard)
             return {
                 ...state,
                 selectedCard: selectedCard,

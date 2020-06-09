@@ -72,7 +72,7 @@ namespace Carpentry.Logic.Implementations
 
             var allManaTypes = await _dataReferenceService.GetAllManaColors();
 
-            result.ManaColors = allManaTypes
+            result.Colors = allManaTypes
                 .Select(x => new FilterOption()
                 {
                     Value = x.Id.ToString(),

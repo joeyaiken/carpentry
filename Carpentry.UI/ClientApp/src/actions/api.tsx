@@ -141,8 +141,9 @@ export const api = {
         //     return;
         // },
         
+        //TODO - whatever calls this needs to not clear pending cards when an error occurrs
         async AddBatch(dto: InventoryCard[]): Promise<void> {
-            const url = `api/Inventory/AddBatch`;
+            const url = `api/Inventory/AddCardBatch`;
             await Post(url, dto);
             return;
         },

@@ -52,7 +52,7 @@ namespace Carpentry.UI.Legacy.Controllers
                 LegacyAppFiltersDto mappedResult = new LegacyAppFiltersDto
                 {
                     Formats = _mapper.ToLegacy(result.Formats),
-                    ManaColors = _mapper.ToLegacy(result.ManaColors),
+                    ManaColors = _mapper.ToLegacy(result.Colors),
                     Rarities = _mapper.ToLegacy(result.Rarities),
                     Sets = _mapper.ToLegacy(result.Sets),
                     Statuses = _mapper.ToLegacy(result.Statuses),

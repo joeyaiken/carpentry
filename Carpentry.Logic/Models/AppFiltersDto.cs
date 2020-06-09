@@ -15,7 +15,7 @@ namespace Carpentry.Logic.Models
         public List<FilterOption> Formats { get; set; }
 
         [JsonProperty("colors")]
-        public List<FilterOption> ManaColors { get; set; }
+        public List<FilterOption> Colors { get; set; }
 
         [JsonProperty("rarities")]
         public List<FilterOption> Rarities { get; set; }

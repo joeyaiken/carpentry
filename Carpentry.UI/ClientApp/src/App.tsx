@@ -30,7 +30,7 @@ class AppContainer extends React.Component<AppContainerProps>{
     }
 
     componentDidMount() {
-        console.log('calling core data')
+        // console.log('calling core data')
         this.props.dispatch(requestCoreData());
     }
 
@@ -119,11 +119,7 @@ function App(): JSX.Element {
     return(
         <AppLayout routes={routes}>
             <Switch>
-                {
-                    //routes.map(route => <Route path={route.path} component={route.component} />)
-                    //No idea if this will actually work...
-                    routes.map(route => <Route path={route.path} render={(props) => <route.component {...props} {...route.customProps} />} component={route.component} />)
-                }
+                { routes.map(route => <Route path={route.path} render={(props) => <route.component {...props} {...route.customProps} />} />) }
 
 
                 {/* <Route path='/Inventory/addCards' render={(props) => <CardSearchContainer {...props} searchContext="inventory" />} /> */}

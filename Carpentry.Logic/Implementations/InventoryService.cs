@@ -108,12 +108,12 @@ namespace Carpentry.Logic.Implementations
         {
             await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
 
-            DataReferenceValue<int> cardVariant = await _referenceService.GetCardVariantTypeByName(dto.VariantType);
+            DataReferenceValue<int> cardVariant = await _referenceService.GetCardVariantTypeByName(dto.VariantName);
 
             var newInventoryCard = new Data.DataModels.InventoryCardData()
             {
                 IsFoil = dto.IsFoil,
-                InventoryCardStatusId = dto.InventoryCardStatusId,
+                InventoryCardStatusId = dto.StatusId,
                 MultiverseId = dto.MultiverseId,
                 VariantTypeId = cardVariant.Id,
             };
@@ -143,9 +143,9 @@ namespace Carpentry.Logic.Implementations
             var newCards = cards.Select(x => new Data.DataModels.InventoryCardData()
             {
                 IsFoil = x.IsFoil,
-                InventoryCardStatusId = x.InventoryCardStatusId,
+                InventoryCardStatusId = x.StatusId,
                 MultiverseId = x.MultiverseId,
-                VariantTypeId = variantTypes.FirstOrDefault(v => v.Name == x.VariantType).Id,
+                VariantTypeId = variantTypes.FirstOrDefault(v => v.Name == x.VariantName).Id,
 
             }).ToList();
 
@@ -172,7 +172,7 @@ namespace Carpentry.Logic.Implementations
             Carpentry.Data.DataModels.InventoryCardData dbCard = await _inventoryRepo.GetInventoryCardById(dto.Id);
 
             //currently only expecting to change the status with this method
-            dbCard.InventoryCardStatusId = dto.InventoryCardStatusId;
+            dbCard.InventoryCardStatusId = dto.StatusId;
 
             await _inventoryRepo.UpdateInventoryCard(dbCard);
         }
@@ -215,9 +215,9 @@ namespace Carpentry.Logic.Implementations
                 {
                     Id = x.Id,
                     IsFoil = x.IsFoil,
-                    InventoryCardStatusId = x.InventoryCardStatusId,
+                    StatusId = x.InventoryCardStatusId,
                     MultiverseId = x.MultiverseId,
-                    VariantType = x.VariantType,
+                    VariantName = x.VariantType,
                     Name = x.Name,
                     Set = x.Set,
                     //DeckCards = x.DeckCards.Select(c => new InventoryDeckCardDto

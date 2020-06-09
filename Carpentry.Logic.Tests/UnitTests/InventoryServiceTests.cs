@@ -27,7 +27,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             InventoryCardDto newCard = new InventoryCardDto()
             {
                 MultiverseId = 1,
-                VariantType = "normal"
+                VariantName = "normal"
             };
 
             var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
@@ -74,10 +74,10 @@ namespace Carpentry.Logic.Tests.UnitTests
             //Assemble
             List<InventoryCardDto> cardBatch = new List<InventoryCardDto>()
             {
-                new InventoryCardDto() { MultiverseId = 1, VariantType = "normal" },
-                new InventoryCardDto() { MultiverseId = 1, VariantType = "normal" },
-                new InventoryCardDto() { MultiverseId = 1, VariantType = "normal" },
-                new InventoryCardDto() { MultiverseId = 1, VariantType = "normal" },
+                new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
+                new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
+                new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
+                new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
             };
 
             var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
@@ -130,7 +130,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             {
                 Id = 1,
                 MultiverseId = 1,
-                VariantType = "normal"
+                VariantName = "normal"
             };
 
             var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);

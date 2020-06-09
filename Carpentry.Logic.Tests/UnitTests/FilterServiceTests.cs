@@ -52,7 +52,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             //Assert
             Assert.IsNotNull(resultValue);
             Assert.IsNotNull(resultValue.Formats);
-            Assert.IsNotNull(resultValue.ManaColors);
+            Assert.IsNotNull(resultValue.Colors);
             Assert.IsNotNull(resultValue.Rarities);
             Assert.IsNotNull(resultValue.Sets);
             Assert.IsNotNull(resultValue.Statuses);

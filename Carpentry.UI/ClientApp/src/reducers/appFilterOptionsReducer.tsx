@@ -60,6 +60,8 @@ export const apiDataReceived = (state: AppFilterOptionsReducerState, action: Red
         // isLoading: false,
         // searchResults: searchResultPayload,
     }
+    console.log('new filter state');
+    console.log(newState)
     return newState;
 }
 

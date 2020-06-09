@@ -241,6 +241,8 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     renderSearchResultDetail(){
+        console.log('search context')
+        console.log(this.props.searchContext)
         return(
             <React.Fragment>
             {
@@ -294,22 +296,22 @@ interface FilterBarProps {
 }
 
 function FilterBar(props: FilterBarProps): JSX.Element{
-        const {  flexRow, outlineSection } = appStyles();
-        return(<React.Fragment>
-            <Paper className={combineStyles(outlineSection, flexRow)}>
-                <CardFilterBar 
-                    filterOptions={props.filterOptions}
-                    handleBoolFilterChange={props.handleBoolFilterChange}
-                    handleFilterChange={props.handleFilterChange}
-                    
-                    searchFilter={props.searchFilterProps}
-                    visibleFilters={props.visibleFilters}
-                />
-                <FilterBarSearchButton handleSearchButtonClick={props.handleSearchButtonClick}/>
+    const {  flexRow, outlineSection } = appStyles();
+    return(<React.Fragment>
+        <Paper className={combineStyles(outlineSection, flexRow)}>
+            <CardFilterBar 
+                filterOptions={props.filterOptions}
+                handleBoolFilterChange={props.handleBoolFilterChange}
+                handleFilterChange={props.handleFilterChange}
+                
+                searchFilter={props.searchFilterProps}
+                visibleFilters={props.visibleFilters}
+            />
+            <FilterBarSearchButton handleSearchButtonClick={props.handleSearchButtonClick}/>
 
-            </Paper>
-        </React.Fragment>);
-    }
+        </Paper>
+    </React.Fragment>);
+}
 
 
 
@@ -368,6 +370,8 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //Notes: "visibleContainer" now needs to be determined by the route & "ownProps"
 
 
+    console.log('card search own props');
+    console.log(ownProps);
 
     // console.log(state.cardSearch.inventoryDetail);
 

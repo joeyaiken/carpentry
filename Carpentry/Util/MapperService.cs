@@ -133,12 +133,12 @@ namespace Carpentry.UI.Legacy.Util
             {
                 Id = card.Id,
                 DeckCards = card.DeckCards.Select(x => ToModel(x)).ToList(),
-                InventoryCardStatusId = card.InventoryCardStatusId,
+                StatusId = card.InventoryCardStatusId,
                 IsFoil = card.IsFoil,
                 MultiverseId = card.MultiverseId,
                 Name = card.Name,
                 Set = card.Set,
-                VariantType = card.VariantType,
+                VariantName = card.VariantType,
             };
             return result;
         }
@@ -163,12 +163,12 @@ namespace Carpentry.UI.Legacy.Util
                         InventoryCardId = card.Id,
                     }
                 ).ToList() : null,
-                InventoryCardStatusId = card.InventoryCardStatusId,
+                InventoryCardStatusId = card.StatusId,
                 IsFoil = card.IsFoil,
                 MultiverseId = card.MultiverseId,
                 Name = card.Name,
                 Set = card.Set,
-                VariantType = card.VariantType,
+                VariantType = card.VariantName,
             };
             return result;
         }

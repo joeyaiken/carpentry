@@ -826,7 +826,9 @@ namespace Carpentry.Data.Implementations
 
             if (filters.Rarity.DefaultIfEmpty().Any() && filters.Rarity.Count() > 0)
             {
-                query = query.Where(x => filters.Rarity.Contains(x.Rarity.Name.ToLower()));
+                //rarity values coming in are char codes, not names
+                query = query.Where(x => filters.Rarity.Contains(x.Rarity.Id.ToString()));
+                //query = query.Where(x => filters.Rarity.Contains(x.Rarity.Name.ToLower()));
 
             }
 

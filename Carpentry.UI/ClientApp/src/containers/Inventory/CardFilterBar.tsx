@@ -62,6 +62,7 @@ export default function CardFilterBar(props: CardFilterBarProps): JSX.Element {
                         value={props.searchFilter.type}
                         onChange={props.handleFilterChange}
                         margin="normal">
+                            <MenuItem key="null" value=""></MenuItem>
                             {   props.filterOptions.types &&
                                 props.filterOptions.types.map((item) => (<MenuItem key={item.name} value={item.value}> {item.name} </MenuItem>))
                             }
