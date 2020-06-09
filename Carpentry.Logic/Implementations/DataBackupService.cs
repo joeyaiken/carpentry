@@ -1,4 +1,5 @@
-﻿using Carpentry.Data.LegacyDataContext;
+﻿using Carpentry.Data.DataContext;
+//using Carpentry.Data.LegacyDataContext;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Backups;
@@ -19,12 +20,12 @@ namespace Carpentry.Logic.Implementations
     public class DataBackupService : IDataBackupService
     {
         private readonly ILogger<DataBackupService> _logger;
-        private readonly SqliteDataContext _cardContext;
+        private readonly CarpentryDataContext _cardContext;
         private readonly IDataBackupConfig _config;
         
         public DataBackupService(
             ILogger<DataBackupService> logger,
-            SqliteDataContext cardContext,
+            CarpentryDataContext cardContext,
             IDataBackupConfig config
             )
         {

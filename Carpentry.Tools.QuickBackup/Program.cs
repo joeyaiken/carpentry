@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Carpentry.Data.DataContext;
 using Carpentry.Data.LegacyDataContext;
 using Carpentry.Logic.Implementations;
 using Carpentry.Logic.Interfaces;
@@ -53,7 +54,10 @@ namespace Carpentry.Tools.QuickBackup
 
                 .AddLogging(config => config.AddSerilog())
 
-                .AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
+                //.AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
+
+                .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
+
                 .AddScoped<IDataBackupService, DataBackupService>()
                 .BuildServiceProvider();
 
