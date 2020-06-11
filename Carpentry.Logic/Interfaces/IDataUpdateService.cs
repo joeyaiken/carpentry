@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Carpentry.Logic.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,5 +26,28 @@ namespace Carpentry.Logic.Interfaces
         Task EnsureDatabasesCreated();
 
         Task EnsureDefaultRecordsExist();
+
+        //
+        //
+        //
+
+        //public async List<SetDetailDto> GetTrackedSets()
+        Task<List<SetDetailDto>> GetTrackedSets();
+
+        //public async void UpdateTrackedSetScryData(string setCode)
+        Task UpdateTrackedSetScryData(string setCode);
+
+        //public async void UpdateTrackedSetCardData(string setCode)
+        Task UpdateTrackedSetCardData(string setCode);
+
+        //public async List<SetDetailDto> GetAllAvailableSets()
+        Task<List<SetDetailDto>> GetAllAvailableSets();
+
+        //public async void AddTrackedSet(string setCode)
+        Task AddTrackedSet(string setCode);
+
+        //public async void RemoveTrackedSet(string setCode)
+        Task RemoveTrackedSet(string setCode);
+
     }
 }

@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Remove="Controllers\LegacyCardsController.cs" />
     <Compile Remove="Controllers\LegacyCoreController.cs" />
-    <Compile Remove="Util\IMapperService.cs" />
   </ItemGroup>
 
   <ItemGroup>

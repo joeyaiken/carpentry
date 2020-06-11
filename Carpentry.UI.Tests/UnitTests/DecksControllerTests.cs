@@ -139,7 +139,7 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
             var typedResult = response.Result as OkObjectResult;
 
-            IEnumerable<DeckPropertiesDto> resultValue = typedResult.Value as IEnumerable<DeckPropertiesDto>;
+            IEnumerable<DeckOverviewDto> resultValue = typedResult.Value as IEnumerable<DeckOverviewDto>;
 
             Assert.IsNotNull(resultValue);
             Assert.AreEqual(5, resultValue.Count());

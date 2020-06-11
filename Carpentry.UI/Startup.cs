@@ -2,26 +2,14 @@ using Carpentry.Data.Implementations;
 using Carpentry.Data.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-//using Carpentry.Data.LegacyDataContextLegacy;
-//using Carpentry.Data.LegacyDataContext;
-//using Carpentry.Logic.Interfaces;
-//using Carpentry.Logic.Implementations;
-//using Carpentry.Interfaces;
-//using Carpentry.Implementations;
 using Microsoft.Extensions.Hosting;
 using Carpentry.Data.DataContext;
-//using Carpentry.Service.Interfaces;
-//using Carpentry.Service.Implementations;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Implementations;
-//using Carpentry.UI.Util;
 
 namespace Carpentry.UI
 {

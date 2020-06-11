@@ -1,25 +1,13 @@
-using Carpentry.Data.Implementations;
-using Carpentry.Data.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices;
+//using Microsoft.AspNetCore.HttpsPolicy;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-//using Carpentry.Data.LegacyDataContextLegacy;
-//using Carpentry.Data.LegacyDataContext;
-//using Carpentry.Service.Interfaces;
-//using Carpentry.Service.Implementations;
-//using Carpentry.Interfaces;
-//using Carpentry.Implementations;
+//using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using Carpentry.UI.Legacy.Util;
-using Carpentry.Data.DataContext;
-using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Implementations;
 
 namespace Carpentry
 {
@@ -35,81 +23,6 @@ namespace Carpentry
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ////Going to actually pull the fill filepaths from app settings now
-            ////TODO Eventually I could make a static config class and just read from that class
-            ////TODO Everything else still needs this DB pattern
-            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
-            ////string legacyDatabaseFilepath = Configuration.GetValue<string>("AppSettings:LegacyDatabaseFilepath");
-
-            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            ////services.AddDbContext<LegacySqliteDataContext>(options => options.UseSqlite($"Data Source={legacyDatabaseFilepath}"));
-            //services.AddDbContext<SqliteDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
-
-            ////string repo
-            //services.AddScoped<ICardStringRepo, LegacyScryfallRepo>();
-            //services.AddHttpClient<ICardStringRepo, LegacyScryfallRepo>();
-
-            ////new & legacy DBs
-            //services.AddScoped<ILegacyCardRepo, SqliteCardRepo>();
-            ////services.AddScoped<ILegacySqliteCardRepo, LegacySqliteCardRepo>();
-
-
-
-            //carpentry service
-            //services.AddScoped<ICarpentryService, CarpentryService>();
-
-
-            string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
-
-
-            ////DBs
-            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
-
-            ////DB repos
-            services.AddScoped<ICardDataRepo, CardDataRepo>();
-            services.AddScoped<IDeckDataRepo, DeckDataRepo>();
-            services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
-            services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
-
-            services.AddScoped<IDataReferenceRepo, DataReferenceRepo>();
-
-
-
-            //DB services
-            services.AddScoped<IDataReferenceService, DataReferenceService>();
-            services.AddScoped<IDataQueryService, DataQueryService>();
-
-
-            //Logic services
-            services.AddScoped<ICardSearchService, CardSearchService>();
-            services.AddScoped<IDeckService, DeckService>();
-            services.AddScoped<IInventoryService, InventoryService>();
-            
-            services.AddScoped<IDataUpdateService, DataUpdateService>();
-            services.AddScoped<IFilterService, FilterService>();
-
-            services.AddScoped<IScryfallService, ScryfallService>();
-            services.AddHttpClient<IScryfallService, ScryfallService>();
-
-            //Service layer services
-            //services.AddScoped<ICoreControllerService, CoreControllerService>();
-            //services.AddScoped<IDeckControllerService, DeckControllerService>();
-            //services.AddScoped<IInventoryControllerService, InventoryControllerService>();
-            //services.AddScoped<ICardSearchControllerService, CardSearchControllerService>();
-
-
-
-
-            //Util services
-            //services.AddScoped<IMapperService, MapperService>();
-            services.AddScoped<MapperService>();
-
-
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             // In production, the React files will be served from this directory
             services.AddControllersWithViews();
 
@@ -136,16 +49,7 @@ namespace Carpentry
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller}/{action=Index}/{id?}");
-            //});
-
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

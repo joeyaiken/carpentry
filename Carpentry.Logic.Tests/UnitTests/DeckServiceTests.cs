@@ -227,7 +227,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             var deckService = new DeckService(mockDeckRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
 
 
-            List<DeckProperties> expectedResults = new List<DeckProperties>();
+            List<DeckPropertiesDto> expectedResults = new List<DeckPropertiesDto>();
 
 
             //Act

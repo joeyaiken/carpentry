@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.UI.Legacy.Models;
-using Carpentry.UI.Legacy.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.UI.Legacy.Controllers
@@ -12,19 +9,8 @@ namespace Carpentry.UI.Legacy.Controllers
     [Route("api/[controller]")]
     public class DecksController : ControllerBase
     {
-        private string FormatExceptionMessage(string functionName, Exception ex)
-        {
-            return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
-        }
-
-        private readonly IDeckService _decks;
-        private readonly MapperService _mapper;
-
-        public DecksController(IDeckService decks, MapperService mapper)
-        {
-            _decks = decks;
-            _mapper = mapper;
-        }
+        
+        public DecksController() { }
 
         /// <summary>
         /// This method just ensures the controller can start correctly (catches DI issues)
@@ -41,15 +27,8 @@ namespace Carpentry.UI.Legacy.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> Add([FromBody] LegacyDeckPropertiesDto deckProps)
         {
-            try
-            {
-                int newDeckId = await _decks.AddDeck(_mapper.ToModel(deckProps));
-                return Ok(newDeckId);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Add", ex));
-            }
+            var result = 1;
+            return await Task.FromResult(Ok(result));
         }
 
         //decks/update
@@ -57,15 +36,7 @@ namespace Carpentry.UI.Legacy.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> Update([FromBody] LegacyDeckPropertiesDto deckProps)
         {
-            try
-            {
-                await _decks.UpdateDeck(_mapper.ToModel(deckProps));
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Update", ex));
-            }
+            return await Task.FromResult(Ok());
         }
 
         //decks/delete
@@ -73,15 +44,7 @@ namespace Carpentry.UI.Legacy.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> Delete(int deckId)
         {
-            try
-            {
-                await _decks.DeleteDeck(deckId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Delete", ex));
-            }
+            return await Task.FromResult(Ok());
         }
 
         //decks/Search
@@ -89,16 +52,16 @@ namespace Carpentry.UI.Legacy.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> Search()
         {
-            try
+            var result = new List<DeckOverviewDto>()
             {
-                var results = await _decks.GetDeckOverviews();
-                //IEnumerable<LegacyDeckPropertiesDto> mappedResults = _mapper.ToLegacy(results);
-                return Ok(results);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Search", ex));
-            }
+                new DeckOverviewDto()
+                {
+                    Name = "Test Deck",
+                    Colors = new List<string>(){ "W","U","B","R","G"}
+
+                }
+            };
+            return await Task.FromResult(Ok(result));
         }
 
         //decks/Get
@@ -106,62 +69,46 @@ namespace Carpentry.UI.Legacy.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult<DeckDetailDto>> Get(int deckId)
         {
-            try
+            var result = new DeckDetailDto()
             {
-                var results = await _decks.GetDeckDetail(deckId);
-                //LegacyDeckDetailDto mappedResults = _mapper.ToLegacy(results);
-                return Ok(results);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Get", ex));
-            }
+                CardOverviews = new List<DeckCardOverview>()
+                {
+                    
+                },
+                Cards = new List<DeckCard>()
+                {
+
+                },
+                Props = new DeckPropertiesDto(),
+                Stats = new DeckStatsDto()
+                {
+                    ColorIdentity = new List<char>(),
+                    CostCounts = new Dictionary<string, int>(),
+                    TotalCost = 0,
+                    TotalCount = 0,
+                    TypeCounts = new Dictionary<string, int>(),
+                },
+            };
+            return await Task.FromResult(result);
         }
 
 
         [HttpPost("[action]")]
         public async Task<ActionResult> AddCard([FromBody] LegacyDeckCardDto dto)
         {
-            try
-            {
-                var model = _mapper.ToModel(dto);
-                await _decks.AddDeckCard(model);
-                //await _decks.AddDeckCard(dto.ToModel());
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("AddCard", ex));
-            }
+            return await Task.FromResult(Ok());
         }
 
         [HttpPost("[action]")]
         public async Task<ActionResult> UpdateCard([FromBody] LegacyDeckCardDto card)
         {
-            try
-            {
-                var cardModel = _mapper.ToModel(card);
-                await _decks.UpdateDeckCard(cardModel);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("UpdateCard", ex));
-            }
+            return await Task.FromResult(Ok());
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult> RemoveCard(int id)
         {
-            try
-            {
-                await _decks.DeleteDeckCard(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("RemoveCard", ex));
-            }
+            return await Task.FromResult(Ok());
         }
     }
 }
