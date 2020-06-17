@@ -162,8 +162,6 @@ namespace Carpentry.Logic.Implementations
         /// <returns></returns>
         public async Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters)
         {
-            //throw new NotImplementedException();
-
             var dbCards = await _dataQueryService.SearchInventoryCards(filters);
 
             List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();

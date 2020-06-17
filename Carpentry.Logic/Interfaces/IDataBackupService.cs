@@ -27,5 +27,12 @@ namespace Carpentry.Logic.Interfaces
         Task RestoreCollectionFromBackup();
         Task RestoreCollectionFromBackup(string directory);
 
+
+        //Task BackupCollection(string backupDirectory, string deckFilename, string cardFilename, string propsFilename);
+
+
+        //Task BackupCollection(string deckBackupLocation, string cardBackupLocation, string propsBackupLocation);
+        
+
     }
 }

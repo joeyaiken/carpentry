@@ -29,15 +29,19 @@ namespace Carpentry.UI
             //Going to actually pull the fill filepaths from app settings now
             //TODO Eventually I could make a static config class and just read from that class
             //TODO Everything else still needs this DB pattern
-            string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
 
+            //TODO - should this be scopped instead of singleton?
             ////DBs
             //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
             services.AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")));
 
             //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
             services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
+
+
+            services.AddSingleton<IDataBackupConfig, CarpentryAppConfig>();
 
             ////DB repos
             services.AddScoped<ICardDataRepo, CardDataRepo>();
@@ -52,13 +56,14 @@ namespace Carpentry.UI
             services.AddScoped<IDataQueryService, DataQueryService>();
 
 
-            //Logic services
+            //Logic services6
             services.AddScoped<ICardSearchService, CardSearchService>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
 
-
+            services.AddScoped<ICardImportService, CardImportService>();
             services.AddScoped<IDataUpdateService, DataUpdateService>();
+            services.AddScoped<IDataBackupService, DataBackupService>();
             services.AddScoped<IFilterService, FilterService>();
 
             services.AddScoped<IScryfallService, ScryfallService>();

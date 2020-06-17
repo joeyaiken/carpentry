@@ -516,5 +516,38 @@ namespace Carpentry.Logic.Implementations
             _logger.LogInformation("Finished adding card categories");
         }
 
+        //
+        //
+        //
+
+        public async Task<List<SetDetailDto>> GetTrackedSets()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateTrackedSetScryData(string setCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateTrackedSetCardData(string setCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<SetDetailDto>> GetAllAvailableSets()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task AddTrackedSet(string setCode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task RemoveTrackedSet(string setCode)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

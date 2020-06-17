@@ -619,8 +619,6 @@ namespace Carpentry.Logic.Implementations
         //IDR where exactly this gets called outside of console apps
         public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dtoBatch)
         {
-            ////#error not implemented
-            //            throw new NotImplementedException();
             _logger.LogWarning("Beginning AddDeckCardBatch");
             var dtoArray = dtoBatch.ToArray();
 

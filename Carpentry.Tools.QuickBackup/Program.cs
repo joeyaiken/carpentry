@@ -29,14 +29,21 @@ namespace Carpentry.Tools.QuickBackup
 
             var backupService = serviceProvider.GetService<IDataBackupService>();
 
-            await backupService.BackupDatabase();
+            //var appConfig = new BackupToolConfig(Configuration);
+
+            await backupService.BackupCollection(
+                //appConfig.BackupDirectory, 
+                //appConfig.DatabaseLocation, 
+                //appConfig.CardBackupFilename, 
+                //appConfig.PropsBackupFilename
+            );
 
             logger.LogInformation("Completed successfully");
         }
 
         private static ServiceProvider BuildServiceProvider()
         {
-            var appConfig = new BackupToolConfig(Configuration);
+            //var appConfig = new BackupToolConfig(Configuration);
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
@@ -46,7 +53,7 @@ namespace Carpentry.Tools.QuickBackup
                 .WriteTo.Console()
                 .CreateLogger();
 
-            string cardDatabaseLocation = $"Data Source={appConfig.DatabaseLocation}";
+            //string cardDatabaseLocation = $"Data Source={appConfig.DatabaseLocation}";
 
             var serviceProvider = new ServiceCollection()
                 .AddSingleton(Configuration)

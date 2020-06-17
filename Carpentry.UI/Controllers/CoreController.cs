@@ -15,6 +15,7 @@ namespace Carpentry.UI.Controllers
     [Route("api/[controller]")]
     public class CoreController : ControllerBase
     {
+        //TODO - consider breaking this into multiple controllers
         private string FormatExceptionMessage(string functionName, Exception ex)
         {
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
@@ -48,6 +49,8 @@ namespace Carpentry.UI.Controllers
             return Ok("Online");
         }
 
+        #region filters
+
         /// <summary>
         /// Returns default reference/filter values used by the app
         /// When the app loads, values will be queried to populate dropdown lists
@@ -67,22 +70,24 @@ namespace Carpentry.UI.Controllers
             }
         }
 
+        #endregion
+
+        #region tracked set definitions
 
         //-- all about managing card definitions - "card data" controller?
         //
         //GetTrackedSets(can this be the same source the DDLs pull from?)
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetTrackedSets()
+        public async Task<ActionResult<List<SetDetailDto>>> GetTrackedSets()
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                var result = await _updateService.GetTrackedSets();
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("GetTrackedSets", ex));
             }
         }
 
@@ -90,196 +95,163 @@ namespace Carpentry.UI.Controllers
 
         //UpdateTrackedSetScryData
         [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateTrackedSetScryData()
+        public async Task<ActionResult> UpdateTrackedSetScryData(string setCode)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                await _updateService.UpdateTrackedSetScryData(setCode);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetScryData", ex));
             }
         }
         //UpdateTrackedSetCardData
         [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateTrackedSetCardData()
+        public async Task<ActionResult> UpdateTrackedSetCardData(string setCode)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                await _updateService.UpdateTrackedSetCardData(setCode);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetCardData", ex));
             }
         }
         //GetAllAvailableSets
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetAllAvailableSets()
+        public async Task<ActionResult<List<SetDetailDto>>> GetAllAvailableSets()
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                var result = await _updateService.GetAllAvailableSets();
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("GetAllAvailableSets", ex));
             }
         }
         //AddTrackedSet
         [HttpGet("[action]")]
-        public async Task<ActionResult> AddTrackedSet()
+        public async Task<ActionResult> AddTrackedSet(string setCode)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                await _updateService.AddTrackedSet(setCode);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("AddTrackedSet", ex));
             }
         }
         //RemoveTrackedSet(fails if any inventory cards present)
         [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveTrackedSet()
+        public async Task<ActionResult> RemoveTrackedSet(string setCode)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                await _updateService.RemoveTrackedSet(setCode);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
             }
         }
 
+        #endregion
 
-
-
-
+        #region backups
 
         //-- all about managing collection (and kinda inventory) data
         //VerifyBackupLocation
         [HttpGet("[action]")]
-        public async Task<ActionResult> VerifyBackupLocation()
+        public async Task<ActionResult<BackupDetailDto>> VerifyBackupLocation(string directory)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                var result = await _backupService.VerifyBackupLocation(directory);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("VerifyBackupLocation", ex));
             }
         }
+        
         //BackupCollection
         [HttpGet("[action]")]
-        public async Task<ActionResult> BackupCollection()
+        public async Task<ActionResult> BackupCollection(string directory)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                //read from config??
+                //The backup service really shouldn't be concerned with this nonsense
+
+
+                await _backupService.BackupCollection(directory);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("BackupCollection", ex));
             }
         }
+        
         //RestoreCollectionFromBackup
         [HttpGet("[action]")]
-        public async Task<ActionResult> RestoreCollectionFromBackup()
+        public async Task<ActionResult> RestoreCollectionFromBackup(string directory)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                await _backupService.RestoreCollectionFromBackup(directory);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("RestoreCollectionFromBackup", ex));
             }
         }
 
+        #endregion
 
+        #region import
 
-        //-- and import
         //ValidateImport
         [HttpGet("[action]")]
-        public async Task<ActionResult> ValidateImport()
+        public async Task<ActionResult<ValidatedCardImportDto>> ValidateImport(CardImportDto payload)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                var result = await _importService.ValidateImport(payload);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("ValidateImport", ex));
             }
         }
         //AddValidatedImport
         [HttpGet("[action]")]
-        public async Task<ActionResult> AddValidatedImport()
+        public async Task<ActionResult> AddValidatedImport(ValidatedCardImportDto validatedPayload)
         {
-            throw new NotImplementedException("still needs implementation and return type defined");
             try
             {
-                //AppFiltersDto result = await _filterService.GetAppFilterValues();
-                //return Ok(result);
+                await _importService.AddValidatedImport(validatedPayload);
+                return Ok();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("", ex));
+                return StatusCode(500, FormatExceptionMessage("AddValidatedImport", ex));
             }
         }
 
-        ////get backup details / props (string directory)
-        //[HttpPost("[action]")]
-        //public async Task <ActionResult<BackupDetailDto>> GetBackupDetails(string directory)
-        //{
-        //    try
-        //    {
-        //        BackupDetailDto result = await _backupService.GetBackupDetail(directory);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("GetBackupDetails", ex));
-        //    }
-        //}
-
-        //[HttpPost("[action]")]
-        //public async Task<ActionResult> BackupInventoryData(string directory)
-        //{
-        //    try
-        //    {
-        //        await _backupService.BackupDatabase(directory);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("GetBackupDetails", ex));
-        //    }
-        //}
-
-
+        #endregion
 
         //Possible controller methods
 
@@ -298,10 +270,6 @@ namespace Carpentry.UI.Controllers
 
         //update the prices of a single set
         //  ??break this down??
-
-
-
-
 
     }
 }

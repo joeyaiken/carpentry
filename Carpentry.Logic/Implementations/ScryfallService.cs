@@ -27,7 +27,7 @@ namespace Carpentry.Logic.Implementations
         }
 
         /// <summary>
-        /// Keep in mind this doesn't return variants
+        /// Keep in mind this doesn't return variants 
         /// </summary>
         /// <param name="multiverseId"></param>
         /// <returns></returns>

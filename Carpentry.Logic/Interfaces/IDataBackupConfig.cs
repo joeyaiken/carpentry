@@ -2,7 +2,7 @@
 {
     public interface IDataBackupConfig
     {
-        string DatabaseLocation { get; set; }
+        //string DatabaseLocation { get; set; }
 
         //string DeckBackupLocation { get; set; }
 

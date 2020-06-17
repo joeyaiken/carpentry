@@ -14,15 +14,26 @@ using System.Threading.Tasks;
 namespace Carpentry.Logic.Implementations
 {
     /// <summary>
-    /// This class contains the logic for saving relevant DB contents to a text file
+    /// This class contains the logic for saving relevant DB contents to a text file 
     /// Save location is pulled from the IDataBackupConfig
     /// </summary>
+    /// 
+
+    //So, the initial version of this class had/has a way too complex config
+    //I don't need this class requiring a config object just to opperate
+    //Do I want to read "CardBackups"/"DeckBackups"/"PropsBacups".txt from a config file?
+    //  I guess "no magic strings" is rather important
+    //  Can I just read from appsettings here without caring about a config object? That's fine, right?
+
     public class DataBackupService : IDataBackupService
     {
         private readonly ILogger<DataBackupService> _logger;
         private readonly CarpentryDataContext _cardContext;
-        private readonly IDataBackupConfig _config;
-        
+
+        //What if this didn't need direct access to a config?
+        //I need to read from a config somewhere, even if that gets lifted to a controller layer
+        private readonly IDataBackupConfig _config; //TODO - consider lifting this to the controller layer?
+
         public DataBackupService(
             ILogger<DataBackupService> logger,
             CarpentryDataContext cardContext,
@@ -34,33 +45,62 @@ namespace Carpentry.Logic.Implementations
             _config = config;
         }
 
+        //Should these two be a combined "verify backup detail" ?
         public async Task<BackupDetailDto> GetBackupDetail(string directory)
         {
+            //if directory == null, use config default
             throw new NotImplementedException();
         }
 
-        public async Task BackupDatabase()
+        public async Task<BackupDetailDto> VerifyBackupLocation(string directory)
         {
-            await BackupDatabase(null);
+            //if directory == null, use config default
+            throw new NotImplementedException();
         }
 
-        public async Task BackupDatabase(string directory)
+        public async Task BackupCollection()
+        {
+            await BackupCollection(null);
+        }
+
+        public async Task BackupCollection(string directory)
         {
             _logger.LogInformation("DataBackupService - SaveDb...");
 
             string backupDirectory = directory != null ? directory : _config.BackupDirectory;
-            
+
             string deckBackupLocation = $"{backupDirectory}{_config.DeckBackupFilename}";
             string cardBackupLocation = $"{backupDirectory}{_config.CardBackupFilename}";
             string propsBackupLocation = $"{backupDirectory}{_config.PropsBackupFilename}";
 
-            await BackupDatabaseToTextFiles(deckBackupLocation, cardBackupLocation, propsBackupLocation);
+            await BackupCollectionToTextFiles(deckBackupLocation, cardBackupLocation, propsBackupLocation);
 
             _logger.LogInformation("DataBackupService - SaveDb...completed successfully");
         }
 
+
+        //public async Task BackupCollection(string backupDirectory, string deckFilename, string cardFilename, string propsFilename)
+        //{
+        //    _logger.LogInformation("DataBackupService - SaveDb...");
+
+        //    string deckBackupLocation = $"{backupDirectory}{deckFilename}";
+        //    string cardBackupLocation = $"{backupDirectory}{cardFilename}";
+        //    string propsBackupLocation = $"{backupDirectory}{propsFilename}";
+
+        //    await BackupCollectionToTextFiles(deckBackupLocation, cardBackupLocation, propsBackupLocation);
+
+        //    _logger.LogInformation("DataBackupService - SaveDb...completed successfully");
+        //}
+
+        //public async Task BackupCollection(string deckBackupLocation, string cardBackupLocation, string propsBackupLocation)
+        //{
+        //    _logger.LogInformation("DataBackupService - SaveDb...");
+        //    await BackupCollectionToTextFiles(deckBackupLocation, cardBackupLocation, propsBackupLocation);
+        //    _logger.LogInformation("DataBackupService - SaveDb...completed successfully");
+        //}
+
         //TODO - This should take a sinle folder directory, where all 3 files will be dropped.  Not [this weird design where they COULD be in different folders]
-        private async Task BackupDatabaseToTextFiles(string deckBackupFilepath, string cardBackupFilepath, string propsBackupFilepath)
+        private async Task BackupCollectionToTextFiles(string deckBackupFilepath, string cardBackupFilepath, string propsBackupFilepath)
         {
             List<BackupInventoryCard> cardExports;
             List<BackupDeck> deckExports;
@@ -121,6 +161,15 @@ namespace Carpentry.Logic.Implementations
             await System.IO.File.WriteAllTextAsync(propsBackupFilepath, propsBackupObj.ToString());
 
             
+        }
+
+        public async Task RestoreCollectionFromBackup()
+        {
+            throw new NotImplementedException();
+        }
+        public async Task RestoreCollectionFromBackup(string directory)
+        {
+            throw new NotImplementedException();
         }
     }
 }
