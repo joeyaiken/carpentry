@@ -63,12 +63,11 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
                 }</Switch>}
             </Typography>
         
-            <Route
+            {/* <Route
                 path='/'
                 render={
                     ({location}) => (
                         <Fragment>
-                            {/* TODO - These all need to be NavLink components instead of Tabs */}
                             <Tabs value={location.pathname}>
                                 <Tab value='/inventory' label='Inventory' component={Link} to={'/inventory'} />
                                 <Tab value='/decks' label='Decks' component={Link} to={'/decks'} />
@@ -77,7 +76,7 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
                         </Fragment>
                     )
                 }
-            />
+            /> */}
 
             {/* {
             <Typography variant="h5" className= "flex-section">

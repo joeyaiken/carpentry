@@ -74,10 +74,32 @@ namespace Carpentry.Data.Implementations
 
         }
 
-        public async Task<CardData> GetCardById(int multiverseId)
+        public async Task<CardData> GetCardData(int multiverseId)
         {
             CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
             return result;
+        }
+
+        public async Task<CardData> GetCardData(string name, string setCode)
+        {
+            //var matchingSet = await _cardContext.Sets.FirstOrDefaultAsync(x => x.Code.ToLower() == setCode.ToLower());
+
+            var matchingCard = await _cardContext.Cards
+                .Where(x => x.Set.Code.ToLower() == setCode.ToLower() && x.Name.ToLower() == name.ToLower())
+                .Include(x => x.Variants).ThenInclude(v => v.Type)
+                .Include(x => x.CardColorIdentities)
+                .Include(x => x.CardColors)
+                .Include(x => x.Legalities)
+                .Include(c => c.Set)
+                .FirstOrDefaultAsync();
+
+            if(matchingCard == null)
+            {
+                throw new Exception($"Could not find card ({setCode}) {name}");
+            }
+
+            //CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
+            return matchingCard;
         }
 
         public async Task<List<CardData>> GetCardsByName(string cardName)

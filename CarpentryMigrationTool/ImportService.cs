@@ -22,6 +22,8 @@ namespace CarpentryMigrationTool
         public bool IsFoil { get; set; } 
     }
 
+    
+
     class ImportService
     {
         private readonly ILogger<ImportService> _logger;

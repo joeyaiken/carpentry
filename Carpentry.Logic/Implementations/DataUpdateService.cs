@@ -50,7 +50,7 @@ namespace Carpentry.Logic.Implementations
         public async Task EnsureCardDefinitionExists(int multiverseId)
         {
             //var dbCard = await _cardRepo.QueryCardDefinitions().FirstOrDefaultAsync(x => x.Id == multiverseId);
-            var dbCard = await _cardRepo.GetCardById(multiverseId);
+            var dbCard = await _cardRepo.GetCardData(multiverseId);
 
             if (dbCard != null)
             {
@@ -540,8 +540,11 @@ namespace Carpentry.Logic.Implementations
             throw new NotImplementedException();
         }
 
+        
         public async Task AddTrackedSet(string setCode)
         {
+            //This should return silently if a set code already exists
+            //It should add the card definitions, not just an empty shell of a set
             throw new NotImplementedException();
         }
 

@@ -4,14 +4,14 @@
     "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj": {}
   },
   "projects": {
-    "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj": {
+    "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
-        "projectName": "Carpentry.Tools.QuickImport",
-        "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
+        "projectUniqueName": "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj",
+        "projectName": "Carpentry.Data",
+        "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj",
         "packagesPath": "C:\\Users\\Joe\\.nuget\\packages\\",
-        "outputPath": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\obj\\",
+        "outputPath": "C:\\DotNet\\Carpentry\\Carpentry.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -40,6 +40,180 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj",
+        "projectName": "Carpentry.Logic",
+        "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj",
+        "packagesPath": "C:\\Users\\Joe\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Joe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj": {
+                "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
+        "projectName": "Carpentry.Tools.QuickImport",
+        "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
+        "packagesPath": "C:\\Users\\Joe\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Joe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj": {
+                "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Microsoft.Extensions.Configuration.FileExtensions": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
+            "Serilog": {
+              "target": "Package",
+              "version": "[2.9.0, )"
+            },
+            "Serilog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[3.0.1, )"
+            },
+            "Serilog.Settings.Configuration": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
