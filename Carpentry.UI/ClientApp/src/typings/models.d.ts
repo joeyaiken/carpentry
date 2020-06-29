@@ -232,3 +232,11 @@ declare interface MagicCard {
     text: string;
     type: string;
 }
+
+declare interface SetDetailDto {
+    code: string;
+    name: string;
+    dataLastUpdated: Date | null;
+    scryLastUpdated: Date | null;
+    inventoryCardCount: number;
+}

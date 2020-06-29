@@ -47,8 +47,20 @@ export const api = {
     core: {
 
         async getFilterValues(): Promise<AppFiltersDto> {
-            console.log('why no filter values?')
+            //console.log('why no filter values?')
             const endpoint = `api/Core/GetFilterValues`;
+            const result = await Get(endpoint);
+            return result;
+        },
+
+        async getTrackedSets(): Promise<SetDetailDto> {
+            const endpoint = `api/Core/GetTrackedSets`;
+            const result = await Get(endpoint);
+            return result;
+        },
+
+        async getUntrackedSets(): Promise<SetDetailDto> {
+            const endpoint = `api/Core/GetUntrackedSets`;
             const result = await Get(endpoint);
             return result;
         },
@@ -73,7 +85,6 @@ export const api = {
         ////Update Set Card Data
         //[HttpGet("[action]")]
         //public async Task<ActionResult> UpdateSetData(string setCode)
-
 
     },
 

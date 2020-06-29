@@ -135,6 +135,11 @@ namespace Carpentry.UI.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetAllAvailableSets", ex));
             }
         }
+
+        //GetUntrackedSets ??
+
+
+
         //AddTrackedSet
         [HttpGet("[action]")]
         public async Task<ActionResult> AddTrackedSet(string setCode)

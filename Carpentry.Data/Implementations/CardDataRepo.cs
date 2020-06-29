@@ -121,6 +121,12 @@ namespace Carpentry.Data.Implementations
             await _cardContext.Database.EnsureCreatedAsync();
         }
 
+        public async Task<List<CardSetData>> GetAllCardSets()
+        {
+            var result = await _cardContext.Sets.ToListAsync();
+            return result;
+        }
+
         #region private
 
         private async Task AddCardDefinition(CardDataDto dto)

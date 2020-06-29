@@ -192,5 +192,38 @@ namespace Carpentry.Logic.Implementations
             return mappedCards;
         }
 
+        public async Task<List<ScryfallSetOverviewDto>> GetAllSets()
+        {
+            var endpoint = $"https://api.scryfall.com/sets";
+            var responseString = await _client.GetStringAsync(endpoint);
+
+            JObject setResponseObject = JObject.Parse(responseString);
+
+            JArray responseData = setResponseObject.Value<JArray>("data");
+
+            List<ScryfallSetOverviewDto> result = new List<ScryfallSetOverviewDto>();
+
+            foreach(var scrySet in responseData)
+            {
+                var newDto = new ScryfallSetOverviewDto()
+                {
+                    Code = setResponseObject.Value<string>("code"),
+
+                    Name = setResponseObject.Value<string>("name"),
+
+                    SetType = setResponseObject.Value<string>("set_type"),
+                    CardCount = setResponseObject.Value<int>("card_count"),
+                    Digital = setResponseObject.Value<bool>("digital"),
+                    FoilOnly = setResponseObject.Value<bool>("foil_only"),
+                    NonfoilOnly = setResponseObject.Value<bool>("nonfoil_only"),
+                    ReleasedAtString = setResponseObject.Value<string>("released_at"),
+                };
+
+                result.Add(newDto);
+            }
+
+            return result;
+        }
+
     }
 }

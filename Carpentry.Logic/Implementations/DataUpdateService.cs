@@ -522,7 +522,62 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<List<SetDetailDto>> GetTrackedSets()
         {
-            throw new NotImplementedException();
+            //Might as well just get all sets from the Carpentry DB
+            //TODO - consider replacing this with a view
+            var dbSets = await _cardRepo.GetAllCardSets();
+
+            var result = dbSets.Select(s => new SetDetailDto()
+            {
+                Code = s.Code,
+                DataLastUpdated = s.LastUpdated,
+                Name = s.Name,
+            }).ToList();
+
+            foreach(var dto in result)
+            {
+                dto.ScryLastUpdated = await _scryfallRepo.GetSetDataLastUpdated(dto.Code);
+            }
+
+            return result;
+        }
+
+        public async Task<List<SetDetailDto>> GetUntrackedSets()
+        {
+            //goal - get all scryfall sets NOT currently tracked by the app
+            //will exclude online-only sets, really old sets, and weird promos
+
+            //check the scry repo for most recent data
+            //  if not up to date: call scry repo, filter, and apply to DB
+            //  return list of available sets (dataLastUpdated == null for all)
+
+            var auditData = await _scryfallRepo.GetAuditData();
+
+            if(auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
+            {
+                //get the list of sets from the scryfall service
+
+                //maybe do some filtering
+
+                //add the results to the DB
+            }
+
+            //var trackedSets = await GetTrackedSets();
+
+            var trackedSetCodes = GetTrackedSets().Result.Select(x => x.Code).ToList(); //will this work?.....
+
+            var scrySets = _scryfallRepo.GetAvailableSetOverviews().Result
+                .Where(x => !trackedSetCodes.Contains(x.Code))
+                .Select(x => new SetDetailDto()
+                {
+                    Code = x.Code,
+                    DataLastUpdated = null,
+                    InventoryCardCount = 0,
+                    Name = x.Name,
+                    ScryLastUpdated = x.LastUpdated,
+                })
+                .ToList(); //or this?
+
+            return scrySets;
         }
 
         public async Task UpdateTrackedSetScryData(string setCode)
@@ -535,12 +590,6 @@ namespace Carpentry.Logic.Implementations
             throw new NotImplementedException();
         }
 
-        public async Task<List<SetDetailDto>> GetAllAvailableSets()
-        {
-            throw new NotImplementedException();
-        }
-
-        
         public async Task AddTrackedSet(string setCode)
         {
             //This should return silently if a set code already exists

@@ -7,7 +7,6 @@ import { Route, Switch } from 'react-router';
 import AppLayout from './components/AppLayout';
 import './styles/App.css';
 import Backups from './components/Backups';
-import CardSetSettings from './containers/CardSetSettings';
 import InventoryContainer from './containers/Inventory/InventoryContainer';
 import { ConnectedComponent } from 'react-redux';
 import DeckEditorContainer from './containers/DeckEditor/DeckEditorContainer';
@@ -16,6 +15,7 @@ import CardSearchContainer from './containers/CardSearch/CardSearchContainer';
 import { connect, DispatchProp } from 'react-redux';
 import { AppState } from './reducers'
 import { requestCoreData } from './actions/coreActions';
+import CardSetSettingsContainer from './containers/CardSetSettings/CardSetSettingsContainer';
 
 
 
@@ -86,7 +86,7 @@ function App(): JSX.Element {
         },
         {
             path: '/settings/sets',
-            component: CardSetSettings,
+            component: CardSetSettingsContainer,
             name: 'Carpentry',
             customProps: {}
         },

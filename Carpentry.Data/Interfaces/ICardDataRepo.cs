@@ -24,6 +24,9 @@ namespace Carpentry.Data.Interfaces
         Task<CardData> GetCardData(int multiverseId);
         Task<CardData> GetCardData(string name, string code);
 
+
+        Task<List<CardSetData>> GetAllCardSets();
+
         Task EnsureDatabaseExists();
 
 

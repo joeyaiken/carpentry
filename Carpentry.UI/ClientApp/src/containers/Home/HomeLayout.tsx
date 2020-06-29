@@ -53,7 +53,18 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
                     />
                     {/* <CardContent></CardContent> */}
                 </Card>
-
+                <Card>
+                    <CardHeader
+                        titleTypographyProps={{variant:"h5"}}
+                        title={"Tracked Sets"}
+                        action={
+                            <Link to={'/settings/sets'}>
+                                <IconButton size="medium"><ArrowForward /></IconButton>
+                            </Link>
+                        }
+                    />
+                    {/* <CardContent></CardContent> */}
+                </Card>
                 {/* <CardHeader
                         
                         title={props.title}

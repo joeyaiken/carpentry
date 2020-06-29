@@ -1,5 +1,6 @@
 ﻿using Carpentry.Data.DataContext;
 using Carpentry.Data.DataModels;
+using Carpentry.Data.DataModels.QueryResults;
 using Carpentry.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -89,5 +90,24 @@ namespace Carpentry.Data.Implementations
             await _scryContext.Database.EnsureCreatedAsync();
         }
 
+        public async Task<ScryfallAuditData> GetAuditData()
+        {
+            var auditData = await _scryContext.AuditData.FirstOrDefaultAsync();
+            return auditData;
+        }
+
+        public async Task<List<ScryfallSetOverview>> GetAvailableSetOverviews()
+        {
+            var result = await _scryContext.Sets
+                .OrderByDescending(x => x.ReleasedAt)
+                .Select(x => new ScryfallSetOverview
+                {
+                    Code = x.Code,
+                    Name = x.Name,
+                    LastUpdated = x.LastUpdated,
+                })
+                .ToListAsync();
+            return result;
+        }
     }
 }

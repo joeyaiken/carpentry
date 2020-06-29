@@ -166,25 +166,25 @@ namespace Carpentry.Data.DataContext
             modelBuilder.Entity<DataModels.QueryResults.InventoryCardByNameResult>(eb =>
             {
                 eb.HasNoKey();
-                eb.ToView("vInventoryCardsByName");
+                eb.ToView("vwInventoryCardsByName");
             });
 
             modelBuilder.Entity<DataModels.QueryResults.InventoryCardByMidResult>(eb =>
             {
                 eb.HasNoKey();
-                eb.ToView("vInventoryCardsByMid");
+                eb.ToView("vwInventoryCardsByMid");
             });
 
             modelBuilder.Entity <DataModels.QueryResults.InventoryCardByUniqueResult> (eb =>
             {
                 eb.HasNoKey();
-                eb.ToView("vInventoryCardsUniquePrints");
+                eb.ToView("vwInventoryCardsUniquePrints");
             });
 
             modelBuilder.Entity<DataModels.QueryResults.InventoryCardByCustomResult>(eb =>
             {
                 eb.HasNoKey();
-                eb.ToView("vInventoryCardsCustom");
+                eb.ToView("vwInventoryCardsCustom");
             });
 
             #endregion

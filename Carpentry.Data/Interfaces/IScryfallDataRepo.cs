@@ -1,4 +1,5 @@
 ﻿using Carpentry.Data.DataModels;
+using Carpentry.Data.DataModels.QueryResults;
 using Carpentry.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,11 @@ namespace Carpentry.Data.Interfaces
 
         Task<ScryfallSetData> GetSetByCode(string setCode);
 
+        Task<List<ScryfallSetOverview>> GetAvailableSetOverviews(); 
+
         Task EnsureDatabaseExists();
+
+        Task<ScryfallAuditData> GetAuditData();
 
         //Task DeleteSet(int setId);
     }
