@@ -17,6 +17,11 @@ namespace Carpentry.Data.DataContext
         //No associations to set up for this DB
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<ScryfallAuditData>(eb =>
+            {
+                eb.HasNoKey();
+            });
         }
 
     }   

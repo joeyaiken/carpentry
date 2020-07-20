@@ -238,5 +238,8 @@ declare interface SetDetailDto {
     name: string;
     dataLastUpdated: Date | null;
     scryLastUpdated: Date | null;
-    inventoryCardCount: number;
+    ownedCount: number;
+    collectedCount: number;
+    isTracked: boolean;
+
 }

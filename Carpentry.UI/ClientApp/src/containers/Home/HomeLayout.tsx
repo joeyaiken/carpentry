@@ -41,18 +41,7 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
                     />
                     {/* <CardContent></CardContent> */}
                 </Card>
-                <Card>
-                    <CardHeader
-                        titleTypographyProps={{variant:"h5"}}
-                        title={"Settings"}
-                        action={
-                            <Link to={'/settings'}>
-                                <IconButton size="medium"><ArrowForward /></IconButton>
-                            </Link>
-                        }
-                    />
-                    {/* <CardContent></CardContent> */}
-                </Card>
+                
                 <Card>
                     <CardHeader
                         titleTypographyProps={{variant:"h5"}}
@@ -64,6 +53,29 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
                         }
                     />
                     {/* <CardContent></CardContent> */}
+                </Card>
+
+                {/* <Card>
+                    <CardHeader
+                        titleTypographyProps={{variant:"h5"}}
+                        title={"Settings"}
+                        action={
+                            <Link to={'/settings'}>
+                                <IconButton size="medium"><ArrowForward /></IconButton>
+                            </Link>
+                        }
+                    />
+                </Card> */}
+                <Card>
+                    <CardHeader
+                        titleTypographyProps={{variant:"h5"}}
+                        title={"Backups"}
+                        action={
+                            <Link to={'/settings/backups/'}>
+                                <IconButton size="medium"><ArrowForward /></IconButton>
+                            </Link>
+                        }
+                    />
                 </Card>
                 {/* <CardHeader
                         

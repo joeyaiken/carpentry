@@ -5,11 +5,12 @@ import { Typography, Box, CardContent, Card, CardHeader, Paper, Button } from '@
 import DeckList from '../DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 import CardSetSettingsContainerLayout from './CardSetSettingsContainerLayout';
+import { requestTrackedSets } from '../../actions/coreActions';
 
 //Should this manage the modal?
 
 interface PropsFromState {
-
+    trackedSetDetails: SetDetailDto[];
 }
 
 type CardSetSettingsContainerProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -20,13 +21,26 @@ class CardSetSettingsContainer extends React.Component<CardSetSettingsContainerP
     }
 
     componentDidMount() {
-        // this.props.dispatch(ensureDeckOverviewsLoaded())
-        //load 
+        //showUntracked, update
+        this.props.dispatch(requestTrackedSets(false, false));
+    }
+
+    handleRefreshClick(): void {
+
+    }
+
+    handleShowUntrackedClick(): void {
+        
     }
 
     render() {
         return (
-            <CardSetSettingsContainerLayout />
+            <CardSetSettingsContainerLayout
+                onRefreshClick={this.handleRefreshClick}
+                onShowUntrackedClick={this.handleShowUntrackedClick}
+                trackedSetDetails={this.props.trackedSetDetails}
+                showUntrackedValue={true}
+            />
         );
     }
 }
@@ -37,6 +51,7 @@ function mapStateToProps(state: AppState, ownProps): PropsFromState {
     // console.log(ownProps);
 
     const result: PropsFromState = {
+        trackedSetDetails: [],
     }
     return result;
 }

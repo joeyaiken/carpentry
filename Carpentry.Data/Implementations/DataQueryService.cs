@@ -329,26 +329,30 @@ namespace Carpentry.Data.Implementations
         }
 
 
-        public IEnumerable<InventoryCardByNameResult> QueryCardsByName()
+        public IQueryable<InventoryCardByNameResult> QueryCardsByName()
         {
             return _cardContext.InventoryCardByName.AsQueryable();
         }
 
-        public IEnumerable<InventoryCardByMidResult> QueryCardsByMid()
+        public IQueryable<InventoryCardByMidResult> QueryCardsByMid()
         {
             return _cardContext.InventoryCardByMid.AsQueryable();
         }
 
-        public IEnumerable<InventoryCardByUniqueResult> QueryCardsByUnique()
+        public IQueryable<InventoryCardByUniqueResult> QueryCardsByUnique()
         {
             return _cardContext.InventoryCardByUnique.AsQueryable();
         }
 
-        public IEnumerable<InventoryCardByCustomResult> QueryCardsByCustom()
+        public IQueryable<InventoryCardByCustomResult> QueryCardsByCustom()
         {
             return _cardContext.InventoryCardByCustom.AsQueryable();
         }
 
+        public IQueryable<SetTotalsResult> QuerySetTotals()
+        {
+            return _cardContext.SetTotals.AsQueryable();
+        }
         //public async Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId)
         //{
         //    //Deck Overviews

@@ -31,12 +31,15 @@ namespace Carpentry.Logic.Implementations
 
         private readonly IDataReferenceRepo _dataReferenceRepo;
 
+        private readonly IDataQueryService _dataQueryService;
+
         public DataUpdateService(
             ILogger<DataBackupService> logger,
             IScryfallService scryService,
             ICardDataRepo cardRepo,
             IScryfallDataRepo scryfallRepo,
-            IDataReferenceRepo dataReferenceRepo
+            IDataReferenceRepo dataReferenceRepo,
+            IDataQueryService dataQueryService
             )
         {
             _logger = logger;
@@ -45,6 +48,7 @@ namespace Carpentry.Logic.Implementations
             _cardRepo = cardRepo;
             _dataReferenceRepo = dataReferenceRepo;
             _dbRefreshIntervalDays = 30; //TODO - move to a config
+            _dataQueryService = dataQueryService;
         }
 
         public async Task EnsureCardDefinitionExists(int multiverseId)
@@ -520,18 +524,24 @@ namespace Carpentry.Logic.Implementations
         //
         //
 
-        public async Task<List<SetDetailDto>> GetTrackedSets()
+        public async Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update)
         {
             //Might as well just get all sets from the Carpentry DB
-            //TODO - consider replacing this with a view
-            var dbSets = await _cardRepo.GetAllCardSets();
+            var dbSetTotals = _dataQueryService.QuerySetTotals().ToList();
 
-            var result = dbSets.Select(s => new SetDetailDto()
+            var result = dbSetTotals.Select(s => new SetDetailDto()
             {
                 Code = s.Code,
                 DataLastUpdated = s.LastUpdated,
                 Name = s.Name,
-            }).ToList();
+                CollectedCount = s.CollectedCount ?? 0,
+                InventoryCount = s.InventoryCount ?? 0,
+                IsTracked = s.IsTracked,
+                ScryLastUpdated = null,
+                TotalCount = s.TotalCount,
+            })
+            .OrderByDescending(s => s.ReleaseDate)    
+            .ToList();
 
             foreach(var dto in result)
             {
@@ -541,44 +551,44 @@ namespace Carpentry.Logic.Implementations
             return result;
         }
 
-        public async Task<List<SetDetailDto>> GetUntrackedSets()
-        {
-            //goal - get all scryfall sets NOT currently tracked by the app
-            //will exclude online-only sets, really old sets, and weird promos
+        //public async Task<List<SetDetailDto>> GetUntrackedSets()
+        //{
+        //    //goal - get all scryfall sets NOT currently tracked by the app
+        //    //will exclude online-only sets, really old sets, and weird promos
 
-            //check the scry repo for most recent data
-            //  if not up to date: call scry repo, filter, and apply to DB
-            //  return list of available sets (dataLastUpdated == null for all)
+        //    //check the scry repo for most recent data
+        //    //  if not up to date: call scry repo, filter, and apply to DB
+        //    //  return list of available sets (dataLastUpdated == null for all)
 
-            var auditData = await _scryfallRepo.GetAuditData();
+        //    var auditData = await _scryfallRepo.GetAuditData();
 
-            if(auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
-            {
-                //get the list of sets from the scryfall service
+        //    if(auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
+        //    {
+        //        //get the list of sets from the scryfall service
 
-                //maybe do some filtering
+        //        //maybe do some filtering
 
-                //add the results to the DB
-            }
+        //        //add the results to the DB
+        //    }
 
-            //var trackedSets = await GetTrackedSets();
+        //    //var trackedSets = await GetTrackedSets();
 
-            var trackedSetCodes = GetTrackedSets().Result.Select(x => x.Code).ToList(); //will this work?.....
+        //    var trackedSetCodes = GetTrackedSets().Result.Select(x => x.Code).ToList(); //will this work?.....
 
-            var scrySets = _scryfallRepo.GetAvailableSetOverviews().Result
-                .Where(x => !trackedSetCodes.Contains(x.Code))
-                .Select(x => new SetDetailDto()
-                {
-                    Code = x.Code,
-                    DataLastUpdated = null,
-                    InventoryCardCount = 0,
-                    Name = x.Name,
-                    ScryLastUpdated = x.LastUpdated,
-                })
-                .ToList(); //or this?
+        //    var scrySets = _scryfallRepo.GetAvailableSetOverviews().Result
+        //        .Where(x => !trackedSetCodes.Contains(x.Code))
+        //        .Select(x => new SetDetailDto()
+        //        {
+        //            Code = x.Code,
+        //            DataLastUpdated = null,
+        //            InventoryCardCount = 0,
+        //            Name = x.Name,
+        //            ScryLastUpdated = x.LastUpdated,
+        //        })
+        //        .ToList(); //or this?
 
-            return scrySets;
-        }
+        //    return scrySets;
+        //}
 
         public async Task UpdateTrackedSetScryData(string setCode)
         {

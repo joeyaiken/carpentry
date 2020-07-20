@@ -15,6 +15,8 @@ namespace Carpentry.Data.DataModels
 
         public DateTime ReleaseDate { get; set; }
 
+        public bool IsTracked { get; set; }
+
         public DateTime? LastUpdated { get; set; }
 
         //Associations

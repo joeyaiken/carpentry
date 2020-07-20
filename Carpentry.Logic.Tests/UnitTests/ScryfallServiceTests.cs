@@ -208,5 +208,44 @@ namespace Carpentry.Logic.Tests.UnitTests
             //Assert.IsTrue(result.CardTokens.Count > 100);
         }
 
+
+        [TestMethod]
+        public async Task ScryfallService_GetAllSets_Test()
+        {
+            //Assemble
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict); //MockBehavior.Strict
+
+            //Got this approach from the following article:
+            //https://gingter.org/2018/07/26/how-to-mock-httpclient-in-your-net-c-unit-tests/
+            handlerMock
+                .Protected()
+               .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+               )
+               .ReturnsAsync((HttpRequestMessage r, CancellationToken c) => new HttpResponseMessage()
+               {
+                   StatusCode = HttpStatusCode.OK,
+                   Content = new StringContent(MockHttpClient.HandleMockClientRequest(r.RequestUri.ToString())),
+               })
+               .Verifiable();
+
+            var httpClient = new HttpClient(handlerMock.Object)
+            {
+                BaseAddress = new Uri("http://test.com/"),
+            };
+
+            var scryService = new ScryfallService(httpClient);
+
+            //Act
+            var result = await scryService.GetAllSets();
+
+            //Assert
+            Assert.IsNotNull(result);
+            //Assert.IsTrue(result.CardTokens.Count > 100);
+
+        }
+
     }
 }

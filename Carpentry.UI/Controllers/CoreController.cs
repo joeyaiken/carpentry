@@ -78,11 +78,14 @@ namespace Carpentry.UI.Controllers
         //
         //GetTrackedSets(can this be the same source the DDLs pull from?)
         [HttpGet("[action]")]
-        public async Task<ActionResult<List<SetDetailDto>>> GetTrackedSets()
+        public async Task<ActionResult<List<SetDetailDto>>> GetTrackedSets(
+                bool showUntracked,
+                bool update = false
+            )
         {
             try
             {
-                var result = await _updateService.GetTrackedSets();
+                var result = await _updateService.GetTrackedSets(showUntracked, update);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -122,52 +125,53 @@ namespace Carpentry.UI.Controllers
             }
         }
         //GetAllAvailableSets
-        [HttpGet("[action]")]
-        public async Task<ActionResult<List<SetDetailDto>>> GetAllAvailableSets()
-        {
-            try
-            {
-                var result = await _updateService.GetAllAvailableSets();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("GetAllAvailableSets", ex));
-            }
-        }
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult<List<SetDetailDto>>> GetAllAvailableSets()
+        //{
+        //    try
+        //    {
+        //        //var result = await _updateService.GetAllAvailableSets();
+        //        //return Ok(result);
+        //        throw new NotImplementedException();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("GetAllAvailableSets", ex));
+        //    }
+        //}
 
         //GetUntrackedSets ??
 
 
 
         //AddTrackedSet
-        [HttpGet("[action]")]
-        public async Task<ActionResult> AddTrackedSet(string setCode)
-        {
-            try
-            {
-                await _updateService.AddTrackedSet(setCode);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("AddTrackedSet", ex));
-            }
-        }
-        //RemoveTrackedSet(fails if any inventory cards present)
-        [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveTrackedSet(string setCode)
-        {
-            try
-            {
-                await _updateService.RemoveTrackedSet(setCode);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
-            }
-        }
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> AddTrackedSet(string setCode)
+        //{
+        //    try
+        //    {
+        //        await _updateService.AddTrackedSet(setCode);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("AddTrackedSet", ex));
+        //    }
+        //}
+        ////RemoveTrackedSet(fails if any inventory cards present)
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> RemoveTrackedSet(string setCode)
+        //{
+        //    try
+        //    {
+        //        await _updateService.RemoveTrackedSet(setCode);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
+        //    }
+        //}
 
         #endregion
 

@@ -12,6 +12,8 @@ import { cardSearchAppReducer, CardSearchAppReducerState } from './cardSearchApp
 
 import { appFilterOptionsReducer, AppFilterOptionsReducerState } from './appFilterOptionsReducer';
 
+import { trackedSetDataReducer, TrackedSetDataReducerState } from './trackedSetDataReducer';
+
 //ui
 import { uiReducer, UiReducerState } from './uiReducer';
 
@@ -46,6 +48,7 @@ export interface AppState {
         deckDetail: DeckDetailState,
         inventory: InventoryDataReducerState,
         cardSearch: CardSearchDataReducerState,
+        trackedSets: TrackedSetDataReducerState,
     },
     app: {
         inventory: InventoryAppReducerState,
@@ -58,6 +61,7 @@ export interface AppState {
 export const reducers = {
     data: combineReducers({
         appFilterOptions: appFilterOptionsReducer,
+        trackedSets: trackedSetDataReducer,
         //isLoading: null,
         deckOverviews,
         deckDetail,

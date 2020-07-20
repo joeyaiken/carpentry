@@ -101,7 +101,7 @@ export const requestCoreData = (): any => {
 }
 function getCoreData(dispatch: Dispatch, state: AppState): any {
     const dataIsLoading = state.data.appFilterOptions.isLoading;
-    console.log('get core data ----------');
+    // console.log('get core data ----------');
     if(dataIsLoading) {
         return;
     }
@@ -116,6 +116,28 @@ function getCoreData(dispatch: Dispatch, state: AppState): any {
     //     dispatch(newDeckSaveComplete());
     // });
 }
+
+
+
+//getTrackedSets
+
+export const requestTrackedSets = (showUntracked: boolean, update: boolean): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return getTrackedSets(dispatch, getState(), showUntracked, update);
+    }
+}
+function getTrackedSets(dispatch: Dispatch, state: AppState, showUntracked: boolean, update: boolean): any {
+    const dataIsLoading = state.data.trackedSets.isLoading;
+    if(dataIsLoading){
+        return;
+    }
+    dispatch(apiDataRequested('trackedSets', { showUntracked: showUntracked, update: update}));
+    api.core.getTrackedSets(showUntracked, update).then((results) => {
+        dispatch(apiDataReceived('trackedSets', results));
+    })
+}
+
+
 
 // // export const CORE_DATA_REQUESTED = 'CORE_DATA_REQUESTED';
 // // export const coreDataRequested = (): ReduxAction  => ({

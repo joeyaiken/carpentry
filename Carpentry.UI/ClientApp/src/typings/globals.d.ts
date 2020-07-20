@@ -10,7 +10,8 @@ declare type ApiScopeOption =
     "inventoryOverview" | 
     "inventoryDetail" | 
     "cardSearchResults" | 
-    "cardSearchInventoryDetail" ;
+    "cardSearchInventoryDetail" |
+    "trackedSets";
 
 declare type DeckFormatOption = 'Standard' | 'Legacy' | 'Modern' | 'Commander' | 'Oathbreaker';
 

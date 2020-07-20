@@ -53,8 +53,8 @@ export const api = {
             return result;
         },
 
-        async getTrackedSets(): Promise<SetDetailDto> {
-            const endpoint = `api/Core/GetTrackedSets`;
+        async getTrackedSets(showUntracked: boolean, update: boolean): Promise<SetDetailDto> {
+            const endpoint = `api/Core/GetTrackedSets?showUntracked=${showUntracked}&update=${update}`;
             const result = await Get(endpoint);
             return result;
         },

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Carpentry.Data.DataModels.QueryResults;
 using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Data.QueryResults;
@@ -42,5 +44,12 @@ namespace Carpentry.Data.Interfaces
         Task<IEnumerable<CardDataDto>> SearchInventoryCards(InventoryQueryParameter filters);
 
         Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);
+
+
+
+
+        //IDK why the others aren't on there yet
+        IQueryable<SetTotalsResult> QuerySetTotals();
+
     }
 }

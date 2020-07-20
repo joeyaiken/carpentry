@@ -32,7 +32,7 @@ namespace Carpentry.Logic.Interfaces
         //
 
         //public async List<SetDetailDto> GetTrackedSets()
-        Task<List<SetDetailDto>> GetTrackedSets();
+        Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update);
 
         //public async void UpdateTrackedSetScryData(string setCode)
         Task UpdateTrackedSetScryData(string setCode);
@@ -41,7 +41,7 @@ namespace Carpentry.Logic.Interfaces
         Task UpdateTrackedSetCardData(string setCode);
 
         //public async List<SetDetailDto> GetAllAvailableSets()
-        Task<List<SetDetailDto>> GetAllAvailableSets();
+        //Task<List<SetDetailDto>> GetAllAvailableSets();
 
         //public async void AddTrackedSet(string setCode)
         Task AddTrackedSet(string setCode);

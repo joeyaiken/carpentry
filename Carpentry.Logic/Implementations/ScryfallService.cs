@@ -192,6 +192,10 @@ namespace Carpentry.Logic.Implementations
             return mappedCards;
         }
 
+
+        //This will return the (filtered) list of sets from scryfall
+        //It won't include, for example, anything online-only
+        //Maybe in the future, include a param to include promos/whatnot
         public async Task<List<ScryfallSetOverviewDto>> GetAllSets()
         {
             var endpoint = $"https://api.scryfall.com/sets";
@@ -205,22 +209,55 @@ namespace Carpentry.Logic.Implementations
 
             foreach(var scrySet in responseData)
             {
+                //need JObject not JToken
+
+
+
+                //result.Code = setResponseObject.Value<string>("code");
+
                 var newDto = new ScryfallSetOverviewDto()
                 {
-                    Code = setResponseObject.Value<string>("code"),
-
-                    Name = setResponseObject.Value<string>("name"),
-
-                    SetType = setResponseObject.Value<string>("set_type"),
-                    CardCount = setResponseObject.Value<int>("card_count"),
-                    Digital = setResponseObject.Value<bool>("digital"),
-                    FoilOnly = setResponseObject.Value<bool>("foil_only"),
-                    NonfoilOnly = setResponseObject.Value<bool>("nonfoil_only"),
-                    ReleasedAtString = setResponseObject.Value<string>("released_at"),
+                    //"object": "set",
+                    //"id": "372dafe8-b5d1-4b81-998f-3ae96b59498a",
+                    Code = scrySet.Value<string>("code"),
+                    //"mtgo_code": "2xm",
+                    //"arena_code": "2xm",
+                    //"tcgplayer_id": 2655,
+                    Name = scrySet.Value<string>("name"),
+                    //"uri": "https://api.scryfall.com/sets/372dafe8-b5d1-4b81-998f-3ae96b59498a",
+                    //"scryfall_uri": "https://scryfall.com/sets/2xm",
+                    //"search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3A2xm&unique=prints",
+                    ReleasedAtString = scrySet.Value<string>("released_at"),
+                    SetType = scrySet.Value<string>("set_type"),
+                    CardCount = scrySet.Value<int>("card_count"),
+                    Digital = scrySet.Value<bool>("digital"),
+                    NonfoilOnly = scrySet.Value<bool>("nonfoil_only"),
+                    FoilOnly = scrySet.Value<bool>("foil_only"),
+                    //"icon_svg_uri": "https://img.scryfall.com/sets/2xm.svg?1594612800"
                 };
 
                 result.Add(newDto);
             }
+
+            //funny
+            string[] excludedSetTypes = {
+                "token",
+                "funny",
+                "memorabilia",
+                "promo",
+                "box",
+            };
+
+            result = result
+                .Where(s => 
+                    s.Digital == false
+                        &&
+                    !excludedSetTypes.Contains(s.SetType)
+                        &&
+                    !s.Name.Contains("Judge ")
+                )
+                .ToList();
+            //This should be filtered
 
             return result;
         }
