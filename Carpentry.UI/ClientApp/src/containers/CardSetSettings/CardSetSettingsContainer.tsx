@@ -11,6 +11,9 @@ import { requestTrackedSets } from '../../actions/coreActions';
 
 interface PropsFromState {
     trackedSetDetails: SetDetailDto[];
+
+    showUntracked: boolean;
+
 }
 
 type CardSetSettingsContainerProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -18,19 +21,21 @@ type CardSetSettingsContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 class CardSetSettingsContainer extends React.Component<CardSetSettingsContainerProps> {
     constructor(props: CardSetSettingsContainerProps) {
         super(props);
+        this.handleRefreshClick = this.handleRefreshClick.bind(this);
+        this.handleShowUntrackedClick = this.handleShowUntrackedClick.bind(this);
     }
 
     componentDidMount() {
         //showUntracked, update
-        this.props.dispatch(requestTrackedSets(false, false));
+        this.props.dispatch(requestTrackedSets(this.props.showUntracked, false));
     }
 
     handleRefreshClick(): void {
-
+        this.props.dispatch(requestTrackedSets(this.props.showUntracked, true));
     }
 
     handleShowUntrackedClick(): void {
-        
+        this.props.dispatch(requestTrackedSets(!this.props.showUntracked, false));
     }
 
     render() {
@@ -39,19 +44,35 @@ class CardSetSettingsContainer extends React.Component<CardSetSettingsContainerP
                 onRefreshClick={this.handleRefreshClick}
                 onShowUntrackedClick={this.handleShowUntrackedClick}
                 trackedSetDetails={this.props.trackedSetDetails}
-                showUntrackedValue={true}
+                showUntrackedValue={this.props.showUntracked}
             />
         );
     }
 }
 
+// function selectDeckList(state: AppState): DeckOverviewDto[] {
+//     //state.data.
+//     //const someting = state.
+//     const { deckIds, decksById } = state.data.deckOverviews;
+//     const result: DeckOverviewDto[] = deckIds.map( id => decksById[id]);
+//     return result;
+// }
+
+function selectTrackedSets(state: AppState): SetDetailDto[] {
+    const { setsById, setIds } = state.data.trackedSets;
+    const result: SetDetailDto[] = setIds.map((setId) => setsById[setId]);
+    return result;
+}
+
+////
 function mapStateToProps(state: AppState, ownProps): PropsFromState {
 
     // console.log('attempting to check ownProps');
     // console.log(ownProps);
 
     const result: PropsFromState = {
-        trackedSetDetails: [],
+        trackedSetDetails: selectTrackedSets(state),
+        showUntracked: state.data.trackedSets.showUntracked,
     }
     return result;
 }

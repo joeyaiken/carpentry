@@ -1,77 +1,85 @@
 import { API_DATA_REQUESTED, API_DATA_RECEIVED } from '../actions/';
 
 export interface TrackedSetDataReducerState {
-    // sets: {
-    //     byName: {[name:string]: FilterOption}
-    //     allKeys: string[]
-    // }
-    // types: {
-    //     byName: {[name:string]: FilterOption}
-    //     allKeys: string[]
-    // }
-    // colors: {
-    //     byName: {[name:string]: FilterOption}
-    //     allKeys: string[]
-    // }
-    // rarities: {
-    //     byName: {[name:string]: FilterOption}
-    //     allKeys: string[]
-    // }
+    setsById: { [id: number]: SetDetailDto };
+    setIds: number[];
     isLoading: boolean;
-    filterOptions: AppFiltersDto;
+    showUntracked: boolean;
 }
 
-export const trackedSetDataRequested = (state: TrackedSetDataReducerState, action: ReduxAction): TrackedSetDataReducerState => {
-    const { scope } = action.payload;
+export const apiDataRequested = (state: TrackedSetDataReducerState, action: ReduxAction): TrackedSetDataReducerState => {
+    const { scope, data } = action.payload;
     
-    if(scope as ApiScopeOption !== "coreFilterOptions") return (state);
+    if(scope as ApiScopeOption !== "trackedSets") return (state);
     
+    const { showUntracked } = data
+
     const newState: TrackedSetDataReducerState = {
         ...state,
         ...initialState,
         isLoading: true,
+        showUntracked: showUntracked,
     }
 
     return newState;
 }
 
-export const trackedSetDataReceived = (state: TrackedSetDataReducerState, action: ReduxAction): TrackedSetDataReducerState => {
-    
+export const apiDataReceived = (state: TrackedSetDataReducerState, action: ReduxAction): TrackedSetDataReducerState => {
     const { scope, data } = action.payload;
+    
+    if(scope as ApiScopeOption !== "trackedSets") return (state);
 
-    // console.log('card search data receive');
-    // console.log(`scope: ${scope}`);
+    //I guess this is normally where Normalizr should be used?
+    const apiSets: SetDetailDto[] = data;
 
-    if(scope as ApiScopeOption !== "coreFilterOptions") return (state);
-    console.log('filters recieved')
-    // const searchResultPayload: MagicCard[] = data || [];
-    // let resultsById = {};
-    // searchResultPayload.forEach(card => resultsById[card.multiverseId] = card);
+    let setsById: { [key:number]: SetDetailDto } = {};
 
-    const searchResultPayload: AppFiltersDto = data || {};
+    apiSets.forEach(set => {
+        setsById[set.setId] = set;
+    });
 
-    console.log(searchResultPayload)
     const newState: TrackedSetDataReducerState = {
-        ...state,
-        filterOptions: searchResultPayload,
         isLoading: false,
-        // searchResultsById: resultsById,
-        // allSearchResultIds: searchResultPayload.map(card => card.multiverseId),
-        // isLoading: false,
-        // searchResults: searchResultPayload,
+        setIds: apiSets.map(set => set.setId),
+        setsById: setsById,
+        showUntracked: state.showUntracked,
     }
-    console.log('new filter state');
-    console.log(newState)
+
+
+
+    
+    // const newState: TrackedSetDataReducerState = {
+    //     ...state,
+    //     deckIds: apiDecks.map(deck => deck.id),
+    //     decksById: decksById,
+    //     isLoading: false,
+    //     isInitialized: true,
+    //     // decks: data,
+    // };
+
+
+    // console.log(searchResultPayload)
+    // const newState: TrackedSetDataReducerState = {
+    //     ...state,
+    //     filterOptions: searchResultPayload,
+    //     isLoading: false,
+    //     // searchResultsById: resultsById,
+    //     // allSearchResultIds: searchResultPayload.map(card => card.multiverseId),
+    //     // isLoading: false,
+    //     // searchResults: searchResultPayload,
+    // }
+    // console.log('new filter state');
+    // console.log(newState)
     return newState;
 }
 
 export const trackedSetDataReducer = (state = initialState, action: ReduxAction): TrackedSetDataReducerState => {
     switch(action.type){
         case API_DATA_REQUESTED:
-            return trackedSetDataRequested(state, action);
+            return apiDataRequested(state, action);
 
         case API_DATA_RECEIVED:
-            return trackedSetDataReceived(state, action);
+            return apiDataReceived(state, action);
             
         default:
             return(state)
@@ -79,35 +87,9 @@ export const trackedSetDataReducer = (state = initialState, action: ReduxAction)
 }
 
 const initialState: TrackedSetDataReducerState = {
-    // sets: {
-    //     byName:{},
-    //     allKeys: [],
-    // },
-    // types: {
-    //     byName:{},
-    //     allKeys: [],
-    // },
-    // colors: {
-    //     byName:{},
-    //     allKeys: [],
-    // },
-    // rarities: {
-    //     byName:{},
-    //     allKeys: [],
-    // },
-    // filterOptions: {
-    //     sets: GetSetFilters(),
-    //     colors: GetColorFilters(),
-    //     rarities: GetRarityFilters(),
-    //     types: GetTypeFilters()
-    // },
-    filterOptions: {
-        sets: [],
-        colors: [],
-        rarities: [],
-        types: [],
-        formats: [],
-        statuses: [],
-    },
     isLoading: false,
+    showUntracked: false,
+    setsById: {},
+    setIds: [],
 }
+

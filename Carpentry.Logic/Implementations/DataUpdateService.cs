@@ -531,6 +531,7 @@ namespace Carpentry.Logic.Implementations
 
             var result = dbSetTotals.Select(s => new SetDetailDto()
             {
+                SetId = s.SetId,
                 Code = s.Code,
                 DataLastUpdated = s.LastUpdated,
                 Name = s.Name,

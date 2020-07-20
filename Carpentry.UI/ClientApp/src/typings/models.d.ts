@@ -234,6 +234,7 @@ declare interface MagicCard {
 }
 
 declare interface SetDetailDto {
+    setId: number;
     code: string;
     name: string;
     dataLastUpdated: Date | null;
