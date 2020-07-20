@@ -19,15 +19,17 @@ namespace Carpentry.Data.Interfaces
     {
         Task<DateTime?> GetSetDataLastUpdated(string setCode);
 
-        Task AddOrUpdateSet(ScryfallSetData setData);
+        Task AddOrUpdateSet(ScryfallSetData setData, bool applyData);
 
-        Task<ScryfallSetData> GetSetByCode(string setCode);
+        Task<ScryfallSetData> GetSetByCode(string setCode, bool includeData);
 
         Task<List<ScryfallSetOverview>> GetAvailableSetOverviews(); 
 
         Task EnsureDatabaseExists();
 
         Task<ScryfallAuditData> GetAuditData();
+
+        Task SetAuditData();
 
         //Task DeleteSet(int setId);
     }

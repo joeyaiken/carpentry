@@ -21,6 +21,8 @@ namespace Carpentry.Logic.Interfaces
 
         Task<List<ScryfallMagicCard>> SearchScryfallByName(string name, bool exclusive);
 
+        Task<List<ScryfallSetOverviewDto>> GetAllSets();
+
         //search by name
         //  GetCardsByName
 

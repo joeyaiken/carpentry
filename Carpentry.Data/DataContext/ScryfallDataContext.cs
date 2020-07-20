@@ -5,7 +5,7 @@ namespace Carpentry.Data.DataContext
 {
     public class ScryfallDataContext : DbContext
     {
-        public DbSet<ScryfallAuditData> AuditData { get; set; }
+        public DbSet<ScryfallAuditData> ScryfallAuditData { get; set; }
      
         public DbSet<ScryfallSetData> Sets { get; set; }
 
@@ -20,7 +20,7 @@ namespace Carpentry.Data.DataContext
 
             modelBuilder.Entity<ScryfallAuditData>(eb =>
             {
-                eb.HasNoKey();
+                //eb.HasNoKey();
             });
         }
 

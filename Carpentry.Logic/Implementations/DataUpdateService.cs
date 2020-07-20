@@ -167,11 +167,11 @@ namespace Carpentry.Logic.Implementations
                     CardData = JsonConvert.SerializeObject(scryfallPayload.CardTokens)
                 };
 
-                await _scryfallRepo.AddOrUpdateSet(scryData);
+                await _scryfallRepo.AddOrUpdateSet(scryData, true);
             }
             else
             {
-                scryData = await _scryfallRepo.GetSetByCode(setCode);
+                scryData = await _scryfallRepo.GetSetByCode(setCode, true);
             }
 
             List<MagicCardDto> magicCards = null;
@@ -193,7 +193,7 @@ namespace Carpentry.Logic.Implementations
                 //Serialize & apply to set
                 scryData.CardData = JsonConvert.SerializeObject(magicCards);
                 scryData.DataIsParsed = true;
-                await _scryfallRepo.AddOrUpdateSet(scryData);
+                await _scryfallRepo.AddOrUpdateSet(scryData, true);
             }
 
             //Ensure the set definition exists / get the set ID
@@ -526,8 +526,16 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update)
         {
-            //Might as well just get all sets from the Carpentry DB
-            var dbSetTotals = _dataQueryService.QuerySetTotals().ToList();
+            //update first?
+            if (update)
+            {
+                await TryUpdateAvailableSets();
+            }
+
+            //Get list of sets from vwSetTotals, filtering if requested
+            var dbSetTotals = _dataQueryService.QuerySetTotals()
+                .Where(s => showUntracked || s.IsTracked == true)
+                .ToList();
 
             var result = dbSetTotals.Select(s => new SetDetailDto()
             {
@@ -540,8 +548,9 @@ namespace Carpentry.Logic.Implementations
                 IsTracked = s.IsTracked,
                 ScryLastUpdated = null,
                 TotalCount = s.TotalCount,
+                ReleaseDate = s.ReleaseDate,
             })
-            .OrderByDescending(s => s.ReleaseDate)    
+            .OrderByDescending(s => s.ReleaseDate)
             .ToList();
 
             foreach(var dto in result)
@@ -550,6 +559,69 @@ namespace Carpentry.Logic.Implementations
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Update the list of sets available to track (does not update the data of cards in the set)
+        /// </summary>
+        /// <returns></returns>
+        private async Task TryUpdateAvailableSets()
+        {
+            //Update scry data, if not updated today
+            var auditData = await _scryfallRepo.GetAuditData();
+            if (auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
+            {
+                //get the list of sets from the scryfall service
+                var allSetsResult = await _scryService.GetAllSets();
+
+                //update scry data
+                foreach(var setResult in allSetsResult)
+                {
+                    var scryRepoSet = await _scryfallRepo.GetSetByCode(setResult.Code, false);
+
+                    if (scryRepoSet == null)
+                    {
+                        scryRepoSet = new ScryfallSetData();
+                    }
+
+                    scryRepoSet.Code = setResult.Code;
+                    scryRepoSet.Name = setResult.Name;
+                    scryRepoSet.ReleasedAt = DateTime.Parse(setResult.ReleasedAtString);
+                    scryRepoSet.SetType = setResult.SetType;
+                    scryRepoSet.CardCount = setResult.CardCount;
+                    scryRepoSet.Digital = setResult.Digital;
+                    scryRepoSet.NonfoilOnly = setResult.NonfoilOnly;
+                    scryRepoSet.FoilOnly = setResult.FoilOnly;
+
+                    await _scryfallRepo.AddOrUpdateSet(scryRepoSet, false);
+                }
+
+                await _scryfallRepo.SetAuditData();
+            }
+
+            //get the set definition overviews from the scry DB
+            var scrySets = await _scryfallRepo.GetAvailableSetOverviews();
+
+            var existingCardSets = await _cardRepo.GetAllCardSets();
+
+            foreach (var scrySet in scrySets)
+            {
+                //for each result, see if it exists in the DB
+                var existingSet = existingCardSets.Where(x => x.Code.ToLower() == scrySet.Code.ToLower()).FirstOrDefault();
+                if(existingCardSets != null)
+                {
+                    existingSet = new CardSetData()
+                    {
+                        Code = scrySet.Code,
+                        IsTracked = false,
+                        LastUpdated = null,
+                    };
+                }
+                existingSet.Name = scrySet.Name;
+                existingSet.ReleaseDate = scrySet.ReleasedAt;
+
+                await _cardRepo.AddOrUpdateCardSet(existingSet);
+            }
         }
 
         //public async Task<List<SetDetailDto>> GetUntrackedSets()
@@ -563,7 +635,7 @@ namespace Carpentry.Logic.Implementations
 
         //    var auditData = await _scryfallRepo.GetAuditData();
 
-        //    if(auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
+        //    if (auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
         //    {
         //        //get the list of sets from the scryfall service
 

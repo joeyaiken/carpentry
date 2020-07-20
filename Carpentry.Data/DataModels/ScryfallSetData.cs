@@ -20,6 +20,15 @@ namespace Carpentry.Data.DataModels
         public string CardData { get; set; }
 
         public bool DataIsParsed { get; set; }
-
+        
+        public string SetType { get; set; }
+        
+        public int? CardCount { get; set; }
+        
+        public bool? Digital { get; set; }
+        
+        public bool? NonfoilOnly { get; set; }
+        
+        public bool? FoilOnly { get; set; }
     }
 }

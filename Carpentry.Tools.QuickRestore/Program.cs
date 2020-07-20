@@ -60,20 +60,56 @@ namespace Carpentry.Tools.QuickRestore
                 //.AddDbContext<CarpentryDataContext>(options => options.UseSqlite(cardDatabaseLocation))
                 //.AddDbContext<ScryfallDataContext>(options => options.UseSqlite(scryDatabaseLocation))
 
+                //.AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
+                //.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
+
+                ////data services
+                //.AddSingleton<ICardDataRepo, CardDataRepo>()
+                //.AddSingleton<IDeckDataRepo, DeckDataRepo>()
+                //.AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
+                //.AddSingleton<IScryfallDataRepo, ScryfallRepo>()
+                //.AddSingleton<IDataReferenceService, DataReferenceService>()
+                //.AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
+
+                ////logic services
+                .AddScoped<IDataRestoreService, DataRestoreService>()
+                //.AddScoped<IDataUpdateService, DataUpdateService>()
+
+                //.AddScoped<IScryfallService, ScryfallService>()
+                //.AddHttpClient<IScryfallService, ScryfallService>().Services
+
+
+
                 .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
+
+                //.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"))
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
-                //data services
-                .AddSingleton<ICardDataRepo, CardDataRepo>()
-                .AddSingleton<IDeckDataRepo, DeckDataRepo>()
-                .AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
-                .AddSingleton<IScryfallDataRepo, ScryfallRepo>()
-                .AddSingleton<IDataReferenceService, DataReferenceService>()
-                .AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
 
-                //logic services
-                .AddScoped<IDataRestoreService, DataRestoreService>()
+                //.AddSingleton<IDataBackupConfig, CarpentryAppConfig>()
+
+                ////DB repos
+                .AddScoped<ICardDataRepo, CardDataRepo>()
+                .AddScoped<IDeckDataRepo, DeckDataRepo>()
+                .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
+                .AddScoped<IScryfallDataRepo, ScryfallRepo>()
+                .AddScoped<IDataReferenceRepo, DataReferenceRepo>()
+
+
+                //DB 
+                .AddScoped<IDataReferenceService, DataReferenceService>()
+                .AddScoped<IDataQueryService, DataQueryService>()
+
+
+                //Logic 6
+                .AddScoped<ICardSearchService, CardSearchService>()
+                .AddScoped<IDeckService, DeckService>()
+                .AddScoped<IInventoryService, InventoryService>()
+
+                .AddScoped<ICardImportService, CardImportService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
+                .AddScoped<IDataBackupService, DataBackupService>()
+                .AddScoped<IFilterService, FilterService>()
 
                 .AddScoped<IScryfallService, ScryfallService>()
                 .AddHttpClient<IScryfallService, ScryfallService>().Services

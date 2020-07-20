@@ -33,7 +33,7 @@ namespace Carpentry.Data.Implementations
             return setLastUpdated;
         }
 
-        public async Task AddOrUpdateSet(ScryfallSetData setData)
+        public async Task AddOrUpdateSet(ScryfallSetData setData, bool applyData)
         {
             //do I map or blindly add/update?
             //TODO - Map between models instead of blindly applying
@@ -48,7 +48,12 @@ namespace Carpentry.Data.Implementations
                 existingSet.DataIsParsed = setData.DataIsParsed;
                 existingSet.LastUpdated = setData.LastUpdated;
                 existingSet.ReleasedAt = setData.ReleasedAt;
-                existingSet.CardData = setData.CardData;
+
+                if (applyData)
+                {
+                    existingSet.CardData = setData.CardData;
+                }
+
                 //_scryContext.Sets.Update(setData);
                 //setData.Id = existingSet.Id;
                 _scryContext.Sets.Update(existingSet);
@@ -64,11 +69,27 @@ namespace Carpentry.Data.Implementations
             await _scryContext.SaveChangesAsync();
         }
 
-        public async Task<ScryfallSetData> GetSetByCode(string setCode)
+        public async Task<ScryfallSetData> GetSetByCode(string setCode, bool includeData)
         {
             var set = await _scryContext
                 .Sets
                 .Where(x => x.Code.ToLower() == setCode.ToLower())
+                .Select(c => new ScryfallSetData
+                {
+                    CardCount = c.CardCount,
+                    //CardData = c.CardData,
+                    CardData = includeData ? c.CardData : null,
+                    Code = c.Code,
+                    DataIsParsed = c.DataIsParsed,
+                    Digital = c.Digital,
+                    FoilOnly = c.FoilOnly,
+                    Id = c.Id,
+                    LastUpdated = c.LastUpdated,
+                    Name = c.Name,
+                    NonfoilOnly = c.NonfoilOnly,
+                    ReleasedAt = c.ReleasedAt,
+                    SetType = c.SetType,
+                })
                 .FirstOrDefaultAsync();
             return set;
             
@@ -92,8 +113,25 @@ namespace Carpentry.Data.Implementations
 
         public async Task<ScryfallAuditData> GetAuditData()
         {
-            var auditData = await _scryContext.AuditData.FirstOrDefaultAsync();
+            var auditData = await _scryContext.ScryfallAuditData.FirstOrDefaultAsync();
             return auditData;
+        }
+
+        public async Task SetAuditData()
+        {
+            var existingAuditData = await _scryContext.ScryfallAuditData.FirstOrDefaultAsync();
+
+            if(existingAuditData == null)
+            {
+                var newAuditData = new ScryfallAuditData() { DefinitionsLastUpdated = DateTime.Now };
+                _scryContext.ScryfallAuditData.Add(newAuditData);
+            }
+            else
+            {
+                existingAuditData.DefinitionsLastUpdated = DateTime.Now;
+                _scryContext.ScryfallAuditData.Update(existingAuditData);
+            }
+            await _scryContext.SaveChangesAsync();
         }
 
         public async Task<List<ScryfallSetOverview>> GetAvailableSetOverviews()
@@ -105,6 +143,12 @@ namespace Carpentry.Data.Implementations
                     Code = x.Code,
                     Name = x.Name,
                     LastUpdated = x.LastUpdated,
+                    CardCount = x.CardCount ?? 0,
+                    Digital = x.Digital ?? false,
+                    FoilOnly = x.FoilOnly ?? false,
+                    NonfoilOnly = x.NonfoilOnly ?? false,
+                    SetType = x.SetType,
+                    ReleasedAt = x.ReleasedAt,
                 })
                 .ToListAsync();
             return result;
