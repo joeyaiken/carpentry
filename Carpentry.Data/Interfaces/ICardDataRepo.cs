@@ -14,6 +14,7 @@ namespace Carpentry.Data.Interfaces
         //Sets
         Task<List<string>> GetAllCardSetCodes();
         Task<DateTime?> GetCardSetLastUpdated(string setCode); //why isn't this a GetSetByCode ?
+        Task<CardSetData> GetCardSetById(int setId);
         Task<int> AddOrUpdateCardSet(CardSetData setData); //This probably doesn't actually have to return an ID
 
         //Cards

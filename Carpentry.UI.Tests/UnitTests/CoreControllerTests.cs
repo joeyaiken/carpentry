@@ -114,53 +114,53 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.AreEqual(resultValue.Count, expectedResult.Count);
         }
 
-        [TestMethod]
-        public async Task Core_UpdateTrackedSetScryData_ReturnsOK_Test()
-        {
-            //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+        //[TestMethod]
+        //public async Task Core_UpdateTrackedSetScryData_ReturnsOK_Test()
+        //{
+        //    //assemble
+        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
+        //    var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+        //    var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+        //    var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
 
-            mockUpdateService
-                .Setup(p => p.UpdateTrackedSetScryData(It.IsAny<string>()))
-                .Returns(Task.CompletedTask);
+        //    mockUpdateService
+        //        .Setup(p => p.UpdateTrackedSetScryData(It.IsAny<string>()))
+        //        .Returns(Task.CompletedTask);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
+        //    var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
 
-            var setCodeToRequest = "IKO";
+        //    var setCodeToRequest = "IKO";
 
-            //act
-            var response = await coreController.UpdateTrackedSetScryData(setCodeToRequest);
+        //    //act
+        //    var response = await coreController.UpdateTrackedSetScryData(setCodeToRequest);
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
-        }
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkResult));
+        //}
 
-        [TestMethod]
-        public async Task Core_UpdateTrackedSetCardData_ReturnsOK_Test()
-        {
-            //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+        //[TestMethod]
+        //public async Task Core_UpdateTrackedSetCardData_ReturnsOK_Test()
+        //{
+        //    //assemble
+        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
+        //    var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+        //    var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+        //    var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
 
-            mockUpdateService
-                .Setup(p => p.UpdateTrackedSetCardData(It.IsAny<string>()))
-                .Returns(Task.CompletedTask);
+        //    mockUpdateService
+        //        .Setup(p => p.UpdateTrackedSetCardData(It.IsAny<string>()))
+        //        .Returns(Task.CompletedTask);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
+        //    var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
 
-            var setCodeToRequest = "IKO";
+        //    var setCodeToRequest = "IKO";
 
-            //act
-            var response = await coreController.UpdateTrackedSetCardData(setCodeToRequest);
+        //    //act
+        //    var response = await coreController.UpdateTrackedSetCardData(setCodeToRequest);
 
-            //assert
-            Assert.IsInstanceOfType(response, typeof(OkResult));
-        }
+        //    //assert
+        //    Assert.IsInstanceOfType(response, typeof(OkResult));
+        //}
 
         //[TestMethod]
         //public async Task Core_GetAllAvailableSets_ReturnsOK_Test()

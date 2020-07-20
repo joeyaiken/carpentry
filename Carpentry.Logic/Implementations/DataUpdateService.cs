@@ -561,6 +561,63 @@ namespace Carpentry.Logic.Implementations
             return result;
         }
 
+
+        public async Task AddTrackedSet(int setId)
+        {
+            //get the set for this ID
+            var dbSet = await _cardRepo.GetCardSetById(setId);
+
+            if(dbSet == null)
+            {
+                throw new ArgumentException($"No set matching provided set ID of {setId}");
+            }
+
+            if (dbSet.IsTracked)
+            {
+                return;
+            }
+
+            //get data from scryfall
+
+            //update if scryfall is out of date
+
+
+            //add card definition batch
+            //  Should this be done in batches?
+            //      Variants
+            //      Color/identity
+            //      Variants(prices)
+            //      Legalities
+
+            dbSet.IsTracked = true;
+            dbSet.LastUpdated = DateTime.Now;
+            await _cardRepo.AddOrUpdateCardSet(dbSet);
+        }
+
+        public async Task RemoveTrackedSet(int setId)
+        {
+            //get DB set
+
+            //verify 0 owned/collected
+
+            //remove card definitions
+
+            //update set
+        }
+
+        public async Task UpdateTrackedSet(int setId)
+        {
+            //get data from scryfall
+
+            //update scryfall if out of date
+            
+            //1:    itterate over each card, checking the existing DB card
+            //2:    Remove all CardVariant & CardLegalities for the cards, & re-populate just those records
+
+
+
+        }
+
         /// <summary>
         /// Update the list of sets available to track (does not update the data of cards in the set)
         /// </summary>

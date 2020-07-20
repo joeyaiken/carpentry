@@ -36,6 +36,12 @@ namespace Carpentry.Data.Implementations
             return setLastUpdated;
         }
 
+        public async Task<CardSetData> GetCardSetById(int setId)
+        {
+            CardSetData result = await _cardContext.Sets.FirstOrDefaultAsync(s => s.Id == setId);
+            return result;
+        }
+
         //This probably doesn't actually have to return an ID
         public async Task<int> AddOrUpdateCardSet(CardSetData setData)
         {
@@ -47,7 +53,7 @@ namespace Carpentry.Data.Implementations
                 existingSet.LastUpdated = setData.LastUpdated;
                 existingSet.Name = setData.Name;
                 existingSet.ReleaseDate = setData.ReleaseDate;
-
+                
                 //setData.Id = existingSet.Id;
                 _cardContext.Sets.Update(existingSet);
             }

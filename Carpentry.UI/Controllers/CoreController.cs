@@ -74,21 +74,11 @@ namespace Carpentry.UI.Controllers
 
         #region tracked set definitions
 
-        //-- all about managing card definitions - "card data" controller?
-        //
-        //GetTrackedSets(can this be the same source the DDLs pull from?)
         [HttpGet("[action]")]
-        public async Task<ActionResult<List<SetDetailDto>>> GetTrackedSets(
-                bool showUntracked,
-                bool update = false
-            )
+        public async Task<ActionResult<List<SetDetailDto>>> GetTrackedSets(bool showUntracked, bool update = false)
         {
             try
             {
-
-
-
-
                 var result = await _updateService.GetTrackedSets(showUntracked, update);
                 return Ok(result);
             }
@@ -98,36 +88,81 @@ namespace Carpentry.UI.Controllers
             }
         }
 
+        //AddTrackedSet
+        [HttpGet("[action]")]
+        public async Task<ActionResult> AddTrackedSet(int setId)
+        {
+            try
+            {
+                await _updateService.AddTrackedSet(setId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("AddTrackedSet", ex));
+            }
+        }
+
+        //RemoveTrackedSet
+        [HttpGet("[action]")]
+        public async Task<ActionResult> RemoveTrackedSet(int setId)
+        {
+            try
+            {
+                await _updateService.RemoveTrackedSet(setId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
+            }
+        }
+
+        //UpdateTrackedSet
+        [HttpGet("[action]")]
+        public async Task<ActionResult> UpdateTrackedSet(int setId)
+        {
+            try
+            {
+                await _updateService.UpdateTrackedSet(setId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("UpdateTrackedSet", ex));
+            }
+        }
+
         //Get Tracked Set Detail ?
 
         //UpdateTrackedSetScryData
-        [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateTrackedSetScryData(string setCode)
-        {
-            try
-            {
-                await _updateService.UpdateTrackedSetScryData(setCode);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetScryData", ex));
-            }
-        }
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> UpdateTrackedSetScryData(string setCode)
+        //{
+        //    try
+        //    {
+        //        await _updateService.UpdateTrackedSetScryData(setCode);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetScryData", ex));
+        //    }
+        //}
         //UpdateTrackedSetCardData
-        [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateTrackedSetCardData(string setCode)
-        {
-            try
-            {
-                await _updateService.UpdateTrackedSetCardData(setCode);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetCardData", ex));
-            }
-        }
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> UpdateTrackedSetCardData(string setCode)
+        //{
+        //    try
+        //    {
+        //        await _updateService.UpdateTrackedSetCardData(setCode);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetCardData", ex));
+        //    }
+        //}
         //GetAllAvailableSets
         //[HttpGet("[action]")]
         //public async Task<ActionResult<List<SetDetailDto>>> GetAllAvailableSets()
