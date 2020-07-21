@@ -123,11 +123,42 @@ namespace Carpentry.Data.Implementations
 
             IEnumerable<CardOverviewResult> query;
 
+            //var test = QueryCardsByUnique().Take(100).ToList();
+
+            //var anotherTest = QueryCardsByUnique().ToList();
+
+            //var doesThisBreak = QueryCardsByUnique().Select(x => x).ToList();
+
+            //var confusion = QueryCardsByUnique().Select(x => new CardOverviewResult() { }).ToList();
+
+            //var queryTest = QueryCardsByUnique()
+
+            //            .Select((x, i) => new CardOverviewResult()
+            //            {
+            //                //Id = i + 1, //When querying by unique, the MID is NOT a unique value
+            //                //SetCode = x.SetCode,
+            //                //Cmc = x.Cmc,
+            //                //Cost = x.ManaCost,
+            //                //Count = x.CardCount,
+            //                //Img = x.ImageUrl,
+            //                //Name = x.Name,
+            //                //Type = x.Type,
+            //                //IsFoil = x.IsFoil,
+            //                //Price = x.Price,
+            //                //Variant = x.VariantName,
+            //                //Category = null,
+            //                SetCode = "abcd",
+
+            //            }).ToList();
+
+            
+
+
             switch (param.GroupBy)
             {
                 case "name":
 
-                    query = QueryCardsByName()
+                    query = QueryCardsByName().AsEnumerable()
 
                         .Select((x, i) => new CardOverviewResult
                         {
@@ -143,7 +174,7 @@ namespace Carpentry.Data.Implementations
                     break;
                
                 case "unique":
-                    query = QueryCardsByUnique()
+                    query = QueryCardsByUnique().AsEnumerable()
 
                         .Select((x, i) => new CardOverviewResult()
                         {
@@ -163,7 +194,7 @@ namespace Carpentry.Data.Implementations
                     break;
 
                 case "custom":
-                    query = QueryCardsByCustom()
+                    query = QueryCardsByCustom().AsEnumerable()
 
                         .Select((x, i) => new CardOverviewResult()
                         {
@@ -185,7 +216,7 @@ namespace Carpentry.Data.Implementations
                 //case "mid":
                 default: //assuming group by mid for default
 
-                    query = QueryCardsByMid()
+                    query = QueryCardsByMid().AsEnumerable()
 
                         .Select(x => new CardOverviewResult()
                         {
