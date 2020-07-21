@@ -758,6 +758,7 @@ namespace Carpentry.Data.Implementations
                 Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
                 Rarity = card.Rarity.Name,
                 Set = card.Set.Code,
+                //SetId = card.Set.Id,
                 Text = card.Text,
                 Type = card.Type,
                 ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),

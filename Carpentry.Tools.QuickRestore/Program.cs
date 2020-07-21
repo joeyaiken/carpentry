@@ -30,6 +30,14 @@ namespace Carpentry.Tools.QuickRestore
 
             await restoreService.RestoreDatabase();
 
+
+
+
+
+
+
+
+
             logger.LogInformation("Completed successfully");
         }
 

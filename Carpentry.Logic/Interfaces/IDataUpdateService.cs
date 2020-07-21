@@ -41,10 +41,12 @@ namespace Carpentry.Logic.Interfaces
         Task UpdateTrackedSet(int setId);
 
         //public async void UpdateTrackedSetScryData(string setCode)
-        Task UpdateTrackedSetScryData(string setCode);
+        //Task UpdateTrackedSetScryData(string setCode);
+
+        Task TryUpdateAvailableSets();
 
         //public async void UpdateTrackedSetCardData(string setCode)
-        Task UpdateTrackedSetCardData(string setCode);
+        //Task UpdateTrackedSetCardData(string setCode);
 
         //public async List<SetDetailDto> GetAllAvailableSets()
         //Task<List<SetDetailDto>> GetAllAvailableSets();
@@ -52,8 +54,8 @@ namespace Carpentry.Logic.Interfaces
         //public async void AddTrackedSet(string setCode)
         Task AddTrackedSet(string setCode);
 
-        //public async void RemoveTrackedSet(string setCode)
-        Task RemoveTrackedSet(string setCode);
+        ////public async void RemoveTrackedSet(string setCode)
+        //Task RemoveTrackedSet(string setCode);
 
     }
 }

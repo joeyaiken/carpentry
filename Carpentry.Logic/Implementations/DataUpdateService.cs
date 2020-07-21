@@ -393,8 +393,8 @@ namespace Carpentry.Logic.Implementations
                 MultiverseId = card.MultiverseId,
                 Name = card.Name,
                 Rarity = card.Rarity,
-                //Set = card.Set,
-                SetId = setId,
+                Set = card.Set,
+                //SetId = setId,
                 Text = card.Text,
                 Type = card.Type,
                 Variants = card.Variants.Keys.Select(x => new CardVariantDto
@@ -698,6 +698,11 @@ namespace Carpentry.Logic.Implementations
             await _cardRepo.AddOrUpdateCardSet(dbSet);
             //throw new NotImplementedException();
         }
+        public async Task AddTrackedSet(string setCode)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task UpdateTrackedSet(int setId)
         {
@@ -768,13 +773,17 @@ namespace Carpentry.Logic.Implementations
             await _cardRepo.AddOrUpdateCardSet(dbSet);
             //throw new NotImplementedException();
         }
+        //public async Task RemoveTrackedSet(string setCode)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        
         /// <summary>
         /// Update the list of sets available to track (does not update the data of cards in the set)
+        /// Gets called by DataRestore service to populate possible sets
         /// </summary>
         /// <returns></returns>
-        private async Task TryUpdateAvailableSets()
+        public async Task TryUpdateAvailableSets()
         {
             //Update scry data, if not updated today
             var auditData = await _scryfallRepo.GetAuditData();
@@ -872,26 +881,16 @@ namespace Carpentry.Logic.Implementations
         //    return scrySets;
         //}
 
-        public async Task UpdateTrackedSetScryData(string setCode)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task UpdateTrackedSetScryData(string setCode)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public async Task UpdateTrackedSetCardData(string setCode)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task UpdateTrackedSetCardData(string setCode)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public async Task AddTrackedSet(string setCode)
-        {
-            //This should return silently if a set code already exists
-            //It should add the card definitions, not just an empty shell of a set
-            throw new NotImplementedException();
-        }
-
-        public async Task RemoveTrackedSet(string setCode)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

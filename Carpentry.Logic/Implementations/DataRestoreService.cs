@@ -50,11 +50,17 @@ namespace Carpentry.Logic.Implementations
             //Stary by ensuring a DB actually exists
             await _dataUpdateService.EnsureDatabasesCreated();
 
-            ////ensure default records exist
-            //await _dataUpdateService.EnsureDefaultRecordsExist();
+            //ensure default records exist
+            await _dataUpdateService.EnsureDefaultRecordsExist();
 
-            ////load all decks
-            //await LoadDeckBackups();
+            //load all decks
+            await LoadDeckBackups();
+
+            //load set definitions
+            await _dataUpdateService.TryUpdateAvailableSets();
+
+            //add tracked sets
+            await LoadTrackedSets();
 
             ////try to add sets, adding only dummy info
             //await LoadSetTempData();
@@ -62,8 +68,8 @@ namespace Carpentry.Logic.Implementations
             ////run "refresh DB"
             //await _dataUpdateService.UpdateAllSets();
 
-            ////add inventory & deck cards
-            //await LoadCardBackups();
+            //add inventory & deck cards
+            await LoadCardBackups();
 
             _logger.LogWarning("DataRestoreService - RestoreDb...Completed!");
         }
@@ -110,52 +116,72 @@ namespace Carpentry.Logic.Implementations
             _logger.LogWarning("LoadDeckBackups - Complete");
         }
 
-        public async Task LoadSetTempData()
+        public async Task LoadTrackedSets()
         {
-            //set-data is considered the source-of-truth for what's up to date
-            //Inserting partial records into the set table, so we can then update the partial sets with a different service
-
-            int setCount = (await _cardDataRepo.GetAllCardSetCodes()).Count();
-
-            //get count from repo
-            //if no count, add to repo
-
-
-            if (setCount > 0)
-            {
-                _logger.LogWarning("LoadSetTempData - set data already exists, not adding temp records");
-                return;
-            }
-
-            _logger.LogWarning("LoadSetTempData - Adding set placeholder records...");
-
+            //Ensuring all sets in Props are properly tracked
+            _logger.LogInformation($"LoadTrackedSets - begin");
             string propsBackupLocation = $"{_config.BackupDirectory}{_config.PropsBackupFilename}";
 
             string propsBackupDataString = await System.IO.File.ReadAllTextAsync(propsBackupLocation);
+            
             BackupDataProps parsedPropsBackups = JObject.Parse(propsBackupDataString).ToObject<BackupDataProps>();
-
-            var newSets = parsedPropsBackups.SetCodes.Select(code => new CardSetData()
+            
+            foreach(var setCode in parsedPropsBackups.SetCodes)
             {
-                Code = code,
-            }).ToList();
-
-            for(int i = 0; i < newSets.Count(); i++)
-            {
-                await _cardDataRepo.AddOrUpdateCardSet(newSets[i]);
+                _logger.LogInformation($"LoadTrackedSets - loading {setCode}");
+                var set = await _cardDataRepo.GetCardSetByCode(setCode);
+                await _dataUpdateService.AddTrackedSet(set.Id);
             }
 
-            //var newSetRequests = parsedPropsBackups.SetCodes
-            //    .Select(code => new CardSetData()
-            //    {
-            //        Code = code
-            //    })
-            //    .Select(tempSet => _cardDataRepo.AddOrUpdateCardSet(tempSet))
-            //    .ToList();
-
-            //await Task.WhenAll(newSetRequests);
-
-            _logger.LogWarning("RestoreDb - LoadSetTempData...completed");
+            _logger.LogInformation($"LoadTrackedSets - complete");
         }
+
+        //public async Task LoadSetTempData()
+        //{
+        //    //set-data is considered the source-of-truth for what's up to date
+        //    //Inserting partial records into the set table, so we can then update the partial sets with a different service
+
+        //    int setCount = (await _cardDataRepo.GetAllCardSetCodes()).Count();
+
+        //    //get count from repo
+        //    //if no count, add to repo
+
+
+        //    if (setCount > 0)
+        //    {
+        //        _logger.LogWarning("LoadSetTempData - set data already exists, not adding temp records");
+        //        return;
+        //    }
+
+        //    _logger.LogWarning("LoadSetTempData - Adding set placeholder records...");
+
+        //    string propsBackupLocation = $"{_config.BackupDirectory}{_config.PropsBackupFilename}";
+
+        //    string propsBackupDataString = await System.IO.File.ReadAllTextAsync(propsBackupLocation);
+        //    BackupDataProps parsedPropsBackups = JObject.Parse(propsBackupDataString).ToObject<BackupDataProps>();
+
+        //    var newSets = parsedPropsBackups.SetCodes.Select(code => new CardSetData()
+        //    {
+        //        Code = code,
+        //    }).ToList();
+
+        //    for(int i = 0; i < newSets.Count(); i++)
+        //    {
+        //        await _cardDataRepo.AddOrUpdateCardSet(newSets[i]);
+        //    }
+
+        //    //var newSetRequests = parsedPropsBackups.SetCodes
+        //    //    .Select(code => new CardSetData()
+        //    //    {
+        //    //        Code = code
+        //    //    })
+        //    //    .Select(tempSet => _cardDataRepo.AddOrUpdateCardSet(tempSet))
+        //    //    .ToList();
+
+        //    //await Task.WhenAll(newSetRequests);
+
+        //    _logger.LogWarning("RestoreDb - LoadSetTempData...completed");
+        //}
 
         public async Task LoadCardBackups()
         {

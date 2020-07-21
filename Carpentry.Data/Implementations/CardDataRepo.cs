@@ -42,6 +42,12 @@ namespace Carpentry.Data.Implementations
             return result;
         }
 
+        public async Task<CardSetData> GetCardSetByCode(string setCode)
+        {
+            CardSetData result = await _cardContext.Sets.FirstOrDefaultAsync(s => s.Code == setCode.ToLower());
+            return result;
+        }
+
         //This probably doesn't actually have to return an ID
         public async Task<int> AddOrUpdateCardSet(CardSetData setData)
         {
@@ -65,20 +71,20 @@ namespace Carpentry.Data.Implementations
             return setData.Id;
         }
 
-        public async Task AddOrUpdateCardDefinition(CardDataDto cardData)
-        {
-            CardData cardFromDb = _cardContext.Cards.Where(x => x.Id == cardData.MultiverseId).FirstOrDefault();
+        //public async Task AddOrUpdateCardDefinition(CardDataDto cardData)
+        //{
+        //    CardData cardFromDb = _cardContext.Cards.Where(x => x.Id == cardData.MultiverseId).FirstOrDefault();
 
-            if (cardFromDb == null)
-            {
-                await AddCardDefinition(cardData);
-            }
-            else
-            {
-                await UpdateCardDefinition(cardData);
-            }
+        //    if (cardFromDb == null)
+        //    {
+        //        await AddCardDefinition(cardData);
+        //    }
+        //    else
+        //    {
+        //        await UpdateCardDefinition(cardData);
+        //    }
 
-        }
+        //}
 
         /// <summary>
         /// Adds a batch of card definitions
@@ -110,6 +116,8 @@ namespace Carpentry.Data.Implementations
 
             List<CardVariantTypeData> allVariantTypes = _cardContext.VariantTypes.ToList();
 
+            List<CardSetData> allSets = _cardContext.Sets.ToList();
+
             var newCards = cards.Select(dto => new CardData
             {
                 Id = dto.MultiverseId,
@@ -121,7 +129,8 @@ namespace Carpentry.Data.Implementations
 
                 //Set
                 //Set = dbSet, //Should this be the ID instead?
-                SetId = dto.SetId,
+                //SetId = dto.SetId,
+                SetId = allSets.Where(s => s.Code == dto.Set).FirstOrDefault().Id,
 
                 //Rarity
                 RarityId = GetRarityId(dto.Rarity),
@@ -411,214 +420,214 @@ namespace Carpentry.Data.Implementations
             return rarity;
         }
 
-        private async Task AddCardDefinition(CardDataDto dto)
-        {
-            //ScryfallMagicCard scryfallCard = JsonConvert.DeserializeObject<ScryfallMagicCard>(scryfallDBCard.StringData);
+        //private async Task AddCardDefinition(CardDataDto dto)
+        //{
+        //    //ScryfallMagicCard scryfallCard = JsonConvert.DeserializeObject<ScryfallMagicCard>(scryfallDBCard.StringData);
 
-            //besides just adding the card, also need to add
+        //    //besides just adding the card, also need to add
 
-            //ColorIdentities
-            List<string> dtoColorIdentities = dto.ColorIdentity ?? new List<string>();
-            List<ManaTypeData> relevantColorIdentityManaTypes = _cardContext.ManaTypes
-                .AsEnumerable()
-                .Where(x => dtoColorIdentities.Contains(x.Id.ToString()))
-                .ToList();
+        //    //ColorIdentities
+        //    List<string> dtoColorIdentities = dto.ColorIdentity ?? new List<string>();
+        //    List<ManaTypeData> relevantColorIdentityManaTypes = _cardContext.ManaTypes
+        //        .AsEnumerable()
+        //        .Where(x => dtoColorIdentities.Contains(x.Id.ToString()))
+        //        .ToList();
 
-            //CardColors,
-            List<string> dtoColors = dto.Colors ?? new List<string>();
-            List<ManaTypeData> relevantColorManaTypes = _cardContext.ManaTypes
-                .AsEnumerable()
-                .Where(x => dtoColors.Contains(x.Id.ToString()))
-                .ToList();
+        //    //CardColors,
+        //    List<string> dtoColors = dto.Colors ?? new List<string>();
+        //    List<ManaTypeData> relevantColorManaTypes = _cardContext.ManaTypes
+        //        .AsEnumerable()
+        //        .Where(x => dtoColors.Contains(x.Id.ToString()))
+        //        .ToList();
 
-            //CardLegalities, 
-            List<string> scryCardLegalities = dto.Legalities.ToList();
+        //    //CardLegalities, 
+        //    List<string> scryCardLegalities = dto.Legalities.ToList();
 
-            //NOTE - This ends up ignoring any formats that don't actually exist in the DB
-            //as of 11-16-2019, this is the desired effect
-            List<MagicFormatData> relevantDbFormats = _cardContext.MagicFormats
-                .AsEnumerable()
-                .Where(x => scryCardLegalities.Contains(x.Name))
-                .ToList();
+        //    //NOTE - This ends up ignoring any formats that don't actually exist in the DB
+        //    //as of 11-16-2019, this is the desired effect
+        //    List<MagicFormatData> relevantDbFormats = _cardContext.MagicFormats
+        //        .AsEnumerable()
+        //        .Where(x => scryCardLegalities.Contains(x.Name))
+        //        .ToList();
 
-            //CardVariants
-            List<string> dtoVariantNames = dto.Variants.Select(x => x.Name).ToList();
-            List<CardVariantTypeData> relevantDBVariantTypes = _cardContext.VariantTypes
-                .AsEnumerable()
-                .Where(x => dtoVariantNames.Contains(x.Name))
-                .ToList();
-
-
-            var dbSet = _cardContext.Sets.FirstOrDefault(x => x.Code == dto.Set);
-            if (dbSet == null)
-            {
-                CardSetData newSet = new CardSetData()
-                {
-                    Code = dto.Set,
-                    Name = dto.Set,
-                };
-                _cardContext.Sets.Add(newSet);
-                dbSet = newSet;
-            }
-
-            //char rarity;
-            //switch (dto.Rarity)
-            //{
-            //    case "mythic":
-            //        rarity = 'M';
-            //        break;
-
-            //    case "rare":
-            //        rarity = 'R';
-            //        break;
-            //    case "uncommon":
-            //        rarity = 'U';
-            //        break;
-            //    case "common":
-            //        rarity = 'C';
-            //        break;
-            //    default:
-            //        throw new Exception("Error reading scryfall rarity");
-
-            //}
-
-            var newCard = new CardData
-            {
-                Id = dto.MultiverseId,
-                Cmc = dto.Cmc,
-                ManaCost = dto.ManaCost,
-                Name = dto.Name,
-                Text = dto.Text,
-                Type = dto.Type,
-
-                //Set
-                Set = dbSet, //Should this be the ID instead?
-
-                //Rarity
-                RarityId = GetRarityId(dto.Rarity),
-
-                //Color
-                //jank
-                CardColors = relevantColorManaTypes.Select(x => new CardColorData
-                {
-                    ManaType = x,
-                }).ToList(),
+        //    //CardVariants
+        //    List<string> dtoVariantNames = dto.Variants.Select(x => x.Name).ToList();
+        //    List<CardVariantTypeData> relevantDBVariantTypes = _cardContext.VariantTypes
+        //        .AsEnumerable()
+        //        .Where(x => dtoVariantNames.Contains(x.Name))
+        //        .ToList();
 
 
-                //Color Identity
-                CardColorIdentities = relevantColorIdentityManaTypes.Select(x => new CardColorIdentityData
-                {
-                    ManaType = x,
-                }).ToList(),
+        //    var dbSet = _cardContext.Sets.FirstOrDefault(x => x.Code == dto.Set);
+        //    if (dbSet == null)
+        //    {
+        //        CardSetData newSet = new CardSetData()
+        //        {
+        //            Code = dto.Set,
+        //            Name = dto.Set,
+        //        };
+        //        _cardContext.Sets.Add(newSet);
+        //        dbSet = newSet;
+        //    }
 
-                //Variants
-                Variants = dto.Variants.Select(x => new CardVariantData()
-                {
-                    ImageUrl = x.Image,
-                    Price = x.Price,
-                    PriceFoil = x.PriceFoil,
-                    Type = relevantDBVariantTypes.FirstOrDefault(v => v.Name == x.Name)
-                }).ToList(),
+        //    //char rarity;
+        //    //switch (dto.Rarity)
+        //    //{
+        //    //    case "mythic":
+        //    //        rarity = 'M';
+        //    //        break;
 
-                //Legalities
-                //This is weird, but I only want to add legalities that exist in the DB
-                Legalities = relevantDbFormats.Select(format => new CardLegalityData
-                {
-                    Format = format
-                }).ToList(),
+        //    //    case "rare":
+        //    //        rarity = 'R';
+        //    //        break;
+        //    //    case "uncommon":
+        //    //        rarity = 'U';
+        //    //        break;
+        //    //    case "common":
+        //    //        rarity = 'C';
+        //    //        break;
+        //    //    default:
+        //    //        throw new Exception("Error reading scryfall rarity");
+
+        //    //}
+
+        //    var newCard = new CardData
+        //    {
+        //        Id = dto.MultiverseId,
+        //        Cmc = dto.Cmc,
+        //        ManaCost = dto.ManaCost,
+        //        Name = dto.Name,
+        //        Text = dto.Text,
+        //        Type = dto.Type,
+
+        //        //Set
+        //        Set = dbSet, //Should this be the ID instead?
+
+        //        //Rarity
+        //        RarityId = GetRarityId(dto.Rarity),
+
+        //        //Color
+        //        //jank
+        //        CardColors = relevantColorManaTypes.Select(x => new CardColorData
+        //        {
+        //            ManaType = x,
+        //        }).ToList(),
+
+
+        //        //Color Identity
+        //        CardColorIdentities = relevantColorIdentityManaTypes.Select(x => new CardColorIdentityData
+        //        {
+        //            ManaType = x,
+        //        }).ToList(),
+
+        //        //Variants
+        //        Variants = dto.Variants.Select(x => new CardVariantData()
+        //        {
+        //            ImageUrl = x.Image,
+        //            Price = x.Price,
+        //            PriceFoil = x.PriceFoil,
+        //            Type = relevantDBVariantTypes.FirstOrDefault(v => v.Name == x.Name)
+        //        }).ToList(),
+
+        //        //Legalities
+        //        //This is weird, but I only want to add legalities that exist in the DB
+        //        Legalities = relevantDbFormats.Select(format => new CardLegalityData
+        //        {
+        //            Format = format
+        //        }).ToList(),
 
 
 
-            };
+        //    };
 
-            int preSaveId = newCard.Id;
-            _cardContext.Cards.Add(newCard);
-            await _cardContext.SaveChangesAsync();
-        }
+        //    int preSaveId = newCard.Id;
+        //    _cardContext.Cards.Add(newCard);
+        //    await _cardContext.SaveChangesAsync();
+        //}
 
-        private async Task UpdateCardDefinition(CardDataDto dto)
-        {
-            var cardToUpdate = _cardContext.Cards.FirstOrDefault(x => x.Id == dto.MultiverseId);
+        //private async Task UpdateCardDefinition(CardDataDto dto)
+        //{
+        //    var cardToUpdate = _cardContext.Cards.FirstOrDefault(x => x.Id == dto.MultiverseId);
 
-            if (cardToUpdate == null)
-            {
-                throw new Exception("Could not find the card to update");
-            }
+        //    if (cardToUpdate == null)
+        //    {
+        //        throw new Exception("Could not find the card to update");
+        //    }
 
-            //So all of the things I have to update don't actually exist on the Cards table
+        //    //So all of the things I have to update don't actually exist on the Cards table
 
-            //I need to possibly add/remove legalities, and I need to update the price on variants
+        //    //I need to possibly add/remove legalities, and I need to update the price on variants
 
-            var existingVariants = _cardContext.CardVariants
-                .Where(x => x.CardId == cardToUpdate.Id).Include(x => x.Type);
+        //    var existingVariants = _cardContext.CardVariants
+        //        .Where(x => x.CardId == cardToUpdate.Id).Include(x => x.Type);
 
-            await existingVariants.ForEachAsync(v =>
-            {
-                string variantName = v.Type.Name;
+        //    await existingVariants.ForEachAsync(v =>
+        //    {
+        //        string variantName = v.Type.Name;
 
-                CardVariantDto matchingDtoVariant = dto.Variants.Where(dtoV => dtoV.Name.ToLower() == variantName.ToLower()).FirstOrDefault();
+        //        CardVariantDto matchingDtoVariant = dto.Variants.Where(dtoV => dtoV.Name.ToLower() == variantName.ToLower()).FirstOrDefault();
 
-                v.Price = matchingDtoVariant.Price;
-                v.PriceFoil = matchingDtoVariant.PriceFoil;
-                v.ImageUrl = matchingDtoVariant.Image; //why not update this too
-            });
+        //        v.Price = matchingDtoVariant.Price;
+        //        v.PriceFoil = matchingDtoVariant.PriceFoil;
+        //        v.ImageUrl = matchingDtoVariant.Image; //why not update this too
+        //    });
             
-            _cardContext.CardVariants.UpdateRange(existingVariants);
+        //    _cardContext.CardVariants.UpdateRange(existingVariants);
 
-            //what if there are new variants to add?(hint hint)
+        //    //what if there are new variants to add?(hint hint)
 
-            //.Select
-            //.Select(x => new CardVariant()
-            //{
-            //    Id = x.Id,
-            //    CardId = x.CardId,
-            //    ImageUrl = x.ImageUrl,
-            //    CardVariantTypeId = x.CardVariantTypeId,
-            //    Price = scryfallCard.Prices[x.Type.Name],
-            //    PriceFoil = scryfallCard.Prices[$"{x.Type.Name}_foil"]
-            //});
-
-
-            //existingVariants.ForEach(variant =>
-            //{
-            //    variant.Price = scryfallCard.Prices[variant.;
-            //    variant.PriceFoil = 0;
-            //});
+        //    //.Select
+        //    //.Select(x => new CardVariant()
+        //    //{
+        //    //    Id = x.Id,
+        //    //    CardId = x.CardId,
+        //    //    ImageUrl = x.ImageUrl,
+        //    //    CardVariantTypeId = x.CardVariantTypeId,
+        //    //    Price = scryfallCard.Prices[x.Type.Name],
+        //    //    PriceFoil = scryfallCard.Prices[$"{x.Type.Name}_foil"]
+        //    //});
 
 
-            var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == cardToUpdate.Id).Include(x => x.Format);
+        //    //existingVariants.ForEach(variant =>
+        //    //{
+        //    //    variant.Price = scryfallCard.Prices[variant.;
+        //    //    variant.PriceFoil = 0;
+        //    //});
 
-            //IDK if this will get messed up by case sensitivity
-            var existingLegalitiesToDelete = allExistingLegalities.Where(x => !dto.Legalities.Contains(x.Format.Name));
 
-            var legalityStringsToKeep = allExistingLegalities.Where(x => dto.Legalities.Contains(x.Format.Name)).Select(x => x.Format.Name);
+        //    var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == cardToUpdate.Id).Include(x => x.Format);
 
-            var legalitiesToAdd = dto.Legalities
-                .Where(x => !legalityStringsToKeep.Contains(x))
-                .Select(x => new CardLegalityData()
-                {
-                    CardId = cardToUpdate.Id,
-                    Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
-                })
-                .Where(x => x.Format != null)
-                .ToList();
+        //    //IDK if this will get messed up by case sensitivity
+        //    var existingLegalitiesToDelete = allExistingLegalities.Where(x => !dto.Legalities.Contains(x.Format.Name));
 
-            //var something = dto.Legalities
-            //    .Where(x => !legalityStringsToKeep.Contains(x))
-            //    .Select(x => new
-            //    {
-            //        x,
-            //        CardId = cardToUpdate.Id,
-            //        Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
-            //    }).ToList();
+        //    var legalityStringsToKeep = allExistingLegalities.Where(x => dto.Legalities.Contains(x.Format.Name)).Select(x => x.Format.Name);
 
-            if (existingLegalitiesToDelete.Any())
-                _cardContext.CardLegalities.RemoveRange(existingLegalitiesToDelete);
-            if (legalitiesToAdd.Any())
-                _cardContext.CardLegalities.AddRange(legalitiesToAdd);
-            await _cardContext.SaveChangesAsync();
+        //    var legalitiesToAdd = dto.Legalities
+        //        .Where(x => !legalityStringsToKeep.Contains(x))
+        //        .Select(x => new CardLegalityData()
+        //        {
+        //            CardId = cardToUpdate.Id,
+        //            Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
+        //        })
+        //        .Where(x => x.Format != null)
+        //        .ToList();
 
-        }
+        //    //var something = dto.Legalities
+        //    //    .Where(x => !legalityStringsToKeep.Contains(x))
+        //    //    .Select(x => new
+        //    //    {
+        //    //        x,
+        //    //        CardId = cardToUpdate.Id,
+        //    //        Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
+        //    //    }).ToList();
+
+        //    if (existingLegalitiesToDelete.Any())
+        //        _cardContext.CardLegalities.RemoveRange(existingLegalitiesToDelete);
+        //    if (legalitiesToAdd.Any())
+        //        _cardContext.CardLegalities.AddRange(legalitiesToAdd);
+        //    await _cardContext.SaveChangesAsync();
+
+        //}
 
         
 
