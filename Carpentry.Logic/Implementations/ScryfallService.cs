@@ -23,7 +23,7 @@ namespace Carpentry.Logic.Implementations
             _client = client;
 
             //TODO - load this from a config
-            _scryfallApiDelay = 200; //1000 = 1 second, scryfall requests 50-100
+            _scryfallApiDelay = 100; //1000 = 1 second, scryfall requests 50-100
         }
 
         /// <summary>
@@ -143,6 +143,7 @@ namespace Carpentry.Logic.Implementations
                         else
                         {
                             int breakpoint = 1;
+                            //So this isn't getting M21 - RinAndSeri properly...
                             //_logger.LogError($"Could not find matching card for special card: {cardName}");
                         }
 

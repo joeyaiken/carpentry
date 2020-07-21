@@ -247,54 +247,104 @@ namespace Carpentry.Data.Implementations
 
             foreach(var card in cards)
             {
-                //Update variants
-                var existingVariants = _cardContext.CardVariants
-                    .Where(x => x.CardId == card.MultiverseId).Include(x => x.Type);
-
-                await existingVariants.ForEachAsync(v =>
+                try
                 {
-                    string variantName = v.Type.Name;
 
-                    CardVariantDto matchingDtoVariant = card.Variants.Where(dtoV => dtoV.Name.ToLower() == variantName.ToLower()).FirstOrDefault();
-
-                    v.Price = matchingDtoVariant.Price;
-                    v.PriceFoil = matchingDtoVariant.PriceFoil;
-                    v.ImageUrl = matchingDtoVariant.Image; //why not update this too
-                });
-
-                _cardContext.CardVariants.UpdateRange(existingVariants);
-
-                //Update legalities
-                var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == card.MultiverseId).Include(x => x.Format);
-
-                //IDK if this will get messed up by case sensitivity
-                var existingLegalitiesToDelete = allExistingLegalities.Where(x => !card.Legalities.Contains(x.Format.Name));
-
-                var legalityStringsToKeep = allExistingLegalities.Where(x => card.Legalities.Contains(x.Format.Name)).Select(x => x.Format.Name);
-
-                var legalitiesToAdd = card.Legalities
-                    .Where(x => !legalityStringsToKeep.Contains(x))
-                    .Select(x => new CardLegalityData()
+                    if(card.MultiverseId == 479733)
                     {
-                        CardId = card.MultiverseId,
-                        Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
-                    })
-                    .Where(x => x.Format != null)
-                    .ToList();
+                        int breakpoint2 = 1;
+                    }
 
-                //var something = dto.Legalities
-                //    .Where(x => !legalityStringsToKeep.Contains(x))
-                //    .Select(x => new
-                //    {
-                //        x,
-                //        CardId = cardToUpdate.Id,
-                //        Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
-                //    }).ToList();
+                    //Update variants
+                    var existingVariants = _cardContext.CardVariants
+                        .Where(x => x.CardId == card.MultiverseId).Include(x => x.Type).ToList();
 
-                if (existingLegalitiesToDelete.Any())
-                    _cardContext.CardLegalities.RemoveRange(existingLegalitiesToDelete);
-                if (legalitiesToAdd.Any())
-                    _cardContext.CardLegalities.AddRange(legalitiesToAdd);
+                    foreach (var variant in existingVariants)
+                    {
+                        string variantName = variant.Type.Name;
+
+                        CardVariantDto matchingDtoVariant = card.Variants.Where(dtoV => dtoV.Name.ToLower() == variantName.ToLower()).FirstOrDefault();
+
+                        if(matchingDtoVariant == null)
+                        {
+                            //there's some mismatch. Is there another, non-normal, variant, not in the DTO?
+                            //need to check the DTO to see if there's anything not contained in ExistingVariants
+
+                            var excludedDtoVariants = card.Variants.Where(dtoV => !existingVariants.Select(v => v.Type.Name).Contains(dtoV.Name)).ToList();
+
+                            //var excludedVariants = existingVariants.Where(ev => !card.Variants.Select(dtoV => dtoV.Name).Contains(ev.Type.Name)).ToList();
+
+                            if(excludedDtoVariants.Count == 1)
+                            {
+                                matchingDtoVariant = excludedDtoVariants[0];
+                            }
+                            else
+                            {
+                                throw new Exception("Error matching card variants");
+                            }
+
+
+                            
+                        }
+
+
+                        variant.Price = matchingDtoVariant.Price;
+                        variant.PriceFoil = matchingDtoVariant.PriceFoil;
+                        variant.ImageUrl = matchingDtoVariant.Image; //why not update this too
+
+                    }
+
+                    //await existingVariants.ForEachAsync(v =>
+                    //{
+                    //    string variantName = v.Type.Name;
+
+                    //    CardVariantDto matchingDtoVariant = card.Variants.Where(dtoV => dtoV.Name.ToLower() == variantName.ToLower()).FirstOrDefault();
+
+                    //    v.Price = matchingDtoVariant.Price;
+                    //    v.PriceFoil = matchingDtoVariant.PriceFoil;
+                    //    v.ImageUrl = matchingDtoVariant.Image; //why not update this too
+                    //});
+
+                    _cardContext.CardVariants.UpdateRange(existingVariants);
+
+                    //Update legalities
+                    var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == card.MultiverseId).Include(x => x.Format);
+
+                    //IDK if this will get messed up by case sensitivity
+                    var existingLegalitiesToDelete = allExistingLegalities.Where(x => !card.Legalities.Contains(x.Format.Name));
+
+                    var legalityStringsToKeep = allExistingLegalities.Where(x => card.Legalities.Contains(x.Format.Name)).Select(x => x.Format.Name);
+
+                    var legalitiesToAdd = card.Legalities
+                        .Where(x => !legalityStringsToKeep.Contains(x))
+                        .Select(x => new CardLegalityData()
+                        {
+                            CardId = card.MultiverseId,
+                            Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
+                        })
+                        .Where(x => x.Format != null)
+                        .ToList();
+
+                    //var something = dto.Legalities
+                    //    .Where(x => !legalityStringsToKeep.Contains(x))
+                    //    .Select(x => new
+                    //    {
+                    //        x,
+                    //        CardId = cardToUpdate.Id,
+                    //        Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
+                    //    }).ToList();
+
+                    if (existingLegalitiesToDelete.Any())
+                        _cardContext.CardLegalities.RemoveRange(existingLegalitiesToDelete);
+                    if (legalitiesToAdd.Any())
+                        _cardContext.CardLegalities.AddRange(legalitiesToAdd);
+                }
+                catch(Exception ex)
+                {
+                    int breakpoint = 1;
+                }
+
+                
             }
 
             await _cardContext.SaveChangesAsync();

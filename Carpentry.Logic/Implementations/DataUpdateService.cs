@@ -735,8 +735,8 @@ namespace Carpentry.Logic.Implementations
             //1:    itterate over each card, checking the existing DB card
             //2:    Remove all CardVariant & CardLegalities for the cards, & re-populate just those records
 
-            //dbSet.LastUpdated = DateTime.Now;
-            //await _cardRepo.AddOrUpdateCardSet(dbSet);
+            dbSet.LastUpdated = DateTime.Now;
+            await _cardRepo.AddOrUpdateCardSet(dbSet);
             //throw new NotImplementedException();
         }
 
