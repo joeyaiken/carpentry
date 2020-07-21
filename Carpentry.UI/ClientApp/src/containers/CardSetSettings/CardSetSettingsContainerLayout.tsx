@@ -1,20 +1,31 @@
 import React from 'react'
-import { Box, Typography, Button, Switch, FormControlLabel, IconButton, TableHead, Paper, Table, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Box, Typography, Button, Switch, FormControlLabel, IconButton, TableHead, Paper, Table, TableRow, TableCell, TableBody, Backdrop, CircularProgress } from '@material-ui/core';
 import { appStyles } from '../../styles/appStyles';
-import { MoreHoriz, MoreVert, Refresh } from '@material-ui/icons';
+import { MoreHoriz, MoreVert, Refresh, Add, Delete, SettingsSystemDaydreamOutlined } from '@material-ui/icons';
 
 declare interface ComponentProps {
     onRefreshClick: () => void;
     onShowUntrackedClick: () => void;
 
+    onAddSetClick: (setId: number) => void;
+    onRemoveSetClick: (setId: number) => void;
+    onUpdateSetClick: (setId: number) => void;
+
     trackedSetDetails: SetDetailDto[];
     showUntrackedValue: boolean;
+
+    isLoading: boolean;
 }
 
 export default function CardSetSettingsContainerLayout(props: ComponentProps): JSX.Element {
     const { outlineSection, flexRow, flexSection, staticSection } = appStyles();
     return(
-        <Box>
+        <React.Fragment>
+            <Backdrop open={props.isLoading} style={{zIndex:0}} >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+            <Box>
+            {/* <Backdrop open={props.isLoading} > */}
             
             <Box className={flexRow}>
                 <Box className={flexSection}>
@@ -90,10 +101,38 @@ export default function CardSetSettingsContainerLayout(props: ComponentProps): J
                                 <TableRow key={setDetail.code}>
                                     <TableCell>{setDetail.code}</TableCell>
                                     <TableCell>{setDetail.name}</TableCell>
-                                    <TableCell>[owned count]</TableCell>
-                                    <TableCell>[collected count]</TableCell>
-                                    <TableCell>[last updated]</TableCell>
-                                    <TableCell>[btn]</TableCell>
+                                    <TableCell>{setDetail.inventoryCount}</TableCell>
+                                    <TableCell>{setDetail.isTracked && `${setDetail.collectedCount}/${setDetail.totalCount}`}</TableCell>
+                            <TableCell>{setDetail.dataLastUpdated}</TableCell>
+                                    <TableCell>
+                                        {
+                                            !setDetail.isTracked &&
+                                            <IconButton color="inherit" onClick={() => {props.onAddSetClick(setDetail.setId)}}>
+                                                <Add />
+                                            </IconButton>
+                                        }
+                                        {
+                                            setDetail.isTracked &&
+                                            <React.Fragment>
+                                                {/* {
+                                                    setDetail.dataLastUpdated 
+                                                    && setDetail.dataLastUpdated.getFullYear() === 
+                                                } */}
+                                                <IconButton color="inherit" onClick={() => {props.onUpdateSetClick(setDetail.setId)}}>
+                                                    <Refresh />
+                                                </IconButton>
+                                                <IconButton color="inherit" onClick={() => {props.onRemoveSetClick(setDetail.setId)}}>
+                                                    <Delete />
+                                                </IconButton>
+                                            </React.Fragment>
+                                        }
+                                    {/* <IconButton color="inherit" onClick={props.onRefreshClick}>
+                                        <Refresh />
+                                    </IconButton>
+                                    <IconButton color="inherit" onClick={props.onRefreshClick}>
+                                        <Refresh />
+                                    </IconButton> */}
+                                    </TableCell>
                                 </TableRow>
                                 
                                 )
@@ -112,5 +151,8 @@ export default function CardSetSettingsContainerLayout(props: ComponentProps): J
                 </Table>
             </Paper>
         </Box>
+            
+        </React.Fragment>
+        
 );
 }

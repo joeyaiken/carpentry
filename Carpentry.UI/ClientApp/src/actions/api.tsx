@@ -59,11 +59,31 @@ export const api = {
             return result;
         },
 
-        async getUntrackedSets(): Promise<SetDetailDto> {
-            const endpoint = `api/Core/GetUntrackedSets`;
-            const result = await Get(endpoint);
-            return result;
+        async addTrackedSet(setId: number): Promise<void> {
+            const endpoint = `api/Core/AddTrackedSet?setId=${setId}`;
+            console.log('updating tracked sets ping 4');
+            await Get(endpoint);
+            console.log('updating tracked sets ping 5');
+            return;
         },
+
+        async updateTrackedSet(setId: number): Promise<void> {
+            const endpoint = `api/Core/UpdateTrackedSet?setId=${setId}`;
+            await Get(endpoint);
+            return;
+        },
+
+        async removeTrackedSet(setId: number): Promise<void> {
+            const endpoint = `api/Core/RemoveTrackedSet?setId=${setId}`;
+            await Get(endpoint);
+            return;
+        },
+
+        // async getUntrackedSets(): Promise<SetDetailDto> {
+        //     const endpoint = `api/Core/GetUntrackedSets`;
+        //     const result = await Get(endpoint);
+        //     return result;
+        // },
 
         ////Backup DB
         ////should this be a POST since it could/should include filepath info?
@@ -188,13 +208,23 @@ export const api = {
 }
 
 async function Get(url: string): Promise<any> {
-    console.log(`get fetching URL ${url}`)
+    // console.log(`get fetching URL ${url}`)
     const response = await fetch(url);
-    if (response.status === 202) {
-        return;
+    // console.log('updating tracked sets ping 7?');
+    // console.log(response);
+
+    const contentType = response.headers.get("content-type");
+    if(contentType && contentType.indexOf("application/json") !== -1){
+        const result = await response.json();
+        return result;
     }
-    const result = await response.json();
-    return result;
+    return;
+
+    // if (response.status === 202) {
+    //     return;
+    // }
+    // const result = await response.json();
+    // return result;
 }
 
 async function Post(endpoint: string, payload: any): Promise<any> {

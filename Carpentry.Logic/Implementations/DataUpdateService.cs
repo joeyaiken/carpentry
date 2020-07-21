@@ -130,6 +130,9 @@ namespace Carpentry.Logic.Implementations
 
         }
 
+
+
+
         /// <summary>
         /// Update the card and scry data for a particular set
         /// </summary>
@@ -206,33 +209,62 @@ namespace Carpentry.Logic.Implementations
             };
             cardSet.Id = await _cardRepo.AddOrUpdateCardSet(cardSet);
 
-            //AddOrUpdate all card definitions in card DB
-            foreach(var card in magicCards)
-            {
-                CardDataDto cardDefinition = new CardDataDto()
-                {
-                    Cmc = card.Cmc,
-                    ColorIdentity = card.ColorIdentity,
-                    Colors = card.Colors,
-                    Legalities = card.Legalities,
-                    ManaCost = card.ManaCost,
-                    MultiverseId = card.MultiverseId,
-                    Name = card.Name,
-                    Rarity = card.Rarity,
-                    Set = card.Set,
-                    Text = card.Text,
-                    Type = card.Type,
-                    Variants = card.Variants.Keys.Select(x => new CardVariantDto
-                    {
-                        Name = x,
-                        Image = card.Variants[x],
-                        Price = card.Prices[x],
-                        PriceFoil = card.Prices[$"{x}_foil"],
-                    }).ToList(),
-                };
 
-                await _cardRepo.AddOrUpdateCardDefinition(cardDefinition);
-            }
+            //need an opperation for "AddCardDataForSet(
+            //AddCardDataBatch
+            List<CardDataDto> cardsToAdd = magicCards.Select(card => new CardDataDto()
+            {
+                Cmc = card.Cmc,
+                ColorIdentity = card.ColorIdentity,
+                Colors = card.Colors,
+                Legalities = card.Legalities,
+                ManaCost = card.ManaCost,
+                MultiverseId = card.MultiverseId,
+                Name = card.Name,
+                Rarity = card.Rarity,
+                //Set = card.Set,
+                Text = card.Text,
+                Type = card.Type,
+                Variants = card.Variants.Keys.Select(x => new CardVariantDto
+                {
+                    Name = x,
+                    Image = card.Variants[x],
+                    Price = card.Prices[x],
+                    PriceFoil = card.Prices[$"{x}_foil"],
+                }).ToList(),
+            }).ToList();
+
+
+            await _cardRepo.AddCardDataBatch(cardsToAdd);
+
+
+            //AddOrUpdate all card definitions in card DB
+            //foreach (var card in magicCards)
+            //{
+            //    CardDataDto cardDefinition = new CardDataDto()
+            //    {
+            //        Cmc = card.Cmc,
+            //        ColorIdentity = card.ColorIdentity,
+            //        Colors = card.Colors,
+            //        Legalities = card.Legalities,
+            //        ManaCost = card.ManaCost,
+            //        MultiverseId = card.MultiverseId,
+            //        Name = card.Name,
+            //        Rarity = card.Rarity,
+            //        Set = card.Set,
+            //        Text = card.Text,
+            //        Type = card.Type,
+            //        Variants = card.Variants.Keys.Select(x => new CardVariantDto
+            //        {
+            //            Name = x,
+            //            Image = card.Variants[x],
+            //            Price = card.Prices[x],
+            //            PriceFoil = card.Prices[$"{x}_foil"],
+            //        }).ToList(),
+            //    };
+
+            //    await _cardRepo.AddOrUpdateCardDefinition(cardDefinition);
+            //}
 
 
 
@@ -296,6 +328,85 @@ namespace Carpentry.Logic.Implementations
             //await _scryRepo.UpdateScrySet(existingScryfallSet);
 
             //_logger.LogError($"Refresh Set Data - Completed process of refreshing {setCode}");
+        }
+
+
+
+        private async Task<List<CardDataDto>> GetUpdatedScrySet(int setId, string setCode)
+        {
+            //check if the scry set is up to date
+            DateTime? scryDataLastUpdated = await _scryfallRepo.GetSetDataLastUpdated(setCode);
+
+            ScryfallSetData scryData = null;
+
+            //If not, get from SF
+            if (scryDataLastUpdated == null || scryDataLastUpdated.Value.AddDays(_dbRefreshIntervalDays) < DateTime.Today.Date)
+            {
+                var scryfallPayload = await _scryService.GetFullSet(setCode);
+
+                scryData = new ScryfallSetData
+                {
+                    Code = scryfallPayload.Code,
+                    Name = scryfallPayload.Name,
+                    DataIsParsed = false,
+                    LastUpdated = DateTime.Now,
+                    ReleasedAt = DateTime.Parse(scryfallPayload.ReleaseDate),
+                    CardData = JsonConvert.SerializeObject(scryfallPayload.CardTokens)
+                };
+
+                await _scryfallRepo.AddOrUpdateSet(scryData, true);
+            }
+            else
+            {
+                scryData = await _scryfallRepo.GetSetByCode(setCode, true);
+            }
+
+            List<MagicCardDto> magicCards = null;
+
+            //check if the scry set is parsed
+            if (scryData.DataIsParsed)
+            {
+                //deserialize as MagicCard
+                magicCards = JsonConvert.DeserializeObject<List<MagicCardDto>>(scryData.CardData);
+            }
+            else
+            {
+                //deserialize as JToken list
+                List<JToken> unparsedCards = JsonConvert.DeserializeObject<List<JToken>>(scryData.CardData);
+
+                //map
+                magicCards = _scryService.MapScryfallDataToCards(unparsedCards).Select(x => x.ToMagicCard()).ToList();
+
+                //Serialize & apply to set
+                scryData.CardData = JsonConvert.SerializeObject(magicCards);
+                scryData.DataIsParsed = true;
+                await _scryfallRepo.AddOrUpdateSet(scryData, true);
+            }
+
+            List<CardDataDto> mappedCards = magicCards.Select(card => new CardDataDto()
+            {
+                Cmc = card.Cmc,
+                ColorIdentity = card.ColorIdentity,
+                Colors = card.Colors,
+                Legalities = card.Legalities,
+                ManaCost = card.ManaCost,
+                MultiverseId = card.MultiverseId,
+                Name = card.Name,
+                Rarity = card.Rarity,
+                //Set = card.Set,
+                SetId = setId,
+                Text = card.Text,
+                Type = card.Type,
+                Variants = card.Variants.Keys.Select(x => new CardVariantDto
+                {
+                    Name = x,
+                    Image = card.Variants[x],
+                    Price = card.Prices[x],
+                    PriceFoil = card.Prices[$"{x}_foil"],
+                }).ToList(),
+            }).ToList();
+
+            return mappedCards;
         }
 
         public async Task EnsureDatabasesCreated()
@@ -546,17 +657,17 @@ namespace Carpentry.Logic.Implementations
                 CollectedCount = s.CollectedCount ?? 0,
                 InventoryCount = s.InventoryCount ?? 0,
                 IsTracked = s.IsTracked,
-                ScryLastUpdated = null,
+                //ScryLastUpdated = null,
                 TotalCount = s.TotalCount,
                 ReleaseDate = s.ReleaseDate,
             })
             .OrderByDescending(s => s.ReleaseDate)
             .ToList();
 
-            foreach(var dto in result)
-            {
-                dto.ScryLastUpdated = await _scryfallRepo.GetSetDataLastUpdated(dto.Code);
-            }
+            //foreach(var dto in result)
+            //{
+            //    dto.ScryLastUpdated = await _scryfallRepo.GetSetDataLastUpdated(dto.Code);
+            //}
 
             return result;
         }
@@ -577,47 +688,88 @@ namespace Carpentry.Logic.Implementations
                 return;
             }
 
-            //get data from scryfall
+            //get current scry data
+            var scryData = await GetUpdatedScrySet(setId, dbSet.Code);
 
-            //update if scryfall is out of date
-
-
-            //add card definition batch
-            //  Should this be done in batches?
-            //      Variants
-            //      Color/identity
-            //      Variants(prices)
-            //      Legalities
+            await _cardRepo.AddCardDataBatch(scryData);
 
             dbSet.IsTracked = true;
             dbSet.LastUpdated = DateTime.Now;
             await _cardRepo.AddOrUpdateCardSet(dbSet);
-        }
-
-        public async Task RemoveTrackedSet(int setId)
-        {
-            //get DB set
-
-            //verify 0 owned/collected
-
-            //remove card definitions
-
-            //update set
+            //throw new NotImplementedException();
         }
 
         public async Task UpdateTrackedSet(int setId)
         {
+            var dbSet = await _cardRepo.GetCardSetById(setId);
+
+            if (dbSet == null)
+            {
+                throw new ArgumentException($"No set matching provided set ID of {setId}");
+            }
+
+            if (!dbSet.IsTracked)
+            {
+                return; //Don't want to update untracked sets
+            }
+
+            if (dbSet.LastUpdated != null && dbSet.LastUpdated.Value.AddDays(_dbRefreshIntervalDays) > DateTime.Today.Date)
+            {
+                _logger.LogInformation($"UpdateSetData - Card set {dbSet.Code} is already up to date, nothing will be updated.");
+                return;
+            }
+
+            var scryData = await GetUpdatedScrySet(setId, dbSet.Code);
+
+            await _cardRepo.UpdateCardDataBatch(scryData);
+
             //get data from scryfall
 
             //update scryfall if out of date
-            
+
             //1:    itterate over each card, checking the existing DB card
             //2:    Remove all CardVariant & CardLegalities for the cards, & re-populate just those records
 
-
-
+            //dbSet.LastUpdated = DateTime.Now;
+            //await _cardRepo.AddOrUpdateCardSet(dbSet);
+            //throw new NotImplementedException();
         }
 
+        public async Task RemoveTrackedSet(int setId)
+        {
+            var dbSet = await _cardRepo.GetCardSetById(setId);
+            var setTotals = _dataQueryService.QuerySetTotals().Where(s => s.SetId == setId).FirstOrDefault();
+
+            if (setTotals == null)
+            {
+                throw new ArgumentException($"No set matching provided set ID of {setId}");
+            }
+
+            if (!setTotals.IsTracked)
+            {
+                return; //If not tracked, just return
+            }
+            //get DB set
+
+            //verify 0 owned/collected
+            
+            if(setTotals.InventoryCount > 0 || setTotals.CollectedCount > 0)
+            {
+                return; //won't delete anything with owned cards
+                //TODO - should be able to remove a set with only buylist cards?
+            }
+
+            //remove card definitions
+            await _cardRepo.RemoveAllCardDefinitionsForSetId(setId);
+
+            //update set
+            dbSet.LastUpdated = null;
+            dbSet.IsTracked = false;
+            await _cardRepo.AddOrUpdateCardSet(dbSet);
+            //throw new NotImplementedException();
+        }
+
+        
         /// <summary>
         /// Update the list of sets available to track (does not update the data of cards in the set)
         /// </summary>

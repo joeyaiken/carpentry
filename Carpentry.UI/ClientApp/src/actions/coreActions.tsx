@@ -134,10 +134,67 @@ function getTrackedSets(dispatch: Dispatch, state: AppState, showUntracked: bool
     dispatch(apiDataRequested('trackedSets', { showUntracked: showUntracked, update: update}));
     api.core.getTrackedSets(showUntracked, update).then((results) => {
         dispatch(apiDataReceived('trackedSets', results));
-    })
+    });
 }
 
+export const requestAddTrackedSet = (setId: number): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return addTrackedSet(dispatch, getState(), setId);
+    }
+}
+function addTrackedSet(dispatch: Dispatch, state: AppState, setId: number): any {
+    const dataIsLoading = state.data.trackedSets.isLoading;
+    if(dataIsLoading){
+        return;
+    }
 
+    const showUntrackedVal = state.data.trackedSets.showUntracked;
+    dispatch(apiDataRequested('trackedSets', { showUntracked: showUntrackedVal, update: false}));
+    api.core.addTrackedSet(setId).then(() => {
+        dispatch(apiDataReceived('trackedSets', null));
+        dispatch(requestTrackedSets(showUntrackedVal, false));
+    });
+}
+
+export const requestUpdateTrackedSet = (setId: number): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return updateTrackedSet(dispatch, getState(), setId);
+    }
+}
+function updateTrackedSet(dispatch: Dispatch, state: AppState, setId: number): any {
+    const dataIsLoading = state.data.trackedSets.isLoading;
+    if(dataIsLoading){
+        return;
+    }
+    // console.log('updating tracked sets ping 1');
+    
+    const showUntrackedVal = state.data.trackedSets.showUntracked;
+    dispatch(apiDataRequested('trackedSets', { showUntracked: showUntrackedVal, update: false}));
+    api.core.updateTrackedSet(setId).then(() => {
+        // console.log('updating tracked sets ping 2');
+        dispatch(apiDataReceived('trackedSets', null));
+        // console.log('updating tracked sets ping 3');
+        dispatch(requestTrackedSets(showUntrackedVal, false));
+    });
+}
+export const requestRemoveTrackedSet = (setId: number): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return removeTrackedSet(dispatch, getState(), setId);
+    }
+}
+function removeTrackedSet(dispatch: Dispatch, state: AppState, setId: number): any {
+    const dataIsLoading = state.data.trackedSets.isLoading;
+    if(dataIsLoading){
+        return;
+    }
+    
+    const showUntrackedVal = state.data.trackedSets.showUntracked;
+    dispatch(apiDataRequested('trackedSets', { showUntracked: showUntrackedVal, update: false}));
+    api.core.removeTrackedSet(setId).then(() => {
+        dispatch(apiDataReceived('trackedSets', null));
+        dispatch(requestTrackedSets(showUntrackedVal, false));
+    });
+}
 
 // // export const CORE_DATA_REQUESTED = 'CORE_DATA_REQUESTED';
 // // export const coreDataRequested = (): ReduxAction  => ({

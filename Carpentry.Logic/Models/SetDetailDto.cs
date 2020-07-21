@@ -18,7 +18,7 @@ namespace Carpentry.Logic.Models
         public DateTime? DataLastUpdated { get; set; }
         
         //Scry Last Updated
-        public DateTime? ScryLastUpdated { get; set; }
+        //public DateTime? ScryLastUpdated { get; set; }
         //Owned cards / card count / tracked count
 
         public bool IsTracked { get; set; }

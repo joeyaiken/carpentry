@@ -32,6 +32,14 @@ export const apiDataReceived = (state: TrackedSetDataReducerState, action: Redux
     //I guess this is normally where Normalizr should be used?
     const apiSets: SetDetailDto[] = data;
 
+    //Create/Update/Delete actions will return null
+    if(data === null){
+        return {
+            ...state,
+            isLoading: false,
+        }
+    }
+
     let setsById: { [key:number]: SetDetailDto } = {};
 
     apiSets.forEach(set => {

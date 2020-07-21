@@ -5,7 +5,7 @@ import { Typography, Box, CardContent, Card, CardHeader, Paper, Button } from '@
 import DeckList from '../DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 import CardSetSettingsContainerLayout from './CardSetSettingsContainerLayout';
-import { requestTrackedSets } from '../../actions/coreActions';
+import { requestTrackedSets, requestAddTrackedSet, requestUpdateTrackedSet, requestRemoveTrackedSet } from '../../actions/coreActions';
 
 //Should this manage the modal?
 
@@ -13,7 +13,7 @@ interface PropsFromState {
     trackedSetDetails: SetDetailDto[];
 
     showUntracked: boolean;
-
+    isLoading: boolean;
 }
 
 type CardSetSettingsContainerProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -23,6 +23,9 @@ class CardSetSettingsContainer extends React.Component<CardSetSettingsContainerP
         super(props);
         this.handleRefreshClick = this.handleRefreshClick.bind(this);
         this.handleShowUntrackedClick = this.handleShowUntrackedClick.bind(this);
+        this.handleAddTrackedSetClick = this.handleAddTrackedSetClick.bind(this);
+        this.handleUpdateTrackedSetClick = this.handleUpdateTrackedSetClick.bind(this);
+        this.handleRemoveTrackedSetClick = this.handleRemoveTrackedSetClick.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +41,18 @@ class CardSetSettingsContainer extends React.Component<CardSetSettingsContainerP
         this.props.dispatch(requestTrackedSets(!this.props.showUntracked, false));
     }
 
+    handleAddTrackedSetClick(setId: number): void {
+        this.props.dispatch(requestAddTrackedSet(setId))
+    }
+
+    handleUpdateTrackedSetClick(setId: number): void {
+        this.props.dispatch(requestUpdateTrackedSet(setId))
+    }
+
+    handleRemoveTrackedSetClick(setId: number): void {
+        this.props.dispatch(requestRemoveTrackedSet(setId))
+    }
+
     render() {
         return (
             <CardSetSettingsContainerLayout
@@ -45,6 +60,10 @@ class CardSetSettingsContainer extends React.Component<CardSetSettingsContainerP
                 onShowUntrackedClick={this.handleShowUntrackedClick}
                 trackedSetDetails={this.props.trackedSetDetails}
                 showUntrackedValue={this.props.showUntracked}
+                onAddSetClick={this.handleAddTrackedSetClick}
+                onRemoveSetClick={this.handleRemoveTrackedSetClick}
+                onUpdateSetClick={this.handleUpdateTrackedSetClick}
+                isLoading={this.props.isLoading}
             />
         );
     }
@@ -73,6 +92,7 @@ function mapStateToProps(state: AppState, ownProps): PropsFromState {
     const result: PropsFromState = {
         trackedSetDetails: selectTrackedSets(state),
         showUntracked: state.data.trackedSets.showUntracked,
+        isLoading: state.data.trackedSets.isLoading,
     }
     return result;
 }
