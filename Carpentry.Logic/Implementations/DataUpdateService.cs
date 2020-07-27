@@ -826,7 +826,9 @@ namespace Carpentry.Logic.Implementations
             {
                 //for each result, see if it exists in the DB
                 var existingSet = existingCardSets.Where(x => x.Code.ToLower() == scrySet.Code.ToLower()).FirstOrDefault();
-                if(existingCardSets != null)
+                
+                //if it doesn't, create a new one that can be added to the db
+                if(existingSet == null)
                 {
                     existingSet = new CardSetData()
                     {
@@ -835,6 +837,8 @@ namespace Carpentry.Logic.Implementations
                         LastUpdated = null,
                     };
                 }
+
+                //This mainly makes sure these fields are updated in the DB
                 existingSet.Name = scrySet.Name;
                 existingSet.ReleaseDate = scrySet.ReleasedAt;
 

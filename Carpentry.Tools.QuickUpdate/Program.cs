@@ -4,9 +4,6 @@ using System.Threading.Tasks;
 using Carpentry.Data.Interfaces;
 using Carpentry.Logic.Implementations;
 using Carpentry.Logic.Interfaces;
-//using Carpentry.Data.LegacyDataContext;
-//using Carpentry.Logic.Implementations;
-//using Carpentry.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,26 +12,44 @@ using Serilog;
 using Serilog.Events;
 using Carpentry.Data.Implementations;
 using Carpentry.Data.DataContext;
+using System.Linq;
 
 namespace Carpentry.Tools.QuickUpdate
 {
     class Program
     {
+        private static readonly int DB_UPDATE_INTERVAL_DAYS = 0; //Increase this if you only want to update data every few days
+
         static async Task Main(string[] args)
         {
             var serviceProvider = BuildServiceProvider();
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
-            logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
+            logger.LogInformation("Carpentry QuickUpdate - Initializing...");
 
             var updateService = serviceProvider.GetService<IDataUpdateService>();
 
-            await updateService.UpdateAllSets();
+            logger.LogInformation("Getting list of tracked set");
 
-            logger.LogInformation("Completed successfully");
+            var trackedSets = await updateService.GetTrackedSets(false, true);
+
+            var setsToUpdate = trackedSets
+                .Where(s => s.DataLastUpdated == null || s.DataLastUpdated.Value.AddDays(DB_UPDATE_INTERVAL_DAYS) < DateTime.Today.Date)
+                .ToList();
+
+            logger.LogInformation($"Found {setsToUpdate.Count} sets to update");
+
+
+            for (int i = 0; i < setsToUpdate.Count; i++)
+            {
+                logger.LogInformation($"Updating {setsToUpdate[i].Code} [{i+1}/{setsToUpdate.Count}]...");
+                await updateService.UpdateTrackedSet(setsToUpdate[i].SetId);
+                logger.LogInformation($"Updating {setsToUpdate[i].Code} complete!");
+            }
+
+            logger.LogInformation("Carpentry QuickUpdate - Completed successfully");
         }
-
 
         private static ServiceProvider BuildServiceProvider()
         {
@@ -53,45 +68,24 @@ namespace Carpentry.Tools.QuickUpdate
             var serviceProvider = new ServiceCollection()
                 .AddSingleton(Configuration)
 
-
-
-
                 //.AddSingleton<IDataBackupConfig, BackupToolConfig>()
 
                 .AddLogging(config => config.AddSerilog())
-
-                ////.AddDbContext<SqliteDataContext>(options => options.UseSqlite(cardDatabaseLocation))
-                //.AddScoped<IDataUpdateService, DataUpdateService>()
-
-                ////IScryfallService scryService,
-                //.AddScoped<IScryfallService, ScryfallService>()
-                //.AddHttpClient<IScryfallService, ScryfallService>().Services
-
-                ////ICardRepo cardRepo,
-                ////.AddScoped<ICardRepo, CarpentryCardRepo>() //Name TBD, this hasn't been implemented yet
-                ////IScryfallRepo scryfallRepo
-                //.AddScoped<IScryfallDataRepo, ScryfallRepo>()
-
-
 
                 .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
                 //data services
                 .AddSingleton<ICardDataRepo, CardDataRepo>()
-                .AddSingleton<IDeckDataRepo, DeckDataRepo>()
-                .AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
                 .AddSingleton<IScryfallDataRepo, ScryfallRepo>()
-                .AddSingleton<IDataReferenceService, DataReferenceService>()
                 .AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
+                .AddSingleton<IDataQueryService, DataQueryService>()
 
                 //logic services
-                .AddScoped<IDataRestoreService, DataRestoreService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
 
                 .AddScoped<IScryfallService, ScryfallService>()
                 .AddHttpClient<IScryfallService, ScryfallService>().Services
-
 
                 .BuildServiceProvider();
 

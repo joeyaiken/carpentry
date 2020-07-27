@@ -118,6 +118,7 @@ namespace Carpentry.Data.Implementations
         public async Task<IEnumerable<DataReferenceValue<string>>> GetAllSets()
         {
             List<DataReferenceValue<string>> results = await _cardContext.Sets
+                .Where(s => s.IsTracked)
                 .OrderByDescending(s => s.ReleaseDate)
                 .Select(x => new DataReferenceValue<string>()
                 {

@@ -26,9 +26,13 @@ namespace Carpentry.Tools.QuickRestore
 
             var restoreService = serviceProvider.GetService<IDataRestoreService>();
 
-            logger.LogInformation("initialized successfully");
+            //Verify DBs & default records exist
 
-            await restoreService.RestoreDatabase();
+            //validate the backup object
+
+            //add all sets in the validated object
+
+            //import the validated object
 
 
 
@@ -36,6 +40,10 @@ namespace Carpentry.Tools.QuickRestore
 
 
 
+
+            //logger.LogInformation("initialized successfully");
+
+            //await restoreService.RestoreDatabase();
 
 
             logger.LogInformation("Completed successfully");

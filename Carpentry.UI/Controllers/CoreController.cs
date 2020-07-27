@@ -103,21 +103,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //RemoveTrackedSet
-        [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveTrackedSet(int setId)
-        {
-            try
-            {
-                await _updateService.RemoveTrackedSet(setId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
-            }
-        }
-
         //UpdateTrackedSet
         [HttpGet("[action]")]
         public async Task<ActionResult> UpdateTrackedSet(int setId)
@@ -133,84 +118,20 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //Get Tracked Set Detail ?
-
-        //UpdateTrackedSetScryData
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> UpdateTrackedSetScryData(string setCode)
-        //{
-        //    try
-        //    {
-        //        await _updateService.UpdateTrackedSetScryData(setCode);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetScryData", ex));
-        //    }
-        //}
-        //UpdateTrackedSetCardData
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> UpdateTrackedSetCardData(string setCode)
-        //{
-        //    try
-        //    {
-        //        await _updateService.UpdateTrackedSetCardData(setCode);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("UpdateTrackedSetCardData", ex));
-        //    }
-        //}
-        //GetAllAvailableSets
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult<List<SetDetailDto>>> GetAllAvailableSets()
-        //{
-        //    try
-        //    {
-        //        //var result = await _updateService.GetAllAvailableSets();
-        //        //return Ok(result);
-        //        throw new NotImplementedException();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("GetAllAvailableSets", ex));
-        //    }
-        //}
-
-        //GetUntrackedSets ??
-
-
-
-        //AddTrackedSet
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> AddTrackedSet(string setCode)
-        //{
-        //    try
-        //    {
-        //        await _updateService.AddTrackedSet(setCode);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("AddTrackedSet", ex));
-        //    }
-        //}
-        ////RemoveTrackedSet(fails if any inventory cards present)
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> RemoveTrackedSet(string setCode)
-        //{
-        //    try
-        //    {
-        //        await _updateService.RemoveTrackedSet(setCode);
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
-        //    }
-        //}
+        //RemoveTrackedSet
+        [HttpGet("[action]")]
+        public async Task<ActionResult> RemoveTrackedSet(int setId)
+        {
+            try
+            {
+                await _updateService.RemoveTrackedSet(setId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
+            }
+        }
 
         #endregion
 

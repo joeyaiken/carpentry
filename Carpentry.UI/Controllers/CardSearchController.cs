@@ -13,6 +13,18 @@ namespace Carpentry.UI.Controllers
     [ApiController]
     public class CardSearchController : ControllerBase
     {
+
+        //      
+
+        /*  This controller should just have 2 methods
+                Search Web / Search Scryfall, a method that calls the scryfall search API
+                    Currently this only searches by name, and has an override for all prints
+                Search Inventory, a method that queries the local DB
+                    Contains filters for: 
+                        Only owned cards
+                        Card data filters
+            */
+
         private string FormatExceptionMessage(string functionName, Exception ex)
         {
             return $"An error occured when processing the {functionName} method of the Card Search controller: {ex.Message}";

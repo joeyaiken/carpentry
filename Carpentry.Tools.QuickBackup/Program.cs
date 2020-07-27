@@ -29,6 +29,13 @@ namespace Carpentry.Tools.QuickBackup
 
             var backupService = serviceProvider.GetService<IDataBackupService>();
 
+            //create a backup
+
+            //copy contents to config directory
+
+
+
+
             //var appConfig = new BackupToolConfig(Configuration);
 
             await backupService.BackupCollection(
