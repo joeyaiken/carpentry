@@ -47,49 +47,7 @@ namespace Carpentry.UI.Controllers
             return Ok("Online");
         }
 
-        /// <summary>
-        /// Will call the scryfall API to get cards by name, returning mapped results
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
-        {
-            try
-            {
-                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromWeb(param);
-                return Ok(cards);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("SearchWeb", ex));
-            }
-        }
-
-        /// <summary>
-        /// Searches all cards in a given set.
-        /// In earlier versions, this involved searching the cached scryfall repo, but now we can just search the regular card repo
-        /// This could / should probably be merged with SearchInventory
-        /// </summary>
-        /// <param name="filters"></param>
-        /// <returns></returns>
-        [HttpPost("[action]")]
-        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
-        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] JsonObj filters)
-        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] JObject filters)
-        {
-            try
-            {
-                //CardSearchQueryParameter newFilters = new CardSearchQueryParameter();
-                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromSet(filters);
-                return Ok(cards);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("SearchSet", ex));
-            }
-        }
+        #region Search Methods
 
         /// <summary>
         /// Searches cards in the inventory
@@ -110,5 +68,55 @@ namespace Carpentry.UI.Controllers
                 return StatusCode(500, FormatExceptionMessage("SearchInventory", ex));
             }
         }
+
+        /// <summary>
+        /// Will call the scryfall API to get cards by name, returning mapped results
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [HttpPost("[action]")]
+        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
+        {
+            try
+            {
+                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromWeb(param);
+                return Ok(cards);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("SearchWeb", ex));
+            }
+        }
+
+        #endregion Search Methods
+
+        #region Obsolete 
+
+        ///// <summary>
+        ///// Searches all cards in a given set.
+        ///// In earlier versions, this involved searching the cached scryfall repo, but now we can just search the regular card repo
+        ///// This could / should probably be merged with SearchInventory
+        ///// </summary>
+        ///// <param name="filters"></param>
+        ///// <returns></returns>
+        //[HttpPost("[action]")]
+        ////public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
+        //public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] CardSearchQueryParameter filters)
+        ////public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] JsonObj filters)
+        ////public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchSet([FromBody] JObject filters)
+        //{
+        //    try
+        //    {
+        //        //CardSearchQueryParameter newFilters = new CardSearchQueryParameter();
+        //        IEnumerable<MagicCardDto> cards = await _cardSearch.SearchCardsFromSet(filters);
+        //        return Ok(cards);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, FormatExceptionMessage("SearchSet", ex));
+        //    }
+        //}
+
+        #endregion
     }
 }

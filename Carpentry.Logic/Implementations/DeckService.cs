@@ -352,6 +352,8 @@ namespace Carpentry.Logic.Implementations
 
         #region Public methods
 
+        #region Deck Props
+
         public async Task<int> AddDeck(DeckPropertiesDto props)
         {
             DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(props.Format);
@@ -402,6 +404,95 @@ namespace Carpentry.Logic.Implementations
             await _deckRepo.DeleteDeck(deckId);
         }
 
+        #endregion Deck Props
+
+        #region Deck Cards
+
+        /// <summary>
+        /// Adds a card to a deck
+        /// If the dto references an existing deck card, and that card is ALREADY in a deck, no new card is added
+        ///     Instead, the existing card is moved to this deck
+        /// If the card exists, but isn't in a deck, then a new deck card is created
+        /// If the inventory card doesn't exist, then a new one is mapped
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public async Task AddDeckCard(DeckCardDto dto)
+        {
+            //Don't need to add an inventory card
+            if (dto.InventoryCard.Id > 0)
+            {
+                //if a card already exists in a deck it is "moved" to this deck
+                var existingDeckCard = await _deckRepo.GetDeckCardByInventoryId(dto.InventoryCard.Id);
+
+                if (existingDeckCard != null)
+                {
+                    existingDeckCard.DeckId = dto.DeckId;
+                    existingDeckCard.CategoryId = null;
+
+                    await _deckRepo.UpdateDeckCard(existingDeckCard);
+                    return;
+                }
+
+                //nothing needs to be created, the deck and inventory cards already exist
+            }
+
+            //Need to add a new inventory card for this deck card
+            //(check how I'm adding inventory cards atm)
+            if (dto.InventoryCard.Id == 0)
+            {
+                int newInventoryCardId = await _inventoryService.AddInventoryCard(dto.InventoryCard);
+                dto.InventoryCard.Id = newInventoryCardId;
+            }
+
+            DeckCardData cardToAdd = new DeckCardData()
+            {
+                CategoryId = dto.CategoryId,
+                DeckId = dto.DeckId,
+                InventoryCardId = dto.InventoryCard.Id,
+            };
+
+            await _deckRepo.AddDeckCard(cardToAdd);
+            //await _cardRepo.AddDeckCard(dto);
+        }
+
+        //I think I only end up adding NEW deck cards with a batch
+        //IDR where exactly this gets called outside of console apps
+        public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dtoBatch)
+        {
+            _logger.LogWarning("Beginning AddDeckCardBatch");
+            var dtoArray = dtoBatch.ToArray();
+
+            for (int i = 0; i < dtoArray.Count(); i++)
+            {
+                DeckCardDto dto = dtoArray[i];
+
+                //console apps want to see this
+                _logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
+
+                await AddDeckCard(dto);
+            }
+        }
+
+        public async Task UpdateDeckCard(DeckCardDto card)
+        {
+            DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
+
+            dbCard.DeckId = card.DeckId;
+            dbCard.CategoryId = card.CategoryId;
+
+            await _deckRepo.UpdateDeckCard(dbCard);
+        }
+
+        public async Task DeleteDeckCard(int deckCardId)
+        {
+            await _deckRepo.DeleteDeckCard(deckCardId);
+        }
+
+        #endregion Deck Cards
+
+        #region Search
+
         public async Task<IEnumerable<DeckOverviewDto>> GetDeckOverviews()
         {
 
@@ -420,9 +511,9 @@ namespace Carpentry.Logic.Implementations
                 //BasicW = dbDeck.BasicW,
                 Format = dbDeck.Format.Name,
                 Name = dbDeck.Name,
-                
+
                 //don't want to populate notes here right?
-                
+
             }).ToList();
 
             for (int i = 0; i < deckList.Count(); i++)
@@ -444,7 +535,7 @@ namespace Carpentry.Logic.Implementations
                 {
                     deckToUdpate.ValidationIssues = validationResults;
                 }
-                
+
 
 
                 //deckList[i].Notes = await ValidateDeck(deckList[i].Id);
@@ -453,8 +544,6 @@ namespace Carpentry.Logic.Implementations
             return deckList;
         }
 
-
-        
         //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
         //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
         public async Task<DeckDetailDto> GetDeckDetail(int deckId)
@@ -567,88 +656,27 @@ namespace Carpentry.Logic.Implementations
             return result;
         }
 
-        /// <summary>
-        /// Adds a card to a deck
-        /// If the dto references an existing deck card, and that card is ALREADY in a deck, no new card is added
-        ///     Instead, the existing card is moved to this deck
-        /// If the card exists, but isn't in a deck, then a new deck card is created
-        /// If the inventory card doesn't exist, then a new one is mapped
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public async Task AddDeckCard(DeckCardDto dto)
+        #endregion Search
+
+        #region Import / Export
+
+        public async Task<ValidatedDeckImportDto> ValidateDeckImport(DeckImportDto dto)
         {
-            //Don't need to add an inventory card
-            if (dto.InventoryCard.Id > 0)
-            {
-                //if a card already exists in a deck it is "moved" to this deck
-                var existingDeckCard = await _deckRepo.GetDeckCardByInventoryId(dto.InventoryCard.Id);
-
-                if (existingDeckCard != null)
-                {
-                    existingDeckCard.DeckId = dto.DeckId;
-                    existingDeckCard.CategoryId = null;
-
-                    await _deckRepo.UpdateDeckCard(existingDeckCard);
-                    return;
-                }
-
-                //nothing needs to be created, the deck and inventory cards already exist
-            }
-            
-            //Need to add a new inventory card for this deck card
-            //(check how I'm adding inventory cards atm)
-            if (dto.InventoryCard.Id == 0)
-            {
-                int newInventoryCardId = await _inventoryService.AddInventoryCard(dto.InventoryCard);
-                dto.InventoryCard.Id = newInventoryCardId;
-            }
-
-            DeckCardData cardToAdd = new DeckCardData()
-            {
-                CategoryId = dto.CategoryId,
-                DeckId = dto.DeckId,
-                InventoryCardId = dto.InventoryCard.Id,
-            };
-
-            await _deckRepo.AddDeckCard(cardToAdd);
-            //await _cardRepo.AddDeckCard(dto);
+            throw new NotImplementedException();
         }
 
-        //I think I only end up adding NEW deck cards with a batch
-        //IDR where exactly this gets called outside of console apps
-        public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dtoBatch)
+        public async Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto)
         {
-            _logger.LogWarning("Beginning AddDeckCardBatch");
-            var dtoArray = dtoBatch.ToArray();
-
-            for (int i = 0; i < dtoArray.Count(); i++)
-            {
-                DeckCardDto dto = dtoArray[i];
-
-                //console apps want to see this
-                _logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
-
-                await AddDeckCard(dto);
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task UpdateDeckCard(DeckCardDto card)
+        public async Task<string> ExportDeckList(int deckId)
         {
-            DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
-
-            dbCard.DeckId = card.DeckId;
-            dbCard.CategoryId = card.CategoryId;
-
-            await _deckRepo.UpdateDeckCard(dbCard);
+            throw new NotImplementedException();
         }
 
-        public async Task DeleteDeckCard(int deckCardId)
-        {
-            await _deckRepo.DeleteDeckCard(deckCardId);
-        }
+        #endregion Import / Export
 
         #endregion
-
     }
 }

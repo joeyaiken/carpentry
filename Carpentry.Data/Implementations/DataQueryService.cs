@@ -805,9 +805,6 @@ namespace Carpentry.Data.Implementations
                 .Select(x => x.Id)
                 .FirstOrDefault();
 
-
-
-
             var query = _cardContext.Cards
                 .Where(x => x.SetId == matchingSetId);
                 //.Where(x => x.InventoryCards.Count > 0)

@@ -16,6 +16,8 @@ namespace Carpentry.UI.Tests.UnitTests
     [TestClass]
     public class DecksControllerTests
     {
+        #region Status
+
         [TestMethod]
         public void Decks_GetStatus_ReturnsAsyncOK_Test()
         {
@@ -33,6 +35,10 @@ namespace Carpentry.UI.Tests.UnitTests
 
             Assert.AreEqual("Online", resultValue);
         }
+
+        #endregion
+
+        #region Deck Props
 
         [TestMethod]
         public async Task Decks_AddDeck_ReturnsAsyncOK_Test()
@@ -62,7 +68,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var typedResult = response.Result as OkObjectResult;
             Assert.AreEqual(expectedNewId, typedResult.Value);
         }
-        
+
         [TestMethod]
         public async Task Decks_UpdateDeck_ReturnsAsyncOK_Test()
         {
@@ -89,13 +95,13 @@ namespace Carpentry.UI.Tests.UnitTests
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
-        
+
         [TestMethod]
         public async Task Decks_DeleteDeck_ReturnsAsyncOK_Test()
         {
             //arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            
+
             int idToSubmit = 1;
 
             mockDeckService
@@ -103,7 +109,7 @@ namespace Carpentry.UI.Tests.UnitTests
                 .Returns(Task.CompletedTask);
 
             var decksController = new Controllers.DecksController(mockDeckService.Object);
-            
+
             //act
             var response = await decksController.DeleteDeck(idToSubmit);
 
@@ -111,74 +117,10 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
-        [TestMethod]
-        public async Task Decks_GetDeckOverviews_ReturnsAsyncOK_Test()
-        {
-            //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+        #endregion Deck Props
 
-            IEnumerable<DeckOverviewDto> expectedSearchResults = new List<DeckOverviewDto>()
-            {
-                new DeckOverviewDto{ },
-                new DeckOverviewDto{ },
-                new DeckOverviewDto{ },
-                new DeckOverviewDto{ },
-                new DeckOverviewDto{ },
-            }.AsEnumerable();
+        #region Deck Cards
 
-            mockDeckService
-                .Setup(p => p.GetDeckOverviews())
-                .ReturnsAsync(expectedSearchResults);
-
-            var decksController = new Controllers.DecksController(mockDeckService.Object);
-            
-            //act
-            var response = await decksController.GetDeckOverviews();
-
-            //assert
-            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
-            var typedResult = response.Result as OkObjectResult;
-
-            IEnumerable<DeckOverviewDto> resultValue = typedResult.Value as IEnumerable<DeckOverviewDto>;
-
-            Assert.IsNotNull(resultValue);
-            Assert.AreEqual(5, resultValue.Count());
-        }
-        
-        [TestMethod]
-        public async Task Decks_GetDeckDetail_ReturnsAsyncOK_Test()
-        {
-            //arrange
-            int deckIdToRequest = 1;
-
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-
-            mockDeckService
-                .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
-                .ReturnsAsync(new DeckDetailDto
-                {
-                    CardOverviews = new List<DeckCardOverview>(),
-                    Cards = new List<DeckCard>(),
-                    //CardDetails = new List<InventoryCardDto>(),
-                    //CardOverviews = new List<InventoryOverviewDto>(),
-                    Props = new DeckPropertiesDto(),
-                    Stats = new DeckStatsDto(),
-                });
-
-            var decksController = new Controllers.DecksController(mockDeckService.Object);
-            
-
-            //act
-            var response = await decksController.GetDeckDetail(deckIdToRequest);
-
-            //assert
-            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
-            var typedResult = response.Result as OkObjectResult;
-
-            DeckDetailDto resultValue = typedResult.Value as DeckDetailDto;
-            Assert.IsNotNull(resultValue);
-        }
-        
         [TestMethod]
         public async Task Decks_AddDeckCard_ReturnsAsyncOK_Test()
         {
@@ -204,7 +146,7 @@ namespace Carpentry.UI.Tests.UnitTests
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
-        
+
         [TestMethod]
         public async Task Decks_UpdateDeckCard_ReturnsAsyncOK_Test()
         {
@@ -231,7 +173,7 @@ namespace Carpentry.UI.Tests.UnitTests
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
-        
+
         [TestMethod]
         public async Task Decks_RemoveDeckCard_ReturnsAsyncOK_Test()
         {
@@ -253,5 +195,192 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
+        #endregion Deck Cards
+
+        #region Search
+
+        [TestMethod]
+        public async Task Decks_GetDeckOverviews_ReturnsAsyncOK_Test()
+        {
+            //arrange
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            IEnumerable<DeckOverviewDto> expectedSearchResults = new List<DeckOverviewDto>()
+            {
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
+                new DeckOverviewDto{ },
+            }.AsEnumerable();
+
+            mockDeckService
+                .Setup(p => p.GetDeckOverviews())
+                .ReturnsAsync(expectedSearchResults);
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+
+            //act
+            var response = await decksController.GetDeckOverviews();
+
+            //assert
+            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
+            var typedResult = response.Result as OkObjectResult;
+
+            IEnumerable<DeckOverviewDto> resultValue = typedResult.Value as IEnumerable<DeckOverviewDto>;
+
+            Assert.IsNotNull(resultValue);
+            Assert.AreEqual(5, resultValue.Count());
+        }
+
+        [TestMethod]
+        public async Task Decks_GetDeckDetail_ReturnsAsyncOK_Test()
+        {
+            //arrange
+            int deckIdToRequest = 1;
+
+            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            mockDeckService
+                .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
+                .ReturnsAsync(new DeckDetailDto
+                {
+                    CardOverviews = new List<DeckCardOverview>(),
+                    Cards = new List<DeckCard>(),
+                    //CardDetails = new List<InventoryCardDto>(),
+                    //CardOverviews = new List<InventoryOverviewDto>(),
+                    Props = new DeckPropertiesDto(),
+                    Stats = new DeckStatsDto(),
+                });
+
+            var decksController = new Controllers.DecksController(mockDeckService.Object);
+
+
+            //act
+            var response = await decksController.GetDeckDetail(deckIdToRequest);
+
+            //assert
+            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
+            var typedResult = response.Result as OkObjectResult;
+
+            DeckDetailDto resultValue = typedResult.Value as DeckDetailDto;
+            Assert.IsNotNull(resultValue);
+        }
+
+        #endregion Search
+
+        #region Import
+
+        [TestMethod]
+        public async Task Decks_ValidateDeckImport_ReturnsAsyncOK_Test()
+        {
+            Assert.Fail();
+            ////arrange
+            //int deckIdToRequest = 1;
+
+            //var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            //mockDeckService
+            //    .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
+            //    .ReturnsAsync(new DeckDetailDto
+            //    {
+            //        CardOverviews = new List<DeckCardOverview>(),
+            //        Cards = new List<DeckCard>(),
+            //        //CardDetails = new List<InventoryCardDto>(),
+            //        //CardOverviews = new List<InventoryOverviewDto>(),
+            //        Props = new DeckPropertiesDto(),
+            //        Stats = new DeckStatsDto(),
+            //    });
+
+            //var decksController = new Controllers.DecksController(mockDeckService.Object);
+
+
+            ////act
+            //var response = await decksController.GetDeckDetail(deckIdToRequest);
+
+            ////assert
+            //Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
+            //var typedResult = response.Result as OkObjectResult;
+
+            //DeckDetailDto resultValue = typedResult.Value as DeckDetailDto;
+            //Assert.IsNotNull(resultValue);
+        }
+        //AddValidatedDeckImport
+
+        [TestMethod]
+        public async Task Decks_AddValidatedDeckImport_ReturnsAsyncOK_Test()
+        {
+            Assert.Fail();
+            ////arrange
+            //int deckIdToRequest = 1;
+
+            //var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            //mockDeckService
+            //    .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
+            //    .ReturnsAsync(new DeckDetailDto
+            //    {
+            //        CardOverviews = new List<DeckCardOverview>(),
+            //        Cards = new List<DeckCard>(),
+            //        //CardDetails = new List<InventoryCardDto>(),
+            //        //CardOverviews = new List<InventoryOverviewDto>(),
+            //        Props = new DeckPropertiesDto(),
+            //        Stats = new DeckStatsDto(),
+            //    });
+
+            //var decksController = new Controllers.DecksController(mockDeckService.Object);
+
+
+            ////act
+            //var response = await decksController.GetDeckDetail(deckIdToRequest);
+
+            ////assert
+            //Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
+            //var typedResult = response.Result as OkObjectResult;
+
+            //DeckDetailDto resultValue = typedResult.Value as DeckDetailDto;
+            //Assert.IsNotNull(resultValue);
+        }
+        
+        #endregion Import
+
+        #region Export
+
+        [TestMethod]
+        public async Task Decks_ExportDeckList_ReturnsAsyncOK_Test()
+        {
+            Assert.Fail();
+            ////arrange
+            //int deckIdToRequest = 1;
+
+            //var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+
+            //mockDeckService
+            //    .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
+            //    .ReturnsAsync(new DeckDetailDto
+            //    {
+            //        CardOverviews = new List<DeckCardOverview>(),
+            //        Cards = new List<DeckCard>(),
+            //        //CardDetails = new List<InventoryCardDto>(),
+            //        //CardOverviews = new List<InventoryOverviewDto>(),
+            //        Props = new DeckPropertiesDto(),
+            //        Stats = new DeckStatsDto(),
+            //    });
+
+            //var decksController = new Controllers.DecksController(mockDeckService.Object);
+
+
+            ////act
+            //var response = await decksController.GetDeckDetail(deckIdToRequest);
+
+            ////assert
+            //Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
+            //var typedResult = response.Result as OkObjectResult;
+
+            //DeckDetailDto resultValue = typedResult.Value as DeckDetailDto;
+            //Assert.IsNotNull(resultValue);
+        }
+        
+        #endregion Export
     }
 }

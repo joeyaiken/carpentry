@@ -64,74 +64,7 @@ namespace Carpentry.Logic.Implementations
             var scryfallCard = await _scryService.GetCardByMid(multiverseId);
 
             await UpdateSetData(scryfallCard.Set);
-
-            //await _cardRepo.AddCardDefinition(scryfallCard);
         }
-
-        /// <summary>
-        /// Updates all pricing and legality data for a card set
-        /// </summary>
-        /// <returns></returns>
-        public async Task UpdateAllSets()
-        {
-            _logger.LogInformation("UpdateAllSets - Calculating sets to update");
-
-            var setCodes = await _cardRepo.GetAllCardSetCodes();
-
-            _logger.LogInformation($"Found {setCodes.Count()} sets in the database, checking scry definitions");
-
-            //What if, instead of doing everything for 1 set at a time, why not...
-            //  Update the scry definitions of all sets (not parsing anything)
-            //  THEN, 1 at a time, parsing the scry definitions, seeing what doesn't get handled properly
-            //      I should prevent this from saving a given set if there is a SINGLE unhandled card
-
-            //Note - I know there's no way the scry data will be OLDER than the card data
-
-            //Get all un-parsed scry data
-            for (int i = 0; i < setCodes.Count(); i++)
-            {
-                //get scry set last updated, don't parse
-
-            }
-
-
-            //try to parse every scryfall set, expecting an error if anything doesn't parse properly
-            for (int i = 0; i < setCodes.Count(); i++)
-            {
-                
-
-            }
-
-
-            for (int i = 0; i < setCodes.Count(); i++)
-            {
-
-                DateTime? dbLastUpdated = await _cardRepo.GetCardSetLastUpdated(setCodes[i]);
-
-                //if (dbLastUpdated != null && dbLastUpdated.Value.AddDays(_dbRefreshIntervalDays) > DateTime.Today.Date)
-                //{
-                //    _logger.LogInformation($"Set code {setCodes[i]} was last updated {dbLastUpdated.ToString()}, nothing will be updated.");
-                //    //continue;
-                //} 
-                if (dbLastUpdated != null)
-                {
-                    _logger.LogInformation($"Set code {setCodes[i]} was last updated {dbLastUpdated.ToString()}, nothing will be updated.");
-                    //continue;
-                }
-                else
-                {
-                    string replaceReason = dbLastUpdated == null ? "has never been updated" : $"was last updated {dbLastUpdated.ToString()}";
-                    _logger.LogInformation($"Set code {setCodes[i]} {replaceReason}.  Set will now be updated");
-                    await UpdateSetData(setCodes[i]);
-                }
-            }
-
-            _logger.LogWarning("UpdateAllSets - Done refreshing set data");
-
-        }
-
-
-
 
         /// <summary>
         /// Update the card and scry data for a particular set
@@ -698,11 +631,11 @@ namespace Carpentry.Logic.Implementations
             await _cardRepo.AddOrUpdateCardSet(dbSet);
             //throw new NotImplementedException();
         }
+
         public async Task AddTrackedSet(string setCode)
         {
             throw new NotImplementedException();
         }
-
 
         public async Task UpdateTrackedSet(int setId)
         {
@@ -773,17 +706,13 @@ namespace Carpentry.Logic.Implementations
             await _cardRepo.AddOrUpdateCardSet(dbSet);
             //throw new NotImplementedException();
         }
-        //public async Task RemoveTrackedSet(string setCode)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         /// <summary>
         /// Update the list of sets available to track (does not update the data of cards in the set)
         /// Gets called by DataRestore service to populate possible sets
         /// </summary>
         /// <returns></returns>
-        public async Task TryUpdateAvailableSets()
+        private async Task TryUpdateAvailableSets()
         {
             //Update scry data, if not updated today
             var auditData = await _scryfallRepo.GetAuditData();
@@ -845,56 +774,5 @@ namespace Carpentry.Logic.Implementations
                 await _cardRepo.AddOrUpdateCardSet(existingSet);
             }
         }
-
-        //public async Task<List<SetDetailDto>> GetUntrackedSets()
-        //{
-        //    //goal - get all scryfall sets NOT currently tracked by the app
-        //    //will exclude online-only sets, really old sets, and weird promos
-
-        //    //check the scry repo for most recent data
-        //    //  if not up to date: call scry repo, filter, and apply to DB
-        //    //  return list of available sets (dataLastUpdated == null for all)
-
-        //    var auditData = await _scryfallRepo.GetAuditData();
-
-        //    if (auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
-        //    {
-        //        //get the list of sets from the scryfall service
-
-        //        //maybe do some filtering
-
-        //        //add the results to the DB
-        //    }
-
-        //    //var trackedSets = await GetTrackedSets();
-
-        //    var trackedSetCodes = GetTrackedSets().Result.Select(x => x.Code).ToList(); //will this work?.....
-
-        //    var scrySets = _scryfallRepo.GetAvailableSetOverviews().Result
-        //        .Where(x => !trackedSetCodes.Contains(x.Code))
-        //        .Select(x => new SetDetailDto()
-        //        {
-        //            Code = x.Code,
-        //            DataLastUpdated = null,
-        //            InventoryCardCount = 0,
-        //            Name = x.Name,
-        //            ScryLastUpdated = x.LastUpdated,
-        //        })
-        //        .ToList(); //or this?
-
-        //    return scrySets;
-        //}
-
-        //public async Task UpdateTrackedSetScryData(string setCode)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public async Task UpdateTrackedSetCardData(string setCode)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        
     }
 }

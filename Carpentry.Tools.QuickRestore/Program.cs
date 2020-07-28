@@ -11,6 +11,7 @@ using Serilog.Events;
 using Carpentry.Logic.Implementations;
 using Carpentry.Data.Implementations;
 using Carpentry.Data.Interfaces;
+using Carpentry.Logic.Models;
 
 namespace Carpentry.Tools.QuickRestore
 {
@@ -18,33 +19,53 @@ namespace Carpentry.Tools.QuickRestore
     {
         static async Task Main(string[] args)
         {
+            string backupLocation = "";
+
             var serviceProvider = BuildServiceProvider();
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
-            logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
+            logger.LogInformation("Carpentry QuickRestore - Initializing...");
 
-            var restoreService = serviceProvider.GetService<IDataRestoreService>();
+            var updateService = serviceProvider.GetService<IDataUpdateService>();
+
+            var importService = serviceProvider.GetService<ICardImportService>();
 
             //Verify DBs & default records exist
 
+            logger.LogInformation("Checking for default records");
+
+            await updateService.EnsureDatabasesCreated();
+
+            await updateService.EnsureDefaultRecordsExist();
+
+            logger.LogInformation("Updating set definitions");
+
+            //get collection of sets
+            var cardSets = await updateService.GetTrackedSets(true, true);
+
+            logger.LogInformation("Validating import DTO");
+
             //validate the backup object
+            var importDto = new CardImportDto()
+            {
+                ImportType = CardImportPayloadType.Carpentry,
+                ImportPayload = backupLocation
+            };
+
+            ValidatedCarpentryImportDto validatedDto = await importService.ValidateCarpentryImport(importDto);
+
+            logger.LogInformation($"Found {validatedDto.UntrackedSets.Count} untracked sets to add");
 
             //add all sets in the validated object
+            for(int i = 0; i < validatedDto.UntrackedSets.Count; i++)
+            {
+                logger.LogInformation($"Adding tracking for {validatedDto.UntrackedSets[i].SetCode} [{i}/{validatedDto.UntrackedSets.Count}]");
+                await updateService.AddTrackedSet(validatedDto.UntrackedSets[i].SetId);
+            }
 
             //import the validated object
-
-
-
-
-
-
-
-
-            //logger.LogInformation("initialized successfully");
-
-            //await restoreService.RestoreDatabase();
-
+            await importService.AddValidatedCarpentryImport(validatedDto);
 
             logger.LogInformation("Completed successfully");
         }

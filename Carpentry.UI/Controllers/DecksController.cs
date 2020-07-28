@@ -34,6 +34,8 @@ namespace Carpentry.UI.Controllers
             return Ok("Online");
         }
 
+        #region Deck Props
+
         //decks/add
         //- add a deck
         [HttpPost("[action]")]
@@ -82,38 +84,9 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //decks/Search
-        //- get a list of deck properties & stats
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews()
-        {
-            try
-            {
-                IEnumerable<DeckOverviewDto> results = await _decks.GetDeckOverviews();
-                return Ok(results);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Search", ex));
-            }
-        }
+        #endregion Deck Props
 
-        //decks/Get
-        //- get a deck (with cards)
-        [HttpGet("[action]")]
-        public async Task<ActionResult<DeckDetailDto>> GetDeckDetail(int deckId)
-        {
-            try
-            {
-                DeckDetailDto results = await _decks.GetDeckDetail(deckId);
-                return Ok(results);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("Get", ex));
-            }
-        }
-
+        #region Deck Cards
 
         [HttpPost("[action]")]
         public async Task<ActionResult> AddDeckCard([FromBody] DeckCardDto dto)
@@ -156,5 +129,72 @@ namespace Carpentry.UI.Controllers
                 return StatusCode(500, FormatExceptionMessage("RemoveCard", ex));
             }
         }
+
+        #endregion Deck Cards
+
+        #region Search
+
+        //decks/Search
+        //- get a list of deck properties & stats
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews()
+        {
+            try
+            {
+                IEnumerable<DeckOverviewDto> results = await _decks.GetDeckOverviews();
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Search", ex));
+            }
+        }
+
+        //decks/Get
+        //- get a deck (with cards)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<DeckDetailDto>> GetDeckDetail(int deckId)
+        {
+            try
+            {
+                DeckDetailDto results = await _decks.GetDeckDetail(deckId);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("Get", ex));
+            }
+        }
+
+        #endregion Search
+
+        #region Import
+
+        //ValidateDeckImport
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ValidateDeckImport()
+        {
+            throw new NotImplementedException();
+        }
+        //AddValidatedDeckImport
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddValidatedDeckImport()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Import
+
+        #region Export
+
+        //ExportDeckList
+        [HttpGet("[action]")]
+        public async Task<ActionResult<string>> ExportDeckList(int deckId)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Export
+
     }
 }

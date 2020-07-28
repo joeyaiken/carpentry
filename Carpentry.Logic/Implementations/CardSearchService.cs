@@ -203,35 +203,6 @@ namespace Carpentry.Logic.Implementations
 
             List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
 
-
-
-            ////TODO - This filtering could/should be moved to the Data project
-            //IQueryable<ScryfallMagicCard> query = await _inventoryRepo.QueryCardsBySet(filters.SetCode);
-
-            //if (!string.IsNullOrEmpty(filters.Type))
-            //{
-            //    query = query.Where(x => x.Type.Contains(filters.Type));
-            //}
-
-            //filters.ColorIdentity.ForEach(color =>
-            //{
-            //    query = query.Where(x => x.ColorIdentity.Contains(color));
-            //});
-
-            //if (filters.ExclusiveColorFilters)
-            //{
-            //    query = query.Where(x => x.ColorIdentity.Count() == filters.ColorIdentity.Count());
-            //}
-
-            //if (filters.MultiColorOnly)
-            //{
-            //    query = query.Where(x => x.ColorIdentity.Count() > 1);
-            //}
-
-            //query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));
-
-            //List<MagicCard> result = query.OrderBy(x => x.Name).ToList();
-
             return mappedCards;
         }
 

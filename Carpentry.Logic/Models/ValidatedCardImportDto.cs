@@ -4,13 +4,29 @@ using System.Text;
 
 namespace Carpentry.Logic.Models
 {
-    public class ValidatedCardImportDto
+    public class ValidatedArenaImportDto
     {
         //Should this also have a "existingDeckId" or do I just exclusively set the ID of DeckProps?
         public DeckPropertiesDto DeckProps { get; set; } 
         public List<ValidatedCardDto> ValidatedCards { get; set; }
+        //public List<string> UntrackedSets { get; set; }
 
     }
+
+    public class ValidatedCarpentryImportDto
+    {
+        public string BackupDirectory { get; set; }
+
+        public DateTime BackupDate { get; set; }
+
+        public List<UntrackedSet> UntrackedSets { get; set; }
+
+        //validation errors?
+    }
+
+
+
+
 
     public class ValidatedCardDto
     {
@@ -31,5 +47,10 @@ namespace Carpentry.Logic.Models
         public string ImageUrl { get; set; }
     }
     
+    public class UntrackedSet
+    {
+        public int SetId { get; set; }
+        public string SetCode { get; set; }
+    }
 
 }

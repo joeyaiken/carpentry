@@ -9,21 +9,22 @@ namespace Carpentry.Logic.Interfaces
     public interface IDeckService
     {
         Task<int> AddDeck(DeckPropertiesDto props);
-
         Task UpdateDeck(DeckPropertiesDto props);
-
         Task DeleteDeck(int deckId);
 
-        Task<IEnumerable<DeckOverviewDto>> GetDeckOverviews();
-
-        Task<DeckDetailDto> GetDeckDetail(int deckId);
 
         Task AddDeckCard(DeckCardDto dto);
-
         Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto);
-
         Task UpdateDeckCard(DeckCardDto card);
-
         Task DeleteDeckCard(int deckCardId);
+
+
+        Task<IEnumerable<DeckOverviewDto>> GetDeckOverviews();
+        Task<DeckDetailDto> GetDeckDetail(int deckId);
+
+
+        Task<ValidatedDeckImportDto> ValidateDeckImport(DeckImportDto dto);
+        Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto);
+        Task<string> ExportDeckList(int deckId);
     }
 }

@@ -26,73 +26,73 @@ namespace Carpentry.Tools.QuickImport
     {
         static async Task Main(string[] args)
         {
-            var serviceProvider = BuildServiceProvider();
+            //var serviceProvider = BuildServiceProvider();
 
-            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
+            //var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
-            logger.LogInformation("Beginning import tool");
+            //logger.LogInformation("Beginning import tool");
 
-            var importService = serviceProvider.GetService<ICardImportService>();
+            //var importService = serviceProvider.GetService<ICardImportService>();
 
-            List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
-            {
-                ////Populate EDH deck:
-                //new DeckImportTemplate
-                //{
-                //    Name = "Primal Genesis",
-                //    FormatName = "commander",
-                //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Populate.txt"
-                //},
-                ////Knights brawl deck
-                //new DeckImportTemplate
-                //{
-                //    Name = "Knight's Charge",
-                //    FormatName = "brawl",
-                //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Knight.txt"
-                //},
-                ////Chulane brawl deck
-                //new DeckImportTemplate
-                //{
-                //    Name = "Wild Bounty",
-                //    FormatName = "brawl",
-                //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Chulane.txt"
-                //},
-                ////Draggo brawl deck
-                //new DeckImportTemplate
-                //{
-                //    Name = "Savage Hunter 2",
-                //    FormatName = "brawl",
-                //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Draggo.txt"
-                //},
-            };
+            //List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
+            //{
+            //    ////Populate EDH deck:
+            //    //new DeckImportTemplate
+            //    //{
+            //    //    Name = "Primal Genesis",
+            //    //    FormatName = "commander",
+            //    //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Populate.txt"
+            //    //},
+            //    ////Knights brawl deck
+            //    //new DeckImportTemplate
+            //    //{
+            //    //    Name = "Knight's Charge",
+            //    //    FormatName = "brawl",
+            //    //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Knight.txt"
+            //    //},
+            //    ////Chulane brawl deck
+            //    //new DeckImportTemplate
+            //    //{
+            //    //    Name = "Wild Bounty",
+            //    //    FormatName = "brawl",
+            //    //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Chulane.txt"
+            //    //},
+            //    ////Draggo brawl deck
+            //    //new DeckImportTemplate
+            //    //{
+            //    //    Name = "Savage Hunter 2",
+            //    //    FormatName = "brawl",
+            //    //    FilePath = "C:\\DotNet\\carpentry-refactor\\CarpentryMigrationTool\\Imports\\Draggo.txt"
+            //    //},
+            //};
 
-            if(decksToImport.Count == 0)
-            {
-                logger.LogInformation($"No decks specified, will now exit");
-                return;
-            }
+            //if(decksToImport.Count == 0)
+            //{
+            //    logger.LogInformation($"No decks specified, will now exit");
+            //    return;
+            //}
 
-            logger.LogInformation($"Will attempt to import {decksToImport.Count} decks");
+            //logger.LogInformation($"Will attempt to import {decksToImport.Count} decks");
 
-            foreach(var deck in decksToImport)
-            {
-                logger.LogInformation($"Attempting to import deck {deck.Name}");
-                string fileContents = await GetRawListFromFile(deck.FilePath);
+            //foreach(var deck in decksToImport)
+            //{
+            //    logger.LogInformation($"Attempting to import deck {deck.Name}");
+            //    string fileContents = await GetRawListFromFile(deck.FilePath);
 
-                CardImportDto importPayload = new CardImportDto()
-                {
-                    ImportType = CardImportPayloadType.Arena,
-                    ImportPayload = fileContents,
-                };
+            //    CardImportDto importPayload = new CardImportDto()
+            //    {
+            //        ImportType = CardImportPayloadType.Arena,
+            //        ImportPayload = fileContents,
+            //    };
 
-                var validatedPayload = await importService.ValidateImport(importPayload);
-                validatedPayload.DeckProps.Name = deck.Name;
-                validatedPayload.DeckProps.Format = deck.FormatName;
+            //    var validatedPayload = await importService.ValidateImport(importPayload);
+            //    validatedPayload.DeckProps.Name = deck.Name;
+            //    validatedPayload.DeckProps.Format = deck.FormatName;
 
-                await importService.AddValidatedImport(validatedPayload);
+            //    await importService.AddValidatedImport(validatedPayload);
 
-                logger.LogInformation($"Successfully imported deck {deck.Name}");
-            }
+            //    logger.LogInformation($"Successfully imported deck {deck.Name}");
+            //}
         }
 
         private static ServiceProvider BuildServiceProvider()

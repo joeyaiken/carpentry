@@ -24,13 +24,13 @@ export const api = {
             return result || [];
         },
 
-        async searchSet(filters: CardSearchQueryParameter): Promise<MagicCard[]> {
-            console.log('searchSet');
-            console.log(filters);
-            const endpoint = `api/CardSearch/SearchSet`;
-            const result = await Post(endpoint, filters);
-            return result || [];
-        },
+        // async searchSet(filters: CardSearchQueryParameter): Promise<MagicCard[]> {
+        //     console.log('searchSet');
+        //     console.log(filters);
+        //     const endpoint = `api/CardSearch/SearchSet`;
+        //     const result = await Post(endpoint, filters);
+        //     return result || [];
+        // },
 
         async searchWeb(name: string, exclusive: boolean): Promise<MagicCard[]> {
             const endpoint = `api/CardSearch/SearchWeb`;

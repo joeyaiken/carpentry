@@ -54,65 +54,7 @@ namespace Carpentry.Logic.Implementations
             _inventoryService = inventoryService;
         }
 
-        public async Task<ValidatedCardImportDto> ValidateImport(CardImportDto payload)
-        {
-            switch (payload.ImportType)
-            {
-                case CardImportPayloadType.Arena:
-                    return await ValidateArenaImport(payload);
-                default:
-                    throw new Exception("Unhandled import type");
-            }
-        }
-        
-        public async Task AddValidatedImport(ValidatedCardImportDto validatedPayload)
-        {
-            //If deck == null, just adding inventory cards
-            if(validatedPayload.DeckProps == null)
-            {
-                //just create a list of inventory cards to add
-                List<InventoryCardDto> cardBatch = validatedPayload.ValidatedCards
-                    .Select(x => new InventoryCardDto()
-                    {
-                        MultiverseId = x.MultiverseId,
-                        StatusId = _cardStatus_InInventory,
-                        IsFoil = x.IsFoil,
-                        VariantName = x.VariantName,                        
-                    })
-                    .ToList();
-
-                await _inventoryService.AddInventoryCardBatch(cardBatch);
-
-                return;
-            }
-
-            int deckId = validatedPayload.DeckProps.Id;
-            //if deck doesn't exist, add it first
-            if(deckId == 0)
-            {
-                deckId = await _deckService.AddDeck(validatedPayload.DeckProps);
-            } 
-            else //else update the existing one (in case we changed the land count)
-            {
-                await _deckService.UpdateDeck(validatedPayload.DeckProps);
-            }
-
-            List<DeckCardDto> cardsToAdd = validatedPayload.ValidatedCards.Select(c => new DeckCardDto()
-            {
-                DeckId = deckId,
-                InventoryCard = new InventoryCardDto
-                {
-                    StatusId = _cardStatus_InInventory,
-                    IsFoil = c.IsFoil,
-                    MultiverseId = c.MultiverseId,
-                    VariantName = c.VariantName,
-                },
-            }).ToList();
-
-            await _deckService.AddDeckCardBatch(cardsToAdd);
-        }
-
-        private async Task<ValidatedCardImportDto> ValidateArenaImport(CardImportDto payload)
+        public async Task<ValidatedArenaImportDto> ValidateArenaImport(CardImportDto payload)
         {
             //Get paload split into lines
             string[] importRows = payload.ImportPayload.Split('\n');
@@ -128,7 +70,7 @@ namespace Carpentry.Logic.Implementations
 
             var distinctSetCodes = mappedRecords.Select(x => x.Code).Distinct().ToList();
 
-            foreach(var code in distinctSetCodes)
+            foreach (var code in distinctSetCodes)
             {
                 //will just return silently if the set is already tracked
                 await _dataUpdateService.AddTrackedSet(code);
@@ -137,7 +79,7 @@ namespace Carpentry.Logic.Implementations
             List<ValidatedCardDto> validatedCards = new List<ValidatedCardDto>();
 
             //for each card, get the matching DB card by Name+Code (from the carpentry DB)
-            foreach(var card in mappedRecords)
+            foreach (var card in mappedRecords)
             {
                 var matchingCard = await _cardDataRepo.GetCardData(card.Name, card.Code);
 
@@ -162,13 +104,69 @@ namespace Carpentry.Logic.Implementations
                 }
             }
 
-            var result = new ValidatedCardImportDto()
+            var result = new ValidatedArenaImportDto()
             {
                 DeckProps = deckProps,
                 ValidatedCards = validatedCards,
             };
 
             return result;
+        }
+        public async Task AddValidatedArenaImport(ValidatedArenaImportDto validatedPayload)
+        {
+            //If deck == null, just adding inventory cards
+            if (validatedPayload.DeckProps == null)
+            {
+                //just create a list of inventory cards to add
+                List<InventoryCardDto> cardBatch = validatedPayload.ValidatedCards
+                    .Select(x => new InventoryCardDto()
+                    {
+                        MultiverseId = x.MultiverseId,
+                        StatusId = _cardStatus_InInventory,
+                        IsFoil = x.IsFoil,
+                        VariantName = x.VariantName,
+                    })
+                    .ToList();
+
+                await _inventoryService.AddInventoryCardBatch(cardBatch);
+
+                return;
+            }
+
+            int deckId = validatedPayload.DeckProps.Id;
+            //if deck doesn't exist, add it first
+            if (deckId == 0)
+            {
+                deckId = await _deckService.AddDeck(validatedPayload.DeckProps);
+            }
+            else //else update the existing one (in case we changed the land count)
+            {
+                await _deckService.UpdateDeck(validatedPayload.DeckProps);
+            }
+
+            List<DeckCardDto> cardsToAdd = validatedPayload.ValidatedCards.Select(c => new DeckCardDto()
+            {
+                DeckId = deckId,
+                InventoryCard = new InventoryCardDto
+                {
+                    StatusId = _cardStatus_InInventory,
+                    IsFoil = c.IsFoil,
+                    MultiverseId = c.MultiverseId,
+                    VariantName = c.VariantName,
+                },
+            }).ToList();
+
+            await _deckService.AddDeckCardBatch(cardsToAdd);
+        }
+
+        public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto payload)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto payload)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

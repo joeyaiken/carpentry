@@ -43,36 +43,36 @@ namespace Carpentry.Logic.Implementations
             _inventoryDataRepo = inventoryDataRepo;
         }
 
-        public async Task RestoreDatabase()
-        {
-            _logger.LogInformation("DataRestoreService - RestoreDb...");
+        //public async Task RestoreDatabase()
+        //{
+        //    _logger.LogInformation("DataRestoreService - RestoreDb...");
 
-            //Stary by ensuring a DB actually exists
-            await _dataUpdateService.EnsureDatabasesCreated();
+        //    //Stary by ensuring a DB actually exists
+        //    await _dataUpdateService.EnsureDatabasesCreated();
 
-            //ensure default records exist
-            await _dataUpdateService.EnsureDefaultRecordsExist();
+        //    //ensure default records exist
+        //    await _dataUpdateService.EnsureDefaultRecordsExist();
 
-            //load all decks
-            await LoadDeckBackups();
+        //    //load all decks
+        //    await LoadDeckBackups();
 
-            //load set definitions
-            await _dataUpdateService.TryUpdateAvailableSets();
+        //    //load set definitions
+        //    await _dataUpdateService.TryUpdateAvailableSets();
 
-            //add tracked sets
-            await LoadTrackedSets();
+        //    //add tracked sets
+        //    await LoadTrackedSets();
 
-            ////try to add sets, adding only dummy info
-            //await LoadSetTempData();
+        //    ////try to add sets, adding only dummy info
+        //    //await LoadSetTempData();
 
-            ////run "refresh DB"
-            //await _dataUpdateService.UpdateAllSets();
+        //    ////run "refresh DB"
+        //    //await _dataUpdateService.UpdateAllSets();
 
-            //add inventory & deck cards
-            await LoadCardBackups();
+        //    //add inventory & deck cards
+        //    await LoadCardBackups();
 
-            _logger.LogWarning("DataRestoreService - RestoreDb...Completed!");
-        }
+        //    _logger.LogWarning("DataRestoreService - RestoreDb...Completed!");
+        //}
 
         public async Task LoadDeckBackups()
         {

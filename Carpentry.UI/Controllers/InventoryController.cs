@@ -40,9 +40,11 @@ namespace Carpentry.UI.Controllers
             return Ok("Online");
         }
 
+        #region Inventory Cards
+
         //Add
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> AddCard([FromBody] InventoryCardDto dto)
+        public async Task<ActionResult<int>> AddInventoryCard([FromBody] InventoryCardDto dto)
         {
             try
             {
@@ -51,13 +53,13 @@ namespace Carpentry.UI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("Add", ex));
+                return StatusCode(500, FormatExceptionMessage("AddInventoryCard", ex));
             }
         }
 
         //AddCardBatch
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> AddCardBatch([FromBody] List<InventoryCardDto> dto)
+        public async Task<ActionResult<int>> AddInventoryCardBatch([FromBody] List<InventoryCardDto> dto)
         {
             try
             {
@@ -66,13 +68,12 @@ namespace Carpentry.UI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("AddBatch", ex));
+                return StatusCode(500, FormatExceptionMessage("AddInventoryCardBatch", ex));
             }
         }
 
-        //Update
         [HttpPost("[action]")]
-        public async Task<ActionResult> UpdateCard([FromBody] InventoryCardDto dto)
+        public async Task<ActionResult> UpdateInventoryCard([FromBody] InventoryCardDto dto)
         {
             try
             {
@@ -81,13 +82,19 @@ namespace Carpentry.UI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("Update", ex));
+                return StatusCode(500, FormatExceptionMessage("UpdateInventoryCard", ex));
             }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateInventoryCardBatch([FromBody] List<InventoryCardDto> batch)
+        {
+            throw new NotImplementedException();
         }
 
         //Delete
         [HttpGet("[action]")]
-        public async Task<ActionResult> DeleteCard(int id)
+        public async Task<ActionResult> DeleteInventoryCard(int id)
         {
             try
             {
@@ -96,9 +103,19 @@ namespace Carpentry.UI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("Delete", ex));
+                return StatusCode(500, FormatExceptionMessage("DeleteInventoryCard", ex));
             }
         }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> DeleteInventoryCardBatch(List<int> batchIDs)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Search
 
         //Search
         [HttpPost("[action]")]
@@ -115,13 +132,18 @@ namespace Carpentry.UI.Controllers
             }
         }
 
+
+        //What if this took an int, instead of a name
+        //The int could be any CardId, and the method would load all cards with the same name
         [HttpGet("[action]")]
-        public async Task<ActionResult<InventoryDetailDto>> GetCardsByName(string name)
+        //public async Task<ActionResult<InventoryDetailDto>> GetInventoryDetail(string name)
+        public async Task<ActionResult<InventoryDetailDto>> GetInventoryDetail(int cardId)
         {
             try
             {
-                InventoryDetailDto result = await _inventory.GetInventoryDetailByName(name);
-                return Ok(result);
+                throw new NotImplementedException();
+                //InventoryDetailDto result = await _inventory.GetInventoryDetailByName(name);
+                //return Ok(result);
             }
             catch (Exception ex)
             {
@@ -129,24 +151,80 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //Get Backup Details / Settings
+        #endregion
 
-        //Request Backup
+        #region Collection Builder
 
-        //Request Restore
-        //  Defaults
-        //  Decks
-        //  Set shells
-        //      Update scry sets 1 at a time
-        //  inv & deck cards
+        //TODO - define param
+        //TODO - define return
 
-        //get tracked sets
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCollectionBuilderSuggestions()
+        {
+            throw new NotImplementedException();
+        }
 
-        //get all sets
+        //TODO - define param
+        //should just return Ok()
+        [HttpPost("[action]")]
+        public async Task<ActionResult> HideCollectionBuilderSuggestion()
+        {
+            throw new NotImplementedException();
+        }
 
-        //change set tracking
+        #endregion
 
-        //update set data / prices / whatnot
+        #region Trimming Tips
 
+        //TODO - define param
+        //TODO - define return
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetTrimmingTips()
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO - define param
+        //Returns OK()
+        [HttpPost("[action]")]
+        public async Task<ActionResult> HideTrimmingTip()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Import
+
+        //Validate Carpentry Import
+        //TODO - define param
+        //TODO - define return
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ValidateCarpentryImport()
+        {
+            throw new NotImplementedException();
+        }
+
+        //Add Validated Carpentry Import
+        //TODO - define param
+        //Returns OK()
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddValidatedCarpentryImport()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Export
+
+        //ExportInventoryBackup
+        [HttpGet("[action]")]
+        public async Task<ActionResult> ExportInventoryBackup()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

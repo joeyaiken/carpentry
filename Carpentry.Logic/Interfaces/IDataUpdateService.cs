@@ -9,12 +9,6 @@ namespace Carpentry.Logic.Interfaces
     public interface IDataUpdateService
     {
         /// <summary>
-        /// Updates all pricing and legality data for a card set
-        /// </summary>
-        /// <returns></returns>
-        Task UpdateAllSets();
-
-        /// <summary>
         /// Update the card and scry data for a particular set
         /// </summary>
         /// <param name="setCode"></param>
@@ -36,26 +30,13 @@ namespace Carpentry.Logic.Interfaces
 
         Task AddTrackedSet(int setId);
 
+        Task AddTrackedSet(string setCode);
+
         Task RemoveTrackedSet(int setId);
         
         Task UpdateTrackedSet(int setId);
 
-        //public async void UpdateTrackedSetScryData(string setCode)
-        //Task UpdateTrackedSetScryData(string setCode);
 
-        Task TryUpdateAvailableSets();
-
-        //public async void UpdateTrackedSetCardData(string setCode)
-        //Task UpdateTrackedSetCardData(string setCode);
-
-        //public async List<SetDetailDto> GetAllAvailableSets()
-        //Task<List<SetDetailDto>> GetAllAvailableSets();
-
-        //public async void AddTrackedSet(string setCode)
-        Task AddTrackedSet(string setCode);
-
-        ////public async void RemoveTrackedSet(string setCode)
-        //Task RemoveTrackedSet(string setCode);
 
     }
 }
