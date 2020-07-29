@@ -170,17 +170,32 @@ namespace Carpentry.UI.Controllers
 
         #region Import
 
-        //ValidateDeckImport
         [HttpPost("[action]")]
-        public async Task<ActionResult> ValidateDeckImport()
+        public async Task<ActionResult<ValidatedDeckImportDto>> ValidateDeckImport(DeckImportDto dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ValidatedDeckImportDto results = await _decks.ValidateDeckImport(dto);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("ValidateDeckImport", ex));
+            }
         }
-        //AddValidatedDeckImport
+
         [HttpPost("[action]")]
-        public async Task<ActionResult> AddValidatedDeckImport()
+        public async Task<ActionResult> AddValidatedDeckImport(ValidatedDeckImportDto dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _decks.AddValidatedDeckImport(dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("ValidateDeckImport", ex));
+            }
         }
 
         #endregion Import
@@ -191,7 +206,15 @@ namespace Carpentry.UI.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult<string>> ExportDeckList(int deckId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string results = await _decks.ExportDeckList(deckId);
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("ValidateDeckImport", ex));
+            }
         }
 
         #endregion Export

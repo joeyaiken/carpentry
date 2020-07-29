@@ -106,15 +106,21 @@ namespace Carpentry.UI.Tests.UnitTests
             var response = await cardSearchController.SearchWeb(queryParam);
 
             //assert
-            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
-
-            var typedResult = response.Result as OkObjectResult;
-
-            IEnumerable<MagicCardDto> resultValue = typedResult.Value as IEnumerable<MagicCardDto>;
-
+            //var resultValue = AssertIsObjectResult<IEnumerable<MagicCardDto>>(response);
+            var resultValue = AssertIsObjectResult(response);
             Assert.IsNotNull(resultValue);
             Assert.AreEqual(5, resultValue.Count());
         }
+
+        private static T AssertIsObjectResult<T>(ActionResult<T> controllerResponse)
+        {
+            Assert.IsInstanceOfType(controllerResponse.Result, typeof(OkObjectResult));
+            var typedResult = controllerResponse.Result as OkObjectResult;
+            var resultValue = typedResult.Value;
+            return (T)resultValue;
+        }
+
+
 
         //[TestMethod]
         //public async Task CardSearch_SearchSet_ReturnsOK_Test()
