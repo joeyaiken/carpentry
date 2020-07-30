@@ -210,14 +210,14 @@ namespace Carpentry.UI.Tests.UnitTests
             //arrange
             var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            IEnumerable<InventoryOverviewDto> searchResult = new List<InventoryOverviewDto>()
+            List<InventoryOverviewDto> searchResult = new List<InventoryOverviewDto>()
             {
                 new InventoryOverviewDto() { },
                 new InventoryOverviewDto() { },
                 new InventoryOverviewDto() { },
                 new InventoryOverviewDto() { },
                 new InventoryOverviewDto() { },
-            }.AsEnumerable();
+            };
 
             mockService
                 .Setup(p => p.GetInventoryOverviews(It.IsNotNull<InventoryQueryParameter>()))
@@ -250,6 +250,8 @@ namespace Carpentry.UI.Tests.UnitTests
             //arrange
             var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
+            int idToRequest = 1;
+
             InventoryDetailDto detailResult = new InventoryDetailDto()
             {
                 Cards = new List<MagicCardDto>(),
@@ -258,13 +260,10 @@ namespace Carpentry.UI.Tests.UnitTests
             };
 
             mockService
-                .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
+                .Setup(p => p.GetInventoryDetail(It.Is<int>(i => i == idToRequest)))
                 .ReturnsAsync(detailResult);
 
             var inventoryController = new Controllers.InventoryController(mockService.Object);
-
-            //string nameToRequest = "Mock Card Detail";
-            int idToRequest = 1;
 
             //act
             var response = await inventoryController.GetInventoryDetail(idToRequest);

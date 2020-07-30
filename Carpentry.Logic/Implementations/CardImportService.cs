@@ -54,7 +54,7 @@ namespace Carpentry.Logic.Implementations
             _inventoryService = inventoryService;
         }
 
-        public async Task<ValidatedArenaImportDto> ValidateArenaImport(CardImportDto payload)
+        public async Task<ValidatedDeckImportDto> ValidateArenaImport(CardImportDto payload)
         {
             //Get paload split into lines
             string[] importRows = payload.ImportPayload.Split('\n');
@@ -104,7 +104,7 @@ namespace Carpentry.Logic.Implementations
                 }
             }
 
-            var result = new ValidatedArenaImportDto()
+            var result = new ValidatedDeckImportDto()
             {
                 DeckProps = deckProps,
                 ValidatedCards = validatedCards,
@@ -112,7 +112,7 @@ namespace Carpentry.Logic.Implementations
 
             return result;
         }
-        public async Task AddValidatedArenaImport(ValidatedArenaImportDto validatedPayload)
+        public async Task AddValidatedArenaImport(ValidatedDeckImportDto validatedPayload)
         {
             //If deck == null, just adding inventory cards
             if (validatedPayload.DeckProps == null)

@@ -89,7 +89,15 @@ namespace Carpentry.UI.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> UpdateInventoryCardBatch([FromBody] List<InventoryCardDto> batch)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _inventory.UpdateInventoryCardBatch(batch);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("UpdateInventoryCardBatch", ex));
+            }
         }
 
         //Delete
@@ -110,7 +118,15 @@ namespace Carpentry.UI.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> DeleteInventoryCardBatch(List<int> batchIDs)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _inventory.DeleteInventoryCardBatch(batchIDs);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("DeleteInventoryCardBatch", ex));
+            }
         }
 
         #endregion
@@ -141,9 +157,8 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                throw new NotImplementedException();
-                //InventoryDetailDto result = await _inventory.GetInventoryDetailByName(name);
-                //return Ok(result);
+                InventoryDetailDto result = await _inventory.GetInventoryDetail(cardId);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -154,42 +169,65 @@ namespace Carpentry.UI.Controllers
         #endregion
 
         #region Collection Builder
-
-        //TODO - define param
-        //TODO - define return
-
+        
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetCollectionBuilderSuggestions()
+        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> GetCollectionBuilderSuggestions()
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<InventoryOverviewDto> result = await _inventory.GetCollectionBuilderSuggestions();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetCollectionBuilderSuggestions", ex));
+            }
         }
 
-        //TODO - define param
-        //should just return Ok()
         [HttpPost("[action]")]
-        public async Task<ActionResult> HideCollectionBuilderSuggestion()
+        public async Task<ActionResult> HideCollectionBuilderSuggestion(InventoryOverviewDto dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _inventory.HideCollectionBuilderSuggestion(dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("HideCollectionBuilderSuggestion", ex));
+            }
         }
 
         #endregion
 
         #region Trimming Tips
 
-        //TODO - define param
-        //TODO - define return
         [HttpGet("[action]")]
-        public async Task<ActionResult> GetTrimmingTips()
+        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> GetTrimmingTips()
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<InventoryOverviewDto> result = await _inventory.GetTrimmingTips();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetTrimmingTips", ex));
+            }
         }
 
-        //TODO - define param
-        //Returns OK()
         [HttpPost("[action]")]
-        public async Task<ActionResult> HideTrimmingTip()
+        public async Task<ActionResult> HideTrimmingTip(InventoryOverviewDto dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _inventory.HideTrimmingTip(dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("HideTrimmingTip", ex));
+            }
         }
 
         #endregion

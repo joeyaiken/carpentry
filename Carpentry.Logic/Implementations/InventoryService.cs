@@ -102,7 +102,7 @@ namespace Carpentry.Logic.Implementations
 
         #endregion
 
-        #region Inventory related methods
+        #region Inventory Card add/update/delete
 
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
@@ -121,8 +121,6 @@ namespace Carpentry.Logic.Implementations
             newInventoryCard.Id = await _inventoryRepo.AddInventoryCard(newInventoryCard);
 
             return newInventoryCard.Id;
-
-            //return newId;
         }
 
         public async Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards)
@@ -133,7 +131,7 @@ namespace Carpentry.Logic.Implementations
 
             var distinctIDs = cards.Select(x => x.MultiverseId).Distinct().ToList();
 
-            for(int i = 0; i < distinctIDs.Count(); i++)
+            for (int i = 0; i < distinctIDs.Count(); i++)
             {
                 await _dataUpdateService.EnsureCardDefinitionExists(distinctIDs[i]);
             }
@@ -177,31 +175,59 @@ namespace Carpentry.Logic.Implementations
             await _inventoryRepo.UpdateInventoryCard(dbCard);
         }
 
+        public async Task UpdateInventoryCardBatch(IEnumerable<InventoryCardDto> batch)
+        {
+            foreach(var card in batch)
+            {
+                await UpdateInventoryCard(card);
+            }
+        }
+
         public async Task DeleteInventoryCard(int id)
         {
             await _inventoryRepo.DeleteInventoryCard(id);
         }
 
-
-        public async Task<IEnumerable<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
+        public async Task DeleteInventoryCardBatch(IEnumerable<int> batch)
         {
-            if(param == null)
+            foreach(int id in batch)
+            {
+                await DeleteInventoryCard(id);
+            }
+        }
+
+        #endregion Inventory Card add/update/delete
+
+        #region Search
+
+        public async Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
+        {
+            if (param == null)
             {
                 throw new ArgumentNullException("param");
             }
 
             IEnumerable<CardOverviewResult> result = await _queryService.GetInventoryOverviews(param);
 
-            IEnumerable<InventoryOverviewDto> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x)).ToList();
+            List<InventoryOverviewDto> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x)).ToList();
 
             return mappedResult;
         }
 
-        public async Task<InventoryDetailDto> GetInventoryDetailByName(string name)
+        public async Task<InventoryDetailDto> GetInventoryDetail(int cardId)
         {
+
+            var matchingCard = await _cardDataRepo.GetCardData(cardId);
+
+            if (matchingCard == null)
+            {
+                throw new Exception($"No card found for ID {cardId}");
+            }
+
+
             InventoryDetailDto result = new InventoryDetailDto()
             {
-                Name = name,
+                Name = matchingCard.Name,
                 Cards = new List<MagicCardDto>(),
                 InventoryCards = new List<InventoryCardDto>(),
             };
@@ -210,7 +236,7 @@ namespace Carpentry.Logic.Implementations
 
             //GetInventoryCardsByName -> InventoryCardResult
 
-            List<InventoryCardDto> inventoryCards = (await _queryService.GetInventoryCardsByName(name))
+            List<InventoryCardDto> inventoryCards = (await _queryService.GetInventoryCardsByName(matchingCard.Name))
                 .Select(x => new InventoryCardDto()
                 {
                     Id = x.Id,
@@ -257,14 +283,56 @@ namespace Carpentry.Logic.Implementations
             //GetCardsByName | GetCardDefinitionsByName | GetCardDataByName -> CardData
             //Should this be from the query service or cardDataRepo?
             //var cardDefinitionsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name);
-            var cardDefinitions = await _cardDataRepo.GetCardsByName(name);
+            var cardDefinitions = await _cardDataRepo.GetCardsByName(matchingCard.Name);
 
             result.Cards = MapInventoryQueryToMagicCardObject(cardDefinitions).ToList();
 
             return result;
         }
 
-        #endregion
+        #endregion Search
 
+        #region Collection Builder
+
+        public async Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions()
+        {
+            throw new NotImplementedException();
+        }
+        public async Task HideCollectionBuilderSuggestion(InventoryOverviewDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Collection Builder
+
+        #region Trimming Tips
+
+        public async Task<List<InventoryOverviewDto>> GetTrimmingTips()
+        {
+            throw new NotImplementedException();
+        }
+        public async Task HideTrimmingTip(InventoryOverviewDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Trimming Tips
+
+        #region Import/Export
+
+        public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task ExportInventoryBackup()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Import/Export
     }
 }

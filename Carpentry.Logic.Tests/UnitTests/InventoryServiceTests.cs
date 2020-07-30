@@ -251,10 +251,12 @@ namespace Carpentry.Logic.Tests.UnitTests
         
         //Task<InventoryDetail> GetInventoryDetailByName(string name);
         [TestMethod]
-        public async Task InventoryServiceTests_GetInventoryDetailByName_Test()
+        public async Task InventoryServiceTests_GetInventoryDetail_Test()
         {
             //Assemble
-            string nameToRequest = "Opt";
+            int idToRequest = 1;
+
+            string nameToExpect = "Opt";
 
             var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
@@ -275,13 +277,22 @@ namespace Carpentry.Logic.Tests.UnitTests
             };
 
             mockQueryService
-                .Setup(p => p.GetInventoryCardsByName(It.Is<string>(s => s == nameToRequest)))
+                .Setup(p => p.GetInventoryCardsByName(It.Is<string>(s => s == nameToExpect)))
                 .ReturnsAsync(inventoryQueryResult);
 
             var mockDataReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
 
             var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
 
+            CardData getCardDataResult = new CardData()
+            {
+                Name = nameToExpect
+            };
+
+            mockCardDatarepo
+                .Setup(p => p.GetCardData(It.Is<int>(i => i == idToRequest)))
+                .ReturnsAsync(getCardDataResult);
+                
             List<CardData> cardDataResult = new List<CardData>()
             {
                 new CardData()
@@ -314,7 +325,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             };
 
             mockCardDatarepo
-                .Setup(p => p.GetCardsByName(It.Is<string>(s => s == nameToRequest)))
+                .Setup(p => p.GetCardsByName(It.Is<string>(s => s == nameToExpect)))
                 .ReturnsAsync(cardDataResult);
 
             var inventoryService = new InventoryService(
@@ -325,7 +336,7 @@ namespace Carpentry.Logic.Tests.UnitTests
                 mockCardDatarepo.Object);
 
             //Act
-            InventoryDetailDto result = await inventoryService.GetInventoryDetailByName(nameToRequest);
+            InventoryDetailDto result = await inventoryService.GetInventoryDetail(idToRequest);
 
             //Assert
             Assert.IsNotNull(result);

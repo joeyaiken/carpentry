@@ -9,16 +9,29 @@ namespace Carpentry.Logic.Interfaces
 {
     public interface IInventoryService
     {
+        //Inventory Card add/update/delete
         Task<int> AddInventoryCard(InventoryCardDto dto);
-
         Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards);
-
         Task UpdateInventoryCard(InventoryCardDto dto);
-
+        Task UpdateInventoryCardBatch(IEnumerable<InventoryCardDto> batch);
         Task DeleteInventoryCard(int id);
+        Task DeleteInventoryCardBatch(IEnumerable<int> batch);
 
-        Task<IEnumerable<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
+        //Search
+        Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
+        Task<InventoryDetailDto> GetInventoryDetail(int cardId);
 
-        Task<InventoryDetailDto> GetInventoryDetailByName(string name);
+        //Collection Builder
+        Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions();
+        Task HideCollectionBuilderSuggestion(InventoryOverviewDto dto);
+
+        //Trimming Tips
+        Task<List<InventoryOverviewDto>> GetTrimmingTips();
+        Task HideTrimmingTip(InventoryOverviewDto dto);
+
+        //Import/Export
+        Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto);
+        Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto);
+        Task ExportInventoryBackup();
     }
 }
