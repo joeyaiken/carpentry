@@ -328,7 +328,7 @@ namespace Carpentry.Logic.Implementations
         {
             throw new NotImplementedException();
         }
-        public async Task ExportInventoryBackup()
+        public async Task<byte[]> ExportInventoryBackup()
         {
             throw new NotImplementedException();
         }

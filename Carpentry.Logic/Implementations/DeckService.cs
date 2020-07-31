@@ -23,8 +23,6 @@ namespace Carpentry.Logic.Implementations
         //2 -   A DTO that contains either IDs or values but not the associations
 
         //Should have no access to data context classes, only repo classes
-        //private readonly ILegacyCardRepo _cardRepo;
-        //private readonly ICardStringRepo _scryRepo;
         private readonly ILogger<DeckService> _logger;
 
         private readonly IDeckDataRepo _deckRepo;

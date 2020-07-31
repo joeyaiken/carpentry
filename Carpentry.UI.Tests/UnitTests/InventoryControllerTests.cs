@@ -98,7 +98,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var response = await inventoryController.AddInventoryCardBatch(payload);
 
             //assert
-            Assert.IsInstanceOfType(response.Result, typeof(OkResult));
+            Assert.IsInstanceOfType(response, typeof(OkResult));
 
         }
 
@@ -129,25 +129,26 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Inventory_UpdateInventoryCardBatch_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //mockService
-            //    .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCardDto>()))
-            //    .Returns(Task.CompletedTask);
+            mockService
+                .Setup(p => p.UpdateInventoryCardBatch(It.IsNotNull<IEnumerable<InventoryCardDto>>()))
+                .Returns(Task.CompletedTask);
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
-            //InventoryCardDto payload = new InventoryCardDto()
-            //{
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
+            var payload = new List<InventoryCardDto>()
+            {
+                new InventoryCardDto(){ },
+                new InventoryCardDto(){ },
+                new InventoryCardDto(){ },
+            };
 
-            //};
+            //act
+            var response = await inventoryController.UpdateInventoryCardBatch(payload);
 
-            ////act
-            //var response = await inventoryController.UpdateInventoryCard(payload);
-
-            ////assert
-            //Assert.IsInstanceOfType(response, typeof(OkResult));
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkResult));
 
         }
 
@@ -175,29 +176,22 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Inventory_DeleteInventoryCardBatch_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var idToExpect = 1;
+            //arrange
+            var idsToSubmit = new List<int> { 1, 2, 3, 4, 5 };
 
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //mockService
-            //    .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i == idToExpect)))
-            //    .Returns(Task.CompletedTask);
+            mockService
+                .Setup(p => p.DeleteInventoryCardBatch(It.IsAny<List<int>>()))
+                .Returns(Task.CompletedTask);
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
 
-            ////act
-            //var response = await inventoryController.DeleteCard(idToExpect);
+            //act
+            var response = await inventoryController.DeleteInventoryCardBatch(idsToSubmit);
 
-            ////assert
-            //Assert.IsInstanceOfType(response, typeof(OkResult));
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> DeleteInventoryCardBatch(List<int> batchIDs)
-        {
-            throw new NotImplementedException();
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
         #endregion
@@ -284,71 +278,52 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Inventory_GetCollectionBuilderSuggestions_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //InventoryDetailDto detailResult = new InventoryDetailDto()
-            //{
-            //    Cards = new List<MagicCardDto>(),
-            //    InventoryCards = new List<InventoryCardDto>(),
-            //    Name = "Mock Card Detail",
-            //};
+            var serviceResult = new List<InventoryOverviewDto>()
+            {
+                new InventoryOverviewDto(),
+                new InventoryOverviewDto(),
+                new InventoryOverviewDto(),
+            };
 
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
+            mockService
+                .Setup(p => p.GetCollectionBuilderSuggestions())
+                .ReturnsAsync(serviceResult);
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
+            
+            //act
+            var response = await inventoryController.GetCollectionBuilderSuggestions();
 
-            ////string nameToRequest = "Mock Card Detail";
-            //int idToRequest = 1;
+            //assert
+            var typedResult = response.Result as OkObjectResult;
 
-            ////act
-            //var response = await inventoryController.GetInventoryDetail(idToRequest);
-
-            ////assert
-            //var typedResult = response.Result as OkObjectResult;
-
-            //InventoryDetailDto resultValue = typedResult.Value as InventoryDetailDto;
-            //Assert.IsNotNull(resultValue);
-            ////Assert.AreEqual(nameToRequest, resultValue.Name);
-
+            var resultValue = typedResult.Value as List<InventoryOverviewDto>;
+            Assert.IsNotNull(resultValue);
+            Assert.AreEqual(serviceResult.Count, resultValue.Count);
         }
-        
+
         [TestMethod]
         public async Task Inventory_HideCollectionBuilderSuggestion_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //InventoryDetailDto detailResult = new InventoryDetailDto()
-            //{
-            //    Cards = new List<MagicCardDto>(),
-            //    InventoryCards = new List<InventoryCardDto>(),
-            //    Name = "Mock Card Detail",
-            //};
+            mockService
+                .Setup(p => p.HideCollectionBuilderSuggestion(It.IsNotNull<InventoryOverviewDto>()))
+                .Returns(Task.CompletedTask);
 
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            var payloadToSubmit = new InventoryOverviewDto() { };
 
-            ////string nameToRequest = "Mock Card Detail";
-            //int idToRequest = 1;
+            //act
+            var response = await inventoryController.HideCollectionBuilderSuggestion(payloadToSubmit);
 
-            ////act
-            //var response = await inventoryController.GetInventoryDetail(idToRequest);
-
-            ////assert
-            //var typedResult = response.Result as OkObjectResult;
-
-            //InventoryDetailDto resultValue = typedResult.Value as InventoryDetailDto;
-            //Assert.IsNotNull(resultValue);
-            ////Assert.AreEqual(nameToRequest, resultValue.Name);
-
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
         #endregion
@@ -358,71 +333,52 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Inventory_GetTrimmingTips_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //InventoryDetailDto detailResult = new InventoryDetailDto()
-            //{
-            //    Cards = new List<MagicCardDto>(),
-            //    InventoryCards = new List<InventoryCardDto>(),
-            //    Name = "Mock Card Detail",
-            //};
+            var serviceResult = new List<InventoryOverviewDto>()
+            {
+                new InventoryOverviewDto(),
+                new InventoryOverviewDto(),
+                new InventoryOverviewDto(),
+            };
 
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
+            mockService
+                .Setup(p => p.GetTrimmingTips())
+                .ReturnsAsync(serviceResult);
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
 
-            ////string nameToRequest = "Mock Card Detail";
-            //int idToRequest = 1;
+            //act
+            var response = await inventoryController.GetTrimmingTips();
 
-            ////act
-            //var response = await inventoryController.GetInventoryDetail(idToRequest);
+            //assert
+            var typedResult = response.Result as OkObjectResult;
 
-            ////assert
-            //var typedResult = response.Result as OkObjectResult;
-
-            //InventoryDetailDto resultValue = typedResult.Value as InventoryDetailDto;
-            //Assert.IsNotNull(resultValue);
-            ////Assert.AreEqual(nameToRequest, resultValue.Name);
-
+            var resultValue = typedResult.Value as List<InventoryOverviewDto>;
+            Assert.IsNotNull(resultValue);
+            Assert.AreEqual(serviceResult.Count, resultValue.Count);
         }
 
         [TestMethod]
         public async Task Inventory_HideTrimmingTip_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //InventoryDetailDto detailResult = new InventoryDetailDto()
-            //{
-            //    Cards = new List<MagicCardDto>(),
-            //    InventoryCards = new List<InventoryCardDto>(),
-            //    Name = "Mock Card Detail",
-            //};
+            mockService
+                .Setup(p => p.HideTrimmingTip(It.IsNotNull<InventoryOverviewDto>()))
+                .Returns(Task.CompletedTask);
 
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            var payloadToSubmit = new InventoryOverviewDto() { };
 
-            ////string nameToRequest = "Mock Card Detail";
-            //int idToRequest = 1;
+            //act
+            var response = await inventoryController.HideTrimmingTip(payloadToSubmit);
 
-            ////act
-            //var response = await inventoryController.GetInventoryDetail(idToRequest);
-
-            ////assert
-            //var typedResult = response.Result as OkObjectResult;
-
-            //InventoryDetailDto resultValue = typedResult.Value as InventoryDetailDto;
-            //Assert.IsNotNull(resultValue);
-            ////Assert.AreEqual(nameToRequest, resultValue.Name);
-
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
         #endregion
@@ -432,71 +388,54 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Inventory_ValidateCarpentryImport_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //InventoryDetailDto detailResult = new InventoryDetailDto()
-            //{
-            //    Cards = new List<MagicCardDto>(),
-            //    InventoryCards = new List<InventoryCardDto>(),
-            //    Name = "Mock Card Detail",
-            //};
+            var validatedImport = new ValidatedCarpentryImportDto()
+            {
 
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
+            };
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            mockService
+                .Setup(p => p.ValidateCarpentryImport(It.IsNotNull<CardImportDto>()))
+                .ReturnsAsync(validatedImport);
 
-            ////string nameToRequest = "Mock Card Detail";
-            //int idToRequest = 1;
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
 
-            ////act
-            //var response = await inventoryController.GetInventoryDetail(idToRequest);
+            var importToSubmit = new CardImportDto()
+            {
 
-            ////assert
-            //var typedResult = response.Result as OkObjectResult;
+            };
 
-            //InventoryDetailDto resultValue = typedResult.Value as InventoryDetailDto;
-            //Assert.IsNotNull(resultValue);
-            ////Assert.AreEqual(nameToRequest, resultValue.Name);
+            //act
+            var response = await inventoryController.ValidateCarpentryImport(importToSubmit);
 
+            //assert
+            var typedResult = response.Result as OkObjectResult;
+
+            ValidatedCarpentryImportDto resultValue = typedResult.Value as ValidatedCarpentryImportDto;
+            Assert.IsNotNull(resultValue);
         }
-  
+
         [TestMethod]
         public async Task Inventory_AddValidatedCarpentryImport_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //InventoryDetailDto detailResult = new InventoryDetailDto()
-            //{
-            //    Cards = new List<MagicCardDto>(),
-            //    InventoryCards = new List<InventoryCardDto>(),
-            //    Name = "Mock Card Detail",
-            //};
+            mockService
+                .Setup(p => p.AddValidatedCarpentryImport(It.IsNotNull<ValidatedCarpentryImportDto>()))
+                .Returns(Task.CompletedTask);
 
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            var payloadToSubmit = new ValidatedCarpentryImportDto() { };
 
-            ////string nameToRequest = "Mock Card Detail";
-            //int idToRequest = 1;
+            //act
+            var response = await inventoryController.AddValidatedCarpentryImport(payloadToSubmit);
 
-            ////act
-            //var response = await inventoryController.GetInventoryDetail(idToRequest);
-
-            ////assert
-            //var typedResult = response.Result as OkObjectResult;
-
-            //InventoryDetailDto resultValue = typedResult.Value as InventoryDetailDto;
-            //Assert.IsNotNull(resultValue);
-            ////Assert.AreEqual(nameToRequest, resultValue.Name);
-
+            //assert
+            Assert.IsInstanceOfType(response, typeof(OkResult));
         }
         
         #endregion
@@ -506,38 +445,33 @@ namespace Carpentry.UI.Tests.UnitTests
         [TestMethod]
         public async Task Inventory_ExportInventoryBackup_ReturnsAsyncOK_Test()
         {
-            Assert.Fail();
-            ////arrange
-            //var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
+            //arrange
+            var mockService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            //InventoryDetailDto detailResult = new InventoryDetailDto()
-            //{
-            //    Cards = new List<MagicCardDto>(),
-            //    InventoryCards = new List<InventoryCardDto>(),
-            //    Name = "Mock Card Detail",
-            //};
+            InventoryDetailDto detailResult = new InventoryDetailDto()
+            {
+                Cards = new List<MagicCardDto>(),
+                InventoryCards = new List<InventoryCardDto>(),
+                Name = "Mock Card Detail",
+            };
 
-            //mockService
-            //    .Setup(p => p.GetInventoryDetailByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(detailResult);
+            var mockResult = new byte[0];
 
-            //var inventoryController = new Controllers.InventoryController(mockService.Object);
+            mockService
+                .Setup(p => p.ExportInventoryBackup())
+                .ReturnsAsync(mockResult);
 
-            ////string nameToRequest = "Mock Card Detail";
-            //int idToRequest = 1;
+            var inventoryController = new Controllers.InventoryController(mockService.Object);
 
-            ////act
-            //var response = await inventoryController.GetInventoryDetail(idToRequest);
+            //act
+            var response = await inventoryController.ExportInventoryBackup();
 
-            ////assert
-            //var typedResult = response.Result as OkObjectResult;
-
-            //InventoryDetailDto resultValue = typedResult.Value as InventoryDetailDto;
-            //Assert.IsNotNull(resultValue);
-            ////Assert.AreEqual(nameToRequest, resultValue.Name);
-
+            //assert
+            var typedResponse = response as FileContentResult;
+            byte[] resultValue = typedResponse.FileContents;
+            Assert.IsNotNull(resultValue);
         }
-        
+
         #endregion
     }
 }

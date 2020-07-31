@@ -407,7 +407,7 @@ namespace Carpentry.Data.Implementations
 
 namespace Sqlite.Implementations
 {
-    public class ScryfallRepo : ICardStringRepo
+    public class ScryfallRepo //: ICardStringRepo
     {
         private readonly ILogger<ScryfallRepo> _logger;
         private readonly HttpClient _client;

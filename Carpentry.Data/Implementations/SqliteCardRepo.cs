@@ -15,7 +15,7 @@ using Carpentry.Data.LegacyModels;
 
 namespace Carpentry.Data.Implementations
 {
-    public class SqliteCardRepo : ILegacyCardRepo
+    public class SqliteCardRepo //: ILegacyCardRepo
     {
 
         //readonly ScryfallDataContext _scryContext;

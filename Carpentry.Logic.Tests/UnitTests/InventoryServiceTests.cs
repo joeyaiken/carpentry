@@ -17,7 +17,14 @@ namespace Carpentry.Logic.Tests.UnitTests
     [TestClass]
     public class InventoryServiceTests
     {
-        
+
+        [TestMethod]
+        public async Task TestMethodsVerifiedUpToDate()
+        {
+            Assert.Fail();
+        }
+
+
         [TestMethod]
         public async Task InventoryServiceTests_AddInventoryCard_Test()
         {

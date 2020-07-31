@@ -47,14 +47,5 @@ namespace Carpentry.Data.Interfaces
         //
 
 
-
-
-
-
-
-
-
-
-
     }
 }

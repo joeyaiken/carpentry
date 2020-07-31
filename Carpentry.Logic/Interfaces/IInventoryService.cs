@@ -32,6 +32,6 @@ namespace Carpentry.Logic.Interfaces
         //Import/Export
         Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto);
         Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto);
-        Task ExportInventoryBackup();
+        Task<byte[]> ExportInventoryBackup();
     }
 }

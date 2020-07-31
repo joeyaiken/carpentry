@@ -13,27 +13,23 @@ namespace Carpentry.Logic.Interfaces
         /// </summary>
         /// <param name="setCode"></param>
         /// <returns></returns>
-        Task UpdateSetData(string setCode);
+        //Task UpdateSetData(string setCode);
 
         Task EnsureCardDefinitionExists(int multiverseId);
 
-        Task EnsureDatabasesCreated();
 
+        //Currently only used by QuickRestore, I don't know where these would otherwise get called
+        Task EnsureDatabasesCreated();
         Task EnsureDefaultRecordsExist();
 
-        //
-        //
-        //
+
+
 
         //public async List<SetDetailDto> GetTrackedSets()
         Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update);
-
         Task AddTrackedSet(int setId);
-
-        Task AddTrackedSet(string setCode);
-
+        Task AddTrackedSet(string setCode); //used by
         Task RemoveTrackedSet(int setId);
-        
         Task UpdateTrackedSet(int setId);
 
 

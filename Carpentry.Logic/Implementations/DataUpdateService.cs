@@ -17,6 +17,8 @@ namespace Carpentry.Logic.Implementations
 {
     //TODO - consider renaming this to "DataMaintenanceService" or "DataIntegrityService"
     //Idea being this checks if sets / cards exist, and can check if DB defaults
+    // Maybe just CardDataService?
+    //      Would that be a good spot to also get filter options?
     public class DataUpdateService : IDataUpdateService
     {
         private readonly ILogger<DataBackupService> _logger;

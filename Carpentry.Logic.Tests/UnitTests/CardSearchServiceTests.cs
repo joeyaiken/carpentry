@@ -18,6 +18,12 @@ namespace Carpentry.Logic.Tests.UnitTests
     [TestClass]
     public class CardSearchServiceTests
     {
+        [TestMethod]
+        public async Task TestMethodsVerifiedUpToDate()
+        {
+            Assert.Fail();
+        }
+
         private static CardDataDto CardInstance()
         {
             CardDataDto result = new CardDataDto()

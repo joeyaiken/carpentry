@@ -59,7 +59,7 @@ namespace Carpentry.UI.Controllers
 
         //AddCardBatch
         [HttpPost("[action]")]
-        public async Task<ActionResult<int>> AddInventoryCardBatch([FromBody] List<InventoryCardDto> dto)
+        public async Task<ActionResult> AddInventoryCardBatch([FromBody] List<InventoryCardDto> dto)
         {
             try
             {
@@ -238,18 +238,34 @@ namespace Carpentry.UI.Controllers
         //TODO - define param
         //TODO - define return
         [HttpPost("[action]")]
-        public async Task<ActionResult> ValidateCarpentryImport()
+        public async Task<ActionResult<ValidatedCarpentryImportDto>> ValidateCarpentryImport(CardImportDto cardImportDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _inventory.ValidateCarpentryImport(cardImportDto);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("ValidateCarpentryImport", ex));
+            }
         }
 
         //Add Validated Carpentry Import
         //TODO - define param
         //Returns OK()
         [HttpPost("[action]")]
-        public async Task<ActionResult> AddValidatedCarpentryImport()
+        public async Task<ActionResult> AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _inventory.AddValidatedCarpentryImport(dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("AddValidatedCarpentryImport", ex));
+            }
         }
 
         #endregion
@@ -258,9 +274,18 @@ namespace Carpentry.UI.Controllers
 
         //ExportInventoryBackup
         [HttpGet("[action]")]
-        public async Task<ActionResult> ExportInventoryBackup()
+        public async Task<IActionResult> ExportInventoryBackup()
         {
-            throw new NotImplementedException();
+            try
+            {
+                const string contentType = "application/zip";
+                var resultStream = await _inventory.ExportInventoryBackup();
+                return File(resultStream, contentType);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("ExportInventoryBackup", ex));
+            }
         }
 
         #endregion

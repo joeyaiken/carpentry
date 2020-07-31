@@ -130,7 +130,6 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
-
         [TestMethod]
         public async Task Core_UpdateTrackedSet_ReturnsOK_Test()
         {
@@ -153,7 +152,6 @@ namespace Carpentry.UI.Tests.UnitTests
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
 
-
         [TestMethod]
         public async Task Core_RemoveTrackedSet_ReturnsOK_Test()
         {
@@ -175,139 +173,6 @@ namespace Carpentry.UI.Tests.UnitTests
             //assert
             Assert.IsInstanceOfType(response, typeof(OkResult));
         }
-
-        //[TestMethod]
-        //public async Task Core_VerifyBackupLocation_ReturnsOK_Test()
-        //{
-        //    //assemble
-        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-        //    var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-        //    var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
-        //    var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
-        //    var expectedResult = new BackupDetailDto();
-
-        //    mockBackupService
-        //        .Setup(p => p.VerifyBackupLocation(It.IsAny<string>()))
-        //        .ReturnsAsync(expectedResult);
-
-        //    var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
-
-        //    string directoryToSubmit = "c:\\some\\directory\\";
-
-        //    //act
-        //    var response = await coreController.VerifyBackupLocation(directoryToSubmit);
-
-        //    //assert
-        //    Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
-        //    var typedResult = response.Result as OkObjectResult;
-        //    BackupDetailDto resultValue = typedResult.Value as BackupDetailDto;
-
-        //    Assert.IsNotNull(resultValue);
-        //}
-
-        //[TestMethod]
-        //public async Task Core_BackupCollection_ReturnsOK_Test()
-        //{
-        //    //assemble
-        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-        //    var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-        //    var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
-        //    var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
-        //    mockBackupService
-        //        .Setup(p => p.BackupCollection(It.IsAny<string>()))
-        //        .Returns(Task.CompletedTask);
-
-        //    var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
-
-        //    string backupDirectory = "C:\\Something\\";
-
-        //    //act
-        //    var response = await coreController.BackupCollection(backupDirectory);
-
-        //    //assert
-        //    Assert.IsInstanceOfType(response, typeof(OkResult));
-        //}
-
-        //[TestMethod]
-        //public async Task Core_RestoreCollectionFromBackup_ReturnsOK_Test()
-        //{
-        //    //assemble
-        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-        //    var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-        //    var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
-        //    var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
-        //    mockBackupService
-        //        .Setup(p => p.RestoreCollectionFromBackup(It.IsAny<string>()))
-        //        .Returns(Task.CompletedTask);
-
-        //    var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
-
-        //    string backupDirectory = "C:\\Something\\";
-
-        //    //act
-        //    var response = await coreController.RestoreCollectionFromBackup(backupDirectory);
-
-        //    //assert
-        //    Assert.IsInstanceOfType(response, typeof(OkResult));
-        //}
-
-        //[TestMethod]
-        //public async Task Core_ValidateImport_ReturnsOK_Test()
-        //{
-        //    //assemble
-        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-        //    var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-        //    var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
-        //    var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
-        //    CardImportDto payloadToSubmit = new CardImportDto();
-
-        //    ValidatedCardImportDto expectedResponse = new ValidatedCardImportDto();
-
-        //    mockImportService
-        //        .Setup(p => p.ValidateImport(It.IsAny<CardImportDto>()))
-        //        .ReturnsAsync(expectedResponse);
-
-        //    var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
-
-        //    //act
-        //    var response = await coreController.ValidateImport(payloadToSubmit);
-
-        //    //assert
-        //    Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
-        //    var typedResult = response.Result as OkObjectResult;
-        //    ValidatedCardImportDto resultValue = typedResult.Value as ValidatedCardImportDto;
-
-        //    Assert.IsNotNull(resultValue);
-        //}
-
-        //[TestMethod]
-        //public async Task Core_AddValidatedImport_ReturnsOK_Test()
-        //{
-        //    //assemble
-        //    var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-        //    var mockBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
-        //    var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
-        //    var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
-        //    var payloadToSubmit = new ValidatedCardImportDto();
-
-        //    mockImportService
-        //        .Setup(p => p.AddValidatedImport(It.IsAny<ValidatedCardImportDto>()))
-        //        .Returns(Task.CompletedTask);
-
-
-        //    var coreController = new Controllers.CoreController(mockFilterService.Object, mockBackupService.Object, mockImportService.Object, mockUpdateService.Object);
-
-        //    //act
-        //    var response = await coreController.AddValidatedImport(payloadToSubmit);
-
-        //    //assert
-        //    Assert.IsInstanceOfType(response, typeof(OkResult));
-        //}
 
     }
 }
