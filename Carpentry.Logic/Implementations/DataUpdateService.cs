@@ -31,26 +31,25 @@ namespace Carpentry.Logic.Implementations
 
         private readonly int _dbRefreshIntervalDays;
 
-        private readonly IDataReferenceRepo _dataReferenceRepo;
+        private readonly ICoreDataRepo _coreDataRepo;
 
-        private readonly IDataQueryService _dataQueryService;
 
         public DataUpdateService(
             ILogger<DataBackupService> logger,
             IScryfallService scryService,
             ICardDataRepo cardRepo,
             IScryfallDataRepo scryfallRepo,
-            IDataReferenceRepo dataReferenceRepo,
-            IDataQueryService dataQueryService
+            ICoreDataRepo coreDataRepo
+            //IDataQueryService dataQueryService
             )
         {
             _logger = logger;
             _scryService = scryService;
             _scryfallRepo = scryfallRepo;
             _cardRepo = cardRepo;
-            _dataReferenceRepo = dataReferenceRepo;
+            _coreDataRepo = coreDataRepo;
             _dbRefreshIntervalDays = 30; //TODO - move to a config
-            _dataQueryService = dataQueryService;
+            //_dataQueryService = dataQueryService;
         }
 
         public async Task EnsureCardDefinitionExists(int multiverseId)
@@ -348,7 +347,7 @@ namespace Carpentry.Logic.Implementations
         {
             
             await _scryfallRepo.EnsureDatabaseExists();
-            await _cardRepo.EnsureDatabaseExists();
+            await _coreDataRepo.EnsureDatabaseExists();
             //await _cardContext.Database.EnsureCreatedAsync();
             //await _scryRepo.EnsureDatabaseCreated();
         }
@@ -397,10 +396,10 @@ namespace Carpentry.Logic.Implementations
 
             for(int i = 0; i < allStatuses.Count(); i++)
             {
-                await _dataReferenceRepo.TryAddInventoryCardStatus(allStatuses[i]);
+                await _coreDataRepo.TryAddInventoryCardStatus(allStatuses[i]);
             }
 
-            //var statusTasks = allStatuses.Select(s => _dataReferenceRepo.TryAddInventoryCardStatus(s));
+            //var statusTasks = allStatuses.Select(s => _coreDataRepo.TryAddInventoryCardStatus(s));
 
             //await Task.WhenAll(statusTasks);
 
@@ -435,10 +434,10 @@ namespace Carpentry.Logic.Implementations
 
             for(int i = 0; i < allRarities.Count(); i++)
             {
-                await _dataReferenceRepo.TryAddCardRarity(allRarities[i]);
+                await _coreDataRepo.TryAddCardRarity(allRarities[i]);
             }
 
-            //var tasks = allRarities.Select(r => _dataReferenceRepo.TryAddCardRarity(r));
+            //var tasks = allRarities.Select(r => _coreDataRepo.TryAddCardRarity(r));
 
             //await Task.WhenAll(tasks);
 
@@ -473,10 +472,10 @@ namespace Carpentry.Logic.Implementations
             
             for(int i = 0; i < allManaTypes.Count(); i++)
             {
-                await _dataReferenceRepo.TryAddManaType(allManaTypes[i]);
+                await _coreDataRepo.TryAddManaType(allManaTypes[i]);
             }
 
-            //var tasks = allManaTypes.Select(x => _dataReferenceRepo.TryAddManaType(x));
+            //var tasks = allManaTypes.Select(x => _coreDataRepo.TryAddManaType(x));
 
             //await Task.WhenAll(tasks);
 
@@ -505,10 +504,10 @@ namespace Carpentry.Logic.Implementations
 
             for(int i = 0; i < allFormats.Count(); i++)
             {
-                await _dataReferenceRepo.TryAddMagicFormat(allFormats[i]);
+                await _coreDataRepo.TryAddMagicFormat(allFormats[i]);
             }
 
-            //var tasks = allFormats.Select(x => _dataReferenceRepo.TryAddMagicFormat(x));
+            //var tasks = allFormats.Select(x => _coreDataRepo.TryAddMagicFormat(x));
 
             //await Task.WhenAll(tasks);
 
@@ -531,10 +530,10 @@ namespace Carpentry.Logic.Implementations
 
             for(int i = 0; i < allVariants.Count(); i++)
             {
-                await _dataReferenceRepo.TryAddCardVariantType(allVariants[i]);
+                await _coreDataRepo.TryAddCardVariantType(allVariants[i]);
             }
 
-            //var tasks = allVariants.Select(x => _dataReferenceRepo.TryAddCardVariantType(x));
+            //var tasks = allVariants.Select(x => _coreDataRepo.TryAddCardVariantType(x));
 
             //await Task.WhenAll(tasks);
 
@@ -556,10 +555,10 @@ namespace Carpentry.Logic.Implementations
 
             for(int i = 0; i < allCategories.Count(); i++)
             {
-                await _dataReferenceRepo.TryAddDeckCardCategory(allCategories[i]);
+                await _coreDataRepo.TryAddDeckCardCategory(allCategories[i]);
             }
 
-            //var tasks = allCategories.Select(x => _dataReferenceRepo.TryAddDeckCardCategory(x));
+            //var tasks = allCategories.Select(x => _coreDataRepo.TryAddDeckCardCategory(x));
 
             //await Task.WhenAll(tasks);
 
@@ -579,7 +578,7 @@ namespace Carpentry.Logic.Implementations
             }
 
             //Get list of sets from vwSetTotals, filtering if requested
-            var dbSetTotals = _dataQueryService.QuerySetTotals()
+            var dbSetTotals = _cardRepo.QuerySetTotals()
                 .Where(s => showUntracked || s.IsTracked == true)
                 .ToList();
 
@@ -678,7 +677,7 @@ namespace Carpentry.Logic.Implementations
         public async Task RemoveTrackedSet(int setId)
         {
             var dbSet = await _cardRepo.GetCardSetById(setId);
-            var setTotals = _dataQueryService.QuerySetTotals().Where(s => s.SetId == setId).FirstOrDefault();
+            var setTotals = _cardRepo.QuerySetTotals().Where(s => s.SetId == setId).FirstOrDefault();
 
             if (setTotals == null)
             {

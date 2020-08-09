@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Tests.UnitTests
+namespace Carpentry.Logic.Tests.UnitTests.DeckServiceTests
 {
     [TestClass]
     public class DeckServiceDeckTests
@@ -32,19 +32,17 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
             DataReferenceValue<int> formatResult = new DataReferenceValue<int>() { Id = 1 };
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetMagicFormat(It.IsAny<string>()))
                 .ReturnsAsync(formatResult);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             DeckPropertiesDto props = new DeckPropertiesDto();
 
@@ -71,19 +69,17 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
             DataReferenceValue<int> formatResult = new DataReferenceValue<int>() { Id = 1 };
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetMagicFormat(It.IsAny<string>()))
                 .ReturnsAsync(formatResult);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             DeckPropertiesDto props = new DeckPropertiesDto();
 
@@ -106,13 +102,11 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             int idToDelete = 1;
 

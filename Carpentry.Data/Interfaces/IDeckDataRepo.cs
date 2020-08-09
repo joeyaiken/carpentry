@@ -1,7 +1,6 @@
 ﻿using Carpentry.Data.DataModels;
-using System;
+using Carpentry.Data.QueryResults;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Data.Interfaces
@@ -23,14 +22,12 @@ namespace Carpentry.Data.Interfaces
         Task UpdateDeckCard(DeckCardData deckCard);
         Task DeleteDeckCard(int deckCardId);
         Task<DeckCardData> GetDeckCardById(int deckCardId);
-
         Task<DeckCardData> GetDeckCardByInventoryId(int inventoryCardId);
-        
-        //Queries
-        //Do I want a unique class for Query logic?
-        //GetAllDeckProps
-        //GetAllDecks[validated]
 
-        //GetDeckCardCount
+        //Queries
+        Task<List<DeckCardResult>> GetDeckCards(int deckId);
+        Task<int> GetDeckCardCount(int deckId);
+        Task<List<string>> GetDeckColorIdentity(int deckId);
+        Task<IEnumerable<DeckCardStatResult>> GetDeckCardStats(int deckId);
     }
 }

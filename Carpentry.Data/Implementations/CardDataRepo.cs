@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Carpentry.Data.Models;
+using Carpentry.Data.DataModels.QueryResults;
 
 namespace Carpentry.Data.Implementations
 {
@@ -46,6 +47,11 @@ namespace Carpentry.Data.Implementations
         {
             CardSetData result = await _cardContext.Sets.FirstOrDefaultAsync(s => s.Code == setCode.ToLower());
             return result;
+        }
+
+        public IQueryable<SetTotalsResult> QuerySetTotals()
+        {
+            return _cardContext.SetTotals.AsQueryable();
         }
 
         //This probably doesn't actually have to return an ID
@@ -413,12 +419,7 @@ namespace Carpentry.Data.Implementations
             return result;
         }
 
-        public async Task EnsureDatabaseExists()
-        {
-            //await _cardContext.Database.EnsureDeletedAsync();
-            await _cardContext.Database.EnsureCreatedAsync();
-        }
-
+        
         public async Task<List<CardSetData>> GetAllCardSets()
         {
             var result = await _cardContext.Sets.ToListAsync();

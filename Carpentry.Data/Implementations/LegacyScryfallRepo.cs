@@ -14,7 +14,7 @@ using Carpentry.Data.LegacyModels;
 
 namespace Carpentry.Data.Implementations
 {
-    public class LegacyScryfallRepo : ICardStringRepo
+    public class LegacyScryfallRepo //: ICardStringRepo
     {
         private readonly ILogger<LegacyScryfallRepo> _logger;
         private readonly HttpClient _client;

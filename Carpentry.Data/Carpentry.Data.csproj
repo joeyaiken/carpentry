@@ -5,15 +5,48 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Implementations\CardComparer.cs" />
+    <Compile Remove="Implementations\DataQueryService.cs" />
+    <Compile Remove="Implementations\DataReferenceRepo.cs" />
+    <Compile Remove="Implementations\DataReferenceService.cs" />
+    <Compile Remove="Implementations\LegacyScryfallRepo.cs" />
+    <Compile Remove="Implementations\SqliteCardRepo.cs" />
+    <Compile Remove="Interfaces\IDataQueryService.cs" />
+    <Compile Remove="Interfaces\IDataReferenceRepo.cs" />
+    <Compile Remove="Interfaces\IDataReferenceService.cs" />
     <Compile Remove="LegacyDataContext\LegacySqliteDataContext.cs" />
     <Compile Remove="Implementations\LegacySqliteCardRepo.cs" />
     <Compile Remove="Implementations\SqliteNCardRepo.cs" />
     <Compile Remove="Interfaces\ILegacySqliteCardRepo.cs" />
+    <Compile Remove="LegacyDataContext\ScryfallDataContext.cs" />
+    <Compile Remove="LegacyDataContext\SqliteDataContext.cs" />
+    <Compile Remove="LegacyModels\Card.cs" />
+    <Compile Remove="LegacyModels\CardDto.cs" />
+    <Compile Remove="LegacyModels\CardOverviewDto.cs" />
+    <Compile Remove="LegacyModels\DeckCardDto.cs" />
+    <Compile Remove="LegacyModels\DeckDto.cs" />
+    <Compile Remove="LegacyModels\DeckProperties.cs" />
+    <Compile Remove="LegacyModels\DeckStats.cs" />
+    <Compile Remove="LegacyModels\FilterDescriptor.cs" />
+    <Compile Remove="LegacyModels\InventoryCardDto.cs" />
+    <Compile Remove="LegacyModels\InventoryDeckCardDto.cs" />
+    <Compile Remove="LegacyModels\InventoryDetailDto.cs" />
+    <Compile Remove="LegacyModels\InventoryOverviewDto.cs" />
+    <Compile Remove="LegacyModels\InventoryQueryResult.cs" />
+    <Compile Remove="LegacyModels\MagicCardDto.cs" />
+    <Compile Remove="LegacyModels\PricedCardDto.cs" />
+    <Compile Remove="LegacyModels\ScryfallMagicCard.cs" />
+    <Compile Remove="LegacyModels\ScryfallSetDataDto.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="LegacyDataContext\" />
+    <Folder Include="LegacyModels\" />
   </ItemGroup>
 
 </Project>

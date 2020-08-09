@@ -12,44 +12,27 @@ namespace Carpentry.Data.Interfaces
 {
     public interface IDataQueryService
     {
-        //CardOverviewResult
-        //
-        //GetInventoryOverviews
-
-
-
-        Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param);
-
-        
-        
-        //Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId);
-        //Task<IEnumerable<InventoryCardResult>> GetDeckInventoryCards(int deckId);
-
-        Task<List<DeckCardResult>> GetDeckCards(int deckId);
-
-
-
-        //get deck inventory cards
-
-        //get the total # of cards in a deck (includes basic lands)
-        Task<int> GetDeckCardCount(int deckId);
-
-        Task<List<string>> GetDeckColorIdentity(int deckId);
-
-        Task<IEnumerable<DeckCardStatResult>> GetDeckCardStats(int deckId);
-
-        Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName);
-
-        //Card Search queries
-        Task<IEnumerable<CardDataDto>> SearchInventoryCards(InventoryQueryParameter filters);
-
-        Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);
+        //Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param);
 
 
 
 
-        //IDK why the others aren't on there yet
-        IQueryable<SetTotalsResult> QuerySetTotals();
+
+        ////get deck inventory cards
+
+        ////get the total # of cards in a deck (includes basic lands)
+
+
+        //Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName);
+
+        ////Card Search queries
+        //Task<IEnumerable<CardDataDto>> SearchInventoryCards(InventoryQueryParameter filters);
+
+        //Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);
+
+
+        ////IDK why the others aren't on there yet
+        //IQueryable<SetTotalsResult> QuerySetTotals();
 
     }
 }

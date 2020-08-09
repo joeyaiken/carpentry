@@ -78,8 +78,7 @@ namespace Carpentry.Tools.QuickUpdate
                 //data services
                 .AddSingleton<ICardDataRepo, CardDataRepo>()
                 .AddSingleton<IScryfallDataRepo, ScryfallRepo>()
-                .AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
-                .AddSingleton<IDataQueryService, DataQueryService>()
+                .AddScoped<ICoreDataRepo, CoreDataRepo>()
 
                 //logic services
                 .AddScoped<IDataUpdateService, DataUpdateService>()

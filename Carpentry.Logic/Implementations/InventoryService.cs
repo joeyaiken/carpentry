@@ -6,42 +6,31 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Data.Interfaces;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Carpentry.Data.QueryResults;
-//using Carpentry.Data.DataContext;
 
 namespace Carpentry.Logic.Implementations
 {
     public class InventoryService : IInventoryService
     {
-
         private readonly IInventoryDataRepo _inventoryRepo;
-
         private readonly IDataUpdateService _dataUpdateService;
-
-        private readonly IDataQueryService _queryService;
-
-        private readonly IDataReferenceService _referenceService;
-
+        private readonly ICoreDataRepo _coreDataRepo;
         private readonly ICardDataRepo _cardDataRepo;
 
         public InventoryService(
             IInventoryDataRepo inventoryRepo,
             IDataUpdateService dataUpdateService,
-            IDataQueryService queryService,
-            IDataReferenceService referenceService,
+            ICoreDataRepo coreDataRepo,
             ICardDataRepo cardDataRepo
         )
         {
             _inventoryRepo = inventoryRepo;
             _dataUpdateService = dataUpdateService;
-            _queryService = queryService;
-            _referenceService = referenceService;
+            _coreDataRepo = coreDataRepo;
             _cardDataRepo = cardDataRepo;
         }
 
         #region private methods
-
 
         private static InventoryOverviewDto MapCardResultToInventoryOverview(CardOverviewResult data)
         {
@@ -108,7 +97,7 @@ namespace Carpentry.Logic.Implementations
         {
             await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
 
-            DataReferenceValue<int> cardVariant = await _referenceService.GetCardVariantTypeByName(dto.VariantName);
+            DataReferenceValue<int> cardVariant = await _coreDataRepo.GetCardVariantTypeByName(dto.VariantName);
 
             var newInventoryCard = new Data.DataModels.InventoryCardData()
             {
@@ -136,7 +125,7 @@ namespace Carpentry.Logic.Implementations
                 await _dataUpdateService.EnsureCardDefinitionExists(distinctIDs[i]);
             }
 
-            var variantTypes = await _referenceService.GetAllCardVariantTypes();
+            var variantTypes = await _coreDataRepo.GetAllCardVariantTypes();
 
             var newCards = cards.Select(x => new Data.DataModels.InventoryCardData()
             {
@@ -207,7 +196,7 @@ namespace Carpentry.Logic.Implementations
                 throw new ArgumentNullException("param");
             }
 
-            IEnumerable<CardOverviewResult> result = await _queryService.GetInventoryOverviews(param);
+            IEnumerable<CardOverviewResult> result = await _inventoryRepo.GetInventoryOverviews(param);
 
             List<InventoryOverviewDto> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x)).ToList();
 
@@ -236,7 +225,7 @@ namespace Carpentry.Logic.Implementations
 
             //GetInventoryCardsByName -> InventoryCardResult
 
-            List<InventoryCardDto> inventoryCards = (await _queryService.GetInventoryCardsByName(matchingCard.Name))
+            List<InventoryCardDto> inventoryCards = (await _inventoryRepo.GetInventoryCardsByName(matchingCard.Name))
                 .Select(x => new InventoryCardDto()
                 {
                     Id = x.Id,

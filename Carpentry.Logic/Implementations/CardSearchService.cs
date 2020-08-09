@@ -17,13 +17,13 @@ namespace Carpentry.Logic.Implementations
         //Should have no access to data context classes, only repo classes
         //private readonly ICardDataRepo _cardRepo;
         private readonly IScryfallService _scryService;
-        private readonly IDataQueryService _dataQueryService;
+        private readonly IInventoryDataRepo _inventoryRepo;
         ////private readonly ICardStringRepo _scryRepo;
         ////private readonly ILogger<CarpentryService> _logger;
         //private readonly IInventoryDataRepo _inventoryRepo;
 
         public CardSearchService(
-            IDataQueryService dataQueryService,
+            IInventoryDataRepo inventoryRepo,
             IScryfallService scryService
             
             //ICardDataRepo cardRepo
@@ -31,7 +31,7 @@ namespace Carpentry.Logic.Implementations
             //, ILogger<CardSearchService> logger
             )
         {
-            _dataQueryService = dataQueryService;
+            _inventoryRepo = inventoryRepo;
             _scryService = scryService;
             
             //_cardRepo = cardRepo;
@@ -162,7 +162,7 @@ namespace Carpentry.Logic.Implementations
         /// <returns></returns>
         public async Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters)
         {
-            var dbCards = await _dataQueryService.SearchInventoryCards(filters);
+            var dbCards = await _inventoryRepo.SearchInventoryCards(filters);
 
             List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
 
@@ -199,7 +199,7 @@ namespace Carpentry.Logic.Implementations
                 throw new ArgumentNullException("Set code filter cannot be null");
             }
 
-            var dbCards = await _dataQueryService.SearchCardSet(filters);
+            var dbCards = await _inventoryRepo.SearchCardSet(filters);
 
             List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
 

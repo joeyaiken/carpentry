@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Tests.UnitTests
+namespace Carpentry.Logic.Tests.UnitTests.DeckServiceTests
 {
     [TestClass]
     public class DeckServiceSearchTests
@@ -47,22 +47,20 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
-            mockQueryService
+            mockRepo
                 .Setup(p => p.GetDeckCardCount(It.Is<int>(i => i > 0)))
                 .ReturnsAsync(expectedDeckCardCountResult);
 
 
-            mockQueryService
+            mockRepo
                 .Setup(p => p.GetDeckColorIdentity(It.Is<int>(i => i > 0)))
                 .ReturnsAsync(new List<string>() { "U", "R", "G" });
 
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             //Act
             var result = await deckService.GetDeckOverviews();
@@ -97,29 +95,27 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
-            mockQueryService
+            mockDeckRepo
                 .Setup(p => p.GetDeckCards(It.Is<int>(i => i == idToRequest)))
                 .ReturnsAsync(dbCards);
 
             int expectedDeckCardCountResult = 60;
 
-            mockQueryService
+            mockDeckRepo
                 .Setup(p => p.GetDeckCardCount(It.Is<int>(i => i == idToRequest)))
                 .ReturnsAsync(expectedDeckCardCountResult);
 
             List<DeckCardStatResult> expectedStatsResult = new List<DeckCardStatResult>();
 
-            mockQueryService
+            mockDeckRepo
                 .Setup(p => p.GetDeckCardStats(It.Is<int>(i => i == idToRequest)))
                 .ReturnsAsync(expectedStatsResult);
 
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockDeckRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockDeckRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
 
             List<DeckPropertiesDto> expectedResults = new List<DeckPropertiesDto>();

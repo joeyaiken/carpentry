@@ -27,25 +27,21 @@ namespace Carpentry.Logic.Implementations
 
         private readonly IDeckDataRepo _deckRepo;
 
-        private readonly IDataQueryService _queryService;
-
         private readonly IInventoryService _inventoryService;
 
-        public IDataReferenceService _referenceService;
+        public ICoreDataRepo _coreDataRepo;
 
         public DeckService(
-            IDeckDataRepo deckRepo, 
-            IDataQueryService queryService, 
+            IDeckDataRepo deckRepo,
             IInventoryService inventoryService, 
             ILogger<DeckService> logger,
-            IDataReferenceService referenceService
+            ICoreDataRepo coreDataRepo
             )
         {
             _deckRepo = deckRepo;
-            _queryService = queryService;
             _inventoryService = inventoryService;
             _logger = logger;
-            _referenceService = referenceService;
+            _coreDataRepo = coreDataRepo;
         }
 
         #region private methods
@@ -73,9 +69,9 @@ namespace Carpentry.Logic.Implementations
             DeckStatsDto result = new DeckStatsDto();
 
             //total Count
-            result.TotalCount = await _queryService.GetDeckCardCount(deckId);
+            result.TotalCount = await _deckRepo.GetDeckCardCount(deckId);
 
-            var statData = await _queryService.GetDeckCardStats(deckId);
+            var statData = await _deckRepo.GetDeckCardStats(deckId);
 
             //total price
             decimal? totalPrice = statData.Sum(x => x.Price);
@@ -276,7 +272,7 @@ namespace Carpentry.Logic.Implementations
 
             #region Validate deck size
 
-            int deckSize = await _queryService.GetDeckCardCount(deckId);
+            int deckSize = await _deckRepo.GetDeckCardCount(deckId);
 
             //what's the min deck count for this format?
             if (deckFormat == "commander")
@@ -354,7 +350,7 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<int> AddDeck(DeckPropertiesDto props)
         {
-            DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(props.Format);
+            DataReferenceValue<int> deckFormat = await _coreDataRepo.GetMagicFormat(props.Format);
 
             var newDeck = new DeckData()
             {
@@ -383,7 +379,7 @@ namespace Carpentry.Logic.Implementations
                 throw new Exception("No deck found matching the specified ID");
             }
 
-            DataReferenceValue<int> deckFormat = await _referenceService.GetMagicFormat(deckDto.Format);
+            DataReferenceValue<int> deckFormat = await _coreDataRepo.GetMagicFormat(deckDto.Format);
 
             existingDeck.Name = deckDto.Name;
             existingDeck.MagicFormatId = deckFormat.Id;
@@ -519,7 +515,7 @@ namespace Carpentry.Logic.Implementations
                 var deckToUdpate = deckList[i];
 
                 //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
-                deckToUdpate.Colors = await _queryService.GetDeckColorIdentity(deckToUdpate.Id);
+                deckToUdpate.Colors = await _deckRepo.GetDeckColorIdentity(deckToUdpate.Id);
 
                 //string validationResults = await ValidateDeck(deckList[i].Id);
                 string validationResults = await ValidateDeck(deckToUdpate.Id);
@@ -587,7 +583,7 @@ namespace Carpentry.Logic.Implementations
                 Stats = new DeckStatsDto(),
             };
 
-            var deckCardData = await _queryService.GetDeckCards(deckId);
+            var deckCardData = await _deckRepo.GetDeckCards(deckId);
 
 
             //Card Overviews

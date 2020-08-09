@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Tests.UnitTests
+namespace Carpentry.Logic.Tests.UnitTests.DeckServiceTests
 {
     [TestClass]
     public class DeckServiceImportExportTests

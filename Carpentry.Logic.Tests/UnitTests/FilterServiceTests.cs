@@ -18,33 +18,33 @@ namespace Carpentry.Logic.Tests.UnitTests
         public async Task FilterService_GetAppFilterValues_Test()
         {
             //Arrange
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetAllMagicFormats())
                 .ReturnsAsync(new List<DataReferenceValue<int>>());
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetAllManaColors())
                 .ReturnsAsync(new List<DataReferenceValue<char>>());
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetAllRarities())
                 .ReturnsAsync(new List<DataReferenceValue<char>>());
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetAllSets())
                 .ReturnsAsync(new List<DataReferenceValue<string>>());
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetAllStatuses())
                 .ReturnsAsync(new List<DataReferenceValue<int>>());
 
-            mockReferenceService
+            mockCoreRepo
                 .Setup(p => p.GetAllTypes())
                 .Returns(new List<DataReferenceValue<string>>());
 
-            FilterService service = new FilterService(mockReferenceService.Object);
+            FilterService service = new FilterService(mockCoreRepo.Object);
 
             //Act
             AppFiltersDto resultValue = await service.GetAppFilterValues();

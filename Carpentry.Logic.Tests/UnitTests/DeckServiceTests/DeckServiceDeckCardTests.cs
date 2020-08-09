@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Tests.UnitTests
+namespace Carpentry.Logic.Tests.UnitTests.DeckServiceTests
 {
     [TestClass]
     public class DeckServiceDeckCardTests
@@ -42,17 +42,15 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
             mockInventoryService
                 .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCardDto>()))
                 .ReturnsAsync(inventoryIdToExpect);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             //Act
             await deckService.AddDeckCard(cardToAdd);
@@ -87,13 +85,11 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             //Act
             await deckService.AddDeckCard(cardToAdd);
@@ -128,13 +124,11 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             //Act
             await deckService.AddDeckCard(cardToAdd);
@@ -155,13 +149,11 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             List<DeckCardDto> cardsToAdd = new List<DeckCardDto>();
 
@@ -198,13 +190,11 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             //Act
             await deckService.UpdateDeckCard(card);
@@ -225,13 +215,11 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
 
-            var mockReferenceService = new Mock<IDataReferenceService>(MockBehavior.Strict);
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
-            var deckService = new DeckService(mockRepo.Object, mockQueryService.Object, mockInventoryService.Object, mockLogger.Object, mockReferenceService.Object);
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
 
             int idToDelete = 1;
 

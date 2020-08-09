@@ -53,15 +53,17 @@ namespace Carpentry.Logic.Tests.UnitTests
                 CardInstance(),
             };
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
+            //var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
 
-            mockQueryService
+            var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+
+            mockInventoryRepo
                 .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
                 .ReturnsAsync(expectedSearchResult);
 
             var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            var cardSearchService = new CardSearchService(mockQueryService.Object, mockScryService.Object);
+            var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
 
             InventoryQueryParameter filters = new InventoryQueryParameter()
             {
@@ -90,15 +92,15 @@ namespace Carpentry.Logic.Tests.UnitTests
                 CardInstance(),
             };
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
+            var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
-            mockQueryService
+            mockInventoryRepo
                 .Setup(p => p.SearchCardSet(It.IsNotNull<CardSearchQueryParameter>()))
                 .ReturnsAsync(expectedSearchResult);
 
             var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            var cardSearchService = new CardSearchService(mockQueryService.Object, mockScryService.Object);
+            var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
 
             CardSearchQueryParameter filters = new CardSearchQueryParameter()
             {
@@ -127,7 +129,7 @@ namespace Carpentry.Logic.Tests.UnitTests
                 new ScryfallMagicCard(){ Name = "Card" },
             };
 
-            var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
+            var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
             var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
@@ -135,7 +137,7 @@ namespace Carpentry.Logic.Tests.UnitTests
                 .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(expectedSearchResult);
 
-            var cardSearchService = new CardSearchService(mockQueryService.Object, mockScryService.Object);
+            var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
 
             NameSearchQueryParameter filters = new NameSearchQueryParameter()
             {

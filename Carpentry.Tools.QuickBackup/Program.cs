@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Carpentry.Data.DataContext;
-using Carpentry.Data.LegacyDataContext;
+//using Carpentry.Data.LegacyDataContext;
 using Carpentry.Logic.Implementations;
 using Carpentry.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;

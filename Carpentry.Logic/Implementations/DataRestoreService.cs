@@ -19,7 +19,7 @@ namespace Carpentry.Logic.Implementations
         private readonly ILogger<DataRestoreService> _logger;
         private readonly IDataUpdateService _dataUpdateService;
         private readonly IDataBackupConfig _config;
-        private readonly IDataReferenceService _dataReferenceService;
+        private readonly ICoreDataRepo _coreDataRepo;
         private readonly ICardDataRepo _cardDataRepo;
         private readonly IDeckDataRepo _deckDataRepo;
         private readonly IInventoryDataRepo _inventoryDataRepo;
@@ -27,7 +27,7 @@ namespace Carpentry.Logic.Implementations
         public DataRestoreService(
             ILogger<DataRestoreService> logger,
             IDataUpdateService dataUpdateService,
-            IDataReferenceService dataReferenceService,
+            ICoreDataRepo coreDataRepo,
             IDataBackupConfig config,
             ICardDataRepo cardDataRepo, 
             IDeckDataRepo deckDataRepo,
@@ -36,7 +36,7 @@ namespace Carpentry.Logic.Implementations
         {
             _logger = logger;
             _dataUpdateService = dataUpdateService;
-            _dataReferenceService = dataReferenceService;
+            _coreDataRepo = coreDataRepo;
             _config = config;
             _cardDataRepo = cardDataRepo;
             _deckDataRepo = deckDataRepo;
@@ -102,7 +102,7 @@ namespace Carpentry.Logic.Implementations
                 Name = x.Name,
                 Notes = x.Notes,
 
-                MagicFormatId = _dataReferenceService.GetMagicFormat(x.Format).Result.Id,
+                MagicFormatId = _coreDataRepo.GetMagicFormat(x.Format).Result.Id,
 
                 Id = x.ExportId
             }).ToList();
@@ -204,7 +204,7 @@ namespace Carpentry.Logic.Implementations
 
             _logger.LogWarning("RestoreDb - LoadCardBackups...definitions exist, mapping & saving");
 
-            List<DataReferenceValue<int>> allVariants = await _dataReferenceService.GetAllCardVariantTypes();
+            List<DataReferenceValue<int>> allVariants = await _coreDataRepo.GetAllCardVariantTypes();
 
             var mappedInventoryCards = parseCardsBackups.Select(x => new InventoryCardData
             {

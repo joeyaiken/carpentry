@@ -1,7 +1,9 @@
 ﻿using Carpentry.Data.DataModels;
+using Carpentry.Data.DataModels.QueryResults;
 using Carpentry.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,40 +14,19 @@ namespace Carpentry.Data.Interfaces
     public interface ICardDataRepo
     {
         //Sets
-        Task<List<string>> GetAllCardSetCodes();
         Task<DateTime?> GetCardSetLastUpdated(string setCode); //why isn't this a GetSetByCode ?
         Task<CardSetData> GetCardSetById(int setId);
         Task<CardSetData> GetCardSetByCode(string setCode);
         Task<int> AddOrUpdateCardSet(CardSetData setData); //This probably doesn't actually have to return an ID
+        Task<List<CardSetData>> GetAllCardSets();
+        IQueryable<SetTotalsResult> QuerySetTotals();
 
         //Cards
-        //Task AddOrUpdateCardDefinition(CardDataDto cardDto);
-
         Task AddCardDataBatch(List<CardDataDto> cards);
-
-        
         Task UpdateCardDataBatch(List<CardDataDto> cards);
-
-        //Task<CardData> GetCardById(int multiverseId);
         Task<List<CardData>> GetCardsByName(string cardName);
-        
         Task<CardData> GetCardData(int multiverseId);
         Task<CardData> GetCardData(string name, string code);
-
-
-
         Task RemoveAllCardDefinitionsForSetId(int setId);
-
-        Task<List<CardSetData>> GetAllCardSets();
-
-        Task EnsureDatabaseExists();
-
-
-
-        //Task<CardSet> GetSetByCode(string setCode);
-
-        //
-
-
     }
 }
