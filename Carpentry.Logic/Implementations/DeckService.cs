@@ -666,6 +666,8 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<string> ExportDeckList(int deckId)
         {
+            //I don't know if this can be properly implemented yet
+            //Might not currently be properly tracking card set number
             throw new NotImplementedException();
         }
 

@@ -713,7 +713,7 @@ namespace Carpentry.Logic.Implementations
         /// Gets called by DataRestore service to populate possible sets
         /// </summary>
         /// <returns></returns>
-        private async Task TryUpdateAvailableSets()
+        public async Task TryUpdateAvailableSets()
         {
             //Update scry data, if not updated today
             var auditData = await _scryfallRepo.GetAuditData();

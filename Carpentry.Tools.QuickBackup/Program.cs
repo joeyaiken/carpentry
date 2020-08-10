@@ -21,29 +21,15 @@ namespace Carpentry.Tools.QuickBackup
     {
         static async Task Main(string[] args)
         {
+            //Init & get service
             var serviceProvider = BuildServiceProvider();
-
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
-
             logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
-
+            var appConfig = new BackupToolConfig(Configuration);
             var backupService = serviceProvider.GetService<IDataBackupService>();
-
-            //create a backup
-
-            //copy contents to config directory
-
-
-
-
-            //var appConfig = new BackupToolConfig(Configuration);
-
-            await backupService.BackupCollection(
-                //appConfig.BackupDirectory, 
-                //appConfig.DatabaseLocation, 
-                //appConfig.CardBackupFilename, 
-                //appConfig.PropsBackupFilename
-            );
+            
+            //Call backup service
+            await backupService.BackupCollectionToDirectory(appConfig.BackupDirectory);
 
             logger.LogInformation("Completed successfully");
         }

@@ -41,8 +41,8 @@ namespace Carpentry.Tools.QuickRestore
 
             logger.LogInformation("Updating set definitions");
 
-            //get collection of sets
-            var cardSets = await updateService.GetTrackedSets(true, true);
+            //get collection of sets.
+            await updateService.TryUpdateAvailableSets();
 
             logger.LogInformation("Validating import DTO");
 

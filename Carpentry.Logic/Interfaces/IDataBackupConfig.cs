@@ -10,7 +10,7 @@
 
         //string PropsBackupLocation { get; set; }
 
-        string BackupDirectory { get; set; }
+        //string BackupDirectory { get; set; }
 
         string DeckBackupFilename { get; set; }
         string CardBackupFilename { get; set; }

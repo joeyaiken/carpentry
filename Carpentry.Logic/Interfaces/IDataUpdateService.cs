@@ -32,7 +32,7 @@ namespace Carpentry.Logic.Interfaces
         Task RemoveTrackedSet(int setId);
         Task UpdateTrackedSet(int setId);
 
-
+        Task TryUpdateAvailableSets();
 
     }
 }

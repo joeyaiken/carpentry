@@ -8,9 +8,9 @@ namespace Carpentry.Tools.QuickBackup
         public BackupToolConfig(IConfiguration appConfig)
         {
             //Database
-            string backupSourceDbRoot = appConfig.GetValue<string>("AppSettings:DatabaseFolderPath");
-            string backupSourceDbLocation = appConfig.GetValue<string>("AppSettings:DatabaseFilename");
-            DatabaseLocation = $"{backupSourceDbRoot}{backupSourceDbLocation}";
+            //string backupSourceDbRoot = appConfig.GetValue<string>("AppSettings:DatabaseFolderPath");
+            //string backupSourceDbLocation = appConfig.GetValue<string>("AppSettings:DatabaseFilename");
+            //DatabaseLocation = $"{backupSourceDbRoot}{backupSourceDbLocation}";
 
             //Backups
             BackupDirectory = appConfig.GetValue<string>("AppSettings:BackupFolderPath");
@@ -23,7 +23,7 @@ namespace Carpentry.Tools.QuickBackup
             //PropsBackupLocation = $"{backupFolderPath}{propsBackupFilename}";
         }
         //DB
-        public string DatabaseLocation { get; set; }
+        //public string DatabaseLocation { get; set; }
 
 
         //Backups

@@ -25,7 +25,7 @@ namespace Carpentry.UI.Controllers
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryService inventory)
+        public InventoryController(IInventoryService inventory, IDataBackupService dataBackupService)
         {
             _inventory = inventory;
         }
@@ -280,6 +280,7 @@ namespace Carpentry.UI.Controllers
             {
                 const string contentType = "application/zip";
                 var resultStream = await _inventory.ExportInventoryBackup();
+                //var resultStream = await _dataBackupService.GenerateZipBackup();
                 return File(resultStream, contentType);
             }
             catch (Exception ex)

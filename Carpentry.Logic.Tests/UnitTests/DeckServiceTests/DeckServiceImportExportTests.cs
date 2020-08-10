@@ -22,19 +22,77 @@ namespace Carpentry.Logic.Tests.UnitTests.DeckServiceTests
         [TestMethod]
         public async Task DeckService_ValidateDeckImport_Test()
         {
-            Assert.Fail();
+            //Arrange
+ 
+            var mockRepo = new Mock<IDeckDataRepo>(MockBehavior.Strict);
+
+            var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
+
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
+
+            var payload = new DeckImportDto() { };
+
+            //Act
+            var result = await deckService.ValidateDeckImport(payload);
+
+            //Assert
+            Assert.IsNotNull(result);
+
+            Assert.Fail("Must decide how to validate the response object");
         }
         //Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto);
         [TestMethod]
         public async Task DeckService_AddValidatedDeckImport_Test()
         {
-            Assert.Fail();
+            //Arrange
+
+            var mockRepo = new Mock<IDeckDataRepo>(MockBehavior.Strict);
+
+            var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
+
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
+
+            var payload = new ValidatedDeckImportDto() { };
+
+            //Act
+            await deckService.AddValidatedDeckImport(payload);
+
+            //Assert
+            //Returns void, nothing to assert
         }
         //Task<string> ExportDeckList(int deckId);
         [TestMethod]
         public async Task DeckService_ExportDeckList_Test()
         {
-            Assert.Fail();
+            //Arrange
+
+            var mockRepo = new Mock<IDeckDataRepo>(MockBehavior.Strict);
+
+            var mockLogger = new Mock<ILogger<DeckService>>(MockBehavior.Loose);
+
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+
+            var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+
+            var deckService = new DeckService(mockRepo.Object, mockInventoryService.Object, mockLogger.Object, mockCoreRepo.Object);
+
+            int deckIdToExport = 1;
+
+            //Act
+            var result = await deckService.ExportDeckList(deckIdToExport);
+
+            //Assert
+            Assert.IsNotNull(result);
+
+            Assert.Fail("Must decide how to validate the response object");
         }
     }
 }
