@@ -8,12 +8,16 @@ namespace Carpentry.Service.Tests.UnitTests
     [TestClass]
     public class CarpentryCardSerachServiceTests
     {
-
         [TestMethod]
-        public void TestsAreImplemented()
+        public void CarpentryCardSerachService_SearchInventory_Test()
         {
             Assert.Fail();
         }
-
+        
+        [TestMethod]
+        public void CarpentryCardSerachService_SearchWeb_Test()
+        {
+            Assert.Fail();
+        }
     }
 }
