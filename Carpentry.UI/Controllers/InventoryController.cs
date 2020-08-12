@@ -25,7 +25,7 @@ namespace Carpentry.UI.Controllers
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(IInventoryService inventory, IDataBackupService dataBackupService)
+        public InventoryController(IInventoryService inventory)
         {
             _inventory = inventory;
         }

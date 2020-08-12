@@ -17,12 +17,14 @@ namespace Carpentry.Logic.Implementations
         private readonly ICoreDataRepo _coreDataRepo;
         private readonly ICardDataRepo _cardDataRepo;
         private readonly IDataBackupService _dataBackupService;
+        ICardImportService _cardImportService;
         public InventoryService(
             IInventoryDataRepo inventoryRepo,
             IDataUpdateService dataUpdateService,
             ICoreDataRepo coreDataRepo,
             ICardDataRepo cardDataRepo,
-            IDataBackupService dataBackupService
+            IDataBackupService dataBackupService,
+            ICardImportService cardImportService
         )
         {
             _inventoryRepo = inventoryRepo;
@@ -30,6 +32,7 @@ namespace Carpentry.Logic.Implementations
             _coreDataRepo = coreDataRepo;
             _cardDataRepo = cardDataRepo;
             _dataBackupService = dataBackupService;
+            _cardImportService = cardImportService;
         }
 
         #region private methods
@@ -313,23 +316,13 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto)
         {
-            //ignoring the payload type for now
+            var validatedPayload = await _cardImportService.ValidateCarpentryImport(cardImportDto);
 
-            var importDirectory = cardImportDto.ImportPayload;
-
-
-
-
-
-
-
-
-
-            throw new NotImplementedException();
+            return validatedPayload;
         }
         public async Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto)
         {
-            throw new NotImplementedException();
+            await _cardImportService.AddValidatedCarpentryImport(dto);
         }
         public async Task<byte[]> ExportInventoryBackup()
         {

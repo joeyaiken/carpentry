@@ -54,7 +54,7 @@ namespace Carpentry.Logic.Implementations
             _inventoryService = inventoryService;
         }
 
-        public async Task<ValidatedDeckImportDto> ValidateArenaImport(CardImportDto payload)
+        public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload)
         {
             //Get paload split into lines
             string[] importRows = payload.ImportPayload.Split('\n');
@@ -112,7 +112,7 @@ namespace Carpentry.Logic.Implementations
 
             return result;
         }
-        public async Task AddValidatedArenaImport(ValidatedDeckImportDto validatedPayload)
+        public async Task AddValidatedDeckImport(ValidatedDeckImportDto validatedPayload)
         {
             //If deck == null, just adding inventory cards
             if (validatedPayload.DeckProps == null)
@@ -161,6 +161,26 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto payload)
         {
+            var result = new ValidatedCarpentryImportDto()
+            {
+                BackupDirectory = payload.ImportPayload,
+            };
+
+            //ignoring the payload type for now
+
+            //verify the directory exists
+
+            //Extract the Backup Props file
+
+            //see what sets the Backup Props are still untracked
+
+            //
+
+
+
+
+
+
             throw new NotImplementedException();
         }
 

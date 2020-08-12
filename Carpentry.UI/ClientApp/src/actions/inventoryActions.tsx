@@ -95,6 +95,23 @@ export const inventoryAddComplete = (): ReduxAction => ({
     type: INVENTORY_ADD_COMPLETE
 });
 
+export const requestInventoryExport = (): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return getInventoryExport(dispatch, getState());
+    }
+}
+
+function getInventoryExport(dispatch: Dispatch, state: AppState): any {
+    //TODO - add "isLoading" block
+    api.Inventory.exportInventoryBackup().then((blob) => {
+        const exportFilename = "CarpentryBackup.zip"
+
+
+    });
+
+}
+
+
 // /**
 //  * 
 //  * Inventory api stuff

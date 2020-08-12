@@ -171,7 +171,7 @@ namespace Carpentry.UI.Controllers
         #region Import
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<ValidatedDeckImportDto>> ValidateDeckImport(DeckImportDto dto)
+        public async Task<ActionResult<ValidatedDeckImportDto>> ValidateDeckImport(CardImportDto dto)
         {
             try
             {

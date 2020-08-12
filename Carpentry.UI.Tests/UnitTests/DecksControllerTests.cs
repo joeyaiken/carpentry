@@ -275,7 +275,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_ValidateDeckImport_ReturnsAsyncOK_Test()
         {
             //arrange   
-            DeckImportDto importPayload = new DeckImportDto()
+            CardImportDto importPayload = new CardImportDto()
             {
 
             };
@@ -288,7 +288,7 @@ namespace Carpentry.UI.Tests.UnitTests
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
 
             mockDeckService
-                .Setup(p => p.ValidateDeckImport(It.IsAny<DeckImportDto>()))
+                .Setup(p => p.ValidateDeckImport(It.IsAny<CardImportDto>()))
                 .ReturnsAsync(expectedResult);
 
             var decksController = new Controllers.DecksController(mockDeckService.Object);

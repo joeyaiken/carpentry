@@ -6,12 +6,12 @@ namespace Carpentry.Logic.Interfaces
     public interface ICardImportService
     {
         //public async ValidatedCardImportDto ValidateImport([Raw]CardImportDto)
-        Task<ValidatedDeckImportDto> ValidateArenaImport(CardImportDto payload);
+        Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload);
 
         Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto payload);
 
         //public async void AddValidatedImport(ValidatedCardImportDto)
-        Task AddValidatedArenaImport(ValidatedDeckImportDto validatedPayload);
+        Task AddValidatedDeckImport(ValidatedDeckImportDto validatedPayload);
 
         Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto payload);
 

@@ -204,6 +204,11 @@ export const api = {
             return result;
         },
 
+        async exportInventoryBackup(): Promise<any> {
+            const endpoint = `api/Inventory/ExportInventoryBackup`;
+            const result = await Get(endpoint);
+            return result;
+        }
     },
 }
 
@@ -219,6 +224,55 @@ async function Get(url: string): Promise<any> {
         return result;
     }
     return;
+
+    // if (response.status === 202) {
+    //     return;
+    // }
+    // const result = await response.json();
+    // return result;
+}
+
+async function GetFile(url: string): Promise<any> {
+    // console.log(`get fetching URL ${url}`)
+    const response = await fetch(url);
+    // console.log('updating tracked sets ping 7?');
+    // console.log(response);
+
+    // const contentType = response.headers.get("content-type");
+    // if(contentType && contentType.indexOf("application/json") !== -1){
+    //     const result = await response.json();
+    //     return result;
+    // }
+
+    if(response.status != 200){
+        //error
+        return;
+    } else {
+        return response.blob();
+    }
+
+
+    /*
+    fetch('api/zip')
+        .then((response) => {
+            if (response.status != 200) {
+                let errorMessage = "Error processing the request... (" + response.status + " " + response.statusText + ")";
+                throw new Error(errorMessage);
+            } else {
+                return response.blob();
+            }
+        })
+        .then((blob: any) => {
+            // !!! see next code block !!!
+            downloadData('geojsons.zip', blob);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    
+    */
+
+
 
     // if (response.status === 202) {
     //     return;

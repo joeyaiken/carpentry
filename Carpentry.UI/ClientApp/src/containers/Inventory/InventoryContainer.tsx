@@ -1,7 +1,7 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
 import { AppState } from '../../reducers'
-import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem, makeStyles, Button } from '@material-ui/core';
+import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem, makeStyles, Button, IconButton } from '@material-ui/core';
 import CardFilterBar from './CardFilterBar';
 import InventoryCardGrid from './InventoryCardGrid';
 import LoadingBox from '../../components/LoadingBox';
@@ -19,6 +19,7 @@ import {
 import InventoryFilterBar from './InventoryFilterBar';
 import { Link } from 'react-router-dom';
 import { appStyles } from '../../styles/appStyles';
+import { Publish } from '@material-ui/icons';
 
 
 // import SectionLayout from '../components/SectionLayout';
@@ -55,6 +56,7 @@ class InventoryContainer extends React.Component<InventoryProps>{
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
         this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
+        this.handleExportClick = this.handleExportClick.bind(this);
     }
 
     componentDidMount() {
@@ -83,6 +85,10 @@ class InventoryContainer extends React.Component<InventoryProps>{
         // this.props.dispatch(requestInventoryItems());
     }
 
+    handleExportClick() {
+
+    }
+
     render() {
         // const {  flexCol } = appStyles();
         return (
@@ -99,7 +105,7 @@ class InventoryContainer extends React.Component<InventoryProps>{
                             <Link to={'/inventory/addCards/'}>
                                 <Button>Add Cards</Button>
                             </Link>
-                            
+                            <IconButton size="medium" onClick={this.handleExportClick}><Publish /></IconButton>
                             {/* {
                                 props.tabNames &&
                                 <Tabs value={props.activeTab} onChange={(e, value) => {props.onTabClick && props.onTabClick(value)}} >

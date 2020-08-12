@@ -152,9 +152,9 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
 
         console.log('serch by set')
         console.log(param);
-        api.cardSearch.searchSet(param).then((results) => {
-            dispatch(apiDataReceived(_localApiScope, results));
-        })
+        // api.cardSearch.searchSet(param).then((results) => {
+        //     dispatch(apiDataReceived(_localApiScope, results));
+        // })
     }
 }
 

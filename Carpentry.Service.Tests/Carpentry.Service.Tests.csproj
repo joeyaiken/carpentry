@@ -7,10 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="UnitTests\CardSearchControllerServiceTests.cs" />
-    <Compile Remove="UnitTests\CoreControllerServiceTests.cs" />
-    <Compile Remove="UnitTests\DeckControllerServiceTests.cs" />
-    <Compile Remove="UnitTests\InventoryControllerServiceTests.cs" />
+    <Compile Remove="OldUnitTests\CardSearchControllerServiceTests.cs" />
+    <Compile Remove="OldUnitTests\CollectionBuilderTests.cs" />
+    <Compile Remove="OldUnitTests\CoreControllerServiceTests.cs" />
+    <Compile Remove="OldUnitTests\DataUpdateServiceTests.cs" />
+    <Compile Remove="OldUnitTests\DeckControllerServiceTests.cs" />
+    <Compile Remove="OldUnitTests\DeckServiceDeckCardTests.cs" />
+    <Compile Remove="OldUnitTests\DeckServiceDeckTests.cs" />
+    <Compile Remove="OldUnitTests\DeckServiceImportExportTests.cs" />
+    <Compile Remove="OldUnitTests\DeckServiceSearchTests.cs" />
+    <Compile Remove="OldUnitTests\FilterServiceTests.cs" />
+    <Compile Remove="OldUnitTests\ImportExportTests.cs" />
+    <Compile Remove="OldUnitTests\InventoryCardTests.cs" />
+    <Compile Remove="OldUnitTests\InventoryControllerServiceTests.cs" />
+    <Compile Remove="OldUnitTests\InventorySearchTests.cs" />
+    <Compile Remove="OldUnitTests\TrimmingTipsTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UnitTests\" />
+    <Folder Include="OldUnitTests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carpentry.Service\Carpentry.Service.csproj" />
   </ItemGroup>
 
 </Project>

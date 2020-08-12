@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Interfaces
+namespace Carpentry.Service.Interfaces
 {
-    public interface IDeckService
+    public interface ICarpentryDeckService
     {
         Task<int> AddDeck(DeckPropertiesDto props);
         Task UpdateDeck(DeckPropertiesDto props);
