@@ -1,12 +1,9 @@
-﻿using Carpentry.Data.Interfaces;
-using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Service.Implementations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Service.Tests.UnitTests
@@ -433,8 +430,9 @@ namespace Carpentry.Service.Tests.UnitTests
         [TestMethod]
         public async Task InventoryService_GetCollectionBuilderSuggestions_ThrowsNotImplemented_Test()
         {
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
@@ -450,6 +448,9 @@ namespace Carpentry.Service.Tests.UnitTests
                 .ReturnsAsync(mockSuggestions);
 
             var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
                 mockTrimmingTipsService.Object
                 );
@@ -466,8 +467,9 @@ namespace Carpentry.Service.Tests.UnitTests
         [TestMethod]
         public async Task InventoryService_HideCollectionBuilderSuggestion_ThrowsNotImplemented_Test()
         {
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
@@ -476,6 +478,9 @@ namespace Carpentry.Service.Tests.UnitTests
                 .Returns(Task.CompletedTask);
 
             var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
                 mockTrimmingTipsService.Object
                 );
@@ -496,9 +501,9 @@ namespace Carpentry.Service.Tests.UnitTests
         [TestMethod]
         public async Task InventoryService_GetTrimmingTips_Test()
         {
-            
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-            
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
@@ -514,6 +519,9 @@ namespace Carpentry.Service.Tests.UnitTests
                 .ReturnsAsync(mockTrimmingTips);
 
             var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
                 mockTrimmingTipsService.Object
                 );
@@ -530,8 +538,9 @@ namespace Carpentry.Service.Tests.UnitTests
         [TestMethod]
         public async Task InventoryService_HideTrimmingTip_Test()
         {
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
@@ -540,6 +549,9 @@ namespace Carpentry.Service.Tests.UnitTests
                 .Returns(Task.CompletedTask);
 
             var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
                 mockTrimmingTipsService.Object
                 );

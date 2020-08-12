@@ -16,23 +16,23 @@ namespace Carpentry.Logic.Implementations
         private readonly IDataUpdateService _dataUpdateService;
         private readonly ICoreDataRepo _coreDataRepo;
         private readonly ICardDataRepo _cardDataRepo;
-        private readonly IDataBackupService _dataBackupService;
-        ICardImportService _cardImportService;
+        //private readonly IDataBackupService _dataBackupService;
+        //ICardImportService _cardImportService;
         public InventoryService(
             IInventoryDataRepo inventoryRepo,
             IDataUpdateService dataUpdateService,
             ICoreDataRepo coreDataRepo,
-            ICardDataRepo cardDataRepo,
-            IDataBackupService dataBackupService,
-            ICardImportService cardImportService
+            ICardDataRepo cardDataRepo
+            //IDataBackupService dataBackupService,
+            //ICardImportService cardImportService
         )
         {
             _inventoryRepo = inventoryRepo;
             _dataUpdateService = dataUpdateService;
             _coreDataRepo = coreDataRepo;
             _cardDataRepo = cardDataRepo;
-            _dataBackupService = dataBackupService;
-            _cardImportService = cardImportService;
+            //_dataBackupService = dataBackupService;
+            //_cardImportService = cardImportService;
         }
 
         #region private methods
@@ -286,50 +286,5 @@ namespace Carpentry.Logic.Implementations
 
         #endregion Search
 
-        #region Collection Builder
-
-        public async Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions()
-        {
-            throw new NotImplementedException();
-        }
-        public async Task HideCollectionBuilderSuggestion(InventoryOverviewDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion Collection Builder
-
-        #region Trimming Tips
-
-        public async Task<List<InventoryOverviewDto>> GetTrimmingTips()
-        {
-            throw new NotImplementedException();
-        }
-        public async Task HideTrimmingTip(InventoryOverviewDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion Trimming Tips
-
-        #region Import/Export
-
-        public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto)
-        {
-            var validatedPayload = await _cardImportService.ValidateCarpentryImport(cardImportDto);
-
-            return validatedPayload;
-        }
-        public async Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto)
-        {
-            await _cardImportService.AddValidatedCarpentryImport(dto);
-        }
-        public async Task<byte[]> ExportInventoryBackup()
-        {
-            var result = await _dataBackupService.GenerateZipBackup();
-            return result;
-        }
-
-        #endregion Import/Export
     }
 }

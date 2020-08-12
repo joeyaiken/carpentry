@@ -31,21 +31,21 @@ namespace Carpentry.Logic.Implementations
 
         public ICoreDataRepo _coreDataRepo;
 
-        public ICardImportService _cardImportService;
+        //public ICardImportService _cardImportService;
 
         public DeckService(
             IDeckDataRepo deckRepo,
             IInventoryService inventoryService, 
             ILogger<DeckService> logger,
-            ICoreDataRepo coreDataRepo,
-            ICardImportService cardImportService
+            ICoreDataRepo coreDataRepo
+            //ICardImportService cardImportService
             )
         {
             _deckRepo = deckRepo;
             _inventoryService = inventoryService;
             _logger = logger;
             _coreDataRepo = coreDataRepo;
-            _cardImportService = cardImportService;
+            //_cardImportService = cardImportService;
         }
 
         #region private methods
@@ -658,23 +658,23 @@ namespace Carpentry.Logic.Implementations
 
         #region Import / Export
 
-        public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto)
-        {
-            var validatedResult = await _cardImportService.ValidateDeckImport(dto);
+        //public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto)
+        //{
+        //    var validatedResult = await _cardImportService.ValidateDeckImport(dto);
 
-            return validatedResult;
-        }
+        //    return validatedResult;
+        //}
 
-        public async Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto)
-        {
-            await _cardImportService.AddValidatedDeckImport(validatedDto);
-        }
+        //public async Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto)
+        //{
+        //    await _cardImportService.AddValidatedDeckImport(validatedDto);
+        //}
 
-        public async Task<string> ExportDeckList(int deckId)
-        {
-            //This can't be implemented until I add Set Number to CardData, and properly track that in the DB
-            throw new NotImplementedException();
-        }
+        //public async Task<string> ExportDeckList(int deckId)
+        //{
+        //    //This can't be implemented until I add Set Number to CardData, and properly track that in the DB
+        //    throw new NotImplementedException();
+        //}
 
         #endregion Import / Export
 

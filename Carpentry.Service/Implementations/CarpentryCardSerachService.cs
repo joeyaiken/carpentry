@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Service.Implementations
 {
-    public class CardSearchService : ICarpentryCardSearchService
+    public class CarpentryCardSearchService : ICarpentryCardSearchService
     {
         //Should have no access to data context classes, only repo classes
         //private readonly ICardDataRepo _cardRepo;
@@ -18,7 +18,7 @@ namespace Carpentry.Service.Implementations
         ////private readonly ILogger<CarpentryService> _logger;
         //private readonly IInventoryDataRepo _inventoryRepo;
 
-        public CardSearchService(
+        public CarpentryCardSearchService(
             //IInventoryDataRepo inventoryRepo,
             //IScryfallService scryService
 

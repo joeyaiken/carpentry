@@ -1,13 +1,9 @@
-﻿using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Models;
-//using Carpentry.Service.Interfaces;
-//using Carpentry.Service.Models;
+﻿using Carpentry.Logic.Models;
+using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Carpentry.UI.Tests.UnitTests
@@ -19,10 +15,9 @@ namespace Carpentry.UI.Tests.UnitTests
         public void Core_GetStatus_ReturnsOK_Test()
         {
             //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICarpentryCoreService>(MockBehavior.Strict);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockUpdateService.Object);
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
             var response = coreController.GetStatus();
@@ -39,8 +34,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_GetFilterValues_ReturnsOK_Test()
         {
             //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICarpentryCoreService>(MockBehavior.Strict);
 
             var expectedResult = new AppFiltersDto()
             {
@@ -52,11 +46,11 @@ namespace Carpentry.UI.Tests.UnitTests
                 Types = new List<FilterOption>(),
             };
 
-            mockFilterService
+            mockCoreService
                 .Setup(p => p.GetAppFilterValues())
                 .ReturnsAsync(expectedResult);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockUpdateService.Object);
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
             var response = await coreController.GetFilterValues();
@@ -80,8 +74,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_GetTrackedSets_ReturnsOK_Test()
         {
             //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICarpentryCoreService>(MockBehavior.Strict);
 
             List<SetDetailDto> expectedResult = new List<SetDetailDto>()
             {
@@ -90,11 +83,11 @@ namespace Carpentry.UI.Tests.UnitTests
                 new SetDetailDto(),
             };
 
-            mockUpdateService.
+            mockCoreService.
                 Setup(p => p.GetTrackedSets(It.IsAny<bool>(), It.IsAny<bool>()))
                 .ReturnsAsync(expectedResult);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockUpdateService.Object);
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
             var response = await coreController.GetTrackedSets(false, false);
@@ -112,16 +105,15 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_AddTrackedSet_ReturnsOK_Test()
         {
             //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICarpentryCoreService>(MockBehavior.Strict);
 
             int setIdToTrack = 1;
 
-            mockUpdateService.
+            mockCoreService.
                 Setup(p => p.AddTrackedSet(It.IsAny<int>()))
                 .Returns(Task.CompletedTask);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockUpdateService.Object);
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
             var response = await coreController.AddTrackedSet(setIdToTrack);
@@ -134,16 +126,15 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_UpdateTrackedSet_ReturnsOK_Test()
         {
             //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICarpentryCoreService>(MockBehavior.Strict);
 
             int setIdToTrack = 1;
 
-            mockUpdateService.
+            mockCoreService.
                 Setup(p => p.UpdateTrackedSet(It.IsAny<int>()))
                 .Returns(Task.CompletedTask);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockUpdateService.Object);
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
             var response = await coreController.UpdateTrackedSet(setIdToTrack);
@@ -156,16 +147,15 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Core_RemoveTrackedSet_ReturnsOK_Test()
         {
             //assemble
-            var mockFilterService = new Mock<IFilterService>(MockBehavior.Strict);
-            var mockUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var mockCoreService = new Mock<ICarpentryCoreService>(MockBehavior.Strict);
 
             int setIdToTrack = 1;
 
-            mockUpdateService.
+            mockCoreService.
                 Setup(p => p.RemoveTrackedSet(It.IsAny<int>()))
                 .Returns(Task.CompletedTask);
 
-            var coreController = new Controllers.CoreController(mockFilterService.Object, mockUpdateService.Object);
+            var coreController = new Controllers.CoreController(mockCoreService.Object);
 
             //act
             var response = await coreController.RemoveTrackedSet(setIdToTrack);

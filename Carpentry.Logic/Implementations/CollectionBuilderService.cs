@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations
 {
-    class CollectionBuilderService : ICollectionBuilderService
+    public class CollectionBuilderService : ICollectionBuilderService
     {
         public async Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions()
         {

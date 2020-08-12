@@ -1,4 +1,5 @@
-﻿using Carpentry.Logic.Models;
+﻿using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Carpentry.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,22 +24,24 @@ namespace Carpentry.Service.Implementations
         //private readonly IInventoryService _inventoryService;
 
         //public ICoreDataRepo _coreDataRepo;
-
-        //public ICardImportService _cardImportService;
+        private readonly IDeckService _deckService;
+        private readonly ICardImportService _cardImportService;
 
         public CarpentryDeckService(
+            IDeckService deckService,
             //IDeckDataRepo deckRepo,
             //IInventoryService inventoryService,
             //ILogger<DeckService> logger,
             //ICoreDataRepo coreDataRepo,
-            //ICardImportService cardImportService
+            ICardImportService cardImportService
             )
         {
             //_deckRepo = deckRepo;
             //_inventoryService = inventoryService;
             //_logger = logger;
             //_coreDataRepo = coreDataRepo;
-            //_cardImportService = cardImportService;
+            _deckService = deckService;
+            _cardImportService = cardImportService;
         }
 
         #region Public methods
@@ -117,12 +120,14 @@ namespace Carpentry.Service.Implementations
 
         public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto)
         {
-            throw new NotImplementedException();
+            var validatedResult = await _cardImportService.ValidateDeckImport(dto);
+
+            return validatedResult;
         }
 
         public async Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto)
         {
-            throw new NotImplementedException();
+            await _cardImportService.AddValidatedDeckImport(validatedDto);
         }
 
         public async Task<string> ExportDeckList(int deckId)
@@ -130,6 +135,7 @@ namespace Carpentry.Service.Implementations
             //This can't be implemented until I add Set Number to CardData, and properly track that in the DB
             throw new NotImplementedException();
         }
+
 
         #endregion Import / Export
 

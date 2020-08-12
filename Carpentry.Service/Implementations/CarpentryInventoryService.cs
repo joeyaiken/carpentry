@@ -10,33 +10,23 @@ namespace Carpentry.Service.Implementations
 {
     public class CarpentryInventoryService : ICarpentryInventoryService
     {
-        //private readonly IInventoryDataRepo _inventoryRepo;
-        //private readonly IDataUpdateService _dataUpdateService;
-        //private readonly ICoreDataRepo _coreDataRepo;
-        //private readonly ICardDataRepo _cardDataRepo;
-        //private readonly IDataBackupService _dataBackupService;
-        //ICardImportService _cardImportService;
-
-        ICollectionBuilderService _collectionBuilderService;
-        ITrimmingTipsService _trimmingTipsService;
+        private readonly IInventoryService _inventoryService;
+        private readonly IDataBackupService _dataBackupService;
+        private readonly ICardImportService _cardImportService;
+        private readonly ICollectionBuilderService _collectionBuilderService;
+        private readonly ITrimmingTipsService _trimmingTipsService;
 
         public CarpentryInventoryService(
-            //IInventoryDataRepo inventoryRepo,
-            //IDataUpdateService dataUpdateService,
-            //ICoreDataRepo coreDataRepo,
-            //ICardDataRepo cardDataRepo,
-            //IDataBackupService dataBackupService,
-            //ICardImportService cardImportService
+            IInventoryService inventoryService,
+            IDataBackupService dataBackupService,
+            ICardImportService cardImportService,
             ICollectionBuilderService collectionBuilderService,
             ITrimmingTipsService trimmingTipsService
         )
         {
-            //_inventoryRepo = inventoryRepo;
-            //_dataUpdateService = dataUpdateService;
-            //_coreDataRepo = coreDataRepo;
-            //_cardDataRepo = cardDataRepo;
-            //_dataBackupService = dataBackupService;
-            //_cardImportService = cardImportService;
+            _inventoryService = inventoryService;
+            _dataBackupService = dataBackupService;
+            _cardImportService = cardImportService;
             _collectionBuilderService = collectionBuilderService;
             _trimmingTipsService = trimmingTipsService;
         }
@@ -45,32 +35,33 @@ namespace Carpentry.Service.Implementations
 
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
-            throw new NotImplementedException();
+            var response = await _inventoryService.AddInventoryCard(dto);
+            return response;
         }
 
         public async Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards)
         {
-            throw new NotImplementedException();
+            await _inventoryService.AddInventoryCardBatch(cards);
         }
 
         public async Task UpdateInventoryCard(InventoryCardDto dto)
         {
-            throw new NotImplementedException();
+            await _inventoryService.UpdateInventoryCard(dto);
         }
 
         public async Task UpdateInventoryCardBatch(IEnumerable<InventoryCardDto> batch)
         {
-            throw new NotImplementedException();
+            await _inventoryService.UpdateInventoryCardBatch(batch);
         }
 
         public async Task DeleteInventoryCard(int id)
         {
-            throw new NotImplementedException();
+            await _inventoryService.DeleteInventoryCard(id);
         }
 
         public async Task DeleteInventoryCardBatch(IEnumerable<int> batch)
         {
-            throw new NotImplementedException();
+            await _inventoryService.DeleteInventoryCardBatch(batch);
         }
 
         #endregion Inventory Card add/update/delete
@@ -79,13 +70,14 @@ namespace Carpentry.Service.Implementations
 
         public async Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
         {
-            throw new NotImplementedException();
+            var result = await _inventoryService.GetInventoryOverviews(param);
+            return result;
         }
 
         public async Task<InventoryDetailDto> GetInventoryDetail(int cardId)
         {
-
-            throw new NotImplementedException();
+            var result = await _inventoryService.GetInventoryDetail(cardId);
+            return result;
         }
 
         #endregion Search
@@ -125,15 +117,20 @@ namespace Carpentry.Service.Implementations
 
         public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto)
         {
-            throw new NotImplementedException();
+            var validatedPayload = await _cardImportService.ValidateCarpentryImport(cardImportDto);
+
+            return validatedPayload;
         }
+
         public async Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto)
         {
-            throw new NotImplementedException();
+            await _cardImportService.AddValidatedCarpentryImport(dto);
         }
+
         public async Task<byte[]> ExportInventoryBackup()
         {
-            throw new NotImplementedException();
+            var result = await _dataBackupService.GenerateZipBackup();
+            return result;
         }
 
         #endregion Import/Export

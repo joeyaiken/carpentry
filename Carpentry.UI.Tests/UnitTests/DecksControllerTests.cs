@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
-using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Service.Interfaces;
 
 namespace Carpentry.UI.Tests.UnitTests
 {
@@ -22,7 +22,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public void Decks_GetStatus_ReturnsAsyncOK_Test()
         {
             //Arrange            
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
             var decksController = new Controllers.DecksController(mockDeckService.Object);
 
             //act
@@ -44,7 +44,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_AddDeck_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             int expectedNewId = 1;
 
@@ -73,7 +73,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_UpdateDeck_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             mockDeckService
                 .Setup(p => p.UpdateDeck(It.IsNotNull<DeckPropertiesDto>()))
@@ -100,7 +100,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_DeleteDeck_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             int idToSubmit = 1;
 
@@ -125,7 +125,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_AddDeckCard_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             mockDeckService
                 .Setup(p => p.AddDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id == 0)))
@@ -151,7 +151,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_UpdateDeckCard_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             mockDeckService
                 .Setup(p => p.UpdateDeckCard(It.Is<DeckCardDto>(c => c != null && c.Id > 0)))
@@ -178,7 +178,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_RemoveDeckCard_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             int idToSubmit = 3;
 
@@ -203,7 +203,7 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task Decks_GetDeckOverviews_ReturnsAsyncOK_Test()
         {
             //arrange
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             IEnumerable<DeckOverviewDto> expectedSearchResults = new List<DeckOverviewDto>()
             {
@@ -239,7 +239,7 @@ namespace Carpentry.UI.Tests.UnitTests
             //arrange
             int deckIdToRequest = 1;
 
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             mockDeckService
                 .Setup(p => p.GetDeckDetail(It.Is<int>(i => i == deckIdToRequest)))
@@ -285,7 +285,7 @@ namespace Carpentry.UI.Tests.UnitTests
 
             };
 
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             mockDeckService
                 .Setup(p => p.ValidateDeckImport(It.IsAny<CardImportDto>()))
@@ -313,7 +313,7 @@ namespace Carpentry.UI.Tests.UnitTests
 
             };
 
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             mockDeckService
                 .Setup(p => p.AddValidatedDeckImport(It.IsAny<ValidatedDeckImportDto>()))
@@ -338,7 +338,7 @@ namespace Carpentry.UI.Tests.UnitTests
             //arrange
             int deckIdToRequest = 1;
 
-            var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
+            var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
             string expectedResult = "LETS PRETEND THIS IS LEGIT";
 

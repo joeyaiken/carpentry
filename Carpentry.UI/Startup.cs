@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Carpentry.Data.DataContext;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Implementations;
+using Carpentry.Service.Interfaces;
+using Carpentry.Service.Implementations;
 
 namespace Carpentry.UI
 {
@@ -40,17 +42,16 @@ namespace Carpentry.UI
             //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
             services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
 
-
             services.AddSingleton<IDataBackupConfig, CarpentryAppConfig>();
 
-            ////DB repos
+            //DB repos
             services.AddScoped<ICardDataRepo, CardDataRepo>();
             services.AddScoped<IDeckDataRepo, DeckDataRepo>();
             services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
             services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
             services.AddScoped<ICoreDataRepo, CoreDataRepo>();
 
-            //Logic services6
+            //Logic services
             services.AddScoped<ICardSearchService, CardSearchService>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
@@ -63,7 +64,17 @@ namespace Carpentry.UI
             services.AddScoped<IScryfallService, ScryfallService>();
             services.AddHttpClient<IScryfallService, ScryfallService>();
 
+            services.AddScoped<ICollectionBuilderService, CollectionBuilderService>();
+            services.AddScoped<ITrimmingTipsService, TrimmingTipsService>();
+            
 
+
+
+            //Service-layer
+            services.AddScoped<ICarpentryCardSearchService, CarpentryCardSearchService>();
+            services.AddScoped<ICarpentryCoreService, CarpentryCoreService>();
+            services.AddScoped<ICarpentryDeckService, CarpentryDeckService>();
+            services.AddScoped<ICarpentryInventoryService, CarpentryInventoryService>();
 
             services.AddControllersWithViews();
             // In production, the React files will be served from this directory

@@ -22,16 +22,16 @@ namespace Carpentry.Logic.Interfaces
         Task<InventoryDetailDto> GetInventoryDetail(int cardId);
 
         //Collection Builder
-        Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions();
-        Task HideCollectionBuilderSuggestion(InventoryOverviewDto dto);
+        //Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions();
+        //Task HideCollectionBuilderSuggestion(InventoryOverviewDto dto);
 
         //Trimming Tips
-        Task<List<InventoryOverviewDto>> GetTrimmingTips();
-        Task HideTrimmingTip(InventoryOverviewDto dto);
+        //Task<List<InventoryOverviewDto>> GetTrimmingTips();
+        //Task HideTrimmingTip(InventoryOverviewDto dto);
 
         //Import/Export
-        Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto);
-        Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto);
-        Task<byte[]> ExportInventoryBackup();
+        //Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto);
+        //Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto);
+        //Task<byte[]> ExportInventoryBackup();
     }
 }

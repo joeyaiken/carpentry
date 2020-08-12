@@ -23,8 +23,8 @@ namespace Carpentry.Logic.Interfaces
         Task<DeckDetailDto> GetDeckDetail(int deckId);
 
 
-        Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto);
-        Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto);
-        Task<string> ExportDeckList(int deckId);
+        //Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto);
+        //Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto);
+        //Task<string> ExportDeckList(int deckId);
     }
 }

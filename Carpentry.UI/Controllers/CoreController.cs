@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Service.Interfaces;
 
 namespace Carpentry.UI.Controllers
 {
@@ -20,13 +21,11 @@ namespace Carpentry.UI.Controllers
             return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
         }
 
-        private readonly IFilterService _filterService;
-        private readonly IDataUpdateService _updateService;
+        private readonly ICarpentryCoreService _coreService;
 
-        public CoreController(IFilterService filterService, IDataUpdateService updateService)
+        public CoreController(ICarpentryCoreService coreService)
         {
-            _filterService = filterService;
-            _updateService = updateService;
+            _coreService = coreService;
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                AppFiltersDto result = await _filterService.GetAppFilterValues();
+                AppFiltersDto result = await _coreService.GetAppFilterValues();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -69,7 +68,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                var result = await _updateService.GetTrackedSets(showUntracked, update);
+                var result = await _coreService.GetTrackedSets(showUntracked, update);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -84,7 +83,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                await _updateService.AddTrackedSet(setId);
+                await _coreService.AddTrackedSet(setId);
                 return Ok();
             }
             catch (Exception ex)
@@ -99,7 +98,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                await _updateService.UpdateTrackedSet(setId);
+                await _coreService.UpdateTrackedSet(setId);
                 return Ok();
             }
             catch (Exception ex)
@@ -114,7 +113,7 @@ namespace Carpentry.UI.Controllers
         {
             try
             {
-                await _updateService.RemoveTrackedSet(setId);
+                await _coreService.RemoveTrackedSet(setId);
                 return Ok();
             }
             catch (Exception ex)
