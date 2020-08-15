@@ -17,9 +17,9 @@ namespace Carpentry.Data.DataModels
 
         public DateTime? LastUpdated { get; set; }
 
-        public string CardData { get; set; }
+        //public string CardData { get; set; }
 
-        public bool DataIsParsed { get; set; }
+        //public bool DataIsParsed { get; set; }
         
         public string SetType { get; set; }
         
@@ -30,5 +30,12 @@ namespace Carpentry.Data.DataModels
         public bool? NonfoilOnly { get; set; }
         
         public bool? FoilOnly { get; set; }
+
+        public string CardTokens { get; set; }
+
+        public string SetCards { get; set; }
+
+        public string PremiumCards { get; set; }
+
     }
 }

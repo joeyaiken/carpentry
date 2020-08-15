@@ -16,12 +16,12 @@
 
         public string Category { get; set; }
 
-        public int MultiverseId { get; set; }
-
         public string Set { get; set; }
 
         public bool IsFoil { get; set; }
 
-        public string VariantType { get; set; }
+        //public string VariantType { get; set; }
+        public int? CollectorNumber { get; set; }
+        public int CardId { get; set; }
     }
 }

@@ -13,7 +13,8 @@ namespace Carpentry.Logic.Interfaces
     public interface IScryfallService
     {
 
-        Task<ScryfallSetDataDto> GetFullSet(string setCode);
+        //Task<ScryfallSetDataDto> GetFullSet(string setCode);
+        Task<ScryfallSetDataDto> GetFullMappedSet(string setCode);
 
         List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData);
 

@@ -11,7 +11,7 @@ namespace Carpentry.Data.Models
 
         //I honestly think I just want to tweak the magicCardDto
 
-
+        public int CardId { get; set; }
 
         //a flat representation of a DB card definition
 
@@ -21,7 +21,7 @@ namespace Carpentry.Data.Models
         public List<string> ColorIdentity { get; set; }
         public List<string> Colors { get; set; }
         public string ManaCost { get; set; }
-        public int MultiverseId { get; set; }
+        public int? MultiverseId { get; set; }
         public string Name { get; set; }
         //public Dictionary<string, decimal?> Prices { get; set; }
         //public Dictionary<string, string> Variants { get; set; }
@@ -36,7 +36,14 @@ namespace Carpentry.Data.Models
         public string Text { get; set; }
         public string Type { get; set; }
 
-        public List<CardVariantDto> Variants { get; set; }
+
+        public int CollectorNumber { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? PriceFoil { get; set; }
+        public decimal? TixPrice { get; set; }
+        public string ImageUrl { get; set; }
+
+        //public List<CardVariantDto> Variants { get; set; }
 
         //thought: Do I keep normal image(and maybe price) here, and variants in additional models?
     }

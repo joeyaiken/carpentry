@@ -73,7 +73,8 @@ namespace Carpentry.Logic.Implementations
             foreach (var code in distinctSetCodes)
             {
                 //will just return silently if the set is already tracked
-                await _dataUpdateService.AddTrackedSet(code);
+                var set = await _cardDataRepo.GetCardSetByCode(code);
+                await _dataUpdateService.AddTrackedSet(set.Id);
             }
 
             List<ValidatedCardDto> validatedCards = new List<ValidatedCardDto>();

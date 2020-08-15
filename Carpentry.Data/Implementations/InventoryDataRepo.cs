@@ -17,10 +17,12 @@ namespace Carpentry.Data.Implementations
     public class InventoryDataRepo : IInventoryDataRepo
     {
         private readonly CarpentryDataContext _cardContext;
-
+        private readonly string[] _allColors;
         public InventoryDataRepo(CarpentryDataContext cardContext)
         {
             _cardContext = cardContext;
+
+            _allColors = new string[] { "W", "U", "B", "R", "G" };
         }
 
 
@@ -30,17 +32,24 @@ namespace Carpentry.Data.Implementations
         {
             IQueryable<CardDataDto> result = query.Select(card => new CardDataDto()
             {
+                CardId = card.Id,
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
                 MultiverseId = card.Id,
                 Name = card.Name,
-                Variants = card.Variants.Select(v => new CardVariantDto()
-                {
-                    Image = v.ImageUrl,
-                    Name = v.Type.Name,
-                    Price = v.Price,
-                    PriceFoil = v.PriceFoil,
-                }).ToList(),
+                ImageUrl = card.ImageUrl,
+                Price = card.Price,
+                TixPrice = card.TixPrice,
+                PriceFoil = card.PriceFoil,
+                CollectorNumber = card.CollectorNumber ?? 0, //TODO -remove the "?? 0"
+
+                //Variants = card.Variants.Select(v => new CardVariantDto()
+                //{
+                //    Image = v.ImageUrl,
+                //    Name = v.Type.Name,
+                //    Price = v.Price,
+                //    PriceFoil = v.PriceFoil,
+                //}).ToList(),
                 //Prices = card.Variants.ToDictionary(v => (v.)  )
 
                 //Prices = card.Variants.SelectMany(x => new[]
@@ -57,21 +66,25 @@ namespace Carpentry.Data.Implementations
 
                 //Variants = card.Variants.ToDictionary(v => v.Type.Name, v => v.ImageUrl),
                 //Variants = card.Variants.Select(v => new { v.Type.Name, v.ImageUrl }).ToDictionary(v => v.Name, v => v.ImageUrl),
-                Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
+                //Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
+                Colors = card.Color.Split().ToList(),
+                ColorIdentity = card.ColorIdentity.Split().ToList(),
                 Rarity = card.Rarity.Name,
                 Set = card.Set.Code,
                 //SetId = card.Set.Id,
                 Text = card.Text,
                 Type = card.Type,
-                ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),
+                //ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),
                 Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
-            });
+            }); ;
             return result;
         }
 
         private async Task<IQueryable<CardData>> QueryFilteredCards(InventoryQueryParameter filters)
         {
             var cardsQuery = _cardContext.Cards.AsQueryable();
+
+            
 
             if (!string.IsNullOrEmpty(filters.Set))
             {
@@ -86,18 +99,22 @@ namespace Carpentry.Data.Implementations
 
             if (filters.Colors != null && filters.Colors.Any())
             {
-                //var allowedColorIDs = filters.Colors.
+                //
 
-                var excludedColors = await _cardContext.ManaTypes.Where(x => !filters.Colors.Contains(x.Id.ToString())).Select(x => x.Id).ToListAsync();
+                //atm I'm trying to be strict in my matching.  If a color isn't in the list, I'll exclude any card containing that color
 
-                //var includedColors = filters.Colors;
+                var excludedColors = _allColors.Where(x => !filters.Colors.Contains(x)).Select(x => x).ToList();
 
-                //only want cards where every color is an included color
-                //cardsQuery = cardsQuery.Where(x => !x.CardColorIdentities.Any() || x.CardColorIdentities.Any(color => includedColors.Contains(color.ManaTypeId.ToString())));
+                ////var includedColors = filters.Colors;
 
-                //alternative query, no excluded colors
-                cardsQuery = cardsQuery.Where(x => !(x.CardColorIdentities.Any(color => excludedColors.Contains(color.ManaTypeId))));
+                ////only want cards where every color is an included color
+                ////cardsQuery = cardsQuery.Where(x => !x.CardColorIdentities.Any() || x.CardColorIdentities.Any(color => includedColors.Contains(color.ManaTypeId.ToString())));
 
+                ////alternative query, no excluded colors
+                ////cardsQuery = cardsQuery.Where(x => !(x.CardColorIdentities.Any(color => excludedColors.Contains(color.ManaTypeId))));
+                //cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Split("").ToList().Contains  // .Any(color => excludedColors.Contains(color)))
+
+                cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
             }
 
             if (!string.IsNullOrEmpty(filters.Format))
@@ -109,12 +126,12 @@ namespace Carpentry.Data.Implementations
 
             if (filters.ExclusiveColorFilters)
             {
-                cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() == filters.Colors.Count());
+                cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Length == filters.Colors.Count());
             }
 
             if (filters.MultiColorOnly)
             {
-                cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() > 1);
+                cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Length > 1);
             }
 
             if (!string.IsNullOrEmpty(filters.Type))
@@ -169,7 +186,7 @@ namespace Carpentry.Data.Implementations
         /// <returns></returns>
         public async Task<int> AddInventoryCard(InventoryCardData cardToAdd)
         {
-            var matchingCard = _cardContext.Cards.FirstOrDefault(x => x.Id == cardToAdd.MultiverseId);
+            var matchingCard = _cardContext.Cards.FirstOrDefault(x => x.Id == cardToAdd.CardId);
             var first6Card = _cardContext.Cards.FirstOrDefault();
             _cardContext.InventoryCards.Add(cardToAdd);
             await _cardContext.SaveChangesAsync();
@@ -361,18 +378,13 @@ namespace Carpentry.Data.Implementations
 
             if (param.Colors != null && param.Colors.Any())
             {
-                ////var allowedColorIDs = param.Colors.
+                //
 
-                //var excludedColors = await _cardContext.ManaTypes.Where(x => !param.Colors.Contains(x.Id.ToString())).Select(x => x.Id).ToListAsync();
+                //atm I'm trying to be strict in my matching.  If a color isn't in the list, I'll exclude any card containing that color
 
-                ////var includedColors = param.Colors;
+                //var excludedColors = _allColors.Where(x => !param.Colors.Contains(x)).Select(x => x).ToList();
 
-                ////only want cards where every color is an included color
-                ////cardsQuery = cardsQuery.Where(x => !x.CardColorIdentities.Any() || x.CardColorIdentities.Any(color => includedColors.Contains(color.ManaTypeId.ToString())));
-
-                ////alternative query, no excluded colors
-                //cardsQuery = cardsQuery.Where(x => !(x.CardColorIdentities.Any(color => excludedColors.Contains(color.ManaTypeId))));
-
+                //query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
             }
 
             if (!string.IsNullOrEmpty(param.Format))
@@ -613,8 +625,8 @@ namespace Carpentry.Data.Implementations
                     Id = x.Id,
                     IsFoil = x.IsFoil,
                     InventoryCardStatusId = x.InventoryCardStatusId,
-                    MultiverseId = x.MultiverseId,
-                    VariantType = x.VariantType.Name,
+                    //MultiverseId = x.MultiverseId,
+                    //VariantType = x.VariantType.Name,
                     Name = x.Card.Name,
                     Set = x.Card.Set.Code,
                     //DeckCards = x.DeckCards.Select(c => new DeckCardResult()
@@ -649,18 +661,8 @@ namespace Carpentry.Data.Implementations
 
             if (filters.Colors.Any())
             {
-                //var allowedColorIDs = filters.Colors.
-
-                var excludedColors = await _cardContext.ManaTypes.Where(x => !filters.Colors.Contains(x.Id.ToString())).Select(x => x.Id).ToListAsync();
-
-                //var includedColors = filters.Colors;
-
-                //only want cards where every color is an included color
-                //cardsQuery = cardsQuery.Where(x => !x.CardColorIdentities.Any() || x.CardColorIdentities.Any(color => includedColors.Contains(color.ManaTypeId.ToString())));
-
-                //alternative query, no excluded colors
-                cardsQuery = cardsQuery.Where(x => !(x.CardColorIdentities.Any(color => excludedColors.Contains(color.ManaTypeId))));
-
+                var excludedColors = _allColors.Where(x => !filters.Colors.Contains(x)).Select(x => x).ToList();
+                cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
             }
 
             if (!string.IsNullOrEmpty(filters.Format))
@@ -672,12 +674,12 @@ namespace Carpentry.Data.Implementations
 
             if (filters.ExclusiveColorFilters)
             {
-                cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() == filters.Colors.Count());
+                cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Length == filters.Colors.Count());
             }
 
             if (filters.MultiColorOnly)
             {
-                cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() > 1);
+                cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Length > 1);
             }
 
             if (!string.IsNullOrEmpty(filters.Type))
@@ -789,28 +791,19 @@ namespace Carpentry.Data.Implementations
 
             if (filters.ColorIdentity.Any())
             {
-                //var allowedColorIDs = filters.Colors.
-
-                var excludedColors = await _cardContext.ManaTypes.Where(x => !filters.ColorIdentity.Contains(x.Id.ToString())).Select(x => x.Id).ToListAsync();
-
-                //var includedColors = filters.Colors;
-
-                //only want cards where every color is an included color
-                //cardsQuery = cardsQuery.Where(x => !x.CardColorIdentities.Any() || x.CardColorIdentities.Any(color => includedColors.Contains(color.ManaTypeId.ToString())));
-
-                //alternative query, no excluded colors
-                query = query.Where(x => !(x.CardColorIdentities.Any(color => excludedColors.Contains(color.ManaTypeId))));
+                var excludedColors = _allColors.Where(x => !filters.ColorIdentity.Contains(x)).Select(x => x).ToList();
+                query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
 
             }
 
             if (filters.ExclusiveColorFilters)
             {
-                query = query.Where(x => x.CardColorIdentities.Count() == filters.ColorIdentity.Count());
+                query = query.Where(x => x.ColorIdentity.Length == filters.ColorIdentity.Count());
             }
 
             if (filters.MultiColorOnly)
             {
-                query = query.Where(x => x.CardColorIdentities.Count() > 1);
+                query = query.Where(x => x.ColorIdentity.Length > 1);
             }
 
             //query = query.Where(x => filters.Rarity.Contains(x.Rarity.ToLower()));

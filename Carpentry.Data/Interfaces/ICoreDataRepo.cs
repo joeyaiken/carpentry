@@ -12,20 +12,17 @@ namespace Carpentry.Data.Interfaces
     {
         //TryAdd
         Task TryAddCardRarity(CardRarityData data);
-        Task TryAddCardVariantType(CardVariantTypeData data);
         Task TryAddDeckCardCategory(DeckCardCategoryData data);
         Task TryAddInventoryCardStatus(InventoryCardStatusData data);
         Task TryAddMagicFormat(MagicFormatData data);
-        Task TryAddManaType(ManaTypeData data);
-
 
         //Reference Values
-        Task<List<DataReferenceValue<int>>> GetAllCardVariantTypes();
-        Task<DataReferenceValue<int>> GetCardVariantTypeByName(string name);
+        //Task<List<DataReferenceValue<int>>> GetAllCardVariantTypes();
+        //Task<DataReferenceValue<int>> GetCardVariantTypeByName(string name);
         Task<IEnumerable<DataReferenceValue<int>>> GetAllMagicFormats();
         Task<DataReferenceValue<int>> GetMagicFormat(string formatName);
         Task<DataReferenceValue<int>> GetMagicFormat(int formatId);
-        Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors();
+        //Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors();
         Task<IEnumerable<DataReferenceValue<char>>> GetAllRarities();
         Task<IEnumerable<DataReferenceValue<string>>> GetAllSets();
         Task<IEnumerable<DataReferenceValue<int>>> GetAllStatuses();

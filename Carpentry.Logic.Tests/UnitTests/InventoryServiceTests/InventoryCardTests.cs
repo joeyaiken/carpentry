@@ -36,9 +36,9 @@ namespace Carpentry.Logic.Tests.UnitTests.InventoryServiceTests
 
             var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
 
-            mockDataUpdateService
-                .Setup(p => p.EnsureCardDefinitionExists(It.Is<int>(i => i == newCard.MultiverseId)))
-                .Returns(Task.CompletedTask);
+            //mockDataUpdateService
+            //    .Setup(p => p.EnsureCardDefinitionExists(It.Is<int>(i => i == newCard.MultiverseId)))
+            //    .Returns(Task.CompletedTask);
 
             var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 
@@ -83,9 +83,9 @@ namespace Carpentry.Logic.Tests.UnitTests.InventoryServiceTests
 
             var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
 
-            mockDataUpdateService
-                .Setup(p => p.EnsureCardDefinitionExists(It.Is<int>(i => i > 0)))
-                .Returns(Task.CompletedTask);
+            //mockDataUpdateService
+            //    .Setup(p => p.EnsureCardDefinitionExists(It.Is<int>(i => i > 0)))
+            //    .Returns(Task.CompletedTask);
 
             var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
 

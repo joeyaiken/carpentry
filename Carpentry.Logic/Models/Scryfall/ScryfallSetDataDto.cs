@@ -13,8 +13,10 @@ namespace Carpentry.Logic.Models.Scryfall
 
         public string ReleaseDate { get; set; }
 
-        //public List<ScryfallMagicCard> Cards { get; set; }
-
         public List<JToken> CardTokens { get; set; }
+
+        public List<ScryfallMagicCard> SetCards { get; set; }
+
+        public List<ScryfallMagicCard> PremiumCards { get; set; }
     }
 }

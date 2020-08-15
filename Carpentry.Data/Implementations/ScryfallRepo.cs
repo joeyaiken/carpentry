@@ -33,25 +33,37 @@ namespace Carpentry.Data.Implementations
             return setLastUpdated;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="setData"></param>
+        /// <param name="applyData">
+        /// Called with "false" if I only want to update a set definition without clearing out data
+        /// In reality, I could probably ignore sets that already exist, but maybe Scryfall will want to update something, idk
+        /// </param>
+        /// <returns></returns>
         public async Task AddOrUpdateSet(ScryfallSetData setData, bool applyData)
         {
             //do I map or blindly add/update?
             //TODO - Map between models instead of blindly applying
 
             var existingSet = _scryContext.Sets.Where(x => x.Code.ToLower() == setData.Code.ToLower()).FirstOrDefault();
-            //shoot does it default to null or default to a new instance???
 
             if (existingSet != null) 
             {
                 existingSet.Code = setData.Code;
                 existingSet.Name = setData.Name;
-                existingSet.DataIsParsed = setData.DataIsParsed;
+                //existingSet.DataIsParsed = setData.DataIsParsed;
                 existingSet.LastUpdated = setData.LastUpdated;
                 existingSet.ReleasedAt = setData.ReleasedAt;
+                
 
                 if (applyData)
                 {
-                    existingSet.CardData = setData.CardData;
+                    //existingSet.CardData = setData.CardData;
+                    existingSet.CardTokens = setData.CardTokens;
+                    existingSet.SetCards = setData.SetCards;
+                    existingSet.PremiumCards = setData.PremiumCards;
                 }
 
                 //_scryContext.Sets.Update(setData);
@@ -78,9 +90,9 @@ namespace Carpentry.Data.Implementations
                 {
                     CardCount = c.CardCount,
                     //CardData = c.CardData,
-                    CardData = includeData ? c.CardData : null,
+                    //CardData = includeData ? c.CardData : null,
                     Code = c.Code,
-                    DataIsParsed = c.DataIsParsed,
+                    //DataIsParsed = c.DataIsParsed,
                     Digital = c.Digital,
                     FoilOnly = c.FoilOnly,
                     Id = c.Id,
@@ -89,6 +101,10 @@ namespace Carpentry.Data.Implementations
                     NonfoilOnly = c.NonfoilOnly,
                     ReleasedAt = c.ReleasedAt,
                     SetType = c.SetType,
+
+                    CardTokens = includeData ? c.CardTokens : null,
+                    SetCards = includeData ? c.SetCards : null,
+                    PremiumCards = includeData ? c.PremiumCards : null,
                 })
                 .FirstOrDefaultAsync();
             return set;

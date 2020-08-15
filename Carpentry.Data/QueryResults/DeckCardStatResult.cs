@@ -14,7 +14,7 @@ namespace Carpentry.Data.QueryResults
 
         public int? Cmc { get; set; }
 
-        public List<char> ColorIdentity { get; set; }
+        public List<string> ColorIdentity { get; set; }
 
         public char? CategoryId { get; set; }
     }

@@ -8,7 +8,7 @@ namespace Carpentry.Data.QueryResults
     {
         public int Id { get; set; }
 
-        public int MultiverseId { get; set; }
+        //public int MultiverseId { get; set; }
 
         public string Name { get; set; }
 
@@ -16,7 +16,7 @@ namespace Carpentry.Data.QueryResults
 
         public bool IsFoil { get; set; }
 
-        public string VariantType { get; set; }
+        //public string VariantType { get; set; }
 
         public int InventoryCardStatusId { get; set; }
         

@@ -29,13 +29,13 @@ namespace Carpentry.Logic.Tests.UnitTests
             CardDataDto result = new CardDataDto()
             {
                 Name = "Card",
-                Variants = new List<CardVariantDto>()
-                {
-                    new CardVariantDto()
-                    {
-                        Name = "normal",
-                    }
-                }
+                //Variants = new List<CardVariantDto>()
+                //{
+                //    new CardVariantDto()
+                //    {
+                //        Name = "normal",
+                //    }
+                //}
             };
             return result;
         }

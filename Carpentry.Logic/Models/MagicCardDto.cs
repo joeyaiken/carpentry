@@ -18,16 +18,16 @@ namespace Carpentry.Logic.Models
         public string ManaCost { get; set; }
 
         [JsonProperty("multiverseId")]
-        public int MultiverseId { get; set; }
+        public int? MultiverseId { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("prices")]
-        public Dictionary<string, decimal?> Prices { get; set; }
+        //[JsonProperty("prices")]
+        //public Dictionary<string, decimal?> Prices { get; set; }
 
-        [JsonProperty("variants")]
-        public Dictionary<string, string> Variants { get; set; }
+        //[JsonProperty("variants")]
+        //public Dictionary<string, string> Variants { get; set; }
 
         [JsonProperty("lealities")]
         public List<string> Legalities { get; set; }
@@ -43,5 +43,15 @@ namespace Carpentry.Logic.Models
 
         [JsonProperty("type")]
         public string Type { get; set; }
+
+        public int CollectionNumber { get; set; }
+
+        public decimal? Price { get; set; }
+
+        public decimal? PriceFoil { get; set; }
+
+        public decimal? PriceTix { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }

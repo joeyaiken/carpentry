@@ -122,23 +122,27 @@ namespace Carpentry.Logic.Implementations
                 ManaCost = card.ManaCost,
                 MultiverseId = card.MultiverseId,
                 Name = card.Name,
-
+                CollectionNumber = card.CollectorNumber,
+                ImageUrl = card.ImageUrl,
+                Price = card.Price,
+                PriceFoil = card.PriceFoil,
+                PriceTix = card.TixPrice,
                 //        Prices = card.Variants.ToDictionary(v => (v.))
 
-                Prices = card.Variants.SelectMany(x => new[]
-                {
-                    new {
-                        Name = x.Name,
-                        Price = x.Price,
-                    },
-                    new {
-                        Name = $"{x.Name}_foil",
-                        Price = x.PriceFoil,
-                    }
-                }).ToDictionary(v => v.Name, v => v.Price),
+                //Prices = card.Variants.SelectMany(x => new[]
+                //{
+                //    new {
+                //        Name = x.Name,
+                //        Price = x.Price,
+                //    },
+                //    new {
+                //        Name = $"{x.Name}_foil",
+                //        Price = x.PriceFoil,
+                //    }
+                //}).ToDictionary(v => v.Name, v => v.Price),
 
                 //        Variants = card.Variants.ToDictionary(v => v.Type.Name, v => v.ImageUrl),
-                Variants = card.Variants.Select(v => new { v.Name, v.Image }).ToDictionary(v => v.Name, v => v.Image),
+                //Variants = card.Variants.Select(v => new { v.Name, v.Image }).ToDictionary(v => v.Name, v => v.Image),
 
                 Colors = card.Colors,
                 Rarity = card.Rarity,

@@ -185,13 +185,15 @@ namespace Carpentry.Data.Implementations
                     Category = x.CategoryId == null ? null : x.Category.Name,
                     Cmc = x.InventoryCard.Card.Cmc,
                     Cost = x.InventoryCard.Card.ManaCost,
-                    Img = x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+                    //Img = x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+                    Img = x.InventoryCard.Card.ImageUrl,
                     IsFoil = x.InventoryCard.IsFoil,
-                    MultiverseId = x.InventoryCard.MultiverseId,
+                    CollectorNumber = x.InventoryCard.Card.CollectorNumber,
+                    CardId = x.InventoryCard.CardId,
                     Name = x.InventoryCard.Card.Name,
                     Set = x.InventoryCard.Card.Set.Code,
                     Type = x.InventoryCard.Card.Type,
-                    VariantType = x.InventoryCard.VariantType.Name,
+                    //VariantType = x.InventoryCard.VariantType.Name,
                 }).ToListAsync();
 
             return deckCards;
@@ -202,10 +204,14 @@ namespace Carpentry.Data.Implementations
 
             var deckCardColors = await _cardContext.DeckCards
                 .Where(x => x.DeckId == deckId)
-                .SelectMany(x => x.InventoryCard.Card.CardColorIdentities)
-                .Select(ci => ci.ManaTypeId.ToString())
+                .SelectMany(x => x.InventoryCard.Card.ColorIdentity.Split())
                 .Distinct()
                 .ToListAsync();
+
+                //.SelectMany(x => x.InventoryCard.Card.CardColorIdentities)
+                //.Select(ci => ci.ManaTypeId.ToString())
+                //.Distinct()
+                //.ToListAsync();
 
             var dbDeck = _cardContext.Decks.Where(x => x.Id == deckId).FirstOrDefault();
 
@@ -250,13 +256,14 @@ namespace Carpentry.Data.Implementations
                 .Select(x => new
                 {
                     Card = x.InventoryCard.Card,
-                    Variant = x.InventoryCard.Card.Variants
-                        .Where(cardVariant => cardVariant.CardVariantTypeId == x.InventoryCard.VariantTypeId)
-                        .FirstOrDefault(),
+                    //Variant = x.InventoryCard.Card.Variants
+                    //    .Where(cardVariant => cardVariant.CardVariantTypeId == x.InventoryCard.VariantTypeId)
+                    //    .FirstOrDefault(),
+
                     DeckCard = x,
                     IsFoil = x.InventoryCard.IsFoil,
                     //ColorIdentity = x.InventoryCard.Card.CardColorIdentities.SelectMany<char>(ci => ci.ManaTypeId)
-                    ColorIdentity = x.InventoryCard.Card.CardColorIdentities.Select(ci => ci.ManaTypeId).ToList(),
+                    ColorIdentity = x.InventoryCard.Card.ColorIdentity.Split().ToList(),
                 });
 
             List<DeckCardStatResult> results = await query.Select(x => new DeckCardStatResult()
@@ -264,7 +271,7 @@ namespace Carpentry.Data.Implementations
                 CategoryId = x.DeckCard.CategoryId,
                 Cmc = x.Card.Cmc,
                 ColorIdentity = x.ColorIdentity,
-                Price = (x.IsFoil ? x.Variant.PriceFoil : x.Variant.Price),
+                Price = (x.IsFoil ? x.Card.PriceFoil : x.Card.Price),
                 Type = x.Card.Type,
             }).ToListAsync();
 

@@ -23,19 +23,9 @@ namespace Carpentry.Data.DataContext
 
         public DbSet<CardRarityData> Rarities { get; set; }
 
-        public DbSet<CardColorIdentityData> ColorIdentities { get; set; }
-
-        public DbSet<CardColorData> CardColors { get; set; }
-
-        public DbSet<ManaTypeData> ManaTypes { get; set; }
-
         public DbSet<CardLegalityData> CardLegalities { get; set; }
 
         public DbSet<MagicFormatData> MagicFormats { get; set; }
-
-        public DbSet<CardVariantData> CardVariants { get; set; }
-
-        public DbSet<CardVariantTypeData> VariantTypes { get; set; }
 
         public DbSet<DeckCardCategoryData> DeckCardCategories { get; set; }
 
@@ -57,13 +47,13 @@ namespace Carpentry.Data.DataContext
         {
             #region Associations
 
-            //Deck -- DeckInventoryCard
+            //Deck -- DeckCard
             modelBuilder.Entity<DeckData>()
                 .HasMany(x => x.Cards)
                 .WithOne(x => x.Deck)
                 .HasForeignKey(x => x.DeckId);
 
-            //DeckInventoryCard -- InventoryCard
+            //DeckCard -- InventoryCard
             modelBuilder.Entity<DeckCardData>()
                 .HasOne(x => x.InventoryCard)
                 .WithMany(x => x.DeckCards)
@@ -73,7 +63,7 @@ namespace Carpentry.Data.DataContext
             modelBuilder.Entity<InventoryCardData>()
                 .HasOne(x => x.Card)
                 .WithMany(x => x.InventoryCards)
-                .HasForeignKey(x => x.MultiverseId);
+                .HasForeignKey(x => x.CardId);
 
             //InventoryCard -- Status
             modelBuilder.Entity<InventoryCardData>()
@@ -93,30 +83,6 @@ namespace Carpentry.Data.DataContext
                 .WithMany(x => x.Cards)
                 .HasForeignKey(x => x.RarityId);
 
-            //Card -- CardColorIdentity
-            modelBuilder.Entity<CardData>()
-                .HasMany(x => x.CardColorIdentities)
-                .WithOne(x => x.Card)
-                .HasForeignKey(x => x.CardId);
-
-            //CardColorIdentity -- ManaType
-            modelBuilder.Entity<ManaTypeData>()
-                .HasMany(x => x.CardColorIdentities)
-                .WithOne(x => x.ManaType)
-                .HasForeignKey(x => x.ManaTypeId);
-
-            //variant type -- card variant
-            modelBuilder.Entity<CardVariantData>()
-                .HasOne(x => x.Type)
-                .WithMany(x => x.VariantCards)
-                .HasForeignKey(x => x.CardVariantTypeId);
-
-            //card -- card variant
-            modelBuilder.Entity<CardVariantData>()
-                .HasOne(x => x.Card)
-                .WithMany(x => x.Variants)
-                .HasForeignKey(x => x.CardId);
-
             //magic format -- card legality
             modelBuilder.Entity<CardLegalityData>()
                 .HasOne(x => x.Format)
@@ -127,18 +93,6 @@ namespace Carpentry.Data.DataContext
             modelBuilder.Entity<CardLegalityData>()
                 .HasOne(x => x.Card)
                 .WithMany(x => x.Legalities)
-                .HasForeignKey(x => x.CardId);
-
-            //card color -- mana type
-            modelBuilder.Entity<ManaTypeData>()
-                .HasMany(x => x.CardColors)
-                .WithOne(x => x.ManaType)
-                .HasForeignKey(x => x.ManaTypeId);
-
-            //card -- card color
-            modelBuilder.Entity<CardData>()
-                .HasMany(x => x.CardColors)
-                .WithOne(x => x.Card)
                 .HasForeignKey(x => x.CardId);
 
             //deck card -- category
@@ -160,7 +114,6 @@ namespace Carpentry.Data.DataContext
                 .HasForeignKey(x => x.MagicFormatId);
 
             #endregion
-
 
             #region Views
 

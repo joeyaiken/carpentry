@@ -95,124 +95,40 @@ namespace Carpentry.Data.Implementations
         /// <summary>
         /// Adds a batch of card definitions
         /// Assumes the card's set definition already exists in the DB
+        /// Assumes all of the cards should be added to the DB, and none already exist
+        ///     TODO - Should ensure a natural key covers SetId/CollectionNumber
         /// </summary>
         /// <param name="cards"></param>
         /// <returns></returns>
         public async Task AddCardDataBatch(List<CardDataDto> cards)
         {
-            //check for any existing cards?
-
-            //List<string> scryCardLegalities = dto.Legalities.ToList();
-
-            ////NOTE - This ends up ignoring any formats that don't actually exist in the DB
-            ////as of 11-16-2019, this is the desired effect
-            //List<MagicFormatData> relevantDbFormats = _cardContext.MagicFormats
-            //    .AsEnumerable()
-            //    .Where(x => scryCardLegalities.Contains(x.Name))
-            //    .ToList();
-
-            ////CardVariants
-            //List<string> dtoVariantNames = dto.Variants.Select(x => x.Name).ToList();
-            //List<CardVariantTypeData> relevantDBVariantTypes = _cardContext.VariantTypes
-            //    .AsEnumerable()
-            //    .Where(x => dtoVariantNames.Contains(x.Name))
-            //    .ToList();
-
             List<MagicFormatData> allFormats = _cardContext.MagicFormats.ToList();
-
-            List<CardVariantTypeData> allVariantTypes = _cardContext.VariantTypes.ToList();
-
             List<CardSetData> allSets = _cardContext.Sets.ToList();
 
             var newCards = cards.Select(dto => new CardData
             {
-                Id = dto.MultiverseId,
+                //Id = dto.CardId,
+                MultiverseId = dto.MultiverseId,
                 Cmc = dto.Cmc,
                 ManaCost = dto.ManaCost,
                 Name = dto.Name,
                 Text = dto.Text,
                 Type = dto.Type,
-
-                //Set
-                //Set = dbSet, //Should this be the ID instead?
-                //SetId = dto.SetId,
                 SetId = allSets.Where(s => s.Code == dto.Set).FirstOrDefault().Id,
-
-                //Rarity
                 RarityId = GetRarityId(dto.Rarity),
-
-                //Color
-                //jank
-                //CardColors = relevantColorManaTypes.Select(x => new CardColorData
-                //{
-                //    ManaType = x,
-                //}).ToList(),
-                CardColors = (dto.Colors == null) ? null : dto.Colors.Select(c => new CardColorData
-                {
-                    ManaTypeId = Convert.ToChar(c),
-                }).ToList(),
-
-
-                //Color Identity
-                //CardColorIdentities = relevantColorIdentityManaTypes.Select(x => new CardColorIdentityData
-                //{
-                //    ManaType = x,
-                //}).ToList(),
-                CardColorIdentities = (dto.Colors == null) ? null : dto.Colors.Select(c => new CardColorIdentityData
-                {
-                    ManaTypeId = Convert.ToChar(c),
-                }).ToList(),
-
-
-                //Variants
-                //Variants = dto.Variants.Select(x => new CardVariantData()
-                //{
-                //    ImageUrl = x.Image,
-                //    Price = x.Price,
-                //    PriceFoil = x.PriceFoil,
-                //    Type = relevantDBVariantTypes.FirstOrDefault(v => v.Name == x.Name)
-                //}).ToList(),
-
-                //Variants = allVariantTypes
-                //    .Where(variantType => dto.Variants.Select(cv => cv.Name).Contains(variantType.Name))
-                //    .Select(variantType => new CardVariantData
-                //    {
-                //        Price = dto.
-                //    }).ToList(),
-
-                Variants = dto.Variants.Select(x => new CardVariantData
-                {
-                    ImageUrl = x.Image,
-                    Price = x.Price,
-                    PriceFoil = x.PriceFoil,
-                    CardVariantTypeId = allVariantTypes.Where(vt => vt.Name == x.Name).Select(vt => vt.Id).FirstOrDefault(),
-                }).ToList(),
-
-                //List<string> scryCardLegalities = dto.Legalities.ToList();
-
-                ////NOTE - This ends up ignoring any formats that don't actually exist in the DB
-                ////as of 11-16-2019, this is the desired effect
-                //List<MagicFormatData> relevantDbFormats = _cardContext.MagicFormats
-                //    .AsEnumerable()
-                //    .Where(x => scryCardLegalities.Contains(x.Name))
-                //    .ToList();
-
-                //Legalities
-                //This is weird, but I only want to add legalities that exist in the DB
-                //Legalities = relevantDbFormats.Select(format => new CardLegalityData
-                //{
-                //    Format = format
-                //}).ToList(),
-
-
+                CollectorNumber = dto.CollectorNumber,
+                ImageUrl = dto.ImageUrl,
+                Price = dto.Price,
+                PriceFoil = dto.PriceFoil,
+                TixPrice = dto.TixPrice,
+                Color = string.Join("",dto.Colors),
+                ColorIdentity = string.Join("",dto.ColorIdentity),
                 Legalities = allFormats
                     .Where(format => dto.Legalities.Contains(format.Name))
-                    .Select(format => new CardLegalityData 
+                    .Select(format => new CardLegalityData
                     {
                         FormatId = format.Id,
                     }).ToList(),
-
-
             });
 
             await _cardContext.Cards.AddRangeAsync(newCards);
@@ -223,15 +139,13 @@ namespace Carpentry.Data.Implementations
         /// <summary>
         /// Updates variable data on a batch of cards already in the DB
         /// Will update Legality data & variant data
-        /// Will not update card definitions (this means I won't catch text errata, right?)
-        ///     That sounds bad
         /// </summary>
         /// <param name="cards"></param>
         /// <returns></returns>
         public async Task UpdateCardDataBatch(List<CardDataDto> cards)
         {
-            //Assumes all card definitions already exist in the DB
-            //Not going to update the card definition for now
+            //Assumes all card definitions already exist in the DB (does it have to?)
+
             //Update all card definitions
             //var dbCards = _cardContext.Cards
             //    //trying to be clever when getting the matching DB cards
@@ -251,54 +165,95 @@ namespace Carpentry.Data.Implementations
             //do I...
             //  Itterate over each card, building a list of things to update?
 
+            List<CardDataDto> unmatchedCards = new List<CardDataDto>();
+
             foreach(var card in cards)
             {
                 try
                 {
+                    //I'm no longer storing variants the same way, so now I need to update all card definitions in the batch
 
-                    if(card.MultiverseId == 479733)
+                    //get the card by natural key
+                    //NOTE - NATURAL KEY CAN'T BE TRUSTED YET, COLLECTION NUMBERS DON'T WORK
+                    //var existingCard = _cardContext.Cards.Where(x => x.Set.Code == card.Set && x.CollectorNumber == card.CollectorNumber).FirstOrDefault();
+
+                    //var matchingByName = _cardContext.Cards.Where(x => x.Name == card.Name).ToList();
+
+
+
+
+                    //first, try to match on Set/Name/Collection number
+                    var existingCard = _cardContext.Cards.Where(
+                        x => x.Set.Code == card.Set
+                        && x.CollectorNumber == card.CollectorNumber).FirstOrDefault();
+
+                    //Then, if that doesn't work, try to just match on Name/Set/MID
+                    if(existingCard == null)
                     {
-                        int breakpoint2 = 1;
+                        existingCard = _cardContext.Cards.Where(
+                            x => x.Set.Code == card.Set
+                            && x.Name == card.Name
+                            && card.MultiverseId == x.MultiverseId).FirstOrDefault();
+                    }
+                    
+                    //it it's still not found, assume it doesn't exist yet
+                    if (existingCard == null)
+                    {
+                        unmatchedCards.Add(card);
+                        continue;
                     }
 
+                    //variable fields
+                    existingCard.Price = card.Price;
+                    existingCard.PriceFoil = card.PriceFoil;
+                    existingCard.TixPrice = card.TixPrice;
+
+                    //Static fields for cleaning up the data
+                    existingCard.ImageUrl = card.ImageUrl;
+                    existingCard.Color = card.Colors == null ? null : string.Join("", card.Colors);
+                    existingCard.ColorIdentity = card.ColorIdentity == null ? null : string.Join("", card.ColorIdentity);
+                    existingCard.CollectorNumber = card.CollectorNumber;
+
+                    _cardContext.Cards.Update(existingCard);
+
                     //Update variants
-                    var existingVariants = _cardContext.CardVariants
-                        .Where(x => x.CardId == card.MultiverseId).Include(x => x.Type).ToList();
+                    //var existingVariants = _cardContext.CardVariants
+                    //    .Where(x => x.CardId == card.MultiverseId).Include(x => x.Type).ToList();
 
-                    foreach (var variant in existingVariants)
-                    {
-                        string variantName = variant.Type.Name;
+                    //foreach (var variant in existingVariants)
+                    //{
+                    //    string variantName = variant.Type.Name;
 
-                        CardVariantDto matchingDtoVariant = card.Variants.Where(dtoV => dtoV.Name.ToLower() == variantName.ToLower()).FirstOrDefault();
+                    //    CardVariantDto matchingDtoVariant = card.Variants.Where(dtoV => dtoV.Name.ToLower() == variantName.ToLower()).FirstOrDefault();
 
-                        if(matchingDtoVariant == null)
-                        {
-                            //there's some mismatch. Is there another, non-normal, variant, not in the DTO?
-                            //need to check the DTO to see if there's anything not contained in ExistingVariants
+                    //    if(matchingDtoVariant == null)
+                    //    {
+                    //        //there's some mismatch. Is there another, non-normal, variant, not in the DTO?
+                    //        //need to check the DTO to see if there's anything not contained in ExistingVariants
 
-                            var excludedDtoVariants = card.Variants.Where(dtoV => !existingVariants.Select(v => v.Type.Name).Contains(dtoV.Name)).ToList();
+                    //        var excludedDtoVariants = card.Variants.Where(dtoV => !existingVariants.Select(v => v.Type.Name).Contains(dtoV.Name)).ToList();
 
-                            //var excludedVariants = existingVariants.Where(ev => !card.Variants.Select(dtoV => dtoV.Name).Contains(ev.Type.Name)).ToList();
+                    //        //var excludedVariants = existingVariants.Where(ev => !card.Variants.Select(dtoV => dtoV.Name).Contains(ev.Type.Name)).ToList();
 
-                            if(excludedDtoVariants.Count == 1)
-                            {
-                                matchingDtoVariant = excludedDtoVariants[0];
-                            }
-                            else
-                            {
-                                throw new Exception("Error matching card variants");
-                            }
+                    //        if(excludedDtoVariants.Count == 1)
+                    //        {
+                    //            matchingDtoVariant = excludedDtoVariants[0];
+                    //        }
+                    //        else
+                    //        {
+                    //            throw new Exception("Error matching card variants");
+                    //        }
 
 
                             
-                        }
+                    //    }
 
 
-                        variant.Price = matchingDtoVariant.Price;
-                        variant.PriceFoil = matchingDtoVariant.PriceFoil;
-                        variant.ImageUrl = matchingDtoVariant.Image; //why not update this too
+                    //    variant.Price = matchingDtoVariant.Price;
+                    //    variant.PriceFoil = matchingDtoVariant.PriceFoil;
+                    //    variant.ImageUrl = matchingDtoVariant.Image; //why not update this too
 
-                    }
+                    //}
 
                     //await existingVariants.ForEachAsync(v =>
                     //{
@@ -311,10 +266,10 @@ namespace Carpentry.Data.Implementations
                     //    v.ImageUrl = matchingDtoVariant.Image; //why not update this too
                     //});
 
-                    _cardContext.CardVariants.UpdateRange(existingVariants);
+                    //_cardContext.CardVariants.UpdateRange(existingVariants);
 
                     //Update legalities
-                    var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == card.MultiverseId).Include(x => x.Format);
+                    var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == existingCard.Id).Include(x => x.Format);
 
                     //IDK if this will get messed up by case sensitivity
                     var existingLegalitiesToDelete = allExistingLegalities.Where(x => !card.Legalities.Contains(x.Format.Name));
@@ -325,20 +280,11 @@ namespace Carpentry.Data.Implementations
                         .Where(x => !legalityStringsToKeep.Contains(x))
                         .Select(x => new CardLegalityData()
                         {
-                            CardId = card.MultiverseId,
+                            CardId = existingCard.Id,//MultiverseId
                             Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
                         })
                         .Where(x => x.Format != null)
                         .ToList();
-
-                    //var something = dto.Legalities
-                    //    .Where(x => !legalityStringsToKeep.Contains(x))
-                    //    .Select(x => new
-                    //    {
-                    //        x,
-                    //        CardId = cardToUpdate.Id,
-                    //        Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
-                    //    }).ToList();
 
                     if (existingLegalitiesToDelete.Any())
                         _cardContext.CardLegalities.RemoveRange(existingLegalitiesToDelete);
@@ -354,6 +300,10 @@ namespace Carpentry.Data.Implementations
             }
 
             await _cardContext.SaveChangesAsync();
+
+            await AddCardDataBatch(unmatchedCards);
+
+            
 
 
             //or
@@ -390,9 +340,9 @@ namespace Carpentry.Data.Implementations
 
             var matchingCard = await _cardContext.Cards
                 .Where(x => x.Set.Code.ToLower() == setCode.ToLower() && x.Name.ToLower() == name.ToLower())
-                .Include(x => x.Variants).ThenInclude(v => v.Type)
-                .Include(x => x.CardColorIdentities)
-                .Include(x => x.CardColors)
+                //.Include(x => x.Variants).ThenInclude(v => v.Type)
+                //.Include(x => x.CardColorIdentities)
+                //.Include(x => x.CardColors)
                 .Include(x => x.Legalities)
                 .Include(c => c.Set)
                 .FirstOrDefaultAsync();
@@ -409,9 +359,9 @@ namespace Carpentry.Data.Implementations
         public async Task<List<CardData>> GetCardsByName(string cardName)
         {
             var result = await _cardContext.Cards.Where(x => x.Name == cardName)
-                .Include(c => c.Variants).ThenInclude(v => v.Type)
-                .Include(c => c.CardColorIdentities).ThenInclude(ci => ci.ManaType)
-                .Include(c => c.CardColors).ThenInclude(c => c.ManaType)
+                //.Include(c => c.Variants).ThenInclude(v => v.Type)
+                //.Include(c => c.CardColorIdentities).ThenInclude(ci => ci.ManaType)
+                //.Include(c => c.CardColors).ThenInclude(c => c.ManaType)
                 .Include(c => c.Legalities).ThenInclude(l => l.Format)
                 .Include(c => c.Rarity)
                 .Include(c => c.Set)

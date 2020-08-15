@@ -45,11 +45,19 @@ namespace Carpentry.Logic.Implementations
             return cardResult;
         }
 
+        /// <summary>
+        /// Gets a full set of Card Tokens from Scryfall
+        /// Does not do any mapping (mapped lists are null)
+        /// </summary>
+        /// <param name="setCode"></param>
+        /// <returns></returns>
         public async Task<ScryfallSetDataDto> GetFullSet(string setCode)
         {
             ScryfallSetDataDto result = new ScryfallSetDataDto()
             {
                 CardTokens = new List<JToken>(),
+                //SetCards = new List<ScryfallMagicCard>(),
+                //PremiumCards = new List<ScryfallMagicCard>(),
             };
 
             //List<JToken> rawCardResults = new List<JToken>();
@@ -84,16 +92,68 @@ namespace Carpentry.Logic.Implementations
                     cardSearchUri = cardSearchJobject.Value<string>("next_page");
                 }
             }
-
+            
             //result.Cards = MapScryfallDataToCards(rawCardResults);
 
             return result;
         }
 
+        public async Task<ScryfallSetDataDto> GetFullMappedSet(string setCode)
+        {
+            var rawSet = await GetFullSet(setCode);
+
+            //Should this be a try/catch?
+            var mappedSet = MapScryfallSetData(rawSet);
+
+            return mappedSet;
+        }
+
+        /// <summary>
+        /// Takes a ScryfallSetDataDto and maps Card Tokens to ScryfallMagicCard objects
+        /// </summary>
+        /// <param name="setData"></param>
+        /// <returns></returns>
+        public ScryfallSetDataDto MapScryfallSetData(ScryfallSetDataDto setData)
+        {
+            //clear what's ever set for mapped cards
+            setData.SetCards = new List<ScryfallMagicCard>();
+            setData.PremiumCards = new List<ScryfallMagicCard>();
+
+            //Parse each token & add to a list
+            foreach(var card in setData.CardTokens)
+            {
+                try
+                {
+                    ScryfallMagicCard cardToAdd = new ScryfallMagicCard();
+                    cardToAdd.RefreshFromToken(card);
+
+                    if (cardToAdd.IsPremium)
+                    {
+                        setData.PremiumCards.Add(cardToAdd);
+                    }
+                    else
+                    {
+                        setData.SetCards.Add(cardToAdd);
+                    }
+                }
+                //Hopefully I won't hit this, but I'm leaving it in for DEV
+                catch(Exception ex)
+                {
+                    throw new Exception($"Issue mapping scryfall card: {ex.Message}");
+                }
+            }
+
+            return setData;
+        }
+
+        [Obsolete]
         public List<ScryfallMagicCard> MapScryfallDataToCards(List<JToken> cardSearchData)
         {
             try
             {
+
+                //★
+
                 //_logger.LogWarning("Begin MapScryfallDataToCards");
 
                 List<ScryfallMagicCard> updatedCards = new List<ScryfallMagicCard>();
@@ -138,7 +198,7 @@ namespace Carpentry.Logic.Implementations
                         {
                             //_logger.LogWarning($"Applying variant to {cardName}");
 
-                            cardToUpdate.ApplyVariant(specialCard);
+    //                        cardToUpdate.ApplyVariant(specialCard);
                         }
                         else
                         {

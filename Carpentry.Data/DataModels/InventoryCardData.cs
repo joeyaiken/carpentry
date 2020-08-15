@@ -9,11 +9,9 @@ namespace Carpentry.Data.DataModels
         //Fields
         public int Id { get; set; }
 
-        public int MultiverseId { get; set; }
+        public int CardId { get; set; }
 
         public int InventoryCardStatusId { get; set; }
-
-        public int VariantTypeId { get; set; }
 
         public bool IsFoil { get; set; }
 
@@ -24,7 +22,6 @@ namespace Carpentry.Data.DataModels
 
         public virtual InventoryCardStatusData Status { get; set; }
 
-        public virtual CardVariantTypeData VariantType { get; set; }
     }
 
 }

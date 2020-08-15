@@ -43,7 +43,7 @@ namespace Carpentry.Tools.QuickUpdate
 
             for (int i = 0; i < setsToUpdate.Count; i++)
             {
-                logger.LogInformation($"Updating {setsToUpdate[i].Code} [{i+1}/{setsToUpdate.Count}]...");
+                logger.LogInformation($"Updating {setsToUpdate[i].Code} [{i + 1}/{setsToUpdate.Count}]...");
                 await updateService.UpdateTrackedSet(setsToUpdate[i].SetId);
                 logger.LogInformation($"Updating {setsToUpdate[i].Code} complete!");
             }
@@ -59,6 +59,7 @@ namespace Carpentry.Tools.QuickUpdate
                 .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+                .MinimumLevel.Override("System.Net.Http", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();

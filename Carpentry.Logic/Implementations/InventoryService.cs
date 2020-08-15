@@ -67,22 +67,28 @@ namespace Carpentry.Logic.Implementations
                 MultiverseId = card.Id,
                 Name = card.Name,
 
+                CollectionNumber = card.CollectorNumber ?? 0, //todo - replace "?? 0"
+                ImageUrl = card.ImageUrl,
+                Price = card.Price,
+                PriceFoil = card.PriceFoil,
+                PriceTix = card.TixPrice,
+                
                 //Prices = card.Variants.ToDictionary(v => (v.)  )
 
-                Prices = card.Variants.SelectMany(x => new[]
-                {
-                            new {
-                                Name = x.Type.Name,
-                                Price = x.Price,
-                            },
-                            new {
-                                Name = $"{x.Type.Name}_foil",
-                                Price = x.PriceFoil,
-                            }
-                        }).ToDictionary(v => v.Name, v => v.Price),
+                //Prices = card.Variants.SelectMany(x => new[]
+                //{
+                //            new {
+                //                Name = x.Type.Name,
+                //                Price = x.Price,
+                //            },
+                //            new {
+                //                Name = $"{x.Type.Name}_foil",
+                //                Price = x.PriceFoil,
+                //            }
+                //        }).ToDictionary(v => v.Name, v => v.Price),
 
                 //Variants = card.Variants.ToDictionary(v => v.Type.Name, v => v.ImageUrl),
-                Variants = card.Variants.Select(v => new { v.Type.Name, v.ImageUrl }).ToDictionary(v => v.Name, v => v.ImageUrl),
+                //Variants = card.Variants.Select(v => new { v.Type.Name, v.ImageUrl }).ToDictionary(v => v.Name, v => v.ImageUrl),
                 Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
                 Rarity = card.Rarity.Name,
                 Set = card.Set.Code,
@@ -100,7 +106,7 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
-            await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
+            //await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
 
             DataReferenceValue<int> cardVariant = await _coreDataRepo.GetCardVariantTypeByName(dto.VariantName);
 
@@ -127,7 +133,7 @@ namespace Carpentry.Logic.Implementations
 
             for (int i = 0; i < distinctIDs.Count(); i++)
             {
-                await _dataUpdateService.EnsureCardDefinitionExists(distinctIDs[i]);
+                //await _dataUpdateService.EnsureCardDefinitionExists(distinctIDs[i]);
             }
 
             var variantTypes = await _coreDataRepo.GetAllCardVariantTypes();

@@ -60,38 +60,38 @@ namespace Carpentry.Data.Implementations
             return results;
         }
 
-        public async Task<DataReferenceValue<int>> GetCardVariantTypeByName(string name)
-        {
-            var result = await _cardContext.VariantTypes.FirstOrDefaultAsync(x => x.Name == name);
-            DataReferenceValue<int> mappedResult = new DataReferenceValue<int>
-            {
-                Id = result.Id,
-                Name = result.Name,
-            };
-            return mappedResult;
-        }
+        //public async Task<DataReferenceValue<int>> GetCardVariantTypeByName(string name)
+        //{
+        //    var result = await _cardContext.VariantTypes.FirstOrDefaultAsync(x => x.Name == name);
+        //    DataReferenceValue<int> mappedResult = new DataReferenceValue<int>
+        //    {
+        //        Id = result.Id,
+        //        Name = result.Name,
+        //    };
+        //    return mappedResult;
+        //}
 
-        public async Task<List<DataReferenceValue<int>>> GetAllCardVariantTypes()
-        {
-            List<DataReferenceValue<int>> result = await _cardContext.VariantTypes.Select(x => new DataReferenceValue<int>()
-            {
-                Id = x.Id,
-                Name = x.Name,
-            }).ToListAsync();
-            return result;
-        }
+        //public async Task<List<DataReferenceValue<int>>> GetAllCardVariantTypes()
+        //{
+        //    List<DataReferenceValue<int>> result = await _cardContext.VariantTypes.Select(x => new DataReferenceValue<int>()
+        //    {
+        //        Id = x.Id,
+        //        Name = x.Name,
+        //    }).ToListAsync();
+        //    return result;
+        //}
 
-        public async Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors()
-        {
-            List<DataReferenceValue<char>> results = await _cardContext.ManaTypes
-                .Select(x => new DataReferenceValue<char>()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                }).ToListAsync();
+        //public async Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors()
+        //{
+        //    List<DataReferenceValue<char>> results = await _cardContext.ManaTypes
+        //        .Select(x => new DataReferenceValue<char>()
+        //        {
+        //            Id = x.Id,
+        //            Name = x.Name,
+        //        }).ToListAsync();
 
-            return results;
-        }
+        //    return results;
+        //}
 
         public async Task<IEnumerable<DataReferenceValue<char>>> GetAllRarities()
         {
@@ -174,16 +174,16 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
-        public async Task TryAddManaType(ManaTypeData type)
-        {
-            var existingRecord = _cardContext.ManaTypes.FirstOrDefault(x => x.Id == type.Id);
-            if (existingRecord == null)
-            {
-                _logger.LogWarning($"Adding mana type {type.Name}");
-                _cardContext.ManaTypes.Add(type);
-                await _cardContext.SaveChangesAsync();
-            }
-        }
+        //public async Task TryAddManaType(ManaTypeData type)
+        //{
+        //    var existingRecord = _cardContext.ManaTypes.FirstOrDefault(x => x.Id == type.Id);
+        //    if (existingRecord == null)
+        //    {
+        //        _logger.LogWarning($"Adding mana type {type.Name}");
+        //        _cardContext.ManaTypes.Add(type);
+        //        await _cardContext.SaveChangesAsync();
+        //    }
+        //}
 
         public async Task TryAddMagicFormat(MagicFormatData format)
         {
@@ -196,17 +196,17 @@ namespace Carpentry.Data.Implementations
             }
         }
 
-        public async Task TryAddCardVariantType(CardVariantTypeData variant)
-        {
-            var existingRecord = _cardContext.VariantTypes.FirstOrDefault(x => x.Name == variant.Name);
-            if (existingRecord == null)
-            {
-                _cardContext.VariantTypes.Add(variant);
-                _logger.LogWarning($"Adding variant {variant.Name}");
-                await _cardContext.SaveChangesAsync();
-            }
+        //public async Task TryAddCardVariantType(CardVariantTypeData variant)
+        //{
+        //    var existingRecord = _cardContext.VariantTypes.FirstOrDefault(x => x.Name == variant.Name);
+        //    if (existingRecord == null)
+        //    {
+        //        _cardContext.VariantTypes.Add(variant);
+        //        _logger.LogWarning($"Adding variant {variant.Name}");
+        //        await _cardContext.SaveChangesAsync();
+        //    }
 
-        }
+        //}
 
         public async Task TryAddDeckCardCategory(DeckCardCategoryData category)
         {
