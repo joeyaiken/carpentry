@@ -6,7 +6,7 @@ namespace Carpentry.Data.DataModels.QueryResults
 {
     public class InventoryCardByUniqueResult
     {
-        public int MultiverseId { get; set; }
+        public int CardId { get; set; }
 
         public string SetCode { get; set; }
 
@@ -20,7 +20,7 @@ namespace Carpentry.Data.DataModels.QueryResults
 
         public char RarityId { get; set; }
 
-        public string VariantName { get; set; }
+        public int CollectorNumber { get; set; }
 
         public bool? IsFoil { get; set; }
 

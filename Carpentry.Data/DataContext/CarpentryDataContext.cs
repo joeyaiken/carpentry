@@ -31,7 +31,7 @@ namespace Carpentry.Data.DataContext
 
         //Views
         public DbSet<DataModels.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
-        public DbSet<DataModels.QueryResults.InventoryCardByMidResult> InventoryCardByMid { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByPrintResult> InventoryCardByMid { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByCustomResult> InventoryCardByCustom { get; set; }
         public DbSet<DataModels.QueryResults.SetTotalsResult> SetTotals { get; set; }
@@ -123,7 +123,7 @@ namespace Carpentry.Data.DataContext
                 eb.ToView("vwInventoryCardsByName");
             });
 
-            modelBuilder.Entity<DataModels.QueryResults.InventoryCardByMidResult>(eb =>
+            modelBuilder.Entity<DataModels.QueryResults.InventoryCardByPrintResult>(eb =>
             {
                 eb.HasNoKey();
                 eb.ToView("vwInventoryCardsByMid");

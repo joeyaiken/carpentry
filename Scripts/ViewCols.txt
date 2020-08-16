@@ -32,13 +32,13 @@ vwInventoryCardsUnique
 	CardCount
 	ImageUrl
 
-vwInventoryCardTotalsByStatus
+vwInventoryCardTotalsByStatus---
 	StatusId
 	StatusName
 	TotalPrice
 	TotalCount
 
-vwSetTotals
+vwSetTotals---
 	SetId
 	Code
 	Name

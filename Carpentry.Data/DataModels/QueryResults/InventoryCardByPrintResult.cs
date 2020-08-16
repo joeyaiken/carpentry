@@ -4,13 +4,15 @@ using System.Text;
 
 namespace Carpentry.Data.DataModels.QueryResults
 {
-    public class InventoryCardByMidResult
+    public class InventoryCardByPrintResult
     {
-        public int MultiverseId { get; set; }
+        public int CardId { get; set; }
 
         public string SetCode { get; set; }
 
         public string Name { get; set; }
+
+        public int CollectorNumber { get; set; }
 
         public string Type { get; set; }
 

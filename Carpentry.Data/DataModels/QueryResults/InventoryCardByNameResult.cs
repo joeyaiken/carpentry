@@ -17,5 +17,6 @@ namespace Carpentry.Data.DataModels.QueryResults
         public string ImageUrl { get; set; }
 
         public int OwnedCount { get; set; }
+
     }
 }

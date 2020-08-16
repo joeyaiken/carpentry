@@ -81,3 +81,7 @@ C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentr
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.dll
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.pdb
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.genruntimeconfig.cache
+C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csprojAssemblyReference.cache
+C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfoInputs.cache
+C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfo.cs
+C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csproj.CoreCompileInputs.cache

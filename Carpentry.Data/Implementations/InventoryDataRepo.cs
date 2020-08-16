@@ -488,7 +488,7 @@ namespace Carpentry.Data.Implementations
             return _cardContext.InventoryCardByName.AsQueryable();
         }
 
-        public IQueryable<InventoryCardByMidResult> QueryCardsByMid()
+        public IQueryable<InventoryCardByPrintResult> QueryCardsByMid()
         {
             return _cardContext.InventoryCardByMid.AsQueryable();
         }
