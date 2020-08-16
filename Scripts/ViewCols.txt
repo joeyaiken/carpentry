@@ -1,0 +1,51 @@
+vwInventoryCardsByName
+	Name
+	Type
+	ManaCost
+	CMC
+	ImageUrl
+	OwnedCount
+
+vwInventoryCardsByPrint
+	CardId
+	SetCode
+	Name
+	CollectorNumber
+	Type
+	ManaCost
+	Cmc
+	RarityId
+	ImageUrl
+	OwnedCount
+
+vwInventoryCardsUnique
+	CardId
+	SetCode
+	Name
+	Type
+	ManaCost
+	Cmc
+	RarityId
+	CollectorNumber
+	IsFoil
+	Price
+	CardCount
+	ImageUrl
+
+vwInventoryCardTotalsByStatus
+	StatusId
+	StatusName
+	TotalPrice
+	TotalCount
+
+vwSetTotals
+	SetId
+	Code
+	Name
+	ReleaseDate
+	LastUpdated
+	IsTracked
+	InventoryCount
+	CollectedCount
+	TotalCount
+
