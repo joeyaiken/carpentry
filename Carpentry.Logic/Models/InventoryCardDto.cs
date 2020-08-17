@@ -13,8 +13,11 @@ namespace Carpentry.Logic.Models
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("multiverseId")]
-        public int MultiverseId { get; set; }
+        //[JsonProperty("multiverseId")]
+        //public int MultiverseId { get; set; }
+
+        [JsonProperty("cardId")]
+        public int CardId { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -25,8 +28,11 @@ namespace Carpentry.Logic.Models
         [JsonProperty("isFoil")]
         public bool IsFoil { get; set; }
 
-        [JsonProperty("variantName")]
-        public string VariantName { get; set; }
+        //[JsonProperty("variantName")]
+        //public string VariantName { get; set; }
+
+        [JsonProperty("collectorNumber")]
+        public int CollectorNumber { get; set; }
 
         [JsonProperty("statusId")]
         public int StatusId { get; set; }

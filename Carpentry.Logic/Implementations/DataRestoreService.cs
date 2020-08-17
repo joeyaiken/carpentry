@@ -204,14 +204,15 @@ namespace Carpentry.Logic.Implementations
 
             _logger.LogWarning("RestoreDb - LoadCardBackups...definitions exist, mapping & saving");
 
-            List<DataReferenceValue<int>> allVariants = await _coreDataRepo.GetAllCardVariantTypes();
+            //List<DataReferenceValue<int>> allVariants = await _coreDataRepo.GetAllCardVariantTypes();
 
             var mappedInventoryCards = parseCardsBackups.Select(x => new InventoryCardData
             {
                 InventoryCardStatusId = x.InventoryCardStatusId,
                 IsFoil = x.IsFoil,
-                MultiverseId = x.MultiverseId,
-                VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
+                //CardId = x.CardId,
+                //MultiverseId = x.MultiverseId,
+                //VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
                 DeckCards = 
                     x.DeckCards.Select(d => new DeckCardData()
                     {

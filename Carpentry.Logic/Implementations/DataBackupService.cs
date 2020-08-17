@@ -136,18 +136,25 @@ namespace Carpentry.Logic.Implementations
         private async Task<JArray> GetCardBackups()
         {
             //Need to query all inventory cards (with  included deck card info)
-            var cardExports = await _cardContext.InventoryCards.Select(x => new BackupInventoryCard
-            {
-                MultiverseId = x.MultiverseId,
-                InventoryCardStatusId = x.InventoryCardStatusId,
-                IsFoil = x.IsFoil,
-                VariantName = x.VariantType.Name,
-                DeckCards = x.DeckCards.Select(c => new BackupDeckCard
+            var cardExports = await _cardContext.InventoryCards
+                .Select(x => new BackupInventoryCard
                 {
-                    DeckId = c.DeckId,
-                    Category = c.CategoryId,
-                }).ToList(),
-            }).OrderBy(x => x.MultiverseId).ToListAsync();
+                    CollectorNumber = x.Card.CollectorNumber,
+                    SetCode = x.Card.Set.Code,
+                    //MultiverseId = x.MultiverseId,
+                    InventoryCardStatusId = x.InventoryCardStatusId,
+                    IsFoil = x.IsFoil,
+                    //VariantName = x.VariantType.Name,
+                    DeckCards = x.DeckCards.Select(c => new BackupDeckCard
+                    {
+                        DeckId = c.DeckId,
+                        Category = c.CategoryId,
+                    }).ToList(),
+                })
+                //.OrderBy(x => x.MultiverseId)
+                .OrderBy(x => x.SetCode)
+                .ThenBy(x => x.CollectorNumber)
+                .ToListAsync();
 
             var result = JArray.FromObject(cardExports);
             

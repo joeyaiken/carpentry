@@ -10,6 +10,8 @@ namespace Carpentry.Data.QueryResults
 
         //public int MultiverseId { get; set; }
 
+        public int CardId { get; set; }
+
         public string Name { get; set; }
 
         public string Set { get; set; }
@@ -21,6 +23,8 @@ namespace Carpentry.Data.QueryResults
         public int InventoryCardStatusId { get; set; }
         
         public string Type { get; set; }
+
+        public int CollectorNumber { get; set; }
 
         //Should this be "deck cards" instead of "deck card IDs"
         //[JsonProperty("deckCardIds")]

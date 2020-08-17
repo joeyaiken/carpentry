@@ -82,7 +82,7 @@ namespace Carpentry.UI.Legacy.Controllers
                 Props = new DeckPropertiesDto(),
                 Stats = new DeckStatsDto()
                 {
-                    ColorIdentity = new List<char>(),
+                    ColorIdentity = new List<string>(),
                     CostCounts = new Dictionary<string, int>(),
                     TotalCost = 0,
                     TotalCount = 0,

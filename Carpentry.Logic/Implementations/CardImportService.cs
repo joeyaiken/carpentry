@@ -90,13 +90,13 @@ namespace Carpentry.Logic.Implementations
                     Name = matchingCard.Name,
                     SetCode = matchingCard.Set.Code,
                     IsFoil = card.IsFoil,
-                    VariantName = "normal",
-                    Variants = matchingCard.Variants.Select(v => new ValidatedCardVariant
-                    {
-                        VariantTypeId = v.CardVariantTypeId,
-                        Name = v.Type.Name,
-                        ImageUrl = v.ImageUrl,
-                    }).ToList(),
+                    //VariantName = "normal",
+                    //Variants = matchingCard.Variants.Select(v => new ValidatedCardVariant
+                    //{
+                    //    VariantTypeId = v.CardVariantTypeId,
+                    //    Name = v.Type.Name,
+                    //    ImageUrl = v.ImageUrl,
+                    //}).ToList(),
                 };
 
                 for (int i = 0; i < card.Count; i++)
@@ -122,10 +122,10 @@ namespace Carpentry.Logic.Implementations
                 List<InventoryCardDto> cardBatch = validatedPayload.ValidatedCards
                     .Select(x => new InventoryCardDto()
                     {
-                        MultiverseId = x.MultiverseId,
+                        //MultiverseId = x.MultiverseId,
                         StatusId = _cardStatus_InInventory,
                         IsFoil = x.IsFoil,
-                        VariantName = x.VariantName,
+                        //VariantName = x.VariantName,
                     })
                     .ToList();
 
@@ -152,8 +152,8 @@ namespace Carpentry.Logic.Implementations
                 {
                     StatusId = _cardStatus_InInventory,
                     IsFoil = c.IsFoil,
-                    MultiverseId = c.MultiverseId,
-                    VariantName = c.VariantName,
+                    //MultiverseId = c.MultiverseId,
+                    //VariantName = c.VariantName,
                 },
             }).ToList();
 

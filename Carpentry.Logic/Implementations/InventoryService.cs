@@ -53,7 +53,7 @@ namespace Carpentry.Logic.Implementations
                 IsFoil = data.IsFoil,
                 Category = data.Category,
                 Description = data.Category,
-                Variant = data.Variant,
+                //Variant = data.Variant,
             };
             return result;
         }
@@ -89,12 +89,18 @@ namespace Carpentry.Logic.Implementations
 
                 //Variants = card.Variants.ToDictionary(v => v.Type.Name, v => v.ImageUrl),
                 //Variants = card.Variants.Select(v => new { v.Type.Name, v.ImageUrl }).ToDictionary(v => v.Name, v => v.ImageUrl),
-                Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
+                
+                //Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
+                Colors = card.Color.Split().ToList(),
+
                 Rarity = card.Rarity.Name,
                 Set = card.Set.Code,
                 Text = card.Text,
                 Type = card.Type,
-                ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),
+
+                //ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),
+                ColorIdentity = card.ColorIdentity.Split().ToList(),
+                
                 Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
             }).ToList();
             return result;
@@ -108,14 +114,15 @@ namespace Carpentry.Logic.Implementations
         {
             //await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
 
-            DataReferenceValue<int> cardVariant = await _coreDataRepo.GetCardVariantTypeByName(dto.VariantName);
+            //DataReferenceValue<int> cardVariant = await _coreDataRepo.GetCardVariantTypeByName(dto.VariantName);
 
             var newInventoryCard = new Data.DataModels.InventoryCardData()
             {
                 IsFoil = dto.IsFoil,
                 InventoryCardStatusId = dto.StatusId,
-                MultiverseId = dto.MultiverseId,
-                VariantTypeId = cardVariant.Id,
+                CardId = dto.CardId,
+                //MultiverseId = dto.MultiverseId,
+                //VariantTypeId = cardVariant.Id,
             };
 
             newInventoryCard.Id = await _inventoryRepo.AddInventoryCard(newInventoryCard);
@@ -129,21 +136,22 @@ namespace Carpentry.Logic.Implementations
             //Ensure all cards exist in the repo
 
 
-            var distinctIDs = cards.Select(x => x.MultiverseId).Distinct().ToList();
+            //var distinctIDs = cards.Select(x => x.MultiverseId).Distinct().ToList();
 
-            for (int i = 0; i < distinctIDs.Count(); i++)
-            {
-                //await _dataUpdateService.EnsureCardDefinitionExists(distinctIDs[i]);
-            }
+            //for (int i = 0; i < distinctIDs.Count(); i++)
+            //{
+            //    //await _dataUpdateService.EnsureCardDefinitionExists(distinctIDs[i]);
+            //}
 
-            var variantTypes = await _coreDataRepo.GetAllCardVariantTypes();
+            //var variantTypes = await _coreDataRepo.GetAllCardVariantTypes();
 
             var newCards = cards.Select(x => new Data.DataModels.InventoryCardData()
             {
                 IsFoil = x.IsFoil,
                 InventoryCardStatusId = x.StatusId,
-                MultiverseId = x.MultiverseId,
-                VariantTypeId = variantTypes.FirstOrDefault(v => v.Name == x.VariantName).Id,
+                CardId = x.CardId,
+                //MultiverseId = x.MultiverseId,
+                //VariantTypeId = variantTypes.FirstOrDefault(v => v.Name == x.VariantName).Id,
 
             }).ToList();
 
@@ -242,8 +250,11 @@ namespace Carpentry.Logic.Implementations
                     Id = x.Id,
                     IsFoil = x.IsFoil,
                     StatusId = x.InventoryCardStatusId,
-                    MultiverseId = x.MultiverseId,
-                    VariantName = x.VariantType,
+                    //MultiverseId = x.MultiverseId,
+                    //VariantName = x.VariantType,
+                    CardId = x.CardId,
+                    CollectorNumber = x.CollectorNumber,
+
                     Name = x.Name,
                     Set = x.Set,
                     //DeckCards = x.DeckCards.Select(c => new InventoryDeckCardDto

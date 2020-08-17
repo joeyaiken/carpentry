@@ -466,7 +466,7 @@ namespace Carpentry.Logic.Implementations
                 DeckCardDto dto = dtoArray[i];
 
                 //console apps want to see this
-                _logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
+                //_logger.LogWarning($"Adding card #{i} MID {dto.InventoryCard.MultiverseId}");
 
                 await AddDeckCard(dto);
             }
@@ -603,7 +603,10 @@ namespace Carpentry.Logic.Implementations
                 {
                     Name = x.Key.Name,
                     Count = x.Count(),
-                    Item = x.OrderByDescending(c => c.MultiverseId).FirstOrDefault(),
+                    //TODO - I wanted to make sure that, if I had several versions of a card in a deck, then I show the "newest" card
+                    //I can't do that with the current fields on the Result class
+                    //Item = x.OrderByDescending(c => c.MultiverseId).FirstOrDefault(), //why is this MID DESC ? - I wanted the "newest image" for a card
+                    Item = x.FirstOrDefault(),
                 }).ToList();
 
             List<DeckCardOverview> mappedCardOverviews = groupedCards.Select((x, i) => new DeckCardOverview()
@@ -638,11 +641,12 @@ namespace Carpentry.Logic.Implementations
             List<DeckCard> mappedCards = deckCardData.Select(x => new DeckCard()
             {
                 Id = x.Id,
-                MultiverseId = x.MultiverseId,
+                //MultiverseId = x.MultiverseId,
                 IsFoil = x.IsFoil,
-                VariantType = x.VariantType,
+                //VariantType = x.VariantType,
                 Name = x.Name,
                 Category = x.Category,
+                CollectorNumber = x.CollectorNumber,
                 Set = x.Set,
             }).ToList();
 

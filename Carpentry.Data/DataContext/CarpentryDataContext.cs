@@ -33,7 +33,7 @@ namespace Carpentry.Data.DataContext
         public DbSet<DataModels.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByPrintResult> InventoryCardByMid { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
-        public DbSet<DataModels.QueryResults.InventoryCardByCustomResult> InventoryCardByCustom { get; set; }
+        //public DbSet<DataModels.QueryResults.InventoryCardByCustomResult> InventoryCardByCustom { get; set; }
         public DbSet<DataModels.QueryResults.SetTotalsResult> SetTotals { get; set; }
 
         #endregion
@@ -126,19 +126,17 @@ namespace Carpentry.Data.DataContext
             modelBuilder.Entity<DataModels.QueryResults.InventoryCardByPrintResult>(eb =>
             {
                 eb.HasNoKey();
-                eb.ToView("vwInventoryCardsByMid");
+                eb.ToView("vwInventoryCardsByPrint");
             });
-
-            modelBuilder.Entity <DataModels.QueryResults.InventoryCardByUniqueResult> (eb =>
+            modelBuilder.Entity<DataModels.QueryResults.InventoryCardByUniqueResult>(eb =>
             {
                 eb.HasNoKey();
-                eb.ToView("vwInventoryCardsUniquePrints");
+                eb.ToView("vwInventoryCardsByUnique");
             });
-
-            modelBuilder.Entity<DataModels.QueryResults.InventoryCardByCustomResult>(eb =>
+            modelBuilder.Entity<DataModels.QueryResults.InventoryTotalsByStatusResult>(eb =>
             {
                 eb.HasNoKey();
-                eb.ToView("vwInventoryCardsCustom");
+                eb.ToView("vwInventoryTotalsByStatus");
             });
 
             modelBuilder.Entity<DataModels.QueryResults.SetTotalsResult>(eb =>
@@ -146,6 +144,7 @@ namespace Carpentry.Data.DataContext
                 eb.HasNoKey();
                 eb.ToView("vwSetTotals");
             });
+
             #endregion
 
             #region procs?

@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Dev\\carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj": {}
+    "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj": {}
   },
   "projects": {
-    "C:\\Dev\\carpentry\\Carpentry.Data\\Carpentry.Data.csproj": {
+    "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dev\\carpentry\\Carpentry.Data\\Carpentry.Data.csproj",
+        "projectUniqueName": "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj",
         "projectName": "Carpentry.Data",
-        "projectPath": "C:\\Dev\\carpentry\\Carpentry.Data\\Carpentry.Data.csproj",
-        "packagesPath": "C:\\Users\\Joey\\.nuget\\packages\\",
-        "outputPath": "C:\\Dev\\carpentry\\Carpentry.Data\\obj\\",
+        "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj",
+        "packagesPath": "C:\\Users\\Joe\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNet\\Carpentry\\Carpentry.Data\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Joey\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Joe\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -62,21 +65,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Dev\\carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj": {
+    "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dev\\carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj",
+        "projectUniqueName": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj",
         "projectName": "Carpentry.Logic",
-        "projectPath": "C:\\Dev\\carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj",
-        "packagesPath": "C:\\Users\\Joey\\.nuget\\packages\\",
-        "outputPath": "C:\\Dev\\carpentry\\Carpentry.Logic\\obj\\",
+        "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj",
+        "packagesPath": "C:\\Users\\Joe\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Joey\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Joe\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -89,8 +95,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Dev\\carpentry\\Carpentry.Data\\Carpentry.Data.csproj": {
-                "projectPath": "C:\\Dev\\carpentry\\Carpentry.Data\\Carpentry.Data.csproj"
+              "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj": {
+                "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Data\\Carpentry.Data.csproj"
               }
             }
           }
@@ -118,21 +124,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Dev\\carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj": {
+    "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dev\\carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
+        "projectUniqueName": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
         "projectName": "Carpentry.Tools.QuickImport",
-        "projectPath": "C:\\Dev\\carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
-        "packagesPath": "C:\\Users\\Joey\\.nuget\\packages\\",
-        "outputPath": "C:\\Dev\\carpentry\\Carpentry.Tools.QuickImport\\obj\\",
+        "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Carpentry.Tools.QuickImport.csproj",
+        "packagesPath": "C:\\Users\\Joe\\.nuget\\packages\\",
+        "outputPath": "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Joey\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Joe\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -145,8 +154,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Dev\\carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj": {
-                "projectPath": "C:\\Dev\\carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj"
+              "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj": {
+                "projectPath": "C:\\DotNet\\Carpentry\\Carpentry.Logic\\Carpentry.Logic.csproj"
               }
             }
           }
@@ -220,7 +229,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

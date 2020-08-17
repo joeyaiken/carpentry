@@ -27,6 +27,6 @@ namespace Carpentry.Logic.Models
 
 
         //Should this include color identity??
-        public List<char> ColorIdentity { get; set; }
+        public List<string> ColorIdentity { get; set; }
     }
 }

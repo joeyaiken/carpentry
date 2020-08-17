@@ -1,6 +1,7 @@
 ﻿using Carpentry.Data.Interfaces;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -70,15 +71,37 @@ namespace Carpentry.Logic.Implementations
                 })
                 .ToList();
 
-            var allManaTypes = await _coreDataRepo.GetAllManaColors();
-
-            result.Colors = allManaTypes
-                .Select(x => new FilterOption()
+            //var allManaTypes = await _coreDataRepo.GetAllManaColors();
+            var allManaTypes = new List<FilterOption>()
+            {
+                new FilterOption()
                 {
-                    Value = x.Id.ToString(),
-                    Name = x.Name
-                })
-                .ToList();
+                    Value = "W",
+                    Name = "White",
+                },
+                new FilterOption()
+                {
+                    Value = "U",
+                    Name = "Blue",
+                },
+                new FilterOption()
+                {
+                    Value = "B",
+                    Name = "Black",
+                },
+                new FilterOption()
+                {
+                    Value = "R",
+                    Name = "Red",
+                },
+                new FilterOption()
+                {
+                    Value = "G",
+                    Name = "Green",
+                },
+            };
+
+            result.Colors = allManaTypes;
 
             return result;
         }

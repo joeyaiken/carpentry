@@ -317,30 +317,30 @@ namespace Carpentry.Data.Implementations
                             Type = x.Type,
                             IsFoil = x.IsFoil,
                             Price = x.Price,
-                            Variant = x.VariantName,
+                            //Variant = x.VariantName,
                         });
 
                     break;
 
-                case "custom":
-                    query = QueryCardsByCustom().AsEnumerable()
+                //case "custom":
+                //    query = QueryCardsByCustom().AsEnumerable()
 
-                        .Select((x, i) => new CardOverviewResult()
-                        {
-                            Id = i + 1, //When querying by unique, the MID is NOT a unique value
-                            SetCode = x.SetCode,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.CardCount,
-                            Img = x.ImageUrl,
-                            Name = x.Name,
-                            Type = x.Type,
-                            IsFoil = x.IsFoil,
-                            Price = x.Price,
-                            Variant = x.VariantName,
-                        });
+                //        .Select((x, i) => new CardOverviewResult()
+                //        {
+                //            Id = i + 1, //When querying by unique, the MID is NOT a unique value
+                //            SetCode = x.SetCode,
+                //            Cmc = x.Cmc,
+                //            Cost = x.ManaCost,
+                //            Count = x.CardCount,
+                //            Img = x.ImageUrl,
+                //            Name = x.Name,
+                //            Type = x.Type,
+                //            IsFoil = x.IsFoil,
+                //            Price = x.Price,
+                //            Variant = x.VariantName,
+                //        });
 
-                    break;
+                //    break;
 
                 //case "mid":
                 default: //assuming group by mid for default
@@ -349,7 +349,7 @@ namespace Carpentry.Data.Implementations
 
                         .Select(x => new CardOverviewResult()
                         {
-                            Id = x.MultiverseId,
+                            Id = x.CardId,
                             SetCode = x.SetCode,
                             Cmc = x.Cmc,
                             Cost = x.ManaCost,
@@ -498,12 +498,7 @@ namespace Carpentry.Data.Implementations
             return _cardContext.InventoryCardByUnique.AsQueryable();
         }
 
-        public IQueryable<InventoryCardByCustomResult> QueryCardsByCustom()
-        {
-            return _cardContext.InventoryCardByCustom.AsQueryable();
-        }
 
-        
         //public async Task<IEnumerable<CardOverviewResult>> GetDeckCardOverviews(int deckId)
         //{
         //    //Deck Overviews

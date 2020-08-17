@@ -5,17 +5,17 @@ namespace Carpentry.Logic.Models.Backups
 {
     class BackupInventoryCard
     {
-        [JsonProperty("i")]
-        public int MultiverseId { get; set; }
-
         [JsonProperty("s")]
-        public int InventoryCardStatusId { get; set; }
+        public string SetCode { get; set; }
 
-        [JsonProperty("v")]
-        public string VariantName { get; set; }
+        [JsonProperty("n")]
+        public int? CollectorNumber { get; set; }
 
         [JsonProperty("f")]
         public bool IsFoil { get; set; }
+
+        [JsonProperty("i")]
+        public int InventoryCardStatusId { get; set; }
 
         [JsonProperty("d")]
         public List<BackupDeckCard> DeckCards { get; set; }
