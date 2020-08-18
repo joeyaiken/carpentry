@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Interfaces
 {
-    public interface ICardImportService
+    public interface IDataImportService
     {
         //public async ValidatedCardImportDto ValidateImport([Raw]CardImportDto)
         Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload);

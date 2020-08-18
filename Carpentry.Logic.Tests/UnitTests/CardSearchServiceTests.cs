@@ -43,114 +43,117 @@ namespace Carpentry.Logic.Tests.UnitTests
         [TestMethod]
         public async Task CardSearchService_SearchCardsFromInventory_Test()
         {
-            //Assemble
-            List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
-            {
-                CardInstance(),
-                CardInstance(),
-                CardInstance(),
-                CardInstance(),
-                CardInstance(),
-            };
+            Assert.Fail();
+            ////Assemble
+            //List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
+            //{
+            //    CardInstance(),
+            //    CardInstance(),
+            //    CardInstance(),
+            //    CardInstance(),
+            //    CardInstance(),
+            //};
 
-            //var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
+            ////var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
 
-            var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
-            mockInventoryRepo
-                .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
-                .ReturnsAsync(expectedSearchResult);
+            //mockInventoryRepo
+            //    .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
+            //    .ReturnsAsync(expectedSearchResult);
 
-            var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
+            //var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
+            //var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
 
-            InventoryQueryParameter filters = new InventoryQueryParameter()
-            {
+            //InventoryQueryParameter filters = new InventoryQueryParameter()
+            //{
 
-            };
+            //};
 
-            //Act
-            IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromInventory(filters);
+            ////Act
+            //IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromInventory(filters);
 
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedSearchResult.Count, result.Count());
+            ////Assert
+            //Assert.IsNotNull(result);
+            //Assert.AreEqual(expectedSearchResult.Count, result.Count());
 
         }
 
         [TestMethod]
         public async Task CardSearchService_SearchCardsFromSet_Test()
         {
-            //Assemble
-            List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
-            {
-                CardInstance(),
-                CardInstance(),
-                CardInstance(),
-                CardInstance(),
-                CardInstance(),
-            };
+            Assert.Fail();
+            ////Assemble
+            //List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
+            //{
+            //    CardInstance(),
+            //    CardInstance(),
+            //    CardInstance(),
+            //    CardInstance(),
+            //    CardInstance(),
+            //};
 
-            var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
-            mockInventoryRepo
-                .Setup(p => p.SearchCardSet(It.IsNotNull<CardSearchQueryParameter>()))
-                .ReturnsAsync(expectedSearchResult);
+            //mockInventoryRepo
+            //    .Setup(p => p.SearchCardSet(It.IsNotNull<CardSearchQueryParameter>()))
+            //    .ReturnsAsync(expectedSearchResult);
 
-            var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
+            //var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
+            //var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
 
-            CardSearchQueryParameter filters = new CardSearchQueryParameter()
-            {
+            //CardSearchQueryParameter filters = new CardSearchQueryParameter()
+            //{
 
-            };
+            //};
 
-            //Act
-            IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromSet(filters);
+            ////Act
+            //IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromSet(filters);
 
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedSearchResult.Count, result.Count());
+            ////Assert
+            //Assert.IsNotNull(result);
+            //Assert.AreEqual(expectedSearchResult.Count, result.Count());
 
         }
 
         [TestMethod]
         public async Task CardSearchService_SearchCardsFromWeb_Test()
         {
-            //Assemble
-            List<ScryfallMagicCard> expectedSearchResult = new List<ScryfallMagicCard>()
-            {
-                new ScryfallMagicCard(){ Name = "Card" },
-                new ScryfallMagicCard(){ Name = "Card" },
-                new ScryfallMagicCard(){ Name = "Card" },
-                new ScryfallMagicCard(){ Name = "Card" },
-                new ScryfallMagicCard(){ Name = "Card" },
-            };
+            Assert.Fail();
+            ////Assemble
+            //List<ScryfallMagicCard> expectedSearchResult = new List<ScryfallMagicCard>()
+            //{
+            //    new ScryfallMagicCard(){ Name = "Card" },
+            //    new ScryfallMagicCard(){ Name = "Card" },
+            //    new ScryfallMagicCard(){ Name = "Card" },
+            //    new ScryfallMagicCard(){ Name = "Card" },
+            //    new ScryfallMagicCard(){ Name = "Card" },
+            //};
 
-            var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
-            var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
+            //var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            mockScryService
-                .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
-                .ReturnsAsync(expectedSearchResult);
+            //mockScryService
+            //    .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
+            //    .ReturnsAsync(expectedSearchResult);
 
-            var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
+            //var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
 
-            NameSearchQueryParameter filters = new NameSearchQueryParameter()
-            {
-                Name = "",
-                Exclusive = false,
-            };
+            //NameSearchQueryParameter filters = new NameSearchQueryParameter()
+            //{
+            //    Name = "",
+            //    Exclusive = false,
+            //};
 
-            //Act
-            IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromWeb(filters);
+            ////Act
+            //IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromWeb(filters);
 
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedSearchResult.Count, result.Count());
+            ////Assert
+            //Assert.IsNotNull(result);
+            //Assert.AreEqual(expectedSearchResult.Count, result.Count());
         }
     }
 }

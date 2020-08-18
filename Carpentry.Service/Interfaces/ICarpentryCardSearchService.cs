@@ -10,6 +10,6 @@ namespace Carpentry.Service.Interfaces
     {
         Task<List<CardSearchResultDto>> SearchInventory(CardSearchQueryParameter filters);
 
-        Task<IEnumerable<MagicCardDto>> SearchWeb(NameSearchQueryParameter filters);
+        Task<List<MagicCardDto>> SearchWeb(NameSearchQueryParameter filters);
     }
 }

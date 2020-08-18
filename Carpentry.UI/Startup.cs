@@ -56,7 +56,7 @@ namespace Carpentry.UI
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
 
-            services.AddScoped<ICardImportService, CardImportService>();
+            services.AddScoped<IDataImportService, DataImportService>();
             services.AddScoped<IDataUpdateService, DataUpdateService>();
             services.AddScoped<IDataExportService, DataExportService>();
             services.AddScoped<IFilterService, FilterService>();

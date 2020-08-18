@@ -34,14 +34,14 @@ namespace Carpentry.Logic.Implementations
         public static LandType Forest { get { return new LandType("Forest"); } }
     }
 
-    public class CardImportService : ICardImportService
+    public class DataImportService : IDataImportService
     {
         private readonly IDataUpdateService _dataUpdateService;
         private readonly ICardDataRepo _cardDataRepo;
         private readonly IDeckService _deckService;
         private readonly IInventoryService _inventoryService;
         private readonly int _cardStatus_InInventory = 1;
-        public CardImportService(
+        public DataImportService(
             IDataUpdateService dataUpdateService,
             ICardDataRepo cardDataRepo,
             IDeckService deckService,

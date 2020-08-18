@@ -1,12 +1,10 @@
-﻿using Carpentry.Data.QueryParameters;
-using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Data.Interfaces;
 using System.Linq;
-using Carpentry.Data.QueryResults;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -16,20 +14,20 @@ namespace Carpentry.Logic.Implementations
         //private readonly IDataUpdateService _dataUpdateService;
         //private readonly ICoreDataRepo _coreDataRepo;
         private readonly ICardDataRepo _cardDataRepo;
-        private readonly ISearchService _searchService;
+        //private readonly ISearchService _searchService;
         public InventoryService(
             IInventoryDataRepo inventoryRepo,
             //IDataUpdateService dataUpdateService,
             //ICoreDataRepo coreDataRepo,
-            ICardDataRepo cardDataRepo,
-            ISearchService searchService
+            ICardDataRepo cardDataRepo
+            //ISearchService searchService
         )
         {
             _inventoryRepo = inventoryRepo;
             //_dataUpdateService = dataUpdateService;
             //_coreDataRepo = coreDataRepo;
             _cardDataRepo = cardDataRepo;
-            _searchService = searchService;
+            //_searchService = searchService;
         }
 
         #region private methods
@@ -241,19 +239,19 @@ namespace Carpentry.Logic.Implementations
 
         #region Search
 
-        public async Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
-        {
-            if (param == null)
-            {
-                throw new ArgumentNullException("param");
-            }
+        //public async Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
+        //{
+        //    if (param == null)
+        //    {
+        //        throw new ArgumentNullException("param");
+        //    }
 
-            //IEnumerable<CardOverviewResult> result = await _inventoryRepo.GetInventoryOverviews(param);
+        //    //IEnumerable<CardOverviewResult> result = await _inventoryRepo.GetInventoryOverviews(param);
 
-            var result = await _searchService.SearchInventory(param);
+        //    var result = await _searchService.SearchInventory(param);
 
-            return result;
-        }
+        //    return result;
+        //}
 
         public async Task<InventoryDetailDto> GetInventoryDetail(int cardId)
         {

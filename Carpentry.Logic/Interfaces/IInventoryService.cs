@@ -1,8 +1,5 @@
-﻿using Carpentry.Data.QueryParameters;
-using Carpentry.Logic.Models;
-using System;
+﻿using Carpentry.Logic.Models;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Interfaces
@@ -18,20 +15,7 @@ namespace Carpentry.Logic.Interfaces
         Task DeleteInventoryCardBatch(IEnumerable<int> batch);
 
         //Search
-        Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
+        //Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
         Task<InventoryDetailDto> GetInventoryDetail(int cardId);
-
-        //Collection Builder
-        //Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions();
-        //Task HideCollectionBuilderSuggestion(InventoryOverviewDto dto);
-
-        //Trimming Tips
-        //Task<List<InventoryOverviewDto>> GetTrimmingTips();
-        //Task HideTrimmingTip(InventoryOverviewDto dto);
-
-        //Import/Export
-        //Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto);
-        //Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto);
-        //Task<byte[]> ExportInventoryBackup();
     }
 }

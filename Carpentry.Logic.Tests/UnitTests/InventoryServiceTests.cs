@@ -30,6 +30,8 @@ namespace Carpentry.Logic.Tests.UnitTests
             };
 
             var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
+            //var mockSearchService
 
             mockInventoryRepo
                 .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCardData>()))
@@ -49,7 +51,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             //    .Setup(p => p.GetCardVariantTypeByName(It.IsNotNull<string>()))
             //    .ReturnsAsync(expectedVariantType);
 
-            var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
+            
 
             var inventoryService = new InventoryService(
                 mockInventoryRepo.Object,

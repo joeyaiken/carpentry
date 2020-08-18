@@ -12,16 +12,18 @@ namespace Carpentry.Service.Implementations
     {
         private readonly IInventoryService _inventoryService;
         private readonly IDataExportService _dataBackupService;
-        private readonly ICardImportService _cardImportService;
+        private readonly IDataImportService _cardImportService;
         private readonly ICollectionBuilderService _collectionBuilderService;
         private readonly ITrimmingTipsService _trimmingTipsService;
+        private readonly ISearchService _searchService;
 
         public CarpentryInventoryService(
             IInventoryService inventoryService,
             IDataExportService dataBackupService,
-            ICardImportService cardImportService,
+            IDataImportService cardImportService,
             ICollectionBuilderService collectionBuilderService,
-            ITrimmingTipsService trimmingTipsService
+            ITrimmingTipsService trimmingTipsService,
+            ISearchService searchService
         )
         {
             _inventoryService = inventoryService;
@@ -29,6 +31,7 @@ namespace Carpentry.Service.Implementations
             _cardImportService = cardImportService;
             _collectionBuilderService = collectionBuilderService;
             _trimmingTipsService = trimmingTipsService;
+            _searchService = searchService;
         }
 
         #region Inventory Card add/update/delete
@@ -70,7 +73,7 @@ namespace Carpentry.Service.Implementations
 
         public async Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
         {
-            var result = await _inventoryService.GetInventoryOverviews(param);
+            var result = await _searchService.SearchInventory(param);
             return result;
         }
 
@@ -79,7 +82,6 @@ namespace Carpentry.Service.Implementations
             var result = await _inventoryService.GetInventoryDetail(cardId);
             return result;
         }
-
 
         #endregion Search
 

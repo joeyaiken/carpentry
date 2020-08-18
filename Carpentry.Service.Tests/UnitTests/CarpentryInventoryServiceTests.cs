@@ -20,9 +20,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             int idToExpect = 1;
 
@@ -42,7 +43,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -58,9 +60,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             List<InventoryCardDto> cardBatch = new List<InventoryCardDto>()
             {
@@ -79,7 +82,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -95,9 +99,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             InventoryCardDto cardToUpdate = new InventoryCardDto()
             {
@@ -115,7 +120,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -131,9 +137,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
 
             var cardsToUpdate = new List<InventoryCardDto>()
@@ -164,7 +171,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -180,9 +188,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             int idToDelete = 1;
 
@@ -195,7 +204,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -211,9 +221,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             var idsToDelete = new List<int> { 1, 2, 3 };
 
@@ -226,7 +237,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -246,9 +258,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
 
             List<InventoryOverviewDto> expectedOverviewResult = new List<InventoryOverviewDto>()
@@ -258,8 +271,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 new InventoryOverviewDto(),
             };
 
-            mockInventoryService
-                .Setup(p => p.GetInventoryOverviews(It.IsNotNull<InventoryQueryParameter>()))
+            mockSearchService
+                .Setup(p => p.SearchInventory(It.IsNotNull<InventoryQueryParameter>()))
                 .ReturnsAsync(expectedOverviewResult);
 
             var inventoryService = new CarpentryInventoryService(
@@ -267,7 +280,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             InventoryQueryParameter queryParamToRequest = new InventoryQueryParameter()
@@ -294,9 +308,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             var expectedResult = new InventoryDetailDto();
 
@@ -309,7 +324,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             int idToRequest = 1;
@@ -330,9 +346,10 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             var mockSuggestions = new List<InventoryOverviewDto>()
             {
@@ -350,7 +367,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -367,9 +385,10 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             mockCollectionBuilderService
                 .Setup(p => p.HideCollectionBuilderSuggestion(It.IsNotNull<InventoryOverviewDto>()))
@@ -380,7 +399,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             var payloadToSubmit = new InventoryOverviewDto() { };
@@ -401,9 +421,10 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             var mockTrimmingTips = new List<InventoryOverviewDto>()
             {
@@ -421,7 +442,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -438,9 +460,10 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             mockTrimmingTipsService
                 .Setup(p => p.HideTrimmingTip(It.IsNotNull<InventoryOverviewDto>()))
@@ -451,7 +474,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             var payloadToSubmit = new InventoryOverviewDto() { };
@@ -473,9 +497,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             var expectedResult = new ValidatedCarpentryImportDto();
 
@@ -488,7 +513,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             var payloadToSubmit = new CardImportDto() { };
@@ -506,9 +532,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             mockCardImportService
                 .Setup(p => p.AddValidatedCarpentryImport(It.IsNotNull<ValidatedCarpentryImportDto>()))
@@ -519,7 +546,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockDataBackupService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             var payloadToSubmit = new ValidatedCarpentryImportDto() { };
@@ -537,9 +565,10 @@ namespace Carpentry.Service.Tests.UnitTests
             //Assemble
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
-            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
+            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
 
             var expectedResult = new byte[] { };
 
@@ -552,7 +581,8 @@ namespace Carpentry.Service.Tests.UnitTests
                 mockExportService.Object,
                 mockCardImportService.Object,
                 mockCollectionBuilderService.Object,
-                mockTrimmingTipsService.Object
+                mockTrimmingTipsService.Object,
+                mockSearchService.Object
                 );
 
             //Act
@@ -563,7 +593,5 @@ namespace Carpentry.Service.Tests.UnitTests
         }
         
         #endregion
-
-
     }
 }

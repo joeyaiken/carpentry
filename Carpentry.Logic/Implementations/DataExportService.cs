@@ -110,7 +110,52 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<string> GetDeckListExport(int deckId)
         {
-            throw new NotImplementedException("This hasn't been implemented yet");
+            //Format: <amount> <Card Name> (<Set>) <Collector Number>
+            //Groups: Companion/Commander, Deck, Sideboard
+            var deckCards = await _cardContext.DeckCards
+                .Where(dc => dc.DeckId == deckId)
+                .Select(c => new
+                {
+                    CardString = $"{c.InventoryCard.Card.Name} ({c.InventoryCard.Card.Set.Code}) {c.InventoryCard.Card.CollectorNumber}" ,
+                    //c.InventoryCard.Card.Name,
+                    //c.InventoryCard.Card.Set.Code,
+                    //c.InventoryCard.Card.CollectorNumber,
+                    Category = c.Category.Name ?? "Deck",
+                }).ToListAsync();
+
+            var fullStrings = deckCards
+                .GroupBy(dc => new
+                {
+                    dc.Category,
+                    dc.CardString
+                })
+                .Select(g => new
+                {
+                    g.Key.Category,
+                    CardString = $"{g.Count()} {g.Key.CardString}",
+                }).ToList();
+
+            var groupedStrings = fullStrings
+                .GroupBy(g => g.Category)
+                .Select(g => new
+                {
+                    Category = g.Key,
+                    Cards = g.Select(i => i.CardString),
+                })
+                .ToList();
+
+            var exportList = new List<string>();
+
+            foreach(var group in groupedStrings)
+            {
+                exportList.Add(group.Category);
+                exportList.AddRange(group.Cards);
+                exportList.Add("");
+            }
+
+            var result = string.Join('\n', exportList);
+
+            return result;
         }
 
         #endregion

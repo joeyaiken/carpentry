@@ -1,12 +1,16 @@
 ﻿using Carpentry.Data.Interfaces;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
+using Carpentry.Logic.Models.Scryfall;
+using Carpentry.Logic.Search;
 using Carpentry.Service.Implementations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Carpentry.Service.Tests.UnitTests
 {
@@ -14,41 +18,69 @@ namespace Carpentry.Service.Tests.UnitTests
     public class CarpentryCardSerachServiceTests
     {
         [TestMethod]
-        public void CarpentryCardSerachService_SearchInventory_Test()
+        public async Task CarpentryCardSerachService_SearchInventory_Test()
         {
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            //Assemble
             var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
             var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
+
+            var expectedResult = new List<CardSearchResultDto>()
+            {
+
+            };
+
+            mockSearchService
+                .Setup(p => p.SearchCards(It.IsNotNull<CardSearchQueryParameter>()))
+                .ReturnsAsync(expectedResult);
 
             var cardSearchService = new CarpentryCardSearchService(
                 mockSearchService.Object,
                 mockScryService.Object
                 );
 
-            var queryParam = new NameSearchQueryParameter();
+            var queryParamToSubmit = new CardSearchQueryParameter();
 
-            var result = cardSearchService.SearchWeb(queryParam);
+            //Act
+            var result = await cardSearchService.SearchInventory(queryParamToSubmit);
 
-            Assert.Fail();
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedResult.Count, result.Count);
         }
         
         [TestMethod]
-        public void CarpentryCardSerachService_SearchWeb_Test()
+        public async Task CarpentryCardSerachService_SearchWeb_Test()
         {
             var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
             var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
+
+            var expectedResult = new List<ScryfallMagicCard>()
+            {
+
+            };
+
+            mockScryService
+                .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
+                .ReturnsAsync(expectedResult);
 
             var cardSearchService = new CarpentryCardSearchService(
                 mockSearchService.Object,
                 mockScryService.Object
                 );
 
-            var queryParam = new NameSearchQueryParameter();
+            var queryParam = new NameSearchQueryParameter()
+            {
+                Name = "Opt",
+                Exclusive = false,
+            };
 
-            var result = cardSearchService.SearchWeb(queryParam);
 
-            Assert.Fail();
+            //Act
+            var result = await cardSearchService.SearchWeb(queryParam);
 
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedResult.Count, result.Count);
         }
     }
 }

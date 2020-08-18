@@ -36,7 +36,7 @@ namespace Carpentry.Service.Implementations
             return result;
         }
 
-        public async Task<IEnumerable<MagicCardDto>> SearchWeb(NameSearchQueryParameter filters)
+        public async Task<List<MagicCardDto>> SearchWeb(NameSearchQueryParameter filters)
         {
             //TODO - add some way of indicating that a card's set isn't tracked in the DB
             var result = await _scryService.SearchScryfallByName(filters.Name, filters.Exclusive);

@@ -20,7 +20,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             int idToReturn = 1;
@@ -50,7 +50,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             mockDeckService
@@ -77,7 +77,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             mockDeckService
@@ -108,7 +108,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             mockDeckService
@@ -135,7 +135,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             //int idToReturn = 1;
@@ -168,7 +168,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             mockDeckService
@@ -195,7 +195,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             mockDeckService
@@ -226,7 +226,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             var deckOverviewsToReturn = new List<DeckOverviewDto>()
@@ -259,7 +259,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             var expectedResult = new DeckDetailDto();
@@ -292,7 +292,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             var expectedResult = new ValidatedDeckImportDto() { };
@@ -324,7 +324,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             mockImportService
@@ -351,7 +351,7 @@ namespace Carpentry.Service.Tests.UnitTests
         {
             //Arrange
             var mockDeckService = new Mock<IDeckService>(MockBehavior.Strict);
-            var mockImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockImportService = new Mock<IDataImportService>(MockBehavior.Strict);
             var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
 
             var expectedResult = "A DECK LIST";

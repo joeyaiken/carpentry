@@ -73,7 +73,7 @@ namespace Carpentry.UI.Tests.UnitTests
 
             var typedResult = response.Result as OkObjectResult;
 
-            IEnumerable<MagicCardDto> resultValue = typedResult.Value as IEnumerable<MagicCardDto>;
+            var resultValue = typedResult.Value as List<CardSearchResultDto>;
 
             Assert.IsNotNull(resultValue);
             Assert.AreEqual(5, resultValue.Count());
@@ -83,14 +83,14 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task CardSearch_SearchWeb_ReturnsOK_Test()
         {
             //arrange
-            IEnumerable<MagicCardDto> expectedSearchResults = new List<MagicCardDto>()
+            List<MagicCardDto> expectedSearchResults = new List<MagicCardDto>()
             {
                 new MagicCardDto{ },
                 new MagicCardDto{ },
                 new MagicCardDto{ },
                 new MagicCardDto{ },
                 new MagicCardDto{ },
-            }.AsEnumerable();
+            };
 
             var mockService = new Mock<ICarpentryCardSearchService>(MockBehavior.Strict);
 
@@ -106,10 +106,6 @@ namespace Carpentry.UI.Tests.UnitTests
             var response = await cardSearchController.SearchWeb(queryParam);
 
             //assert
-            //var resultValue = AssertIsObjectResult<IEnumerable<MagicCardDto>>(response);
-            //var resultValue = AssertIsObjectResult(response);
-            
-
             Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
             var typedResult = response.Result as OkObjectResult;
             var resultValue = typedResult.Value as IEnumerable<MagicCardDto>;

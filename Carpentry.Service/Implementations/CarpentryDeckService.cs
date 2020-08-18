@@ -12,12 +12,12 @@ namespace Carpentry.Service.Implementations
     {        
         //Should have no access to data context classes, only repo classes
         private readonly IDeckService _deckService;
-        private readonly ICardImportService _cardImportService;
+        private readonly IDataImportService _cardImportService;
         private readonly IDataExportService _exportService;
 
         public CarpentryDeckService(
             IDeckService deckService,
-            ICardImportService cardImportService,
+            IDataImportService cardImportService,
             IDataExportService exportService
             )
         {

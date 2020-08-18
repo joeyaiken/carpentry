@@ -29,7 +29,7 @@ namespace Carpentry.Tools.QuickRestore
 
             var updateService = serviceProvider.GetService<IDataUpdateService>();
 
-            var importService = serviceProvider.GetService<ICardImportService>();
+            var importService = serviceProvider.GetService<IDataImportService>();
 
             //Verify DBs & default records exist
 
@@ -137,7 +137,7 @@ namespace Carpentry.Tools.QuickRestore
                 .AddScoped<IDeckService, DeckService>()
                 .AddScoped<IInventoryService, InventoryService>()
 
-                .AddScoped<ICardImportService, CardImportService>()
+                .AddScoped<IDataImportService, DataImportService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
                 .AddScoped<IDataExportService, DataExportService>()
                 .AddScoped<IFilterService, FilterService>()
