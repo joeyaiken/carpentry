@@ -19,15 +19,15 @@ namespace Carpentry.Logic.Implementations
     /// <summary>
     /// This class contains the logic for saving relevant DB contents to a text file, or exporting as a zip file
     /// </summary>
-    public class DataBackupService : IDataBackupService
+    public class DataExportService : IDataExportService
     {
-        private readonly ILogger<DataBackupService> _logger;
+        private readonly ILogger<DataExportService> _logger;
         private readonly CarpentryDataContext _cardContext; //TODO - Data context needs to be replaced a Repo class
         private readonly CompressionLevel _exportCompressionLevel;
         private readonly IDataBackupConfig _config;
 
-        public DataBackupService(
-            ILogger<DataBackupService> logger,
+        public DataExportService(
+            ILogger<DataExportService> logger,
             CarpentryDataContext cardContext,
             IDataBackupConfig config
             )
@@ -105,6 +105,12 @@ namespace Carpentry.Logic.Implementations
             }
 
             return backupFile;
+        }
+
+
+        public async Task<string> GetDeckListExport(int deckId)
+        {
+            throw new NotImplementedException("This hasn't been implemented yet");
         }
 
         #endregion

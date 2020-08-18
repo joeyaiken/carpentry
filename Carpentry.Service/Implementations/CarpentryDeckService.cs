@@ -9,39 +9,21 @@ using System.Threading.Tasks;
 namespace Carpentry.Service.Implementations
 {
     public class CarpentryDeckService : ICarpentryDeckService
-    {
-        //All methods should return a model specific to THIS project, not the data project (evevntually)
-
-        //What if all data layer models were either
-        //1 -   A DB/DataContext model
-        //2 -   A DTO that contains either IDs or values but not the associations
-
+    {        
         //Should have no access to data context classes, only repo classes
-        //private readonly ILogger<DeckService> _logger;
-
-        //private readonly IDeckDataRepo _deckRepo;
-
-        //private readonly IInventoryService _inventoryService;
-
-        //public ICoreDataRepo _coreDataRepo;
         private readonly IDeckService _deckService;
         private readonly ICardImportService _cardImportService;
+        private readonly IDataExportService _exportService;
 
         public CarpentryDeckService(
             IDeckService deckService,
-            //IDeckDataRepo deckRepo,
-            //IInventoryService inventoryService,
-            //ILogger<DeckService> logger,
-            //ICoreDataRepo coreDataRepo,
-            ICardImportService cardImportService
+            ICardImportService cardImportService,
+            IDataExportService exportService
             )
         {
-            //_deckRepo = deckRepo;
-            //_inventoryService = inventoryService;
-            //_logger = logger;
-            //_coreDataRepo = coreDataRepo;
             _deckService = deckService;
             _cardImportService = cardImportService;
+            _exportService = exportService;
         }
 
         #region Public methods
@@ -50,17 +32,18 @@ namespace Carpentry.Service.Implementations
 
         public async Task<int> AddDeck(DeckPropertiesDto props)
         {
-            throw new NotImplementedException();
+            var result = await _deckService.AddDeck(props);
+            return result;
         }
 
         public async Task UpdateDeck(DeckPropertiesDto deckDto)
         {
-            throw new NotImplementedException();
+            await _deckService.UpdateDeck(deckDto);
         }
 
         public async Task DeleteDeck(int deckId)
         {
-            throw new NotImplementedException();
+            await _deckService.DeleteDeck(deckId);
         }
 
         #endregion Deck Props
@@ -78,40 +61,42 @@ namespace Carpentry.Service.Implementations
         /// <returns></returns>
         public async Task AddDeckCard(DeckCardDto dto)
         {
-            throw new NotImplementedException();
+            await _deckService.AddDeckCard(dto);
         }
 
         //I think I only end up adding NEW deck cards with a batch
         //IDR where exactly this gets called outside of console apps
         public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dtoBatch)
         {
-            throw new NotImplementedException();
+            await _deckService.AddDeckCardBatch(dtoBatch);
         }
 
         public async Task UpdateDeckCard(DeckCardDto card)
         {
-            throw new NotImplementedException();
+            await _deckService.UpdateDeckCard(card);
         }
 
         public async Task DeleteDeckCard(int deckCardId)
         {
-            throw new NotImplementedException();
+            await _deckService.DeleteDeckCard(deckCardId);
         }
 
         #endregion Deck Cards
 
         #region Search
 
-        public async Task<IEnumerable<DeckOverviewDto>> GetDeckOverviews()
+        public async Task<List<DeckOverviewDto>> GetDeckOverviews()
         {
-            throw new NotImplementedException();
+            var result = await _deckService.GetDeckOverviews();
+            return result;
         }
 
         //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
         //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
         public async Task<DeckDetailDto> GetDeckDetail(int deckId)
         {
-            throw new NotImplementedException();
+            var result = await _deckService.GetDeckDetail(deckId);
+            return result;
         }
 
         #endregion Search
@@ -121,7 +106,6 @@ namespace Carpentry.Service.Implementations
         public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto)
         {
             var validatedResult = await _cardImportService.ValidateDeckImport(dto);
-
             return validatedResult;
         }
 
@@ -132,10 +116,9 @@ namespace Carpentry.Service.Implementations
 
         public async Task<string> ExportDeckList(int deckId)
         {
-            //This can't be implemented until I add Set Number to CardData, and properly track that in the DB
-            throw new NotImplementedException();
+            var result = await _exportService.GetDeckListExport(deckId);
+            return result;
         }
-
 
         #endregion Import / Export
 

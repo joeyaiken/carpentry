@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Carpentry.Data.QueryParameters
+namespace Carpentry.Logic.Search
 {
     public class CardSearchQueryParameter
     {

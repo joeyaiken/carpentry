@@ -27,7 +27,7 @@ namespace Carpentry.Logic.Implementations
     //  A premium card is an card with a collector_number that includes a star/★
     public class DataUpdateService : IDataUpdateService
     {
-        private readonly ILogger<DataBackupService> _logger;
+        private readonly ILogger<DataExportService> _logger;
 
         private readonly IScryfallService _scryService;
 
@@ -41,7 +41,7 @@ namespace Carpentry.Logic.Implementations
 
 
         public DataUpdateService(
-            ILogger<DataBackupService> logger,
+            ILogger<DataExportService> logger,
             IScryfallService scryService,
             ICardDataRepo cardRepo,
             IScryfallDataRepo scryfallRepo,

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Carpentry.Data.Models;
 using Carpentry.Data.DataModels.QueryResults;
+using Carpentry.Data.Exceptions;
 
 namespace Carpentry.Data.Implementations
 {
@@ -293,7 +294,7 @@ namespace Carpentry.Data.Implementations
                 }
                 catch(Exception ex)
                 {
-                    int breakpoint = 1;
+                    throw;
                 }
 
                 
@@ -328,9 +329,9 @@ namespace Carpentry.Data.Implementations
 
         }
 
-        public async Task<CardData> GetCardData(int multiverseId)
+        public async Task<CardData> GetCardData(int cardId)
         {
-            CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
+            CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == cardId);
             return result;
         }
 
@@ -345,11 +346,33 @@ namespace Carpentry.Data.Implementations
                 //.Include(x => x.CardColors)
                 .Include(x => x.Legalities)
                 .Include(c => c.Set)
+                .Include(c => c.Rarity)
                 .FirstOrDefaultAsync();
 
             if(matchingCard == null)
             {
-                throw new Exception($"Could not find card ({setCode}) {name}");
+                throw new CardNotFoundException(setCode, name);
+            }
+
+            //CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
+            return matchingCard;
+        }
+        
+        public async Task<CardData> GetCardData(string setCode, int collectorNumber)
+        {
+            var matchingCard = await _cardContext.Cards
+                .Where(x => x.Set.Code.ToLower() == setCode.ToLower() && x.CollectorNumber == collectorNumber)
+                //.Include(x => x.Variants).ThenInclude(v => v.Type)
+                //.Include(x => x.CardColorIdentities)
+                //.Include(x => x.CardColors)
+                .Include(x => x.Legalities)
+                .Include(c => c.Set)
+                .Include(c => c.Rarity)
+                .FirstOrDefaultAsync();
+
+            if (matchingCard == null)
+            {
+                throw new CardNotFoundException(setCode, collectorNumber);
             }
 
             //CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
@@ -366,6 +389,7 @@ namespace Carpentry.Data.Implementations
                 .Include(c => c.Rarity)
                 .Include(c => c.Set)
                 .ToListAsync();
+            
             return result;
         }
 

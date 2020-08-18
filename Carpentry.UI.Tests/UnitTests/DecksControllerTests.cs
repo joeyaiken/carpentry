@@ -205,14 +205,14 @@ namespace Carpentry.UI.Tests.UnitTests
             //arrange
             var mockDeckService = new Mock<ICarpentryDeckService>(MockBehavior.Strict);
 
-            IEnumerable<DeckOverviewDto> expectedSearchResults = new List<DeckOverviewDto>()
+            List<DeckOverviewDto> expectedSearchResults = new List<DeckOverviewDto>()
             {
                 new DeckOverviewDto{ },
                 new DeckOverviewDto{ },
                 new DeckOverviewDto{ },
                 new DeckOverviewDto{ },
                 new DeckOverviewDto{ },
-            }.AsEnumerable();
+            };
 
             mockDeckService
                 .Setup(p => p.GetDeckOverviews())

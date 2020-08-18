@@ -63,7 +63,7 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
+            var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
 
             InventoryQueryParameter filters = new InventoryQueryParameter()
             {
@@ -100,7 +100,7 @@ namespace Carpentry.Logic.Tests.UnitTests
 
             var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
+            var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
 
             CardSearchQueryParameter filters = new CardSearchQueryParameter()
             {
@@ -137,7 +137,7 @@ namespace Carpentry.Logic.Tests.UnitTests
                 .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(expectedSearchResult);
 
-            var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
+            var cardSearchService = new SearchService(mockInventoryRepo.Object, mockScryService.Object);
 
             NameSearchQueryParameter filters = new NameSearchQueryParameter()
             {

@@ -26,7 +26,7 @@ namespace Carpentry.Tools.QuickBackup
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
             logger.LogInformation("----------Carpentry Quick Backup Tool - Initializing----------");
             var appConfig = new BackupToolConfig(Configuration);
-            var backupService = serviceProvider.GetService<IDataBackupService>();
+            var backupService = serviceProvider.GetService<IDataExportService>();
             
             //Call backup service
             await backupService.BackupCollectionToDirectory(appConfig.BackupDirectory);
@@ -58,7 +58,7 @@ namespace Carpentry.Tools.QuickBackup
 
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
-                .AddScoped<IDataBackupService, DataBackupService>()
+                .AddScoped<IDataExportService, DataExportService>()
                 .BuildServiceProvider();
 
             return serviceProvider;

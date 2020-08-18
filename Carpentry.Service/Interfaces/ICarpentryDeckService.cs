@@ -19,7 +19,7 @@ namespace Carpentry.Service.Interfaces
         Task DeleteDeckCard(int deckCardId);
 
 
-        Task<IEnumerable<DeckOverviewDto>> GetDeckOverviews();
+        Task<List<DeckOverviewDto>> GetDeckOverviews();
         Task<DeckDetailDto> GetDeckDetail(int deckId);
 
 

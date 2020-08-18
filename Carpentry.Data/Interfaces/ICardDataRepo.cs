@@ -25,8 +25,10 @@ namespace Carpentry.Data.Interfaces
         Task AddCardDataBatch(List<CardDataDto> cards);
         Task UpdateCardDataBatch(List<CardDataDto> cards);
         Task<List<CardData>> GetCardsByName(string cardName);
-        Task<CardData> GetCardData(int multiverseId);
+        Task<CardData> GetCardData(int cardId);
         Task<CardData> GetCardData(string name, string code);
+        Task<CardData> GetCardData(string setCode, int collectorNumber);
         Task RemoveAllCardDefinitionsForSetId(int setId);
     }
 }
+

@@ -13,50 +13,47 @@ namespace Carpentry.Logic.Implementations
     public class InventoryService : IInventoryService
     {
         private readonly IInventoryDataRepo _inventoryRepo;
-        private readonly IDataUpdateService _dataUpdateService;
-        private readonly ICoreDataRepo _coreDataRepo;
+        //private readonly IDataUpdateService _dataUpdateService;
+        //private readonly ICoreDataRepo _coreDataRepo;
         private readonly ICardDataRepo _cardDataRepo;
-        //private readonly IDataBackupService _dataBackupService;
-        //ICardImportService _cardImportService;
+        private readonly ISearchService _searchService;
         public InventoryService(
             IInventoryDataRepo inventoryRepo,
-            IDataUpdateService dataUpdateService,
-            ICoreDataRepo coreDataRepo,
-            ICardDataRepo cardDataRepo
-            //IDataBackupService dataBackupService,
-            //ICardImportService cardImportService
+            //IDataUpdateService dataUpdateService,
+            //ICoreDataRepo coreDataRepo,
+            ICardDataRepo cardDataRepo,
+            ISearchService searchService
         )
         {
             _inventoryRepo = inventoryRepo;
-            _dataUpdateService = dataUpdateService;
-            _coreDataRepo = coreDataRepo;
+            //_dataUpdateService = dataUpdateService;
+            //_coreDataRepo = coreDataRepo;
             _cardDataRepo = cardDataRepo;
-            //_dataBackupService = dataBackupService;
-            //_cardImportService = cardImportService;
+            _searchService = searchService;
         }
 
         #region private methods
 
-        private static InventoryOverviewDto MapCardResultToInventoryOverview(CardOverviewResult data)
-        {
-            InventoryOverviewDto result = new InventoryOverviewDto()
-            {
-                Cmc = data.Cmc,
-                Cost = data.Cost,
-                Count = data.Count,
-                //Description = data.,
-                Id = data.Id,
-                Img = data.Img,
-                Name = data.Name,
-                Type = data.Type,
-                Price = data.Price,
-                IsFoil = data.IsFoil,
-                Category = data.Category,
-                Description = data.Category,
-                //Variant = data.Variant,
-            };
-            return result;
-        }
+        //private static InventoryOverviewDto MapCardResultToInventoryOverview(CardOverviewResult data)
+        //{
+        //    InventoryOverviewDto result = new InventoryOverviewDto()
+        //    {
+        //        Cmc = data.Cmc,
+        //        Cost = data.Cost,
+        //        Count = data.Count,
+        //        //Description = data.,
+        //        Id = data.Id,
+        //        Img = data.Img,
+        //        Name = data.Name,
+        //        Type = data.Type,
+        //        Price = data.Price,
+        //        IsFoil = data.IsFoil,
+        //        Category = data.Category,
+        //        Description = data.Category,
+        //        //Variant = data.Variant,
+        //    };
+        //    return result;
+        //}
 
         private static List<MagicCardDto> MapInventoryQueryToMagicCardObject(List<Data.DataModels.CardData> query)
         {
@@ -112,18 +109,54 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
-            //await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
-
-            //DataReferenceValue<int> cardVariant = await _coreDataRepo.GetCardVariantTypeByName(dto.VariantName);
+            //TODO - validate card ID, instead of blindly trusting it if > 0
 
             var newInventoryCard = new Data.DataModels.InventoryCardData()
             {
                 IsFoil = dto.IsFoil,
                 InventoryCardStatusId = dto.StatusId,
                 CardId = dto.CardId,
-                //MultiverseId = dto.MultiverseId,
-                //VariantTypeId = cardVariant.Id,
             };
+
+            //Does the DTO contain a valid CardId?
+            if(newInventoryCard.CardId == 0)
+            {
+                //var matchingSet = await _cardDataRepo.GetCardSetByCode(dto.Set);
+
+                //if(matchingSet == null || !matchingSet.IsTracked)
+                //{
+                //    throw new Exception("Cannot add inventory card, not a valid tracked set");
+                //}
+
+                var cardData = await _cardDataRepo.GetCardData(dto.Set, dto.CollectorNumber);
+
+                //if (string.IsNullOrEmpty(dto.Set) || dto.CollectorNumber == 0)
+                //{
+                //    throw new Exception("Cannot add inventory card, not enough information to find a card");
+                //}
+
+                //If not, does the DTO contain a valid Set/CollectorNumber combo?
+                //var cardData = await _cardDataRepo.GetCardData(dto.Set, dto.CollectorNumber);
+
+
+                newInventoryCard.CardId = cardData.Id;
+
+
+            }
+
+
+
+            //Is the set actually tracked?
+
+            //Then, build a Data object and send to DB
+
+
+
+            //await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
+            //DataReferenceValue<int> cardVariant = await _coreDataRepo.GetCardVariantTypeByName(dto.VariantName);
+
+
+
 
             newInventoryCard.Id = await _inventoryRepo.AddInventoryCard(newInventoryCard);
 
@@ -175,7 +208,7 @@ namespace Carpentry.Logic.Implementations
             //Whatever, the Logic layer doesn't care what the UI layer is doing
             //It still needs to just map to something the DB can consume, the DB doesn't need a unique layer of mappings
 
-            Carpentry.Data.DataModels.InventoryCardData dbCard = await _inventoryRepo.GetInventoryCardById(dto.Id);
+            Carpentry.Data.DataModels.InventoryCardData dbCard = await _inventoryRepo.GetInventoryCard(dto.Id);
 
             //currently only expecting to change the status with this method
             dbCard.InventoryCardStatusId = dto.StatusId;
@@ -215,11 +248,11 @@ namespace Carpentry.Logic.Implementations
                 throw new ArgumentNullException("param");
             }
 
-            IEnumerable<CardOverviewResult> result = await _inventoryRepo.GetInventoryOverviews(param);
+            //IEnumerable<CardOverviewResult> result = await _inventoryRepo.GetInventoryOverviews(param);
 
-            List<InventoryOverviewDto> mappedResult = result.Select(x => MapCardResultToInventoryOverview(x)).ToList();
+            var result = await _searchService.SearchInventory(param);
 
-            return mappedResult;
+            return result;
         }
 
         public async Task<InventoryDetailDto> GetInventoryDetail(int cardId)

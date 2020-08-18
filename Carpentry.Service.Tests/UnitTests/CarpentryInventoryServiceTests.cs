@@ -1,4 +1,5 @@
-﻿using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Data.QueryParameters;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Service.Implementations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,415 +13,312 @@ namespace Carpentry.Service.Tests.UnitTests
     public class CarpentryInventoryServiceTests
     {
         #region Inventory Card add/update/delete
-        //Task<int> AddInventoryCard(InventoryCardDto dto);
-        //Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards);
-        //Task UpdateInventoryCard(InventoryCardDto dto);
-        //Task UpdateInventoryCardBatch(IEnumerable<InventoryCardDto> batch);
-        //Task DeleteInventoryCard(int id);
-        //Task DeleteInventoryCardBatch(IEnumerable<int> batch);
 
         [TestMethod]
         public async Task InventoryServiceTests_AddInventoryCard_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //int idToExpect = 1;
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //InventoryCardDto newCard = new InventoryCardDto()
-            //{
-            //    MultiverseId = 1,
-            //    VariantName = "normal"
-            //};
+            int idToExpect = 1;
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            InventoryCardDto newCard = new InventoryCardDto()
+            {
+                CardId = 1,
+                IsFoil = false,
+                StatusId = 1,
+            };
 
-            //mockInventoryRepo
-            //    .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCardData>()))
-            //    .ReturnsAsync(idToExpect);
+            mockInventoryService
+                .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCardDto>()))
+                .ReturnsAsync(idToExpect);
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //mockDataUpdateService
-            //    .Setup(p => p.EnsureCardDefinitionExists(It.Is<int>(i => i == newCard.MultiverseId)))
-            //    .Returns(Task.CompletedTask);
+            //Act
+            var newId = await inventoryService.AddInventoryCard(newCard);
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
-
-            //DataReferenceValue<int> expectedVariantType = new DataReferenceValue<int>() { Id = 1, Name = "normal" };
-
-            //mockCoreRepo
-            //    .Setup(p => p.GetCardVariantTypeByName(It.IsNotNull<string>()))
-            //    .ReturnsAsync(expectedVariantType);
-
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //var newId = await inventoryService.AddInventoryCard(newCard);
-
-            ////Assert
-            //Assert.AreEqual(idToExpect, newId);
+            //Assert
+            Assert.AreEqual(idToExpect, newId);
         }
 
         [TestMethod]
         public async Task InventoryServiceTests_AddInventoryCardBatch_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //List<InventoryCardDto> cardBatch = new List<InventoryCardDto>()
-            //{
-            //    new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
-            //    new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
-            //    new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
-            //    new InventoryCardDto() { MultiverseId = 1, VariantName = "normal" },
-            //};
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            List<InventoryCardDto> cardBatch = new List<InventoryCardDto>()
+            {
+                new InventoryCardDto() { },
+                new InventoryCardDto() { },
+                new InventoryCardDto() { },
+                new InventoryCardDto() { },
+            };
 
-            //mockInventoryRepo
-            //    .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCardData>>()))
-            //    .Returns(Task.CompletedTask);
+            mockInventoryService
+                .Setup(p => p.AddInventoryCardBatch(It.IsNotNull<List<InventoryCardDto>>()))
+                .Returns(Task.CompletedTask);
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //mockDataUpdateService
-            //    .Setup(p => p.EnsureCardDefinitionExists(It.Is<int>(i => i > 0)))
-            //    .Returns(Task.CompletedTask);
+            //Act
+            await inventoryService.AddInventoryCardBatch(cardBatch);
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
-
-            //List<DataReferenceValue<int>> variantTypes = new List<DataReferenceValue<int>>()
-            //{
-            //    new DataReferenceValue<int>() { Id = 1, Name = "normal" },
-            //    new DataReferenceValue<int>() { Id = 2, Name = "showcase" }
-            //};
-
-            //mockCoreRepo
-            //    .Setup(p => p.GetAllCardVariantTypes())
-            //    .ReturnsAsync(variantTypes);
-
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //await inventoryService.AddInventoryCardBatch(cardBatch);
-
-            ////Assert
-            ////Task returns void, nothing to assert
+            //Assert
+            //Task returns void, nothing to assert
         }
 
         [TestMethod]
         public async Task InventoryServiceTests_UpdateInventoryCard_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //InventoryCardDto cardToUpdate = new InventoryCardDto()
-            //{
-            //    Id = 1,
-            //    MultiverseId = 1,
-            //    VariantName = "normal"
-            //};
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            InventoryCardDto cardToUpdate = new InventoryCardDto()
+            {
+                Id = 1,
+                CardId = 1,
+                StatusId = 2,
+            };
 
-            //mockInventoryRepo
-            //    .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCardData>()))
-            //    .Returns(Task.CompletedTask);
+            mockInventoryService
+                .Setup(p => p.UpdateInventoryCard(It.IsAny<InventoryCardDto>()))
+                .Returns(Task.CompletedTask);
 
-            //InventoryCardData inventoryDbCard = new InventoryCardData() { Id = 1 };
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //mockInventoryRepo
-            //    .Setup(p => p.GetInventoryCardById(It.Is<int>(i => i == cardToUpdate.Id)))
-            //    .ReturnsAsync(inventoryDbCard);
+            //Act
+            await inventoryService.UpdateInventoryCard(cardToUpdate);
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
-
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
-
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //await inventoryService.UpdateInventoryCard(cardToUpdate);
-
-            ////Assert
-            ////Task returns void, nothing to assert
+            //Assert
+            //Task returns void, nothing to assert
         }
 
         [TestMethod]
         public async Task InventoryServiceTests_UpdateInventoryCardBatch_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //var cardsToUpdate = new List<InventoryCardDto>()
-            //{
-            //    new InventoryCardDto()
-            //    {
-            //        Id = 1,
-            //        MultiverseId = 1,
-            //        VariantName = "normal"
-            //    },
-            //    new InventoryCardDto()
-            //    {
-            //        Id = 2,
-            //        MultiverseId = 2,
-            //        VariantName = "normal"
-            //    },
-            //    new InventoryCardDto()
-            //    {
-            //        Id = 3,
-            //        MultiverseId = 3,
-            //        VariantName = "normal"
-            //    },
-            //};
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
 
-            //mockInventoryRepo
-            //    .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCardData>()))
-            //    .Returns(Task.CompletedTask);
+            var cardsToUpdate = new List<InventoryCardDto>()
+            {
+                new InventoryCardDto()
+                {
+                    Id = 1,
+                    StatusId = 2,
+                },
+                new InventoryCardDto()
+                {
+                    Id = 2,
+                    StatusId = 3,
+                },
+                new InventoryCardDto()
+                {
+                    Id = 3,
+                    StatusId = 1,
+                },
+            };
 
-            //InventoryCardData inventoryDbCard = new InventoryCardData() { Id = 1 };
+            mockInventoryService
+                .Setup(p => p.UpdateInventoryCardBatch(It.IsNotNull<IEnumerable<InventoryCardDto>>()))
+                .Returns(Task.CompletedTask);
 
-            //mockInventoryRepo
-            //    .Setup(p => p.GetInventoryCardById(It.IsAny<int>()))
-            //    .ReturnsAsync(inventoryDbCard);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            //Act
+            await inventoryService.UpdateInventoryCardBatch(cardsToUpdate);
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
-
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //await inventoryService.UpdateInventoryCardBatch(cardsToUpdate);
-
-            ////Assert
-            ////Task returns void, nothing to assert
+            //Assert
+            //Task returns void, nothing to assert
         }
 
         [TestMethod]
         public async Task InventoryServiceTests_DeleteInventoryCard_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //int idToDelete = 1;
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            int idToDelete = 1;
 
-            //mockInventoryRepo
-            //    .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i == idToDelete)))
-            //    .Returns(Task.CompletedTask);
+            mockInventoryService
+                .Setup(p => p.DeleteInventoryCard(It.Is<int>(i => i == idToDelete)))
+                .Returns(Task.CompletedTask);
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+            //Act
+            await inventoryService.DeleteInventoryCard(idToDelete);
 
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //await inventoryService.DeleteInventoryCard(idToDelete);
-
-            ////Assert
-            ////Task returns void, nothing to assert
+            //Assert
+            //Task returns void, nothing to assert
         }
 
         [TestMethod]
         public async Task InventoryServiceTests_DeleteInventoryCardBatch_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //var idsToDelete = new List<int> { 1, 2, 3 };
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            var idsToDelete = new List<int> { 1, 2, 3 };
 
-            //mockInventoryRepo
-            //    .Setup(p => p.DeleteInventoryCard(It.IsAny<int>()))
-            //    .Returns(Task.CompletedTask);
+            mockInventoryService
+                .Setup(p => p.DeleteInventoryCardBatch(It.IsAny<IEnumerable<int>>()))
+                .Returns(Task.CompletedTask);
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+            //Act
+            await inventoryService.DeleteInventoryCardBatch(idsToDelete);
 
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //await inventoryService.DeleteInventoryCardBatch(idsToDelete);
-
-            ////Assert
-            ////Task returns void, nothing to assert
+            //Assert
+            //Task returns void, nothing to assert
         }
 
         #endregion
 
         #region Search
-        //Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
-        //Task<InventoryDetailDto> GetInventoryDetail(int cardId);
+
         [TestMethod]
         public async Task InventoryServiceTests_GetInventoryOverviews_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //InventoryQueryParameter queryParamToRequest = new InventoryQueryParameter()
-            //{
-            //    //GroupBy = "unique",
-            //    //Sort = "price",
-            //    //SortDescending = true,
-            //    //Skip = 0,
-            //    //Take = 100,
-            //    //Rarity = new List<string>() { "common", "uncommon" },
-            //};
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+            List<InventoryOverviewDto> expectedOverviewResult = new List<InventoryOverviewDto>()
+            {
+                new InventoryOverviewDto(),
+                new InventoryOverviewDto(),
+                new InventoryOverviewDto(),
+            };
 
-            //List<CardOverviewResult> inventoryOverviewResult = new List<CardOverviewResult>()
-            //{
+            mockInventoryService
+                .Setup(p => p.GetInventoryOverviews(It.IsNotNull<InventoryQueryParameter>()))
+                .ReturnsAsync(expectedOverviewResult);
 
-            //};
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //mockInventoryRepo
-            //    .Setup(p => p.GetInventoryOverviews(It.IsNotNull<InventoryQueryParameter>()))
-            //    .ReturnsAsync(inventoryOverviewResult);
+            InventoryQueryParameter queryParamToRequest = new InventoryQueryParameter()
+            {
+                //GroupBy = "unique",
+                //Sort = "price",
+                //SortDescending = true,
+                //Skip = 0,
+                //Take = 100,
+                //Rarity = new List<string>() { "common", "uncommon" },
+            };
 
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
+            //Act
+            var overivews = await inventoryService.GetInventoryOverviews(queryParamToRequest);
 
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //IEnumerable<InventoryOverviewDto> overivews = await inventoryService.GetInventoryOverviews(queryParamToRequest);
-
-            ////Assert
-            //Assert.IsNotNull(overivews);
+            //Assert
+            Assert.IsNotNull(overivews);
+            Assert.AreEqual(expectedOverviewResult.Count, overivews.Count);
         }
 
         [TestMethod]
         public async Task InventoryServiceTests_GetInventoryDetail_Test()
         {
-            Assert.Fail();
-            ////Assemble
-            //int idToRequest = 1;
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //string nameToExpect = "Opt";
+            var expectedResult = new InventoryDetailDto();
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            mockInventoryService
+                .Setup(p => p.GetInventoryDetail(It.Is<int>(i => i > 0)))
+                .ReturnsAsync(expectedResult);
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+            int idToRequest = 1;
 
-            //List<InventoryCardResult> inventoryQueryResult = new List<InventoryCardResult>()
-            //{
-            //    new InventoryCardResult(),
-            //    new InventoryCardResult(),
-            //    new InventoryCardResult(),
-            //    new InventoryCardResult(),
-            //    //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
-            //    //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
-            //    //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
-            //    //new InventoryCardResult { DeckCards = new List<DeckCardResult>(), },
-            //};
+            //Act
+            var result = await inventoryService.GetInventoryDetail(idToRequest);
 
-            //mockInventoryRepo
-            //    .Setup(p => p.GetInventoryCardsByName(It.Is<string>(s => s == nameToExpect)))
-            //    .ReturnsAsync(inventoryQueryResult);
-
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //CardData getCardDataResult = new CardData()
-            //{
-            //    Name = nameToExpect
-            //};
-
-            //mockCardDatarepo
-            //    .Setup(p => p.GetCardData(It.Is<int>(i => i == idToRequest)))
-            //    .ReturnsAsync(getCardDataResult);
-
-            //List<CardData> cardDataResult = new List<CardData>()
-            //{
-            //    new CardData()
-            //    {
-            //        Legalities = new List<CardLegalityData>(),
-            //        Variants = new List<CardVariantData>(),
-            //        Rarity = new CardRarityData(),
-            //        Set = new CardSetData(),
-            //        CardColorIdentities = new List<CardColorIdentityData>(),
-            //        CardColors = new List<CardColorData>(),
-            //    },
-            //    new CardData()
-            //    {
-            //        Legalities = new List<CardLegalityData>(),
-            //        Variants = new List<CardVariantData>(),
-            //        Rarity = new CardRarityData(),
-            //        Set = new CardSetData(),
-            //        CardColorIdentities = new List<CardColorIdentityData>(),
-            //        CardColors = new List<CardColorData>(),
-            //    },
-            //    new CardData()
-            //    {
-            //        Legalities = new List<CardLegalityData>(),
-            //        Variants = new List<CardVariantData>(),
-            //        Rarity = new CardRarityData(),
-            //        Set = new CardSetData(),
-            //        CardColorIdentities = new List<CardColorIdentityData>(),
-            //        CardColors = new List<CardColorData>(),
-            //    },
-            //};
-
-            //mockCardDatarepo
-            //    .Setup(p => p.GetCardsByName(It.Is<string>(s => s == nameToExpect)))
-            //    .ReturnsAsync(cardDataResult);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////Act
-            //InventoryDetailDto result = await inventoryService.GetInventoryDetail(idToRequest);
-
-            ////Assert
-            //Assert.IsNotNull(result);
+            //Assert
+            Assert.IsNotNull(result);
         }
 
         #endregion
@@ -431,7 +329,7 @@ namespace Carpentry.Service.Tests.UnitTests
         public async Task InventoryService_GetCollectionBuilderSuggestions_ThrowsNotImplemented_Test()
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
-            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
             var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
@@ -468,7 +366,7 @@ namespace Carpentry.Service.Tests.UnitTests
         public async Task InventoryService_HideCollectionBuilderSuggestion_ThrowsNotImplemented_Test()
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
-            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
             var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
@@ -502,7 +400,7 @@ namespace Carpentry.Service.Tests.UnitTests
         public async Task InventoryService_GetTrimmingTips_Test()
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
-            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
             var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
@@ -539,7 +437,7 @@ namespace Carpentry.Service.Tests.UnitTests
         public async Task InventoryService_HideTrimmingTip_Test()
         {
             var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
-            var mockDataBackupService = new Mock<IDataBackupService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
             var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
             var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
             var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
@@ -569,182 +467,101 @@ namespace Carpentry.Service.Tests.UnitTests
 
         #region Import/Export
 
-        //Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto cardImportDto);
         [TestMethod]
         public async Task InventoryService_ValidateCarpentryImport_Test()
         {
-            Assert.Fail();
-            ////Assemble
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            var expectedResult = new ValidatedCarpentryImportDto();
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            mockCardImportService
+                .Setup(p => p.ValidateCarpentryImport(It.IsNotNull<CardImportDto>()))
+                .ReturnsAsync(expectedResult);
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
+            var payloadToSubmit = new CardImportDto() { };
 
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
+            //Act
+            var result = await inventoryService.ValidateCarpentryImport(payloadToSubmit);
 
-            //var payloadToSubmit = new CardImportDto() { };
-
-            ////List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
-            ////{
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////};
-
-            //////var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
-            ////var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
-
-            ////mockInventoryRepo
-            ////    .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
-            ////    .ReturnsAsync(expectedSearchResult);
-
-            ////var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
-
-            ////var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
-
-            ////InventoryQueryParameter filters = new InventoryQueryParameter()
-            ////{
-
-            ////};
-
-            ////Act
-            //var result = await inventoryService.ValidateCarpentryImport(payloadToSubmit);
-
-            //Assert.IsNotNull(result);
-
-
-            ////IEnumerable<MagicCardDto> result = await cardSearchService.SearchCardsFromInventory(filters);
-
-            //////Assert
-            ////Assert.IsNotNull(result);
-            ////Assert.AreEqual(expectedSearchResult.Count, result.Count());
-            //Assert.Fail("Must confirm this is working as expected");
+            //Assert
+            Assert.IsNotNull(result);
         }
 
-        //Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto);
         [TestMethod]
         public async Task InventoryService_AddValidatedCarpentryImport_Test()
         {
-            Assert.Fail();
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockDataBackupService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            ////Assemble
+            mockCardImportService
+                .Setup(p => p.AddValidatedCarpentryImport(It.IsNotNull<ValidatedCarpentryImportDto>()))
+                .Returns(Task.CompletedTask);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockDataBackupService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            var payloadToSubmit = new ValidatedCarpentryImportDto() { };
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+            //Act
+            await inventoryService.AddValidatedCarpentryImport(payloadToSubmit);
 
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
-
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            //var payloadToSubmit = new ValidatedCarpentryImportDto() { };
-
-            ////List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
-            ////{
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////};
-
-            //////var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
-            ////var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
-
-            ////mockInventoryRepo
-            ////    .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
-            ////    .ReturnsAsync(expectedSearchResult);
-
-            ////var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
-
-            ////var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
-
-            ////InventoryQueryParameter filters = new InventoryQueryParameter()
-            ////{
-
-            ////};
-
-            ////Act
-            //await inventoryService.AddValidatedCarpentryImport(payloadToSubmit);
-
-            ////Assert
-            ////Returns void, nothing to assert
-            ////Assert.IsNotNull(result);
+            //Assert
+            //Returns void, nothing to assert
         }
 
-        //Task<byte[]> ExportInventoryBackup();
         [TestMethod]
         public async Task InventoryService_ExportInventoryBackup_Test()
         {
-            Assert.Fail();
-            ////Assemble
+            //Assemble
+            var mockInventoryService = new Mock<IInventoryService>(MockBehavior.Strict);
+            var mockExportService = new Mock<IDataExportService>(MockBehavior.Strict);
+            var mockCardImportService = new Mock<ICardImportService>(MockBehavior.Strict);
+            var mockCollectionBuilderService = new Mock<ICollectionBuilderService>(MockBehavior.Strict);
+            var mockTrimmingTipsService = new Mock<ITrimmingTipsService>(MockBehavior.Strict);
 
-            //var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
+            var expectedResult = new byte[] { };
 
-            //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
+            mockExportService
+                .Setup(p => p.GenerateZipBackup())
+                .ReturnsAsync(expectedResult);
 
-            //var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
+            var inventoryService = new CarpentryInventoryService(
+                mockInventoryService.Object,
+                mockExportService.Object,
+                mockCardImportService.Object,
+                mockCollectionBuilderService.Object,
+                mockTrimmingTipsService.Object
+                );
 
-            //var mockCardDatarepo = new Mock<ICardDataRepo>(MockBehavior.Strict);
+            //Act
+            var result = await inventoryService.ExportInventoryBackup();
 
-            //var inventoryService = new InventoryService(
-            //    mockInventoryRepo.Object,
-            //    mockDataUpdateService.Object,
-            //    mockCoreRepo.Object,
-            //    mockCardDatarepo.Object);
-
-            ////List<CardDataDto> expectedSearchResult = new List<CardDataDto>()
-            ////{
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////    CardInstance(),
-            ////};
-
-            //////var mockQueryService = new Mock<IDataQueryService>(MockBehavior.Strict);
-
-            ////var mockInventoryRepo = new Mock<IInventoryDataRepo>(MockBehavior.Strict);
-
-            ////mockInventoryRepo
-            ////    .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
-            ////    .ReturnsAsync(expectedSearchResult);
-
-            ////var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
-
-            ////var cardSearchService = new CardSearchService(mockInventoryRepo.Object, mockScryService.Object);
-
-            ////InventoryQueryParameter filters = new InventoryQueryParameter()
-            ////{
-
-            ////};
-
-            ////Act
-            //var result = await inventoryService.ExportInventoryBackup();
-
-            ////Assert
-            //Assert.IsNotNull(result);
-
-            //Assert.Fail("Must decide how to validate the response object");
+            //Assert
+            Assert.IsNotNull(result);
         }
+        
         #endregion
 
 

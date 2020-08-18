@@ -491,7 +491,7 @@ namespace Carpentry.Logic.Implementations
 
         #region Search
 
-        public async Task<IEnumerable<DeckOverviewDto>> GetDeckOverviews()
+        public async Task<List<DeckOverviewDto>> GetDeckOverviews()
         {
 
 

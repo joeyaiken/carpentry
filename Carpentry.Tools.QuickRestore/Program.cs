@@ -133,13 +133,13 @@ namespace Carpentry.Tools.QuickRestore
                 .AddScoped<ICoreDataRepo, CoreDataRepo>()
 
                 //Logic 6
-                .AddScoped<ICardSearchService, CardSearchService>()
+                .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IDeckService, DeckService>()
                 .AddScoped<IInventoryService, InventoryService>()
 
                 .AddScoped<ICardImportService, CardImportService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
-                .AddScoped<IDataBackupService, DataBackupService>()
+                .AddScoped<IDataExportService, DataExportService>()
                 .AddScoped<IFilterService, FilterService>()
 
                 .AddScoped<IScryfallService, ScryfallService>()

@@ -79,7 +79,9 @@ namespace Carpentry.Data.Implementations
             }); ;
             return result;
         }
-
+        
+        
+        /*
         private async Task<IQueryable<CardData>> QueryFilteredCards(InventoryQueryParameter filters)
         {
             var cardsQuery = _cardContext.Cards.AsQueryable();
@@ -158,6 +160,8 @@ namespace Carpentry.Data.Implementations
 
             return cardsQuery;
         }
+        */
+
 
         private async Task<int> GetFormatIdByName(string formatName)
         {
@@ -172,11 +176,20 @@ namespace Carpentry.Data.Implementations
         #endregion
 
 
-        public async Task<InventoryCardData> GetInventoryCardById(int inventoryCardId)
+        public async Task<InventoryCardData> GetInventoryCard(int inventoryCardId)
         {
             var result = await _cardContext.InventoryCards.Where(x => x.Id == inventoryCardId).FirstOrDefaultAsync();
             return result;
         }
+
+        //public async Task<InventoryCardData> GetInventoryCard(string setCode, int collectorNumber)
+        //{
+        //    var result = await _cardContext.InventoryCards
+        //        .Where(x => x.Card.Set.Code == setCode && x.Card.CollectorNumber == collectorNumber)
+        //        .FirstOrDefaultAsync();
+        //    return result;
+        //}
+
 
         /// <summary>
         /// Adds a new card to the inventory
@@ -237,260 +250,24 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
+
+
         public async Task<bool> DoInventoryCardsExist()
         {
             InventoryCardData firstCard = await _cardContext.InventoryCards.FirstOrDefaultAsync();
             return (firstCard != null);
         }
 
-        public async Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param)
-        {
-
-            //TODO - filtering should be moved to the logic layer
-
-            //var cardsQuery = await QueryFilteredCards(param);
-
-            IEnumerable<CardOverviewResult> query;
-
-            //var test = QueryCardsByUnique().Take(100).ToList();
-
-            //var anotherTest = QueryCardsByUnique().ToList();
-
-            //var doesThisBreak = QueryCardsByUnique().Select(x => x).ToList();
-
-            //var confusion = QueryCardsByUnique().Select(x => new CardOverviewResult() { }).ToList();
-
-            //var queryTest = QueryCardsByUnique()
-
-            //            .Select((x, i) => new CardOverviewResult()
-            //            {
-            //                //Id = i + 1, //When querying by unique, the MID is NOT a unique value
-            //                //SetCode = x.SetCode,
-            //                //Cmc = x.Cmc,
-            //                //Cost = x.ManaCost,
-            //                //Count = x.CardCount,
-            //                //Img = x.ImageUrl,
-            //                //Name = x.Name,
-            //                //Type = x.Type,
-            //                //IsFoil = x.IsFoil,
-            //                //Price = x.Price,
-            //                //Variant = x.VariantName,
-            //                //Category = null,
-            //                SetCode = "abcd",
-
-            //            }).ToList();
-
-
-
-
-            switch (param.GroupBy)
-            {
-                case "name":
-
-                    query = QueryCardsByName().AsEnumerable()
-
-                        .Select((x, i) => new CardOverviewResult
-                        {
-                            Id = i + 1,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.OwnedCount,
-                            Img = x.ImageUrl,
-                            Name = x.Name,
-                            Type = x.Type,
-                        });
-
-                    break;
-
-                case "unique":
-                    query = QueryCardsByUnique().AsEnumerable()
-
-                        .Select((x, i) => new CardOverviewResult()
-                        {
-                            Id = i + 1, //When querying by unique, the MID is NOT a unique value
-                            SetCode = x.SetCode,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.CardCount,
-                            Img = x.ImageUrl,
-                            Name = x.Name,
-                            Type = x.Type,
-                            IsFoil = x.IsFoil,
-                            Price = x.Price,
-                            //Variant = x.VariantName,
-                        });
-
-                    break;
-
-                //case "custom":
-                //    query = QueryCardsByCustom().AsEnumerable()
-
-                //        .Select((x, i) => new CardOverviewResult()
-                //        {
-                //            Id = i + 1, //When querying by unique, the MID is NOT a unique value
-                //            SetCode = x.SetCode,
-                //            Cmc = x.Cmc,
-                //            Cost = x.ManaCost,
-                //            Count = x.CardCount,
-                //            Img = x.ImageUrl,
-                //            Name = x.Name,
-                //            Type = x.Type,
-                //            IsFoil = x.IsFoil,
-                //            Price = x.Price,
-                //            Variant = x.VariantName,
-                //        });
-
-                //    break;
-
-                //case "mid":
-                default: //assuming group by mid for default
-
-                    query = QueryCardsByMid().AsEnumerable()
-
-                        .Select(x => new CardOverviewResult()
-                        {
-                            Id = x.CardId,
-                            SetCode = x.SetCode,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.OwnedCount,
-                            Img = x.ImageUrl,
-                            Name = x.Name,
-                            Type = x.Type,
-                        });
-
-                    break;
-            }
-
-
-            #region Filters
-
-            if (!string.IsNullOrEmpty(param.Set))
-            {
-                //var matchingSetId = _cardContext.Sets.Where(x => x.Code.ToLower() == param.Set.ToLower()).Select(x => x.Id).FirstOrDefault();
-                query = query.Where(x => x.SetCode == param.Set.ToLower());
-            }
-
-            if (param.StatusId > 0)
-            {
-                //cardsQuery = cardsQuery.Where(x => x.)
-            }
-
-            if (param.Colors != null && param.Colors.Any())
-            {
-                //
-
-                //atm I'm trying to be strict in my matching.  If a color isn't in the list, I'll exclude any card containing that color
-
-                //var excludedColors = _allColors.Where(x => !param.Colors.Contains(x)).Select(x => x).ToList();
-
-                //query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
-            }
-
-            if (!string.IsNullOrEmpty(param.Format))
-            {
-                ////var matchingLegality = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == param.Format.ToLower()).FirstOrDefault();
-                //var matchingFormatId = await GetFormatIdByName(param.Format);
-                //cardsQuery = cardsQuery.Where(x => x.Legalities.Where(l => l.FormatId == matchingFormatId).Any());
-            }
-
-            if (param.ExclusiveColorFilters)
-            {
-                //cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() == param.Colors.Count());
-            }
-
-            if (param.MultiColorOnly)
-            {
-                //cardsQuery = cardsQuery.Where(x => x.CardColorIdentities.Count() > 1);
-            }
-
-            if (!string.IsNullOrEmpty(param.Type))
-            {
-                //cardsQuery = cardsQuery.Where(x => x.Type.Contains(param.Type));
-            }
-
-            if (param.Rarity != null && param.Rarity.Any())
-            {
-                //cardsQuery = cardsQuery.Where(x => param.Rarity.Contains(x.Rarity.Name.ToLower()));
-
-            }
-
-            if (!string.IsNullOrEmpty(param.Text))
-            {
-                //cardsQuery = cardsQuery.Where(x =>
-                //    x.Text.ToLower().Contains(param.Text.ToLower())
-                //    ||
-                //    x.Name.ToLower().Contains(param.Text.ToLower())
-                //    ||
-                //    x.Type.ToLower().Contains(param.Text.ToLower())
-                //);
-            }
-
-
-            #endregion
-
-            var executed = query.ToList();
-
-            if (param.MinCount > 0)
-            {
-                query = query.Where(x => x.Count >= param.MinCount);
-            }
-
-            if (param.MaxCount > 0)
-            {
-                query = query.Where(x => x.Count <= param.MinCount);
-            }
-
-            switch (param.Sort)
-            {
-                case "count":
-                    query = query.OrderByDescending(x => x.Count);
-                    break;
-
-                case "name":
-                    query = query.OrderBy(x => x.Name);
-                    break;
-
-                case "cmc":
-                    query = query.OrderBy(x => x.Cmc)
-                        .ThenBy(x => x.Name);
-                    break;
-
-                case "price":
-                    if (param.SortDescending)
-                    {
-                        query = query.OrderByDescending(x => x.Price)
-                            .ThenBy(x => x.Name);
-                    }
-                    else
-                    {
-                        query = query.OrderBy(x => x.Price)
-                            .ThenBy(x => x.Name);
-                    }
-                    break;
-
-                default:
-                    query = query.OrderByDescending(x => x.Id);
-                    break;
-            }
-
-            if (param.Take > 0)
-            {
-                query = query.Skip(param.Skip).Take(param.Take);//.OrderByDescending(x => x.Count);
-            }
-
-            IEnumerable<CardOverviewResult> result = query.ToList();
-            return result;
-        }
+        
 
         public IQueryable<InventoryCardByNameResult> QueryCardsByName()
         {
             return _cardContext.InventoryCardByName.AsQueryable();
         }
 
-        public IQueryable<InventoryCardByPrintResult> QueryCardsByMid()
+        public IQueryable<InventoryCardByPrintResult> QueryCardsByPrint()
         {
-            return _cardContext.InventoryCardByMid.AsQueryable();
+            return _cardContext.InventoryCardByPrint.AsQueryable();
         }
 
         public IQueryable<InventoryCardByUniqueResult> QueryCardsByUnique()
@@ -716,6 +493,7 @@ namespace Carpentry.Data.Implementations
 
             return result;
         }
+        
         //private static IQueryable<MagicCard> MapInventoryQueryToScryfallDto(IQueryable<Data.LegacyDataContext.Card> query)
         //{
         //    IQueryable<MagicCard> result = query.Select(card => new MagicCard()
@@ -754,6 +532,8 @@ namespace Carpentry.Data.Implementations
 
 
         //NOTE: This is the query that needs to be updated for CardSearch, it's probably useless though, and should be replaced by SearchInventoryCards
+        
+        /*
         public async Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters)
         {
             int matchingSetId = _cardContext.Sets
@@ -817,7 +597,7 @@ namespace Carpentry.Data.Implementations
 
             return mappedResult;
         }
-
+        */
 
     }
 }

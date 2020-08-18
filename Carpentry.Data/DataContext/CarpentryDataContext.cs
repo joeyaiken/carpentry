@@ -9,31 +9,22 @@ namespace Carpentry.Data.DataContext
     {
         #region DbSets
 
-        public DbSet<DeckData> Decks { get; set; }
-
-        public DbSet<DeckCardData> DeckCards { get; set; }
-
-        public DbSet<InventoryCardData> InventoryCards { get; set; }
-
-        public DbSet<InventoryCardStatusData> CardStatuses { get; set; }
-
-        public DbSet<CardData> Cards { get; set; }
-
-        public DbSet<CardSetData> Sets { get; set; }
-
-        public DbSet<CardRarityData> Rarities { get; set; }
-
+        //Tables
         public DbSet<CardLegalityData> CardLegalities { get; set; }
-
-        public DbSet<MagicFormatData> MagicFormats { get; set; }
-
+        public DbSet<CardData> Cards { get; set; }
+        public DbSet<InventoryCardStatusData> CardStatuses { get; set; }
         public DbSet<DeckCardCategoryData> DeckCardCategories { get; set; }
+        public DbSet<DeckCardData> DeckCards { get; set; }
+        public DbSet<DeckData> Decks { get; set; }
+        public DbSet<InventoryCardData> InventoryCards { get; set; } 
+        public DbSet<MagicFormatData> MagicFormats { get; set; }
+        public DbSet<CardRarityData> Rarities { get; set; }
+        public DbSet<CardSetData> Sets { get; set; }
 
         //Views
         public DbSet<DataModels.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
-        public DbSet<DataModels.QueryResults.InventoryCardByPrintResult> InventoryCardByMid { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByPrintResult> InventoryCardByPrint { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
-        //public DbSet<DataModels.QueryResults.InventoryCardByCustomResult> InventoryCardByCustom { get; set; }
         public DbSet<DataModels.QueryResults.SetTotalsResult> SetTotals { get; set; }
 
         #endregion
@@ -101,12 +92,6 @@ namespace Carpentry.Data.DataContext
                 .WithMany(x => x.Cards)
                 .HasForeignKey(x => x.CategoryId);
 
-            ////inventory card - variant type
-            //modelBuilder.Entity<InventoryCard>()
-            //    .HasOne(x => x.VariantType)
-            //    .WithMany(x => x.InventoryCards)
-            //    .HasForeignKey(x => x.VariantTypeId);
-
             //Deck -- MagicFormat
             modelBuilder.Entity<DeckData>()
                 .HasOne(x => x.Format)
@@ -148,7 +133,6 @@ namespace Carpentry.Data.DataContext
             #endregion
 
             #region procs?
-
 
             #endregion
         }

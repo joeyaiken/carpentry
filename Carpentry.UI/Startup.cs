@@ -52,13 +52,13 @@ namespace Carpentry.UI
             services.AddScoped<ICoreDataRepo, CoreDataRepo>();
 
             //Logic services
-            services.AddScoped<ICardSearchService, CardSearchService>();
+            services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
 
             services.AddScoped<ICardImportService, CardImportService>();
             services.AddScoped<IDataUpdateService, DataUpdateService>();
-            services.AddScoped<IDataBackupService, DataBackupService>();
+            services.AddScoped<IDataExportService, DataExportService>();
             services.AddScoped<IFilterService, FilterService>();
 
             services.AddScoped<IScryfallService, ScryfallService>();

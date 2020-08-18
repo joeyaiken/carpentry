@@ -25,10 +25,6 @@ namespace Carpentry.Logic.Tests.UnitTests
                 .ReturnsAsync(new List<DataReferenceValue<int>>());
 
             mockCoreRepo
-                .Setup(p => p.GetAllManaColors())
-                .ReturnsAsync(new List<DataReferenceValue<char>>());
-
-            mockCoreRepo
                 .Setup(p => p.GetAllRarities())
                 .ReturnsAsync(new List<DataReferenceValue<char>>());
 

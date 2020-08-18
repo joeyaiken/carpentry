@@ -146,11 +146,13 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-
-        //What if this took an int, instead of a name
-        //The int could be any CardId, and the method would load all cards with the same name
+        /// <summary>
+        /// Loads an inventory detail for a given card ID
+        /// Returns data the given card, and all other cards with the same Name
+        /// </summary>
+        /// <param name="cardId"></param>
+        /// <returns></returns>
         [HttpGet("[action]")]
-        //public async Task<ActionResult<InventoryDetailDto>> GetInventoryDetail(string name)
         public async Task<ActionResult<InventoryDetailDto>> GetInventoryDetail(int cardId)
         {
             try
@@ -233,8 +235,6 @@ namespace Carpentry.UI.Controllers
         #region Import
 
         //Validate Carpentry Import
-        //TODO - define param
-        //TODO - define return
         [HttpPost("[action]")]
         public async Task<ActionResult<ValidatedCarpentryImportDto>> ValidateCarpentryImport(CardImportDto cardImportDto)
         {
@@ -250,8 +250,6 @@ namespace Carpentry.UI.Controllers
         }
 
         //Add Validated Carpentry Import
-        //TODO - define param
-        //Returns OK()
         [HttpPost("[action]")]
         public async Task<ActionResult> AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto)
         {

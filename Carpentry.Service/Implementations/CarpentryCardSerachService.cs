@@ -1,39 +1,25 @@
 ﻿using Carpentry.Data.QueryParameters;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Service.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Carpentry.Service.Implementations
 {
     public class CarpentryCardSearchService : ICarpentryCardSearchService
     {
-        //Should have no access to data context classes, only repo classes
-        //private readonly ICardDataRepo _cardRepo;
-        //private readonly IScryfallService _scryService;
-        //private readonly IInventoryDataRepo _inventoryRepo;
-        ////private readonly ICardStringRepo _scryRepo;
-        ////private readonly ILogger<CarpentryService> _logger;
-        //private readonly IInventoryDataRepo _inventoryRepo;
-
+        private readonly ISearchService _searchService;
+        private readonly IScryfallService _scryService;
+        
         public CarpentryCardSearchService(
-            //IInventoryDataRepo inventoryRepo,
-            //IScryfallService scryService
-
-            //ICardDataRepo cardRepo
-            //, ICardStringRepo scryRepo
-            //, ILogger<CardSearchService> logger
+            ISearchService searchService,
+            IScryfallService scryService
             )
         {
-            //_inventoryRepo = inventoryRepo;
-            //_scryService = scryService;
-
-            //_cardRepo = cardRepo;
-
-            //_scryRepo = scryRepo;
-            //_logger = logger;
+            _searchService = searchService;
+            _scryService = scryService;
         }
 
         #region Card Search related methods
@@ -45,12 +31,16 @@ namespace Carpentry.Service.Implementations
         /// <returns></returns>
         public async Task<IEnumerable<MagicCardDto>> SearchInventory(InventoryQueryParameter filters)
         {
-            throw new NotImplementedException();
+            var result = await _searchService.SearchCards(filters);
+            return result;
         }
 
         public async Task<IEnumerable<MagicCardDto>> SearchWeb(NameSearchQueryParameter filters)
         {
-            throw new NotImplementedException();
+            //TODO - add some way of indicating that a card's set isn't tracked in the DB
+            var result = await _scryService.SearchScryfallByName(filters.Name, filters.Exclusive);
+            var mappedResult = result.Select(card => card.ToMagicCard()).ToList();
+            return mappedResult;
         }
 
         #endregion

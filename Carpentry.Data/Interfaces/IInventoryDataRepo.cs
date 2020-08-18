@@ -18,18 +18,30 @@ namespace Carpentry.Data.Interfaces
         Task AddInventoryCardBatch(List<InventoryCardData> cardBatch);
         Task UpdateInventoryCard(InventoryCardData card);
         Task DeleteInventoryCard(int inventoryCardId);
-        Task<InventoryCardData> GetInventoryCardById(int inventoryCardId);
+        //Task<InventoryCardData> GetInventoryCardById(int inventoryCardId);
+        Task<InventoryCardData> GetInventoryCard(int inventoryCardId);
+        //Task<InventoryCardData> GetInventoryCard(string setCode, int collectorNumber);
 
-        Task<bool> DoInventoryCardsExist();
+
+        Task<bool> DoInventoryCardsExist(); //??
 
 
-        Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param);
 
+        //Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param);
         Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName);
+
 
         Task<IEnumerable<CardDataDto>> SearchInventoryCards(InventoryQueryParameter filters);
 
-        Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);
+
+        Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);//remove dis?
+
+
+
+
+        IQueryable<InventoryCardByNameResult> QueryCardsByName();
+        IQueryable<InventoryCardByPrintResult> QueryCardsByPrint();
+        IQueryable<InventoryCardByUniqueResult> QueryCardsByUnique();
 
     }
 }

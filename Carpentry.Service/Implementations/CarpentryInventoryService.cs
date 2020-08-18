@@ -11,14 +11,14 @@ namespace Carpentry.Service.Implementations
     public class CarpentryInventoryService : ICarpentryInventoryService
     {
         private readonly IInventoryService _inventoryService;
-        private readonly IDataBackupService _dataBackupService;
+        private readonly IDataExportService _dataBackupService;
         private readonly ICardImportService _cardImportService;
         private readonly ICollectionBuilderService _collectionBuilderService;
         private readonly ITrimmingTipsService _trimmingTipsService;
 
         public CarpentryInventoryService(
             IInventoryService inventoryService,
-            IDataBackupService dataBackupService,
+            IDataExportService dataBackupService,
             ICardImportService cardImportService,
             ICollectionBuilderService collectionBuilderService,
             ITrimmingTipsService trimmingTipsService
@@ -79,6 +79,7 @@ namespace Carpentry.Service.Implementations
             var result = await _inventoryService.GetInventoryDetail(cardId);
             return result;
         }
+
 
         #endregion Search
 

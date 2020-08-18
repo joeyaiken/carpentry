@@ -10,6 +10,8 @@
     <Compile Remove="UnitTests\DeckServiceTests\DeckServiceImportExportTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\CollectionBuilderTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\ImportExportTests.cs" />
+    <Compile Remove="UnitTests\InventoryServiceTests\InventoryCardTests.cs" />
+    <Compile Remove="UnitTests\InventoryServiceTests\InventorySearchTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\TrimmingTipsTests.cs" />
   </ItemGroup>
 
@@ -23,6 +25,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carpentry.Logic\Carpentry.Logic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UnitTests\InventoryServiceTests\" />
   </ItemGroup>
 
 </Project>
