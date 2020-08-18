@@ -107,56 +107,23 @@ namespace Carpentry.UI.Tests.UnitTests
 
             //assert
             //var resultValue = AssertIsObjectResult<IEnumerable<MagicCardDto>>(response);
-            var resultValue = AssertIsObjectResult(response);
+            //var resultValue = AssertIsObjectResult(response);
+            
+
+            Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
+            var typedResult = response.Result as OkObjectResult;
+            var resultValue = typedResult.Value as IEnumerable<MagicCardDto>;
+
             Assert.IsNotNull(resultValue);
             Assert.AreEqual(5, resultValue.Count());
         }
 
-        private static T AssertIsObjectResult<T>(ActionResult<T> controllerResponse)
-        {
-            Assert.IsInstanceOfType(controllerResponse.Result, typeof(OkObjectResult));
-            var typedResult = controllerResponse.Result as OkObjectResult;
-            var resultValue = typedResult.Value;
-            return (T)resultValue;
-        }
-
-        //[TestMethod]
-        //public async Task CardSearch_SearchSet_ReturnsOK_Test()
+        //private static T AssertIsObjectResult<T>(ActionResult<T> controllerResponse)
         //{
-        //    //arrange
-        //    IEnumerable<MagicCardDto> expectedSearchResults = new List<MagicCardDto>()
-        //    {
-        //        new MagicCardDto{ },
-        //        new MagicCardDto{ },
-        //        new MagicCardDto{ },
-        //        new MagicCardDto{ },
-        //        new MagicCardDto{ },
-        //    }.AsEnumerable();
-
-        //    var mockService = new Mock<ICarpentryCardSearchService>(MockBehavior.Strict);
-            
-        //    mockService
-        //        .Setup(p => p.SearchCardsFromSet(It.IsNotNull<CardSearchQueryParameter>()))
-        //        .ReturnsAsync(expectedSearchResults);
-
-        //    var cardSearchController = new Controllers.CardSearchController(mockService.Object);
-
-        //    CardSearchQueryParameter queryParam = new CardSearchQueryParameter() { };
-
-        //    //act
-        //    var response = await cardSearchController.SearchSet(queryParam);
-
-        //    //assert
-        //    Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
-
-        //    var typedResult = response.Result as OkObjectResult;
-
-        //    IEnumerable<MagicCardDto> resultValue = typedResult.Value as IEnumerable<MagicCardDto>;
-
-        //    Assert.IsNotNull(resultValue);
-        //    Assert.AreEqual(5, resultValue.Count());
-        //}
-
-        
+        //    Assert.IsInstanceOfType(controllerResponse.Result, typeof(OkObjectResult));
+        //    var typedResult = controllerResponse.Result as OkObjectResult;
+        //    var resultValue = typedResult.Value;
+        //    return (T)resultValue;
+        //}     
     }
 }
