@@ -1,5 +1,6 @@
 ﻿using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Models;
+using Carpentry.Logic.Search;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,10 +13,8 @@ namespace Carpentry.Logic.Interfaces
         //SearchInventory
         Task<List<InventoryOverviewDto>> SearchInventory(InventoryQueryParameter param);
 
-
-
         //SearchCards
-        Task<List<MagicCardDto>> SearchCards(InventoryQueryParameter filters);
+        Task<List<CardSearchResultDto>> SearchCards(CardSearchQueryParameter filters);
         
 
         //Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters);

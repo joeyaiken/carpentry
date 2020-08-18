@@ -1,6 +1,7 @@
 ﻿using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Logic.Search;
 using Carpentry.Service.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Carpentry.Service.Implementations
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<MagicCardDto>> SearchInventory(InventoryQueryParameter filters)
+        public async Task<List<CardSearchResultDto>> SearchInventory(CardSearchQueryParameter filters)
         {
             var result = await _searchService.SearchCards(filters);
             return result;

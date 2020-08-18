@@ -1,15 +1,14 @@
 ﻿using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Models;
-using System;
+using Carpentry.Logic.Search;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Service.Interfaces
 {
     public interface ICarpentryCardSearchService
     {
-        Task<IEnumerable<MagicCardDto>> SearchInventory(InventoryQueryParameter filters);
+        Task<List<CardSearchResultDto>> SearchInventory(CardSearchQueryParameter filters);
 
         Task<IEnumerable<MagicCardDto>> SearchWeb(NameSearchQueryParameter filters);
     }

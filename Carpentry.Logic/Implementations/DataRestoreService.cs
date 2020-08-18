@@ -189,12 +189,12 @@ namespace Carpentry.Logic.Implementations
             //If I own a card from a set, all definitions for that set should exist in the DB at this point
             //I can safely grab any backup card by MID
 
-            bool cardsExist = await _inventoryDataRepo.DoInventoryCardsExist();
-            if (cardsExist)
-            {
-                _logger.LogWarning("LoadCardBackups - card data already exists, returning");
-                return;
-            }
+            //bool cardsExist = await _inventoryDataRepo.DoInventoryCardsExist();
+            //if (cardsExist)
+            //{
+            //    _logger.LogWarning("LoadCardBackups - card data already exists, returning");
+            //    return;
+            //}
             _logger.LogWarning("LoadCardBackups - preparing to load backups...");
 
             string cardBackupLocation = ""; // $"{_config.BackupDirectory}{_config.CardBackupFilename}";

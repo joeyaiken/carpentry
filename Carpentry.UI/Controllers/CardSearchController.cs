@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Logic.Search;
 using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -45,11 +46,11 @@ namespace Carpentry.UI.Controllers
         /// <param name="filters"></param>
         /// <returns></returns>
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchInventory([FromBody] InventoryQueryParameter filters)
+        public async Task<ActionResult<List<CardSearchResultDto>>> SearchInventory([FromBody] CardSearchQueryParameter filters)
         {
             try
             {
-                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchInventory(filters);
+                var cards = await _cardSearch.SearchInventory(filters);
                 return Ok(cards);
             }
             catch (Exception ex)

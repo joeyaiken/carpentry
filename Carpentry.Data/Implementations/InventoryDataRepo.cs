@@ -81,7 +81,7 @@ namespace Carpentry.Data.Implementations
         }
         
         
-        /*
+        //NOTE - This is the most recent query for adding cards to a deck
         private async Task<IQueryable<CardData>> QueryFilteredCards(InventoryQueryParameter filters)
         {
             var cardsQuery = _cardContext.Cards.AsQueryable();
@@ -160,7 +160,7 @@ namespace Carpentry.Data.Implementations
 
             return cardsQuery;
         }
-        */
+        
 
 
         private async Task<int> GetFormatIdByName(string formatName)
@@ -252,11 +252,11 @@ namespace Carpentry.Data.Implementations
 
 
 
-        public async Task<bool> DoInventoryCardsExist()
-        {
-            InventoryCardData firstCard = await _cardContext.InventoryCards.FirstOrDefaultAsync();
-            return (firstCard != null);
-        }
+        //public async Task<bool> DoInventoryCardsExist()
+        //{
+        //    InventoryCardData firstCard = await _cardContext.InventoryCards.FirstOrDefaultAsync();
+        //    return (firstCard != null);
+        //}
 
         
 
@@ -533,9 +533,17 @@ namespace Carpentry.Data.Implementations
 
         //NOTE: This is the query that needs to be updated for CardSearch, it's probably useless though, and should be replaced by SearchInventoryCards
         
-        /*
+        
+
+/*
+        //NOTE - This is the "most recent" "legacy" Card Search method
+        //It's the most relevant filtering logic, I think
+
         public async Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters)
         {
+
+
+
             int matchingSetId = _cardContext.Sets
                 .Where(x => x.Code.ToLower() == filters.Set.ToLower())
                 .Select(x => x.Id)

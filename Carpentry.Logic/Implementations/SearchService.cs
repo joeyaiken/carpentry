@@ -19,6 +19,7 @@ namespace Carpentry.Logic.Implementations
         //Should have no access to data context classes, only repo classes
         private readonly IScryfallService _scryService;
         private readonly IInventoryDataRepo _inventoryRepo;
+        private readonly string[] _allColors;
 
         public SearchService(
             IInventoryDataRepo inventoryRepo,
@@ -27,6 +28,7 @@ namespace Carpentry.Logic.Implementations
         {
             _inventoryRepo = inventoryRepo;
             _scryService = scryService;
+            _allColors = new string[] { "W", "U", "B", "R", "G" };
         }
 
         /// <summary>
@@ -34,45 +36,112 @@ namespace Carpentry.Logic.Implementations
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public async Task<List<MagicCardDto>> SearchCards(InventoryQueryParameter filters)
+        public async Task<List<CardSearchResultDto>> SearchCards(CardSearchQueryParameter filters)
         {
-            var query = _inventoryRepo.QueryCardsByPrint()
-                //filters
-                ;
+            //Thoughts on result object
+            //  When searching for cards, I want to see cards listed BY NAME
+            //      Scenario 1: adding new cards to inventory.  I'll be filtering by set, so this works great
+            //          I'm also grouping my collection by NAME, not by CollectorNumber
+            //  When searching for a deck, I'd ALSO like to see things grouped by name, then see what varieties of that card-name I could add
+
+            //  So, do I look at the ByName view, or do I group ByPrint?
+            //  Also, how do I fitler on legality?
+
+            //  When searching for cards for a deck, do I load inventory cards with the full list?
+            //      I could keep doing my current plan of making an API call for that
 
 
 
 
+            //Scenario 1: searching cards (filtered by set) to add to inventory
+            //  Want both owned and unowned cards
+            //  Want all possible variations of the card
 
+            //Scenario 2: searching cards to add to deck
+            //  Want only owned cards
+            //  
 
+            var query = _inventoryRepo.QueryCardsByPrint();
 
+            //map first or filters first?
 
+            #region Filters
 
-            var result = query.Select(x => new MagicCardDto()
+            if (!string.IsNullOrEmpty(filters.Set))
             {
-                Cmc = x.Cmc,
-                CollectionNumber = x.CollectorNumber,
-                ColorIdentity = x.ColorIdentity.Split().ToList(),
-                Colors = x.Color.Split().ToList(),
-                ImageUrl = x.ImageUrl,
-                Legalities = null,
-                ManaCost = x.ManaCost,
-                MultiverseId = x.MultiverseId,
+                query = query.Where(x => x.SetCode == filters.Set);
+            }
+
+            if (!string.IsNullOrEmpty(filters.Type))
+            {
+                query = query.Where(x => x.Type.ToLower().Contains(filters.Type.ToLower()));
+            }
+
+            if (filters.ColorIdentity.Any())
+            {
+                var excludedColors = _allColors.Where(x => !filters.ColorIdentity.Contains(x)).Select(x => x).ToList();
+                query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
+            }
+
+            if (filters.ExclusiveColorFilters)
+            {
+                query = query.Where(x => x.ColorIdentity.Length == filters.ColorIdentity.Count());
+            }
+
+            if (filters.MultiColorOnly)
+            {
+                query = query.Where(x => x.ColorIdentity.Length > 1);
+            }
+
+            if (filters.Rarity.DefaultIfEmpty().Any() && filters.Rarity.Count() > 0)
+            {
+                //rarity values coming in are char codes, not names
+                query = query.Where(x => filters.Rarity.Contains(x.RarityId.ToString()));
+            }
+
+            if (filters.ExcludeUnowned)
+            {
+                query = query.Where(x => x.OwnedCount > 0);
+            }
+
+            #endregion
+
+            //Is this a dumb approach?  Trying to get the "first" record now?
+            var groupedQuery = query
+                .GroupBy(c => c.Name)
+                .Select(g => new 
+                {
+                    Name = g.Key,
+                    First = g.First(),
+                    Details = g.Select(c => new CardSearchResultDetail()
+                    {
+                        CardId = c.CardId,
+                        Name = c.Name,
+                        CollectionNumber = c.CollectorNumber,
+                        ImageUrl = c.ImageUrl,
+                        Price = c.Price,
+                        PriceFoil = c.PriceFoil,
+                        PriceTix = c.PriceFoil,
+                        SetCode = c.SetCode,
+                    }).ToList(),
+                }).ToList();
+
+            var results = groupedQuery.Select(x => new CardSearchResultDto()
+            {
                 Name = x.Name,
-                Price = x.Price,
-                PriceFoil = x.PriceFoil,
-                PriceTix = x.TixPrice,
-                Rarity = x.RarityId.ToString(),
-                Set = x.SetCode,
-                Text = x.Text,
-                Type = x.Type,
+                Cmc = x.First.Cmc,
+                ColorIdentity = x.First.ColorIdentity.Split().ToList(),
+                Colors = x.First.Color.Split().ToList(),
+                ManaCost = x.First.ManaCost,
+                Type = x.First.Type,
+                Details = x.Details,
             }).ToList();
 
-            return result;
+            return results;
         }
 
         /// <summary>
-        /// Searches inventory cards for the Inventory section
+        /// Searches inventory cards for the Inventory container
         /// </summary>
         /// <returns></returns>
         public async Task<List<InventoryOverviewDto>> SearchInventory(InventoryQueryParameter param)
@@ -257,7 +326,10 @@ namespace Carpentry.Logic.Implementations
                 query = query.Skip(param.Skip).Take(param.Take);//.OrderByDescending(x => x.Count);
             }
 
-            List<CardOverviewResult> result = query.ToList();
+            List<InventoryOverviewDto> result = query.Select(x => new InventoryOverviewDto
+            {
+                
+            }).ToList();
             return result;
 
         }
@@ -642,51 +714,51 @@ namespace Carpentry.Logic.Implementations
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters)
-        {
-            var dbCards = await _inventoryRepo.SearchInventoryCards(filters);
+        //public async Task<IEnumerable<MagicCardDto>> SearchCardsFromInventory(InventoryQueryParameter filters)
+        //{
+        //    var dbCards = await _inventoryRepo.SearchInventoryCards(filters);
 
-            List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
+        //    List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
 
 
-            //var cardsQuery = await _inventoryRepo.QueryFilteredCards(filters);
+        //    //var cardsQuery = await _inventoryRepo.QueryFilteredCards(filters);
 
-            //var query = MapInventoryQueryToScryfallDto(cardsQuery);
+        //    //var query = MapInventoryQueryToScryfallDto(cardsQuery);
 
-            //var groupedQuery = query
-            //    .GroupBy(x => x.Name)
-            //    .Select(x => x.OrderByDescending(i => i.MultiverseId).First());
+        //    //var groupedQuery = query
+        //    //    .GroupBy(x => x.Name)
+        //    //    .Select(x => x.OrderByDescending(i => i.MultiverseId).First());
 
-            //groupedQuery = groupedQuery.OrderBy(x => x.Name);
+        //    //groupedQuery = groupedQuery.OrderBy(x => x.Name);
 
-            //if (filters.Take > 0)
-            //{
-            //    groupedQuery = groupedQuery.Skip(filters.Skip).Take(filters.Take);
-            //}
+        //    //if (filters.Take > 0)
+        //    //{
+        //    //    groupedQuery = groupedQuery.Skip(filters.Skip).Take(filters.Take);
+        //    //}
 
-            //var result = groupedQuery.ToList();
+        //    //var result = groupedQuery.ToList();
 
-            return mappedCards;
-        }
+        //    return mappedCards;
+        //}
 
         /// <summary>
         /// Returns all of the card definitions for a given set, with specified filters applied
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<MagicCardDto>> SearchCardsFromSet(CardSearchQueryParameter filters)
-        {
-            if (string.IsNullOrEmpty(filters.Set))
-            {
-                throw new ArgumentNullException("Set code filter cannot be null");
-            }
+        //public async Task<IEnumerable<MagicCardDto>> SearchCardsFromSet(CardSearchQueryParameter filters)
+        //{
+        //    if (string.IsNullOrEmpty(filters.Set))
+        //    {
+        //        throw new ArgumentNullException("Set code filter cannot be null");
+        //    }
 
-            var dbCards = await _inventoryRepo.SearchCardSet(filters);
+        //    var dbCards = await _inventoryRepo.SearchCardSet(filters);
 
-            List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
+        //    List<MagicCardDto> mappedCards = dbCards.Select(x => MapCardDataToDto(x)).ToList();
 
-            return mappedCards;
-        }
+        //    return mappedCards;
+        //}
 
 
         public async Task<IEnumerable<MagicCardDto>> SearchCardsFromWeb(NameSearchQueryParameter filters)

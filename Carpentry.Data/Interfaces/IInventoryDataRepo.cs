@@ -23,18 +23,18 @@ namespace Carpentry.Data.Interfaces
         //Task<InventoryCardData> GetInventoryCard(string setCode, int collectorNumber);
 
 
-        Task<bool> DoInventoryCardsExist(); //??
+        //Task<bool> DoInventoryCardsExist(); //??
 
 
 
         //Task<IEnumerable<CardOverviewResult>> GetInventoryOverviews(InventoryQueryParameter param);
+
+        //Used for "Get Inventory Detail"
         Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName);
 
 
-        Task<IEnumerable<CardDataDto>> SearchInventoryCards(InventoryQueryParameter filters);
-
-
-        Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);//remove dis?
+        //Task<IEnumerable<CardDataDto>> SearchInventoryCards(InventoryQueryParameter filters);
+        //Task<IEnumerable<CardDataDto>> SearchCardSet(CardSearchQueryParameter filters);//remove dis?
 
 
 

@@ -1,6 +1,7 @@
 ﻿using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Logic.Search;
 using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -41,25 +42,25 @@ namespace Carpentry.UI.Tests.UnitTests
         public async Task CardSearch_SearchInventory_ReturnsOK_Test()
         {
             //arrange
-            IEnumerable<MagicCardDto> expectedSearchResults = new List<MagicCardDto>()
+            var expectedSearchResults = new List<CardSearchResultDto>()
             {
-                new MagicCardDto{ },
-                new MagicCardDto{ },
-                new MagicCardDto{ },
-                new MagicCardDto{ },
-                new MagicCardDto{ },
-            }.AsEnumerable();
+                new CardSearchResultDto{ },
+                new CardSearchResultDto{ },
+                new CardSearchResultDto{ },
+                new CardSearchResultDto{ },
+                new CardSearchResultDto{ },
+            };
 
             var mockService = new Mock<ICarpentryCardSearchService>(MockBehavior.Strict);
 
             //SearchInventory
             mockService
-                .Setup(p => p.SearchInventory(It.IsNotNull<InventoryQueryParameter>()))
+                .Setup(p => p.SearchInventory(It.IsNotNull<CardSearchQueryParameter>()))
                 .ReturnsAsync(expectedSearchResults);
 
             var cardSearchController = new Controllers.CardSearchController(mockService.Object);
 
-            InventoryQueryParameter queryParam = new InventoryQueryParameter()
+            var queryParam = new CardSearchQueryParameter()
             {
 
             };
