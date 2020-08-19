@@ -30,7 +30,7 @@ namespace Carpentry.Service.Tests.UnitTests
             };
 
             mockSearchService
-                .Setup(p => p.SearchCards(It.IsNotNull<CardSearchQueryParameter>()))
+                .Setup(p => p.SearchCardDefinitions(It.IsNotNull<CardSearchQueryParameter>()))
                 .ReturnsAsync(expectedResult);
 
             var cardSearchService = new CarpentryCardSearchService(

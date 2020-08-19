@@ -78,21 +78,6 @@ namespace Carpentry.Data.Implementations
             return setData.Id;
         }
 
-        //public async Task AddOrUpdateCardDefinition(CardDataDto cardData)
-        //{
-        //    CardData cardFromDb = _cardContext.Cards.Where(x => x.Id == cardData.MultiverseId).FirstOrDefault();
-
-        //    if (cardFromDb == null)
-        //    {
-        //        await AddCardDefinition(cardData);
-        //    }
-        //    else
-        //    {
-        //        await UpdateCardDefinition(cardData);
-        //    }
-
-        //}
-
         /// <summary>
         /// Adds a batch of card definitions
         /// Assumes the card's set definition already exists in the DB
@@ -146,25 +131,6 @@ namespace Carpentry.Data.Implementations
         public async Task UpdateCardDataBatch(List<CardDataDto> cards)
         {
             //Assumes all card definitions already exist in the DB (does it have to?)
-
-            //Update all card definitions
-            //var dbCards = _cardContext.Cards
-            //    //trying to be clever when getting the matching DB cards
-            //    .Join(
-            //        cards.AsQueryable(),
-            //        dbCard => dbCard.Id,
-            //        dtoCard => dtoCard.MultiverseId,
-            //        (db, dto) => new CardData
-            //        {
-            //        }
-            //    ).ToList();
-
-
-            //Update all legalities
-            //(what if I just deleted all existing BS?)
-
-            //do I...
-            //  Itterate over each card, building a list of things to update?
 
             List<CardDataDto> unmatchedCards = new List<CardDataDto>();
 

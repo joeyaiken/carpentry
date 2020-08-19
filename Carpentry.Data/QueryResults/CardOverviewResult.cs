@@ -33,6 +33,8 @@ namespace Carpentry.Data.QueryResults
         public bool? IsFoil { get; set; }
 
         public int? CollectorNumber { get; set; }
+        public string Color { get; set; }
+        public string ColorIdentity { get; set; }
 
         //public string Variant { get; set; }
 

@@ -8,10 +8,8 @@ namespace Carpentry.Data.DataModels
 {
     public class DeckCardCategoryData
     {
-        //ID
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public char Id { get; set; }
-
         public string Name { get; set; }
 
         //Associations

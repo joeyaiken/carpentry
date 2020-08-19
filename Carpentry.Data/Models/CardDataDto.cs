@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Carpentry.Data.Models
 {
+    //TODO - Determine if this should be kept or trashed
     public class CardDataDto
     {
         //Honestly this will be similar to a MagicCard / MagicCardDto

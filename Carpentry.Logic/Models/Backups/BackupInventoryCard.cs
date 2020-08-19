@@ -9,7 +9,7 @@ namespace Carpentry.Logic.Models.Backups
         public string SetCode { get; set; }
 
         [JsonProperty("n")]
-        public int? CollectorNumber { get; set; }
+        public int CollectorNumber { get; set; }
 
         [JsonProperty("f")]
         public bool IsFoil { get; set; }

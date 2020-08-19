@@ -272,7 +272,7 @@ namespace Carpentry.Service.Tests.UnitTests
             };
 
             mockSearchService
-                .Setup(p => p.SearchInventory(It.IsNotNull<InventoryQueryParameter>()))
+                .Setup(p => p.SearchInventoryCards(It.IsNotNull<InventoryQueryParameter>()))
                 .ReturnsAsync(expectedOverviewResult);
 
             var inventoryService = new CarpentryInventoryService(

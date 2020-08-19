@@ -13,7 +13,6 @@ namespace Carpentry.Data.Implementations
 {
     public class ScryfallRepo : IScryfallDataRepo
     {
-
         private readonly ScryfallDataContext _scryContext;
 
         public ScryfallRepo(
@@ -44,40 +43,28 @@ namespace Carpentry.Data.Implementations
         /// <returns></returns>
         public async Task AddOrUpdateSet(ScryfallSetData setData, bool applyData)
         {
-            //do I map or blindly add/update?
-            //TODO - Map between models instead of blindly applying
-
             var existingSet = _scryContext.Sets.Where(x => x.Code.ToLower() == setData.Code.ToLower()).FirstOrDefault();
-
             if (existingSet != null) 
             {
                 existingSet.Code = setData.Code;
                 existingSet.Name = setData.Name;
-                //existingSet.DataIsParsed = setData.DataIsParsed;
                 existingSet.LastUpdated = setData.LastUpdated;
                 existingSet.ReleasedAt = setData.ReleasedAt;
                 
-
                 if (applyData)
                 {
-                    //existingSet.CardData = setData.CardData;
                     existingSet.CardTokens = setData.CardTokens;
                     existingSet.SetCards = setData.SetCards;
                     existingSet.PremiumCards = setData.PremiumCards;
                 }
 
-                //_scryContext.Sets.Update(setData);
-                //setData.Id = existingSet.Id;
                 _scryContext.Sets.Update(existingSet);
             }
             else
             {
-                //ScryfallSet newSet = new ScryfallSet
-                //{
-
-                //}
                 _scryContext.Sets.Add(setData);
             }
+
             await _scryContext.SaveChangesAsync();
         }
 
@@ -89,10 +76,7 @@ namespace Carpentry.Data.Implementations
                 .Select(c => new ScryfallSetData
                 {
                     CardCount = c.CardCount,
-                    //CardData = c.CardData,
-                    //CardData = includeData ? c.CardData : null,
                     Code = c.Code,
-                    //DataIsParsed = c.DataIsParsed,
                     Digital = c.Digital,
                     FoilOnly = c.FoilOnly,
                     Id = c.Id,
@@ -101,7 +85,7 @@ namespace Carpentry.Data.Implementations
                     NonfoilOnly = c.NonfoilOnly,
                     ReleasedAt = c.ReleasedAt,
                     SetType = c.SetType,
-
+                    
                     CardTokens = includeData ? c.CardTokens : null,
                     SetCards = includeData ? c.SetCards : null,
                     PremiumCards = includeData ? c.PremiumCards : null,
@@ -127,12 +111,20 @@ namespace Carpentry.Data.Implementations
             await _scryContext.Database.EnsureCreatedAsync();
         }
 
+        /// <summary>
+        /// Gets the current ScryfallAuditData information, if it exists
+        /// </summary>
+        /// <returns></returns>
         public async Task<ScryfallAuditData> GetAuditData()
         {
             var auditData = await _scryContext.ScryfallAuditData.FirstOrDefaultAsync();
             return auditData;
         }
 
+        /// <summary>
+        /// Gets the current ScryfallAuditData record (creating one if it doesn't exist), and updates the LastUpdated value
+        /// </summary>
+        /// <returns></returns>
         public async Task SetAuditData()
         {
             var existingAuditData = await _scryContext.ScryfallAuditData.FirstOrDefaultAsync();

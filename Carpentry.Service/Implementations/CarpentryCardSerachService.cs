@@ -32,7 +32,7 @@ namespace Carpentry.Service.Implementations
         /// <returns></returns>
         public async Task<List<CardSearchResultDto>> SearchInventory(CardSearchQueryParameter filters)
         {
-            var result = await _searchService.SearchCards(filters);
+            var result = await _searchService.SearchCardDefinitions(filters);
             return result;
         }
 

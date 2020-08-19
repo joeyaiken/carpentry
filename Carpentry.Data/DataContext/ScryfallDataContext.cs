@@ -18,10 +18,10 @@ namespace Carpentry.Data.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<ScryfallAuditData>(eb =>
-            {
-                //eb.HasNoKey();
-            });
+            //modelBuilder.Entity<ScryfallAuditData>(eb =>
+            //{
+            //    //eb.HasNoKey();
+            //});
         }
 
     }   

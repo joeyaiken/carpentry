@@ -9,8 +9,6 @@ namespace Carpentry.Data.DataModels
     {
         [Key]
         public int SetDataAuditKey { get; set; }
-
         public DateTime? DefinitionsLastUpdated { get; set; }
-
     }
 }

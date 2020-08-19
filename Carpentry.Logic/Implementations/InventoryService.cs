@@ -62,7 +62,7 @@ namespace Carpentry.Logic.Implementations
                 MultiverseId = card.Id,
                 Name = card.Name,
 
-                CollectionNumber = card.CollectorNumber ?? 0, //todo - replace "?? 0"
+                CollectionNumber = card.CollectorNumber,
                 ImageUrl = card.ImageUrl,
                 Price = card.Price,
                 PriceFoil = card.PriceFoil,

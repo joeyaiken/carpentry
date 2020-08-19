@@ -73,7 +73,7 @@ namespace Carpentry.Service.Implementations
 
         public async Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
         {
-            var result = await _searchService.SearchInventory(param);
+            var result = await _searchService.SearchInventoryCards(param);
             return result;
         }
 
