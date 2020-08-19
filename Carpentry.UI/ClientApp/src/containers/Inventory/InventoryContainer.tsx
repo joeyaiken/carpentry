@@ -68,9 +68,9 @@ class InventoryContainer extends React.Component<InventoryProps>{
     //     this.props.dispatch(inventorySearchMethodChanged(name));
     // }
 
-    handleCardDetailSelected(card: string | null){
-        console.log(`card selected: ${card}`);
-        this.props.dispatch(requestInventoryDetail(card));
+    handleCardDetailSelected(cardId: number | null){
+        console.log(`card selected: ${cardId}`);
+        this.props.dispatch(requestInventoryDetail(cardId));
     }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {

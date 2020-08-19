@@ -48,39 +48,39 @@ namespace Carpentry.Service.Tests.UnitTests
             Assert.AreEqual(expectedResult.Count, result.Count);
         }
         
-        [TestMethod]
-        public async Task CarpentryCardSerachService_SearchWeb_Test()
-        {
-            var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
-            var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
+        //[TestMethod]
+        //public async Task CarpentryCardSerachService_SearchWeb_Test()
+        //{
+        //    var mockSearchService = new Mock<ISearchService>(MockBehavior.Strict);
+        //    var mockScryService = new Mock<IScryfallService>(MockBehavior.Strict);
 
-            var expectedResult = new List<ScryfallMagicCard>()
-            {
+        //    var expectedResult = new List<ScryfallMagicCard>()
+        //    {
 
-            };
+        //    };
 
-            mockScryService
-                .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
-                .ReturnsAsync(expectedResult);
+        //    mockScryService
+        //        .Setup(p => p.SearchScryfallByName(It.IsNotNull<string>(), It.IsAny<bool>()))
+        //        .ReturnsAsync(expectedResult);
 
-            var cardSearchService = new CarpentryCardSearchService(
-                mockSearchService.Object,
-                mockScryService.Object
-                );
+        //    var cardSearchService = new CarpentryCardSearchService(
+        //        mockSearchService.Object,
+        //        mockScryService.Object
+        //        );
 
-            var queryParam = new NameSearchQueryParameter()
-            {
-                Name = "Opt",
-                Exclusive = false,
-            };
+        //    var queryParam = new NameSearchQueryParameter()
+        //    {
+        //        Name = "Opt",
+        //        Exclusive = false,
+        //    };
 
 
-            //Act
-            var result = await cardSearchService.SearchWeb(queryParam);
+        //    //Act
+        //    var result = await cardSearchService.SearchWeb(queryParam);
 
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedResult.Count, result.Count);
-        }
+        //    //Assert
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual(expectedResult.Count, result.Count);
+        //}
     }
 }

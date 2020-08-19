@@ -251,6 +251,7 @@ declare interface InventoryQueryParameter {
 }
 
 declare interface MagicCard {
+    cardId: number;
     cmc: number | null;
     colorIdentity: string[];
     colors: string[];

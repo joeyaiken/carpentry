@@ -8,7 +8,7 @@ import { appStyles } from '../../styles/appStyles';
 
 interface ComponentProps{
     cardOverviews: InventoryOverviewDto[];
-    onCardSelected: (cardName: string) => void;
+    onCardSelected: (cardId: number) => void;
 }
 
 export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
@@ -33,7 +33,7 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                     </Box>
                                 </CardContent>
                                 <CardActions className={classes.flexSection}>
-                                    <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.name)}} >
+                                    <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.id)}} >
                                         Details
                                     </Button>
                                 </CardActions>

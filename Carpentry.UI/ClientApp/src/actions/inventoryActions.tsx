@@ -83,7 +83,7 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
 
         })
     });
-    api.inventory.AddBatch(newCards).then(() => {
+    api.inventory.addInventoryCardBatch(newCards).then(() => {
         dispatch(inventoryAddComplete());
         dispatch(requestInventoryOverviews());
     });
@@ -178,13 +178,13 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
     });
 
 }
-export const requestInventoryDetail = (name: string | null): any => {
+export const requestInventoryDetail = (cardId: number | null): any => {
     return (dispatch: Dispatch, getState: any) => {
-        return getInventoryDetail(dispatch, getState(), name);
+        return getInventoryDetail(dispatch, getState(), cardId);
     }
 }
 
-function getInventoryDetail(dispatch: Dispatch, state: AppState, name: string | null): any {
+function getInventoryDetail(dispatch: Dispatch, state: AppState, cardId: number | null): any {
     const _localApiScope: ApiScopeOption = "inventoryDetail";
 
     //const queryInProgress = state.inventory.detailIsLoading;
@@ -194,14 +194,14 @@ function getInventoryDetail(dispatch: Dispatch, state: AppState, name: string | 
         return;
     }
     
-    if(!name){
+    if(!cardId){
         //dispatch(inventoryDetailReceived(null));
         dispatch(apiDataReceived(_localApiScope, null));
     } else {
         // dispatch(inventoryDetailRequested());
         dispatch(apiDataRequested(_localApiScope));
 
-        api.inventory.getCardsByName(name).then((result) => {
+        api.inventory.getInventoryDetail(cardId).then((result) => {
             dispatch(apiDataReceived(_localApiScope, result));
         });
     }

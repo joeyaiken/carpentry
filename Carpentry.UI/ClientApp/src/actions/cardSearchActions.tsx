@@ -39,7 +39,7 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ma
     dispatch(apiDataRequested(_localApiScope));
 
     //need to figure out what API call I'm using, should re-use the existing inventory one
-    api.inventory.getCardsByName(card.name).then((results) =>{
+    api.inventory.getInventoryDetail(card.cardId).then((results) =>{
         dispatch(apiDataReceived(_localApiScope, results));
     });
 
