@@ -196,7 +196,7 @@ function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number):
 
     dispatch(apiDataRequested(_localApiScope, deckId));
     
-    api.Decks.getDetail(deckId).then((result) => {
+    api.decks.getDeckDetail(deckId).then((result) => {
         dispatch(apiDataReceived(_localApiScope, result));
     });
 }

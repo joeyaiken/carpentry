@@ -36,7 +36,7 @@ function getDeckOverviews(dispatch: Dispatch, state: AppState): any  {
     console.log('requesting')
     dispatch(apiDataRequested(_localApiScope));
     console.log('now')
-    api.Decks.getOverviews().then((results) => {
+    api.decks.getDeckOverviews().then((results) => {
         console.log('loaded, returning')
         dispatch(apiDataReceived(_localApiScope, results));
     });

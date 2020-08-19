@@ -6,20 +6,12 @@ using System.Text;
 namespace Carpentry.Logic.Tests.UnitTests
 {
     [TestClass]
-    public class DataBackupServiceTests
+    public class DeckServiceTests
     {
-
-        DataBackupServiceTests()
-        {
-
-        }
-
         [TestMethod]
         public void DataBackupServiceTests_TestsAreImplemented_Test()
         {
             Assert.Fail();
         }
-
-
     }
 }

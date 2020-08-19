@@ -13,7 +13,7 @@ export interface DeckDataReducerState {
 
         deckId: number;
     
-        deckProps: DeckProperties | null;
+        deckProps: DeckPropertiesDto | null;
     
         //This (InventoryOverviewDto) might need a GropId or something
         //THIS ISN'T GROUPED BY ID

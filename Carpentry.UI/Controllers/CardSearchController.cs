@@ -67,6 +67,7 @@ namespace Carpentry.UI.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
         {
+            //TODO - swap return object for CardSearchResultDto
             try
             {
                 IEnumerable<MagicCardDto> cards = await _cardSearch.SearchWeb(param);

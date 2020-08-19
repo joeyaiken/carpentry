@@ -27,7 +27,7 @@ namespace Carpentry.Data.Interfaces
         //Queries
         Task<List<DeckCardResult>> GetDeckCards(int deckId);
         Task<int> GetDeckCardCount(int deckId);
-        Task<List<string>> GetDeckColorIdentity(int deckId);
+        Task<List<char>> GetDeckColorIdentity(int deckId);
         Task<IEnumerable<DeckCardStatResult>> GetDeckCardStats(int deckId);
     }
 }

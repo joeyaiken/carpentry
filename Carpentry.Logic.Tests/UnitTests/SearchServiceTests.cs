@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Carpentry.Logic.Tests.UnitTests
 {
     [TestClass]
-    public class CardSearchServiceTests
+    public class SearchServiceTests
     {
         [TestMethod]
         public async Task TestMethodsVerifiedUpToDate()

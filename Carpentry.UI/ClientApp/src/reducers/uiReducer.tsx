@@ -37,9 +37,9 @@ export interface UiReducerState {
     isInventoryDetailModalOpen: boolean;
 
     //newDeckDto: DeckProperties;
-    deckModalProps: DeckProperties | null; //shown in the deckPropsModal
+    deckModalProps: DeckPropertiesDto | null; //shown in the deckPropsModal
 
-    newDeckDto: DeckProperties;
+    newDeckDto: DeckPropertiesDto;
 
     // //legacy
     // //ui - Data that represents how the UI is currently displayed
@@ -226,7 +226,7 @@ export const uiReducer = (state = initialState, action: ReduxAction): UiReducerS
     }
 }
 
-const emptyDeckDto = (): DeckProperties   =>  ({
+const emptyDeckDto = (): DeckPropertiesDto   =>  ({
     basicW: 0,
     basicU: 0,
     basicB: 0,

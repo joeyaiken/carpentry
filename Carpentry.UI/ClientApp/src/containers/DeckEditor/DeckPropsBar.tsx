@@ -4,7 +4,7 @@ import { Typography, Box, AppBar, Chip, Toolbar, Avatar, Button } from '@materia
 
 interface ComponentProps{
     //totalPrice: number;
-    deckProperties: DeckProperties;
+    deckProperties: DeckPropertiesDto;
     onEditClick: () => void;
     onToggleViewClick: () => void;
 }

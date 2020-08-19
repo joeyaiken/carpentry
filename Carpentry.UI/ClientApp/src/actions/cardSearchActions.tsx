@@ -39,7 +39,7 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ma
     dispatch(apiDataRequested(_localApiScope));
 
     //need to figure out what API call I'm using, should re-use the existing inventory one
-    api.Inventory.getCardsByName(card.name).then((results) =>{
+    api.inventory.getCardsByName(card.name).then((results) =>{
         dispatch(apiDataReceived(_localApiScope, results));
     });
 
@@ -110,31 +110,31 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
         api.cardSearch.searchWeb(state.ui.cardSearchFilterProps.cardName, state.ui.cardSearchFilterProps.exclusiveName).then((results) =>{
             dispatch(apiDataReceived(_localApiScope, results));
         });
-    }else if(cardSearchMethod === "inventory"){
+    // }else if(cardSearchMethod === "inventory"){
 
-        const param: InventoryQueryParameter = {
-            groupBy: "mid",
-            text: state.ui.cardSearchFilterProps.text,
-            colors: state.ui.cardSearchFilterProps.colorIdentity,
-            types: [],
-            skip: 0,
-            take: 500,
-            format: state.ui.cardSearchFilterProps.format,
-            sort: '',
-            set: state.ui.cardSearchFilterProps.set,
-            // setId: state.ui.cardSearchFilterProps.setId,
-            exclusiveColorFilters: state.ui.cardSearchFilterProps.exclusiveColorFilters,
-            multiColorOnly: state.ui.cardSearchFilterProps.multiColorOnly,
-            maxCount:0,
-            minCount:0,
-            type: state.ui.cardSearchFilterProps.type,
-            rarity: state.ui.cardSearchFilterProps.rarity,
-            sortDescending: false,
-        }
+    //     const param: InventoryQueryParameter = {
+    //         groupBy: "mid",
+    //         text: state.ui.cardSearchFilterProps.text,
+    //         colors: state.ui.cardSearchFilterProps.colorIdentity,
+    //         types: [],
+    //         skip: 0,
+    //         take: 500,
+    //         format: state.ui.cardSearchFilterProps.format,
+    //         sort: '',
+    //         set: state.ui.cardSearchFilterProps.set,
+    //         // setId: state.ui.cardSearchFilterProps.setId,
+    //         exclusiveColorFilters: state.ui.cardSearchFilterProps.exclusiveColorFilters,
+    //         multiColorOnly: state.ui.cardSearchFilterProps.multiColorOnly,
+    //         maxCount:0,
+    //         minCount:0,
+    //         type: state.ui.cardSearchFilterProps.type,
+    //         rarity: state.ui.cardSearchFilterProps.rarity,
+    //         sortDescending: false,
+    //     }
 
-        api.cardSearch.searchInventory(param).then((results) => {
-            dispatch(apiDataReceived(_localApiScope, results));
-        });
+    //     api.cardSearch.searchInventory(param).then((results) => {
+    //         dispatch(apiDataReceived(_localApiScope, results));
+    //     });
 
     } else {
         const currentFilterProps = state.ui.cardSearchFilterProps;
@@ -150,8 +150,13 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
             type: currentFilterProps.type,
         }
 
-        console.log('serch by set')
-        console.log(param);
+        // console.log('serch by set')
+        // console.log(param);
+
+       api.cardSearch.searchInventory(param).then((results) => {
+            dispatch(apiDataReceived(_localApiScope, results));
+        })
+
         // api.cardSearch.searchSet(param).then((results) => {
         //     dispatch(apiDataReceived(_localApiScope, results));
         // })

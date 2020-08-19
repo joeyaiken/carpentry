@@ -3,6 +3,18 @@
 /// <reference types="react-redux" />
 /// <reference types="redux-thunk" />
 
+declare interface CardImportDto {
+
+}
+
+declare interface ValidatedDeckImportDto {
+
+}
+
+declare interface ValidatedCarpentryImportDto {
+    
+}
+
 declare interface CardSearchQueryParameter {
     set: string;
     type: string;
@@ -10,6 +22,27 @@ declare interface CardSearchQueryParameter {
     exclusiveColorFilters: boolean;
     multiColorOnly: boolean;
     rarity: string[];
+}
+
+declare interface CardSearchResultDto {
+    cmc: number | null;
+    colorIdentity: string[];
+    colors: string[];
+    manaCost: string;
+    name: string;
+    type: string;
+    details: cardSearchResultDetail[];
+}
+
+declare interface cardSearchResultDetail {
+    cardId: number;
+    setCode: string;
+    name: string;
+    collectionNumber: number;
+    price: number | null;
+    priceFoil: number | null;
+    priceTix: number | null;
+    imageUrl: string;
 }
 
 declare interface DeckCard {
@@ -34,7 +67,7 @@ declare interface DeckCardOverview {
 }
 
 declare interface DeckDetailDto {
-    props: DeckProperties;
+    props: DeckPropertiesDto;
     cardOverviews: DeckCardOverview[];
     cards: DeckCard[];
     stats: DeckStats;
@@ -49,7 +82,7 @@ declare interface DeckOverviewDto {
     validationIssues: string;
 }
 
-declare interface DeckProperties {
+declare interface DeckPropertiesDto {
     id: number;
     name: string;
     //format: DeckFormats;
@@ -81,22 +114,22 @@ declare interface AppFiltersDto
     statuses: FilterOption[];
 
     // [JsonProperty("sets")]
-    // public List<FilterOption> Sets { get; set; }
+    // public List<FilterOption> Sets 
 
     // [JsonProperty("types")]
-    // public List<FilterOption> Types { get; set; }
+    // public List<FilterOption> Types 
 
     // [JsonProperty("formats")]
-    // public List<FilterOption> Formats { get; set; }
+    // public List<FilterOption> Formats 
 
     // [JsonProperty("colors")]
-    // public List<FilterOption> ManaColors { get; set; }
+    // public List<FilterOption> ManaColors 
 
     // [JsonProperty("rarities")]
-    // public List<FilterOption> Rarities { get; set; }
+    // public List<FilterOption> Rarities 
 
     // [JsonProperty("statuses")]
-    // public List<FilterOption> Statuses { get; set; }
+    // public List<FilterOption> Statuses 
 }
 
 declare interface FilterOption
@@ -214,7 +247,7 @@ declare interface InventoryQueryParameter {
     maxCount: number;
 
     // [JsonProperty("statusId")]
-    // public int StatusId { get; set; }
+    // public int StatusId 
 }
 
 declare interface MagicCard {

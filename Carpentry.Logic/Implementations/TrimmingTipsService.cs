@@ -11,11 +11,13 @@ namespace Carpentry.Logic.Implementations
     {
         public async Task<List<InventoryOverviewDto>> GetTrimmingTips()
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
         }
 
         public async Task HideTrimmingTip(InventoryOverviewDto dto)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
         }
     }

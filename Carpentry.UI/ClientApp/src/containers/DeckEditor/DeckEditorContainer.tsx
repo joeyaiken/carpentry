@@ -73,7 +73,7 @@ interface PropsFromState {
     deckId: number;
     viewMode: DeckEditorViewMode;//"list" | "grid";
     //deckProperties: DeckDetailDto | null;
-    deckProperties: DeckProperties | null;
+    deckProperties: DeckPropertiesDto | null;
     // cardOverviews: InventoryOverviewDto[];
     // cardMenuAnchor: HTMLButtonElement | null;
     // deckPropsModalOpen: boolean;

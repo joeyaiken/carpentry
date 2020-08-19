@@ -519,7 +519,10 @@ namespace Carpentry.Logic.Implementations
                 var deckToUdpate = deckList[i];
 
                 //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
-                deckToUdpate.Colors = await _deckRepo.GetDeckColorIdentity(deckToUdpate.Id);
+
+                var colorChars = await _deckRepo.GetDeckColorIdentity(deckToUdpate.Id);
+
+                deckToUdpate.Colors = colorChars.Select(x => x.ToString()).ToList();
 
                 //string validationResults = await ValidateDeck(deckList[i].Id);
                 string validationResults = await ValidateDeck(deckToUdpate.Id);

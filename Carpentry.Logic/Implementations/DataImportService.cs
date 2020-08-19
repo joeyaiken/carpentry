@@ -162,6 +162,8 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto payload)
         {
+            //TODO - Is there a better way to submit a file than reading from a directory?
+
             var result = new ValidatedCarpentryImportDto()
             {
                 BackupDirectory = payload.ImportPayload,

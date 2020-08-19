@@ -109,7 +109,7 @@ namespace Carpentry.Tools.QuickRestore
                 //.AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
 
                 ////logic services
-                .AddScoped<IDataRestoreService, DataRestoreService>()
+                //.AddScoped<IDataRestoreService, DataRestoreService>()
                 //.AddScoped<IDataUpdateService, DataUpdateService>()
 
                 //.AddScoped<IScryfallService, ScryfallService>()

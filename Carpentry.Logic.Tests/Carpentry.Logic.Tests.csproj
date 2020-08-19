@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UnitTests\DataRestoreServiceTests.cs" />
+    <Compile Remove="UnitTests\DeckServiceTests\DeckServiceDeckCardTests.cs" />
+    <Compile Remove="UnitTests\DeckServiceTests\DeckServiceDeckTests.cs" />
     <Compile Remove="UnitTests\DeckServiceTests\DeckServiceImportExportTests.cs" />
+    <Compile Remove="UnitTests\DeckServiceTests\DeckServiceSearchTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\CollectionBuilderTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\ImportExportTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\InventoryCardTests.cs" />
@@ -28,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UnitTests\DeckServiceTests\" />
     <Folder Include="UnitTests\InventoryServiceTests\" />
   </ItemGroup>
 

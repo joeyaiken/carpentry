@@ -83,7 +83,7 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
 
         })
     });
-    api.Inventory.AddBatch(newCards).then(() => {
+    api.inventory.AddBatch(newCards).then(() => {
         dispatch(inventoryAddComplete());
         dispatch(requestInventoryOverviews());
     });
@@ -103,7 +103,7 @@ export const requestInventoryExport = (): any => {
 
 function getInventoryExport(dispatch: Dispatch, state: AppState): any {
     //TODO - add "isLoading" block
-    api.Inventory.exportInventoryBackup().then((blob) => {
+    api.inventory.exportInventoryBackup().then((blob) => {
         const exportFilename = "CarpentryBackup.zip"
 
 
@@ -169,7 +169,7 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
         //rarity: ['c','u']
     }
 
-    api.Inventory.searchCards(param).then((result) => {
+    api.inventory.searchCards(param).then((result) => {
 
         //InventoryQueryResult[]
 
@@ -201,7 +201,7 @@ function getInventoryDetail(dispatch: Dispatch, state: AppState, name: string | 
         // dispatch(inventoryDetailRequested());
         dispatch(apiDataRequested(_localApiScope));
 
-        api.Inventory.getCardsByName(name).then((result) => {
+        api.inventory.getCardsByName(name).then((result) => {
             dispatch(apiDataReceived(_localApiScope, result));
         });
     }

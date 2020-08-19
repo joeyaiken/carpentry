@@ -11,11 +11,13 @@ namespace Carpentry.Logic.Implementations
     {
         public async Task<List<InventoryOverviewDto>> GetCollectionBuilderSuggestions()
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
         }
 
         public async Task HideCollectionBuilderSuggestion(InventoryOverviewDto dto)
         {
+            await Task.CompletedTask;
             throw new NotImplementedException();
         }
     }

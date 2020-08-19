@@ -199,45 +199,43 @@ namespace Carpentry.Data.Implementations
             return deckCards;
         }
 
-        public async Task<List<string>> GetDeckColorIdentity(int deckId)
+        public async Task<List<char>> GetDeckColorIdentity(int deckId)
         {
-
-            var deckCardColors = await _cardContext.DeckCards
+            var deckColorStrings = await _cardContext.DeckCards
                 .Where(x => x.DeckId == deckId)
-                .SelectMany(x => x.InventoryCard.Card.ColorIdentity.Split())
-                .Distinct()
+                .Select(x => x.InventoryCard.Card.ColorIdentity)
                 .ToListAsync();
 
-                //.SelectMany(x => x.InventoryCard.Card.CardColorIdentities)
-                //.Select(ci => ci.ManaTypeId.ToString())
-                //.Distinct()
-                //.ToListAsync();
+            var deckCardColors = deckColorStrings
+                .SelectMany(x => x.ToCharArray())
+                .Distinct()
+                .ToList();
 
             var dbDeck = _cardContext.Decks.Where(x => x.Id == deckId).FirstOrDefault();
 
-            if (dbDeck.BasicW > 0 && !deckCardColors.Contains("W"))
+            if (dbDeck.BasicW > 0 && !deckCardColors.Contains('W'))
             {
-                deckCardColors.Add("W");
+                deckCardColors.Add('W');
             }
 
-            if (dbDeck.BasicU > 0 && !deckCardColors.Contains("U"))
+            if (dbDeck.BasicU > 0 && !deckCardColors.Contains('U'))
             {
-                deckCardColors.Add("U");
+                deckCardColors.Add('U');
             }
 
-            if (dbDeck.BasicB > 0 && !deckCardColors.Contains("B"))
+            if (dbDeck.BasicB > 0 && !deckCardColors.Contains('B'))
             {
-                deckCardColors.Add("B");
+                deckCardColors.Add('B');
             }
 
-            if (dbDeck.BasicR > 0 && !deckCardColors.Contains("R"))
+            if (dbDeck.BasicR > 0 && !deckCardColors.Contains('R'))
             {
-                deckCardColors.Add("R");
+                deckCardColors.Add('R');
             }
 
-            if (dbDeck.BasicG > 0 && !deckCardColors.Contains("G"))
+            if (dbDeck.BasicG > 0 && !deckCardColors.Contains('G'))
             {
-                deckCardColors.Add("G");
+                deckCardColors.Add('G');
             }
 
             return deckCardColors;

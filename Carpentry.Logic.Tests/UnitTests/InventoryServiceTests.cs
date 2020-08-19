@@ -37,6 +37,12 @@ namespace Carpentry.Logic.Tests.UnitTests
                 .Setup(p => p.AddInventoryCard(It.IsNotNull<InventoryCardData>()))
                 .ReturnsAsync(idToExpect);
 
+            var cardDataResponse = new CardData();
+
+            mockCardDatarepo
+                .Setup(p => p.GetCardData(It.IsAny<string>(), It.IsAny<int>())) //set/collectionNumber
+                .ReturnsAsync(cardDataResponse);
+
             //var mockDataUpdateService = new Mock<IDataUpdateService>(MockBehavior.Strict);
 
             //mockDataUpdateService

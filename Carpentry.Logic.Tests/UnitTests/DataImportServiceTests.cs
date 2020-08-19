@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace Carpentry.Logic.Tests.UnitTests
 {
     [TestClass]
-    public class CardImportServiceTests
+    public class DataImportServiceTests
     {
         [TestMethod]
         public async Task CardImportServiceTests_AreImplemented_Test()

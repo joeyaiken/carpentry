@@ -6,12 +6,15 @@ using System.Text;
 namespace Carpentry.Logic.Tests.UnitTests
 {
     [TestClass]
-    public class DataRestoreServiceTests
+    public class DataExportServiceTests
     {
+
         [TestMethod]
-        public void FilterService_TestsAreImplemented_Test()
+        public void DataBackupServiceTests_TestsAreImplemented_Test()
         {
             Assert.Fail();
         }
+
+
     }
 }

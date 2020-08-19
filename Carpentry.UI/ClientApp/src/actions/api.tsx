@@ -18,21 +18,13 @@ export const api = {
 
     cardSearch: {
 
-        async searchInventory(filters: InventoryQueryParameter): Promise<MagicCard[]> {
+        async searchInventory(filters: CardSearchQueryParameter): Promise<CardSearchResultDto[]> {
             const endpoint = `api/CardSearch/SearchInventory`;
             const result = await Post(endpoint, filters);
             return result || [];
         },
 
-        // async searchSet(filters: CardSearchQueryParameter): Promise<MagicCard[]> {
-        //     console.log('searchSet');
-        //     console.log(filters);
-        //     const endpoint = `api/CardSearch/SearchSet`;
-        //     const result = await Post(endpoint, filters);
-        //     return result || [];
-        // },
-
-        async searchWeb(name: string, exclusive: boolean): Promise<MagicCard[]> {
+        async searchWeb(name: string, exclusive: boolean): Promise<CardSearchResultDto[]> {
             const endpoint = `api/CardSearch/SearchWeb`;
             const payload = {
                 name: name,
@@ -47,7 +39,6 @@ export const api = {
     core: {
 
         async getFilterValues(): Promise<AppFiltersDto> {
-            //console.log('why no filter values?')
             const endpoint = `api/Core/GetFilterValues`;
             const result = await Get(endpoint);
             return result;
@@ -79,131 +70,155 @@ export const api = {
             return;
         },
 
-        // async getUntrackedSets(): Promise<SetDetailDto> {
-        //     const endpoint = `api/Core/GetUntrackedSets`;
-        //     const result = await Get(endpoint);
-        //     return result;
-        // },
-
-        ////Backup DB
-        ////should this be a POST since it could/should include filepath info?
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> BackupDatabase()
-
-        ////Restore DB
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> RestoreDatabase()
-
-        ////Get Set|Data Update Status
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> GetDatabaseUpdateStatus()
-
-        ////Update Set Scry Data
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> UpdateScryfallSet(string setCode)
-
-        ////Update Set Card Data
-        //[HttpGet("[action]")]
-        //public async Task<ActionResult> UpdateSetData(string setCode)
-
     },
 
-    Decks: {
+    decks: {
 
-        async add(deckProps: DeckProperties): Promise<number> {
-            const endpoint = `api/Decks/Add`;
+        async addDeck(deckProps: DeckPropertiesDto): Promise<number> {
+            const endpoint = `api/Decks/AddDeck`;
             const result = await Post(endpoint, deckProps);
             return result;
         },
-
-        async update(deckProps: DeckProperties): Promise<void> {
-            const endpoint = `api/Decks/Update`;
+        async updateDeck(deckProps: DeckPropertiesDto): Promise<void> {
+            const endpoint = `api/Decks/UpdateDeck`;
             await Post(endpoint, deckProps);
             return;
         },
-
-        async delete(deckId: number): Promise<void> {
-            const endpoint = `api/Decks/Delete`;
+        async deleteDeck(deckId: number): Promise<void> {
+            const endpoint = `api/Decks/DeleteDeck`;
             const url = `${endpoint}?deckId=${deckId}`;
             await Get(url);
             return;
         },
 
-        async getOverviews(): Promise<DeckOverviewDto[]> {
-            //console.log('')
+        async addDeckCard(deckCardProps: DeckCardDto): Promise<void> {
+            const endpoint = `api/Decks/AddDeckCard`;
+            const result = await Post(endpoint, deckCardProps);
+            return result;
+        },
+        async updateDeckCard(dto: DeckCardDto): Promise<void> {
+            const endpoint = `api/Decks/UpdateDeckCard`;
+            const result = await Post(endpoint, dto);
+            return result;
+        },
+        async removeDeckCard(deckCardId: number): Promise<void> {
+            const endpoint = `api/Decks/RemoveDeckCard`;
+            const url = `${endpoint}?id=${deckCardId}`;
+            await Get(url);
+            return;
+        },
+
+        async getDeckOverviews(): Promise<DeckOverviewDto[]> {
             const endpoint = `api/Decks/GetDeckOverviews`;
             const result = await Get(endpoint);
             return result;
         },
-
-        async getDetail(deckId: number): Promise<DeckDetailDto> {
+        async getDeckDetail(deckId: number): Promise<DeckDetailDto> {
             const endpoint = `api/Decks/GetDeckDetail`;
             const url = `${endpoint}?deckId=${deckId}`;
             const result = await Get(url);
             return result;
         },
 
-        async addCard(deckCardProps: DeckCardDto): Promise<void> {
-            const endpoint = `api/Decks/AddCard`;
-            const result = await Post(endpoint, deckCardProps);
-            return result;
-        },
-
-        async updateCard(dto: DeckCardDto): Promise<void> {
-            const endpoint = `api/Decks/UpdateCard`;
+        async validateDeckImport(dto: CardImportDto): Promise<ValidatedDeckImportDto> {
+            const endpoint = `api/Decks/ValidateDeckImport`;
+            //const url = `${endpoint}?deckId=${deckId}`;
             const result = await Post(endpoint, dto);
             return result;
         },
-
-        async removeCard(deckCardId: number): Promise<void> {
-            const endpoint = `api/Decks/RemoveCard`;
-            const url = `${endpoint}?id=${deckCardId}`;
-            await Get(url);
+        async addValidatedDeckImport(dto: ValidatedDeckImportDto): Promise<void> {
+            const endpoint = `api/Decks/AddValidatedDeckImport`;
+            //const url = `${endpoint}?deckId=${deckId}`;
+            await Post(endpoint, dto);
             return;
         },
+        async exportDeckList(deckId: number): Promise<string> {
+            const endpoint = `api/Decks/ExportDeckList`;
+            const url = `${endpoint}?deckId=${deckId}`;
+            const result = await Get(url);
+            return result;
+        }
 
     },
 
-    Inventory: {
+    inventory: {
 
-        // async api_Inventory_Add(dto: InventoryCard): Promise<void> {
-        //     const url = `api/Inventory/Add`;
-        //     await Post(url, dto);
-        //     return;
-        // },
-        
-        //TODO - whatever calls this needs to not clear pending cards when an error occurrs
-        async AddBatch(dto: InventoryCard[]): Promise<void> {
-            const url = `api/Inventory/AddCardBatch`;
+        async addInventoryCard(dto: InventoryCard): Promise<void> {
+            const url = `api/Inventory/AddInventoryCard`;
             await Post(url, dto);
             return;
         },
-        
-        // async api_Inventory_Update(dto: InventoryCard): Promise<void> {
-        //     const url = `api/Inventory/Update`;
-        //     await Post(url, dto);
-        //     return;
-        // },
-        
-        // async api_Inventory_Delete(id: number): Promise<void> {
-        //     const endpoint = `api/Inventory/Delete`;
-        //     const url = `${endpoint}?id=${id}`;
-        //     await Get(url);
-        //     return;
-        // },
-        
+        //TODO - whatever calls this needs to not clear pending cards when an error occurrs
+        async addInventoryCardBatch(dto: InventoryCard[]): Promise<void> {
+            const url = `api/Inventory/AddInventoryCardBatch`;
+            await Post(url, dto);
+            return;
+        },
+        async updateInventoryCard(dto: InventoryCard): Promise<void> {
+            const url = `api/Inventory/UpdateInventoryCard`;
+            await Post(url, dto);
+            return;
+        },
+        async UpdateInventoryCardBatch(dtos: InventoryCard[]): Promise<void> {
+            const url = `api/Inventory/UpdateInventoryCardBatch`;
+            await Post(url, dtos);
+            return;
+        },
+        async deleteInventoryCard(id: number): Promise<void> {
+            const endpoint = `api/Inventory/DeleteInventoryCard`;
+            const url = `${endpoint}?id=${id}`;
+            await Get(url);
+            return;
+        },
+        async deleteInventoryCardBatch(ids: number[]): Promise<void> {
+            const endpoint = `api/Inventory/DeleteInventoryCardBatch`;
+            await Post(endpoint, ids);
+            return;
+        },
+
         async searchCards(param: InventoryQueryParameter): Promise<InventoryOverviewDto[]> {
             const endpoint = `api/Inventory/SearchCards`;
             const result = await Post(endpoint, param);
             return result;
         },
-
-        async getCardsByName(name: string): Promise<InventoryDetailDto> {
-            const endpoint = `api/Inventory/GetCardsByName?name=${name}`;
+        async getInventoryDetail(cardId: number): Promise<InventoryDetailDto> {
+            const endpoint = `api/Inventory/GetInventoryDetail?cardId=${cardId}`;
             const result = await Get(endpoint);
             return result;
         },
 
+        async getCollectionBuilderSuggestions(): Promise<InventoryOverviewDto[]> {
+            const endpoint = `api/Inventory/GetCollectionBuilderSuggestions`;
+            const result = await Get(endpoint);
+            return result;
+        },
+        async hideCollectionBuilderSuggestion(dto: InventoryOverviewDto): Promise<void> {
+            const endpoint = `api/Inventory/HideCollectionBuilderSuggestion`;
+            const result = await Post(endpoint, dto);
+            return result;
+        },
+        
+        async getTrimmingTips(): Promise<InventoryOverviewDto[]> {
+            const endpoint = `api/Inventory/GetTrimmingTips`;
+            const result = await Get(endpoint);
+            return result;
+        },
+        async hideTrimmingTip(dto: InventoryOverviewDto): Promise<void> {
+            const endpoint = `api/Inventory/HideTrimmingTip`;
+            const result = await Post(endpoint, dto);
+            return result;
+        },
+
+        async validateCarpentryImport(dto: CardImportDto): Promise<ValidatedCarpentryImportDto> {
+            const endpoint = `api/Inventory/ValidateCarpentryImport`;
+            const result = await Post(endpoint, dto);
+            return result;
+        },
+        async addValidatedCarpentryImport(dto: ValidatedCarpentryImportDto): Promise<void> {
+            const endpoint = `api/Inventory/AddValidatedCarpentryImport`;
+            const result = await Post(endpoint, dto);
+            return result;
+        },
         async exportInventoryBackup(): Promise<any> {
             const endpoint = `api/Inventory/ExportInventoryBackup`;
             const result = await Get(endpoint);
