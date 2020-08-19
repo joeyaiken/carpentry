@@ -77,7 +77,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //AddTrackedSet
         [HttpGet("[action]")]
         public async Task<ActionResult> AddTrackedSet(int setId)
         {
@@ -92,7 +91,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //UpdateTrackedSet
         [HttpGet("[action]")]
         public async Task<ActionResult> UpdateTrackedSet(int setId)
         {
@@ -107,7 +105,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //RemoveTrackedSet
         [HttpGet("[action]")]
         public async Task<ActionResult> RemoveTrackedSet(int setId)
         {

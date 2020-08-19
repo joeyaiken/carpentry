@@ -34,8 +34,6 @@ namespace Carpentry.UI.Controllers
 
         #region Deck Props
 
-        //decks/add
-        //- add a deck
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> AddDeck([FromBody] DeckPropertiesDto deckProps)
         {
@@ -50,8 +48,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //decks/update
-        //- update properties of a deck
         [HttpPost("[action]")]
         public async Task<ActionResult> UpdateDeck([FromBody] DeckPropertiesDto deckProps)
         {
@@ -66,8 +62,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //decks/delete
-        //- delete a deck
         [HttpGet("[action]")]
         public async Task<ActionResult> DeleteDeck(int deckId)
         {
@@ -132,8 +126,6 @@ namespace Carpentry.UI.Controllers
 
         #region Search
 
-        //decks/Search
-        //- get a list of deck properties & stats
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews()
         {
@@ -148,8 +140,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //decks/Get
-        //- get a deck (with cards)
         [HttpGet("[action]")]
         public async Task<ActionResult<DeckDetailDto>> GetDeckDetail(int deckId)
         {
@@ -200,7 +190,6 @@ namespace Carpentry.UI.Controllers
 
         #region Export
 
-        //ExportDeckList
         [HttpGet("[action]")]
         public async Task<ActionResult<string>> ExportDeckList(int deckId)
         {

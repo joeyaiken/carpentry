@@ -40,7 +40,6 @@ namespace Carpentry.UI.Controllers
 
         #region Inventory Cards
 
-        //Add
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> AddInventoryCard([FromBody] InventoryCardDto dto)
         {
@@ -55,7 +54,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //AddCardBatch
         [HttpPost("[action]")]
         public async Task<ActionResult> AddInventoryCardBatch([FromBody] List<InventoryCardDto> dto)
         {
@@ -98,7 +96,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //Delete
         [HttpGet("[action]")]
         public async Task<ActionResult> DeleteInventoryCard(int id)
         {
@@ -131,7 +128,6 @@ namespace Carpentry.UI.Controllers
 
         #region Search
 
-        //Search
         [HttpPost("[action]")]
         public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> SearchCards([FromBody] InventoryQueryParameter param)
         {
@@ -234,7 +230,6 @@ namespace Carpentry.UI.Controllers
 
         #region Import
 
-        //Validate Carpentry Import
         [HttpPost("[action]")]
         public async Task<ActionResult<ValidatedCarpentryImportDto>> ValidateCarpentryImport(CardImportDto cardImportDto)
         {
@@ -249,7 +244,6 @@ namespace Carpentry.UI.Controllers
             }
         }
 
-        //Add Validated Carpentry Import
         [HttpPost("[action]")]
         public async Task<ActionResult> AddValidatedCarpentryImport(ValidatedCarpentryImportDto dto)
         {
@@ -268,7 +262,6 @@ namespace Carpentry.UI.Controllers
 
         #region Export
 
-        //ExportInventoryBackup
         [HttpGet("[action]")]
         public async Task<IActionResult> ExportInventoryBackup()
         {
