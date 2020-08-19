@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Data.Interfaces
 {
-    //This is one of the DataRepo classes that will communicate with the DB
-    //TODO - Ensure methods of this interface don't return anything belonging to the Carpentry.DataModels namespace
     public interface ICardDataRepo
     {
         //Sets
