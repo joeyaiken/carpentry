@@ -43,7 +43,8 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                                     group.cardOverviews.map(cardItem => 
                                         <TableRow onClick={() => props.onCardSelected(cardItem)} onMouseEnter={() => props.onCardSelected(cardItem)}
                                             key={cardItem.id+cardItem.name}>
-                                            <TableCell>{(cardItem.count > 1) && cardItem.count}</TableCell>
+                                            {/* <TableCell>{(cardItem.count > 1) && cardItem.count}</TableCell> */}
+                                            <TableCell>{cardItem.count}</TableCell>
                                             <TableCell>{cardItem.name}</TableCell>
                                             {/* <TableCell>{cardItem.count}</TableCell> */}
                                             {/* <TableCell>{cardItem.type}</TableCell> */}

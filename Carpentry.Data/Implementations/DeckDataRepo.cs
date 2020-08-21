@@ -261,17 +261,17 @@ namespace Carpentry.Data.Implementations
                     DeckCard = x,
                     IsFoil = x.InventoryCard.IsFoil,
                     //ColorIdentity = x.InventoryCard.Card.CardColorIdentities.SelectMany<char>(ci => ci.ManaTypeId)
-                    ColorIdentity = x.InventoryCard.Card.ColorIdentity.Split().ToList(),
-                });
+                    ColorIdentity = x.InventoryCard.Card.ColorIdentity.ToCharArray(),
+                }).ToList();
 
-            List<DeckCardStatResult> results = await query.Select(x => new DeckCardStatResult()
+            List<DeckCardStatResult> results = query.Select(x => new DeckCardStatResult()
             {
                 CategoryId = x.DeckCard.CategoryId,
                 Cmc = x.Card.Cmc,
-                ColorIdentity = x.ColorIdentity,
+                ColorIdentity = x.ColorIdentity.Length == 0 ? new List<string>() : x.ColorIdentity.Select(c => c.ToString()).ToList(),
                 Price = (x.IsFoil ? x.Card.PriceFoil : x.Card.Price),
                 Type = x.Card.Type,
-            }).ToListAsync();
+            }).ToList();
 
             return results;
 

@@ -16,8 +16,9 @@ import { connect, DispatchProp } from 'react-redux';
 import { AppState } from './reducers'
 import { requestCoreData } from './actions/coreActions';
 import CardSetSettingsContainer from './containers/CardSetSettings/CardSetSettingsContainer';
+import './styles/mana.css';
 
-
+{/* <link href="styles/mana.min.css" rel="stylesheet" type="text/css" /> */}
 
 interface PropsFromState {
 }

@@ -3,6 +3,7 @@ import { Avatar } from '@material-ui/core';
 export interface ManaIconProps {
     manaType: string;
 }
+//This component represents...
 export default function ManaIcon(props: ManaIconProps): JSX.Element {
     //<Chip size="small" avatar={<Avatar src="/img/W.svg" />} label={ props.deckProperties.basicW }/>
     const size = 20;

@@ -10,7 +10,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-react": "^7.19.0",
     "jquery": "^3.4.1",
-    "mana-font": "^1.6.0",
+    "mana-font": "^1.7.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",

@@ -30,7 +30,7 @@ ReactDOM.render(
 
             </ConnectedRouter>
         {/* <link rel="stylesheet" href="/path/to/material-icons/iconfont/material-icons.css"></link> */}
-        {/* <link href="css/mana.min.css" rel="stylesheet" type="text/css" /> */}
+            {/* <link href="styles/mana.min.css" rel="stylesheet" type="text/css" /> */}
         
             {/* <App /> */}
             {/* <h1>Hello, World!</h1> */}
