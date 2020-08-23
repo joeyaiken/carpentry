@@ -22,9 +22,12 @@ declare interface CardSearchQueryParameter {
     exclusiveColorFilters: boolean;
     multiColorOnly: boolean;
     rarity: string[];
+    excludeUnowned: boolean;
+    searchGroup: string | null;
 }
 
 declare interface CardSearchResultDto {
+    cardId: number;
     cmc: number | null;
     colorIdentity: string[];
     colors: string[];
@@ -112,6 +115,8 @@ declare interface AppFiltersDto
     colors: FilterOption[];
     rarities: FilterOption[];
     statuses: FilterOption[];
+
+    searchGroups: FilterOption[];
 
     // [JsonProperty("sets")]
     // public List<FilterOption> Sets 

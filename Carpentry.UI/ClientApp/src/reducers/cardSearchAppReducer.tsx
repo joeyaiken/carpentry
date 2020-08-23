@@ -18,7 +18,7 @@ export interface CardSearchAppReducerState {
     viewMode: CardSearchViewMode;
     pendingCardsSaving: boolean;
     cardSearchMethod: "set" | "web" | "inventory";
-    selectedCard: MagicCard | null; //should probably be an AppState ID
+    selectedCard: CardSearchResultDto | null; //should probably be an AppState ID
 }
 
 const cardSearchSearchMethodChanged = (state = initialState, action: ReduxAction): CardSearchAppReducerState => {
@@ -51,7 +51,7 @@ export const cardSearchAppReducer = (state = initialState, action: ReduxAction):
             }
 
         case CARD_SEARCH_SELECT_CARD:
-            const selectedCard: MagicCard = action.payload;
+            const selectedCard: CardSearchResultDto = action.payload;
             // console.log('card search - card selected')
             // console.log(selectedCard)
             return {

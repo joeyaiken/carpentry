@@ -24,7 +24,7 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
             <Typography variant="h4">
                 Carpentry
             </Typography>
-            <i className="ms ms-g ms-cost"></i><i className="ms ms-gw ms-cost"></i><i className="ms ms-2g ms-cost"></i>
+            {/* <i className="ms ms-g ms-cost"></i><i className="ms ms-gw ms-cost"></i><i className="ms ms-2g ms-cost"></i> */}
             <Typography variant="h6">
                 A deck & inventory management tool for Magic the Gathering
             </Typography>

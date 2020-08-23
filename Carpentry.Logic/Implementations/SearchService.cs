@@ -74,7 +74,15 @@ namespace Carpentry.Logic.Implementations
             if (filters.ColorIdentity.Any())
             {
                 var excludedColors = _allColors.Where(x => !filters.ColorIdentity.Contains(x)).Select(x => x).ToList();
-                query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
+                //query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
+                //query = query.Where(x => x.ColorIdentity.ToCharArray().Any(color => excludedColors.Contains(color.ToString())));
+                //query = query.Where(x => !excludedColors.Any(color => x.ColorIdentity.Contains(color)));
+
+                foreach (var color in excludedColors)
+                {
+                    query = query.Where(x => !x.ColorIdentity.Contains(color));
+                }
+
             }
 
             if (filters.ExclusiveColorFilters)
@@ -98,10 +106,48 @@ namespace Carpentry.Logic.Implementations
                 query = query.Where(x => x.OwnedCount > 0);
             }
 
+            if (!string.IsNullOrEmpty(filters.SearchGroup))
+            {
+                switch (filters.SearchGroup)
+                {
+                    case "Red":
+                        query = query.Where(x => x.ColorIdentity == "R");
+                        break;
+                    case "Blue":
+                        query = query.Where(x => x.ColorIdentity == "U");
+                        break;
+                    case "Green":
+                        query = query.Where(x => x.ColorIdentity == "G");
+                        break;
+                    case "White":
+                        query = query.Where(x => x.ColorIdentity == "W");
+                        break;
+                    case "Black":
+                        query = query.Where(x => x.ColorIdentity == "B");
+                        break;
+                    case "Multicolored":
+                        query = query.Where(x => x.ColorIdentity.Length > 1);
+                        break;
+                    case "Colorless":
+                        query = query.Where(x => x.ColorIdentity.Length == 0);
+                        break;
+                    case "Lands":
+                        query = query.Where(x => x.Type.Contains("Land"));// && !x.Type.Contains()
+                        break;
+                    case "RareMythic":
+                        query = query.Where(x => x.RarityId == 'R' || x.RarityId == 'M');
+                        break;
+                }
+            }
+
+
             #endregion
 
+            var filteredResults = query.ToList();
+
+
             //Is this a dumb approach?  Trying to get the "first" record now?
-            var groupedQuery = query
+            var groupedQuery = filteredResults
                 .GroupBy(c => c.Name)
                 .Select(g => new 
                 {
@@ -117,19 +163,35 @@ namespace Carpentry.Logic.Implementations
                         PriceFoil = c.PriceFoil,
                         PriceTix = c.PriceFoil,
                         SetCode = c.SetCode,
-                    }).ToList(),
+                    }).OrderBy(c => c.CollectionNumber).ToList(),
                 }).ToList();
+
+            //var newQ = groupedQuery.Select(x => new
+            //{
+            //    Name = x.Name,
+            //    Cmc = x.First.Cmc,
+            //    ColorIdentity = x.First.ColorIdentity.Split().ToList(),
+            //    Colors = x.First.Color.Split().ToList(),
+            //    ManaCost = x.First.ManaCost,
+            //    Type = x.First.Type,
+            //    Details = x.Details,
+            //}).ToList();
+
 
             var results = groupedQuery.Select(x => new CardSearchResultDto()
             {
+                //Id = 0, // want to start at 1
+                CardId = x.Details.OrderBy(d => d.CollectionNumber).First().CardId,
                 Name = x.Name,
                 Cmc = x.First.Cmc,
-                ColorIdentity = x.First.ColorIdentity.Split().ToList(),
-                Colors = x.First.Color.Split().ToList(),
+                //ColorIdentity = x.First.ColorIdentity.ToCharArray().Select(c => c.ToString()).ToList(),
+                ColorIdentity = x.First.ColorIdentity?.ToCharArray(),
+                //Colors = x.First.Color.ToCharArray().Select(c => c.ToString()).ToList(),
+                Colors = x.First.Color?.ToCharArray(),
                 ManaCost = x.First.ManaCost,
                 Type = x.First.Type,
                 Details = x.Details,
-            }).ToList();
+            }).Take(500).ToList();//Don't want to ever return more than 500, should add actual pagination
 
             return results;
         }

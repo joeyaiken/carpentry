@@ -43,14 +43,14 @@ export const apiDataReceived = (state: AppFilterOptionsReducerState, action: Red
     // console.log(`scope: ${scope}`);
 
     if(scope as ApiScopeOption !== "coreFilterOptions") return (state);
-    console.log('filters recieved')
+    // console.log('filters recieved')
     // const searchResultPayload: MagicCard[] = data || [];
     // let resultsById = {};
     // searchResultPayload.forEach(card => resultsById[card.multiverseId] = card);
 
     const searchResultPayload: AppFiltersDto = data || {};
 
-    console.log(searchResultPayload)
+    // console.log(searchResultPayload)
     const newState: AppFilterOptionsReducerState = {
         ...state,
         filterOptions: searchResultPayload,
@@ -60,8 +60,8 @@ export const apiDataReceived = (state: AppFilterOptionsReducerState, action: Red
         // isLoading: false,
         // searchResults: searchResultPayload,
     }
-    console.log('new filter state');
-    console.log(newState)
+    // console.log('new filter state');
+    // console.log(newState)
     return newState;
 }
 
@@ -108,6 +108,7 @@ const initialState: AppFilterOptionsReducerState = {
         types: [],
         formats: [],
         statuses: [],
+        searchGroups: [],
     },
     isLoading: false,
 }

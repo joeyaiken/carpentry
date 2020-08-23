@@ -5,7 +5,7 @@ import { INVENTORY_ADD_COMPLETE } from '../actions/inventoryActions';
 export interface CardSearchDataReducerState {
     searchResults: {
         isLoading: boolean;
-        searchResultsById: {[multiverseId: number]: MagicCard};
+        searchResultsById: {[multiverseId: number]: CardSearchResultDto};
         allSearchResultIds: number[];
 
         // selectedCard: MagicCard | null; //should probably be an AppState ID
@@ -94,11 +94,11 @@ const apiDataReceived = (state: CardSearchDataReducerState, action: ReduxAction)
         console.log(data);
         // if(scope as ApiScopeOption !== "cardSearchResults") return (state);
 
-        const searchResultPayload: MagicCard[] = data || [];
+        const searchResultPayload: CardSearchResultDto[] = data || [];
 
         let resultsById = {};
 
-        searchResultPayload.forEach(card => resultsById[card.multiverseId] = card);
+        searchResultPayload.forEach(card => resultsById[card.cardId] = card);
 
         const newState: CardSearchDataReducerState = {
             ...state,
@@ -106,7 +106,7 @@ const apiDataReceived = (state: CardSearchDataReducerState, action: ReduxAction)
                 ...state.searchResults,
                 isLoading: false,
                 searchResultsById: resultsById,
-                allSearchResultIds: searchResultPayload.map(card => card.multiverseId),
+                allSearchResultIds: searchResultPayload.map(card => card.cardId),
             }
         }
 

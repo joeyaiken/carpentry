@@ -14,21 +14,21 @@ export const requestCardSearch = (): any => {
 }
 //Select search result (to see variant / foil options)
 export const CARD_SEARCH_SELECT_CARD = 'CARD_SEARCH_SELECT_CARD';
-export const cardSearchSelectCard = (card: MagicCard): ReduxAction => ({
+export const cardSearchSelectCard = (card: CardSearchResultDto): ReduxAction => ({
     type: CARD_SEARCH_SELECT_CARD,
     payload: card
 });
 
 //This should probably be a singular action (cardSearchSelectCard)
 //cardSerchLoadInventory
-export const requestCardSearchInventory = (card: MagicCard): any => {
+export const requestCardSearchInventory = (card: CardSearchResultDto): any => {
     return (dispatch: Dispatch, getState: any) => {
         return searchCardSearchInventory(dispatch, getState(), card);
     }
 }
 
 //I don't really want to solve this tonight
-function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: MagicCard): any{
+function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: CardSearchResultDto): any{
     const _localApiScope: ApiScopeOption = "cardSearchInventoryDetail";
     //need another bool for isSearching
     const searchInProgress: boolean = state.data.cardSearch.inventoryDetail.isLoading;
@@ -148,6 +148,8 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
             set: currentFilterProps.set,
             // setId: currentFilterProps.setId,
             type: currentFilterProps.type,
+            searchGroup: currentFilterProps.group,
+            excludeUnowned: false,
         }
 
         // console.log('serch by set')

@@ -29,7 +29,8 @@ import PendingCardsSection from './PendingCardsSection';
 import DeckSelectedCardSection from './DeckSelectedCardSection';
 import SelectedCardSection from './SelectedCardSection';
 import { cardSearchClearPendingCards, cardSearchSearchMethodChanged, toggleCardSearchViewMode, cardSearchAddPendingCard, cardSearchRemovePendingCard, cardSearchSelectCard, requestCardSearchInventory, requestCardSearch, requestAddDeckCard } from '../../actions/cardSearchActions';
-import CardFilterBar from '../Inventory/CardFilterBar';
+import SetSearchFilterBar from '../CardSearch/SetSearchFilterBar';
+import WebSearchFilterBar from '../CardSearch/WebSearchFilterBar';
 import FilterBarSearchButton from '../../components/FilterBarSearchButton';
 import { filterValueChanged } from '../../actions/ui.actions';
 import { combineStyles, appStyles } from '../../styles/appStyles';
@@ -45,7 +46,7 @@ interface PropsFromState {
     pendingCards: { [key:number]: PendingCardsDto }
 
     searchContext: "deck" | "inventory";
-    selectedCard: MagicCard | null;
+    selectedCard: CardSearchResultDto | null;
     selectedCardDetail: InventoryDetailDto | null;
 
     searchResults: CardListItem[];
@@ -111,7 +112,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
         this.props.dispatch(toggleCardSearchViewMode());
     }
 
-    handleAddPendingCard(data: MagicCard, isFoil: boolean, variant: string){
+    handleAddPendingCard(data: CardSearchResultDto, isFoil: boolean, variant: string){
         this.props.dispatch(cardSearchAddPendingCard(data,  isFoil, variant));
     }
 
@@ -123,7 +124,12 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
         this.props.dispatch(cardSearchSelectCard(item.data));
         //also search for that selected card
         //Maybe dispatch a second request to load dat detail
-        this.props.dispatch(requestCardSearchInventory(item.data));
+        if(this.props.cardSearchMethod != "set"){
+            this.props.dispatch(requestCardSearchInventory(item.data));
+        }
+
+
+        
 
     }
 
@@ -212,8 +218,8 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
                     handleBoolFilterChange={this.handleBoolFilterChange}
                     handleFilterChange={this.handleFilterChange}
                     searchFilterProps={this.props.searchFilterProps}
-                    visibleFilters={this.props.visibleFilters}
-            
+                    // visibleFilters={this.props.visibleFilters}
+                    cardSearchMethod={this.props.cardSearchMethod}
                     handleSearchButtonClick={this.handleSearchButtonClick}
             />);
     }
@@ -241,15 +247,15 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     renderSearchResultDetail(){
-        console.log('search context')
-        console.log(this.props.searchContext)
+        // console.log('search context')
+        // console.log(this.props.searchContext)
         return(
             <React.Fragment>
             {
                 this.props.selectedCard && this.props.searchContext === "inventory" &&
                 <SelectedCardSection 
                     selectedCard={this.props.selectedCard}
-                    pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
+                    pendingCards={this.props.pendingCards[this.props.selectedCard.cardId]}
                     handleAddPendingCard={this.handleAddPendingCard}
                     handleRemovePendingCard={this.handleRemovePendingCard}
                     selectedCardDetail={null} />
@@ -258,7 +264,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
                 this.props.selectedCard && this.props.searchContext === "deck" &&
                 <DeckSelectedCardSection 
                     selectedCard={this.props.selectedCard}
-                    pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
+                    // pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
                     
                     //But decks don't support pending cards?...
                     handleAddPendingCard={this.handleAddPendingCard}
@@ -287,26 +293,29 @@ interface FilterBarProps {
     filterOptions: AppFiltersDto;
     handleBoolFilterChange: (filter: string, value: boolean) => void;
     handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-
     searchFilterProps: CardFilterProps;
-
-    visibleFilters: CardFilterVisibilities;
+    cardSearchMethod: "set" | "web" | "inventory";
     handleSearchButtonClick: () => void;
-
 }
 
 function FilterBar(props: FilterBarProps): JSX.Element{
     const {  flexRow, outlineSection } = appStyles();
     return(<React.Fragment>
         <Paper className={combineStyles(outlineSection, flexRow)}>
-            <CardFilterBar 
-                filterOptions={props.filterOptions}
-                handleBoolFilterChange={props.handleBoolFilterChange}
-                handleFilterChange={props.handleFilterChange}
-                
-                searchFilter={props.searchFilterProps}
-                visibleFilters={props.visibleFilters}
-            />
+            {   (props.cardSearchMethod == "set") && 
+                    <SetSearchFilterBar 
+                        filterOptions={props.filterOptions}
+                        handleBoolFilterChange={props.handleBoolFilterChange}
+                        handleFilterChange={props.handleFilterChange}
+                        searchFilter={props.searchFilterProps} />
+            }
+            {   (props.cardSearchMethod == "web") && 
+                    <WebSearchFilterBar 
+                        filterOptions={props.filterOptions}
+                        handleBoolFilterChange={props.handleBoolFilterChange}
+                        handleFilterChange={props.handleFilterChange}
+                        searchFilter={props.searchFilterProps} />
+            }
             <FilterBarSearchButton handleSearchButtonClick={props.handleSearchButtonClick}/>
 
         </Paper>
@@ -360,9 +369,9 @@ function selectInventoryDetail(state: AppState): InventoryDetailDto {
     return result;
 }
 
-function selectSearchResults(state: AppState): MagicCard[] {
+function selectSearchResults(state: AppState): CardSearchResultDto[] {
     const { allSearchResultIds, searchResultsById } = state.data.cardSearch.searchResults;
-    const result: MagicCard[] = allSearchResultIds.map(mid => searchResultsById[mid])
+    const result: CardSearchResultDto[] = allSearchResultIds.map(cid => searchResultsById[cid])
     return result;
 }
 
@@ -399,7 +408,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     } else {
         mappedSearchResults = selectSearchResults(state).map(card => ({
             data: card,
-            count: state.data.cardSearch.pendingCards[card.multiverseId] && state.data.cardSearch.pendingCards[card.multiverseId].cards.length
+            count: state.data.cardSearch.pendingCards[card.cardId] && state.data.cardSearch.pendingCards[card.cardId].cards.length
         }) as CardListItem);
     }
 

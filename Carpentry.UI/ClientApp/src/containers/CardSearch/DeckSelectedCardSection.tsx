@@ -4,8 +4,8 @@ import InventoryDetailTable from './InventoryDetailTable';
 import { appStyles, combineStyles } from '../../styles/appStyles';
 
 interface SelectedCardDetailSectionProps {
-    selectedCard: MagicCard;
-    pendingCards?: PendingCardsDto;
+    selectedCard: CardSearchResultDto;
+    // pendingCards?: PendingCardsDto;
     selectedCardDetail: InventoryDetailDto | null;
     handleAddPendingCard: (data: MagicCard, isFoil: boolean, variant: string) => void;
     handleRemovePendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
@@ -41,7 +41,7 @@ export default function DeckSelectedCardSection(props: SelectedCardDetailSection
         <Card className={combineStyles(outlineSection, flexCol)}>
             <CardHeader titleTypographyProps={{variant:"body1"}} title="Add New"/>
             
-            {   Object.keys(props.selectedCard.variants).map((variant: string) => {
+            {/* {   Object.keys(props.selectedCard.variants).map((variant: string) => {
                 return (
                     // <Card key={id} className= "outline-section flex-col">
                         // <CardHeader titleTypographyProps={{variant:"body1"}} title="Add New"/>
@@ -69,7 +69,7 @@ export default function DeckSelectedCardSection(props: SelectedCardDetailSection
                         </Box>
                     // </Card>
                 )})
-            }
+            } */}
         </Card>
     </Box>
 </Paper>);

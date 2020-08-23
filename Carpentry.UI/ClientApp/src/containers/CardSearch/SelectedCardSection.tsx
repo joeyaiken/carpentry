@@ -3,7 +3,7 @@ import { Paper, Box, Card, CardMedia, CardContent, Typography, Button } from '@m
 import { appStyles, combineStyles } from '../../styles/appStyles';
 
 interface SelectedCardDetailSectionProps {
-    selectedCard: MagicCard;
+    selectedCard: CardSearchResultDto;
     pendingCards?: PendingCardsDto;
     selectedCardDetail: InventoryDetailDto | null;
     handleAddPendingCard: (data: MagicCard, isFoil: boolean, variant: string) => void;
@@ -19,7 +19,7 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
     console.log('rendering card search selected card section')
     return(<Paper className={staticSection}>
     <Box className={flexCol}>
-        {   Object.keys(props.selectedCard.variants).map((id: string) => {
+        {   Object.keys(props.selectedCard.details).map((id: string) => {
                
             let countNormal = 0;
             let countFoil = 0;
@@ -43,17 +43,17 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
                         // className={itemImage}
-                        image={(props.selectedCard.variants[id]) || undefined} />
+                        image={(props.selectedCard.details[id]) || undefined} />
                     <CardContent>
                         <Box className={flexCol}>
                             <Box className={flexCol}>
                                 <Box className={flexCol}>
-                                    <Typography>{`${props.selectedCard.prices[id]} | ${props.selectedCard.prices[`${id}_foil`]}`}</Typography>
+                                    <Typography>{`${props.selectedCard.details[id].price} | ${props.selectedCard.details[id].priceFoil}`}</Typography>
                                 </Box>
-                                <Box className={flexCol}>
+                                {/* <Box className={flexCol}>
                                     <Typography>Normal ({countNormal})</Typography>
                                     <Box className={flexRow}>
-                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.multiverseId, false, id)} } >-</Button>
+                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.id, false, id)} } >-</Button>
                                         <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, false, id)} } >+</Button>
                                     </Box>
                                 </Box>
@@ -63,7 +63,7 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
                                         <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.multiverseId, true, id)} } >-</Button>
                                         <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, true, id)} } >+</Button>
                                     </Box>
-                                </Box>
+                                </Box> */}
                             </Box>
                             {/* <Box className={classes.flexRow}>
                                 <div className={classes.outlineSection}>

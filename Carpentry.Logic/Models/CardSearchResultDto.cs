@@ -6,11 +6,16 @@ namespace Carpentry.Logic.Models
 {
     public class CardSearchResultDto
     {
+        public int CardId { get; set; }
+
         public int? Cmc { get; set; }
 
-        public List<string> ColorIdentity { get; set; }
+        //public List<char> ColorIdentity { get; set; }
+        public char[] ColorIdentity { get; set; }
 
-        public List<string> Colors { get; set; }
+
+        //public List<char> Colors { get; set; }
+        public char[] Colors { get; set; }
 
         public string ManaCost { get; set; }
 

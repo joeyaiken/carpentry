@@ -253,6 +253,7 @@ function initialCardSearchFilterProps(): CardFilterProps {
         minCount: 0,
         format: '',
         text: '',
+        group: '',
     } as CardFilterProps;
 } 
 
@@ -271,6 +272,7 @@ function mockFilterProps(): CardFilterProps {
         minCount: 0,
         format: '',
         text: '',
+        group: '',
     } as CardFilterProps;
 }
 
@@ -317,5 +319,6 @@ function defaultSearchFilterProps(): CardFilterProps {
         minCount: 0,
         format: '',
         text: '',
+        group: '',
     }
 }

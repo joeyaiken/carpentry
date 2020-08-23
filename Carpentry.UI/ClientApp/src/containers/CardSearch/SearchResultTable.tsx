@@ -34,7 +34,7 @@ import { appStyles } from '../../styles/appStyles';
 interface SearchResultTableProps {
     searchContext: "deck" | "inventory";
     searchResults: CardListItem[];
-    handleAddPendingCard: (data: MagicCard, isFoil: boolean, variant: string) => void;
+    handleAddPendingCard: (data: CardSearchResultDto, isFoil: boolean, variant: string) => void;
     handleRemovePendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
     onCardSelected: (item: CardListItem) => void;
 }
@@ -72,7 +72,7 @@ export default function SearchResultTable(props: SearchResultTableProps): JSX.El
                         props.searchResults.map(result => (
                             <TableRow 
                                 onClick={() => { props.onCardSelected(result) }}
-                                key={result.data.multiverseId}>
+                                key={result.data.cardId}>
                                 <TableCell>{result.data.name}</TableCell>
                                 {
                                         props.searchContext === "inventory" &&
@@ -80,7 +80,7 @@ export default function SearchResultTable(props: SearchResultTableProps): JSX.El
                                                 <TableCell>{result.count}</TableCell>
                                                 <TableCell>
                                                     <Box className={flexRow}>
-                                                        <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.multiverseId, false, "normal")} } >-</Button>
+                                                        <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.cardId, false, "normal")} } >-</Button>
                                                         {/* <Typography>({result.count})</Typography> */}
                                                         <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data, false, "normal")} } >+</Button>       
                                                     </Box>

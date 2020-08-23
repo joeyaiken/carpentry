@@ -22,5 +22,8 @@ namespace Carpentry.Logic.Models
 
         [JsonProperty("statuses")]
         public List<FilterOption> Statuses { get; set; }
+
+        [JsonProperty("searchGroups")]
+        public List<FilterOption> SearchGroups { get; set; }
     }
 }

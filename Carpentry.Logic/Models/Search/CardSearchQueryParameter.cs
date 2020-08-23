@@ -31,6 +31,10 @@ namespace Carpentry.Logic.Search
         [JsonProperty("rarity")]
         public List<string> Rarity { get; set; }
 
+        [JsonProperty("ExcludeUnowned")]
         public bool ExcludeUnowned { get; set; }
+
+        [JsonProperty("SearchGroup")]
+        public string SearchGroup { get; set; }
     }
 }

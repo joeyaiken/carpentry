@@ -103,8 +103,22 @@ namespace Carpentry.Logic.Implementations
 
             result.Colors = allManaTypes;
 
+            var allSearchGroups = new List<FilterOption>()
+            {
+                new FilterOption() { Value = "Red", Name = "Red" },
+                new FilterOption() { Value = "Blue", Name = "Blue" },
+                new FilterOption() { Value = "Green", Name = "Green" },
+                new FilterOption() { Value = "White", Name = "White" },
+                new FilterOption() { Value = "Black", Name = "Black" },
+                new FilterOption() { Value = "Multicolored", Name = "Multicolored" },
+                new FilterOption() { Value = "Colorless", Name = "Colorless" },
+                new FilterOption() { Value = "Lands", Name = "Lands" },
+                new FilterOption() { Value = "RareMythic", Name = "Rare/Mythic" },
+            };
+
+            result.SearchGroups = allSearchGroups;
+
             return result;
         }
-
     }
 }

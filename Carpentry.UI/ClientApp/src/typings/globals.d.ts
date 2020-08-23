@@ -53,6 +53,8 @@ interface CardFilterProps {
 
     minCount: number | null;
     maxCount: number | null;
+
+    group: string | null;
 }
 
 interface CardFilterVisibilities {
@@ -115,7 +117,7 @@ declare type InventorySearchMethod =  "name" | "mid" | "unique"; //"name" | "qua
 
 
 declare interface CardListItem {
-    data: MagicCard;
+    data: CardSearchResultDto;
     count?: number;
 }
 
@@ -145,6 +147,8 @@ declare interface CardOverviewGroup {
 //    name: string;
 // }
 
+//Represents a payload of cards to be added
+//1 model = multiple inventory cards for a unique CardId
 declare interface PendingCardsDto {
     // data: MagicCard;
     multiverseId: number;

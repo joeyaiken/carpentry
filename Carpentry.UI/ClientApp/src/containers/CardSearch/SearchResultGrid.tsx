@@ -46,7 +46,8 @@ export default function SearchResultGrid(props: SearchResultGridProps): JSX.Elem
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
                         // className={itemImage}
-                        image={card.data.variants['normal'] || ''}
+                        //image={card.data.variants['normal'] || ''}
+                        image={card.data.details[0].imageUrl}
                         title={card.data.name} />
                     {/* {props.children} */}
 
