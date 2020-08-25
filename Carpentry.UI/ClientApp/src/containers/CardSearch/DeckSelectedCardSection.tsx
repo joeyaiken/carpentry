@@ -7,17 +7,18 @@ interface SelectedCardDetailSectionProps {
     selectedCard: CardSearchResultDto;
     // pendingCards?: PendingCardsDto;
     selectedCardDetail: InventoryDetailDto | null;
-    handleAddPendingCard: (data: MagicCard, isFoil: boolean, variant: string) => void;
-    handleRemovePendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
+    handleAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
+    handleRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
     handleAddInventoryCard?: (inventoryCard: InventoryCard) => void;
-    handleAddNewCard?: (multiverseId: number, isFoil: boolean, variant: string) => void;
+    handleAddNewCard?: (cardId: number, isFoil: boolean) => void;
     // handleMoveCard?: (inventoryCard: InventoryCard) => void;
 }
 
 export default function DeckSelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
     const { outlineSection, flexCol, staticSection, flexRow, } = appStyles();
     
-    return(<Paper className={staticSection}>
+    return(
+    // <Paper className={staticSection}>
     <Box className={flexCol}>
         <Card className={combineStyles(outlineSection, flexCol)}>
             <CardHeader titleTypographyProps={{variant:"body1"}} title="Inventory"/>
@@ -41,36 +42,38 @@ export default function DeckSelectedCardSection(props: SelectedCardDetailSection
         <Card className={combineStyles(outlineSection, flexCol)}>
             <CardHeader titleTypographyProps={{variant:"body1"}} title="Add New"/>
             
-            {/* {   Object.keys(props.selectedCard.variants).map((variant: string) => {
+            {   
+                //Object.keys(props.selectedCard.variants).map((variant: string) => {
+                props.selectedCard.details.map(detail => {
                 return (
                     // <Card key={id} className= "outline-section flex-col">
                         // <CardHeader titleTypographyProps={{variant:"body1"}} title="Add New"/>
-                        <Box key={variant} className={combineStyles(outlineSection, flexRow)}>
+                        <Box key={detail.cardId} className={combineStyles(outlineSection, flexRow)}>
                             <CardMedia 
                                 style={{height:"310px", width: "223px"}}
                                 // className={itemImage}
-                                image={(props.selectedCard.variants[variant]) || undefined} />
+                                image={detail.imageUrl || undefined} />
                             <CardContent>
                                 <Box className={flexCol}>
                                     <Box className={flexCol}>
-                                        <Typography>{`${props.selectedCard.prices[variant]} | ${props.selectedCard.prices[`${variant}_foil`]}`}</Typography>
+                                        <Typography>{`${detail.price} | ${detail.priceFoil}`}</Typography>
                                     </Box>
                                     <Box className={flexCol}>
-                                        <Button 
-                                            variant="outlined" 
-                                            onClick={() => { props.handleAddNewCard && props.handleAddNewCard(props.selectedCard.multiverseId,false,variant) }} 
-                                        >
+                                        <Button variant="outlined" onClick={() => { props.handleAddNewCard && props.handleAddNewCard(detail.cardId, false) }}>
                                             Add Normal
                                         </Button>
-                                        <Button variant="outlined" onClick={() => { props.handleAddNewCard && props.handleAddNewCard(props.selectedCard.multiverseId,true,variant) }} >Add Foil</Button>
+                                        <Button variant="outlined" onClick={() => { props.handleAddNewCard && props.handleAddNewCard(detail.cardId, true) }}>
+                                            Add Foil
+                                        </Button>
                                     </Box>
                                 </Box>
                             </CardContent>
                         </Box>
                     // </Card>
                 )})
-            } */}
+            }
         </Card>
     </Box>
-</Paper>);
+// </Paper>
+);
 }

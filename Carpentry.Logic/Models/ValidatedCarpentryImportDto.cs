@@ -10,15 +10,11 @@ namespace Carpentry.Logic.Models
 
         public DateTime BackupDate { get; set; }
 
-        public List<UntrackedSet> UntrackedSets { get; set; }
+        public List<ValidatedDtoUntrackedSet> UntrackedSets { get; set; }
 
         //validation errors?
     }
 
-    public class UntrackedSet
-    {
-        public int SetId { get; set; }
-        public string SetCode { get; set; }
-    }
+    
 
 }

@@ -15,6 +15,7 @@ namespace Carpentry.Data.Interfaces
         Task UpdateDeck(DeckData deck);
         Task DeleteDeck(int deckId);
         Task<DeckData> GetDeckById(int deckid);
+        Task<DeckData> GetDeckByName(string deckName);
         Task<IEnumerable<DeckData>> GetAllDecks();
 
         //Deck Card CRUD

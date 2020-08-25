@@ -18,7 +18,7 @@ namespace Carpentry.Tools.QuickUpdate
 {
     class Program
     {
-        private static readonly int DB_UPDATE_INTERVAL_DAYS = 0; //Increase this if you only want to update data every few days
+        private static readonly int DB_UPDATE_INTERVAL_DAYS = 1; //Increase this if you only want to update data every few days
 
         static async Task Main(string[] args)
         {

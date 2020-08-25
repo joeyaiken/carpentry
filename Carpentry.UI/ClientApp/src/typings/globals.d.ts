@@ -149,9 +149,12 @@ declare interface CardOverviewGroup {
 
 //Represents a payload of cards to be added
 //1 model = multiple inventory cards for a unique CardId
+//Group by Name or CardId ??
+//Fuck it, grouping by name for now
 declare interface PendingCardsDto {
     // data: MagicCard;
-    multiverseId: number;
+    // multiverseId: number;
+    // cardId: number;
     name: string;
     cards: InventoryCard[]; //this might need to be something else
 }

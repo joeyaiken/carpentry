@@ -147,7 +147,11 @@ declare interface DeckCardDto {
     id: number;
     deckId: number;
     categoryId: string | null;
-    inventoryCard: InventoryCard;
+    inventoryCardId: number;
+    cardId: number;
+    isFoil: boolean;
+    inventoryCardStatusId: number;
+    // inventoryCard: InventoryCard;
 }
 
 // declare interface DeckDto {
@@ -191,11 +195,13 @@ declare interface DeckCardDto {
 
 declare interface InventoryCard {
     id: number;
-    multiverseId: number;
+    cardId: number;
+    // multiverseId: number;
     name: string;
     set: string;
     isFoil: boolean;
-    variantName: string;
+    collectorNumber: number;
+    // variantName: string;
     statusId: number; //normal === 1, buylist === 2, sellList === 3
     deckCards: InventoryDeckCardDto[];
 }

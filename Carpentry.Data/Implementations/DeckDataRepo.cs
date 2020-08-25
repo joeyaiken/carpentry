@@ -107,6 +107,19 @@ namespace Carpentry.Data.Implementations
             return matchingDeck;
         }
 
+        /// <summary>
+        /// Not case sensitive
+        /// </summary>
+        /// <param name="deckName"></param>
+        /// <returns></returns>
+        public async Task<DeckData> GetDeckByName(string deckName)
+        {
+            var matchingDeck = await _cardContext.Decks.Where(x => x.Name.ToLower() == deckName.ToLower())
+                .Include(x => x.Format)
+                .FirstOrDefaultAsync();
+            return matchingDeck;
+        }
+
         public async Task<IEnumerable<DeckData>> GetAllDecks()
         {
             var result = await _cardContext.Decks.Include(x => x.Format).ToListAsync();

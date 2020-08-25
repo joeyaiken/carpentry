@@ -313,6 +313,7 @@ namespace Carpentry.Data.Implementations
                 .Include(x => x.Legalities)
                 .Include(c => c.Set)
                 .Include(c => c.Rarity)
+                .OrderBy(c => c.CollectorNumber)
                 .FirstOrDefaultAsync();
 
             if(matchingCard == null)

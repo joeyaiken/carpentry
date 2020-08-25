@@ -1,12 +1,14 @@
 import React from 'react';
 
 import { Typography, Box, AppBar, Chip, Toolbar, Avatar, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 interface ComponentProps{
     //totalPrice: number;
     deckProperties: DeckPropertiesDto;
     onEditClick: () => void;
     onToggleViewClick: () => void;
+    // onAddCardsClick: () => void;
 }
 
 const ManaChip = (type: String, value: number): JSX.Element => 
@@ -46,6 +48,12 @@ export default function DeckPropsBar(props: ComponentProps): JSX.Element {
                     <Button onClick={props.onEditClick} color="primary" variant="contained">
                         Edit
                     </Button>
+                    {/* <Button onClick={props.onAddCardsClick} color="primary" variant="contained">
+                        Add Cards
+                    </Button> */}
+                    <Link to={`/decks/${props.deckProperties.id}/addCards/`}>
+                        <Button color="primary" variant="contained">Add Cards</Button>
+                    </Link>
                 </Box>
             </Toolbar>
         </AppBar>

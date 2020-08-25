@@ -29,7 +29,9 @@ export interface CardSearchDataReducerState {
     };
     
     //wait ID or MID ?
-    pendingCards: { [key:number]: PendingCardsDto } //key === id, should this also have a list to track all keys? 
+    //Neither, NAME
+    //pendingCards: { [key:number]: PendingCardsDto } //key === id, should this also have a list to track all keys? 
+    pendingCards: { [name: string]: PendingCardsDto } //key === name, should this also have a list to track all keys? 
 }
 
 const apiDataRequested = (state: CardSearchDataReducerState, action: ReduxAction): CardSearchDataReducerState => {
@@ -118,19 +120,24 @@ const apiDataReceived = (state: CardSearchDataReducerState, action: ReduxAction)
 const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): CardSearchDataReducerState => {
     //'pending cards' is now a dictionary of 'pending card dto's
     const {
-        data, //0
+        // data, //0
+        name,
+        cardId,
         isFoil, //false
-        variant, //"normal"
+        // variant, //"normal"
+
+        //need
+        //cardId (for inv card)
+        //cardName (for display, and grouping?)
     } = action.payload;
     
-    const magicCardToAdd: MagicCard = data;
+    // const magicCardToAdd: MagicCard = data;
     
-    let cardToAdd: PendingCardsDto = state.pendingCards[data.multiverseId];
+    let cardToAdd: PendingCardsDto = state.pendingCards[name];
     
     if(!cardToAdd){
         cardToAdd = {
-            multiverseId: magicCardToAdd.multiverseId,
-            name: magicCardToAdd.name,
+            name: name,
             cards: [],
         };
 
@@ -148,10 +155,10 @@ const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): Ca
     //     }                    
     }
 
+    //These are the only 3 fields used by the api bulkAdd
     cardToAdd.cards.push({
-        multiverseId: magicCardToAdd.multiverseId, 
+        cardId: cardId,
         isFoil: isFoil,
-        variantName: variant,
         statusId: 1,
     } as InventoryCard);
 
@@ -159,25 +166,29 @@ const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): Ca
         ...state,
         pendingCards: {
             ...state.pendingCards,
-            [magicCardToAdd.multiverseId]: cardToAdd
+            [name]: cardToAdd
         }
     }
     return newState;
 }
 
 const cardSearchRemovePendingCard = (state = initialState, action: ReduxAction): CardSearchDataReducerState => {
-    // const {
-                // } = action.payload;
+    const {
+        name,
+        cardId,
+        isFoil,
+    } = action.payload;
 
-    const midToRemove = action.payload.multiverseId;
-    const removeFoilCard = action.payload.isFoil;
-    const variantToRemove: string = action.payload.variant;
+    // const midToRemove = action.payload.multiverseId;
+    // const removeFoilCard = action.payload.isFoil;
+    // const variantToRemove: string = action.payload.variant;
 
-    let objToRemoveFrom = state.pendingCards[midToRemove];
+    let objToRemoveFrom = state.pendingCards[name];
 
     if(objToRemoveFrom){
 
-        let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.variantName === variantToRemove && x.isFoil === removeFoilCard);
+        //let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.variantName === variantToRemove && x.isFoil === removeFoilCard);
+        let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.cardId === cardId && x.isFoil === isFoil);
 
         if(thisInvCard >= 0){
             objToRemoveFrom.cards.splice(thisInvCard,1);
@@ -185,11 +196,11 @@ const cardSearchRemovePendingCard = (state = initialState, action: ReduxAction):
 
         let pendingCardsAfterRemoval =  {
             ...state.pendingCards,
-            [midToRemove]: objToRemoveFrom
+            [name]: objToRemoveFrom
         }
         //if this pending cards object has 0 items, it should be deleted from the dictionary
         if(objToRemoveFrom.cards.length === 0){
-            delete pendingCardsAfterRemoval[midToRemove];
+            delete pendingCardsAfterRemoval[name];
         }
         const newState: CardSearchDataReducerState = {
             ...state,

@@ -92,7 +92,20 @@ export const api = {
         },
 
         async addDeckCard(deckCardProps: DeckCardDto): Promise<void> {
+
+            // const deck2 = {
+            //     cardId: deckCardProps.cardId,
+            //     categoryId: deckCardProps.categoryId,
+            //     deckId: deckCardProps.deckId,
+            //     id: deckCardProps.id,
+            //     inventoryCardId: deckCardProps.inventoryCardId,
+            //     inventoryCardStatusId: deckCardProps.inventoryCardStatusId,
+            //     isFoil: deckCardProps.isFoil,
+            // }
+
             const endpoint = `api/Decks/AddDeckCard`;
+            // console.log('adding deck card props');
+            // console.log(deckCardProps);
             const result = await Post(endpoint, deckCardProps);
             return result;
         },
@@ -297,8 +310,8 @@ async function GetFile(url: string): Promise<any> {
 }
 
 async function Post(endpoint: string, payload: any): Promise<any> {
-    // console.log('post');
-    // console.log(payload);
+    console.log('post');
+    console.log(payload);
     const bodyToAdd = JSON.stringify(payload);
     const response = await fetch(endpoint, {
         method: 'post',

@@ -34,9 +34,44 @@ namespace Carpentry.Tools.QuickImport
             logger.LogInformation("Beginning import tool");
 
             var importService = serviceProvider.GetService<IDataImportService>();
+            var deckRepo = serviceProvider.GetService<IDeckDataRepo>();
 
             List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
             {
+                //New EDH
+                new DeckImportTemplate()
+                {
+                    Name = "Arcane Maelstrom",
+                    FormatName = "commander",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\ArcaneMaelstrom_EDH.txt",
+                },
+
+                //4 JMP decks
+                new DeckImportTemplate()
+                {
+                    Name = "Enchanted (1)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Enchanted1_JMP.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Witchcraft (2)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Witchcraft2_JMP.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Vampires (2)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Vampires2_JMP.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Ranimated (1)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Ranimated1_JMP.txt",
+                },
+
                 ////Populate EDH deck:
                 //new DeckImportTemplate
                 //{
@@ -78,6 +113,16 @@ namespace Carpentry.Tools.QuickImport
             foreach (var deck in decksToImport)
             {
                 logger.LogInformation($"Attempting to import deck {deck.Name}");
+
+                //check if the deck already exists
+                var existingDeck = await deckRepo.GetDeckByName(deck.Name);
+                if(existingDeck != null)
+                {
+                    logger.LogInformation($"Deck {deck.Name} already exists in the database, skipping...");
+                    continue;
+                }
+
+
                 string fileContents = await GetRawListFromFile(deck.FilePath);
 
                 CardImportDto importPayload = new CardImportDto()
@@ -89,6 +134,15 @@ namespace Carpentry.Tools.QuickImport
                 var validatedPayload = await importService.ValidateDeckImport(importPayload);
                 validatedPayload.DeckProps.Name = deck.Name;
                 validatedPayload.DeckProps.Format = deck.FormatName;
+
+                if(validatedPayload.UntrackedSets.Count > 0)
+                {
+                    throw new Exception("Untracked set encountered (not automatically adding for now)");
+                    //foreach(var untrackedSet in validatedPayload.UntrackedSets)
+                    //{
+
+                    //}
+                }
 
                 await importService.AddValidatedDeckImport(validatedPayload);
 
@@ -116,37 +170,75 @@ namespace Carpentry.Tools.QuickImport
 
                 .AddLogging(config => config.AddSerilog())
 
-                //DB context
+                ////DB context
                 .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
 
+            ////data services
+            //.AddSingleton<ICardDataRepo, CardDataRepo>()
+            ////.AddSingleton<IDeckDataRepo, DeckDataRepo>()
+            ////.AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
+            ////.AddSingleton<IScryfallDataRepo, ScryfallRepo>()
+            ////.AddSingleton<IDataReferenceService, DataReferenceService>()
+            ////.AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
 
-                //data services
-                .AddSingleton<ICardDataRepo, CardDataRepo>()
-                //.AddSingleton<IDeckDataRepo, DeckDataRepo>()
-                //.AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
-                //.AddSingleton<IScryfallDataRepo, ScryfallRepo>()
-                //.AddSingleton<IDataReferenceService, DataReferenceService>()
-                //.AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
+            ////logic services
+            ////.AddScoped<IDataRestoreService, DataRestoreService>()
+            .AddSingleton<IDataUpdateService, DataUpdateService>()
+            //.AddSingleton<IDataImportService, DataImportService>()
 
-                //logic services
-                //.AddScoped<IDataRestoreService, DataRestoreService>()
-                .AddSingleton<IDataUpdateService, DataUpdateService>()
-                .AddSingleton<IDataImportService, DataImportService>()
+            //.AddScoped<IScryfallService, ScryfallService>()
+            //.AddHttpClient<IScryfallService, ScryfallService>().Services
+
+
+
+            ////private readonly IDataUpdateService _dataUpdateService;
+            ////.AddScoped<>
+            ////private readonly ICardDataRepo _cardDataRepo;
+            ////private readonly IDeckService _deckService;
+            ////private readonly IInventoryService _inventoryService;
+
+
+
+
+            //.AddSingleton<IDataBackupConfig, CarpentryAppConfig>()
+
+            // v
+
+            //DB repos
+            .AddScoped<ICardDataRepo, CardDataRepo>()
+            .AddScoped<IDeckDataRepo, DeckDataRepo>()
+            .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
+            .AddScoped<IScryfallDataRepo, ScryfallRepo>()
+            .AddScoped<ICoreDataRepo, CoreDataRepo>()
+
+            //Logic services
+            //.AddScoped<ISearchService, SearchService>()
+            .AddScoped<IDeckService, DeckService>()
+            .AddScoped<IInventoryService, InventoryService>()
+
+            .AddScoped<IDataImportService, DataImportService>()
+            .AddScoped<IDataUpdateService, DataUpdateService>()
+                //.AddScoped<IDataExportService, DataExportService>()
+                //.AddScoped<IFilterService, FilterService>()
 
                 .AddScoped<IScryfallService, ScryfallService>()
                 .AddHttpClient<IScryfallService, ScryfallService>().Services
 
-                
+                //.AddScoped<ICollectionBuilderService, CollectionBuilderService>()
+                //.AddScoped<ITrimmingTipsService, TrimmingTipsService>()
 
-                //private readonly IDataUpdateService _dataUpdateService;
-                //.AddScoped<>
-                //private readonly ICardDataRepo _cardDataRepo;
-                //private readonly IDeckService _deckService;
-                //private readonly IInventoryService _inventoryService;
+                // ^
 
-                //TODO - verify that this starts (has the right services specified here)
+
+                //Service-layer
+                //.AddScoped<ICarpentryCardSearchService, CarpentryCardSearchService>()
+                //.AddScoped<ICarpentryCoreService, CarpentryCoreService>()
+                //.AddScoped<ICarpentryDeckService, CarpentryDeckService>()
+                //.AddScoped<ICarpentryInventoryService, CarpentryInventoryService>()
+
+
                 .BuildServiceProvider();
 
             return serviceProvider;

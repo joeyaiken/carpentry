@@ -212,7 +212,11 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         return(
             <React.Fragment>
             {   this.props.deckProperties && 
-                <DeckPropsBar deckProperties={this.props.deckProperties} onEditClick={this.handleEditPropsClick} onToggleViewClick={this.handleToggleDeckView} />
+                <DeckPropsBar 
+                    deckProperties={this.props.deckProperties} 
+                    onEditClick={this.handleEditPropsClick} 
+                    onToggleViewClick={this.handleToggleDeckView}
+                    />
             }
             </React.Fragment>
         );

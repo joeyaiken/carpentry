@@ -46,6 +46,8 @@ interface PropsFromState {
     pendingCards: { [key:number]: PendingCardsDto }
 
     searchContext: "deck" | "inventory";
+    deckId: number;
+
     selectedCard: CardSearchResultDto | null;
     selectedCardDetail: InventoryDetailDto | null;
 
@@ -60,7 +62,11 @@ interface PropsFromState {
 
 interface OwnProps {
     searchContext: "deck" | "inventory";
-    
+    match: {
+        params: {
+            deckId: string
+        }
+    }
     // match: {
     //     params: {
     //         deckId: number
@@ -112,12 +118,15 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
         this.props.dispatch(toggleCardSearchViewMode());
     }
 
-    handleAddPendingCard(data: CardSearchResultDto, isFoil: boolean, variant: string){
-        this.props.dispatch(cardSearchAddPendingCard(data,  isFoil, variant));
+    //handleAddPendingCard(data: CardSearchResultDto, isFoil: boolean, variant: string){
+    handleAddPendingCard(name: string, cardId: number, isFoil: boolean){
+    //name: string, cardId: number, isFoil: boolean
+        this.props.dispatch(cardSearchAddPendingCard(name, cardId, isFoil));
     }
 
-    handleRemovePendingCard(multiverseId: number, isFoil: boolean, variant: string){
-        this.props.dispatch(cardSearchRemovePendingCard(multiverseId, isFoil, variant));
+    //handleRemovePendingCard(multiverseId: number, isFoil: boolean, variant: string){
+    handleRemovePendingCard(name: string, cardId: number, isFoil: boolean){
+        this.props.dispatch(cardSearchRemovePendingCard(name, cardId, isFoil));
     }
 
     handleCardSelected(item: CardListItem){
@@ -127,10 +136,6 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
         if(this.props.cardSearchMethod != "set"){
             this.props.dispatch(requestCardSearchInventory(item.data));
         }
-
-
-        
-
     }
 
     handleSearchButtonClick(){
@@ -142,26 +147,53 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     handleBoolFilterChange(filter: string, value: boolean): void {
-        console.log(`search filter bar change filter: ${filter} val: ${value}`)
+        // console.log(`search filter bar change filter: ${filter} val: ${value}`)
         this.props.dispatch(filterValueChanged("cardSearchFilterProps", filter, value));
     }
 
     handleAddExistingCardClick(inventoryCard: InventoryCard): void{
-        this.props.dispatch(requestAddDeckCard(inventoryCard));
+        // this.props.dispatch(requestAddDeckCard(inventoryCard));
     }
     
-    handleAddNewCardClick(multiverseId: number, isFoil: boolean, variant: string): void{
-        let inventoryCard: InventoryCard = {
+    //handleAddNewCardClick(multiverseId: number, isFoil: boolean, variant: string): void{
+    handleAddNewCardClick(cardId: number, isFoil: boolean): void{
+
+        let deckCard: DeckCardDto = {
+            categoryId: null,
+            deckId: this.props.deckId,
             id: 0,
-            deckCards: [],
+            inventoryCardId: 0,
+            cardId: cardId,
             isFoil: isFoil,
-            variantName: variant,
-            multiverseId: multiverseId,
-            statusId: 1,
-            name: '',
-            set: '',
+            inventoryCardStatusId: 1, //in inventory
+            // inventoryCard: {
+            //     cardId: cardId,
+            //     isFoil: isFoil,
+            //     statusId: 1,
+
+            //     collectorNumber: 0,
+            //     deckCards: [],
+            //     id: 0,
+            //     name: '',
+            //     set: '',
+            // }
+
+            
         }
-        this.props.dispatch(requestAddDeckCard(inventoryCard));
+
+        // let inventoryCard: InventoryCard = {
+        //     id: 0,
+        //     deckCards: [],
+        //     isFoil: isFoil,
+        //     // variantName: variant,
+        //     // multiverseId: multiverseId,
+        //     statusId: 1,
+        //     name: '',
+        //     set: '',
+        //     cardId: 0,
+        //     collectorNumber: 0,
+        // }
+        this.props.dispatch(requestAddDeckCard(deckCard));
     }
 
     render() {
@@ -177,16 +209,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
                     {this.renderSearchResults()}
                     {this.renderSearchResultDetail()}
                 </React.Fragment>}
-
-
             />
-
-
-
-
-
-
-        
         );
     }
 
@@ -224,8 +247,15 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
             />);
     }
 
+//<div className={classes.flexSection} style={{ overflow:'auto', flex:'1 1 70%' }} >
+//  { props.children }
+// </div>
+
     renderSearchResults(){
-        return(<React.Fragment>
+        return(<Paper 
+                style={{ overflow:'auto', flex:'1 1 70%' }} >
+
+        
             {
                 this.props.viewMode === "list" && 
                     <SearchResultTable 
@@ -243,19 +273,24 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
                         onCardSelected={this.handleCardSelected}
                         />
             }
-        </React.Fragment>);
+        </Paper>);
     }
 
     renderSearchResultDetail(){
         // console.log('search context')
         // console.log(this.props.searchContext)
         return(
-            <React.Fragment>
+            //<Paper className={staticSection}>
+        //     <div className={classes.flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
+        //     { props.children }
+        // </div>
+
+            <Paper style={{ overflow:'auto', flex:'1 1 30%' }} > 
             {
                 this.props.selectedCard && this.props.searchContext === "inventory" &&
                 <SelectedCardSection 
                     selectedCard={this.props.selectedCard}
-                    pendingCards={this.props.pendingCards[this.props.selectedCard.cardId]}
+                    pendingCards={this.props.pendingCards[this.props.selectedCard.name]}
                     handleAddPendingCard={this.handleAddPendingCard}
                     handleRemovePendingCard={this.handleRemovePendingCard}
                     selectedCardDetail={null} />
@@ -277,7 +312,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
                     
                     />
             }
-            </React.Fragment>
+            </Paper>
         );
     }
 
@@ -322,8 +357,6 @@ function FilterBar(props: FilterBarProps): JSX.Element{
     </React.Fragment>);
 }
 
-
-
 interface ContainerLayoutProps {
     appBar: ReactNode;
     filterBar: ReactNode;
@@ -334,13 +367,21 @@ interface ContainerLayoutProps {
 }
 
 function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
-    const {  flexRow, outlineSection, flexCol } = appStyles();
-    return(<React.Fragment>
-        <div className={flexCol}>
+    const {  flexRow, outlineSection, flexCol, flexSection } = appStyles();
+    return(
+    <React.Fragment>
+        {/* <div className={flexCol}> */}
             { props.appBar }
-            <div>
-                { props.filterBar }
-            <Box className={flexRow}>
+            {/* <div> */}
+            { props.filterBar }
+            <Box  // className={flexRow}
+                className={ `${flexRow} ${flexSection}` }
+                style={{ overflow:'auto', alignItems:'stretch' }}
+                >
+
+            {/* className={ `${classes.flexRow} ${classes.flexSection}` } style={{ overflow:'auto', alignItems:'stretch' }} */}
+
+
                 {props.searchResults}
             </Box>
             {props.pendingCards}
@@ -353,11 +394,9 @@ function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
                 </Button>
             </Paper>
 
-            </div>
-        </div>
+            {/* </div> */}
+        {/* </div> */}
     </React.Fragment>);
-
-
 }
 
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
@@ -379,8 +418,8 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //Notes: "visibleContainer" now needs to be determined by the route & "ownProps"
 
 
-    console.log('card search own props');
-    console.log(ownProps);
+    // console.log('card search own props');
+    // console.log(ownProps);
 
     // console.log(state.cardSearch.inventoryDetail);
 
@@ -408,7 +447,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     } else {
         mappedSearchResults = selectSearchResults(state).map(card => ({
             data: card,
-            count: state.data.cardSearch.pendingCards[card.cardId] && state.data.cardSearch.pendingCards[card.cardId].cards.length
+            count: state.data.cardSearch.pendingCards[card.name] && state.data.cardSearch.pendingCards[card.name].cards.length
         }) as CardListItem);
     }
 
@@ -455,6 +494,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     const result: PropsFromState = {
         // cardSearchMethod: state.app.cardSearch.cardSearchMethod,
         cardSearchMethod: state.app.cardSearch.cardSearchMethod,
+        deckId: parseInt(ownProps.match.params.deckId) || 0,
         
         pendingCards: state.data.cardSearch.pendingCards,
 

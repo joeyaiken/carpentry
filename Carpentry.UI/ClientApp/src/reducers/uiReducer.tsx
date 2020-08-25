@@ -261,7 +261,7 @@ function mockFilterProps(): CardFilterProps {
     return{
         // setId: null,
         set: '',
-        colorIdentity: ['R'],
+        colorIdentity: [],
         rarity: [],//['uncommon','common'], //
         type: '',//'Creature',
         exclusiveColorFilters: false,

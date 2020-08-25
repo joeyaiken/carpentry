@@ -71,9 +71,11 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
             const newCard: InventoryCard = {
                 id: 0,
                 isFoil: card.isFoil,
-                multiverseId: card.multiverseId,
+                // multiverseId: card.multiverseId,
                 statusId: card.statusId,
-                variantName: card.variantName,
+                // variantName: card.variantName,
+                cardId: card.cardId,
+                collectorNumber: card.collectorNumber,
                 deckCards: [],
                 name: card.name,
                 set: card.set,

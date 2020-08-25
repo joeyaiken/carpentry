@@ -160,11 +160,11 @@ namespace Carpentry.Logic.Implementations
 
             return newInventoryCard.Id;
         }
-
+        //TODO - Use some smaller DTO that only has the 3 fields actually used
         public async Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards)
         {
 
-            //Ensure all cards exist in the repo
+            //TODO - Ensure all cards exist in the repo
 
 
             //var distinctIDs = cards.Select(x => x.MultiverseId).Distinct().ToList();

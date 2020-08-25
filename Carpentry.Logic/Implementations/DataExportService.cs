@@ -190,8 +190,10 @@ namespace Carpentry.Logic.Implementations
             var cardExports = await _cardContext.InventoryCards
                 .Select(x => new BackupInventoryCard
                 {
-                    CollectorNumber = x.Card.CollectorNumber,
                     SetCode = x.Card.Set.Code,
+                    CollectorNumber = x.Card.CollectorNumber,
+                    
+
                     //MultiverseId = x.MultiverseId,
                     InventoryCardStatusId = x.InventoryCardStatusId,
                     IsFoil = x.IsFoil,

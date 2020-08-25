@@ -5,19 +5,29 @@ namespace Carpentry.Logic.Models
 {
     public class InventoryCardDto
     {
-        public InventoryCardDto()
-        {
-            DeckCards = new List<InventoryDeckCardDto>();
-        }
+        //public InventoryCardDto()
+        //{
+        //    DeckCards = new List<InventoryDeckCardDto>();
+        //}
 
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
-        //[JsonProperty("multiverseId")]
-        //public int MultiverseId { get; set; }
 
         [JsonProperty("cardId")]
         public int CardId { get; set; }
+
+        [JsonProperty("isFoil")]
+        public bool IsFoil { get; set; }
+
+        [JsonProperty("statusId")]
+        public int StatusId { get; set; }
+
+        [JsonProperty("collectorNumber")]
+        public int CollectorNumber { get; set; }
+
+        //[JsonProperty("deckCards")]
+        //public InventoryDeckCardDto[] DeckCards { get; set; }
+
+        [JsonProperty("id")]
+        public int Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -25,23 +35,11 @@ namespace Carpentry.Logic.Models
         [JsonProperty("set")]
         public string Set { get; set; }
 
-        [JsonProperty("isFoil")]
-        public bool IsFoil { get; set; }
-
-        //[JsonProperty("variantName")]
-        //public string VariantName { get; set; }
-
-        [JsonProperty("collectorNumber")]
-        public int CollectorNumber { get; set; }
-
-        [JsonProperty("statusId")]
-        public int StatusId { get; set; }
 
         //Should this be "deck cards" instead of "deck card IDs"
         //[JsonProperty("deckCardIds")]
         //public List<int> DeckCardIds { get; set; }
 
-        [JsonProperty("deckCards")]
-        public List<InventoryDeckCardDto> DeckCards { get; set; }
+
     }
 }

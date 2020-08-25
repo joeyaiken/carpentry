@@ -56,17 +56,26 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload)
         {
+            var result = new ValidatedDeckImportDto();
+
             //Get paload split into lines
-            string[] importRows = payload.ImportPayload.Split('\n');
-            var mappedRecords = importRows.Select(line => ParseImportListRecord(line)).ToList();
+            string[] importRows = payload.ImportPayload.Split(Environment.NewLine);
 
-            DeckPropertiesDto deckProps = new DeckPropertiesDto();
+            var mappedRecords = new List<ImportListRecord>();
 
-            deckProps.BasicW = PullLandCount(LandType.Plains, mappedRecords);
-            deckProps.BasicU = PullLandCount(LandType.Island, mappedRecords);
-            deckProps.BasicB = PullLandCount(LandType.Swamp, mappedRecords);
-            deckProps.BasicR = PullLandCount(LandType.Mountain, mappedRecords);
-            deckProps.BasicG = PullLandCount(LandType.Forest, mappedRecords);
+            foreach(var row in importRows)
+            {
+                mappedRecords.Add(ParseImportListRecord(row));
+            }
+            //importRows.Select(line => ParseImportListRecord(line)).ToList();
+
+            //DeckPropertiesDto deckProps = new DeckPropertiesDto();
+
+            result.DeckProps.BasicW = PullLandCount(LandType.Plains, mappedRecords);
+            result.DeckProps.BasicU = PullLandCount(LandType.Island, mappedRecords);
+            result.DeckProps.BasicB = PullLandCount(LandType.Swamp, mappedRecords);
+            result.DeckProps.BasicR = PullLandCount(LandType.Mountain, mappedRecords);
+            result.DeckProps.BasicG = PullLandCount(LandType.Forest, mappedRecords);
 
             var distinctSetCodes = mappedRecords.Select(x => x.Code).Distinct().ToList();
 
@@ -74,10 +83,14 @@ namespace Carpentry.Logic.Implementations
             {
                 //will just return silently if the set is already tracked
                 var set = await _cardDataRepo.GetCardSetByCode(code);
-                await _dataUpdateService.AddTrackedSet(set.Id);
+                if (!set.IsTracked)
+                {
+                    result.UntrackedSets.Add(new ValidatedDtoUntrackedSet() { SetId = set.Id, SetCode = set.Code });
+                }
+                //await _dataUpdateService.AddTrackedSet(set.Id);
             }
 
-            List<ValidatedCardDto> validatedCards = new List<ValidatedCardDto>();
+            //List<ValidatedCardDto> validatedCards = new List<ValidatedCardDto>();
 
             //for each card, get the matching DB card by Name+Code (from the carpentry DB)
             foreach (var card in mappedRecords)
@@ -86,30 +99,18 @@ namespace Carpentry.Logic.Implementations
 
                 ValidatedCardDto newCard = new ValidatedCardDto()
                 {
-                    MultiverseId = matchingCard.Id,
+                    CardId = matchingCard.Id,
                     Name = matchingCard.Name,
                     SetCode = matchingCard.Set.Code,
+                    CollectorNumber = matchingCard.CollectorNumber,
                     IsFoil = card.IsFoil,
-                    //VariantName = "normal",
-                    //Variants = matchingCard.Variants.Select(v => new ValidatedCardVariant
-                    //{
-                    //    VariantTypeId = v.CardVariantTypeId,
-                    //    Name = v.Type.Name,
-                    //    ImageUrl = v.ImageUrl,
-                    //}).ToList(),
                 };
 
                 for (int i = 0; i < card.Count; i++)
                 {
-                    validatedCards.Add(newCard);
+                    result.ValidatedCards.Add(newCard);
                 }
             }
-
-            var result = new ValidatedDeckImportDto()
-            {
-                DeckProps = deckProps,
-                ValidatedCards = validatedCards,
-            };
 
             return result;
         }
@@ -129,12 +130,13 @@ namespace Carpentry.Logic.Implementations
                     })
                     .ToList();
 
-                await _inventoryService.AddInventoryCardBatch(cardBatch);
+                await _inventoryService.AddInventoryCardBatch(cardBatch); // TODO - consider removing this bit of logic, it would mean the inventory service could be removed from this completely
 
                 return;
             }
 
             int deckId = validatedPayload.DeckProps.Id;
+
             //if deck doesn't exist, add it first
             if (deckId == 0)
             {
@@ -148,13 +150,12 @@ namespace Carpentry.Logic.Implementations
             List<DeckCardDto> cardsToAdd = validatedPayload.ValidatedCards.Select(c => new DeckCardDto()
             {
                 DeckId = deckId,
-                InventoryCard = new InventoryCardDto
-                {
-                    StatusId = _cardStatus_InInventory,
-                    IsFoil = c.IsFoil,
-                    //MultiverseId = c.MultiverseId,
-                    //VariantName = c.VariantName,
-                },
+                IsFoil = c.IsFoil,
+                CardId = c.CardId,
+                InventoryCardStatusId = _cardStatus_InInventory,
+                CategoryId = null,
+                InventoryCardId = 0, //new inventory card
+                Id = 0, //new card
             }).ToList();
 
             await _deckService.AddDeckCardBatch(cardsToAdd);
@@ -200,33 +201,72 @@ namespace Carpentry.Logic.Implementations
         private static ImportListRecord ParseImportListRecord(string recordString)
         {
             //TODO - re-think this, allowing for a different way of detecting foils (and variants) other than #_FOIL
-            var importLineTokens = recordString.Split(' ');
 
-            if (importLineTokens.Count() < 4)
+
+
+
+            var importLineTokens = recordString.Split(' ').ToList();
+
+            if (importLineTokens.Count() < 2)
             {
-                throw new Exception("Expected at least 4 tokens in a line, bad data");
+                throw new Exception("Expected at least 2 tokens in a line, bad data");
             }
 
+
+            
             var mappedRecord = new ImportListRecord();
 
+            //first token will be the count
             if (int.TryParse(importLineTokens[0], out int parsedCount))
+            {
                 mappedRecord.Count = parsedCount;
+                importLineTokens.RemoveAt(0);
+            }
+            
+            //Check if the last token is "FOIL"
+            if(importLineTokens.Last().ToLower() == "foil")
+            {
+                mappedRecord.IsFoil = true;
+                importLineTokens.RemoveAt(importLineTokens.Count() - 1);
+            }
+
+
+            //Is the next line a #, or a set code wrapped in parens?
+            if(int.TryParse(importLineTokens.Last(), out int parsedCollectorNumber))
+            {
+                mappedRecord.Number = parsedCollectorNumber;
+                importLineTokens.RemoveAt(importLineTokens.Count() - 1);
+            }
+
+            //next might be the set code
+            var lastTokenChars = importLineTokens.Last().ToCharArray();
+            if(lastTokenChars[0] == '(' && lastTokenChars[lastTokenChars.Length-1] == ')')
+            {
+                mappedRecord.Code = importLineTokens.Last().Substring(1, lastTokenChars.Length - 2);// In reality Substring should always take 3
+                importLineTokens.RemoveAt(importLineTokens.Count() - 1);
+            }
+
+            //Everything else should be the name
+            mappedRecord.Name = string.Join(' ', importLineTokens);
+
+
+
 
             //number will be also used to determine if a card is foil
-            var numberToken = importLineTokens[importLineTokens.Count() - 1];
+            //var numberToken = importLineTokens[importLineTokens.Count() - 1];
 
             //if (int.TryParse(importLineTokens[importLineTokens.Count() - 1], out int parsedNumber))
-            if (int.TryParse(numberToken.Split('_')[0], out int parsedNumber))
-                mappedRecord.Number = parsedNumber;
+            //if (int.TryParse(numberToken.Split('_')[0], out int parsedNumber))
+            //    mappedRecord.Number = parsedNumber;
 
-            if (numberToken.Split('_').Length > 1)
-                mappedRecord.IsFoil = true;
+            //if (numberToken.Split('_').Length > 1)
+            //    mappedRecord.IsFoil = true;
 
             //Only need the code, but it's wrapped in parens (123)
             //assuming always a 3-char code
-            mappedRecord.Code = importLineTokens[importLineTokens.Count() - 2].Substring(1, 3);
+            //mappedRecord.Code = importLineTokens[importLineTokens.Count() - 2].Substring(1, 3);
 
-            mappedRecord.Name = importLineTokens.Skip(1).Take(importLineTokens.Length - 3).Aggregate((i, j) => $"{i} {j}");
+            //mappedRecord.Name = importLineTokens.Skip(1).Take(importLineTokens.Length - 3).Aggregate((i, j) => $"{i} {j}");
 
             return mappedRecord;
         }

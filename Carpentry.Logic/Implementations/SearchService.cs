@@ -111,28 +111,28 @@ namespace Carpentry.Logic.Implementations
                 switch (filters.SearchGroup)
                 {
                     case "Red":
-                        query = query.Where(x => x.ColorIdentity == "R");
+                        query = query.Where(x => x.ColorIdentity == "R" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
                     case "Blue":
-                        query = query.Where(x => x.ColorIdentity == "U");
+                        query = query.Where(x => x.ColorIdentity == "U" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
                     case "Green":
-                        query = query.Where(x => x.ColorIdentity == "G");
+                        query = query.Where(x => x.ColorIdentity == "G" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
                     case "White":
-                        query = query.Where(x => x.ColorIdentity == "W");
+                        query = query.Where(x => x.ColorIdentity == "W" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
                     case "Black":
-                        query = query.Where(x => x.ColorIdentity == "B");
+                        query = query.Where(x => x.ColorIdentity == "B" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
                     case "Multicolored":
-                        query = query.Where(x => x.ColorIdentity.Length > 1);
+                        query = query.Where(x => x.ColorIdentity.Length > 1 && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
                     case "Colorless":
-                        query = query.Where(x => x.ColorIdentity.Length == 0);
+                        query = query.Where(x => x.ColorIdentity.Length == 0 && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
                     case "Lands":
-                        query = query.Where(x => x.Type.Contains("Land"));// && !x.Type.Contains()
+                        query = query.Where(x => x.Type.Contains("Land") && (x.RarityId == 'C' || x.RarityId == 'U'));// && !x.Type.Contains()
                         break;
                     case "RareMythic":
                         query = query.Where(x => x.RarityId == 'R' || x.RarityId == 'M');
@@ -191,7 +191,10 @@ namespace Carpentry.Logic.Implementations
                 ManaCost = x.First.ManaCost,
                 Type = x.First.Type,
                 Details = x.Details,
-            }).Take(500).ToList();//Don't want to ever return more than 500, should add actual pagination
+            })
+                .OrderBy(x => x.Name)
+                .Take(500)
+                .ToList();//Don't want to ever return more than 500, should add actual pagination
 
             return results;
         }

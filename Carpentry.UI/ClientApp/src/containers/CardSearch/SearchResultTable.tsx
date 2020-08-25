@@ -34,79 +34,82 @@ import { appStyles } from '../../styles/appStyles';
 interface SearchResultTableProps {
     searchContext: "deck" | "inventory";
     searchResults: CardListItem[];
-    handleAddPendingCard: (data: CardSearchResultDto, isFoil: boolean, variant: string) => void;
-    handleRemovePendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
+    handleAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
+    handleRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
     onCardSelected: (item: CardListItem) => void;
 }
 
 export default function SearchResultTable(props: SearchResultTableProps): JSX.Element {
     const { flexSection, flexRow } = appStyles();
+    
+    //<Paper className={flexSection}>
     return (
-        <Paper className={flexSection}>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        {
-                            props.searchContext === "inventory" &&
-                            (   <>
-                                    <TableCell># Pending</TableCell>
-                                    <TableCell>Actions</TableCell>
-                                </>
-                            )
-                        }
-                        {
-                            props.searchContext === "deck" &&
-                            (   <>
-                                    {/* <TableCell>Set</TableCell> */}
-                                    <TableCell>Type</TableCell>
-                                    <TableCell>Cost</TableCell>
-                                    <TableCell></TableCell>
-                                </>
-                            )
-                        }
-                    </TableRow>
-                </TableHead>
-                <TableBody>
+        <Table size="small">
+            <TableHead>
+                <TableRow>
+                    <TableCell>Name</TableCell>
                     {
-                        props.searchResults.map(result => (
-                            <TableRow 
-                                onClick={() => { props.onCardSelected(result) }}
-                                key={result.data.cardId}>
-                                <TableCell>{result.data.name}</TableCell>
-                                {
-                                        props.searchContext === "inventory" &&
-                                        (   <>
-                                                <TableCell>{result.count}</TableCell>
-                                                <TableCell>
-                                                    <Box className={flexRow}>
-                                                        <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.cardId, false, "normal")} } >-</Button>
-                                                        {/* <Typography>({result.count})</Typography> */}
-                                                        <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data, false, "normal")} } >+</Button>       
-                                                    </Box>
-                                                </TableCell>
-                                            </>
-                                        )
-                                    }
-                                    {
-                                        props.searchContext === "deck" &&
-                                        (   <>
-                                                {/* <TableCell>{result.data.set}</TableCell> */}
-                                                <TableCell>{result.data.type}</TableCell>
-                                                <TableCell>{result.data.manaCost}</TableCell>
-                                                <TableCell>{Boolean(result.count) && 
-                                                    <IconButton color="inherit" disabled={true} size="small">
-                                                        <Star />
-                                                    </IconButton> 
-                                                }</TableCell>
-                                            </>
-                                        )
-                                    }                                            
-                            </TableRow>
-                        ))
+                        props.searchContext === "inventory" &&
+                        (   <>
+                                <TableCell># Pending</TableCell>
+                                <TableCell>Actions</TableCell>
+                            </>
+                        )
                     }
-                </TableBody>
-            </Table>
-        </Paper>
+                    {
+                        props.searchContext === "deck" &&
+                        (   <>
+                                {/* <TableCell>Set</TableCell> */}
+                                <TableCell>Type</TableCell>
+                                <TableCell>Cost</TableCell>
+                                <TableCell></TableCell>
+                            </>
+                        )
+                    }
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {
+                    props.searchResults.map(result => (
+                        <TableRow 
+                            onClick={() => { props.onCardSelected(result) }}
+                            key={result.data.cardId}>
+                            <TableCell>{result.data.name}</TableCell>
+                            {
+                                    props.searchContext === "inventory" &&
+                                    (   <>
+                                            <TableCell>{result.count}</TableCell>
+                                            <TableCell>
+                                                <Box className={flexRow}>
+                                                    {/* <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.cardId, false, "normal")} } >-</Button> */}
+                                                    <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.name, result.data.cardId, false)} } >-</Button>
+                                                    {/* <Typography>({result.count})</Typography> */}
+                                                    {/* <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data, false, "normal")} } >+</Button> */}
+                                                    <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data.name, result.data.cardId, false)} } >+</Button>
+                                                </Box>
+                                            </TableCell>
+                                        </>
+                                    )
+                                }
+                                {
+                                    props.searchContext === "deck" &&
+                                    (   <>
+                                            {/* <TableCell>{result.data.set}</TableCell> */}
+                                            <TableCell>{result.data.type}</TableCell>
+                                            <TableCell>{result.data.manaCost}</TableCell>
+                                            <TableCell>{Boolean(result.count) && 
+                                                <IconButton color="inherit" disabled={true} size="small">
+                                                    <Star />
+                                                </IconButton> 
+                                            }</TableCell>
+                                        </>
+                                    )
+                                }                                            
+                        </TableRow>
+                    ))
+                }
+            </TableBody>
+        </Table>
     );
+    //</Paper>
 }

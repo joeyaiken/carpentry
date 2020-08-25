@@ -6,8 +6,8 @@ interface SelectedCardDetailSectionProps {
     selectedCard: CardSearchResultDto;
     pendingCards?: PendingCardsDto;
     selectedCardDetail: InventoryDetailDto | null;
-    handleAddPendingCard: (data: MagicCard, isFoil: boolean, variant: string) => void;
-    handleRemovePendingCard: (multiverseId: number, isFoil: boolean, variant: string) => void;
+    handleAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
+    handleRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
     handleAddInventoryCard?: (inventoryCard: InventoryCard) => void;
     handleAddNewCard?: (multiverseId: number, isFoil: boolean, variant: string) => void;
     // handleMoveCard?: (inventoryCard: InventoryCard) => void;
@@ -16,22 +16,37 @@ interface SelectedCardDetailSectionProps {
 export default function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
     const { outlineSection, flexRow, staticSection, flexCol } = appStyles();
 
-    console.log('rendering card search selected card section')
-    return(<Paper className={staticSection}>
+    // console.log('rendering card search selected card section')
+    return(
+    // <Paper className={staticSection}>
     <Box className={flexCol}>
-        {   Object.keys(props.selectedCard.details).map((id: string) => {
+        {   
+        
+            // Object.keys(props.selectedCard.details).map((id) => {
+
+            props.selectedCard.details.map((detail) => {
+            //for(i = 0; i < props.selectedCard.details.length(); i++){
+            // props.selectedCard.details.forEach(card => {
+
+            // })
+
+            
+
+            // console.log(`SELECTED CARD ID ${id}`)
                
             let countNormal = 0;
             let countFoil = 0;
             if(props.pendingCards)
             {
-                countNormal = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === false).length;
-                countFoil = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === true).length;
+                //countNormal = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === false).length;
+                countNormal = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil === false).length;
+                //countFoil = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === true).length;
+                countFoil = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil === true).length;
             }
 
             //const thisPendingCard = (this.props.selectedCard) && this.props.pendingCards[this.props.selectedCard.multiverseId];
             return (
-                <Card key={id} className={combineStyles(outlineSection, flexRow)}>
+                <Card key={detail.cardId} className={combineStyles(outlineSection, flexRow)}>
                     {/* <Box>
 
                     </Box> */}
@@ -43,27 +58,29 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
                     <CardMedia 
                         style={{height:"310px", width: "223px"}}
                         // className={itemImage}
-                        image={(props.selectedCard.details[id]) || undefined} />
+                        // image={(props.selectedCard.details[id]) || undefined}
+                        image={detail.imageUrl || undefined}
+                         />
                     <CardContent>
                         <Box className={flexCol}>
                             <Box className={flexCol}>
                                 <Box className={flexCol}>
-                                    <Typography>{`${props.selectedCard.details[id].price} | ${props.selectedCard.details[id].priceFoil}`}</Typography>
+                                    <Typography>{`${detail.price} | ${detail.priceFoil}`}</Typography>
                                 </Box>
-                                {/* <Box className={flexCol}>
+                                <Box className={flexCol}>
                                     <Typography>Normal ({countNormal})</Typography>
                                     <Box className={flexRow}>
-                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.id, false, id)} } >-</Button>
-                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, false, id)} } >+</Button>
+                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, false)} } >-</Button>
+                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, false)} } >+</Button>
                                     </Box>
                                 </Box>
                                 <Box className={flexCol}>
                                     <Typography>Foil ({countFoil})</Typography>
                                     <Box className={flexRow}>
-                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(props.selectedCard.multiverseId, true, id)} } >-</Button>
-                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(props.selectedCard, true, id)} } >+</Button>
+                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, true)} } >-</Button>
+                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, true)} } >+</Button>
                                     </Box>
-                                </Box> */}
+                                </Box>
                             </Box>
                             {/* <Box className={classes.flexRow}>
                                 <div className={classes.outlineSection}>
@@ -91,5 +108,6 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
         }
     </Box>
 
-</Paper>);
+// </Paper>
+);
 }

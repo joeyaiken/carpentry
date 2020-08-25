@@ -3,6 +3,7 @@ C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.T
 C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfo.cs
 C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csproj.CoreCompileInputs.cache
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.exe
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\appsettings.json
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.deps.json
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.runtimeconfig.json
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.runtimeconfig.dev.json

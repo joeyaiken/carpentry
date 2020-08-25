@@ -47,22 +47,23 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ca
 
 //Add pending cards
 export const CARD_SEARCH_ADD_PENDING_CARD = 'CARD_SEARCH_ADD_PENDING_CARD'
-export const cardSearchAddPendingCard = (data: MagicCard, isFoil: boolean, variant: string) =>({
+//export const cardSearchAddPendingCard = (data: MagicCard, isFoil: boolean, variant: string) =>({
+export const cardSearchAddPendingCard = (name: string, cardId: number, isFoil: boolean) =>({
     type: CARD_SEARCH_ADD_PENDING_CARD,
     payload: {
-        data: data,
+        name: name,
+        cardId: cardId,
         isFoil: isFoil,
-        variant: variant
     }
 });
 //Remove pending cards
 export const CARD_SEARCH_REMOVE_PENDING_CARD = 'CARD_SEARCH_REMOVE_PENDING_CARD'
-export const cardSearchRemovePendingCard = (multiverseId: number, isFoil: boolean, variant: string) =>({
+export const cardSearchRemovePendingCard = (name: string, cardId: number, isFoil: boolean) =>({
     type: CARD_SEARCH_REMOVE_PENDING_CARD,
     payload: {
-        multiverseId: multiverseId,
+        name: name,
+        cardId: cardId,
         isFoil: isFoil,
-        variant: variant
     }
 });
 // //Card sear filter changed
@@ -166,16 +167,16 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
 }
 
 
-export const requestAddDeckCard = (inventoryCard: InventoryCard): any => {
+export const requestAddDeckCard = (deckCardDto: DeckCardDto): any => {
     return (dispatch: Dispatch, getState: any) => {
-        return addDeckCard(dispatch, getState(), inventoryCard);
+        return addDeckCard(dispatch, getState(), deckCardDto);
     }
 }
 
-function addDeckCard(dispatch: Dispatch, state: AppState, inventoryCard: InventoryCard): any{
-    // dispatch(cardSearchAddingDeckCard());
+function addDeckCard(dispatch: Dispatch, state: AppState, deckCardDto: DeckCardDto): any{
+    dispatch(cardSearchAddingDeckCard());
 
-    alert('broken code hit - cardSearchActions - addDeckCard')
+    // alert('broken code hit - cardSearchActions - addDeckCard')
 
     // const deckCardDto: DeckCardDto = {
     //     deckId: state.app.core.selectedDeckId || 0,
@@ -184,25 +185,29 @@ function addDeckCard(dispatch: Dispatch, state: AppState, inventoryCard: Invento
     //     inventoryCard: inventoryCard,
     //     categoryId: null,
     // }
-    // //console.log
-    // api.Decks.addCard(deckCardDto).then(() => {
-    //     //After response, need to re-request inventory
+    //console.log
 
-    //     // console.log('done requesting card, calling inventory?');
-    //     // console.log(state.app.cardSearch.selectedCard);
-    //     if(state.app.cardSearch.selectedCard){
-    //         dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
-    //     }
+    
+    api.decks.addDeckCard(deckCardDto).then(() => {
 
-    //     alert('broken code hit - CardSearchActions - addDeckCard (should be added, wont nav)');
 
-    //     // if(state.app.core.visibleContainer === "deckEditor" && state.data.deckDetail.deckProps != null){
+        
+        //After response, need to re-request inventory
+
+        //!! This should be re-added eventually
+        // if(state.app.cardSearch.selectedCard){
+        //     dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
+        // }
+
+        // alert('broken code hit - CardSearchActions - addDeckCard (should be added, wont nav)');
+
+        // if(state.app.core.visibleContainer === "deckEditor" && state.data.deckDetail.deckProps != null){
             
-    //     //     //This should be a "navigate to deck detail"
-    //     //     dispatch(requestDeckDetail(state.data.deckDetail.deckProps.id));
-    //     // }
+        //     //This should be a "navigate to deck detail"
+        //     // dispatch(requestDeckDetail(state.data.deckDetail.deckProps.id));
+        // }
 
-    // })
+    })
 }
 
 export const CARD_SEARCH_ADDING_DECK_CARD = 'CARD_SEARCH_ADDING_DECK_CARD';

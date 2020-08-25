@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Carpentry.Logic.Models;
 using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace Carpentry.UI.Controllers
 {
@@ -81,10 +82,16 @@ namespace Carpentry.UI.Controllers
         #region Deck Cards
 
         [HttpPost("[action]")]
+        //public async Task<ActionResult> AddDeckCard([FromBody] object rawDto)
         public async Task<ActionResult> AddDeckCard([FromBody] DeckCardDto dto)
         {
+            //int breakpoint = 1;
+            //return Ok();
             try
             {
+
+
+                //DeckCardDto dto = (DeckCardDto)rawDto;
                 await _decks.AddDeckCard(dto);
                 return Ok();
             }

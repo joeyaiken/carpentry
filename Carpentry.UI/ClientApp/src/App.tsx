@@ -66,6 +66,14 @@ function App(): JSX.Element {
         customProps: any;
     }[] = [
         {
+            path: '/Decks/:deckId/addCards',
+            component: CardSearchContainer,
+            name: 'Deck Editor - Add Cards',
+            customProps: {
+                searchContext: "deck"
+            }
+        },
+        {
             path: '/Decks/:deckId',
             component: DeckEditorContainer,
             name: 'Carpentry - Deck Editor',

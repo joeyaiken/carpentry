@@ -18,7 +18,7 @@ export default function InventoryDetailTable(props: InventoryDetailTableProps): 
                 </TableRow>
             </TableHead>
             <TableBody>
-                {
+                {/* {
                     props.detail.inventoryCards.map(item => {
                         const thisCard = props.detail.cards.find(x => x.multiverseId === item.multiverseId);
 
@@ -65,7 +65,7 @@ export default function InventoryDetailTable(props: InventoryDetailTableProps): 
                         </TableRow>
                         )
                     })
-                }
+                } */}
             </TableBody>
         </Table>
     );
