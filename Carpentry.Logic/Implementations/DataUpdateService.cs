@@ -142,6 +142,8 @@ namespace Carpentry.Logic.Implementations
                 //new MagicFormat { Name = "penny" },
                 new MagicFormatData { Name = "commander" },
                 new MagicFormatData { Name = "brawl" },
+                new MagicFormatData { Name = "jumpstart" },
+                new MagicFormatData { Name = "sealed" },
                 //new MagicFormat { Name = "duel" },
                 //new MagicFormat { Name = "oldschool" },
             };

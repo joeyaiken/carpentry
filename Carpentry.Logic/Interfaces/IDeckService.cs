@@ -9,6 +9,7 @@ namespace Carpentry.Logic.Interfaces
     public interface IDeckService
     {
         Task<int> AddDeck(DeckPropertiesDto props);
+        Task AddImportedDeckBatch(List<DeckPropertiesDto> decks);
         Task UpdateDeck(DeckPropertiesDto props);
         Task DeleteDeck(int deckId);
 

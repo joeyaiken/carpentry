@@ -374,6 +374,27 @@ namespace Carpentry.Logic.Implementations
             return newId;
         }
 
+        public async Task AddImportedDeckBatch(List<DeckPropertiesDto> decks)
+        {
+            var allFormats = await _coreDataRepo.GetAllMagicFormats();
+
+            var newDecks = decks.Select(props => new DeckData()
+            {
+                Id = props.Id,
+                Name = props.Name,
+                MagicFormatId = allFormats.Where(f => f.Name.ToLower() == props.Format.ToLower()).FirstOrDefault().Id,
+                Notes = props.Notes,
+
+                BasicW = props.BasicW,
+                BasicU = props.BasicU,
+                BasicB = props.BasicB,
+                BasicR = props.BasicR,
+                BasicG = props.BasicG,
+            }).ToList();
+
+            await _deckRepo.AddImportedDeckBatch(newDecks);
+        }
+
         public async Task UpdateDeck(DeckPropertiesDto deckDto)
         {
             DeckData existingDeck = await _deckRepo.GetDeckById(deckDto.Id);

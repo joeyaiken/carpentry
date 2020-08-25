@@ -12,7 +12,7 @@ namespace Carpentry.Tools.QuickRestore
         public BackupConfig(IConfiguration appConfig)
         {
             //Backups
-            BackupDirectory = appConfig.GetValue<string>("AppSettings:BackupFolderRoot");
+            BackupDirectory = appConfig.GetValue<string>("AppSettings:BackupFolderPath");
 
             DeckBackupFilename = appConfig.GetValue<string>("AppSettings:DeckBackupFilename");
             CardBackupFilename = appConfig.GetValue<string>("AppSettings:CardBackupFilename");

@@ -5,6 +5,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Carpentry.Data.DataContext
 {
+    public static class ModelBuilderExtensions
+    {
+        public static void Seed(this ModelBuilder modelBuilder)
+        {
+            //string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            //UriBuilder uri = new UriBuilder(codeBase);
+            //string path = Uri.UnescapeDataString(uri.Path);
+            //var baseDir = Path.GetDirectoryName(path) + "\\Migrations\\MovieActorsView.sql";
+
+            //context.Database.ExecuteSqlCommand(File.ReadAllText(baseDir));
+            
+        }
+
+        private static void SeedFile(string fileName)
+        {
+
+        }
+    }
+
     public class CarpentryDataContext : DbContext
     {
         #region DbSets
@@ -135,6 +154,8 @@ namespace Carpentry.Data.DataContext
             #region procs?
 
             #endregion
+
+            modelBuilder.Seed();
         }
 
     }

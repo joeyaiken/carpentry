@@ -27,6 +27,9 @@ namespace Carpentry.Data.Interfaces
         Task<CardData> GetCardData(string name, string code);
         Task<CardData> GetCardData(string setCode, int collectorNumber);
         Task RemoveAllCardDefinitionsForSetId(int setId);
+        IQueryable<CardData> QueryCardDefinitions();
+
+
     }
 }
 

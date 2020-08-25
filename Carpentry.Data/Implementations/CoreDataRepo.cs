@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -225,6 +227,38 @@ namespace Carpentry.Data.Implementations
         {
             //await _cardContext.Database.EnsureDeletedAsync();
             await _cardContext.Database.EnsureCreatedAsync();
+
+            //await _cardContext.Database.ExecuteSqlCommandAsync()
+            await ExecuteSqlScript("spGetInventoryTotals");
+            await ExecuteSqlScript("vwInventoryCardsByName");
+            await ExecuteSqlScript("vwInventoryCardsByPrint");
+            await ExecuteSqlScript("vwInventoryCardsByUnique");
+            await ExecuteSqlScript("vwInventoryTotalsByStatus");
+            await ExecuteSqlScript("vwSetTotals");
+
+        }
+        private async Task ExecuteSqlScript(string scriptName)
+        {
+            try
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+
+                var something = Directory.GetCurrentDirectory();
+                //Directory.
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                var baseDir = Path.GetDirectoryName(path) + $"\\DataScripts\\{scriptName}.sql";
+                var scriptContents = File.ReadAllText(baseDir);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+                await _cardContext.Database.ExecuteSqlCommandAsync(scriptContents);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation($"Error attempting to add DB object {scriptName}", ex);
+            }
+            
         }
 
     }

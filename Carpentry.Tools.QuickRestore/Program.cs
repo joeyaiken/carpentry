@@ -19,13 +19,12 @@ namespace Carpentry.Tools.QuickRestore
     {
         static async Task Main(string[] args)
         {
-            string backupLocation = "";
-
             var serviceProvider = BuildServiceProvider();
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
             logger.LogInformation("Carpentry QuickRestore - Initializing...");
+            var appConfig = new BackupConfig(Configuration);
 
             var updateService = serviceProvider.GetService<IDataUpdateService>();
 
@@ -50,7 +49,7 @@ namespace Carpentry.Tools.QuickRestore
             var importDto = new CardImportDto()
             {
                 ImportType = CardImportPayloadType.Carpentry,
-                ImportPayload = backupLocation
+                ImportPayload = appConfig.BackupDirectory,
             };
 
             ValidatedCarpentryImportDto validatedDto = await importService.ValidateCarpentryImport(importDto);

@@ -86,3 +86,9 @@ C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentr
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.dll
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.pdb
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.genruntimeconfig.cache
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\spGetInventoryTotals.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByName.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByPrint.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByUnique.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryTotalsByStatus.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwSetTotals.sql

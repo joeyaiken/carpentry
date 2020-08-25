@@ -107,7 +107,7 @@ namespace Carpentry.Data.Implementations
                 Price = dto.Price,
                 PriceFoil = dto.PriceFoil,
                 TixPrice = dto.TixPrice,
-                Color = string.Join("",dto.Colors),
+                Color = dto.Colors == null ? null : string.Join("",dto.Colors),
                 ColorIdentity = string.Join("",dto.ColorIdentity),
                 Legalities = allFormats
                     .Where(format => dto.Legalities.Contains(format.Name))
@@ -383,6 +383,11 @@ namespace Carpentry.Data.Implementations
 
             await _cardContext.SaveChangesAsync();
 
+        }
+
+        public IQueryable<CardData> QueryCardDefinitions()
+        {
+            return _cardContext.Cards.AsQueryable();
         }
 
         #region private

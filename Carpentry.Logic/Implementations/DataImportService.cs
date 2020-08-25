@@ -3,6 +3,9 @@ using Carpentry.Data.Interfaces;
 using Carpentry.Data.QueryResults;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Logic.Models.Backups;
+using Microsoft.EntityFrameworkCore.Internal;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,24 +37,32 @@ namespace Carpentry.Logic.Implementations
         public static LandType Forest { get { return new LandType("Forest"); } }
     }
 
+
+    //Maybe this SHOULD have access to the repo
     public class DataImportService : IDataImportService
     {
         private readonly IDataUpdateService _dataUpdateService;
         private readonly ICardDataRepo _cardDataRepo;
         private readonly IDeckService _deckService;
         private readonly IInventoryService _inventoryService;
+        private readonly IInventoryDataRepo _inventoryRepo;
         private readonly int _cardStatus_InInventory = 1;
+        private readonly IDataBackupConfig _config;
         public DataImportService(
             IDataUpdateService dataUpdateService,
             ICardDataRepo cardDataRepo,
             IDeckService deckService,
-            IInventoryService inventoryService
+            IInventoryService inventoryService,
+            IInventoryDataRepo inventoryRepo,
+            IDataBackupConfig config
             )
         {
             _dataUpdateService = dataUpdateService;
             _cardDataRepo = cardDataRepo;
             _deckService = deckService;
             _inventoryService = inventoryService;
+            _inventoryRepo = inventoryRepo;
+            _config = config;
         }
 
         public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload)
@@ -168,7 +179,31 @@ namespace Carpentry.Logic.Implementations
             var result = new ValidatedCarpentryImportDto()
             {
                 BackupDirectory = payload.ImportPayload,
+                //BackupDate = null,
+                UntrackedSets = new List<ValidatedDtoUntrackedSet>(),
             };
+
+            //For now I'm just going to use those raw text files
+            string propsBackupLocation = $"{payload.ImportPayload}{_config.PropsBackupFilename}";
+            var backupProps = await LoadBackupProps(propsBackupLocation);
+
+            result.BackupDate = backupProps.TimeStamp;
+
+            //Getting all sets
+            var allSets = await _dataUpdateService.GetTrackedSets(true, false);
+
+            foreach(var setCode in backupProps.SetCodes)
+            {
+                var setTracking = allSets.Where(s => s.Code.ToLower() == setCode.ToLower()).FirstOrDefault();
+                if (!setTracking.IsTracked)
+                {
+                    result.UntrackedSets.Add(new ValidatedDtoUntrackedSet() 
+                    {  
+                        SetCode = setTracking.Code, 
+                        SetId = setTracking.SetId 
+                    });
+                }
+            }
 
             //ignoring the payload type for now
 
@@ -179,19 +214,142 @@ namespace Carpentry.Logic.Implementations
             //see what sets the Backup Props are still untracked
 
             //
-
-
-
-
-
-
-            throw new NotImplementedException();
+            return result;
         }
 
         public async Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto payload)
         {
-            throw new NotImplementedException();
+
+
+            string deckBackupLocation = $"{payload.BackupDirectory}{_config.DeckBackupFilename}";
+            await LoadDeckBackups(deckBackupLocation);
+
+            string cardBackupLocation = $"{payload.BackupDirectory}{_config.CardBackupFilename}";
+            await LoadCardBackups(cardBackupLocation);
+
+            //Note: Required card definitions should exist at this point
+
+            //decks to import
+
+            //cards to import
         }
+
+
+        private async Task<BackupDataProps> LoadBackupProps(string directory)
+        {
+            //Ensuring all sets in Props are properly tracked
+            //_logger.LogInformation($"LoadTrackedSets - begin");
+            //string propsBackupLocation = ""; // $"{_config.BackupDirectory}{_config.PropsBackupFilename}";
+
+            string propsBackupDataString = await System.IO.File.ReadAllTextAsync(directory);
+
+            BackupDataProps parsedPropsBackups = JObject.Parse(propsBackupDataString).ToObject<BackupDataProps>();
+
+            //foreach (var setCode in parsedPropsBackups.SetCodes)
+            //{
+            //    _logger.LogInformation($"LoadTrackedSets - loading {setCode}");
+            //    var set = await _cardDataRepo.GetCardSetByCode(setCode);
+            //    await _dataUpdateService.AddTrackedSet(set.Id);
+            //}
+
+            //_logger.LogInformation($"LoadTrackedSets - complete");
+
+            return parsedPropsBackups;
+        }
+
+        private async Task LoadDeckBackups(string directory)
+        {
+            //int existingDeckCount = _cardContext.Decks.Select(x => x.Id).Count();
+            //int existingDeckCount = (await _deckDataRepo.GetAllDecks()).Count();
+            //if (existingDeckCount > 0)
+            //{
+            //    _logger.LogWarning("LoadDeckBackups - Decks already exist, not loading anything from parsed data");
+            //    return;
+            //}
+
+            //_logger.LogWarning("LoadDeckBackups - Loading parsed decks");
+
+            //string deckBackupLocation = ""; // $"{_config.BackupDirectory}{_config.DeckBackupFilename}";
+
+            string deckBackupsDataString = await System.IO.File.ReadAllTextAsync(directory);
+            List<BackupDeck> parsedBackupDecks = JArray.Parse(deckBackupsDataString).ToObject<List<BackupDeck>>();
+
+            List<DeckPropertiesDto> newDecks = parsedBackupDecks.Select(x => new DeckPropertiesDto()
+            {
+                BasicB = x.BasicB,
+                BasicG = x.BasicG,
+                BasicR = x.BasicR,
+                BasicU = x.BasicU,
+                BasicW = x.BasicW,
+                Name = x.Name,
+                Notes = x.Notes,
+                Format = x.Format,
+                Id = x.ExportId
+            }).ToList();
+
+            await _deckService.AddImportedDeckBatch(newDecks);
+
+            //List<Task<int>> newDeckTasks = newDecks.Select(deck => _deckDataRepo.AddDeck(deck)).ToList();
+
+            //await Task.WhenAll(newDeckTasks);
+
+            //_logger.LogWarning("LoadDeckBackups - Complete");
+        }
+
+        public async Task LoadCardBackups(string directory) //TODO - Should this take a string payload instead?
+        {
+            //I don't need to check if card definitions exist anymore
+            //If I own a card from a set, all definitions for that set should exist in the DB at this point
+            //I can safely grab any backup card by MID
+
+            //bool cardsExist = await _inventoryDataRepo.DoInventoryCardsExist();
+            //if (cardsExist)
+            //{
+            //    _logger.LogWarning("LoadCardBackups - card data already exists, returning");
+            //    return;
+            //}
+            //_logger.LogWarning("LoadCardBackups - preparing to load backups...");
+
+            //string cardBackupLocation = ""; // $"{_config.BackupDirectory}{_config.CardBackupFilename}";
+
+            string cardBackupsDataString = await System.IO.File.ReadAllTextAsync(directory);
+            List<BackupInventoryCard> parseCardsBackups = JArray.Parse(cardBackupsDataString).ToObject<List<BackupInventoryCard>>();
+
+            //_logger.LogWarning("RestoreDb - LoadCardBackups...definitions exist, mapping & saving");
+
+            //List<DataReferenceValue<int>> allVariants = await _coreDataRepo.GetAllCardVariantTypes();
+
+            var mappedInventoryCards = parseCardsBackups
+                .Join(_cardDataRepo.QueryCardDefinitions(),
+                    backup => new { CollectorNumber = backup.CollectorNumber, SetCode = backup.SetCode},
+                    card => new { CollectorNumber = card.CollectorNumber, SetCode = card.Set.Code},
+                    (backup, card) => new 
+                    {
+                        Backup = backup,
+                        Card = card,
+                    })
+                .Select(x => new InventoryCardData
+            {
+                InventoryCardStatusId = x.Backup.InventoryCardStatusId,
+                IsFoil = x.Backup.IsFoil,
+                //CardId = x.CardId,
+                CardId = x.Card.Id,
+                //MultiverseId = x.MultiverseId,
+                //VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
+                DeckCards =
+                    x.Backup.DeckCards.Select(d => new DeckCardData()
+                    {
+                        DeckId = d.DeckId,
+                        CategoryId = d.Category,
+                    }).ToList(),
+            }).ToList();
+
+            //await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);
+            await _inventoryRepo.AddInventoryCardBatch(mappedInventoryCards);
+
+            //_logger.LogWarning("RestoreDb - LoadCardBackups...COMPLETE!");
+        }
+
 
         /// <summary>
         /// Parses an ImportListRecrd object from a string
