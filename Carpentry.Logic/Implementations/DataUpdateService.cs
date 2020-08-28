@@ -71,9 +71,9 @@ namespace Carpentry.Logic.Implementations
 
             List<InventoryCardStatusData> allStatuses = new List<InventoryCardStatusData>()
             {
-                new InventoryCardStatusData { Id = 1, Name = "Inventory" },
-                new InventoryCardStatusData { Id = 2, Name = "Buy List" },
-                new InventoryCardStatusData { Id = 3, Name = "Sell List" },
+                new InventoryCardStatusData { CardStatusId = 1, Name = "Inventory" },
+                new InventoryCardStatusData { CardStatusId = 2, Name = "Buy List" },
+                new InventoryCardStatusData { CardStatusId = 3, Name = "Sell List" },
             };
 
             for (int i = 0; i < allStatuses.Count(); i++)
@@ -94,22 +94,22 @@ namespace Carpentry.Logic.Implementations
             {
                 new CardRarityData
                 {
-                    Id = 'M',
+                    RarityId = 'M',
                     Name = "mythic",
                 },
                 new CardRarityData
                 {
-                    Id = 'R',
+                    RarityId = 'R',
                     Name = "rare",
                 },
                 new CardRarityData
                 {
-                    Id = 'U',
+                    RarityId = 'U',
                     Name = "uncommon",
                 },
                 new CardRarityData
                 {
-                    Id = 'C',
+                    RarityId = 'C',
                     Name = "common",
                 },
             };
@@ -165,8 +165,8 @@ namespace Carpentry.Logic.Implementations
             List<DeckCardCategoryData> allCategories = new List<DeckCardCategoryData>()
             {
                 //null == mainboard new DeckCardCategory { Id = '', Name = "" },
-                new DeckCardCategoryData { Id = 'c', Name = "Commander" },
-                new DeckCardCategoryData { Id = 's', Name = "Sideboard" },
+                new DeckCardCategoryData { DeckCardCategoryId = 'c', Name = "Commander" },
+                new DeckCardCategoryData { DeckCardCategoryId = 's', Name = "Sideboard" },
                 //Companion
 
                 //new DeckCardCategory { Id = '', Name = "" },

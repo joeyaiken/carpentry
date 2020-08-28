@@ -4,7 +4,7 @@
 		Do I care that I don't have a FOIL SHOWCASE of some shit?
 		I think it should only include things I do actually own
 	*/
-	SELECT	c.Id AS CardId
+	SELECT	c.CardId
 			,s.Code AS SetCode
 			,c.Name
 			,c.Type
@@ -24,16 +24,16 @@
 	FROM (
 		SELECT	ic.CardId
 				,ic.IsFoil
-				,COUNT(ic.Id) as CardCount
+				,COUNT(ic.InventoryCardId) as CardCount
 		FROM	InventoryCards ic
 		GROUP BY ic.CardId, ic.IsFoil
 	) AS Totals
 	JOIN		Cards c
-		ON		c.Id = Totals.CardId
+		ON		c.CardId = Totals.CardId
 	JOIN		Rarities r
-		ON		c.RarityId = r.Id
+		ON		c.RarityId = r.RarityId
 	JOIN		Sets s
-		ON		c.SetId = s.Id
+		ON		c.SetId = s.SetId
 --GO
 
 

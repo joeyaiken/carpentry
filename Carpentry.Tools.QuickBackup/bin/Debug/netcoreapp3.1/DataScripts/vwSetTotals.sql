@@ -1,6 +1,6 @@
 ﻿CREATE VIEW [dbo].[vwSetTotals]
 AS
-	SELECT	Sets.Id AS SetId
+	SELECT	Sets.SetId AS SetId
 			,Sets.Code
 			,Sets.Name
 			,Sets.ReleaseDate
@@ -14,41 +14,41 @@ AS
 	LEFT JOIN ( 
 		SELECT	SetId
 				,SUM(IsCollected) AS CollectedCount
-				,COUNT(Id) AS TotalCount
+				,COUNT(CardId) AS TotalCount
 
 		FROM (
-			SELECT		Cards.Id
+			SELECT		Cards.CardId
 						,Cards.SetId
-						,CASE	WHEN COUNT(InventoryCards.Id) > 0 
+						,CASE	WHEN COUNT(InventoryCards.InventoryCardId) > 0 
 								THEN 1 
 								ELSE 0
 						END AS IsCollected
 			FROM		Cards
 			LEFT JOIN	InventoryCards
-				ON		Cards.Id = InventoryCards.CardId
-			GROUP BY	Cards.Id, Cards.SetId
+				ON		Cards.CardId = InventoryCards.CardId
+			GROUP BY	Cards.CardId, Cards.SetId
 
 		) AS CollectedCards
 
 		GROUP BY SetId
 
 	) AS CollectedBySet
-		ON	Sets.Id = CollectedBySet.SetId
+		ON	Sets.SetId = CollectedBySet.SetId
 
 	--inventory count per-set
 	LEFT JOIN (
 
 		SELECT		Cards.SetId
-					,COUNT(InventoryCards.Id) AS InventoryCount
+					,COUNT(InventoryCards.InventoryCardId) AS InventoryCount
 
 		FROM		InventoryCards
 		INNER JOIN	Cards
-			ON		InventoryCards.CardId = Cards.Id
+			ON		InventoryCards.CardId = Cards.CardId
 
 		GROUP BY	SetId
 
 	) AS InventoryCounts
-		ON	InventoryCounts.SetId = Sets.Id
+		ON	InventoryCounts.SetId = Sets.SetId
 --GO
 
 

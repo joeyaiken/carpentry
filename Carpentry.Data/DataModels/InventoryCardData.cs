@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Carpentry.Data.DataModels
 {
     public class InventoryCardData
     {
-        public int Id { get; set; }
+        [Key]
+        public int InventoryCardId { get; set; }
         public int CardId { get; set; }
         public int InventoryCardStatusId { get; set; }
         public bool IsFoil { get; set; }

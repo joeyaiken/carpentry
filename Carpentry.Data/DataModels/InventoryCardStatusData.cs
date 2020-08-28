@@ -9,7 +9,7 @@ namespace Carpentry.Data.DataModels
     public class InventoryCardStatusData
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
+        public int CardStatusId { get; set; }
         public string Name { get; set; }
 
         //Associations

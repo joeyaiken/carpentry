@@ -33,10 +33,10 @@ namespace Carpentry.Data.Implementations
         {
             IQueryable<CardDataDto> result = query.Select(card => new CardDataDto()
             {
-                CardId = card.Id,
+                CardId = card.CardId,
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
-                MultiverseId = card.Id,
+                MultiverseId = card.CardId,
                 Name = card.Name,
                 ImageUrl = card.ImageUrl,
                 Price = card.Price,
@@ -91,7 +91,7 @@ namespace Carpentry.Data.Implementations
 
             if (!string.IsNullOrEmpty(filters.Set))
             {
-                var matchingSetId = _cardContext.Sets.Where(x => x.Code.ToLower() == filters.Set.ToLower()).Select(x => x.Id).FirstOrDefault();
+                var matchingSetId = _cardContext.Sets.Where(x => x.Code.ToLower() == filters.Set.ToLower()).Select(x => x.SetId).FirstOrDefault();
                 cardsQuery = cardsQuery.Where(x => x.SetId == matchingSetId);
             }
 
@@ -171,7 +171,7 @@ namespace Carpentry.Data.Implementations
             {
                 throw new Exception($"Could not find format matching name: {formatName}");
             }
-            return format.Id;
+            return format.FormatId;
         }
 
         #endregion
@@ -179,7 +179,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task<InventoryCardData> GetInventoryCard(int inventoryCardId)
         {
-            var result = await _cardContext.InventoryCards.Where(x => x.Id == inventoryCardId).FirstOrDefaultAsync();
+            var result = await _cardContext.InventoryCards.Where(x => x.InventoryCardId == inventoryCardId).FirstOrDefaultAsync();
             return result;
         }
 
@@ -200,12 +200,12 @@ namespace Carpentry.Data.Implementations
         /// <returns></returns>
         public async Task<int> AddInventoryCard(InventoryCardData cardToAdd)
         {
-            var matchingCard = _cardContext.Cards.FirstOrDefault(x => x.Id == cardToAdd.CardId);
+            var matchingCard = _cardContext.Cards.FirstOrDefault(x => x.CardId == cardToAdd.CardId);
             var first6Card = _cardContext.Cards.FirstOrDefault();
             _cardContext.InventoryCards.Add(cardToAdd);
             await _cardContext.SaveChangesAsync();
 
-            return cardToAdd.Id;
+            return cardToAdd.InventoryCardId;
         }
 
         public async Task AddInventoryCardBatch(List<InventoryCardData> cardBatch)
@@ -224,7 +224,7 @@ namespace Carpentry.Data.Implementations
         public async Task UpdateInventoryCard(InventoryCardData cardToUpdate)
         {
             //todo - actually check if exists? I could just let it error
-            var existingCard = await _cardContext.InventoryCards.FirstOrDefaultAsync(c => c.Id == cardToUpdate.Id);
+            var existingCard = await _cardContext.InventoryCards.FirstOrDefaultAsync(c => c.InventoryCardId == cardToUpdate.InventoryCardId);
 
             if(existingCard == null)
             {
@@ -250,7 +250,7 @@ namespace Carpentry.Data.Implementations
                 throw new Exception("Cannot delete a card that's currently in a deck");
             }
 
-            var cardToRemove = _cardContext.InventoryCards.First(x => x.Id == id);
+            var cardToRemove = _cardContext.InventoryCards.First(x => x.InventoryCardId == id);
 
             _cardContext.InventoryCards.Remove(cardToRemove);
 
@@ -283,7 +283,7 @@ namespace Carpentry.Data.Implementations
                 .SelectMany(x => x.InventoryCards)
                 .Select(x => new InventoryCardResult()
                 {
-                    Id = x.Id,
+                    Id = x.InventoryCardId,
                     IsFoil = x.IsFoil,
                     InventoryCardStatusId = x.InventoryCardStatusId,
                     //MultiverseId = x.MultiverseId,

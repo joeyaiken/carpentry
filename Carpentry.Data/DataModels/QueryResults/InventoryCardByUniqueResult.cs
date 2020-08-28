@@ -18,7 +18,8 @@ namespace Carpentry.Data.DataModels.QueryResults
         public string ColorIdentity { get; set; }
         public bool? IsFoil { get; set; }
         public decimal? Price { get; set; }
-        public int? CardCount { get; set; }
+        public int? OwnedCount { get; set; }
+        public int? DeckCount { get; set; }
         public string ImageUrl { get; set; }
     }
 }

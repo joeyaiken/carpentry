@@ -96,7 +96,7 @@ namespace Carpentry.Logic.Implementations
                 var set = await _cardDataRepo.GetCardSetByCode(code);
                 if (!set.IsTracked)
                 {
-                    result.UntrackedSets.Add(new ValidatedDtoUntrackedSet() { SetId = set.Id, SetCode = set.Code });
+                    result.UntrackedSets.Add(new ValidatedDtoUntrackedSet() { SetId = set.SetId, SetCode = set.Code });
                 }
                 //await _dataUpdateService.AddTrackedSet(set.Id);
             }
@@ -110,7 +110,7 @@ namespace Carpentry.Logic.Implementations
 
                 ValidatedCardDto newCard = new ValidatedCardDto()
                 {
-                    CardId = matchingCard.Id,
+                    CardId = matchingCard.CardId,
                     Name = matchingCard.Name,
                     SetCode = matchingCard.Set.Code,
                     CollectorNumber = matchingCard.CollectorNumber,
@@ -333,7 +333,7 @@ namespace Carpentry.Logic.Implementations
                 InventoryCardStatusId = x.Backup.InventoryCardStatusId,
                 IsFoil = x.Backup.IsFoil,
                 //CardId = x.CardId,
-                CardId = x.Card.Id,
+                CardId = x.Card.CardId,
                 //MultiverseId = x.MultiverseId,
                 //VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
                 DeckCards =

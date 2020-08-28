@@ -140,7 +140,7 @@ namespace Carpentry.Logic.Tests.UnitTests
                 .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCardData>()))
                 .Returns(Task.CompletedTask);
 
-            InventoryCardData inventoryDbCard = new InventoryCardData() { Id = 1 };
+            InventoryCardData inventoryDbCard = new InventoryCardData() { InventoryCardId = 1 };
 
             mockInventoryRepo
                 .Setup(p => p.GetInventoryCard(It.Is<int>(i => i == cardToUpdate.Id)))
@@ -197,7 +197,7 @@ namespace Carpentry.Logic.Tests.UnitTests
                 .Setup(p => p.UpdateInventoryCard(It.IsNotNull<InventoryCardData>()))
                 .Returns(Task.CompletedTask);
 
-            InventoryCardData inventoryDbCard = new InventoryCardData() { Id = 1 };
+            InventoryCardData inventoryDbCard = new InventoryCardData() { InventoryCardId = 1 };
 
             mockInventoryRepo
                 .Setup(p => p.GetInventoryCard(It.IsAny<int>()))

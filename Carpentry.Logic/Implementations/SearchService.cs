@@ -245,7 +245,7 @@ namespace Carpentry.Logic.Implementations
                             Cmc = x.Cmc,
                             IsFoil = x.IsFoil,
                             Price = x.Price,
-                            Count = x.CardCount ?? 0,
+                            Count = x.OwnedCount ?? 0,
                             Img = x.ImageUrl,
                             Color = x.Color,
                             ColorIdentity = x.ColorIdentity,

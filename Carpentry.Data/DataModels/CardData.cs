@@ -8,7 +8,8 @@ namespace Carpentry.Data.DataModels
 {
     public class CardData
     {
-        public int Id { get; set; }
+        [Key]
+        public int CardId { get; set; }
         public int? Cmc { get; set; }
         public string ManaCost { get; set; }
         public string Name { get; set; }

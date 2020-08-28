@@ -168,7 +168,7 @@ namespace Carpentry.Logic.Implementations
             //Need to "Get All Deck Props"
             var deckExports = await _cardContext.Decks.Select(x => new BackupDeck
             {
-                ExportId = x.Id,
+                ExportId = x.DeckId,
                 Name = x.Name,
                 Format = x.Format.Name,
                 Notes = x.Notes,

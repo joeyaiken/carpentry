@@ -57,9 +57,10 @@ namespace Carpentry.Logic.Implementations
         {
             List<MagicCardDto> result = query.Select(card => new MagicCardDto()
             {
+                
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
-                MultiverseId = card.Id,
+                MultiverseId = card.MultiverseId,
                 Name = card.Name,
 
                 CollectionNumber = card.CollectorNumber,
@@ -137,7 +138,7 @@ namespace Carpentry.Logic.Implementations
                 //var cardData = await _cardDataRepo.GetCardData(dto.Set, dto.CollectorNumber);
 
 
-                newInventoryCard.CardId = cardData.Id;
+                newInventoryCard.CardId = cardData.CardId;
 
 
             }
@@ -156,9 +157,9 @@ namespace Carpentry.Logic.Implementations
 
 
 
-            newInventoryCard.Id = await _inventoryRepo.AddInventoryCard(newInventoryCard);
+            newInventoryCard.InventoryCardId = await _inventoryRepo.AddInventoryCard(newInventoryCard);
 
-            return newInventoryCard.Id;
+            return newInventoryCard.InventoryCardId;
         }
         //TODO - Use some smaller DTO that only has the 3 fields actually used
         public async Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards)

@@ -9,7 +9,7 @@ namespace Carpentry.Data.DataModels
     public class DeckCardCategoryData
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public char Id { get; set; }
+        public char DeckCardCategoryId { get; set; }
         public string Name { get; set; }
 
         //Associations

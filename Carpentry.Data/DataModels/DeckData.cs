@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Carpentry.Data.DataModels
 {
     public class DeckData
     {
-        public int Id { get; set; }
+        [Key]
+        public int DeckId { get; set; }
         public string Name { get; set; }
         public string Notes { get; set; }
         public int MagicFormatId { get; set; }

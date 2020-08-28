@@ -16,10 +16,10 @@ AS
 			,Counts.OwnedCount
 	FROM	(
 		SELECT		c.Name
-					,COUNT(ic.Id) AS OwnedCount
+					,COUNT(ic.InventoryCardId) AS OwnedCount
 		FROM		Cards c
 		LEFT JOIN	InventoryCards ic
-				ON	ic.CardId = c.Id
+				ON	ic.CardId = c.CardId
 		GROUP BY	c.Name
 	) AS Counts
 	JOIN	(
@@ -34,7 +34,7 @@ AS
 				,c.ColorIdentity
 		FROM	Cards c
 		JOIN	Sets s
-			ON	c.SetId = s.Id
+			ON	c.SetId = s.SetId
 	) AS RecentCard
 		ON	Counts.Name = RecentCard.Name
 		AND	RecentCard.CardRank = 1

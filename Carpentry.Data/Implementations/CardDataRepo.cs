@@ -40,7 +40,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task<CardSetData> GetCardSetById(int setId)
         {
-            CardSetData result = await _cardContext.Sets.FirstOrDefaultAsync(s => s.Id == setId);
+            CardSetData result = await _cardContext.Sets.FirstOrDefaultAsync(s => s.SetId == setId);
             return result;
         }
 
@@ -75,7 +75,7 @@ namespace Carpentry.Data.Implementations
                 _cardContext.Sets.Add(setData);
             }
             await _cardContext.SaveChangesAsync();
-            return setData.Id;
+            return setData.SetId;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Carpentry.Data.Implementations
                 Name = dto.Name,
                 Text = dto.Text,
                 Type = dto.Type,
-                SetId = allSets.Where(s => s.Code == dto.Set).FirstOrDefault().Id,
+                SetId = allSets.Where(s => s.Code == dto.Set).FirstOrDefault().SetId,
                 RarityId = GetRarityId(dto.Rarity),
                 CollectorNumber = dto.CollectorNumber,
                 ImageUrl = dto.ImageUrl,
@@ -113,7 +113,7 @@ namespace Carpentry.Data.Implementations
                     .Where(format => dto.Legalities.Contains(format.Name))
                     .Select(format => new CardLegalityData
                     {
-                        FormatId = format.Id,
+                        FormatId = format.FormatId,
                     }).ToList(),
             });
 
@@ -236,7 +236,7 @@ namespace Carpentry.Data.Implementations
                     //_cardContext.CardVariants.UpdateRange(existingVariants);
 
                     //Update legalities
-                    var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == existingCard.Id).Include(x => x.Format);
+                    var allExistingLegalities = _cardContext.CardLegalities.Where(x => x.CardId == existingCard.CardId).Include(x => x.Format);
 
                     //IDK if this will get messed up by case sensitivity
                     var existingLegalitiesToDelete = allExistingLegalities.Where(x => !card.Legalities.Contains(x.Format.Name));
@@ -247,7 +247,7 @@ namespace Carpentry.Data.Implementations
                         .Where(x => !legalityStringsToKeep.Contains(x))
                         .Select(x => new CardLegalityData()
                         {
-                            CardId = existingCard.Id,//MultiverseId
+                            CardId = existingCard.CardId,//MultiverseId
                             Format = _cardContext.MagicFormats.Where(f => f.Name == x).FirstOrDefault(),
                         })
                         .Where(x => x.Format != null)
@@ -297,7 +297,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task<CardData> GetCardData(int cardId)
         {
-            CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == cardId);
+            CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.CardId == cardId);
             return result;
         }
 

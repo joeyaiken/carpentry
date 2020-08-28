@@ -4,11 +4,11 @@
 CREATE PROCEDURE [dbo].[spGetInventoryTotals] 
 AS
 	SELECT	SUM(Price) AS TotalPrice
-			,COUNT(Id) AS TotalCount
+			,COUNT(InventoryCardId) AS TotalCount
 	FROM (
 
-		SELECT	ic.Id
-				,CardId
+		SELECT	ic.InventoryCardId
+				,ic.CardId
 				,CASE WHEN ic.IsFoil = 1
 					THEN PriceFoil
 					ELSE Price
@@ -16,7 +16,7 @@ AS
 
 		FROM	InventoryCards ic
 		JOIN	Cards c
-			ON	ic.CardId = c.Id
+			ON	ic.CardId = c.CardId
 		--JOIN	CardVariants cv
 		--	ON	ic.VariantTypeId = cv.CardVariantTypeId
 		--	AND	ic.MultiverseId = cv.CardId

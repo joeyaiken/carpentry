@@ -44,6 +44,8 @@ export const appStyles = makeStyles({
     center: {
         alignSelf: "center",
     },
+
+    
       
 });
 

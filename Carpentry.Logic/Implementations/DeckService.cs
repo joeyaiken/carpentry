@@ -380,7 +380,7 @@ namespace Carpentry.Logic.Implementations
 
             var newDecks = decks.Select(props => new DeckData()
             {
-                Id = props.Id,
+                DeckId = props.Id,
                 Name = props.Name,
                 MagicFormatId = allFormats.Where(f => f.Name.ToLower() == props.Format.ToLower()).FirstOrDefault().Id,
                 Notes = props.Notes,
@@ -529,7 +529,7 @@ namespace Carpentry.Logic.Implementations
 
             List<DeckOverviewDto> deckList = _deckRepo.GetAllDecks().Result.Select(dbDeck => new DeckOverviewDto()
             {
-                Id = dbDeck.Id,
+                Id = dbDeck.DeckId,
                 //BasicB = dbDeck.BasicB,
                 //BasicG = dbDeck.BasicG,
                 //BasicR = dbDeck.BasicR,
@@ -586,7 +586,7 @@ namespace Carpentry.Logic.Implementations
 
             DeckPropertiesDto mappedDeckData = new DeckPropertiesDto()
             {
-                Id = dbDeck.Id,
+                Id = dbDeck.DeckId,
                 BasicB = dbDeck.BasicB,
                 BasicG = dbDeck.BasicG,
                 BasicR = dbDeck.BasicR,

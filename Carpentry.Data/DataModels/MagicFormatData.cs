@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Carpentry.Data.DataModels
 {
     public class MagicFormatData
     {
-        public int Id { get; set; }
+        [Key]
+        public int FormatId { get; set; }
         public string Name { get; set; }
 
         //Associations

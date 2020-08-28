@@ -5,6 +5,9 @@ namespace Carpentry.Logic.Models
 {
     public class MagicCardDto
     {
+        [JsonProperty("cardId")]
+        public int CardId { get; set; }
+
         [JsonProperty("cmc")]
         public int? Cmc { get; set; }
 

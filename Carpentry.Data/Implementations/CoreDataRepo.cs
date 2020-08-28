@@ -31,7 +31,7 @@ namespace Carpentry.Data.Implementations
             DataReferenceValue<int> matchingFormat = await _cardContext.MagicFormats.Where(x => x.Name.ToLower() == formatName.ToLower())
                 .Select(x => new DataReferenceValue<int>()
                 {
-                    Id = x.Id,
+                    Id = x.FormatId,
                     Name = x.Name,
                 }).FirstOrDefaultAsync();
 
@@ -40,10 +40,10 @@ namespace Carpentry.Data.Implementations
 
         public async Task<DataReferenceValue<int>> GetMagicFormat(int formatId)
         {
-            DataReferenceValue<int> matchingFormat = await _cardContext.MagicFormats.Where(x => x.Id == formatId)
+            DataReferenceValue<int> matchingFormat = await _cardContext.MagicFormats.Where(x => x.FormatId == formatId)
                 .Select(x => new DataReferenceValue<int>()
                 {
-                    Id = x.Id,
+                    Id = x.FormatId,
                     Name = x.Name,
                 }).FirstOrDefaultAsync();
 
@@ -55,7 +55,7 @@ namespace Carpentry.Data.Implementations
             List<DataReferenceValue<int>> results = await _cardContext.MagicFormats
                 .Select(x => new DataReferenceValue<int>()
                 {
-                    Id = x.Id,
+                    Id = x.FormatId,
                     Name = x.Name,
                 }).ToListAsync();
 
@@ -100,7 +100,7 @@ namespace Carpentry.Data.Implementations
             List<DataReferenceValue<char>> results = await _cardContext.Rarities
                 .Select(x => new DataReferenceValue<char>()
                 {
-                    Id = x.Id,
+                    Id = x.RarityId,
                     Name = x.Name,
                 }).ToListAsync();
 
@@ -126,7 +126,7 @@ namespace Carpentry.Data.Implementations
             List<DataReferenceValue<int>> results = await _cardContext.CardStatuses
                 .Select(x => new DataReferenceValue<int>()
                 {
-                    Id = x.Id,
+                    Id = x.CardStatusId,
                     Name = x.Name,
                 }).ToListAsync();
 
@@ -167,7 +167,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task TryAddCardRarity(CardRarityData rarity)
         {
-            var existingRecord = _cardContext.Rarities.FirstOrDefault(x => x.Id == rarity.Id);
+            var existingRecord = _cardContext.Rarities.FirstOrDefault(x => x.RarityId == rarity.RarityId);
             if (existingRecord == null)
             {
                 _logger.LogWarning($"Adding card rarity {rarity.Name}");
@@ -212,7 +212,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task TryAddDeckCardCategory(DeckCardCategoryData category)
         {
-            var existingRecord = _cardContext.DeckCardCategories.FirstOrDefault(x => x.Id == category.Id);
+            var existingRecord = _cardContext.DeckCardCategories.FirstOrDefault(x => x.DeckCardCategoryId == category.DeckCardCategoryId);
             if (existingRecord == null)
             {
                 _cardContext.DeckCardCategories.Add(category);

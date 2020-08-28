@@ -1,6 +1,6 @@
 ﻿CREATE VIEW [dbo].[vwInventoryCardsByPrint] AS
 
-	SELECT	c.Id AS CardId
+	SELECT	c.CardId
 			,s.Code AS SetCode
 			,c.Name
 			,c.CollectorNumber
@@ -23,14 +23,14 @@
 			,ISNULL(Counts.OwnedCount,0) AS OwnedCount
 	FROM	Cards c
 	JOIN	Sets s
-		ON	c.SetId = s.Id
+		ON	c.SetId = s.SetId
 	LEFT JOIN (
 		SELECT		ic.CardId
-					,COUNT(ic.Id) AS OwnedCount
+					,COUNT(ic.InventoryCardId) AS OwnedCount
 		FROM		InventoryCards ic
 		GROUP BY	ic.CardId
 	) AS Counts
-		ON	c.Id = Counts.CardId
+		ON	c.CardId = Counts.CardId
 
 --GO
 

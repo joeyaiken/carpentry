@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Carpentry.Data.DataModels
 {
     public class CardLegalityData
     {
-        public int Id { get; set; }
+        [Key]
+        public int CardLegalityId { get; set; }
         public int CardId { get; set; }
         public int FormatId { get; set; }
 

@@ -34,7 +34,7 @@ namespace Carpentry.Data.Implementations
         {
             _cardContext.Decks.Add(newDeck);
             await _cardContext.SaveChangesAsync();
-            return newDeck.Id;
+            return newDeck.DeckId;
         }
 
         public async Task AddImportedDeckBatch(IEnumerable<DeckData> deckList)
@@ -93,7 +93,7 @@ namespace Carpentry.Data.Implementations
                 _cardContext.DeckCards.RemoveRange(deckCardsToDelete);
             }
 
-            var deckToDelete = _cardContext.Decks.Where(x => x.Id == deckId).FirstOrDefault();
+            var deckToDelete = _cardContext.Decks.Where(x => x.DeckId == deckId).FirstOrDefault();
             _cardContext.Decks.Remove(deckToDelete);
 
             await _cardContext.SaveChangesAsync();
@@ -101,7 +101,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task<DeckData> GetDeckById(int deckId)
         {
-            var matchingDeck = await _cardContext.Decks.Where(x => x.Id == deckId)
+            var matchingDeck = await _cardContext.Decks.Where(x => x.DeckId == deckId)
                 .Include(x => x.Format)
                 .FirstOrDefaultAsync();
             return matchingDeck;
@@ -160,7 +160,7 @@ namespace Carpentry.Data.Implementations
         //Deletes a deck card, does not delete the associated inventory card
         public async Task DeleteDeckCard(int deckCardId)
         {
-            var cardToRemove = _cardContext.DeckCards.Where(x => x.Id == deckCardId).FirstOrDefault();
+            var cardToRemove = _cardContext.DeckCards.Where(x => x.DeckCardId == deckCardId).FirstOrDefault();
             if (cardToRemove != null)
             {
                 _cardContext.DeckCards.Remove(cardToRemove);
@@ -174,7 +174,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task<DeckCardData> GetDeckCardById(int deckCardId)
         {
-            var matchingDeckCard = await _cardContext.DeckCards.Where(x => x.Id == deckCardId).FirstOrDefaultAsync();
+            var matchingDeckCard = await _cardContext.DeckCards.Where(x => x.DeckCardId == deckCardId).FirstOrDefaultAsync();
             return matchingDeckCard;
         }
 
@@ -194,7 +194,7 @@ namespace Carpentry.Data.Implementations
                 .Where(x => x.DeckId == deckId)
                 .Select(x => new DeckCardResult()
                 {
-                    Id = x.Id,
+                    Id = x.DeckCardId,
                     Category = x.CategoryId == null ? null : x.Category.Name,
                     Cmc = x.InventoryCard.Card.Cmc,
                     Cost = x.InventoryCard.Card.ManaCost,
@@ -224,7 +224,7 @@ namespace Carpentry.Data.Implementations
                 .Distinct()
                 .ToList();
 
-            var dbDeck = _cardContext.Decks.Where(x => x.Id == deckId).FirstOrDefault();
+            var dbDeck = _cardContext.Decks.Where(x => x.DeckId == deckId).FirstOrDefault();
 
             if (dbDeck.BasicW > 0 && !deckCardColors.Contains('W'))
             {
@@ -256,7 +256,7 @@ namespace Carpentry.Data.Implementations
 
         public async Task<int> GetDeckCardCount(int deckId)
         {
-            int basicLandCount = await _cardContext.Decks.Where(x => x.Id == deckId).Select(deck => deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG).FirstOrDefaultAsync();
+            int basicLandCount = await _cardContext.Decks.Where(x => x.DeckId == deckId).Select(deck => deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG).FirstOrDefaultAsync();
             int cardCount = await _cardContext.DeckCards.Where(x => x.DeckId == deckId).CountAsync();
             return basicLandCount + cardCount;
         }
