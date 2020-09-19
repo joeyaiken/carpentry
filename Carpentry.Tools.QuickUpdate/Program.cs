@@ -32,6 +32,7 @@ namespace Carpentry.Tools.QuickUpdate
 
             logger.LogInformation("Getting list of tracked set");
 
+            
             var trackedSets = await updateService.GetTrackedSets(false, true);
 
             var setsToUpdate = trackedSets
