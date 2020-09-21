@@ -32,16 +32,29 @@ namespace Carpentry.Logic.Models.Scryfall
         {
             JObject parsedProps = tokenProps.ToObject<JObject>();
 
-            var cardLayout = parsedProps.Value<string>("layout");
+            try
+            {
+                //var collNum = TryParseToken<string>(parsedProps, "collector_number", null);
+                //if(collNum == "12")
+                //{
+                   
+                //}
+
+
+                var cardLayout = parsedProps.Value<string>("layout");
 
 
 
-            if (cardLayout == "transform")
+            if (cardLayout == "transform" || cardLayout == "modal_dfc")
             {
                 var normalFace = parsedProps.SelectToken("card_faces")[0];
                 //Variants["normal"] = normalFace.SelectToken("image_uris.normal").ToObject<string>();
                 ImageUrl = normalFace.SelectToken("image_uris.normal").ToObject<string>();
             }
+            //else if (cardLayout == "modal_dfc")
+            //{
+            //    int breakpoint = 1;
+            //}
             else
             {
                 //Variants["normal"] = parsedProps.SelectToken("image_uris.normal").ToObject<string>();
@@ -129,6 +142,13 @@ namespace Carpentry.Logic.Models.Scryfall
             else
             {
                 CollectionNumber = 0; //TODO - Should this default to NULL instead?
+            }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
             #endregion
