@@ -6,6 +6,7 @@ namespace Carpentry.Data.DataModels.QueryResults
 {
     public class InventoryCardByNameResult
     {
+        public int CardId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public string ManaCost { get; set; }

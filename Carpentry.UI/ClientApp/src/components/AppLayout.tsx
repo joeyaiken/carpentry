@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 
 import { Add, AddBox, Menu, FilterList } from '@material-ui/icons';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, NavLink, Route, Switch } from 'react-router-dom';
 import { ConnectedComponent } from 'react-redux';
 import { appStyles, combineStyles } from '../styles/appStyles';
 
@@ -62,6 +62,18 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
                         props.routes.map(route => <Route path={route.path}>{route.name}</Route>)
                 }</Switch>}
             </Typography>
+            {/* <Container> */}
+                <NavLink
+                    to="/decks">
+                    Decks
+                </NavLink>
+                <NavLink
+                    to="/inventory">
+                    Inventory
+                </NavLink>
+
+            {/* </Container> */}
+            
         
             {/* <Route
                 path='/'

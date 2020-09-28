@@ -17,7 +17,9 @@ import { appStyles, combineStyles } from '../../styles/appStyles';
 // import FilterBarSearchButton from '../components/FilterBarSearchButton';
 
 interface InventoryFilterBarProps{
-    searchFilter: CardFilterProps,
+    searchFilter: InventoryFilterProps,
+    viewMethod: "grid" | "table";
+
     visibleFilters: CardFilterVisibilities;
     filterOptions: AppFiltersDto,
     handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -32,6 +34,9 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
     // Need this to cache?
     // try this?
     // https://material-ui.com/components/autocomplete
+
+    console.log('visible filters');
+    console.log(props.visibleFilters);
 
     return(
 <Paper className={combineStyles(outlineSection, flexCol)}>
@@ -51,22 +56,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                         margin="normal"/>
                 </Box>
             }
-            {   //SET filter
-                props.visibleFilters.set &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="set"
-                        className={stretch}
-                        select
-                        label="Set filter"
-                        value={props.searchFilter.set}
-                        onChange={props.handleFilterChange}
-                        margin="normal" >
-                            <MenuItem key="null" value=""></MenuItem>
-                            { props.filterOptions.sets.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
-                        </TextField>
-                </Box>
-            }
+            
             {   //Type filter
                 props.visibleFilters.type &&
                 <Box className={`${flexSection} ${sidePadded}`}>
@@ -153,38 +143,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                     </TextField>
                 </Box>
             }
-            {   //NAME filter - Web only
-                props.visibleFilters.name &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="cardName"
-                        className={stretch}
-                        label="Web"
-                        value={props.searchFilter.cardName}
-                        onChange={props.handleFilterChange}
-                        margin="normal"/>
-                </Box>
-            }
-            {   //NAME IS EXCLUSIVE filter - Web only
-                props.visibleFilters.name &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <FormControl component="fieldset">
-                        <FormControlLabel
-                            name="exclusiveName"
-                            onChange={(e, checked) => {props.handleBoolFilterChange("exclusiveName",checked)}}
-                            checked={props.searchFilter.exclusiveName}
-                            control={
-                                <Checkbox 
-                                    color="primary"
-                                    icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                                    checkedIcon={<CheckBoxIcon fontSize="small" />}
-                                />
-                            }
-                            label="Exclusive"
-                        />
-                    </FormControl>
-                </Box>
-            }
+          
 {/* 
             {   //Min Count
                 props.visibleFilters.count &&
@@ -218,7 +177,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                         className={stretch}
                         select
                         label="Format"
-                        value={props.searchFilter.format}
+                        // value={props.searchFilter.format}
                         onChange={props.handleFilterChange}
                         SelectProps={{
                             displayEmpty: true
@@ -309,9 +268,52 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
             </Box> */}
 
             {/* Sort by name/quantity/price */}
-            <Box className={`${flexSection} ${sidePadded}`}>
+            
+                {/* <Box className={`${flexSection} ${sidePadded}`}>
+                    
+                    <Box className={outlineSection}>
+                        Filter idea: Hide non-normal variants
+                        Can be used when trying to see what I have > 4 or 6 or whatever of
+                    </Box>
+                </Box> */}
+
+                <Box className={`${flexSection} ${sidePadded}`}>
+                    <TextField
+                        name="view"
+                        className={stretch}
+                        select
+                        label="View"
+                         value={props.viewMethod}
+                        onChange={props.handleFilterChange}
+                        margin="normal" >
+                            {
+                                ["grid","table"].map(
+                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
+                                )
+                            }
+                        </TextField>
+                </Box>
+
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
                         name="group"
+                        className={stretch}
+                        select
+                        label="Group by"
+                         value={props.searchFilter.groupBy}
+                        onChange={props.handleFilterChange}
+                        margin="normal" >
+                            {
+                                ["name","print", "unique"].map(
+                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
+                                )
+                            }
+                        </TextField>
+                </Box>
+
+                <Box className={`${flexSection} ${sidePadded}`}>
+                    <TextField
+                        name="sort"
                         className={stretch}
                         select
                         label="Sort by"
@@ -325,16 +327,54 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                             }
                         </TextField>
                 </Box>
+
+                {   //SET filter
+                    props.visibleFilters.set &&
+                    <Box className={`${flexSection} ${sidePadded}`}>
+                        <TextField
+                            name="set"
+                            className={stretch}
+                            select
+                            label="Set filter"
+                            value={props.searchFilter.set}
+                            onChange={props.handleFilterChange}
+                            margin="normal" >
+                                <MenuItem key="null" value=""></MenuItem>
+                                { props.filterOptions.sets.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
+                            </TextField>
+                    </Box>
+                }
+
                 <Box className={`${flexSection} ${sidePadded}`}>
-                    
+                    <TextField
+                        name="text"
+                        className={stretch}
+                        label="Text"
+                        // value={props.searchFilter.group}
+                        onChange={props.handleFilterChange}
+                        margin="normal" >
+      
+                        </TextField>
+                </Box>
+                
+                <Box className={`${flexSection} ${sidePadded}`}>
                     <Box className={outlineSection}>
-                        Filter idea: Hide non-normal variants
-                        {/* Can be used when trying to see what I have > 4 or 6 or whatever of */}
+                        Type
+                    </Box>
+                </Box>
+                <Box className={`${flexSection} ${sidePadded}`}>
+                    <Box className={outlineSection}>
+                        Colors
+                    </Box>
+                </Box>
+                <Box className={`${flexSection} ${sidePadded}`}>
+                    <Box className={outlineSection}>
+                        [Exclusive/Multi]
                     </Box>
                 </Box>
 
             {/* cardStatus (deck/sellList/buyList/inventory) */}
-            <Box className={`${flexSection} ${sidePadded}`}>
+            {/* <Box className={`${flexSection} ${sidePadded}`}>
                 <TextField
                     name="status"
                     className={stretch}
@@ -351,7 +391,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                         ) 
                     }
                 </TextField>
-            </Box>
+            </Box> */}
 
             {/* {
                 this.props.searchFilter.group != "quantity" &&
@@ -389,7 +429,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 // </Box>
             }
 
-            {   //Min Count
+            {/* {   //Min Count
                 props.visibleFilters.count &&
                 <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
@@ -412,7 +452,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                         onChange={props.handleFilterChange}
                         margin="normal"/>
                 </Box>
-            }
+            } */}
             {/* {   //Format
                 props.visibleFilters.format &&
                 <Box className={`${flexSection} ${sidePadded}`}>

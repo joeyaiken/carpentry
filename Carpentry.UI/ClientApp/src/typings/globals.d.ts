@@ -57,6 +57,40 @@ interface CardFilterProps {
     group: string | null;
 }
 
+interface InventoryFilterProps {
+    groupBy: InventoryGroupMethod;
+    sortBy: InventorySortMethod;
+
+
+
+    set: string;
+    // setId: number | null;
+
+    text: string;
+
+    type: string;
+
+    
+
+    colorIdentity: string[];
+    exclusiveColorFilters: boolean;
+    multiColorOnly: boolean;
+
+    rarity: string[];
+
+    // cardName: string;
+    // exclusiveName: boolean;
+
+    // format: string;
+
+    // minCount: number | null;
+    // maxCount: number | null;
+
+    // group: string | null;
+    skip: number;
+    take: number
+}
+
 interface CardFilterVisibilities {
     set: boolean;
     type: boolean;
@@ -110,6 +144,9 @@ declare type CardSearchViewMode = 'grid' | 'list';
 // declare type MenuAnchorOptions = 'deckListMenuAnchor' | 'deckEditorMenuAnchor';
 
 declare type InventorySearchMethod =  "name" | "mid" | "unique"; //"name" | "quantity" | "price"; // | "sellList";
+
+declare type InventoryGroupMethod = "name" | "print" | "unique";
+declare type InventorySortMethod = "name" | "price";
 // declare type InventoryViewMode = "list" | "grid";
 
 

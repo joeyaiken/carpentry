@@ -1,7 +1,7 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
 import { AppState } from '../../reducers'
-import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem, makeStyles, Button, IconButton } from '@material-ui/core';
+import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem, makeStyles, Button, IconButton, Tab } from '@material-ui/core';
 import CardFilterBar from './CardFilterBar';
 import InventoryCardGrid from './InventoryCardGrid';
 import LoadingBox from '../../components/LoadingBox';
@@ -40,11 +40,15 @@ interface PropsFromState {
     // searchMethod: "name" | "quantity" | "price";
     isLoading: boolean;
 
+    viewMethod: "grid" | "table";
+
     searchResults: InventoryOverviewDto[];
 
-    searchFilter: CardFilterProps;
+    searchFilter: InventoryFilterProps;
     filterOptions: AppFiltersDto;
     visibleFilters: CardFilterVisibilities;
+
+    visibleSection: "inventory" | "trimmingTips" | "wishlistHelper" | "buylistHelper";
 }
 
 type InventoryProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -102,6 +106,14 @@ class InventoryContainer extends React.Component<InventoryProps>{
                             <Typography variant="h6">
                                 Inventory
                             </Typography>
+
+                            <Tabs value={this.props.visibleSection}>
+                                <Tab value='inventory' label='Inventory' component={Link} to={'/inventory'} />
+                                <Tab value='trimmingTips' label='Trimming Tips' component={Link} to={'/inventory/trimmingTips'} />
+                                <Tab value='wishlistHelper' label='Wishlist Helper' component={Link} to={'/inventory/wishlistHelper'} />
+                                <Tab value='buylistHelper' label='Buylist Helper' component={Link} to={'/inventory/buylistHelper'} />
+                            </Tabs>
+
                             <Link to={'/inventory/addCards/'}>
                                 <Button>Add Cards</Button>
                             </Link>
@@ -133,6 +145,7 @@ class InventoryContainer extends React.Component<InventoryProps>{
         // https://material-ui.com/components/autocomplete
         return(
             <InventoryFilterBar 
+                viewMethod={this.props.viewMethod}
                 filterOptions={this.props.filterOptions}
                 handleBoolFilterChange={this.handleBoolFilterChange}
                 handleFilterChange={this.handleFilterChange}
@@ -158,7 +171,7 @@ function selectInventoryOverviews(state: AppState): InventoryOverviewDto[] {
     return result;
 }
 
-function getFilterVisibilities(searchMethod: string): CardFilterVisibilities {
+function getFilterVisibilities(groupBy: string): CardFilterVisibilities {
     let visibleFilters: CardFilterVisibilities = {
         name: false,
         color: false,
@@ -169,9 +182,9 @@ function getFilterVisibilities(searchMethod: string): CardFilterVisibilities {
         format: false,
         text: false,
     }
-
-    switch(searchMethod){
-        case "quantity":
+    // group by: name | print | unique
+    switch(groupBy){
+        case "name":
             visibleFilters = {
                 ...visibleFilters,
                 set: true,
@@ -183,20 +196,22 @@ function getFilterVisibilities(searchMethod: string): CardFilterVisibilities {
                 text: true,
             }
             break;
-        case "name":
+        case "print":
             visibleFilters = {
                 ...visibleFilters,
             }
             break;
-        case "price":
+        case "unique":
             visibleFilters = {
                 ...visibleFilters,
+                set: true,
             }
             break;
     }
 
     return visibleFilters;
 }
+
 
 //State
 function mapStateToProps(state: AppState): PropsFromState {
@@ -208,13 +223,19 @@ function mapStateToProps(state: AppState): PropsFromState {
         // isLoading: state.data.
         isLoading: state.data.inventory.overviews.isLoading,
 
+        viewMethod: state.app.inventory.viewMethod,
 
-        searchFilter: state.ui.inventoryFilterProps,
-        visibleFilters: getFilterVisibilities(state.app.inventory.searchMethod),
+        searchFilter: state.app.inventory.filters,
+        visibleFilters: getFilterVisibilities(state.app.inventory.filters.groupBy),
         filterOptions: state.data.appFilterOptions.filterOptions,
         // searchMethod: state.app.inventory.searchMethod,
+
+        visibleSection: "inventory",
     }
     return result;
 }
+
+
+
 
 export default connect(mapStateToProps)(InventoryContainer);

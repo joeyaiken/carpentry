@@ -221,14 +221,19 @@ interface InventoryDetailDto {
 
 
 interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
-    id: number;
-    multiverseId: number;
-    name: string;
-    type: string;
+    category: string;
+    cmc: number;
     cost: string;
-    img: string;
     count: number;
     description: string;
+    id: number;
+    img: string;
+    isFoil: boolean;
+    name: string;
+    price: number;
+    type: string;
+    variant: string;
+    // multiverseId: number;
 }
 
 declare interface InventoryQueryParameter {

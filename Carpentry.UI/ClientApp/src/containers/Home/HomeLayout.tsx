@@ -153,7 +153,7 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
                         titleTypographyProps={{variant:"h5"}}
                         title={"Trimming Tips"} 
                         action={
-                            <Link to={'/inventory/sets'}>
+                            <Link to={'/inventory/trimmingTips'}>
                                 <IconButton size="medium"><ArrowForward /></IconButton>
                             </Link>
                         }
@@ -172,7 +172,7 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
                         titleTypographyProps={{variant:"h5"}}
                         title={"Wishlist Helper"} 
                         action={
-                            <Link to={'/inventory/sets'}>
+                            <Link to={'/inventory/wishlistHelper'}>
                                 <IconButton size="medium"><ArrowForward /></IconButton>
                             </Link>
                         }
@@ -191,7 +191,7 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
                         titleTypographyProps={{variant:"h5"}}
                         title={"Buylist Helper"} 
                         action={
-                            <Link to={'/inventory/sets'}>
+                            <Link to={'/inventory/buylistHelper'}>
                                 <IconButton size="medium"><ArrowForward /></IconButton>
                             </Link>
                         }

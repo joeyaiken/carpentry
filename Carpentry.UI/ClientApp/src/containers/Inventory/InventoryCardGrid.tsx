@@ -28,9 +28,14 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                 <CardContent className={classes.flexSection}>
                                     <Box className={classes.flexCol}>
                                         <Box className={classes.flexRow}>
-                                            {cardItem.count && (<Typography>{cardItem.count} Total</Typography>)}
+                                            {cardItem.count && (<Typography>{cardItem.count} Total {cardItem.isFoil && " - (FOIL)"}</Typography>)}
+                                        </Box>
+                                        <Box className={classes.flexRow}>
+                                            {cardItem.price && (<Typography>${cardItem.price}</Typography>)}
                                         </Box>
                                     </Box>
+
+
                                 </CardContent>
                                 <CardActions className={classes.flexSection}>
                                     <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.id)}} >

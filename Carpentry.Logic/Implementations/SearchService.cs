@@ -217,9 +217,9 @@ namespace Carpentry.Logic.Implementations
 
                     query = _inventoryRepo.QueryCardsByName().AsEnumerable()
 
-                        .Select((x, i) => new CardOverviewResult
+                        .Select((x) => new CardOverviewResult
                         {
-                            Id = i + 1,
+                            Id = x.CardId,
                             Cmc = x.Cmc,
                             Cost = x.ManaCost,
                             Count = x.OwnedCount,
