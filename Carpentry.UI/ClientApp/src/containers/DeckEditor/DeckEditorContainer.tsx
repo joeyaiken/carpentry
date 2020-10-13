@@ -24,12 +24,12 @@ import {
     toggleDeckViewMode, 
     deckEditorCardSelected
 } from '../../actions/deckEditor.actions';
-import DeckStatsBar from './DeckStatsBar';
-import DeckPropsBar from './DeckPropsBar';
-import DeckCardDetail from './DeckCardDetail';
-import CardMenu from './CardMenu';
-import DeckCardGrid from './DeckCardGrid';
-import GroupedDeckCardList from './GroupedDeckCardList';
+import DeckStatsBar from './components/DeckStatsBar';
+import DeckPropsBar from './components/DeckPropsBar';
+import DeckCardDetail from './components/DeckCardDetail';
+import CardMenu from './components/CardMenu';
+import DeckCardGrid from './components/DeckCardGrid';
+import GroupedDeckCardList from './components/GroupedDeckCardList';
 import DeckCardList from '../../components/DeckCardList';
 // import DeckPropertiesLayout from '../components/DeckPropertiesLayout';
 // import DeckPropsBar from '../components/DeckPropsBar';

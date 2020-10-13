@@ -9,10 +9,10 @@ import {
     Button,
     makeStyles,
 } from '@material-ui/core';
-import DeckList from '../DeckList/DeckListContainer';
+import DeckList from '../../DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 import { ArrowForward } from '@material-ui/icons';
-import { appStyles } from '../../styles/appStyles';
+import { appStyles } from '../../../styles/appStyles';
 
 interface LayoutProps {
     

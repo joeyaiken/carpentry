@@ -20,7 +20,7 @@ import React, { ReactNode } from 'react';
 //These will all need to eventually use more-standardised props
 
 import { Typography, Box } from '@material-ui/core';
-import { appStyles } from '../../styles/appStyles';
+import { appStyles } from '../../../styles/appStyles';
 
 interface CardGridContainerProps {
     //   children: ReactNode;

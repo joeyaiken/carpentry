@@ -4,15 +4,31 @@ import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card } fr
 import CardGridContainer from './CardGridContainer';
 // import GridCard from './GridCard';
 
-import { appStyles } from '../../styles/appStyles';
+import { appStyles } from '../../../styles/appStyles';
+import { Link } from 'react-router-dom';
 
 interface ComponentProps{
     cardOverviews: InventoryOverviewDto[];
     onCardSelected: (cardId: number) => void;
 }
 
+function DetailsButton(): JSX.Element {
+    return (
+    <Button color="primary" size="small">
+        Details
+    </Button>
+    );
+}
+
 export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
     const classes = appStyles();
+    // const detailsButton: JSX.Element = () => {
+    //     return (<></>)
+    // }
+
+    
+
+
     return (
         <React.Fragment>
             <CardGridContainer layout="grid">
@@ -33,14 +49,38 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                         <Box className={classes.flexRow}>
                                             {cardItem.price && (<Typography>${cardItem.price}</Typography>)}
                                         </Box>
+                                        <Box className={classes.flexRow}>
+                                            <Typography>${cardItem.id}</Typography>
+                                        </Box>
                                     </Box>
 
 
                                 </CardContent>
                                 <CardActions className={classes.flexSection}>
-                                    <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.id)}} >
-                                        Details
-                                    </Button>
+
+                                    {/* <Link to={'/settings/sets'}>
+                                        <IconButton size="medium"><ArrowForward /></IconButton>
+                                    </Link>
+                                    
+                                    // history.push(`/inventory/${cardId}`)
+                                    */}
+
+
+                                    {/* This needs to be swapped from an action to a link */}
+                                    {/* <Link to={`/inventory/${cardItem.id}`}>
+                                        <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.id)}} >
+                                            Details
+                                        </Button>
+                                    </Link> */}
+                                    {/* <Link 
+                                        to={`/inventory/${cardItem.id}`}
+                                        component={DetailsButton}
+                                        // variant="contained"
+                                    /> */}
+                                        <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.id)}} >
+                                            Details
+                                        </Button>
+                                    {/* </Link> */}
                                 </CardActions>
                             </Box>
                         </Card>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Box, Card, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
-import { appStyles, combineStyles } from '../../styles/appStyles';
+import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 interface SelectedCardDetailSectionProps {
     selectedCard: CardSearchResultDto;

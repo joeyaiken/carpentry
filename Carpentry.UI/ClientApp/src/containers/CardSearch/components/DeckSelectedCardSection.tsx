@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Paper, Card, CardHeader, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
 import InventoryDetailTable from './InventoryDetailTable';
-import { appStyles, combineStyles } from '../../styles/appStyles';
+import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 interface SelectedCardDetailSectionProps {
     selectedCard: CardSearchResultDto;

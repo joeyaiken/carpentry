@@ -4,7 +4,7 @@ import { Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox } fro
 
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import { appStyles, combineStyles } from '../../styles/appStyles';
+import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 export interface WebSearchFilterBarProps{
     searchFilter: CardFilterProps,

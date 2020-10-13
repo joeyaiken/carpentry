@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Typography, Box, Paper, TextField, TableRow, TableHead, Table, TableCell, Tab, TableBody } from '@material-ui/core';
-import { combineStyles, appStyles } from '../../styles/appStyles';
+import { combineStyles, appStyles } from '../../../styles/appStyles';
 
 interface ComponentProps{
     deckStats: DeckStats;

@@ -10,7 +10,7 @@ import Backups from './components/Backups';
 import InventoryContainer from './containers/Inventory/InventoryContainer';
 import { ConnectedComponent } from 'react-redux';
 import DeckEditorContainer from './containers/DeckEditor/DeckEditorContainer';
-import HomeContainer from './containers/Home/HomeContainer';
+import HomeContainer from './home/HomeContainer';
 import CardSearchContainer from './containers/CardSearch/CardSearchContainer';
 import { connect, DispatchProp } from 'react-redux';
 import { AppState } from './reducers'

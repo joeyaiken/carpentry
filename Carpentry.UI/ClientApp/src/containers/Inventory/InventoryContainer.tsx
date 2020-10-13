@@ -2,8 +2,8 @@ import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
 import { AppState } from '../../reducers'
 import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem, makeStyles, Button, IconButton, Tab } from '@material-ui/core';
-import CardFilterBar from './CardFilterBar';
-import InventoryCardGrid from './InventoryCardGrid';
+// import CardFilterBar from './CardFilterBar';
+import InventoryCardGrid from './components/InventoryCardGrid';
 import LoadingBox from '../../components/LoadingBox';
 
 import {
@@ -16,10 +16,12 @@ import {
     // requestInventoryOverviews,
     // requestInventoryDetail,
 } from '../../actions/'
-import InventoryFilterBar from './InventoryFilterBar';
-import { Link } from 'react-router-dom';
+import InventoryFilterBar from './components/InventoryFilterBar';
+import { Link, useHistory } from 'react-router-dom';
 import { appStyles } from '../../styles/appStyles';
 import { Publish } from '@material-ui/icons';
+
+import { push } from 'react-router-redux';
 
 
 // import SectionLayout from '../components/SectionLayout';
@@ -74,7 +76,12 @@ class InventoryContainer extends React.Component<InventoryProps>{
 
     handleCardDetailSelected(cardId: number | null){
         console.log(`card selected: ${cardId}`);
-        this.props.dispatch(requestInventoryDetail(cardId));
+        // this.props.dispatch(requestInventoryDetail(cardId));
+        this.props.dispatch(push(`/inventory/${cardId}`));
+
+        // let history = useHistory();
+        // history.push(`/inventory/${cardId}`)
+
     }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {

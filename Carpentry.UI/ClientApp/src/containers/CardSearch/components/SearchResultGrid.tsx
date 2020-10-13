@@ -23,7 +23,7 @@ import {
     Card,
     CardMedia,
 } from '@material-ui/core';
-import { appStyles } from '../../styles/appStyles';
+import { appStyles } from '../../../styles/appStyles';
 
 interface SearchResultGridProps {
     searchResults: CardListItem[];

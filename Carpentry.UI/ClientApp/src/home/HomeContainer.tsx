@@ -1,8 +1,8 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
-import { AppState } from '../../reducers';
+import { AppState } from '../reducers';
 import { Typography, Box, CardContent, Card, CardHeader, Paper } from '@material-ui/core';
-import DeckList from '../DeckList/DeckListContainer';
+import DeckList from '../containers/DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 import HomeLayout from './HomeLayout';
 

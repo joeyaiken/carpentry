@@ -29,7 +29,7 @@ import {
 } from '@material-ui/core';
 
 import { Star } from '@material-ui/icons';
-import { appStyles } from '../../styles/appStyles';
+import { appStyles } from '../../../styles/appStyles';
 
 interface SearchResultTableProps {
     searchContext: "deck" | "inventory";

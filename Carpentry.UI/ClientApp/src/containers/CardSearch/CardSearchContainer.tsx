@@ -23,14 +23,14 @@ import {
     Tabs,
     Tab,
 } from '@material-ui/core';
-import SearchResultTable from './SearchResultTable';
-import SearchResultGrid from './SearchResultGrid';
-import PendingCardsSection from './PendingCardsSection';
-import DeckSelectedCardSection from './DeckSelectedCardSection';
-import SelectedCardSection from './SelectedCardSection';
+import SearchResultTable from './components/SearchResultTable';
+import SearchResultGrid from './components/SearchResultGrid';
+import PendingCardsSection from './components/PendingCardsSection';
+import DeckSelectedCardSection from './components/DeckSelectedCardSection';
+import SelectedCardSection from './components/SelectedCardSection';
 import { cardSearchClearPendingCards, cardSearchSearchMethodChanged, toggleCardSearchViewMode, cardSearchAddPendingCard, cardSearchRemovePendingCard, cardSearchSelectCard, requestCardSearchInventory, requestCardSearch, requestAddDeckCard } from '../../actions/cardSearchActions';
-import SetSearchFilterBar from '../CardSearch/SetSearchFilterBar';
-import WebSearchFilterBar from '../CardSearch/WebSearchFilterBar';
+import SetSearchFilterBar from './components/SetSearchFilterBar';
+import WebSearchFilterBar from './components/WebSearchFilterBar';
 import FilterBarSearchButton from '../../components/FilterBarSearchButton';
 import { filterValueChanged } from '../../actions/ui.actions';
 import { combineStyles, appStyles } from '../../styles/appStyles';

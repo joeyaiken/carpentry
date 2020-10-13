@@ -1,7 +1,7 @@
 import {  Table, TableHead, TableRow, TableCell, TableBody, Box, CardActions, Button, Card, CardHeader, CardMedia, CardContent, Typography, IconButton } from '@material-ui/core';
 import React from 'react';
 import { MoreVert } from '@material-ui/icons';
-import { appStyles } from '../../styles/appStyles';
+import { appStyles } from '../../../styles/appStyles';
 
 interface ComponentProps{
     //totalPrice: number;

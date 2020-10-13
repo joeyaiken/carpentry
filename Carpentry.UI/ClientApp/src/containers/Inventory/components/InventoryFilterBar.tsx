@@ -13,7 +13,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox'
 
 // import CardFilterBar from '../components/CardFilterBar';
 import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button } from '@material-ui/core';
-import { appStyles, combineStyles } from '../../styles/appStyles';
+import { appStyles, combineStyles } from '../../../styles/appStyles';
 // import FilterBarSearchButton from '../components/FilterBarSearchButton';
 
 interface InventoryFilterBarProps{

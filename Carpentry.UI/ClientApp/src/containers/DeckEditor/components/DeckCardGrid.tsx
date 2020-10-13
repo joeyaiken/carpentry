@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
-import VisualCard from '../../components/VisualCard';
-import { appStyles } from '../../styles/appStyles';
+import VisualCard from '../../../components/VisualCard';
+import { appStyles } from '../../../styles/appStyles';
 
 interface ComponentProps{
     cardOverviews: DeckCardOverview[];

@@ -4,7 +4,7 @@ import {
     Typography,
     Paper,
 } from '@material-ui/core';
-import { combineStyles, appStyles } from '../../styles/appStyles';
+import { combineStyles, appStyles } from '../../../styles/appStyles';
 
 interface CardSearchPendingCardsProps {
     pendingCards: { [key:number]: PendingCardsDto }

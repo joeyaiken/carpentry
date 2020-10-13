@@ -1,6 +1,6 @@
 import React from 'react'
 import { Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
-import ManaCostChip from '../../components/ManaCostChip';
+import ManaCostChip from '../../../components/ManaCostChip';
 
 interface ComponentProps{
     //totalPrice: number;
