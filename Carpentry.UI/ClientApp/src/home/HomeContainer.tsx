@@ -19,6 +19,7 @@ class HomeContainer extends React.Component<HomeProps> {
 
     // componentDidMount() {
     //     this.props.dispatch(ensureDeckOverviewsLoaded())
+    //  eventually this should ensure data for all cards is loaded
     // }
 
     render() {

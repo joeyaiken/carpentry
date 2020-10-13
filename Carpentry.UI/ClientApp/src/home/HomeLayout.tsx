@@ -9,17 +9,14 @@ import {
     Button,
     makeStyles,
 } from '@material-ui/core';
-import DeckList from '../../DeckList/DeckListContainer';
+import DeckList from '../containers/DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 import { ArrowForward } from '@material-ui/icons';
-import { appStyles } from '../../../styles/appStyles';
+import { appStyles } from '../styles/appStyles';
 
 interface LayoutProps {
     
 }
-
-
-
 
 export default function HomeLayout(props: LayoutProps): JSX.Element {
     const { stretch, flexCol, flexSection, flexRow } = appStyles();
