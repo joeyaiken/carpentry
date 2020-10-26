@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { AppState } from '../../reducers'
+import { AppState } from '../../_reducers'
 import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem, makeStyles, Button, IconButton, Tab } from '@material-ui/core';
 // import CardFilterBar from './CardFilterBar';
 import InventoryCardGrid from './components/InventoryCardGrid';
