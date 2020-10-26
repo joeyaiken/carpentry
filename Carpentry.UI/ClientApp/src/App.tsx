@@ -4,19 +4,22 @@
 
 import * as React from 'react';
 import { Route, Switch } from 'react-router';
-import AppLayout from './components/AppLayout';
+import AppLayout from './_components/AppLayout';
 import './styles/App.css';
-import Backups from './components/Backups';
-import InventoryContainer from './containers/Inventory/InventoryContainer';
+import Backups from './_components/Backups';
+// import InventoryContainer from './containers/Inventory/InventoryContainer';
 import { ConnectedComponent } from 'react-redux';
-import DeckEditorContainer from './containers/DeckEditor/DeckEditorContainer';
+import DeckEditorContainer from './_containers/DeckEditor/DeckEditorContainer';
 import HomeContainer from './home/HomeContainer';
-import CardSearchContainer from './containers/CardSearch/CardSearchContainer';
+import CardSearchContainer from './_containers/CardSearch/CardSearchContainer';
 import { connect, DispatchProp } from 'react-redux';
-import { AppState } from './reducers'
-import { requestCoreData } from './actions/coreActions';
-import CardSetSettingsContainer from './containers/CardSetSettings/CardSetSettingsContainer';
+import { AppState } from './_reducers'
+import { requestCoreData } from './_actions/coreActions';
+import CardSetSettingsContainer from './_containers/CardSetSettings/CardSetSettingsContainer';
 import './styles/mana.css';
+
+import InventoryLayout from './inventory/InventoryLayout';
+import DecksLayout from './decks/DecksLayout';
 
 {/* <link href="styles/mana.min.css" rel="stylesheet" type="text/css" /> */}
 
@@ -80,20 +83,6 @@ function App(): JSX.Element {
             customProps: {}
         },
         {
-            path: '/Inventory/addCards',
-            component: CardSearchContainer,
-            name: 'Inventory - Add Cards',
-            customProps: {
-                searchContext: "inventory"
-            }
-        },
-        {
-            path: '/Inventory',
-            component: InventoryContainer,
-            name: 'Inventory',
-            customProps: {}
-        },
-        {
             path: '/settings/sets',
             component: CardSetSettingsContainer,
             name: 'Carpentry',
@@ -105,22 +94,13 @@ function App(): JSX.Element {
             name: 'Carpentry',
             customProps: {}
         },
-        // {
-        //     path: '/settings',
-        //     component: null,
-        //     name: 'Settings'
-        // },
         {
             path: '/',
             component: HomeContainer,
             name: 'Carpentry',
             customProps: {}
         },
-        // {
-        //     path: '',
-        //     component: null,
-        //     name: 'Carpentry'
-        // },
+
     ];
 
 
@@ -128,6 +108,18 @@ function App(): JSX.Element {
     return(
         <AppLayout routes={routes}>
             <Switch>
+                <Route path="/decks" component={DecksLayout} />
+                <Route path="/inventory" component={InventoryLayout} />
+                {/* <Route path="/settings" component={SettingsLayout} /> */}
+                <Route path="/" component={HomeContainer} />
+
+                {/* <Route path="/inventory/addCards" render={(props) => <CardSearchContainer {...props} searchContext="inventory" />} />    
+                <Route path="/inventory" component={InventoryContainer} /> */}
+
+
+                
+
+
                 { routes.map(route => <Route path={route.path} render={(props) => <route.component {...props} {...route.customProps} />} />) }
 
 

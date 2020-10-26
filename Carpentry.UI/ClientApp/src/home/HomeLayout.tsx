@@ -9,7 +9,9 @@ import {
     Button,
     makeStyles,
 } from '@material-ui/core';
-import DeckList from '../containers/DeckList/DeckListContainer';
+// import DeckList from '../containers/DeckList/DeckListContainer';
+//import {} from '../decks/deck-list/'
+import DeckList from '../_containers/DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 import { ArrowForward } from '@material-ui/icons';
 import { appStyles } from '../styles/appStyles';

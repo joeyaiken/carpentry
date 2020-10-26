@@ -9,7 +9,7 @@ import thunkMiddleware from 'redux-thunk'
 import App from './App';
 import { createBrowserHistory } from 'history';
 
-import configureStore from './reducers/configureStore';
+import configureStore from './_reducers/configureStore';
 import { ConnectedRouter } from 'connected-react-router';
 
 // const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
