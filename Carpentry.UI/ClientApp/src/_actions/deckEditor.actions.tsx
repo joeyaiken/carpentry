@@ -6,7 +6,8 @@ import { AppState } from '../_reducers';
 
 import { useLocation } from 'react-router-dom';
 import { apiDataRequested, apiDataReceived } from './data.actions';
-import { api } from './api';
+// import { api } from './api';
+import { decksApi } from '../api/decksApi';
 
 // import { AppState } from "../reducers";
 // import { api_Decks_Get, api_Decks_Update, api_Decks_RemoveCard, api_Decks_UpdateCard } from './api';
@@ -196,7 +197,7 @@ function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number):
 
     dispatch(apiDataRequested(_localApiScope, deckId));
     
-    api.decks.getDeckDetail(deckId).then((result) => {
+    decksApi.getDeckDetail(deckId).then((result) => {
         dispatch(apiDataReceived(_localApiScope, result));
     });
 }

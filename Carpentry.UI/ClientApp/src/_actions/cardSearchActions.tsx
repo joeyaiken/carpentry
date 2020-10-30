@@ -1,8 +1,11 @@
 import { Dispatch } from 'redux'
+import { cardSearchApi } from '../api/cardSearchApi';
+import { decksApi } from '../api/decksApi';
+import { inventoryApi } from '../api/inventoryApi';
 import { AppState } from '../_reducers';
 
 //import { api_Cards_SearchSet, api_Cards_SearchWeb, api_Inventory_GetByName, api_Decks_AddCard, api_Decks_UpdateCard, api_Cards_SearchInventory } from './api';
-import { api } from './api';
+// import { api } from './api';
 // import { requestDeckDetail } from './core.actions';
 import { apiDataRequested, apiDataReceived } from './data.actions';
 
@@ -39,7 +42,7 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ca
     dispatch(apiDataRequested(_localApiScope));
 
     //need to figure out what API call I'm using, should re-use the existing inventory one
-    api.inventory.getInventoryDetail(card.cardId).then((results) =>{
+    inventoryApi.getInventoryDetail(card.cardId).then((results) =>{
         dispatch(apiDataReceived(_localApiScope, results));
     });
 
@@ -108,7 +111,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
     dispatch(apiDataRequested(_localApiScope));
     //why TF am I treating this like a bool?
     if(cardSearchMethod === "web"){
-        api.cardSearch.searchWeb(state.ui.cardSearchFilterProps.cardName, state.ui.cardSearchFilterProps.exclusiveName).then((results) =>{
+        cardSearchApi.searchWeb(state.ui.cardSearchFilterProps.cardName, state.ui.cardSearchFilterProps.exclusiveName).then((results) =>{
             dispatch(apiDataReceived(_localApiScope, results));
         });
     // }else if(cardSearchMethod === "inventory"){
@@ -156,7 +159,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
         // console.log('serch by set')
         // console.log(param);
 
-       api.cardSearch.searchInventory(param).then((results) => {
+        cardSearchApi.searchInventory(param).then((results) => {
             dispatch(apiDataReceived(_localApiScope, results));
         })
 
@@ -188,7 +191,7 @@ function addDeckCard(dispatch: Dispatch, state: AppState, deckCardDto: DeckCardD
     //console.log
 
     
-    api.decks.addDeckCard(deckCardDto).then(() => {
+    decksApi.addDeckCard(deckCardDto).then(() => {
 
 
         

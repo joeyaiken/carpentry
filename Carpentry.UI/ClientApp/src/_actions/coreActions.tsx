@@ -1,5 +1,6 @@
 // // import { AppContainerEnum } from '../reducers/core.reducer';
 import Redux, { Store, Dispatch, compose, combineReducers } from 'redux';
+import { coreApi } from '../api/coreApi';
 import { AppState } from '../_reducers';
 // import { api_Decks_Search, api_Decks_Get, api_Decks_Add
 //        , api_Core_GetFilterOptions 
@@ -7,7 +8,7 @@ import { AppState } from '../_reducers';
 
 // } from './api';
 
-import { api } from './api'
+// import { api } from './api'
 import { apiDataRequested, apiDataReceived } from './data.actions';
 
 // /**
@@ -107,8 +108,8 @@ function getCoreData(dispatch: Dispatch, state: AppState): any {
     }
     dispatch(apiDataRequested('coreFilterOptions'));
     // dispatch(newDeckSaving());
-    //api.core_GetFilterOptions().then((results) => {
-    api.core.getFilterValues().then((results) => {
+    //coreApi_GetFilterOptions().then((results) => {
+    coreApi.getFilterValues().then((results) => {
         // api_Core_GetFilterOptions().then((results) => {
         dispatch(apiDataReceived('coreFilterOptions', results));
     });
@@ -132,7 +133,7 @@ function getTrackedSets(dispatch: Dispatch, state: AppState, showUntracked: bool
         return;
     }
     dispatch(apiDataRequested('trackedSets', { showUntracked: showUntracked, update: update}));
-    api.core.getTrackedSets(showUntracked, update).then((results) => {
+    coreApi.getTrackedSets(showUntracked, update).then((results) => {
         dispatch(apiDataReceived('trackedSets', results));
     });
 }
@@ -150,7 +151,7 @@ function addTrackedSet(dispatch: Dispatch, state: AppState, setId: number): any 
 
     const showUntrackedVal = state.data.trackedSets.showUntracked;
     dispatch(apiDataRequested('trackedSets', { showUntracked: showUntrackedVal, update: false}));
-    api.core.addTrackedSet(setId).then(() => {
+    coreApi.addTrackedSet(setId).then(() => {
         dispatch(apiDataReceived('trackedSets', null));
         dispatch(requestTrackedSets(showUntrackedVal, false));
     });
@@ -170,7 +171,7 @@ function updateTrackedSet(dispatch: Dispatch, state: AppState, setId: number): a
     
     const showUntrackedVal = state.data.trackedSets.showUntracked;
     dispatch(apiDataRequested('trackedSets', { showUntracked: showUntrackedVal, update: false}));
-    api.core.updateTrackedSet(setId).then(() => {
+    coreApi.updateTrackedSet(setId).then(() => {
         // console.log('updating tracked sets ping 2');
         dispatch(apiDataReceived('trackedSets', null));
         // console.log('updating tracked sets ping 3');
@@ -190,7 +191,7 @@ function removeTrackedSet(dispatch: Dispatch, state: AppState, setId: number): a
     
     const showUntrackedVal = state.data.trackedSets.showUntracked;
     dispatch(apiDataRequested('trackedSets', { showUntracked: showUntrackedVal, update: false}));
-    api.core.removeTrackedSet(setId).then(() => {
+    coreApi.removeTrackedSet(setId).then(() => {
         dispatch(apiDataReceived('trackedSets', null));
         dispatch(requestTrackedSets(showUntrackedVal, false));
     });

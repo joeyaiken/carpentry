@@ -104,9 +104,9 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
 
                             <Tabs value={this.props.visibleSection}>
                                 <Tab value='inventory' label='Inventory' component={Link} to={'/inventory'} />
-                                <Tab value='trimmingTips' label='Trimming Tips' component={Link} to={'/inventory/trimmingTips'} />
-                                <Tab value='wishlistHelper' label='Wishlist Helper' component={Link} to={'/inventory/wishlistHelper'} />
-                                <Tab value='buylistHelper' label='Buylist Helper' component={Link} to={'/inventory/buylistHelper'} />
+                                <Tab value='trimmingTips' label='Trimming Tips' component={Link} to={'/inventory/trimming-tips'} />
+                                <Tab value='wishlistHelper' label='Wishlist Helper' component={Link} to={'/inventory/wishlist-helper'} />
+                                <Tab value='buylistHelper' label='Buylist Helper' component={Link} to={'/inventory/buylist-helper'} />
                             </Tabs>
 
                             <Link to={'/inventory/addCards/'}>

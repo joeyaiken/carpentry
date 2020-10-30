@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
+import { decksApi } from '../api/decksApi';
 import { AppState } from '../_reducers';
-import { api } from './api';
+// import { api } from './api';
 import { apiDataRequested, apiDataReceived } from './data.actions';
 
 export const ensureDeckOverviewsLoaded = (): any => {
@@ -36,7 +37,7 @@ function getDeckOverviews(dispatch: Dispatch, state: AppState): any  {
     console.log('requesting')
     dispatch(apiDataRequested(_localApiScope));
     console.log('now')
-    api.decks.getDeckOverviews().then((results) => {
+    decksApi.getDeckOverviews().then((results) => {
         console.log('loaded, returning')
         dispatch(apiDataReceived(_localApiScope, results));
     });

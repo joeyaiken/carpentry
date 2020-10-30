@@ -1,11 +1,72 @@
 import { Dispatch } from 'redux'
-import { AppState } from '../_reducers';
-// import { NetworkWifiTwoTone, ContactSupportOutlined } from '@material-ui/icons';
-// import { arrowFunctionExpression } from '@babel/types';
+import { inventoryApi } from '../../../api/inventoryApi';
+import { AppState } from '../../../_reducers'
+
 // import { api } from './api';
-// import { appBarAddClicked } from './core.actions';
-import { apiDataRequested, apiDataReceived } from './data.actions';
-import { inventoryApi } from '../api/inventoryApi';
+
+// export const ENSURE_TRIMMING_TIPS_LOADED = 'ENSURE_TRIMMING_TIPS_LOADED';
+// export const ensureTrimmingTipsLoaded = (): ReduxAction => ({
+//     type: ENSURE_TRIMMING_TIPS_LOADED
+// });
+export const ensureTrimmingTipsLoaded = (): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        tryLoadTrimmingTips(dispatch, getState());
+    }
+}
+
+
+function tryLoadTrimmingTips(dispatch: Dispatch, state: AppState): any {
+    // let isInitialized = true;
+
+    // if(isInitialized){
+    //     return;
+    // }
+
+    loadTrimmingTips(dispatch, state);
+
+    //TODO - add "isLoading" block
+    // api.inventory.exportInventoryBackup().then((blob) => {
+    //     const exportFilename = "CarpentryBackup.zip"
+
+
+    // });
+
+}
+
+function loadTrimmingTips(dispatch: Dispatch, state: AppState): any {
+    let isLoading = false;
+
+    if(isLoading){
+        return;
+    }
+
+    inventoryApi.getTrimmingTips().then((result) => {
+
+    });
+
+    //dispatch isRequesting
+
+
+    //api call =>
+
+    //dispatch loaded
+
+    
+
+    //TODO - add "isLoading" block
+    // api.inventory.exportInventoryBackup().then((blob) => {
+    //     const exportFilename = "CarpentryBackup.zip"
+
+
+    // });
+
+}
+
+//////
+//inventory actions//
+
+/////////
+
 /**
  * Actions related to the Inventory container
  */
@@ -85,10 +146,10 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
 
         })
     });
-    inventoryApi.addInventoryCardBatch(newCards).then(() => {
-        dispatch(inventoryAddComplete());
-        dispatch(requestInventoryOverviews());
-    });
+    // api.inventory.addInventoryCardBatch(newCards).then(() => {
+    //     dispatch(inventoryAddComplete());
+    //     dispatch(requestInventoryOverviews());
+    // });
 
 }
 
@@ -105,11 +166,11 @@ export const requestInventoryExport = (): any => {
 
 function getInventoryExport(dispatch: Dispatch, state: AppState): any {
     //TODO - add "isLoading" block
-    inventoryApi.exportInventoryBackup().then((blob) => {
-        const exportFilename = "CarpentryBackup.zip"
+    // api.inventory.exportInventoryBackup().then((blob) => {
+    //     const exportFilename = "CarpentryBackup.zip"
 
 
-    });
+    // });
 
 }
 
@@ -141,7 +202,7 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
     // console.log('actions - getInventoryItems - calling inventoryItemsRequested');
 
     //dispatch(inventoryItemsRequested());
-    dispatch(apiDataRequested(_localApiScope));
+    // dispatch(apiDataRequested(_localApiScope));
     
     // console.log('actions - getInventoryItems - calling api_getAllInventoryItems');
 
@@ -171,13 +232,13 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
         //rarity: ['c','u']
     }
 
-    inventoryApi.searchCards(param).then((result) => {
+    // api.inventory.searchCards(param).then((result) => {
 
-        //InventoryQueryResult[]
+    //     //InventoryQueryResult[]
 
-        //dispatch(inventoryItemsReceived(result));
-        dispatch(apiDataReceived(_localApiScope,result));
-    });
+    //     //dispatch(inventoryItemsReceived(result));
+    //     dispatch(apiDataReceived(_localApiScope,result));
+    // });
 
 }
 export const requestInventoryDetail = (cardId: number | null): any => {
@@ -196,17 +257,17 @@ function getInventoryDetail(dispatch: Dispatch, state: AppState, cardId: number 
         return;
     }
     
-    if(!cardId){
-        //dispatch(inventoryDetailReceived(null));
-        dispatch(apiDataReceived(_localApiScope, null));
-    } else {
-        // dispatch(inventoryDetailRequested());
-        dispatch(apiDataRequested(_localApiScope));
+    // if(!cardId){
+    //     //dispatch(inventoryDetailReceived(null));
+    //     dispatch(apiDataReceived(_localApiScope, null));
+    // } else {
+    //     // dispatch(inventoryDetailRequested());
+    //     dispatch(apiDataRequested(_localApiScope));
 
-        inventoryApi.getInventoryDetail(cardId).then((result) => {
-            dispatch(apiDataReceived(_localApiScope, result));
-        });
-    }
+    //     api.inventory.getInventoryDetail(cardId).then((result) => {
+    //         dispatch(apiDataReceived(_localApiScope, result));
+    //     });
+    // }
 }
 
 // export const requestUpdateInventoryCard = (card: InventoryCard, statusId: number): any => {
