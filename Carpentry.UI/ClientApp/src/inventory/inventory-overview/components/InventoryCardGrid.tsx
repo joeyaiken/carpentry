@@ -49,9 +49,9 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                         <Box className={classes.flexRow}>
                                             {cardItem.price && (<Typography>${cardItem.price}</Typography>)}
                                         </Box>
-                                        <Box className={classes.flexRow}>
+                                        {/* <Box className={classes.flexRow}>
                                             <Typography>${cardItem.id}</Typography>
-                                        </Box>
+                                        </Box> */}
                                     </Box>
 
 

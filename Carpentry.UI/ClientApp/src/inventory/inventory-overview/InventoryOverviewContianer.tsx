@@ -21,6 +21,7 @@ import { appStyles } from '../../styles/appStyles';
 import { Publish } from '@material-ui/icons';
 
 import { push } from 'react-router-redux';
+import InventoryDetailContainer from '../inventory-detail/InventoryDetailContainer';
 
 const useStyles = makeStyles({
     
@@ -93,7 +94,6 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
         return (
             <React.Fragment>
                 {/* <InventoryDetailModal /> */}
-                
                 {/* <Box className={flexCol}> */}
                 <Box >
                     <AppBar color="default" position="relative">
@@ -226,11 +226,9 @@ function mapStateToProps(state: AppState): PropsFromState {
         // searchMethod: state.app.inventory.searchMethod,
 
         visibleSection: "inventory",
+
     }
     return result;
 }
-
-
-
 
 export default connect(mapStateToProps)(InventoryOverviewContainer);

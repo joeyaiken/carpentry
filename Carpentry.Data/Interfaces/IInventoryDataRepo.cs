@@ -24,5 +24,8 @@ namespace Carpentry.Data.Interfaces
         IQueryable<InventoryCardByPrintResult> QueryCardsByPrint();
         IQueryable<InventoryCardByUniqueResult> QueryCardsByUnique();
 
+        Task<List<TrimmingTipsResult>> GetTrimmingTips(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null);
+        Task<int> GetTotalTrimCount(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null);
+
     }
 }

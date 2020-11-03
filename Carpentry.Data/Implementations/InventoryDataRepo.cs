@@ -544,5 +544,26 @@ namespace Carpentry.Data.Implementations
 			return inventoryCards;
 
 		}
-	}
+	
+    
+
+        public async Task<List<TrimmingTipsResult>> GetTrimmingTips(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null)
+        {
+
+            var query = _cardContext.Set<TrimmingTipsResult>()
+                .FromSqlInterpolated($"dbo.spGetTrimmingTips @UsedCardsToKeep = {usedCardsToKeep}, @UnusedCardsToKeeep = {unusedCardsToKeeep}, @Set = {setCode}");
+            var result = await query.ToListAsync();
+            return result;
+        }
+
+
+        public async Task<int> GetTotalTrimCount(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null)
+        {
+            var query = _cardContext.Set<TrimmingTipsCountResult>()
+                .FromSqlInterpolated($"dbo.spGetTotalTrimCount @UsedCardsToKeep = {usedCardsToKeep}, @UnusedCardsToKeeep = {unusedCardsToKeeep}, @Set = {setCode}");
+            var result = await query.ToListAsync();
+            return result.Single().TotalRecomendedTrimming;
+        }
+    
+    }
 }

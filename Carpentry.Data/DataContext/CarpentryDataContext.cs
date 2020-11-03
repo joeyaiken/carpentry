@@ -45,6 +45,8 @@ namespace Carpentry.Data.DataContext
         public DbSet<DataModels.QueryResults.InventoryCardByPrintResult> InventoryCardByPrint { get; set; }
         public DbSet<DataModels.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
         public DbSet<DataModels.QueryResults.SetTotalsResult> SetTotals { get; set; }
+        public DbSet<DataModels.QueryResults.TrimmingTipsResult> TrimmingTips { get; set; }
+        public DbSet<DataModels.QueryResults.TrimmingTipsCountResult> TrimmingTipsTotalCount { get; set; }
 
         #endregion
 
@@ -152,6 +154,9 @@ namespace Carpentry.Data.DataContext
             #endregion
 
             #region procs?
+
+            modelBuilder.Entity<DataModels.QueryResults.TrimmingTipsResult>(eb => eb.HasNoKey());
+            modelBuilder.Entity<DataModels.QueryResults.TrimmingTipsCountResult>(eb => eb.HasNoKey());
 
             #endregion
 

@@ -42,7 +42,7 @@ export default function DecksLayout(props: LayoutProps): JSX.Element {
         }, */}
 
                 <Route path="/decks/:deckId/addCards" render={(props) => <CardSearchContainer {...props} searchContext="deck" />} />
-
+                <Route path="/decks/" component={DeckEditorContainer} />
                 <Route path="/decks/:deckId" component={DeckEditorContainer} />
             </Switch>
         </React.Fragment>

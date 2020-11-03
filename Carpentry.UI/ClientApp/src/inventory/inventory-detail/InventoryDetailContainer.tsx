@@ -6,9 +6,21 @@ import AppModal from '../../common/components/AppModal';
 import { requestInventoryDetail } from '../../_actions/inventoryActions';
 import { AppState } from '../../_reducers';
 
+import { ensureInventoryDetailLoaded } from './state/InventoryDetailActions';
+import { parseConfigFileTextToJson } from 'typescript';
+
+interface OwnProps {
+    match: {
+        params: {
+            cardId: number
+        }
+    }
+}
+
 interface PropsFromState { 
     selectedDetailItem: InventoryDetailDto;
     modalIsOpen: boolean;
+    selectedCardId: number;
 }
 
 type InventoryDetailContainerProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -16,11 +28,17 @@ type InventoryDetailContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 class InventoryDetailContainer extends React.Component<InventoryDetailContainerProps>{
     constructor(props: InventoryDetailContainerProps) {
         super(props);
-        this.handleCardDetailSelected = this.handleCardDetailSelected.bind(this);
+        this.handleCloseModalClick = this.handleCloseModalClick.bind(this);
     }
 
-    handleCardDetailSelected(cardId: number | null){
-        this.props.dispatch(requestInventoryDetail(cardId));
+    //on load/bind, ensure cardID is loaded
+    componentDidMount() {
+        // this.props.dispatch(ensureDeckDetailLoaded(this.props.deckId));
+        this.props.dispatch(ensureInventoryDetailLoaded(this.props.selectedCardId))
+    }
+
+    handleCloseModalClick(cardId: number | null){
+        // this.props.dispatch(requestInventoryDetail(cardId));
     }
 
 
@@ -36,7 +54,7 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
                 <AppModal 
                     title={ `Inventory Detail - ${cardName}`}
                     isOpen={this.props.modalIsOpen} 
-                    onCloseClick={() => {this.handleCardDetailSelected(null)}} 
+                    onCloseClick={() => {this.handleCloseModalClick(null)}} 
                     >
                         {
                             this.props.selectedDetailItem &&
@@ -226,10 +244,13 @@ function selectInventoryDetail(state: AppState): InventoryDetailDto {
 }
 
 //State
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     const result: PropsFromState = {
         selectedDetailItem: selectInventoryDetail(state),
-        modalIsOpen: state.ui.isInventoryDetailModalOpen,
+        // modalIsOpen: state.ui.isInventoryDetailModalOpen, //TODO - get this mapped from router state
+        selectedCardId: ownProps.match.params.cardId,
+
+        modalIsOpen: Boolean(ownProps.match.params.cardId != null),
     }
     return result;
 }
