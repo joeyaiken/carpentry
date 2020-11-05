@@ -7,10 +7,12 @@ namespace Carpentry.Logic.Models
     //inventory overview | inventory detail | deck overview | deck detail | Card Search Overview/Search Result Overview | Search Detail
     public class InventoryOverviewDto 
     {
-        [JsonProperty("id")]
+        //[JsonProperty("id")]
         public int Id { get; set; }
+
+        public int CardId { get; set; }
         
-        [JsonProperty("name")]
+        //[JsonProperty("name")]
         public string Name { get; set; }
         
         [JsonProperty("type")]

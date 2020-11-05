@@ -35,8 +35,8 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
     // try this?
     // https://material-ui.com/components/autocomplete
 
-    console.log('visible filters');
-    console.log(props.visibleFilters);
+    // console.log('visible filters');
+    // console.log(props.visibleFilters);
 
     return(
 <Paper className={combineStyles(outlineSection, flexCol)}>

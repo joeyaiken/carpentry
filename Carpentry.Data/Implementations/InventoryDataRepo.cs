@@ -523,6 +523,9 @@ namespace Carpentry.Data.Implementations
 				.SelectMany(x => x.InventoryCards)
 				.Select(x => new InventoryCardResult()
 				{
+                    CardId = x.CardId,
+                    CollectorNumber = x.Card.CollectorNumber,
+                    Type = x.Card.Type,
 					Id = x.InventoryCardId,
 					IsFoil = x.IsFoil,
 					InventoryCardStatusId = x.InventoryCardStatusId,

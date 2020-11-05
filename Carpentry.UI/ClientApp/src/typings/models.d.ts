@@ -222,6 +222,7 @@ interface InventoryDetailDto {
 
 
 interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
+    cardId: number;
     category: string;
     cmc: number;
     cost: string;

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Modal } from '@material-ui/core';
+import { Dialog, Modal } from '@material-ui/core';
 import AppModalLayout from './AppModalLayout';
 
 export interface ComponentProps {
@@ -14,7 +14,9 @@ export interface ComponentProps {
 export default function AppModal(props: ComponentProps): JSX.Element {
     return(
         <React.Fragment>
-            <Modal open={props.isOpen}>
+            {/* <Modal open={props.isOpen}> */}
+            <Dialog open={props.isOpen}>
+                
                 <AppModalLayout
                     onCloseClick={props.onCloseClick}
                     onSaveClick={props.onSaveClick}
@@ -22,7 +24,8 @@ export default function AppModal(props: ComponentProps): JSX.Element {
                     title={props.title}>
                         {props.children}
                 </AppModalLayout>
-            </Modal>
+            {/* </Modal> */}
+            </Dialog>
         </React.Fragment>
     )
 }

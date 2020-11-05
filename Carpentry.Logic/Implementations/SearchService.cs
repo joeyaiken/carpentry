@@ -220,6 +220,7 @@ namespace Carpentry.Logic.Implementations
                         .Select(x => new CardOverviewResult
                         {
                             Id = x.CardId,
+                            CardId = x.CardId,
                             Cmc = x.Cmc,
                             Cost = x.ManaCost,
                             Count = x.OwnedCount,
@@ -235,9 +236,10 @@ namespace Carpentry.Logic.Implementations
                 case "unique":
                     query = _inventoryRepo.QueryCardsByUnique().AsEnumerable()
 
-                        .Select(x => new CardOverviewResult()
+                        .Select((x, i) => new CardOverviewResult()
                         {
-                            Id = x.CardId, //This can't be trusted, cardId isn't unique 
+                            Id = (i + 1),
+                            CardId = x.CardId,
                             SetCode = x.SetCode,
                             Name = x.Name,
                             Type = x.Type,
@@ -261,6 +263,7 @@ namespace Carpentry.Logic.Implementations
                         .Select(x => new CardOverviewResult()
                         {
                             Id = x.CardId,
+                            CardId = x.CardId,
                             SetCode = x.SetCode,
                             Cmc = x.Cmc,
                             Cost = x.ManaCost,
@@ -393,6 +396,7 @@ namespace Carpentry.Logic.Implementations
 
             List<InventoryOverviewDto> result = query.Select(x => new InventoryOverviewDto
             {
+                CardId = x.CardId,
                 Category = null,
                 Cmc = x.Cmc,
                 Cost = x.Cost,

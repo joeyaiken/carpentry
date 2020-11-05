@@ -8,6 +8,7 @@ namespace Carpentry.Data.QueryResults
     {
         public int Id { get; set; }
 
+        public int CardId { get; set; }
         public string SetCode { get; set; }
         public string Name { get; set; }
 

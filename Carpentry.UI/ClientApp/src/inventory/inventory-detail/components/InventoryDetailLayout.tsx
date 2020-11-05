@@ -42,7 +42,7 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
                     let img = displayCard.card.imageUrl;
                     return (
                         <Card 
-                            key={displayCard.card.name} 
+                            key={displayCard.card.cardId} 
                             className="outline-section flex-col"
                             //style={{overflow:"auto"}}
                             // onClick={props.onCardSelected}
