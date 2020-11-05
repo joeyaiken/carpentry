@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableHead, TableRow, TableCell, TableBody, Button } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 
 interface InventoryDetailTableProps {
     detail: InventoryDetailDto

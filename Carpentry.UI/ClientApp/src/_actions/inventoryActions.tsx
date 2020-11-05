@@ -106,7 +106,7 @@ export const requestInventoryExport = (): any => {
 function getInventoryExport(dispatch: Dispatch, state: AppState): any {
     //TODO - add "isLoading" block
     inventoryApi.exportInventoryBackup().then((blob) => {
-        const exportFilename = "CarpentryBackup.zip"
+        // const exportFilename = "CarpentryBackup.zip"
 
 
     });

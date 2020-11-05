@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Paper, Card, CardHeader, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
+import { Box, Card, CardHeader, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
 import InventoryDetailTable from './InventoryDetailTable';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 
@@ -15,7 +15,7 @@ interface SelectedCardDetailSectionProps {
 }
 
 export default function DeckSelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
-    const { outlineSection, flexCol, staticSection, flexRow, } = appStyles();
+    const { outlineSection, flexCol, flexRow, } = appStyles();
     
     return(
     // <Paper className={staticSection}>

@@ -1,10 +1,9 @@
 // import { Dispatch } from 'redux';
 // // import { api_Decks_RemoveCard, api_Decks_Update } from "./api";
 
-import Redux, { Store, Dispatch, compose, combineReducers } from 'redux';
+import { Dispatch } from 'redux';
 import { AppState } from '../_reducers';
 
-import { useLocation } from 'react-router-dom';
 import { apiDataRequested, apiDataReceived } from './data.actions';
 // import { api } from './api';
 import { decksApi } from '../api/decksApi';

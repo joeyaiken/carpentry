@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography, Button, Switch, FormControlLabel, IconButton, TableHead, Paper, Table, TableRow, TableCell, TableBody, Backdrop, CircularProgress } from '@material-ui/core';
 import { appStyles } from '../../styles/appStyles';
-import { MoreHoriz, MoreVert, Refresh, Add, Delete, SettingsSystemDaydreamOutlined } from '@material-ui/icons';
+import { Refresh, Add, Delete } from '@material-ui/icons';
 
 declare interface ComponentProps {
     onRefreshClick: () => void;
@@ -18,7 +18,7 @@ declare interface ComponentProps {
 }
 
 export default function CardSetSettingsContainerLayout(props: ComponentProps): JSX.Element {
-    const { outlineSection, flexRow, flexSection, staticSection } = appStyles();
+    const { flexRow, flexSection } = appStyles();
     return(
         <React.Fragment>
             <Backdrop open={props.isLoading} style={{zIndex:0}} >

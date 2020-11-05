@@ -57,43 +57,43 @@ export interface UiReducerState {
     // isNewDeckModalOpen: boolean; //Should be removed
 }
 
-const apiDataReceived = (state: UiReducerState, action: ReduxAction): UiReducerState => {
-    const { scope, data } = action.payload;
+// const apiDataReceived = (state: UiReducerState, action: ReduxAction): UiReducerState => {
+//     const { scope, data } = action.payload;
 
-    // switch(scope as ApiScopeOption){
-    //     case "inventoryDetail":
+//     // switch(scope as ApiScopeOption){
+//     //     case "inventoryDetail":
 
-    // }
-    if (scope as ApiScopeOption === "inventoryDetail"){
-        const newState: UiReducerState = {
-            ...state,
-            isInventoryDetailModalOpen: Boolean(data),
-        };
-        return newState;
-    }
-    else if (scope as ApiScopeOption === "deckDetail"){
-        const newState: UiReducerState = {
-            ...state,
-            deckPropsModalOpen: false,
-        };
-        return newState;
-    } else return (state);
+//     // }
+//     if (scope as ApiScopeOption === "inventoryDetail"){
+//         const newState: UiReducerState = {
+//             ...state,
+//             isInventoryDetailModalOpen: Boolean(data),
+//         };
+//         return newState;
+//     }
+//     else if (scope as ApiScopeOption === "deckDetail"){
+//         const newState: UiReducerState = {
+//             ...state,
+//             deckPropsModalOpen: false,
+//         };
+//         return newState;
+//     } else return (state);
 
-    // if(scope as ApiScopeOption !== "deckDetail") return (state);
-    // // if(!data){
-    // //     return {
-    // //         ...state,
-    // //         isInventoryDetailModalOpen: false,
-    // //     }
-    // // }
-    // console.log('closing deck props modal')
-    // const newState: UiReducerState = {
-    //     ...state,
-    //     isInventoryDetailModalOpen: Boolean(data),
-    //     deckPropsModalOpen: false,
-    // };
-    // return newState;
-}
+//     // if(scope as ApiScopeOption !== "deckDetail") return (state);
+//     // // if(!data){
+//     // //     return {
+//     // //         ...state,
+//     // //         isInventoryDetailModalOpen: false,
+//     // //     }
+//     // // }
+//     // console.log('closing deck props modal')
+//     // const newState: UiReducerState = {
+//     //     ...state,
+//     //     isInventoryDetailModalOpen: Boolean(data),
+//     //     deckPropsModalOpen: false,
+//     // };
+//     // return newState;
+// }
 
 const filterValueChanged = (state: UiReducerState, action: ReduxAction): UiReducerState => {
     const { type, filter, value } = action.payload;
@@ -108,35 +108,35 @@ const filterValueChanged = (state: UiReducerState, action: ReduxAction): UiReduc
     return newState;
 }
 
-const menuButtonClicked = (state: UiReducerState, action: ReduxAction): UiReducerState => {
-    const { type, anchor } = action.payload;
+// const menuButtonClicked = (state: UiReducerState, action: ReduxAction): UiReducerState => {
+//     const { type, anchor } = action.payload;
 
-    // console.log(`menuButtonClicked :${type}`);
-    const newState: UiReducerState = {
-        ...state,
-        //deckListMenuAnchor: action.payload
-        [type]: anchor
-    }
-    return newState;
-}
+//     // console.log(`menuButtonClicked :${type}`);
+//     const newState: UiReducerState = {
+//         ...state,
+//         //deckListMenuAnchor: action.payload
+//         [type]: anchor
+//     }
+//     return newState;
+// }
 
-const menuOptionSelected = (state: UiReducerState, action: ReduxAction): UiReducerState => {
-    const anchorType = action.payload;
-    const newState: UiReducerState = {
-        ...state,
-        //deckListMenuAnchor: null
-        [anchorType]: null
-    }
-    return newState;
-}
+// const menuOptionSelected = (state: UiReducerState, action: ReduxAction): UiReducerState => {
+//     const anchorType = action.payload;
+//     const newState: UiReducerState = {
+//         ...state,
+//         //deckListMenuAnchor: null
+//         [anchorType]: null
+//     }
+//     return newState;
+// }
 
-const resetCardSearchFilterProps = (state: UiReducerState, action: ReduxAction): UiReducerState => {
-    const newState: UiReducerState = {
-        ...state,
-        cardSearchFilterProps: initialCardSearchFilterProps(),
-    }
-    return newState;
-}
+// const resetCardSearchFilterProps = (state: UiReducerState, action: ReduxAction): UiReducerState => {
+//     const newState: UiReducerState = {
+//         ...state,
+//         cardSearchFilterProps: initialCardSearchFilterProps(),
+//     }
+//     return newState;
+// }
 
 export const uiReducer = (state = initialState, action: ReduxAction): UiReducerState => {
     switch(action.type){
@@ -238,24 +238,24 @@ const emptyDeckDto = (): DeckPropertiesDto   =>  ({
     notes: ""
 });
 
-function initialCardSearchFilterProps(): CardFilterProps {
-    return {
-        // setId: null,
-        set: '',
-        colorIdentity: [],
-        rarity: [], //['mythic','rare','uncommon','common'], //
-        type: '',
-        exclusiveColorFilters: false,
-        multiColorOnly: false,
-        cardName: '',
-        exclusiveName: false,
-        maxCount: 0,
-        minCount: 0,
-        format: '',
-        text: '',
-        group: '',
-    } as CardFilterProps;
-} 
+// function initialCardSearchFilterProps(): CardFilterProps {
+//     return {
+//         // setId: null,
+//         set: '',
+//         colorIdentity: [],
+//         rarity: [], //['mythic','rare','uncommon','common'], //
+//         type: '',
+//         exclusiveColorFilters: false,
+//         multiColorOnly: false,
+//         cardName: '',
+//         exclusiveName: false,
+//         maxCount: 0,
+//         minCount: 0,
+//         format: '',
+//         text: '',
+//         group: '',
+//     } as CardFilterProps;
+// } 
 
 function mockFilterProps(): CardFilterProps {
     return{

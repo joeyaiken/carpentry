@@ -1,7 +1,7 @@
 //table of deck cards
 import React from 'react';
 
-import {  Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 
 interface ComponentProps{
     //totalPrice: number;

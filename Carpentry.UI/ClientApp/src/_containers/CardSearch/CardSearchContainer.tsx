@@ -133,7 +133,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
         this.props.dispatch(cardSearchSelectCard(item.data));
         //also search for that selected card
         //Maybe dispatch a second request to load dat detail
-        if(this.props.cardSearchMethod != "set"){
+        if(this.props.cardSearchMethod !== "set"){
             this.props.dispatch(requestCardSearchInventory(item.data));
         }
     }
@@ -337,14 +337,14 @@ function FilterBar(props: FilterBarProps): JSX.Element{
     const {  flexRow, outlineSection } = appStyles();
     return(<React.Fragment>
         <Paper className={combineStyles(outlineSection, flexRow)}>
-            {   (props.cardSearchMethod == "set") && 
+            {   (props.cardSearchMethod === "set") && 
                     <SetSearchFilterBar 
                         filterOptions={props.filterOptions}
                         handleBoolFilterChange={props.handleBoolFilterChange}
                         handleFilterChange={props.handleFilterChange}
                         searchFilter={props.searchFilterProps} />
             }
-            {   (props.cardSearchMethod == "web") && 
+            {   (props.cardSearchMethod === "web") && 
                     <WebSearchFilterBar 
                         filterOptions={props.filterOptions}
                         handleBoolFilterChange={props.handleBoolFilterChange}
@@ -367,7 +367,7 @@ interface ContainerLayoutProps {
 }
 
 function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
-    const {  flexRow, outlineSection, flexCol, flexSection } = appStyles();
+    const {  flexRow, outlineSection, flexSection } = appStyles();
     return(
     <React.Fragment>
         {/* <div className={flexCol}> */}

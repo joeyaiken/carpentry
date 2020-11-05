@@ -32,7 +32,7 @@ export async function GetFile(url: string): Promise<any> {
     //     return result;
     // }
 
-    if(response.status != 200){
+    if(response.status !== 200){
         //error
         return;
     } else {

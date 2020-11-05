@@ -21,17 +21,15 @@ import './styles/mana.css';
 import InventoryLayout from './inventory/InventoryLayout';
 import DecksLayout from './decks/DecksLayout';
 
-{/* <link href="styles/mana.min.css" rel="stylesheet" type="text/css" /> */}
-
 interface PropsFromState {
 }
 
 type AppContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 
 class AppContainer extends React.Component<AppContainerProps>{
-    constructor(props: AppContainerProps) {
-        super(props);
-    }
+    // constructor(props: AppContainerProps) {
+    //     super(props);
+    // }
 
     componentDidMount() {
         // console.log('calling core data')
@@ -120,7 +118,7 @@ function App(): JSX.Element {
                 
 
 
-                { routes.map(route => <Route path={route.path} render={(props) => <route.component {...props} {...route.customProps} />} />) }
+                { routes.map(route => <Route key={route.path} path={route.path} render={(props) => <route.component {...props} {...route.customProps} />} />) }
 
 
                 {/* <Route path='/Inventory/addCards' render={(props) => <CardSearchContainer {...props} searchContext="inventory" />} /> */}

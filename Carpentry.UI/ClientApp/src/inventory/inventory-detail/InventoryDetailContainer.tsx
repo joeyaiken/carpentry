@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect, DispatchProp } from 'react-redux';
-import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, TableBody, Card } from '@material-ui/core';
+// import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, TableBody, Card } from '@material-ui/core';
 import InventoryDetailLayout from './components/InventoryDetailLayout';
 import AppModal from '../../common/components/AppModal';
-import { requestInventoryDetail } from '../../_actions/inventoryActions';
+// import { requestInventoryDetail } from '../../_actions/inventoryActions';
 import { AppState } from '../../_reducers';
 
 import { ensureInventoryDetailLoaded } from './state/InventoryDetailActions';
-import { parseConfigFileTextToJson } from 'typescript';
+// import { parseConfigFileTextToJson } from 'typescript';
 
 interface OwnProps {
     match: {

@@ -17,10 +17,6 @@ import {
 
 import DeckListTable from './DeckListTable';
 import { AppState } from '../../_reducers';
-import { 
-    // MenuItem, 
-    // Menu, 
-    Paper } from '@material-ui/core';
 
 // import DeckListLayout from '../components/DeckListLayout';
 // // import { deckList } from '../reducers/deckList.reducer';
@@ -33,13 +29,13 @@ interface PropsFromState {
 type DeckListProps = PropsFromState & DispatchProp<ReduxAction>;
 
 class DeckList extends React.Component<DeckListProps> {
-    constructor(props: DeckListProps) {
-        super(props);
-        // this.handleDeckSelected = this.handleDeckSelected.bind(this);
-        // this.handleDeckMenuClick = this.handleDeckMenuClick.bind(this);
-        // this.handleCloseDeckMenuClick = this.handleCloseDeckMenuClick.bind(this);
-        // this.handleDeckMenuSelect = this.handleDeckMenuSelect.bind(this);
-    }
+    // constructor(props: DeckListProps) {
+    //     super(props);
+    //     // this.handleDeckSelected = this.handleDeckSelected.bind(this);
+    //     // this.handleDeckMenuClick = this.handleDeckMenuClick.bind(this);
+    //     // this.handleCloseDeckMenuClick = this.handleCloseDeckMenuClick.bind(this);
+    //     // this.handleDeckMenuSelect = this.handleDeckMenuSelect.bind(this);
+    // }
 
     // //IDK if the app should init with data eventually
     // //For now, it should load the list (or ensure it's loaded) when the component mounts

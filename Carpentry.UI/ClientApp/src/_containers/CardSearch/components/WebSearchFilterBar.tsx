@@ -1,6 +1,6 @@
 //This component should represent the filter bar options present on CardSearch & Inventory
 import React from 'react'
-import { Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Box, TextField, FormControl, FormControlLabel, Checkbox } from '@material-ui/core';
 
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'

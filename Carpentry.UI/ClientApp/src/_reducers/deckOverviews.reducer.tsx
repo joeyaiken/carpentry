@@ -8,7 +8,7 @@ export interface DeckOverviewsState {
 }
 
 export const apiDataRequested = (state: DeckOverviewsState, action: ReduxAction): DeckOverviewsState => {
-    const { scope, data } = action.payload;
+    const { scope } = action.payload;
     
     if(scope as ApiScopeOption !== "deckOverviews") return (state);
 

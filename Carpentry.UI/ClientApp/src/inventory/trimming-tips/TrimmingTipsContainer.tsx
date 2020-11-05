@@ -1,10 +1,10 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
 import { AppState } from '../../_reducers'
-import { Paper, Box, Tabs, AppBar, Typography, Toolbar, TextField, MenuItem, makeStyles, Button, IconButton, Tab, CardHeader, Card, CardContent } from '@material-ui/core';
+import { Box, Tabs, AppBar, Typography, Toolbar, Button, IconButton, Tab, CardHeader, Card, CardContent } from '@material-ui/core';
 // import CardFilterBar from './CardFilterBar';
 // import InventoryCardGrid from './components/InventoryCardGrid';
-import LoadingBox from '../../_components/LoadingBox';
+// import LoadingBox from '../../_components/LoadingBox';
 
 // import {
 //     requestTrimmingTips,
@@ -16,8 +16,8 @@ import {
     // requestInventoryDetail,
 } from '../../_actions'
 // import InventoryFilterBar from './components/InventoryFilterBar';
-import { Link, useHistory } from 'react-router-dom';
-import { appStyles } from '../../styles/appStyles';
+import { Link } from 'react-router-dom';
+// import { appStyles } from '../../styles/appStyles';
 import { Publish } from '@material-ui/icons';
 
 import { push } from 'react-router-redux';
@@ -25,12 +25,6 @@ import TrimmingTipsTable from './components/TrimmingTipsTable';
 import {
     ensureTrimmingTipsLoaded,
 } from './state/TrimmingTipsActions';
-
-const useStyles = makeStyles({
-    
-});
-
-
 
 interface PropsFromState { 
     // // searchMethod: "name" | "quantity" | "price";

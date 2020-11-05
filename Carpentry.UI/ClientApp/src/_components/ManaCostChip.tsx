@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@material-ui/core'
-import ManaIcon from './ManaIcon';
+// import ManaIcon from './ManaIcon';
 // declare type ManaIconType = "W" | "U" | "B" | "R" | "G" | number;
 export interface ManaCostChipProps {
     costString: string;

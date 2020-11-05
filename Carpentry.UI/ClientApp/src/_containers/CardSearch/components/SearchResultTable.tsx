@@ -13,13 +13,13 @@ import React from 'react';
 
 import {
     Button,
-    AppBar,
-    Toolbar,
-    Typography,
-    Paper,
+    // AppBar,
+    // Toolbar,
+    // Typography,
+    // Paper,
     Box,
-    Tabs,
-    Tab,
+    // Tabs,
+    // Tab,
     Table,
     TableHead,
     TableRow,
@@ -40,7 +40,7 @@ interface SearchResultTableProps {
 }
 
 export default function SearchResultTable(props: SearchResultTableProps): JSX.Element {
-    const { flexSection, flexRow } = appStyles();
+    const { flexRow } = appStyles();
     
     //<Paper className={flexSection}>
     return (

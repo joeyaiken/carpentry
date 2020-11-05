@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Box, Card, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
+import { Box, Card, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 interface SelectedCardDetailSectionProps {
@@ -14,7 +14,7 @@ interface SelectedCardDetailSectionProps {
 }
 
 export default function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
-    const { outlineSection, flexRow, staticSection, flexCol } = appStyles();
+    const { outlineSection, flexRow, flexCol } = appStyles();
 
     // console.log('rendering card search selected card section')
     return(

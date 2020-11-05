@@ -1,6 +1,6 @@
 //TODO Review and verify if actually used
 import React from 'react';
-import { CardHeader, CardActions, Typography, Button, Card, Menu, MenuItem, Paper, Table, TableHead, TableRow, TableCell, TableBody, Avatar, IconButton } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody, Avatar, IconButton } from '@material-ui/core';
 import { MoreVert } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 

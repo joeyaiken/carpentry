@@ -12,14 +12,14 @@ import React from 'react';
 // } from '../actions/inventory.actions';
 
 import {
-    Button,
-    AppBar,
-    Toolbar,
-    Typography,
-    Paper,
+    // Button,
+    // AppBar,
+    // Toolbar,
+    // Typography,
+    // Paper,
     Box,
-    Tabs,
-    Tab,
+    // Tabs,
+    // Tab,
     Card,
     CardMedia,
 } from '@material-ui/core';

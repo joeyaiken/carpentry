@@ -1,4 +1,4 @@
-import React, { ReactNode, Fragment } from 'react';
+import React, { ReactNode } from 'react';
 
 import {
   AppBar,
@@ -6,11 +6,15 @@ import {
   Toolbar,
   IconButton,
   Container,
-  Tabs,
-  Tab
+//   Tabs,
+//   Tab
 } from '@material-ui/core';
 
-import { Add, AddBox, Menu, FilterList } from '@material-ui/icons';
+import { 
+    // Add, AddBox, 
+    Menu, 
+    // FilterList 
+} from '@material-ui/icons';
 import { Link, NavLink, Route, Switch } from 'react-router-dom';
 import { ConnectedComponent } from 'react-redux';
 import { appStyles, combineStyles } from '../styles/appStyles';
@@ -59,7 +63,7 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
             
             <Typography variant="h5" className={flexSection}>
                 {<Switch>{
-                        props.routes.map(route => <Route path={route.path}>{route.name}</Route>)
+                        props.routes.map(route => <Route key={route.path} path={route.path}>{route.name}</Route>)
                 }</Switch>}
             </Typography>
             {/* <Container> */}

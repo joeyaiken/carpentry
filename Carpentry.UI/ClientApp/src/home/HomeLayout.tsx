@@ -6,7 +6,6 @@ import {
     CardHeader,
     CardContent,
     IconButton,
-    Button,
     makeStyles,
 } from '@material-ui/core';
 // import DeckList from '../containers/DeckList/DeckListContainer';
@@ -14,14 +13,14 @@ import {
 import DeckList from '../_containers/DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
 import { ArrowForward } from '@material-ui/icons';
-import { appStyles } from '../styles/appStyles';
+// import { appStyles } from '../styles/appStyles';
 
 interface LayoutProps {
     
 }
 
 export default function HomeLayout(props: LayoutProps): JSX.Element {
-    const { stretch, flexCol, flexSection, flexRow } = appStyles();
+    // const { stretch, flexCol, flexSection, flexRow } = appStyles();
 
     const localStyles = makeStyles({
 

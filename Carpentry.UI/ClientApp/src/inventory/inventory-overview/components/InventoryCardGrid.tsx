@@ -5,20 +5,20 @@ import CardGridContainer from './CardGridContainer';
 // import GridCard from './GridCard';
 
 import { appStyles } from '../../../styles/appStyles';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 interface ComponentProps{
     cardOverviews: InventoryOverviewDto[];
     onCardSelected: (cardId: number) => void;
 }
 
-function DetailsButton(): JSX.Element {
-    return (
-    <Button color="primary" size="small">
-        Details
-    </Button>
-    );
-}
+// function DetailsButton(): JSX.Element {
+//     return (
+//     <Button color="primary" size="small">
+//         Details
+//     </Button>
+//     );
+// }
 
 export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
     const classes = appStyles();
