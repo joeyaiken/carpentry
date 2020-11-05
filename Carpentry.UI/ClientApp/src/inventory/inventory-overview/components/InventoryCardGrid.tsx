@@ -34,7 +34,7 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
             <CardGridContainer layout="grid">
                 {
                     props.cardOverviews.map(cardItem => 
-                        <Card key={cardItem.name} className={classes.outlineSection}>
+                        <Card key={ `${cardItem.id}${cardItem.isFoil}`} className={classes.outlineSection}>
                             <CardMedia 
                                 style={{height:"310px", width: "223px"}}
                                 //image={`https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=${props.card.}&type=card`}

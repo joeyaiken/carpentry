@@ -11,7 +11,9 @@ export interface InventoryDataReducerState {
         allIds: number[];
     }
     detail: {
+        selectedCardId: number | null;
         isLoading: boolean;
+        selectedCardName: string;
         //inventory cards
         inventoryCardsById: { [id: number]: InventoryCard };
         inventoryCardAllIds: number[];
@@ -43,6 +45,8 @@ const initialState: InventoryDataReducerState = {
         allIds: [],
     },
     detail: {
+        selectedCardId: null,
+        selectedCardName: "",
         isLoading: false,
         inventoryCardsById: {},
         inventoryCardAllIds: [],
@@ -51,8 +55,10 @@ const initialState: InventoryDataReducerState = {
     }   
 }
 
+//yeah I think this apiDataRequested / Received has to go...
+//It's more complicated than is worth
 const apiDataRequested = (state: InventoryDataReducerState, action: ReduxAction): InventoryDataReducerState => {
-    const { scope } = action.payload;
+    const { scope, data } = action.payload;
     
     if(scope as ApiScopeOption === "inventoryOverview"){
         const newState: InventoryDataReducerState = {
@@ -62,7 +68,6 @@ const apiDataRequested = (state: InventoryDataReducerState, action: ReduxAction)
                 isLoading: true,
             }
         };
-    
         return newState;
     }
     else if (scope as ApiScopeOption === "inventoryDetail"){
@@ -71,6 +76,7 @@ const apiDataRequested = (state: InventoryDataReducerState, action: ReduxAction)
             detail: {
                 ...initialState.detail,
                 isLoading: true,
+                selectedCardId: data, //will be number
             }
         };
         return newState;
@@ -122,6 +128,8 @@ const apiDataReceived = (state: InventoryDataReducerState, action: ReduxAction):
         const newState: InventoryDataReducerState = {
             ...state,
             detail: {
+                selectedCardId: state.detail.selectedCardId,
+                selectedCardName: detailResult.name,
                 isLoading: false,
 
                 inventoryCardsById: inventoryCardsById,

@@ -5,13 +5,13 @@ namespace Carpentry.Logic.Models
 {
     public class InventoryDetailDto
     {
-        [JsonProperty("name")]
+        //[JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("cards")]
+        //[JsonProperty("cards")]
         public List<MagicCardDto> Cards { get; set; }
 
-        [JsonProperty("inventoryCards")]
+        //[JsonProperty("inventoryCards")]
         public List<InventoryCardDto> InventoryCards { get; set; }
 
         //Deck Cards

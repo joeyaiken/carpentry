@@ -1,4 +1,6 @@
 import { Dispatch } from 'redux';
+import { inventoryApi } from '../../../api/inventoryApi';
+import { apiDataReceived, apiDataRequested } from '../../../_actions/data.actions';
 import { AppState } from '../../../_reducers';
 
 export const ensureInventoryDetailLoaded = (cardId: number): any => {
@@ -19,6 +21,23 @@ function tryLoadInventoryDetail(dispatch: Dispatch, state: AppState, cardId: num
     // if(queryInProgress){
     //     return;
     // }
+    const selectedCardId = state.data.inventory.detail.selectedCardId;
+    const queryIsLoading = state.data.inventory.detail.isLoading;
+
+    if(queryIsLoading || cardId === selectedCardId){
+        return;
+    }
+
+    //So, should I dispatch this data action, or add a local action somewhere?
+    dispatch(apiDataRequested(_localApiScope, cardId));
+
+    inventoryApi.getInventoryDetail(cardId).then((result) => {
+        dispatch(apiDataReceived(_localApiScope, result));
+    }).catch((error) => {
+        dispatch(apiDataReceived(_localApiScope, null));
+    });
+
+    
 
 
     // //Dispatch load requested

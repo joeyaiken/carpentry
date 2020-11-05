@@ -1,55 +1,37 @@
 import React from 'react';
-// import { connect, DispatchProp } from 'react-redux';
-// import { AppState } from '../reducers'
-// import {
-//     requestInventoryDetail,
-// } from '../actions/inventory.actions'
-
 import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, TableBody, Card, Typography } from '@material-ui/core';
-
-// interface PropsFromState { 
 
 interface InventoryDetailProps {
     selectedDetailItem: InventoryDetailDto;
 }
 
 interface InventoryDetailCardProps {
-    // set: string;
     card: MagicCard;
-    // variant: string;
     inventoryCards: InventoryCard[];
-    //
-    //
-    //
-    //
-    //
 }
 
 export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.Element {
 
     //need to know all set / variant combos that should be listed
+    //  Each print will get listed separately
 
-    //For each card, need to list all relevant variants
-
-    //  only variants that actually exist in the cards should be included
-
-    //--How about for a V1, I only do a card per set, not per variant/style
-
-
-    // console.log(`inventoryCards ${props.selectedDetailItem.inventoryCards.toString()}}`)
-    // console.log('all sets')
-    // props.selectedDetailItem.inventoryCards.forEach(card =>{
-    //     console.log(card.set);
-    // })
+    // console.log('INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT ')
+    // console.log(props.selectedDetailItem);
     const displayCards: InventoryDetailCardProps[] = props.selectedDetailItem.cards.map(card => {
-        // console.log(`inventoryCard ${props.selectedDetailItem.inventoryCard.set}`)
-        // console.log(`inventoryCards ${props.selectedDetailItem.inventoryCards.toString}}`)
-        // console.log(`card ${card.set}`)
         return {
             card: card,
+            //So this is/was trying to group inventory cards by the card's set
             inventoryCards: props.selectedDetailItem.inventoryCards.filter(inventoryCard => inventoryCard.set === card.set),
         } as InventoryDetailCardProps;
     });
+
+
+    // return(
+    //     <React.Fragment>
+
+            
+    //     </React.Fragment>
+    // );
 
     return(<React.Fragment>
         {/* I don't remember what was incomplete and what may be dups or something */}
@@ -57,10 +39,7 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
         <Box className="flex-col flex-section">
             {
                 displayCards.map(displayCard => {
-                    let img = displayCard.card.variants['normal'] || '';;
-                    // if(displayCard.card.variants['normal']){
-                    //     img = displayCard.card.variants['normal'] || '';
-                    // }
+                    let img = displayCard.card.imageUrl;
                     return (
                         <Card 
                             key={displayCard.card.name} 
@@ -97,6 +76,7 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
+                                            Something went here
                                             {
                                                 displayCard.inventoryCards.map(item => {
 
@@ -108,12 +88,13 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
                                                             {/* {item.variantName}{item.isFoil &&" foil"} */}
                                                             <Typography>IsFoil info here</Typography>
                                                         </TableCell>
-                                                        <TableCell>
+                                                        {/* <TableCell>
                                                             {item.deckCards.length > 0 && "In a Deck"}
                                                             {item.deckCards.length === 0 && item.statusId === 1 && "Inventory"}
                                                             { item.statusId === 2 && "Buy List"}
                                                             { item.statusId === 3 && "Sell List"}
-                                                        </TableCell>
+                                                        </TableCell> */}
+
                                                         {/* <TableCell>
                                                             {item.deckCards.length === 0 && item.statusId === 1 && 
                                                                 <Button size="small" variant="contained" onClick={() => props.handleUpdateCardClick && props.handleUpdateCardClick(item, 3)}>

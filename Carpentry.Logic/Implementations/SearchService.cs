@@ -217,7 +217,7 @@ namespace Carpentry.Logic.Implementations
 
                     query = _inventoryRepo.QueryCardsByName().AsEnumerable()
 
-                        .Select((x) => new CardOverviewResult
+                        .Select(x => new CardOverviewResult
                         {
                             Id = x.CardId,
                             Cmc = x.Cmc,
@@ -235,9 +235,9 @@ namespace Carpentry.Logic.Implementations
                 case "unique":
                     query = _inventoryRepo.QueryCardsByUnique().AsEnumerable()
 
-                        .Select((x, i) => new CardOverviewResult()
+                        .Select(x => new CardOverviewResult()
                         {
-                            Id = i + 1, //When querying by unique, the MID is NOT a unique value
+                            Id = x.CardId, //This can't be trusted, cardId isn't unique 
                             SetCode = x.SetCode,
                             Name = x.Name,
                             Type = x.Type,

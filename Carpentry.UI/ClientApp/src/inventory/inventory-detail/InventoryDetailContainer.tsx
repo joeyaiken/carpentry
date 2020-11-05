@@ -235,8 +235,9 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
 
 //Eventually this should be replaced with something different...(like a different container)
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
-    const { inventoryCardsById, inventoryCardAllIds, cardsById, allCardIds } = state.data.inventory.detail;
+    const { inventoryCardsById, inventoryCardAllIds, cardsById, allCardIds, selectedCardName } = state.data.inventory.detail;
     const result: InventoryDetailDto = {
+        name: selectedCardName,
         inventoryCards: inventoryCardAllIds.map(invId => inventoryCardsById[invId]),
         cards: allCardIds.map(cardId => cardsById[cardId]),
     }

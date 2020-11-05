@@ -65,12 +65,7 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
 
     handleCardDetailSelected(cardId: number | null){
         console.log(`card selected: ${cardId}`);
-        // this.props.dispatch(requestInventoryDetail(cardId));
         this.props.dispatch(push(`/inventory/${cardId}`));
-
-        // let history = useHistory();
-        // history.push(`/inventory/${cardId}`)
-
     }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {

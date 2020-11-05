@@ -402,6 +402,7 @@ function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
     const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.data.cardSearch.inventoryDetail;
     const result: InventoryDetailDto = {
+        name: "",
         cards: allCardIds.map(id => cardsById[id]),
         inventoryCards: inventoryCardAllIds.map(id => inventoryCardsById[id]),
     }

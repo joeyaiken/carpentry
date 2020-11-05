@@ -215,6 +215,7 @@ declare interface InventoryCard {
 // }
 
 interface InventoryDetailDto {
+    name: string;
     cards: MagicCard[];
     inventoryCards: InventoryCard[];
 }
@@ -274,13 +275,18 @@ declare interface MagicCard {
     manaCost: string;
     multiverseId: number;
     name: string;
-    prices: { [key: string]: number | null }
-    variants: { [key: string]: string | null }
+    // prices: { [key: string]: number | null }
+    // variants: { [key: string]: string | null }
     legalities: string[];
     rarity: string;
     set: string;
     text: string;
     type: string;
+    collectionNumber: number;
+    price: number | null;
+    priceFoil: number | null;
+    priceTix: number | null;
+    imageUrl: string;
 }
 
 declare interface SetDetailDto {
