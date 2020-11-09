@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, TableBody, Card, Typography } from '@material-ui/core';
+import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 interface InventoryDetailProps {
     selectedDetailItem: InventoryDetailDto;
@@ -10,61 +11,43 @@ interface InventoryDetailCardProps {
     inventoryCards: InventoryCard[];
 }
 
+
 export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.Element {
+    const { flexCol, flexSection, outlineSection, flexRow, staticSection, scrollSection } = appStyles();
 
-    //need to know all set / variant combos that should be listed
-    //  Each print will get listed separately
-
-    // console.log('INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT INVENTORY DETAIL LAYOUT ')
-    // console.log(props.selectedDetailItem);
+    //TODO - Grouping REALLY should be done in a container...
     const displayCards: InventoryDetailCardProps[] = props.selectedDetailItem.cards.map(card => {
         return {
             card: card,
-            //So this is/was trying to group inventory cards by the card's set
-            inventoryCards: props.selectedDetailItem.inventoryCards.filter(inventoryCard => inventoryCard.set === card.set),
+            inventoryCards: props.selectedDetailItem.inventoryCards
+                .filter(inventoryCard => inventoryCard.set === card.set && inventoryCard.collectorNumber === card.collectionNumber),
         } as InventoryDetailCardProps;
     });
 
-
-    // return(
-    //     <React.Fragment>
-
-            
-    //     </React.Fragment>
-    // );
-
     return(<React.Fragment>
-        {/* I don't remember what was incomplete and what may be dups or something */}
-
-        <Box className="flex-col flex-section">
+        <Box className={combineStyles(flexCol, flexSection)}>
             {
                 displayCards.map(displayCard => {
                     let img = displayCard.card.imageUrl;
                     return (
-                        <Card 
-                            key={displayCard.card.cardId} 
-                            className="outline-section flex-col"
-                            //style={{overflow:"auto"}}
-                            // onClick={props.onCardSelected}
-                            >
-                            {/* <CardHeader titleTypographyProps={{variant:"body1"}} title={ `${displayCard.card.name} - (${displayCard.card.set})` } /> */}
-                            <CardHeader titleTypographyProps={{variant:"body1"}} style={{textTransform:"uppercase"}} title={ `${displayCard.card.set} (${displayCard.inventoryCards.length})` } />
+                        <Card key={displayCard.card.cardId} className={combineStyles(outlineSection, flexCol)}>
+                            <CardHeader titleTypographyProps={{variant:"body1"}} style={{textTransform:"uppercase"}} title={ `${displayCard.card.set} (${displayCard.card.collectionNumber})` } />
                             
-                            <Box className="flex-row flex-section"> 
-                                <Box className="static-section">
+                            <Box className={combineStyles(flexRow, flexSection)}> 
+                                <Box className={staticSection}>
                                     <CardMedia 
                                         style={{height:"310px", width: "223px"}}
-                                        className="item-image"
+                                        // className={itemImage}
                                         image={img}
                                         />
                                 </Box>
                                 
-                                <Box className="flex-section flex-col">
-                                    <Box className="scroll-section" style={{overflow:"auto"}}>
+                                <Box className={combineStyles(flexSection, flexCol)}>
+                                    <Box className={scrollSection}style={{overflow:"auto"}}>
                                         {/* 
-                                        className="flex-section flex-col"
-                                         className="static-section"
-                                         className="flex-section" style={{overflow:"auto"}}
+                                        className="flexSection flexCol"
+                                         className="staticSection"
+                                         className="flexSection" style={{overflow:"auto"}}
                                           style={{overflow:"auto"}}
                                         */}
                                     <Table size="small" >
@@ -76,24 +59,24 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            Something went here
                                             {
                                                 displayCard.inventoryCards.map(item => {
-
-                                                    // const thisCard = displayCard.card;
-
                                                     return(
                                                     <TableRow key={item.id}>
                                                         <TableCell>
-                                                            {/* {item.variantName}{item.isFoil &&" foil"} */}
-                                                            <Typography>IsFoil info here</Typography>
+                                                            <Typography>{item.isFoil &&" foil" || "normal"}</Typography>
                                                         </TableCell>
-                                                        {/* <TableCell>
-                                                            {item.deckCards.length > 0 && "In a Deck"}
+                                                        <TableCell>
+                                                            <Typography>
+                                                                { item.statusId === 1 && "Inventory/Deck" }
+                                                                { item.statusId === 2 && "Wish List" }
+                                                                { item.statusId === 3 && "Sell List" }
+                                                            </Typography>
+                                                            {/* {item.deckCards.length > 0 && "In a Deck"}
                                                             {item.deckCards.length === 0 && item.statusId === 1 && "Inventory"}
                                                             { item.statusId === 2 && "Buy List"}
-                                                            { item.statusId === 3 && "Sell List"}
-                                                        </TableCell> */}
+                                                            { item.statusId === 3 && "Sell List"} */}
+                                                        </TableCell>
 
                                                         {/* <TableCell>
                                                             {item.deckCards.length === 0 && item.statusId === 1 && 
@@ -124,36 +107,8 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
                             </Box>
                         </Card> 
                     )
-
-
                 })
             }
-
-            {/* <InventoryDetailTable 
-                detail={props.selectedDetailItem}
-                // handleUpdateCardClick={this.handleUpdateInventoryCard}
-                // handleDeleteCardClick={this.handleDeleteInventoryCard} 
-                />
-             */}
         </Box>
-        {/* I need to just itterate over all cards as a table, and include a DELETE button */}
-        {/* <Box>
-            {
-                
-                props.selectedDetailItem.cards.map(cardInstance => 
-                    <Box>
-                        <Typography>
-                            {cardInstance.name}&nbsp;{cardInstance.set}
-                        </Typography>
-                        <Typography>
-                            {
-                                props.selectedDetailItem.inventoryCards.filter(item => item.multiverseId === cardInstance.multiverseId).length
-                                //this.props.selectedDetailItem.items.filter(item => item.multiverseId === cardInstance.multiverseId).length
-                            } Total
-                        </Typography>
-                    </Box>
-                )
-            }
-        </Box> */}
     </React.Fragment>);
 }
