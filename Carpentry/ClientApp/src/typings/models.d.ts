@@ -3,13 +3,52 @@
 /// <reference types="react-redux" />
 /// <reference types="redux-thunk" />
 
+declare interface CardImportDto {
 
+}
 
-///New models after testing refactor
+declare interface ValidatedDeckImportDto {
 
+}
 
-declare interface DeckCard
-{
+declare interface ValidatedCarpentryImportDto {
+    
+}
+
+declare interface CardSearchQueryParameter {
+    set: string;
+    type: string;
+    colorIdentity: string[];
+    exclusiveColorFilters: boolean;
+    multiColorOnly: boolean;
+    rarity: string[];
+    excludeUnowned: boolean;
+    searchGroup: string | null;
+}
+
+declare interface CardSearchResultDto {
+    cardId: number;
+    cmc: number | null;
+    colorIdentity: string[];
+    colors: string[];
+    manaCost: string;
+    name: string;
+    type: string;
+    details: cardSearchResultDetail[];
+}
+
+declare interface cardSearchResultDetail {
+    cardId: number;
+    setCode: string;
+    name: string;
+    collectionNumber: number;
+    price: number | null;
+    priceFoil: number | null;
+    priceTix: number | null;
+    imageUrl: string;
+}
+
+declare interface DeckCard {
     id: number;
     multiverseId: number;
     name: string;
@@ -19,20 +58,25 @@ declare interface DeckCard
     category: string;
 }
 
-declare interface DeckCardOverview
-{
+declare interface DeckCardOverview {
     id: number;
     name: string;
     type: string;
     cost: string;
-    cmc: number | null;
+    cmc: number;
+    category: string;
     img: string;
     count: number;
-    category: string;
 }
 
-declare interface DeckOverviewDto
-{
+declare interface DeckDetailDto {
+    props: DeckPropertiesDto;
+    cardOverviews: DeckCardOverview[];
+    cards: DeckCard[];
+    stats: DeckStats;
+}
+
+declare interface DeckOverviewDto {
     id: number;
     name: string;
     format: string;
@@ -40,184 +84,12 @@ declare interface DeckOverviewDto
     isValid: boolean;
     validationIssues: string;
 }
-declare interface DeckDetailDto //: CardCollectionDto
-{
-    props: DeckProperties;
-    cardOverviews: DeckCardOverview[];
-    cardDetails: DeckCard[];
-    stats: DeckStats;
-}
 
-///////
-//Models from the data layer
-
-// interface DeckCardDto
-
-declare interface DeckCardDto { //NOTE - this is a LEGACY model
-    id: number;
-    deckId: number;
-    categoryId: string | null;
-    inventoryCard: InventoryCard;
-}
-
-interface FilterOptionDto {
-        sets: FilterOption[];
-        types : FilterOption[];
-        formats : FilterOption[];
-        colors : FilterOption[];
-        rarities : FilterOption[];
-        statuses : FilterOption[];
-}
-
-interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
-    id: number;
-    multiverseId: number;
-    name: string;
-    type: string;
-    cost: string;
-    img: string;
-    count: number;
-    description: string;
-}
-
-interface InventoryDetailDto {
-    cards: MagicCard[];
-    inventoryCards: InventoryCard[];
-    // deckCards: any[];
-}
-
-
-
-enum DeckFormats {
-    None, Standard, Legacy, Modern, Commander, Oathbreaker
-}
-
-interface CardFilterVisibilities {
-    set: boolean;
-    type: boolean;
-    color: boolean;
-    rarity: boolean;
-    name: boolean;
-    count: boolean;
-    format: boolean;
-    text: boolean;
-}
-
-interface CardFilterProps{
-    set: string;
-    
-    type: string;
-
-    text: string;
-
-    colorIdentity: string[];
-    exclusiveColorFilters: boolean;
-    multiColorOnly: boolean;
-    
-    rarity: string[];
-
-    cardName: string;
-    exclusiveName: boolean;
-
-    format: string;
-
-    minCount: number | null;
-    maxCount: number | null;
-}
-
-interface CardSearchFilter {
-    
-    searchMethod: "set" | "web" | "inventory";
-    // props: CardFilterProps;
-
-    // set: string;
-    
-    // type: string;
-
-    // colorIdentity: string[];
-    // exclusiveColorFilters: boolean;
-    // multiColorOnly: boolean;
-    
-    // rarity: string[];
-
-    // cardName: string;
-    // exclusiveName: boolean;
-
-    //eventually an option for that text filter will go here, but I really just need to get things added
-}
-////////////
-
-
-
-///////////////////
-interface InventorySearchFilter {
-    searchMethod: "name" | "quantity" | "price"; // | "sellList";
-    // props: CardFilterProps;
-    viewMode: "list" | "grid";
-    // sort: string;
-    // text: string;
-}
-
-declare interface InventoryCard {
-    id: number;
-    multiverseId: number;
-    name: string;
-    set: string;
-    isFoil: boolean;
-    variantName: string;
-    statusId: number; //normal === 1, buylist === 2, sellList === 3
-    deckCards: InventoryDeckCardDto[];     
-}
-
-declare interface InventoryDeckCardDto {
-    id: number;
-    deckId: number;
-    deckName: string;
-    inventoryCardId: number;
-    category: string;
-}
-
-declare interface Card {
-    id: number;
-    multiverseId: number;
-    isFoil: boolean;
-    deckId: number | null;
-}
-
-declare interface CardCollectionDto {
-    cards: Card[];
-    data: { [key: number]: MagicCardDto };
-}
-
-// declare interface CardDto {
-//     card: Card;
-//     data: MagicCard;
-// }
-
-declare interface DeckDto
-{
-    props: DeckProperties;
-    // cards: Card[];
-    // data: { [key: number]: MagicCard };
-    cardOverviews: InventoryOverviewDto[];
-    cards: InventoryCard[];
-    stats: DeckStats;
-}
-
-
-declare interface DeckStats {
-    totalCount: number;
-    typeCounts: {[type: string]: number};
-    costCounts: {[type: string]: number};
-    totalCost: number;
-}
-
-
-declare interface DeckProperties {
+declare interface DeckPropertiesDto {
     id: number;
     name: string;
     //format: DeckFormats;
-    format: null | 'Standard' | 'Legacy' | 'Modern' | 'Commander' | 'Oathbreaker';
+    format: null | DeckFormatOption;
     notes: string;
 
     basicW: number;
@@ -227,62 +99,150 @@ declare interface DeckProperties {
     basicG: number;
 }
 
-
-
-declare interface FilterDescriptor {
-    name: string;
-    value: any;
+declare interface DeckStats {
+    totalCount: number;
+    typeCounts: {[type: string]: number};
+    costCounts: {[type: string]: number};
+    totalCost: number;
 }
 
-declare interface MagicCardDto {
-    cmc: number | null;
-    colorIdentity: string[];
-    colors: string[];
-    flavor: string;
-    id: string;
-    imageUrl: string;
-    layout: string;
-    manaCost: string;
-    multiverseId: number;
+
+declare interface AppFiltersDto
+{
+    sets: FilterOption[];
+    types: FilterOption[];
+    formats: FilterOption[];
+    colors: FilterOption[];
+    rarities: FilterOption[];
+    statuses: FilterOption[];
+
+    searchGroups: FilterOption[];
+
+    // [JsonProperty("sets")]
+    // public List<FilterOption> Sets 
+
+    // [JsonProperty("types")]
+    // public List<FilterOption> Types 
+
+    // [JsonProperty("formats")]
+    // public List<FilterOption> Formats 
+
+    // [JsonProperty("colors")]
+    // public List<FilterOption> ManaColors 
+
+    // [JsonProperty("rarities")]
+    // public List<FilterOption> Rarities 
+
+    // [JsonProperty("statuses")]
+    // public List<FilterOption> Statuses 
+}
+
+declare interface FilterOption
+{
     name: string;
-    number: string;
-    price: number | null;
-    priceFoil: number | null;
-    printings: string[];
-    rarity: string;
+    value: string;
+}
+
+declare interface DeckCardDto {
+    id: number;
+    deckId: number;
+    categoryId: string | null;
+    inventoryCardId: number;
+    cardId: number;
+    isFoil: boolean;
+    inventoryCardStatusId: number;
+    // inventoryCard: InventoryCard;
+}
+
+// declare interface DeckDto {
+//     props: DeckProperties;
+//     // cards: Card[];
+//     // data: { [key: number]: MagicCard };
+//     cardOverviews: InventoryOverviewDto[];
+//     cardDetails: InventoryCard[];
+//     stats: DeckStats;
+// }
+
+
+// declare interface DeckStats {
+//     totalCount: number;
+//     typeCounts: { [type: string]: number };
+//     costCounts: { [type: string]: number };
+//     totalCost: number;
+// }
+
+// declare interface FilterDescriptor {
+//     name: string;
+//     value: any;
+// }
+
+
+// declare interface FilterOption {
+//     name: string;
+//     value: string;
+// }
+
+
+
+// interface FilterOptionDto {
+//     sets: FilterOption[];
+//     types: FilterOption[];
+//     formats: FilterOption[];
+//     colors: FilterOption[];
+//     rarities: FilterOption[];
+//     statuses: FilterOption[];
+// }
+
+declare interface InventoryCard {
+    id: number;
+    cardId: number;
+    // multiverseId: number;
+    name: string;
     set: string;
-    setName: string;
-    text: string;
-    type: string;
-    types: string[];
+    isFoil: boolean;
+    collectorNumber: number;
+    // variantName: string;
+    statusId: number; //normal === 1, buylist === 2, sellList === 3
+    deckCards: InventoryDeckCardDto[];
 }
 
-declare interface MagicCard {
-    cmc: number | null;
-    colorIdentity: string[];
-    colors: string[];
-    manaCost: string;
-    multiverseId: number;
-    name: string;
-    prices: { [key: string]: number | null }
-    variants: { [key: string]: string | null }
-    legalities: string[];
-    rarity: string;
-    set: string;
-    text: string;
-    type: string;
-}
+// declare interface InventoryDeckCardDto {
+//     id: number;
+//     deckId: number;
+//     deckName: string;
+//     inventoryCardId: number;
+//     category: string;
+// }
 
-declare interface InventoryQueryResult {
+interface InventoryDetailDto {
     name: string;
     cards: MagicCard[];
-    items: Card[];
+    inventoryCards: InventoryCard[];
+}
+
+
+interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
+    cardId: number;
+    category: string;
+    cmc: number;
+    cost: string;
+    count: number;
+    description: string;
+    id: number;
+    img: string;
+    isFoil: boolean;
+    name: string;
+    price: number;
+    type: string;
+    variant: string;
+    // multiverseId: number;
 }
 
 declare interface InventoryQueryParameter {
-//
+    //
 
-    groupBy: string;
+    //groupBy: "name" | "mid" | "unique";
+    groupBy: InventorySearchMethod;
     colors: string[];
     types: string[];
     type: string;
@@ -290,16 +250,53 @@ declare interface InventoryQueryParameter {
     multiColorOnly: boolean;
     rarity: string[];
 
-    //sets: string[];
+    // //sets: string[];
     set: string;
-    text: string ;
+    // setId: number | null;
+    text: string;
     skip: number;
     take: number;
     format: string | null;
-    sort: string
-    //other things to add?
-    //Format / Legality
+    sort: string;
+    sortDescending: boolean;
+    // //other things to add?
+    // //Format / Legality
     minCount: number;
     maxCount: number;
 
+    // [JsonProperty("statusId")]
+    // public int StatusId 
+}
+
+declare interface MagicCard {
+    cardId: number;
+    cmc: number | null;
+    colorIdentity: string[];
+    colors: string[];
+    manaCost: string;
+    multiverseId: number;
+    name: string;
+    // prices: { [key: string]: number | null }
+    // variants: { [key: string]: string | null }
+    legalities: string[];
+    rarity: string;
+    set: string;
+    text: string;
+    type: string;
+    collectionNumber: number;
+    price: number | null;
+    priceFoil: number | null;
+    priceTix: number | null;
+    imageUrl: string;
+}
+
+declare interface SetDetailDto {
+    setId: number;
+    code: string;
+    name: string;
+    dataLastUpdated: Date | null;
+    inventoryCount: number;
+    collectedCount: number;
+    totalCount: number;
+    isTracked: boolean;
 }

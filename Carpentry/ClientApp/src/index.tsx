@@ -1,36 +1,23 @@
+
+
+import App from './App';
+import configureStore from './configureStore';
+import { ConnectedRouter } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/mana.min.css';
-//import manaB from '../img/B.svg'
-// import 'mana-font';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-import rootReducer from './reducers'
 
-// import App from './carpentry.ui/containers/App';
-import App from './containers/App';
-import * as serviceWorker from './serviceWorker';
-// import './index.css';
-// import '../node_modules/material-icons/iconfont/material-icons.css';
-
-/* <link href="css/mana.min.css" rel="stylesheet" type="text/css" /> */
-
-//Eventually this should call something that initializes the store as well...
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+// Create browser history to use in the Redux store
+const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
+const history = createBrowserHistory({ basename: baseUrl });
+const store = configureStore(history)
 
 ReactDOM.render(
-    <>
-        {/* <link rel="stylesheet" href="/path/to/material-icons/iconfont/material-icons.css"></link> */}
-        <link href="css/mana.min.css" rel="stylesheet" type="text/css" />
-        <Provider store={store}>
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
             <App />
-        </Provider>
-    </>, 
-    document.getElementById('root')
+        </ConnectedRouter>
+    </Provider>
+    , document.getElementById('root')
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();

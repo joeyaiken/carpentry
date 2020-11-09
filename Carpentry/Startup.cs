@@ -1,3 +1,10 @@
+using Carpentry.Data.DataContext;
+using Carpentry.Data.Implementations;
+using Carpentry.Data.Interfaces;
+using Carpentry.Logic.Implementations;
+using Carpentry.Logic.Interfaces;
+using Carpentry.Service.Implementations;
+using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 //using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace Carpentry
 {
@@ -21,9 +29,57 @@ namespace Carpentry
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // In production, the React files will be served from this directory
+            //Going to actually pull the fill filepaths from app settings now
+            //TODO Eventually I could make a static config class and just read from that class
+            //TODO Everything else still needs this DB pattern
+            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+
+            //TODO - should this be scopped instead of singleton?
+            ////DBs
+            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
+            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")));
+
+            //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
+
+            services.AddSingleton<IDataBackupConfig, CarpentryAppConfig>();
+
+            //DB repos
+            services.AddScoped<ICardDataRepo, CardDataRepo>();
+            services.AddScoped<IDeckDataRepo, DeckDataRepo>();
+            services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
+            services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
+            services.AddScoped<ICoreDataRepo, CoreDataRepo>();
+
+            //Logic services
+            services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<IDeckService, DeckService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+
+            services.AddScoped<IDataImportService, DataImportService>();
+            services.AddScoped<IDataUpdateService, DataUpdateService>();
+            services.AddScoped<IDataExportService, DataExportService>();
+            services.AddScoped<IFilterService, FilterService>();
+
+            services.AddScoped<IScryfallService, ScryfallService>();
+            services.AddHttpClient<IScryfallService, ScryfallService>();
+
+            services.AddScoped<ICollectionBuilderService, CollectionBuilderService>();
+            services.AddScoped<ITrimmingTipsService, TrimmingTipsService>();
+
+
+
+
+            //Service-layer
+            services.AddScoped<ICarpentryCardSearchService, CarpentryCardSearchService>();
+            services.AddScoped<ICarpentryCoreService, CarpentryCoreService>();
+            services.AddScoped<ICarpentryDeckService, CarpentryDeckService>();
+            services.AddScoped<ICarpentryInventoryService, CarpentryInventoryService>();
+
             services.AddControllersWithViews();
 
             services.AddSpaStaticFiles(configuration =>
