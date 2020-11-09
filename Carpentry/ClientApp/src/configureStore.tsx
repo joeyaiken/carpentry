@@ -6,6 +6,7 @@ import {
     ////AppState, 
     // reducers 
 } from './';
+import { decksDataReducer, State as DecksDataReducerState } from './decks/state/decksDataReducer';
 
 //TODO - consider renaming this file to just "store.tsx"
 
@@ -14,10 +15,22 @@ const rootReducer = (history: History) => combineReducers({
     // data: reducers.data,
     // app: reducers.app,
     // ui: reducers.ui,
+    decks: combineReducers({
+        data: decksDataReducer,
+    }),
     router: connectRouter(history)
 });
 
-export type AppState = ReturnType<typeof rootReducer>;
+// export type AppState = ReturnType<typeof rootReducer>;
+
+export interface AppState {
+    //router state
+    //
+    decks: {
+        data: DecksDataReducerState
+    }
+}
+
 
 
 export default function configureStore(history: History, initialState?: AppState) {

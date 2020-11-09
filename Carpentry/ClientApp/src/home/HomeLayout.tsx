@@ -14,6 +14,7 @@ import {
 import { Link } from 'react-router-dom';
 import { ArrowForward } from '@material-ui/icons';
 import { futimes } from 'fs';
+import DeckListContainer from '../decks/deck-list/DeckListContainer';
 // import { appStyles } from '../styles/appStyles';
 
 interface LayoutProps {
@@ -157,7 +158,7 @@ function DeckListCard(): JSX.Element {
                     </Link>
                 }
             />
-            {/* <DeckList /> */}
+            <DeckListContainer />
         </Card>
     );
 }

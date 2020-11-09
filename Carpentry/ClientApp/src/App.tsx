@@ -19,6 +19,7 @@ import { AppState } from './configureStore'
 import './styles/mana.css';
 import { Typography } from '@material-ui/core';
 import AppLayout from './common/components/AppLayout';
+import DecksLayout from './decks/DecksLayout';
 
 // import InventoryLayout from './inventory/InventoryLayout';
 // import DecksLayout from './decks/DecksLayout';
@@ -108,8 +109,8 @@ function App(): JSX.Element {
     return(
         <AppLayout routes={routes}>
             <Switch>
-                {/* <Route path="/decks" component={DecksLayout} />
-                <Route path="/inventory" component={InventoryLayout} /> */}
+                <Route path="/decks" component={DecksLayout} />
+                {/* <Route path="/inventory" component={InventoryLayout} /> */}
                 {/* <Route path="/settings" component={SettingsLayout} /> */}
                 <Route path="/" component={HomeContainer} />
 
