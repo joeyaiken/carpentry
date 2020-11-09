@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.UI.Legacy", "Carpentry\Carpentry.UI.Legacy.csproj", "{EADC7557-9D99-4F4C-8FCB-E9713BA70749}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry", "Carpentry\Carpentry.csproj", "{EADC7557-9D99-4F4C-8FCB-E9713BA70749}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Data", "Carpentry.Data\Carpentry.Data.csproj", "{202DD975-9C95-4617-AB36-54CC9ECEAEDF}"
 EndProject
@@ -38,6 +38,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Service", "Carpentry.Service\Carpentry.Service.csproj", "{D753499E-1A1D-4DD2-9942-56483223E0F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Service.Tests", "Carpentry.Service.Tests\Carpentry.Service.Tests.csproj", "{59232A04-5FE4-4833-8F0E-02D589CC1106}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.Legacy", "Carpentry.Legacy\Carpentry.Legacy.csproj", "{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.Tests", "Carpentry.Tests\Carpentry.Tests.csproj", "{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -205,6 +209,30 @@ Global
 		{59232A04-5FE4-4833-8F0E-02D589CC1106}.Release|x64.Build.0 = Release|Any CPU
 		{59232A04-5FE4-4833-8F0E-02D589CC1106}.Release|x86.ActiveCfg = Release|Any CPU
 		{59232A04-5FE4-4833-8F0E-02D589CC1106}.Release|x86.Build.0 = Release|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Debug|x64.Build.0 = Debug|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Debug|x86.Build.0 = Debug|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Release|x64.ActiveCfg = Release|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Release|x64.Build.0 = Release|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Release|x86.ActiveCfg = Release|Any CPU
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5}.Release|x86.Build.0 = Release|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Debug|x64.Build.0 = Debug|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Debug|x86.Build.0 = Debug|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Release|x64.ActiveCfg = Release|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Release|x64.Build.0 = Release|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Release|x86.ActiveCfg = Release|Any CPU
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -223,6 +251,8 @@ Global
 		{DDE8DE5D-39FF-4ACF-8D08-6DE65CCC9C76} = {FFEBD6D4-0B02-48E7-A113-45A386480988}
 		{D753499E-1A1D-4DD2-9942-56483223E0F8} = {5234C916-C156-4ED7-87D0-4C6BC4B8311B}
 		{59232A04-5FE4-4833-8F0E-02D589CC1106} = {5234C916-C156-4ED7-87D0-4C6BC4B8311B}
+		{2FCD2B98-4C93-4A2E-A59F-370FF4843FF5} = {835F1B1F-8469-483A-BE6C-3F802F0C02E7}
+		{04F88CAA-26CF-4B95-A4BD-E5F63CC48DD3} = {835F1B1F-8469-483A-BE6C-3F802F0C02E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A3A1F5C-248B-461E-8852-2541452139E8}

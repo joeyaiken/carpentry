@@ -58,6 +58,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carpentry.Logic\Carpentry.Logic.csproj" />
+    <ProjectReference Include="..\Carpentry.Service\Carpentry.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,249 @@
+html,
+body,
+#root {
+  height: 100%;
+  font-family: Roboto, sans-serif;
+  margin: 0;
+}
+.bar-dark {
+  background-color: #1976D2;
+}
+.bar-light {
+  background-color: #2196F3;
+}
+.transparent {
+  opacity: 0.3;
+}
+
+
+.center {
+  align-self: center;
+}
+
+.stretch {
+  width: 100%;
+  height: 100%;
+}
+
+.side-padded {
+  padding: 0px 8px 0px 8px;
+}
+
+.app-bar {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.pull-right {
+  float: right;
+}
+.sd-card-binder .card-list {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+}
+.sd-card-binder .mana-icon {
+  height: 50px;
+  width: 50px;
+}
+.sd-card-binder .binder-section .section-header {
+  color: #757575;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 8px;
+  background-color: #BBDEFB;
+}
+.card {
+  background-color: #FFFFFF;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 2px;
+}
+.card .card-header {
+  border-radius: 2px 2px 0 0;
+  background-color: #2196F3;
+  color: #FFFFFF;
+  padding: 8px;
+  font-size: 18px;
+  font-weight: 500;
+}
+.card .card-header .header-section {
+  display: inline-block;
+}
+.sd-deck-editor .card-list .selected-card {
+  background-color: #BBDEFB;
+}
+.sd-land-counter {
+  display: grid;
+}
+.sd-land-counter .sd-counter {
+  grid-column-start: 2;
+}
+.sd-counter button,
+.sd-counter input {
+  display: block;
+  max-width: 50px;
+}
+.sd-counter button {
+  background: inherit;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+}
+.sd-material-button {
+  border: none;
+  background-color: inherit;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.sd-material-button .selected-icon {
+  color: #ff9800;
+  border-bottom: #ff9800 2px solid;
+}
+.icon-dark .sd-material-button {
+  color: #757575;
+}
+.flex-container-horizontal {
+  display: flex;
+  flex-flow: row;
+}
+.flex-row {
+  display: flex;
+  flex-flow: row;
+}
+.flex-row-wrap {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+}
+.flex-col {
+  display: flex;
+  flex-flow: column;
+}
+.flex-container-vertical {
+  display: flex;
+  flex-flow: column;
+}
+.flex-section {
+  flex: 1 1 0%;
+}
+.static-section {
+  flex: 0 0 0%;
+}
+
+.scroll-section {
+  flex: 1 1 0%;
+  overflow: auto;
+}
+
+.section-flex {
+  flex: 1 1 0%;
+}
+.section-static {
+  flex: 0 0 0%;
+}
+.padded-section {
+  padding: 8px;
+}
+.sd-card-quick-add .card-container {
+  flex-wrap: wrap;
+}
+.sd-card-quick-add .card-container .magic-card {
+  flex: 1 1 25%;
+  border: solid #2196F3 1px;
+}
+.sd-card-quick-add .card-container .selected-card {
+  background-color: #BBDEFB;
+}
+.ReactModal__Overlay {
+  z-index: 99 !important;
+}
+.outline-section {
+  border: solid #9E9E9E 1px;
+  padding: 8px;
+  margin: 8px;
+  background-color: #FFFFFF;
+}
+#options {
+  border: solid #1976D2 1px;
+}
+.app {
+  display: grid;
+  grid-template-columns: 30% auto 50%;
+  grid-template-rows: 48px auto;
+  background-color: #E1E2E1;
+}
+.app .stretch {
+  width: 100%;
+  height: 100%;
+}
+.app .app-header {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.app .contents-full {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.app .contents-short {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.app .app-header {
+  flex: 0 0 auto;
+  z-index: 5;
+}
+.app .app-header .header-section {
+  display: inline-block;
+}
+.app .app-header .app-icon-title {
+  padding-left: 16px;
+  display: inline-block;
+  color: #FFFFFF;
+}
+.app .app-header .app-icon-description {
+  padding-left: 16px;
+  display: inline-block;
+  color: #BBDEFB;
+}
+.app .app-contents {
+  flex: 1 1 auto;
+}
+.app .app-nav-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 30% 70%;
+}
+.app .app-nav-overlay .cc-app-nav {
+  flex: 0 0 auto;
+  background-color: #FFFFFF;
+  border-radius: 0 0 25px 25px;
+}
+.app .app-nav-overlay .cc-app-nav .cc-app-nav-item {
+  cursor: pointer;
+}
+.app .app-nav-overlay .cc-app-nav .cc-app-nav-item label {
+  color: #212121;
+  font-weight: 600;
+}
+.app .app-nav-overlay .cc-app-nav .compact-card {
+  width: 75px;
+  height: 75px;
+  border-radius: 25px;
+  margin: 5px;
+  padding: 5px;
+  box-shadow: 0 3px 6px rgba(87, 68, 68, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.app .app-nav-overlay .cc-app-nav .deck-mana-types {
+  display: inline-block;
+}
+.app .app-nav-overlay .cc-app-nav .deck-mana-types .mana-icon {
+  width: 25px;
+}
+.app .app-nav-overlay .cc-app-nav .selected-card {
+  background-color: #BBDEFB;
+}
+.app .app-nav-overlay .overlay {
+  background-color: rgba(0, 0, 0, 0.33);
+}

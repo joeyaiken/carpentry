@@ -14,16 +14,18 @@ namespace Carpentry.Logic.Tests.UnitTests
         [TestMethod]
         public async Task GetTrimmingTips_ThrowsNotImplemented_Test()
         {
-            var trimmingTipsService = new TrimmingTipsService();
-            await Assert.ThrowsExceptionAsync<NotImplementedException>(() => trimmingTipsService.GetTrimmingTips());
+            Assert.Fail("Not Implemented");
+            //var trimmingTipsService = new TrimmingTipsService();
+            //await Assert.ThrowsExceptionAsync<NotImplementedException>(() => trimmingTipsService.GetTrimmingTips());
         }
 
         [TestMethod]
         public async Task HideTrimmingTip_ThrowsNotImplemented_Test()
         {
-            var trimmingTipsService = new TrimmingTipsService();
-            var payloadToSubmit = new InventoryOverviewDto();
-            await Assert.ThrowsExceptionAsync<NotImplementedException>(() => trimmingTipsService.HideTrimmingTip(payloadToSubmit));
+            Assert.Fail("Not Implemented");
+            //var trimmingTipsService = new TrimmingTipsService();
+            //var payloadToSubmit = new InventoryOverviewDto();
+            //await Assert.ThrowsExceptionAsync<NotImplementedException>(() => trimmingTipsService.HideTrimmingTip(payloadToSubmit));
         }
     }
 }

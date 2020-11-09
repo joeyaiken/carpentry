@@ -1,15 +1,12 @@
 ﻿using Carpentry.Data.Interfaces;
-using Carpentry.Data.Models;
 using Carpentry.Data.QueryParameters;
 using Carpentry.Data.QueryResults;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
-using Carpentry.Logic.Models.Scryfall;
 using Carpentry.Logic.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations

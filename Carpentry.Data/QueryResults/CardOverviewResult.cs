@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Carpentry.Data.QueryResults
+﻿namespace Carpentry.Data.QueryResults
 {
     public class CardOverviewResult
     {
