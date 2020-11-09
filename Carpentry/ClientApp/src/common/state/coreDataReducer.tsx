@@ -1,0 +1,51 @@
+import { APP_FILTER_OPTIONS_RECEIVED, APP_FILTER_OPTIONS_REQUESTED } from "./coreDataActions";
+
+export interface State {
+    filterDataIsLoading: boolean;
+    filterOptions: AppFiltersDto;
+}
+
+export const coreDataReducer = (state = initialState, action: ReduxAction): State => {
+    switch(action.type){
+        case APP_FILTER_OPTIONS_REQUESTED:
+            return appFiltersRequested(state, action);
+
+        case APP_FILTER_OPTIONS_RECEIVED:
+            return appFiltersReceived(state, action);
+            
+        default:
+            return(state);
+    }
+}
+
+const initialState: State = {
+    filterOptions: {
+        sets: [],
+        colors: [],
+        rarities: [],
+        types: [],
+        formats: [],
+        statuses: [],
+        searchGroups: [],
+    },
+    filterDataIsLoading: false,
+}
+
+export const appFiltersRequested = (state: State, action: ReduxAction): State => {
+    const newState: State = {
+        ...state,
+        ...initialState,
+        filterDataIsLoading: true,
+    };
+    return newState;
+}
+
+export const appFiltersReceived = (state: State, action: ReduxAction): State => {
+    const searchResultPayload: AppFiltersDto = action.payload || {};
+    const newState: State = {
+        ...state,
+        filterOptions: searchResultPayload,
+        filterDataIsLoading: false,
+    };
+    return newState;
+}

@@ -7,6 +7,9 @@ import {
     // reducers 
 } from './';
 import { decksDataReducer, State as DecksDataReducerState } from './decks/state/decksDataReducer';
+import { inventoryDataReducer, InventoryDataReducerState } from './inventory/state/inventoryDataReducer';
+import { inventoryOverviewAppReducer, State as InventoryOverviewState } from './inventory/inventory-overview/state/InventoryOverviewAppReducer';
+import { coreDataReducer, State as CoreDataReducerState } from './common/state/coreDataReducer';
 
 //TODO - consider renaming this file to just "store.tsx"
 
@@ -18,6 +21,16 @@ const rootReducer = (history: History) => combineReducers({
     decks: combineReducers({
         data: decksDataReducer,
     }),
+
+    inventory: combineReducers({
+        overviews: inventoryOverviewAppReducer,
+        data: inventoryDataReducer,
+    }),
+
+    core: combineReducers({
+        data: coreDataReducer,
+    }),
+
     router: connectRouter(history)
 });
 
@@ -29,9 +42,19 @@ export interface AppState {
     decks: {
         data: DecksDataReducerState
     }
+    inventory:{
+        //or
+        //app: {
+        //  overviews
+        //  detail
+        //}
+        overviews: InventoryOverviewState,
+        data: InventoryDataReducerState
+    }
+    core: {
+        data: CoreDataReducerState
+    }
 }
-
-
 
 export default function configureStore(history: History, initialState?: AppState) {
     const middleware = [

@@ -70,8 +70,8 @@ export async function GetFile(url: string): Promise<any> {
 }
 
 export async function Post(endpoint: string, payload: any): Promise<any> {
-    console.log('post');
-    console.log(payload);
+    // console.log('post');
+    // console.log(payload);
     const bodyToAdd = JSON.stringify(payload);
     const response = await fetch(endpoint, {
         method: 'post',

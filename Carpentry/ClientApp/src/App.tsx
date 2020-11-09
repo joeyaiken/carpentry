@@ -17,9 +17,11 @@ import { AppState } from './configureStore'
 // import { requestCoreData } from './_actions/coreActions';
 // import CardSetSettingsContainer from './_containers/CardSetSettings/CardSetSettingsContainer';
 import './styles/mana.css';
-import { Typography } from '@material-ui/core';
+// import { Typography } from '@material-ui/core';
 import AppLayout from './common/components/AppLayout';
 import DecksLayout from './decks/DecksLayout';
+import InventoryLayout from './inventory/InventoryLayout';
+import { requestCoreData } from './common/state/coreDataActions';
 
 // import InventoryLayout from './inventory/InventoryLayout';
 // import DecksLayout from './decks/DecksLayout';
@@ -36,7 +38,7 @@ class AppContainer extends React.Component<AppContainerProps>{
 
     componentDidMount() {
         // console.log('calling core data')
-        // this.props.dispatch(requestCoreData());
+        this.props.dispatch(requestCoreData());
     }
 
     render() {
@@ -110,7 +112,7 @@ function App(): JSX.Element {
         <AppLayout routes={routes}>
             <Switch>
                 <Route path="/decks" component={DecksLayout} />
-                {/* <Route path="/inventory" component={InventoryLayout} /> */}
+                <Route path="/inventory" component={InventoryLayout} />
                 {/* <Route path="/settings" component={SettingsLayout} /> */}
                 <Route path="/" component={HomeContainer} />
 
