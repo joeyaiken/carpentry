@@ -318,6 +318,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                         select
                         label="Sort by"
                         // value={props.searchFilter.group}
+                        value={props.searchFilter.sortBy}
                         onChange={props.handleFilterChange}
                         margin="normal" >
                             {

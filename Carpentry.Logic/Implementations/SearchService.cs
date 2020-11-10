@@ -212,7 +212,7 @@ namespace Carpentry.Logic.Implementations
             {
                 case "name":
 
-                    query = _inventoryRepo.QueryCardsByName().AsEnumerable()
+                    query = _inventoryRepo.QueryCardsByName().AsEnumerable() //remember this executes the query
 
                         .Select(x => new CardOverviewResult
                         {
@@ -226,12 +226,15 @@ namespace Carpentry.Logic.Implementations
                             Type = x.Type,
                             Color = x.Color,
                             ColorIdentity = x.ColorIdentity,
+                            Text = x.Text,
+                            RarityId = x.RarityId,
+
                         });
 
                     break;
 
                 case "unique":
-                    query = _inventoryRepo.QueryCardsByUnique().AsEnumerable()
+                    query = _inventoryRepo.QueryCardsByUnique().AsEnumerable() //remember this executes the query
 
                         .Select((x, i) => new CardOverviewResult()
                         {
@@ -248,6 +251,8 @@ namespace Carpentry.Logic.Implementations
                             Img = x.ImageUrl,
                             Color = x.Color,
                             ColorIdentity = x.ColorIdentity,
+                            Text = x.Text,
+                            RarityId = x.RarityId,
                         });
 
                     break;
@@ -255,7 +260,7 @@ namespace Carpentry.Logic.Implementations
                 //case "print":
                 default: //assuming group by print for default
 
-                    query = _inventoryRepo.QueryCardsByPrint().AsEnumerable()
+                    query = _inventoryRepo.QueryCardsByPrint().AsEnumerable() //remember this executes the query
 
                         .Select(x => new CardOverviewResult()
                         {
@@ -270,6 +275,8 @@ namespace Carpentry.Logic.Implementations
                             Type = x.Type,
                             Color = x.Color,
                             ColorIdentity = x.ColorIdentity,
+                            Text = x.Text,
+                            RarityId = x.RarityId,
                         });
 
                     break;
@@ -284,10 +291,10 @@ namespace Carpentry.Logic.Implementations
                 query = query.Where(x => x.SetCode == param.Set.ToLower());
             }
 
-            if (param.StatusId > 0)
-            {
-                throw new NotImplementedException();
-            }
+            //if (param.StatusId > 0)
+            //{
+            //    throw new NotImplementedException();
+            //}
 
             if (param.Colors != null && param.Colors.Any())
             {
@@ -296,13 +303,13 @@ namespace Carpentry.Logic.Implementations
                 query = query.Where(x => x.ColorIdentity.ToCharArray().Any(color => excludedColors.Contains(color.ToString())));
             }
 
-            if (!string.IsNullOrEmpty(param.Format))
-            {
-                throw new NotImplementedException();
-                ////var matchingLegality = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == param.Format.ToLower()).FirstOrDefault();
-                //var matchingFormatId = await GetFormatIdByName(param.Format);
-                //cardsQuery = cardsQuery.Where(x => x.Legalities.Where(l => l.FormatId == matchingFormatId).Any());
-            }
+            //if (!string.IsNullOrEmpty(param.Format))
+            //{
+            //    throw new NotImplementedException();
+            //    ////var matchingLegality = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == param.Format.ToLower()).FirstOrDefault();
+            //    //var matchingFormatId = await GetFormatIdByName(param.Format);
+            //    //cardsQuery = cardsQuery.Where(x => x.Legalities.Where(l => l.FormatId == matchingFormatId).Any());
+            //}
 
             if (param.ExclusiveColorFilters)
             {
@@ -321,20 +328,18 @@ namespace Carpentry.Logic.Implementations
 
             if (param.Rarity != null && param.Rarity.Any())
             {
-                throw new NotImplementedException();
-                //cardsQuery = cardsQuery.Where(x => param.Rarity.Contains(x.Rarity.Name.ToLower()));
+                query = query.Where(x => param.Rarity.Contains(x.RarityId.ToString()));
             }
 
             if (!string.IsNullOrEmpty(param.Text))
             {
-                throw new NotImplementedException();
-                //cardsQuery = cardsQuery.Where(x =>
-                //    x.Text.ToLower().Contains(param.Text.ToLower())
-                //    ||
-                //    x.Name.ToLower().Contains(param.Text.ToLower())
-                //    ||
-                //    x.Type.ToLower().Contains(param.Text.ToLower())
-                //);
+                query = query.Where(x =>
+                    x.Text.ToLower().Contains(param.Text.ToLower())
+                    ||
+                    x.Name.ToLower().Contains(param.Text.ToLower())
+                    ||
+                    x.Type.ToLower().Contains(param.Text.ToLower())
+                );
             }
 
             if (param.MinCount > 0)

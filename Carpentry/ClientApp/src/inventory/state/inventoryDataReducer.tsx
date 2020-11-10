@@ -84,7 +84,7 @@ const inventoryOverviewsReceived = (state: InventoryDataReducerState, action: Re
         overviewsById[item.id] = item;
     });
 
-    console.log('INVENTORY OVERVIEWS RECEIVED')
+    // console.log('INVENTORY OVERVIEWS RECEIVED')
 
     const newState: InventoryDataReducerState = {
         ...state,

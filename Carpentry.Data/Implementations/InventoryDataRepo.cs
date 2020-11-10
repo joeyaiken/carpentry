@@ -94,10 +94,10 @@ namespace Carpentry.Data.Implementations
 				cardsQuery = cardsQuery.Where(x => x.SetId == matchingSetId);
 			}
 
-			if (filters.StatusId > 0)
-			{
-				//cardsQuery = cardsQuery.Where(x => x.)
-			}
+			//if (filters.StatusId > 0)
+			//{
+			//	//cardsQuery = cardsQuery.Where(x => x.)
+			//}
 
 			if (filters.Colors != null && filters.Colors.Any())
 			{
@@ -119,12 +119,12 @@ namespace Carpentry.Data.Implementations
 				cardsQuery = cardsQuery.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
 			}
 
-			if (!string.IsNullOrEmpty(filters.Format))
-			{
-				//var matchingLegality = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == param.Format.ToLower()).FirstOrDefault();
-				var matchingFormatId = await GetFormatIdByName(filters.Format);
-				cardsQuery = cardsQuery.Where(x => x.Legalities.Where(l => l.FormatId == matchingFormatId).Any());
-			}
+			//if (!string.IsNullOrEmpty(filters.Format))
+			//{
+			//	//var matchingLegality = _cardContext.MagicFormats.Where(x => x.Name.ToLower() == param.Format.ToLower()).FirstOrDefault();
+			//	var matchingFormatId = await GetFormatIdByName(filters.Format);
+			//	cardsQuery = cardsQuery.Where(x => x.Legalities.Where(l => l.FormatId == matchingFormatId).Any());
+			//}
 
 			if (filters.ExclusiveColorFilters)
 			{

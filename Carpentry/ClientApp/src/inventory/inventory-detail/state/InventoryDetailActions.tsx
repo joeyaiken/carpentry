@@ -10,8 +10,6 @@ export const ensureInventoryDetailLoaded = (cardId: number): any => {
 }
 
 function tryLoadInventoryDetail(dispatch: Dispatch, state: AppState, cardId: number){
-    const _localApiScope: ApiScopeOption = "inventoryDetail";
-
     //Has a load been requested?
     //  if yes, return
     //So this could be two variables: queryIsLoaded, loadedId

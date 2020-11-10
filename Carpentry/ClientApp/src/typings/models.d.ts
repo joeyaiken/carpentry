@@ -239,33 +239,20 @@ interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
 }
 
 declare interface InventoryQueryParameter {
-    //
-
-    //groupBy: "name" | "mid" | "unique";
-    groupBy: InventorySearchMethod;
+    groupBy: InventoryGroupMethod;
     colors: string[];
-    types: string[];
     type: string;
     exclusiveColorFilters: boolean;
     multiColorOnly: boolean;
     rarity: string[];
-
-    // //sets: string[];
     set: string;
-    // setId: number | null;
     text: string;
     skip: number;
     take: number;
-    format: string | null;
     sort: string;
     sortDescending: boolean;
-    // //other things to add?
-    // //Format / Legality
     minCount: number;
     maxCount: number;
-
-    // [JsonProperty("statusId")]
-    // public int StatusId 
 }
 
 declare interface MagicCard {

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Dialog, Modal } from '@material-ui/core';
+import { Dialog } from '@material-ui/core';
 import AppModalLayout from './AppModalLayout';
 
 export interface ComponentProps {

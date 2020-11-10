@@ -30,15 +30,15 @@ function tryLoadDeckOverviews(dispatch: Dispatch, state: AppState): void {
 function getDeckOverviews(dispatch: Dispatch, state: AppState): any  {
 
     if(state.decks.data.overviews.isLoading){
-        console.log('isLoading, returning')
+        // console.log('isLoading, returning')
         return;
     }
 
-    console.log('requesting')
+    // console.log('requesting')
     dispatch(deckOverviewsRequested());
-    console.log('now')
+    // console.log('now')
     decksApi.getDeckOverviews().then((results) => {
-        console.log('loaded, returning')
+        // console.log('loaded, returning')
         dispatch(deckOverviewsReceived(results));
     });
 }

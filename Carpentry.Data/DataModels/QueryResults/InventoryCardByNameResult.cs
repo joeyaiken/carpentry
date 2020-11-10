@@ -9,11 +9,13 @@ namespace Carpentry.Data.DataModels.QueryResults
         public int CardId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+		public string Text { get; set; }
         public string ManaCost { get; set; }
-        public string Color { get; set; }
-        public string ColorIdentity { get; set; }
         public int? Cmc { get; set; }
         public string ImageUrl { get; set; }
+        public string Color { get; set; }
+        public string ColorIdentity { get; set; }
+        public char RarityId { get; set; }
         public int OwnedCount { get; set; }
         public int DeckCount { get; set; }
     }

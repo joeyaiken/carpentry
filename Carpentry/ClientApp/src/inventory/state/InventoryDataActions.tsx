@@ -27,33 +27,23 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
 
     //TODO -- This whole chunk shouyld come from the inventory overview app reducer
     //  It should also probably be passed as a param and not purely read from app state
+
+    const existingFilters = state.inventory.overviews.filters;
     const param: InventoryQueryParameter = { 
-        //groupBy: state.inventory.searchFilter.searchMethod,
-        //groupBy: state.inventory.searchMethod,
-        groupBy: 'unique',//state.app.inventory.searchMethod,
-        text: state.inventory.overviews.filters.text,
-        //sets: [],
-        colors: state.inventory.overviews.filters.colorIdentity,
-        types: [],
-        skip: 0,
-        take: 100,
-        // format: state.inventory.overviews.filters.format,
-        sort:   'price',//state.inventory.searchFilter.sort,
-        sortDescending: true,
-        //sort: 'name',
-        //set: 'eld'
-        set: state.inventory.overviews.filters.set,
-        exclusiveColorFilters: state.inventory.overviews.filters.exclusiveColorFilters,
-        multiColorOnly: state.inventory.overviews.filters.multiColorOnly,
-        // maxCount: state.inventory.overviews.filters.maxCount || 0,
-        // minCount: state.inventory.overviews.filters.minCount || 0,
-        type: state.inventory.overviews.filters.type,
-        //rarity: state.cardSearch.cardSearchFilter.props.rarity,
-        rarity: state.inventory.overviews.filters.rarity,
-        //rarity: ['c','u']
-        format: null,
-        maxCount: 0,
-        minCount: 0,
+        groupBy: existingFilters.groupBy,
+        text: existingFilters.text,
+        colors: existingFilters.colorIdentity,
+        skip: existingFilters.skip,
+        take: existingFilters.take,
+        sort: existingFilters.sortBy,
+        sortDescending: existingFilters.sortDescending,
+        set: existingFilters.set,
+        exclusiveColorFilters: existingFilters.exclusiveColorFilters,
+        multiColorOnly: existingFilters.multiColorOnly,
+        maxCount: existingFilters.maxCount,
+        minCount: existingFilters.minCount,
+        type: existingFilters.type,
+        rarity: existingFilters.rarity,
     }
     inventoryApi.searchCards(param).then((result) => {
         dispatch(inventoryOverviewsReceived(result));

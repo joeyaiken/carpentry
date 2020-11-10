@@ -60,35 +60,18 @@ interface CardFilterProps {
 interface InventoryFilterProps {
     groupBy: InventoryGroupMethod;
     sortBy: InventorySortMethod;
-
-
-
     set: string;
-    // setId: number | null;
-
     text: string;
-
     type: string;
-
-    
-
     colorIdentity: string[];
     exclusiveColorFilters: boolean;
     multiColorOnly: boolean;
-
     rarity: string[];
-
-    // cardName: string;
-    // exclusiveName: boolean;
-
-    // format: string;
-
-    // minCount: number | null;
-    // maxCount: number | null;
-
-    // group: string | null;
+    minCount: number;
+    maxCount: number;
     skip: number;
-    take: number
+    take: number;
+    sortDescending: boolean;
 }
 
 interface CardFilterVisibilities {

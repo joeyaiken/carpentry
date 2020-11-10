@@ -1,10 +1,6 @@
 //app reducer for the inventory overview container
 
-////
-
-// import { 
-//     // INVENTORY_SEARCH_METHOD_CHANGED,
-// } from '../_actions';
+import { INVENTORY_OVERVIEW_FILTER_CHANGED } from "./inventoryOverviewActions";
 
 export interface State {
     // searchMethod: InventorySearchMethod;
@@ -44,35 +40,39 @@ export interface State {
 
 export const inventoryOverviewAppReducer = (state = initialState, action: ReduxAction): State => {
     switch(action.type){
-
-        // case INVENTORY_SEARCH_METHOD_CHANGED:
-        //     return inventorySearchMethodChanged(state, action);
-
-        default:
-            return(state)
+        case INVENTORY_OVERVIEW_FILTER_CHANGED: return inventoryOverviewFilterChanged(state, action);
+        default: return(state)
     }
 }
 
+const inventoryOverviewFilterChanged = (state: State, action: ReduxAction): State => {
+    const { filter, value } = action.payload;
+    const newState: State = {
+        ...state,
+        filters: {
+            ...state.filters,
+            [filter]: value,
+        }
+    }
+    return newState;
+}
 
 function initialCardSearchFilterProps(): InventoryFilterProps {
     return {
         groupBy: "unique",
         sortBy: "price",
-        // setId: null,
-        // set: '',
-        // colorIdentity: [],
-        // rarity: [], //['mythic','rare','uncommon','common'], //
-        // type: '',
-        // exclusiveColorFilters: false,
-        // multiColorOnly: false,
-        // cardName: '',
-        // exclusiveName: false,
-        // maxCount: 0,
-        // minCount: 0,
-        // format: '',
-        // text: '',
-        // group: '',
-
+        set: "",
+        text: "",
+        exclusiveColorFilters: false,
+        multiColorOnly: false,
+        skip: 0,
+        take: 100,
+        type: "",
+        colorIdentity: [],
+        rarity: [],
+        minCount: 0,
+        maxCount: 0,
+        sortDescending: true,
     } as InventoryFilterProps;
 } 
 

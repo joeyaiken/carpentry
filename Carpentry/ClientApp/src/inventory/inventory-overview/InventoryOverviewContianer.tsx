@@ -9,6 +9,7 @@ import { Publish } from '@material-ui/icons';
 import { push } from 'react-router-redux';
 import { requestInventoryOverviews } from '../state/InventoryDataActions';
 import LoadingBox from '../../common/components/LoadingBox';
+import { inventoryOverviewFilterChanged } from './state/inventoryOverviewActions';
 
 interface PropsFromState { 
     // searchMethod: "name" | "quantity" | "price";
@@ -47,20 +48,23 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
     // }
 
     handleCardDetailSelected(cardId: number | null){
-        console.log(`card selected: ${cardId}`);
+        // console.log(`card selected: ${cardId}`);
         this.props.dispatch(push(`/inventory/${cardId}`));
     }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        // this.props.dispatch(filterValueChanged("inventoryFilterProps", event.target.name, event.target.value));
+        // this.props.dispatch(inventoryOverviewFilterChanged("inventoryFilterProps", event.target.name, event.target.value));
+        this.props.dispatch(inventoryOverviewFilterChanged(event.target.name, event.target.value));
     }
 
     handleBoolFilterChange(filter: string, value: boolean): void {
         // this.props.dispatch(filterValueChanged("inventoryFilterProps", filter, value));
+        this.props.dispatch(inventoryOverviewFilterChanged(filter, value));
     }
 
     handleSearchButtonClick() {
         // this.props.dispatch(requestInventoryItems());
+        this.props.dispatch(requestInventoryOverviews());
     }
 
     handleExportClick() {

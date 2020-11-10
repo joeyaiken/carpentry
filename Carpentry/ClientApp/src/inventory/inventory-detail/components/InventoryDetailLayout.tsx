@@ -64,7 +64,7 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
                                                     return(
                                                     <TableRow key={item.id}>
                                                         <TableCell>
-                                                            <Typography>{item.isFoil &&" foil" || "normal"}</Typography>
+                                                            <Typography>{(item.isFoil && " foil") || "normal"}</Typography>
                                                         </TableCell>
                                                         <TableCell>
                                                             <Typography>
