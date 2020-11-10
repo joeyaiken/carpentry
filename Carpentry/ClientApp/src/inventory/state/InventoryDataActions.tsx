@@ -17,12 +17,12 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
     if(dataQueryInProgress){
         return;
     }
-    // console.log('actions - getInventoryItems - calling inventoryItemsRequested');
+    console.log('actions - getInventoryOverviews - calling inventoryItemsRequested');
 
     //dispatch(inventoryItemsRequested());
     dispatch(inventoryOverviewsRequested());
     
-    // console.log('actions - getInventoryItems - calling api_getAllInventoryItems');
+    console.log('actions - getInventoryOverviews - calling api_getAllInventoryItems');
 
 
     //TODO -- This whole chunk shouyld come from the inventory overview app reducer
@@ -33,18 +33,20 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
         groupBy: existingFilters.groupBy,
         text: existingFilters.text,
         colors: existingFilters.colorIdentity,
-        skip: existingFilters.skip,
-        take: existingFilters.take,
+        skip: +existingFilters.skip,
+        take: +existingFilters.take,
         sort: existingFilters.sortBy,
         sortDescending: existingFilters.sortDescending,
         set: existingFilters.set,
         exclusiveColorFilters: existingFilters.exclusiveColorFilters,
         multiColorOnly: existingFilters.multiColorOnly,
-        maxCount: existingFilters.maxCount,
-        minCount: existingFilters.minCount,
+        maxCount: +existingFilters.maxCount,
+        minCount: +existingFilters.minCount,
         type: existingFilters.type,
         rarity: existingFilters.rarity,
     }
+    console.log('Getting overviews with params');
+    console.log(param);
     inventoryApi.searchCards(param).then((result) => {
         dispatch(inventoryOverviewsReceived(result));
     });

@@ -323,7 +323,7 @@ namespace Carpentry.Logic.Implementations
 
             if (!string.IsNullOrEmpty(param.Type))
             {
-                query = query.Where(x => x.Type.Contains(param.Type)); //Should this be .ToLower() ?
+                query = query.Where(x => x.Type.ToLower().Contains(param.Type.ToLower())); //Should this be .ToLower() ?
             }
 
             if (param.Rarity != null && param.Rarity.Any())
@@ -334,7 +334,7 @@ namespace Carpentry.Logic.Implementations
             if (!string.IsNullOrEmpty(param.Text))
             {
                 query = query.Where(x =>
-                    x.Text.ToLower().Contains(param.Text.ToLower())
+                    (x.Text != null && x.Text.ToLower().Contains(param.Text.ToLower()))
                     ||
                     x.Name.ToLower().Contains(param.Text.ToLower())
                     ||

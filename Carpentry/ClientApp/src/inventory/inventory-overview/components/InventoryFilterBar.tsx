@@ -4,22 +4,12 @@ import React from 'react';
 
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
-
-// import {
-//     requestInventoryItems, 
-//     // inventoryFilterChanged,
-// } from '../actions/inventory.actions'
-
-
-// import CardFilterBar from '../components/CardFilterBar';
-import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button } from '@material-ui/core';
+import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button, Select } from '@material-ui/core';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
-// import FilterBarSearchButton from '../components/FilterBarSearchButton';
 
 interface InventoryFilterBarProps{
     searchFilter: InventoryFilterProps,
     viewMethod: "grid" | "table";
-
     visibleFilters: CardFilterVisibilities;
     filterOptions: AppFiltersDto,
     handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -35,28 +25,79 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
     // try this?
     // https://material-ui.com/components/autocomplete
 
-    // console.log('visible filters');
-    // console.log(props.visibleFilters);
-
     return(
-<Paper className={combineStyles(outlineSection, flexCol)}>
+        <Paper className={combineStyles(outlineSection, flexCol)}>
+            <Box className={combineStyles(flexSection, flexRow)}>
 
-{/* <Box className={flexCol}> */}
+      
 
-    <Box className={combineStyles(flexSection, flexRow)}>
-            {   //Text filter
-                props.visibleFilters.text &&
                 <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="text"
+                    View: Grid
+                    {/* <TextField
+                        name="view"
                         className={stretch}
-                        label="Text"
-                        value={props.searchFilter.text}
+                        select
+                        label="View"
+                        value={props.viewMethod}
                         onChange={props.handleFilterChange}
-                        margin="normal"/>
+                        margin="normal" >
+                            {
+                                ["grid","table"].map(
+                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
+                                )
+                            }
+                    </TextField> */}
                 </Box>
-            }
-            
+
+                <SelectFilter name="groupBy" value={props.searchFilter.groupBy} selectMultiple={false} 
+                    options={[{name: "name", value: "name"}, {name: "print", value: "print"}, {name: "unique", value: "unique"}]}
+                    handleFilterChange={props.handleFilterChange} />
+
+                <Box className={`${flexSection} ${sidePadded}`}>
+                    Group: By Unique
+                    {/* <TextField
+                        name="group"
+                        className={stretch}
+                        select
+                        label="Group by"
+                            value={props.searchFilter.groupBy}
+                        onChange={props.handleFilterChange}
+                        margin="normal" >
+                            {
+                                ["name","print", "unique"].map(
+                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
+                                )
+                            }
+                    </TextField> */}
+                </Box>
+
+                <Box className={`${flexSection} ${sidePadded}`}>
+                    Sort: By Price, descending
+                    {/* <TextField
+                        name="sort"
+                        className={stretch}
+                        select
+                        label="Sort by"
+                        // value={props.searchFilter.group}
+                        value={props.searchFilter.sortBy}
+                        onChange={props.handleFilterChange}
+                        margin="normal" >
+                            {
+                                ["name","quantity", "price"].map(
+                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
+                                )
+                            }
+                    </TextField> */}
+                </Box>
+
+                <SelectFilter name="set" value={props.searchFilter.set} selectMultiple={false} options={props.filterOptions.sets}
+                    handleFilterChange={props.handleFilterChange} />
+
+                <SelectFilter name="type" value={props.searchFilter.type} selectMultiple={false} options={props.filterOptions.types}
+                    handleFilterChange={props.handleFilterChange} />
+
+        {/* Old implementation, should remove the concept of VisibleFilters.  To complicated for what it provides */}
+
             {   //Type filter
                 props.visibleFilters.type &&
                 <Box className={`${flexSection} ${sidePadded}`}>
@@ -127,48 +168,6 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 </Box>
             }
             
-            {   //RARITY filter
-                props.visibleFilters.rarity &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="rarity"
-                        className={stretch}
-                        select
-                        SelectProps={{ multiple: true }}
-                        label="Rarity filter"
-                        value={props.searchFilter.rarity}
-                        onChange={props.handleFilterChange}
-                        margin="normal" >
-                        { props.filterOptions.rarities.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
-                    </TextField>
-                </Box>
-            }
-          
-{/* 
-            {   //Min Count
-                props.visibleFilters.count &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="minCount"
-                        className={stretch}
-                        label="Min"
-                        value={props.searchFilter.minCount}
-                        onChange={props.handleFilterChange}
-                        margin="normal"/>
-                </Box>
-            }
-            {   //Max Count
-                props.visibleFilters.count &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="maxCount"
-                        className={stretch}
-                        label="Max"
-                        value={props.searchFilter.maxCount}
-                        onChange={props.handleFilterChange}
-                        margin="normal"/>
-                </Box>
-            } */}
             {   //Format
                 props.visibleFilters.format &&
                 <Box className={`${flexSection} ${sidePadded}`}>
@@ -193,37 +192,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 </Box>
             }
     </Box>
-    {/* </Paper> */}
-    
-        
-
-    {/* </Paper> */}
-
-    
-    {/* <Paper className={outlineSection}>
-        <InventoryFilterBar 
-            filterOptions={this.props.filterOptions}
-            handleBoolFilterChange={this.handleBoolFilterChange}
-            handleFilterChange={this.handleFilterChange}
-            searchFilter={this.props.searchFilterProps}
-            visibleFilters={this.props.visibleFilters}
-        />
-    </Paper> */}
     <Box className={combineStyles(flexSection, flexRow)}>
 
 <Box className={combineStyles(flexSection, flexRow)}>
-{/* 
-            <Box className ="flex-section outline-section">
-                [x] Exclude Lands
-            </Box>
 
-            include unowned / only show owned
-
-            exclude lands (this is so I don't have to see all the gates)
-
-            */}
-
-            {/* exclude lands / include unowned / exclude owned */}
             {/* <Box className ="static-section side-padded">
                     <FormControl component="fieldset">
                         <FormControlLabel
@@ -256,107 +228,8 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 </Box>
              */}
 
-            {/*  Group by Name / Group by MID / unique prints */}
-            {/* <Box className={`${flexSection} ${sidePadded}`}>
-                <TextField
-                    name="text"
-                    className={stretch}
-                    label="Group"
-                    value={props.searchFilter.text}
-                    onChange={props.handleFilterChange}
-                    margin="normal"/>
-            </Box> */}
-
-            {/* Sort by name/quantity/price */}
-            
-                {/* <Box className={`${flexSection} ${sidePadded}`}>
-                    
-                    <Box className={outlineSection}>
-                        Filter idea: Hide non-normal variants
-                        Can be used when trying to see what I have > 4 or 6 or whatever of
-                    </Box>
-                </Box> */}
-
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="view"
-                        className={stretch}
-                        select
-                        label="View"
-                         value={props.viewMethod}
-                        onChange={props.handleFilterChange}
-                        margin="normal" >
-                            {
-                                ["grid","table"].map(
-                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
-                                )
-                            }
-                        </TextField>
-                </Box>
-
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="group"
-                        className={stretch}
-                        select
-                        label="Group by"
-                         value={props.searchFilter.groupBy}
-                        onChange={props.handleFilterChange}
-                        margin="normal" >
-                            {
-                                ["name","print", "unique"].map(
-                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
-                                )
-                            }
-                        </TextField>
-                </Box>
-
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="sort"
-                        className={stretch}
-                        select
-                        label="Sort by"
-                        // value={props.searchFilter.group}
-                        value={props.searchFilter.sortBy}
-                        onChange={props.handleFilterChange}
-                        margin="normal" >
-                            {
-                                ["name","quantity", "price"].map(
-                                    val => <MenuItem key={val} value={val} style={{textTransform: "capitalize"}}>{val}</MenuItem>
-                                )
-                            }
-                        </TextField>
-                </Box>
-
-                {   //SET filter
-                    props.visibleFilters.set &&
-                    <Box className={`${flexSection} ${sidePadded}`}>
-                        <TextField
-                            name="set"
-                            className={stretch}
-                            select
-                            label="Set filter"
-                            value={props.searchFilter.set}
-                            onChange={props.handleFilterChange}
-                            margin="normal" >
-                                <MenuItem key="null" value=""></MenuItem>
-                                { props.filterOptions.sets.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
-                            </TextField>
-                    </Box>
-                }
-
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="text"
-                        className={stretch}
-                        label="Text"
-                        // value={props.searchFilter.group}
-                        onChange={props.handleFilterChange}
-                        margin="normal" >
-      
-                        </TextField>
-                </Box>
+                <TextFilter name="text" value={props.searchFilter.text}
+                    handleFilterChange={props.handleFilterChange} />
                 
                 <Box className={`${flexSection} ${sidePadded}`}>
                     <Box className={outlineSection}>
@@ -375,24 +248,6 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 </Box>
 
             {/* cardStatus (deck/sellList/buyList/inventory) */}
-            {/* <Box className={`${flexSection} ${sidePadded}`}>
-                <TextField
-                    name="status"
-                    className={stretch}
-                    select
-                    SelectProps={{ multiple: true }}
-                    label="Status"
-                    // value={props.searchFilter.rarity}
-                    value={["deck","inventory"]}
-                    onChange={props.handleFilterChange}
-                    margin="normal" >
-                    { 
-                        ["deck","sellList","buyList","inventory"].map(
-                            (item) => (<MenuItem key={item} value={item} style={{textTransform: "capitalize"}}>{item}</MenuItem>)
-                        ) 
-                    }
-                </TextField>
-            </Box> */}
 
             {/* {
                 this.props.searchFilter.group != "quantity" &&
@@ -430,30 +285,7 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 // </Box>
             }
 
-            {/* {   //Min Count
-                props.visibleFilters.count &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="minCount"
-                        className={stretch}
-                        label="Min"
-                        value={props.searchFilter.minCount}
-                        onChange={props.handleFilterChange}
-                        margin="normal"/>
-                </Box>
-            }
-            {   //Max Count
-                props.visibleFilters.count &&
-                <Box className={`${flexSection} ${sidePadded}`}>
-                    <TextField
-                        name="maxCount"
-                        className={stretch}
-                        label="Max"
-                        value={props.searchFilter.maxCount}
-                        onChange={props.handleFilterChange}
-                        margin="normal"/>
-                </Box>
-            } */}
+            
             {/* {   //Format
                 props.visibleFilters.format &&
                 <Box className={`${flexSection} ${sidePadded}`}>
@@ -478,37 +310,102 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                 </Box>
             } */}
 
-            <Box className={`${flexSection} ${sidePadded}`}>
-                <TextField
-                    name="text"
-                    className={stretch}
-                    label="Skip"
-                    value={props.searchFilter.text}
-                    onChange={props.handleFilterChange}
-                    margin="normal"/>
-            </Box>
 
-            <Box className={`${flexSection} ${sidePadded}`}>
-                <TextField
-                    name="text"
-                    className={stretch}
-                    label="Take"
-                    value={props.searchFilter.text}
-                    onChange={props.handleFilterChange}
-                    margin="normal"/>
-            </Box>
 
-            
+            <SelectFilter name="rarity" value={props.searchFilter.rarity} options={props.filterOptions.rarities} selectMultiple={true}
+                handleFilterChange={props.handleFilterChange} />
+
+            <NumericFilter name="minCount" value={props.searchFilter.minCount}
+                handleFilterChange={props.handleFilterChange} />
+
+            <NumericFilter name="maxCount" value={props.searchFilter.maxCount}
+                handleFilterChange={props.handleFilterChange} />
+
+            <NumericFilter name="skip" value={props.searchFilter.skip}
+                handleFilterChange={props.handleFilterChange} />
+
+            <NumericFilter name="take" value={props.searchFilter.take}
+                handleFilterChange={props.handleFilterChange} />
+
     </Box>
-    <Box className={combineStyles(staticSection, center, sidePadded)}>
+        <Box className={combineStyles(staticSection, center, sidePadded)}>
             <Button variant="contained" size="medium" color="primary" onClick={() => props.handleSearchButtonClick()}>
                 Search
             </Button>
         </Box>
     </Box>
-{/* </Box> */}
-    {/* </Box> */}
+
 </Paper>
     );
 }
 
+
+
+interface NumericFilterProps {
+    name: string;
+    value: number;
+    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+function NumericFilter(props: NumericFilterProps): JSX.Element {
+    const { flexSection, sidePadded, stretch } = appStyles();
+    return(
+        <Box className={`${flexSection} ${sidePadded}`}>
+            <TextField
+                name={props.name}
+                className={stretch}
+                label={props.name}
+                value={props.value}
+                onChange={props.handleFilterChange}
+                style={{textTransform: "capitalize"}}
+                margin="normal"/>
+        </Box>
+    )
+}
+
+interface SelectFilterProps {
+    name: string;
+    options: FilterOption[];
+    value: string | string[];
+    selectMultiple: boolean;
+    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+function SelectFilter(props: SelectFilterProps): JSX.Element {
+    const { flexSection, sidePadded, stretch } = appStyles();
+    return(
+        <Box className={`${flexSection} ${sidePadded}`}>
+                <TextField
+                    name={props.name}
+                    className={stretch}
+                    select
+                    SelectProps={{ multiple: props.selectMultiple }}
+                    label={props.name}
+                    value={props.value}
+                    onChange={props.handleFilterChange}
+                    style={{textTransform: "capitalize"}}
+                    margin="normal" >
+                    { props.options.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
+                </TextField>
+            </Box>
+    );
+}
+
+interface TextFilterProps {
+    name: string;
+    value: string;
+    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+function TextFilter(props: TextFilterProps): JSX.Element {
+    const { flexSection, sidePadded, stretch } = appStyles();
+    return(
+        <Box className={`${flexSection} ${sidePadded}`}>
+            <TextField
+                name={props.name}
+                className={stretch}
+                label={props.name}
+                value={props.value}
+                onChange={props.handleFilterChange}
+                style={{textTransform: "capitalize"}}
+                margin="normal"/>
+        </Box>
+    )
+}

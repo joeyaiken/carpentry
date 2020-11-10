@@ -9,7 +9,7 @@ import { Publish } from '@material-ui/icons';
 import { push } from 'react-router-redux';
 import { requestInventoryOverviews } from '../state/InventoryDataActions';
 import LoadingBox from '../../common/components/LoadingBox';
-import { inventoryOverviewFilterChanged } from './state/inventoryOverviewActions';
+import { inventoryOverviewFilterChanged } from './state/InventoryOverviewActions';
 
 interface PropsFromState { 
     // searchMethod: "name" | "quantity" | "price";
