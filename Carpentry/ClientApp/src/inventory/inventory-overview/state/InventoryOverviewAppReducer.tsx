@@ -1,6 +1,8 @@
 //app reducer for the inventory overview container
 
-import { INVENTORY_OVERVIEW_FILTER_CHANGED } from "./inventoryOverviewActions";
+import { INVENTORY_OVERVIEW_FILTER_CHANGED } from "./InventoryOverviewActions";
+
+// import { INVENTORY_OVERVIEW_FILTER_CHANGED } from "./inventoryOverviewActions";
 
 export interface State {
     // searchMethod: InventorySearchMethod;

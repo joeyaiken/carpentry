@@ -434,3 +434,9 @@ Carpentry.Tools.QuickRestore/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.As
 Carpentry.Tools.QuickImport/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
 Carpentry.Tools.QuickBackup/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
 .vs/Carpentry/DesignTimeBuild/.dtbcache.v2
+Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/spGetInventoryTotals.sql
+Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwInventoryCardsByName.sql
+Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwInventoryCardsByPrint.sql
+Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwInventoryCardsByUnique.sql
+Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwInventoryTotalsByStatus.sql
+Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwSetTotals.sql
