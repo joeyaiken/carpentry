@@ -1,10 +1,7 @@
-// import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-// import { AppState } from '../../reducers'
-
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button, Select } from '@material-ui/core';
+import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button } from '@material-ui/core';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 interface InventoryFilterBarProps{
@@ -41,6 +38,9 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                     options={[{name:"name", value:"name"},{name:"quantity", value:"quantity"},{name:"price", value:"price"}]}
                     handleFilterChange={props.handleFilterChange} />
 
+                <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
+                    options={[{name: "Desc", value: "sortDescending", checked: props.searchFilter.sortDescending}]} />
+
                 <SelectFilter name="set" value={props.searchFilter.set} selectMultiple={false} options={props.filterOptions.sets}
                     handleFilterChange={props.handleFilterChange} />
 
@@ -49,11 +49,10 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
 
                 <SelectFilter name="colorIdentity" selectMultiple={true} value={props.searchFilter.colorIdentity} options={props.filterOptions.colors}
                     handleFilterChange={props.handleFilterChange} />
-
-                <BooleanColorFilter
-                    exclusiveColorFiltersChecked={props.searchFilter.exclusiveColorFilters}
-                    multiColorOnlyChecked={props.searchFilter.multiColorOnly}
-                    handleBoolFilterChange={props.handleBoolFilterChange} />
+    
+                <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
+                    options={[{name: "Exclusive", value: "exclusiveColorFilters", checked: props.searchFilter.exclusiveColorFilters},
+                    {name: "Multi", value: "multiColorOnly", checked: props.searchFilter.multiColorOnly}]} />
 
             </Box>
             <Box className={combineStyles(flexSection, flexRow)}>
@@ -61,11 +60,8 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
 
                     <TextFilter name="text" value={props.searchFilter.text}
                         handleFilterChange={props.handleFilterChange} />
-                
 
-                    {/* <SelectFilter name="format" value={props.searchFilter.format} selectMultiple={false} 
-                        options={[{name: "none", value:""},{name: "Standard", value:"standard"},{name: "Modern", value:"modern"},{name: "Commander", value:"commander"},
-                        {name: "Pioneer", value:"pioneer"},{name: "Brawl", value:"brawl"},{name: "Pauper", value:"pauper"}]}
+                    {/* <SelectFilter name="format" value={props.searchFilter.format} selectMultiple={false} options={props.filterOptions.formats}
                         handleFilterChange={props.handleFilterChange} /> */}
 
                     <SelectFilter name="rarity" value={props.searchFilter.rarity} options={props.filterOptions.rarities} selectMultiple={true}
@@ -166,41 +162,27 @@ function TextFilter(props: TextFilterProps): JSX.Element {
     )
 }
 
-interface BooleanColorFilterProps {
-    exclusiveColorFiltersChecked: boolean;
-    multiColorOnlyChecked: boolean;
+interface BooleanCheckboxOption {
+    name: string;
+    value: string;
+    checked: boolean;
+}
+interface BooleanCheckboxGroupProps {
+    options: BooleanCheckboxOption[];
     handleBoolFilterChange: (filter: string, value: boolean) => void;
 }
-
-function BooleanColorFilter(props: BooleanColorFilterProps): JSX.Element {
-    
-    const { sidePadded, staticSection } = appStyles();
+function BooleanCheckboxGroup(props: BooleanCheckboxGroupProps): JSX.Element {
     return(
-        <Box className={combineStyles(staticSection, sidePadded)}>
-            <FormControl component="fieldset">
-                <FormControlLabel
-                    name="exclusiveColorFilters"
-                    onChange={(e, checked) => {props.handleBoolFilterChange("exclusiveColorFilters",checked)}}
-                    checked={props.exclusiveColorFiltersChecked}
-                    control={
-                        <Checkbox 
-                            color="primary"
-                            icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                            checkedIcon={<CheckBoxIcon fontSize="small" />} />
-                    }
-                    label="Exclusive" />
-                <FormControlLabel
-                    name="multiColorOnly"
-                    onChange={(e, checked) => {props.handleBoolFilterChange("multiColorOnly",checked)}}
-                    checked={props.multiColorOnlyChecked}
-                    control={
-                        <Checkbox
-                            color="primary"
-                            icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                            checkedIcon={<CheckBoxIcon fontSize="small" />} />
-                    }
-                    label="Multi" />
-            </FormControl>
-        </Box>
+        <FormControl component="fieldset">
+            {
+                props.options.map((item) => (<FormControlLabel
+                    key={item.value}
+                    name={item.value}
+                    onChange={(e, checked) => {props.handleBoolFilterChange(item.value,checked)}}
+                    checked={item.checked}
+                    control={<Checkbox  color="primary" icon={<CheckBoxOutlineBlankIcon fontSize="small" />} checkedIcon={<CheckBoxIcon fontSize="small" />} />}
+                    label={item.name} />))
+            }
+        </FormControl>
     );
 }

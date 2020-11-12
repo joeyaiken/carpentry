@@ -74,31 +74,11 @@ namespace Carpentry.Logic.Implementations
             //var allManaTypes = await _coreDataRepo.GetAllManaColors();
             var allManaTypes = new List<FilterOption>()
             {
-                new FilterOption()
-                {
-                    Value = "W",
-                    Name = "White",
-                },
-                new FilterOption()
-                {
-                    Value = "U",
-                    Name = "Blue",
-                },
-                new FilterOption()
-                {
-                    Value = "B",
-                    Name = "Black",
-                },
-                new FilterOption()
-                {
-                    Value = "R",
-                    Name = "Red",
-                },
-                new FilterOption()
-                {
-                    Value = "G",
-                    Name = "Green",
-                },
+                new FilterOption() {Value = "W", Name = "White"},
+                new FilterOption() {Value = "U",Name = "Blue"},
+                new FilterOption() {Value = "B",Name = "Black"},
+                new FilterOption() {Value = "R",Name = "Red"},
+                new FilterOption() {Value = "G",Name = "Green"},
             };
 
             result.Colors = allManaTypes;
@@ -117,6 +97,21 @@ namespace Carpentry.Logic.Implementations
             };
 
             result.SearchGroups = allSearchGroups;
+
+            var allGroupOptions = new List<FilterOption>()
+            {
+                new FilterOption() { Value = "name", Name = "Name" },
+                new FilterOption() { Value = "print", Name = "Print" },
+                new FilterOption() { Value = "unique", Name = "Unique" },
+            };
+
+            var allSortOptions = new List<FilterOption>()
+            {
+                new FilterOption() { Value = "count", Name = "Count" },
+                new FilterOption() { Value = "name", Name = "Name" },
+                new FilterOption() { Value = "price", Name = "Price" },
+                new FilterOption() { Value = "cmc", Name = "Cmc" },
+            };
 
             return result;
         }
