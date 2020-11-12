@@ -204,6 +204,8 @@ namespace Carpentry.Logic.Implementations
         {
 
             //TODO - Work on this, it seems like I'm pulling in the whole view
+            //Consider updating all views to return the same columns/model
+            //that way I can apply the same filtering regardless of where I get my IQueryable
             IEnumerable<CardOverviewResult> query;
 
             #region query
