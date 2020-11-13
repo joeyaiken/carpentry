@@ -104,7 +104,7 @@ namespace Carpentry.Logic.Implementations
                 new FilterOption() { Value = "print", Name = "Print" },
                 new FilterOption() { Value = "unique", Name = "Unique" },
             };
-
+            result.GroupBy = allGroupOptions;
             var allSortOptions = new List<FilterOption>()
             {
                 new FilterOption() { Value = "count", Name = "Count" },
@@ -112,6 +112,8 @@ namespace Carpentry.Logic.Implementations
                 new FilterOption() { Value = "price", Name = "Price" },
                 new FilterOption() { Value = "cmc", Name = "Cmc" },
             };
+
+            result.SortBy = allSortOptions;
 
             return result;
         }
