@@ -27,6 +27,8 @@ const initialState: State = {
         formats: [],
         statuses: [],
         searchGroups: [],
+        groupBy: [],
+        sortBy: [],
     },
     filterDataIsLoading: false,
 }
