@@ -11,9 +11,9 @@ import React, { ReactNode} from 'react';
 // } from '../actions/cardSearch.actions';
 
 // import CardSearchPendingCards from './CardSearchPendingCards'
-import { 
-    requestAddCardsFromSearch
-} from '../../_actions/inventoryActions';
+// import { 
+//     requestAddCardsFromSearch
+// } from '../../_actions/inventoryActions';
 
 import {
     Button,
@@ -25,10 +25,25 @@ import {
     Tabs,
     Tab,
 } from '@material-ui/core';
-import SearchResultTable from './components/SearchResultTable';
-import SearchResultGrid from './components/SearchResultGrid';
-import PendingCardsSection from './components/PendingCardsSection';
-import { cardSearchClearPendingCards, cardSearchSearchMethodChanged, toggleCardSearchViewMode, cardSearchAddPendingCard, cardSearchRemovePendingCard, cardSearchSelectCard, requestCardSearchInventory, requestCardSearch, requestAddDeckCard } from '../../_actions/cardSearchActions';
+// import SearchResultTable from './components/SearchResultTable';
+// import SearchResultGrid from './components/SearchResultGrid';
+// import PendingCardsSection from './components/PendingCardsSection';
+// import { 
+//     cardSearchClearPendingCards, 
+//     cardSearchSearchMethodChanged, 
+//     toggleCardSearchViewMode, 
+//     cardSearchAddPendingCard, 
+//     cardSearchRemovePendingCard, 
+//     cardSearchSelectCard, 
+//     requestCardSearchInventory,
+//     requestCardSearch, 
+//     requestAddDeckCard 
+// } from '../../_actions/cardSearchActions';
+
+// import {
+
+// } from '';
+
 import SetSearchFilterBar from './components/SetSearchFilterBar';
 import WebSearchFilterBar from './components/WebSearchFilterBar';
 import { combineStyles, appStyles } from '../../styles/appStyles';
@@ -37,6 +52,8 @@ import { AppState } from '../../configureStore';
 import SelectedCardSection from './components/SelectedCardSection';
 import DeckSelectedCardSection from './components/DeckSelectedCardSection';
 import CardSearchLayout from './components/CardSearchLayout';
+import { cardSearchAddPendingCard, cardSearchRemovePendingCard, cardSearchFilterValueChanged, toggleCardSearchViewMode, cardSearchClearPendingCards, cardSearchSearchMethodChanged, requestAddDeckCard, cardSearchSelectCard, cardSearchRequestSavePendingCards } from './state/cardSearchActions';
+import { requestCardSearch, requestCardSearchInventory } from './data/cardSearchDataActions';
 
 // import CardSearchFilterBar from './CardSearchFilterBar';
 // import CardSearchResultDetail from './CardSearchResultDetail';
@@ -106,7 +123,7 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     handleSaveClick(){
-        this.props.dispatch(requestAddCardsFromSearch());
+        this.props.dispatch(cardSearchRequestSavePendingCards());
     }
 
     handleCancelClick(){
@@ -146,12 +163,12 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        this.props.dispatch(filterValueChanged("cardSearchFilterProps", event.target.name, event.target.value));
+        this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", event.target.name, event.target.value));
     }
 
     handleBoolFilterChange(filter: string, value: boolean): void {
         // console.log(`search filter bar change filter: ${filter} val: ${value}`)
-        this.props.dispatch(filterValueChanged("cardSearchFilterProps", filter, value));
+        this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", filter, value));
     }
 
     handleAddExistingCardClick(inventoryCard: InventoryCard): void{
@@ -196,7 +213,10 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
         //     cardId: 0,
         //     collectorNumber: 0,
         // }
-        this.props.dispatch(requestAddDeckCard(deckCard));
+
+        //is this an app or data action?
+        //Maybe app so it can reroute after saving
+        this.props.dispatch(requestAddDeckCard(deckCard));  
     }
 
     render(){
@@ -226,126 +246,126 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
             );
     }
 
-    render_legacy() {
-        // const { flexCol, flexRow, outlineSection } = appStyles();
-        return (
-            <ContainerLayout
-                appBar={this.renderAppBar()}
-                filterBar={this.renderFilterBar()}
-                handleCancelClick={this.handleCancelClick}
-                handleSaveClick={this.handleSaveClick}
-                pendingCards={ this.renderPendingCards() }
-                searchResults={<React.Fragment>
-                    {this.renderSearchResults()}
-                    {this.renderSearchResultDetail()}
-                </React.Fragment>}
-            />
-        );
-    }
+    // render_legacy() {
+    //     // const { flexCol, flexRow, outlineSection } = appStyles();
+    //     return (
+    //         <ContainerLayout
+    //             appBar={this.renderAppBar()}
+    //             filterBar={this.renderFilterBar()}
+    //             handleCancelClick={this.handleCancelClick}
+    //             handleSaveClick={this.handleSaveClick}
+    //             pendingCards={ this.renderPendingCards() }
+    //             searchResults={<React.Fragment>
+    //                 {this.renderSearchResults()}
+    //                 {this.renderSearchResultDetail()}
+    //             </React.Fragment>}
+    //         />
+    //     );
+    // }
 
-    renderAppBar(){
-        return(
-            <AppBar color="default" position="relative">
-                <Toolbar>
-                    <Typography variant="h6">
-                        Card Search
-                    </Typography>
-                    <Tabs value={this.props.cardSearchMethod} onChange={(e, value) => {this.handleSearchMethodTabClick(value)}} >
-                        <Tab value="set" label="Set" />
-                        <Tab value="web" label="Web" />
-                        <Tab value="inventory" label="Inventory" />
-                    </Tabs>
-                    <Button onClick={this.handleToggleViewClick} color="primary" variant="contained">
-                        Toggle View
-                    </Button>
-                </Toolbar>
-            </AppBar>
-        );
-    }
+    // renderAppBar(){
+    //     return(
+    //         <AppBar color="default" position="relative">
+    //             <Toolbar>
+    //                 <Typography variant="h6">
+    //                     Card Search
+    //                 </Typography>
+    //                 <Tabs value={this.props.cardSearchMethod} onChange={(e, value) => {this.handleSearchMethodTabClick(value)}} >
+    //                     <Tab value="set" label="Set" />
+    //                     <Tab value="web" label="Web" />
+    //                     <Tab value="inventory" label="Inventory" />
+    //                 </Tabs>
+    //                 <Button onClick={this.handleToggleViewClick} color="primary" variant="contained">
+    //                     Toggle View
+    //                 </Button>
+    //             </Toolbar>
+    //         </AppBar>
+    //     );
+    // }
 
-    renderFilterBar(){
-        // const {  flexRow, outlineSection } = appStyles();
-        return(
-            <FilterBar 
-                filterOptions={this.props.filterOptions}
-                    handleBoolFilterChange={this.handleBoolFilterChange}
-                    handleFilterChange={this.handleFilterChange}
-                    searchFilterProps={this.props.searchFilterProps}
-                    // visibleFilters={this.props.visibleFilters}
-                    cardSearchMethod={this.props.cardSearchMethod}
-                    handleSearchButtonClick={this.handleSearchButtonClick}
-            />);
-    }
+    // renderFilterBar(){
+    //     // const {  flexRow, outlineSection } = appStyles();
+    //     return(
+    //         <FilterBar 
+    //             filterOptions={this.props.filterOptions}
+    //                 handleBoolFilterChange={this.handleBoolFilterChange}
+    //                 handleFilterChange={this.handleFilterChange}
+    //                 searchFilterProps={this.props.searchFilterProps}
+    //                 // visibleFilters={this.props.visibleFilters}
+    //                 cardSearchMethod={this.props.cardSearchMethod}
+    //                 handleSearchButtonClick={this.handleSearchButtonClick}
+    //         />);
+    // }
 
-    renderSearchResults(){
-        return(<Paper 
-                style={{ overflow:'auto', flex:'1 1 70%' }} >
+    // renderSearchResults(){
+    //     return(<Paper 
+    //             style={{ overflow:'auto', flex:'1 1 70%' }} >
 
         
-            {
-                this.props.viewMode === "list" && 
-                    <SearchResultTable 
-                        searchContext={this.props.searchContext} 
-                        searchResults={this.props.searchResults}
-                        handleAddPendingCard={this.handleAddPendingCard}
-                        handleRemovePendingCard={this.handleRemovePendingCard}
-                        onCardSelected={this.handleCardSelected}
-                        />
-            }
-            {
-                this.props.viewMode === "grid" &&
-                    <SearchResultGrid 
-                        searchResults={this.props.searchResults}
-                        onCardSelected={this.handleCardSelected}
-                        />
-            }
-        </Paper>);
-    }
+    //         {
+    //             this.props.viewMode === "list" && 
+    //                 <SearchResultTable 
+    //                     searchContext={this.props.searchContext} 
+    //                     searchResults={this.props.searchResults}
+    //                     handleAddPendingCard={this.handleAddPendingCard}
+    //                     handleRemovePendingCard={this.handleRemovePendingCard}
+    //                     onCardSelected={this.handleCardSelected}
+    //                     />
+    //         }
+    //         {
+    //             this.props.viewMode === "grid" &&
+    //                 <SearchResultGrid 
+    //                     searchResults={this.props.searchResults}
+    //                     onCardSelected={this.handleCardSelected}
+    //                     />
+    //         }
+    //     </Paper>);
+    // }
 
-    renderSearchResultDetail(){
-        return(
-            //<Paper className={staticSection}>
-        //     <div className={classes.flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
-        //     { props.children }
-        // </div>
+    // renderSearchResultDetail(){
+    //     return(
+    //         //<Paper className={staticSection}>
+    //     //     <div className={classes.flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
+    //     //     { props.children }
+    //     // </div>
 
-            <Paper style={{ overflow:'auto', flex:'1 1 30%' }} > 
-            {
-                this.props.selectedCard && this.props.searchContext === "inventory" &&
-                <SelectedCardSection 
-                    selectedCard={this.props.selectedCard}
-                    pendingCards={this.props.pendingCards[this.props.selectedCard.name]}
-                    handleAddPendingCard={this.handleAddPendingCard}
-                    handleRemovePendingCard={this.handleRemovePendingCard}
-                    selectedCardDetail={null} />
-            }
-            {
-                this.props.selectedCard && this.props.searchContext === "deck" &&
-                <DeckSelectedCardSection 
-                    selectedCard={this.props.selectedCard}
-                    // pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
+    //         <Paper style={{ overflow:'auto', flex:'1 1 30%' }} > 
+    //         {
+    //             this.props.selectedCard && this.props.searchContext === "inventory" &&
+    //             <SelectedCardSection 
+    //                 selectedCard={this.props.selectedCard}
+    //                 pendingCards={this.props.pendingCards[this.props.selectedCard.name]}
+    //                 handleAddPendingCard={this.handleAddPendingCard}
+    //                 handleRemovePendingCard={this.handleRemovePendingCard}
+    //                 selectedCardDetail={null} />
+    //         }
+    //         {
+    //             this.props.selectedCard && this.props.searchContext === "deck" &&
+    //             <DeckSelectedCardSection 
+    //                 selectedCard={this.props.selectedCard}
+    //                 // pendingCards={this.props.pendingCards[this.props.selectedCard.multiverseId]}
                     
-                    //But decks don't support pending cards?...
-                    handleAddPendingCard={this.handleAddPendingCard}
+    //                 //But decks don't support pending cards?...
+    //                 handleAddPendingCard={this.handleAddPendingCard}
                     
-                    handleRemovePendingCard={this.handleRemovePendingCard} 
-                    selectedCardDetail={this.props.selectedCardDetail}
-                    handleAddInventoryCard={this.handleAddExistingCardClick}
-                    handleAddNewCard={this.handleAddNewCardClick}
-                    // handleMoveCard={this.handleMoveCardClick}
+    //                 handleRemovePendingCard={this.handleRemovePendingCard} 
+    //                 selectedCardDetail={this.props.selectedCardDetail}
+    //                 handleAddInventoryCard={this.handleAddExistingCardClick}
+    //                 handleAddNewCard={this.handleAddNewCardClick}
+    //                 // handleMoveCard={this.handleMoveCardClick}
                     
-                    />
-            }
-            </Paper>
-        );
-    }
+    //                 />
+    //         }
+    //         </Paper>
+    //     );
+    // }
 
-    renderPendingCards(){
-        return(
-        <React.Fragment>
-            <PendingCardsSection pendingCards={this.props.pendingCards} />
-        </React.Fragment>);
-    }
+    // renderPendingCards(){
+    //     return(
+    //     <React.Fragment>
+    //         <PendingCardsSection pendingCards={this.props.pendingCards} />
+    //     </React.Fragment>);
+    // }
 }
 
 interface ContainerLayoutProps {
@@ -391,7 +411,7 @@ function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
 }
 
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
-    const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.data.cardSearch.inventoryDetail;
+    const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.cardSearch.data.inventoryDetail;
     const result: InventoryDetailDto = {
         name: "",
         cards: allCardIds.map(id => cardsById[id]),
@@ -401,19 +421,13 @@ function selectInventoryDetail(state: AppState): InventoryDetailDto {
 }
 
 function selectSearchResults(state: AppState): CardSearchResultDto[] {
-    const { allSearchResultIds, searchResultsById } = state.data.cardSearch.searchResults;
+    const { allSearchResultIds, searchResultsById } = state.cardSearch.data.searchResults;
     const result: CardSearchResultDto[] = allSearchResultIds.map(cid => searchResultsById[cid])
     return result;
 }
 
 function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //Notes: "visibleContainer" now needs to be determined by the route & "ownProps"
-
-
-    // console.log('card search own props');
-    // console.log(ownProps);
-
-    // console.log(state.cardSearch.inventoryDetail);
 
     //I'm going to need to map pending card totals to the inventory query result
     
@@ -426,7 +440,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
             //Apparently THIS IS BAD but I can't figure out a better approach right now
             //Clarification, .Find() is BAD
             //const cardExistsInDeck = state.data.deckDetail.cardOverviewsByName[card.name];
-            const { cardOverviewsById, allCardOverviewIds } = state.data.deckDetail;
+            const { cardOverviewsById, allCardOverviewIds } = state.decks.data.detail;
 
             const cardExistsInDeck = Boolean(allCardOverviewIds.find(id => cardOverviewsById[id].name === card.name));
 
@@ -439,7 +453,8 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     } else {
         mappedSearchResults = selectSearchResults(state).map(card => ({
             data: card,
-            count: state.data.cardSearch.pendingCards[card.name] && state.data.cardSearch.pendingCards[card.name].cards.length
+            //count: state.data.cardSearch.pendingCards[card.name] && state.data.cardSearch.pendingCards[card.name].cards.length
+            count: state.cardSearch.state.pendingCards[card.name] && state.cardSearch.state.pendingCards[card.name].cards.length
         }) as CardListItem);
     }
 
@@ -454,7 +469,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         text: false,
     }
 
-    switch(state.app.cardSearch.cardSearchMethod){
+    switch(state.cardSearch.state.cardSearchMethod){
         case "inventory":
             visibleFilters = {
                 ...visibleFilters,
@@ -485,20 +500,25 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
 
     const result: PropsFromState = {
         // cardSearchMethod: state.app.cardSearch.cardSearchMethod,
-        cardSearchMethod: state.app.cardSearch.cardSearchMethod,
+        //cardSearchMethod: state.app.cardSearch.cardSearchMethod,
+        cardSearchMethod: state.cardSearch.state.cardSearchMethod,
         deckId: parseInt(ownProps.match.params.deckId) || 0,
         
-        pendingCards: state.data.cardSearch.pendingCards,
-
+        //pendingCards: state.data.cardSearch.pendingCards,
+        pendingCards: state.cardSearch.state.pendingCards,
         //searchContext: (state.app.core.visibleContainer === "deckEditor") ? "deck":"inventory",
         searchContext: ownProps.searchContext,
-        selectedCard: state.app.cardSearch.selectedCard,
+        //selectedCard: state.app.cardSearch.selectedCard,
+        selectedCard: state.cardSearch.state.selectedCard,
         selectedCardDetail: selectInventoryDetail(state),
 
         searchResults: mappedSearchResults,
-        viewMode: state.app.cardSearch.viewMode,
-        filterOptions: state.data.appFilterOptions.filterOptions,
-        searchFilterProps: state.ui.cardSearchFilterProps,
+        //viewMode: state.app.cardSearch.viewMode,
+        viewMode: state.cardSearch.state.viewMode,
+        //filterOptions: state.data.appFilterOptions.filterOptions,
+        filterOptions: state.core.data.filterOptions,
+        //searchFilterProps: state.ui.cardSearchFilterProps,
+        searchFilterProps: state.cardSearch.state.searchFilter,
         visibleFilters: visibleFilters,
     }
 

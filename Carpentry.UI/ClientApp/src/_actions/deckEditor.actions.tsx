@@ -141,11 +141,11 @@ import { decksApi } from '../api/decksApi';
 //     Actions
 // */
 
-export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED';
-export const deckEditorCardSelected = (cardOverview: DeckCardOverview): ReduxAction => ({
-    type: DECK_EDITOR_CARD_SELECTED,
-    payload: cardOverview
-})
+// export const DECK_EDITOR_CARD_SELECTED = 'DECK_EDITOR_CARD_SELECTED';
+// export const deckEditorCardSelected = (cardOverview: DeckCardOverview): ReduxAction => ({
+//     type: DECK_EDITOR_CARD_SELECTED,
+//     payload: cardOverview
+// })
 
 // export const CARD_MENU_BUTTON_CLICK = 'CARD_MENU_BUTTON_CLICK'
 // export const cardMenuButtonClick = (element: HTMLElement | null): ReduxAction => ({
@@ -173,33 +173,33 @@ export const deckPropertyChanged = (name: string, value: string): ReduxAction =>
 //     type: OPEN_DECK_PROPS_MODAL,
 // });
 
-export const TOGGLE_DECK_VIEW_MODE = 'TOGGLE_DECK_VIEW_MODE';
-export const toggleDeckViewMode = (): ReduxAction => ({
-    type: TOGGLE_DECK_VIEW_MODE,
-});
+// export const TOGGLE_DECK_VIEW_MODE = 'TOGGLE_DECK_VIEW_MODE';
+// export const toggleDeckViewMode = (): ReduxAction => ({
+//     type: TOGGLE_DECK_VIEW_MODE,
+// });
 
 
 
-export const ensureDeckDetailLoaded = (deckId: number): any => {
-    return(dispatch: Dispatch, getState: any) => {
-        tryLoadDeckDetail(dispatch, getState(), deckId);
-    }
-}
+// export const ensureDeckDetailLoaded = (deckId: number): any => {
+//     return(dispatch: Dispatch, getState: any) => {
+//         tryLoadDeckDetail(dispatch, getState(), deckId);
+//     }
+// }
 
-function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number): void {
-    const _localApiScope: ApiScopeOption = "deckDetail";
+// function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number): void {
+//     const _localApiScope: ApiScopeOption = "deckDetail";
 
-    if(state.data.deckDetail.isLoading || state.data.deckDetail.deckId === deckId){
-        console.log('tryLoadDeckDetail returning');
-        return;
-    }
+//     if(state.data.deckDetail.isLoading || state.data.deckDetail.deckId === deckId){
+//         console.log('tryLoadDeckDetail returning');
+//         return;
+//     }
 
-    dispatch(apiDataRequested(_localApiScope, deckId));
+//     dispatch(apiDataRequested(_localApiScope, deckId));
     
-    decksApi.getDeckDetail(deckId).then((result) => {
-        dispatch(apiDataReceived(_localApiScope, result));
-    });
-}
+//     decksApi.getDeckDetail(deckId).then((result) => {
+//         dispatch(apiDataReceived(_localApiScope, result));
+//     });
+// }
 
 // export const requestDeckDetail = (deckId: number): any => {
 //     console.log('requesting deck detail')

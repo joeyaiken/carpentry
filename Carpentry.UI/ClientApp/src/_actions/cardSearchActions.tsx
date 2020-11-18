@@ -48,27 +48,7 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ca
 
 }
 
-//Add pending cards
-export const CARD_SEARCH_ADD_PENDING_CARD = 'CARD_SEARCH_ADD_PENDING_CARD'
-//export const cardSearchAddPendingCard = (data: MagicCard, isFoil: boolean, variant: string) =>({
-export const cardSearchAddPendingCard = (name: string, cardId: number, isFoil: boolean) =>({
-    type: CARD_SEARCH_ADD_PENDING_CARD,
-    payload: {
-        name: name,
-        cardId: cardId,
-        isFoil: isFoil,
-    }
-});
-//Remove pending cards
-export const CARD_SEARCH_REMOVE_PENDING_CARD = 'CARD_SEARCH_REMOVE_PENDING_CARD'
-export const cardSearchRemovePendingCard = (name: string, cardId: number, isFoil: boolean) =>({
-    type: CARD_SEARCH_REMOVE_PENDING_CARD,
-    payload: {
-        name: name,
-        cardId: cardId,
-        isFoil: isFoil,
-    }
-});
+
 // //Card sear filter changed
 // export const CARD_SEARCH_FILTER_CHANGED = 'CARD_SEARCH_FILTER_CHANGED';
 // export const cardSearchFilterChanged = (filter: string, value: string | boolean): ReduxAction => ({
