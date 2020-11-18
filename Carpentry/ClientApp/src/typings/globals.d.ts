@@ -178,6 +178,11 @@ declare interface PendingCardsDto {
     name: string;
     cards: InventoryCard[]; //this might need to be something else
 }
+//pendingCards: { [name: string]: PendingCardsDto } //key === name, should this also have a list to track all keys?
+
+// declare interface PendingCardsCollection {
+
+// }
 
 // declare interface CoreFilterOptions {
 //     sets: FilterOption[];

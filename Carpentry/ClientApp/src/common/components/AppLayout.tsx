@@ -6,27 +6,22 @@ import {
   Toolbar,
   IconButton,
   Container,
-//   Tabs,
-//   Tab
 } from '@material-ui/core';
 
 import { 
-    // Add, AddBox, 
-    Menu, 
-    // FilterList 
+    Menu,
 } from '@material-ui/icons';
-import { Link, NavLink, Route, Switch } from 'react-router-dom';
-import { ConnectedComponent } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
 import { appStyles, combineStyles } from '../../styles/appStyles';
 
 interface LayoutProps {
     children: ReactNode;
 
-    routes: {
-        path: string,
-        component: ConnectedComponent<any, any>,
-        name: string;
-    }[];
+    // routes: {
+    //     path: string,
+    //     component: ConnectedComponent<any, any>,
+    //     name: string;
+    // }[];
     // isAddSelected: boolean;
     // showAddButton: boolean;
     // showFilterButton: boolean;
@@ -62,9 +57,10 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
             </IconButton>
             
             <Typography variant="h5" className={flexSection}>
-                {<Switch>{
+                Carpentry
+                {/* {<Switch>{
                         props.routes.map(route => <Route key={route.path} path={route.path}>{route.name}</Route>)
-                }</Switch>}
+                }</Switch>} */}
             </Typography>
             {/* <Container> */}
                 <NavLink

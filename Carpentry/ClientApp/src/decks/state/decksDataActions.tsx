@@ -57,4 +57,31 @@ export const deckOverviewsReceived = (data: DeckOverviewDto[]): ReduxAction => (
 //Deck Detail / Deck Editor data info will go here
 
 export const DECK_DETAIL_REQUESTED = 'DECK_DETAIL_REQUESTED';
+export const deckDetailRequested = (deckId: number): ReduxAction => ({
+    type: DECK_DETAIL_REQUESTED,
+    payload: deckId,
+});
+
 export const DECK_DETAIL_RECEIVED = 'DECK_DETAIL_RECEIVED';
+export const deckDetailReceived = (dto: DeckDetailDto): ReduxAction => ({
+    type: DECK_DETAIL_RECEIVED,
+    payload: dto,
+});
+
+//do those actions
+
+export const ensureDeckDetailLoaded = (deckId: number): any => {
+    return(dispatch: Dispatch, getState: any) => {
+        tryLoadDeckDetail(dispatch, getState(), deckId);
+    }
+}
+
+function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number): void {
+    if(state.decks.data.detail.isLoading || state.decks.data.detail.deckId === deckId){
+        return;
+    }
+    dispatch(deckDetailRequested(deckId));
+    decksApi.getDeckDetail(deckId).then((result) => {
+        dispatch(deckDetailReceived(result));
+    });
+}

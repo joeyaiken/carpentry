@@ -10,6 +10,11 @@ import { decksDataReducer, State as DecksDataReducerState } from './decks/state/
 import { inventoryDataReducer, InventoryDataReducerState } from './inventory/state/inventoryDataReducer';
 import { inventoryOverviewAppReducer, State as InventoryOverviewState } from './inventory/inventory-overview/state/InventoryOverviewAppReducer';
 import { coreDataReducer, State as CoreDataReducerState } from './common/state/coreDataReducer';
+import { cardSearchDataReducer, State as CardSearchDataReducerState } from './common/card-search/data/CardSearchDataReducer';
+import { deckEditorReducer, State as DeckEditorReducerState } from './decks/deck-editor/state/DeckEditorReducer';
+import { cardSearchReducer, State as CardSearchReducersState } from './common/card-search/state/cardSearchReducer';
+import { trackedSetsReducer, State as TrackedSetsReducerState } from './settings/tracked-sets/state/TrackedSetsReducer';
+// import { settingsDataReducer, State as SettingsDataReducerState } from './settings/state/SettingsDataReducer';
 
 //TODO - consider renaming this file to just "store.tsx"
 
@@ -18,7 +23,16 @@ const rootReducer = (history: History) => combineReducers({
     // data: reducers.data,
     // app: reducers.app,
     // ui: reducers.ui,
+
+    cardSearch: combineReducers({  // cardSearch | search | core | common
+        //state | app | cardSearch | search
+        state: cardSearchReducer,
+        data: cardSearchDataReducer,
+    }),
+
+
     decks: combineReducers({
+        deckEditor: deckEditorReducer,
         data: decksDataReducer,
     }),
 
@@ -31,6 +45,10 @@ const rootReducer = (history: History) => combineReducers({
         data: coreDataReducer,
     }),
 
+    settings: combineReducers({
+        trackedSets: trackedSetsReducer,
+    }),
+
     router: connectRouter(history)
 });
 
@@ -39,7 +57,12 @@ const rootReducer = (history: History) => combineReducers({
 export interface AppState {
     //router state
     //
+    cardSearch: {
+        state: CardSearchReducersState,
+        data: CardSearchDataReducerState
+    }
     decks: {
+        deckEditor: DeckEditorReducerState,
         data: DecksDataReducerState
     }
     inventory:{
@@ -50,6 +73,9 @@ export interface AppState {
         //}
         overviews: InventoryOverviewState,
         data: InventoryDataReducerState
+    }
+    settings: {
+        trackedSets: TrackedSetsReducerState
     }
     core: {
         data: CoreDataReducerState
