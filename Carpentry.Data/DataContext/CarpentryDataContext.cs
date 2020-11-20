@@ -39,6 +39,7 @@ namespace Carpentry.Data.DataContext
         public DbSet<MagicFormatData> MagicFormats { get; set; }
         public DbSet<CardRarityData> Rarities { get; set; }
         public DbSet<CardSetData> Sets { get; set; }
+        public DbSet<DeckCardTagData> CardTags { get; set; }
 
         //Views
         public DbSet<DataModels.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
@@ -118,6 +119,11 @@ namespace Carpentry.Data.DataContext
                 .HasOne(x => x.Format)
                 .WithMany(x => x.Decks)
                 .HasForeignKey(x => x.MagicFormatId);
+
+            modelBuilder.Entity<DeckCardTagData>()
+                .HasOne(x => x.Deck)
+                .WithMany(x => x.Tags)
+                .HasForeignKey(x => x.DeckId);
 
             #endregion
 

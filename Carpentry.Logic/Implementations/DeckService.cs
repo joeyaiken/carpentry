@@ -473,8 +473,11 @@ namespace Carpentry.Logic.Implementations
 
             DeckCardData cardToAdd = new DeckCardData()
             {
-                CategoryId = dto.CategoryId,
                 DeckId = dto.DeckId,
+                CardName = dto.CardName,
+
+                CategoryId = dto.CategoryId,
+                
                 InventoryCardId = dto.InventoryCardId,
             };
 

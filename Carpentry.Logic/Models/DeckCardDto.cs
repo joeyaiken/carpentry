@@ -5,11 +5,15 @@ namespace Carpentry.Logic.Models
     //TODO - Figure out if this is used, I'd like to have a version that doesn't include an inventory card
     public class DeckCardDto
     {
+        //[JsonProperty("deckId")]
+        public int DeckId { get; set; }
+
+        public string CardName { get; set; }
+
         //[JsonProperty("categoryId")]
         public char? CategoryId { get; set; }
 
-        //[JsonProperty("deckId")]
-        public int DeckId { get; set; }
+        
 
         //[JsonProperty("id")]
         public int Id { get; set; }

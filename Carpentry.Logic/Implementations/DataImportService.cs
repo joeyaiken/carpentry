@@ -161,6 +161,7 @@ namespace Carpentry.Logic.Implementations
             List<DeckCardDto> cardsToAdd = validatedPayload.ValidatedCards.Select(c => new DeckCardDto()
             {
                 DeckId = deckId,
+                CardName = c.Name,
                 IsFoil = c.IsFoil,
                 CardId = c.CardId,
                 InventoryCardStatusId = _cardStatus_InInventory,
