@@ -5,6 +5,7 @@ import InventoryOverviewContianer from './inventory-overview/InventoryOverviewCo
 // import CardSearchContainer from '../_containers/CardSearch/CardSearchContainer';
 import TrimmingTipsContainer from './trimming-tips/TrimmingTipsContainer';
 import InventoryDetailContainer from './inventory-detail/InventoryDetailContainer';
+import AppLayout from '../common/components/AppLayout';
 
 interface LayoutProps {
     
@@ -12,7 +13,7 @@ interface LayoutProps {
 
 export default function InventoryLayout(props: LayoutProps): JSX.Element {
     return (
-        <React.Fragment>
+        <AppLayout title="Inventory">
             <Switch>
                 <Route path="/inventory/:cardId" component={InventoryDetailContainer} />
                 <Route path="/inventory"/>
@@ -22,6 +23,6 @@ export default function InventoryLayout(props: LayoutProps): JSX.Element {
                 <Route path="/inventory/trimming-tips" render={(props) => <TrimmingTipsContainer {...props}  />} />
                 <Route path="/inventory" component={InventoryOverviewContianer} />
             </Switch>
-        </React.Fragment>
+        </AppLayout>
     );
 }

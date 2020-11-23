@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Typography, Button, Switch, FormControlLabel, IconButton, TableHead, Paper, Table, TableRow, TableCell, TableBody, Backdrop, CircularProgress } from '@material-ui/core';
 import { Refresh, Add, Delete } from '@material-ui/icons';
 import { appStyles } from '../../../styles/appStyles';
+import AppLayout from '../../../common/components/AppLayout';
 
 declare interface ComponentProps {
     onRefreshClick: () => void;
@@ -20,7 +21,7 @@ declare interface ComponentProps {
 export default function TrackedSetsContainerLayout(props: ComponentProps): JSX.Element {
     const { flexRow, flexSection } = appStyles();
     return(
-        <React.Fragment>
+        <AppLayout title="Settings - Tracked Sets">
             <Backdrop open={props.isLoading} style={{zIndex:0}} >
                 <CircularProgress color="inherit" />
             </Backdrop>
@@ -152,7 +153,7 @@ export default function TrackedSetsContainerLayout(props: ComponentProps): JSX.E
             </Paper>
         </Box>
             
-        </React.Fragment>
+    </AppLayout>
         
 );
 }

@@ -17,6 +17,8 @@ import { appStyles, combineStyles } from '../../styles/appStyles';
 interface LayoutProps {
     children: ReactNode;
 
+    title: string;
+
     // routes: {
     //     path: string,
     //     component: ConnectedComponent<any, any>,

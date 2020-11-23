@@ -8,11 +8,11 @@ import HomeContainer from './home/HomeContainer';
 import { connect, DispatchProp } from 'react-redux';
 import { AppState } from './configureStore'
 import './styles/mana.css';
-import AppLayout from './common/components/AppLayout';
 import DecksLayout from './decks/DecksLayout';
 import InventoryLayout from './inventory/InventoryLayout';
 import { requestCoreData } from './common/state/coreDataActions';
 import TrackedSetsContainer from './settings/tracked-sets/TrackedSetsContainer';
+import NewDeckContainer from './decks/new-deck/NewDeckContainer';
 
 interface PropsFromState {
 }
@@ -36,7 +36,6 @@ class AppContainer extends React.Component<AppContainerProps>{
 function App(): JSX.Element {
 
     /*
-    
     /decks/add/
     /decks/import/
     /decks/:id/props/
@@ -49,18 +48,22 @@ function App(): JSX.Element {
     /settings/???
     /settings/cardData|trackedSets
     /settings/backups
-    /
-    
     */
 
 
     return(
-        <AppLayout>
+        // <AppLayout>
             <Switch>
-                <Route path="/decks" component={DecksLayout} />
+                <Route path="/decks/" component={DecksLayout} />
                 <Route path="/inventory" component={InventoryLayout} />
                 {/* <Route path="/settings" component={SettingsLayout} /> */}
                 <Route path="/settings/sets" component={TrackedSetsContainer} />
+
+                <Route path="/add-deck">
+                    <NewDeckContainer />
+                    <HomeContainer />
+                </Route>
+
                 <Route path="/" component={HomeContainer} />
 
                 {/* <Route path='/settings/backups' >
@@ -70,7 +73,7 @@ function App(): JSX.Element {
                     Settings
                 </Route> */}
             </Switch>
-        </AppLayout>
+        // </AppLayout>
     )
 }
 

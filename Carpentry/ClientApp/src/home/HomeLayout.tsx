@@ -12,8 +12,9 @@ import {
 //import {} from '../decks/deck-list/'
 // import DeckList from '../_containers/DeckList/DeckListContainer';
 import { Link } from 'react-router-dom';
-import { ArrowForward } from '@material-ui/icons';
+import { Add, ArrowForward } from '@material-ui/icons';
 import DeckListContainer from '../decks/deck-list/DeckListContainer';
+import AppLayout from '../common/components/AppLayout';
 // import { appStyles } from '../styles/appStyles';
 
 interface LayoutProps {
@@ -101,46 +102,48 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
 
     // const styles = localStyles();
     return (
-        <Box className={localStyles.containerLayout}>
-            <Box className={localStyles.titleContainer}>
-                <Typography variant="h4">
-                    Carpentry
-                </Typography>
-                <Typography variant="h6">
-                    A deck & inventory management tool for Magic the Gathering
-                </Typography>
-            </Box>
+        <AppLayout title="Carpentry">
+            <Box className={localStyles.containerLayout}>
+                <Box className={localStyles.titleContainer}>
+                    <Typography variant="h4">
+                        Carpentry
+                    </Typography>
+                    <Typography variant="h6">
+                        A deck & inventory management tool for Magic the Gathering
+                    </Typography>
+                </Box>
 
-            <Box  className={localStyles.availableDecks}>
-                <DeckListCard />
-            </Box>
+                <Box  className={localStyles.availableDecks}>
+                    <DeckListCard />
+                </Box>
 
-            <Box className={localStyles.sideTitleContainer}> 
-                <TrackedSetsCard />
-            </Box>
+                <Box className={localStyles.sideTitleContainer}> 
+                    <TrackedSetsCard />
+                </Box>
 
-            <Box className={localStyles.sideContainer}>
-                <InventoryCard />
-                <TrimmingTipsCard />
-                <WishlistHelperCard />
-                <BuylistHelperCard />
+                <Box className={localStyles.sideContainer}>
+                    <InventoryCard />
+                    <TrimmingTipsCard />
+                    <WishlistHelperCard />
+                    <BuylistHelperCard />
+                    
+                    
+                    {/* <Card>
+                        <CardHeader
+                            titleTypographyProps={{variant:"h5"}}
+                            title={"Backups"}
+                            action={
+                                <Link to={'/settings/backups/'}>
+                                    <IconButton size="medium"><ArrowForward /></IconButton>
+                                </Link>
+                            }
+                        />
+                    </Card> */}
+                </Box>
+
                 
-                
-                {/* <Card>
-                    <CardHeader
-                        titleTypographyProps={{variant:"h5"}}
-                        title={"Backups"}
-                        action={
-                            <Link to={'/settings/backups/'}>
-                                <IconButton size="medium"><ArrowForward /></IconButton>
-                            </Link>
-                        }
-                    />
-                </Card> */}
             </Box>
-
-            
-        </Box>
+        </AppLayout>
     );
 }
 
@@ -152,8 +155,8 @@ function DeckListCard(): JSX.Element {
                 titleTypographyProps={{variant:"h5"}}
                 title={"Available Decks"} 
                 action={
-                    <Link to={'/inventory/sets'}>
-                        <IconButton size="medium"><ArrowForward /></IconButton>
+                    <Link to={'/add-deck'}>
+                        <IconButton size="medium"><Add /></IconButton>
                     </Link>
                 }
             />
