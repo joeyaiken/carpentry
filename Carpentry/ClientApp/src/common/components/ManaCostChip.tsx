@@ -19,10 +19,10 @@ export default function ManaCostChip(props: ManaCostChipProps): JSX.Element {
     return (<Box className={"flex-row"}>{
         //splitParts
 
-        splitParts.map(str => {
+        splitParts.map((str, index) => {
             var pipStr = str.split("/").join(''); //want to remove the '/' from hybrid mana
             var pipClass = `ms ms-${pipStr} ms-cost`;
-            return(<i className={pipClass}></i>);
+            return(<i key={index} className={pipClass}></i>);
         })
         // costParts.map((part, index) => <ManaIcon key={`chip${index}`} manaType={part} />)
     }</Box>);

@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Paper, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 import DeckSelectedCardSection from './DeckSelectedCardSection';
 import FilterBar from './FilterBar';

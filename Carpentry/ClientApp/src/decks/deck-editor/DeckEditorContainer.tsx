@@ -1,5 +1,5 @@
 import { connect, DispatchProp } from 'react-redux'
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { Typography, Box } from '@material-ui/core';
 import { toggleDeckViewMode, deckEditorCardSelected } from './state/DeckEditorActions';
 import { AppState } from '../../configureStore';

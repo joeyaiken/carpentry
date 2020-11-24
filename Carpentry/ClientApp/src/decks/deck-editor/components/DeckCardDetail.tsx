@@ -25,16 +25,9 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
             <Box className={staticSection}>
                 <Card>
                     <CardHeader titleTypographyProps={{variant:"body1"}} title={"no card selected"}/>
-                    <CardMedia 
-                        style={{height:"310px", width: "223px"}}
-                        // className={itemImage} 
-                        />
                     <CardContent>
                         <Typography>select a card</Typography>
                     </CardContent>
-                    <CardActions>
-
-                    </CardActions>
                 </Card>
             </Box>
         );

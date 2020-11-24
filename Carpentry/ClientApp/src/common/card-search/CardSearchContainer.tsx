@@ -2,28 +2,11 @@
 
 
 import { connect, DispatchProp } from 'react-redux';
-import React, { ReactNode} from 'react';
-
-// import { 
-//     cardSearchSearchMethodChanged,
-//     cardSearchClearPendingCards,
-//     toggleCardSearchViewMode,
-// } from '../actions/cardSearch.actions';
-
-// import CardSearchPendingCards from './CardSearchPendingCards'
-// import { 
-//     requestAddCardsFromSearch
-// } from '../../_actions/inventoryActions';
-
+import React, { ReactNode } from 'react';
 import {
     Button,
-    AppBar,
-    Toolbar,
-    Typography,
     Paper,
     Box,
-    Tabs,
-    Tab,
 } from '@material-ui/core';
 // import SearchResultTable from './components/SearchResultTable';
 // import SearchResultGrid from './components/SearchResultGrid';
@@ -44,13 +27,8 @@ import {
 
 // } from '';
 
-import SetSearchFilterBar from './components/SetSearchFilterBar';
-import WebSearchFilterBar from './components/WebSearchFilterBar';
-import { combineStyles, appStyles } from '../../styles/appStyles';
-import FilterBar from './components/FilterBar';
+// import { combineStyles, appStyles } from '../../styles/appStyles';
 import { AppState } from '../../configureStore';
-import SelectedCardSection from './components/SelectedCardSection';
-import DeckSelectedCardSection from './components/DeckSelectedCardSection';
 import CardSearchLayout from './components/CardSearchLayout';
 import { cardSearchAddPendingCard, cardSearchRemovePendingCard, cardSearchFilterValueChanged, toggleCardSearchViewMode, cardSearchClearPendingCards, cardSearchSearchMethodChanged, requestAddDeckCard, cardSearchSelectCard, cardSearchRequestSavePendingCards } from './state/cardSearchActions';
 import { requestCardSearch, requestCardSearchInventory } from './data/cardSearchDataActions';
@@ -368,47 +346,47 @@ class CardSearchContainer extends React.Component<CardSearchContainerProps>{
     // }
 }
 
-interface ContainerLayoutProps {
-    appBar: ReactNode;
-    filterBar: ReactNode;
-    pendingCards: ReactNode;
-    searchResults: ReactNode;
-    handleCancelClick: () => void;
-    handleSaveClick: () => void;
-}
+// interface ContainerLayoutProps {
+//     appBar: ReactNode;
+//     filterBar: ReactNode;
+//     pendingCards: ReactNode;
+//     searchResults: ReactNode;
+//     handleCancelClick: () => void;
+//     handleSaveClick: () => void;
+// }
 
-function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
-    const {  flexRow, outlineSection, flexSection } = appStyles();
-    return(
-    <React.Fragment>
-        {/* <div className={flexCol}> */}
-            { props.appBar }
-            {/* <div> */}
-            { props.filterBar }
-            <Box  // className={flexRow}
-                className={combineStyles(flexRow,flexSection)}
-                style={{ overflow:'auto', alignItems:'stretch' }}
-                >
+// function ContainerLayout(props: ContainerLayoutProps): JSX.Element {
+//     const {  flexRow, outlineSection, flexSection } = appStyles();
+//     return(
+//     <React.Fragment>
+//         {/* <div className={flexCol}> */}
+//             { props.appBar }
+//             {/* <div> */}
+//             { props.filterBar }
+//             <Box  // className={flexRow}
+//                 className={combineStyles(flexRow,flexSection)}
+//                 style={{ overflow:'auto', alignItems:'stretch' }}
+//                 >
 
-            {/* className={ `${classes.flexRow} ${classes.flexSection}` } style={{ overflow:'auto', alignItems:'stretch' }} */}
+//             {/* className={ `${classes.flexRow} ${classes.flexSection}` } style={{ overflow:'auto', alignItems:'stretch' }} */}
 
 
-                {props.searchResults}
-            </Box>
-            {props.pendingCards}
-            <Paper className={combineStyles(outlineSection, flexRow)}>
-                <Button onClick={props.handleCancelClick}>
-                    Cancel
-                </Button>
-                <Button color="primary" variant="contained" onClick={props.handleSaveClick}>
-                    Save
-                </Button>
-            </Paper>
+//                 {props.searchResults}
+//             </Box>
+//             {props.pendingCards}
+//             <Paper className={combineStyles(outlineSection, flexRow)}>
+//                 <Button onClick={props.handleCancelClick}>
+//                     Cancel
+//                 </Button>
+//                 <Button color="primary" variant="contained" onClick={props.handleSaveClick}>
+//                     Save
+//                 </Button>
+//             </Paper>
 
-            {/* </div> */}
-        {/* </div> */}
-    </React.Fragment>);
-}
+//             {/* </div> */}
+//         {/* </div> */}
+//     </React.Fragment>);
+// }
 
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
     const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.cardSearch.data.inventoryDetail;

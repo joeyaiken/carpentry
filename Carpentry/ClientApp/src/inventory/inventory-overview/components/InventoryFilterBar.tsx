@@ -17,7 +17,7 @@ interface InventoryFilterBarProps{
 //This bar should just be a flex-grid of filter elements
 //It probably shouldn't even have the "search" button
 export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.Element {
-    const { outlineSection, flexCol, flexRow, flexSection, sidePadded, stretch, staticSection, center } = appStyles();
+    const { outlineSection, flexCol, flexRow, flexSection, sidePadded, staticSection, center } = appStyles();
     // Need this to cache?
     // try this?
     // https://material-ui.com/components/autocomplete

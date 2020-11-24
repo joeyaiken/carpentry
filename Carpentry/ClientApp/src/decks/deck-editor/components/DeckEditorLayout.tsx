@@ -41,7 +41,7 @@ declare interface ComponentProps{
 }
 
 export function DeckEditorLayout(props: ComponentProps): JSX.Element {
-    const { flexRow, flexCol, flexSection } = appStyles();
+    const { flexRow, flexSection } = appStyles();
 
     const firstGroup = props.groupedCardOverviews[0];
 
