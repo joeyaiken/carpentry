@@ -129,7 +129,7 @@ declare type CardSearchViewMode = 'grid' | 'list';
 declare type InventorySearchMethod =  "name" | "mid" | "unique"; //"name" | "quantity" | "price"; // | "sellList";
 
 declare type InventoryGroupMethod = "name" | "print" | "unique";
-declare type InventorySortMethod = "name" | "price";
+declare type InventorySortMethod = "name" | "price" | "cmc" | "count" | "collectorNumber";
 // declare type InventoryViewMode = "list" | "grid";
 
 

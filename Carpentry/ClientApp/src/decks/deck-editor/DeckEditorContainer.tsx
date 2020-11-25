@@ -1,7 +1,8 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
 import { Typography, Box } from '@material-ui/core';
-import { toggleDeckViewMode, deckEditorCardSelected } from './state/DeckEditorActions';
+import { toggleDeckViewMode, deckEditorCardSelected, openDeckPropsModal, closeDeckPropsModal, requestSavePropsModal, deckPropsModalChanged } from './state/DeckEditorActions';
+
 import { AppState } from '../../configureStore';
 import { ensureDeckDetailLoaded } from '../state/decksDataActions';
 import { DeckEditorLayout } from './components/DeckEditorLayout';
@@ -38,6 +39,10 @@ interface PropsFromState {
     deckStats: DeckStats | null;
 
 
+    isPropsDialogOpen: boolean;
+    deckDialogProperties: DeckPropertiesDto | null;
+
+
     //Overview
     groupedCardOverviews: CardOverviewGroup[];
     //Non-grouped views will just snag cards from item at position 0
@@ -63,6 +68,8 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handleCardMenuClick = this.handleCardMenuClick.bind(this);
         this.handleCardMenuSelected = this.handleCardMenuSelected.bind(this);
         this.handleCardMenuClosed = this.handleCardMenuClosed.bind(this);
+        this.handlePropsModalDisassemble = this.handlePropsModalDisassemble.bind(this);
+        this.handlePropsModalDelete = this.handlePropsModalDelete.bind(this);
     }
 
     componentDidMount() {
@@ -124,19 +131,40 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     //props modal
     //handleEditPropsClick(): void {
     handlePropsModalOpen(): void {
-        // this.props.dispatch(openDeckPropsModal());
+        this.props.dispatch(openDeckPropsModal(this.props.deckProperties));
     }
     
     handlePropsModalClose(): void {
-
+        this.props.dispatch(closeDeckPropsModal());
     }
 
     handlePropsModalSave(): void {
-
+        this.props.dispatch(requestSavePropsModal());
     }
 
     handleModalPropsChanged(name: string, value: string): void {
         // this.props.dispatch(deckPropertyChanged(event.target.name, event.target.value));
+        this.props.dispatch(deckPropsModalChanged(name, value));
+    }
+
+    handlePropsModalDisassemble(): void {
+        // const confirmText = `Are you sure you want to delete ${deckAnchor.name}?`;
+        // if(window.confirm(confirmText)){
+        //     // console.log('Prentending to delete deck')
+        //     this.props.dispatch(requestDeleteDeck(deckId));
+        //     // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+        // }
+        // break;
+    }
+    
+    handlePropsModalDelete(): void {
+        // const confirmText = `Are you sure you want to delete ${deckAnchor.name}?`;
+        // if(window.confirm(confirmText)){
+        //     // console.log('Prentending to delete deck')
+        //     this.props.dispatch(requestDeleteDeck(deckId));
+        //     // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+        // }
+        // break;
     }
 
     render() {
@@ -151,14 +179,17 @@ class DeckEditor extends React.Component<DeckEditorProps> {
             return(
                 <DeckEditorLayout 
                     //props & modal
-                    isPropsDialogOpen={false}
                     deckProperties={this.props.deckProperties}
+                    dialogDeckProperties={this.props.deckDialogProperties}
+                    isPropsDialogOpen={this.props.isPropsDialogOpen}
                     onPropsModalOpen={this.handlePropsModalOpen}
                     onPropsModalClose={this.handlePropsModalClose}
                     onModalPropsChange={this.handleModalPropsChanged}
                     onPropsModalSave={this.handlePropsModalSave}
                     formatFilterOptions={this.props.formatFilterOptions}
-                
+                    onPropsModalDisassembleClick={this.handlePropsModalDisassemble}
+                    onPropsModalDeleteClick={this.handlePropsModalDelete}
+
                     //View
                     handleToggleDeckView={this.handleToggleDeckView}
                     viewMode={this.props.viewMode}
@@ -235,6 +266,8 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         deckProperties: state.decks.data.detail.deckProps,
         formatFilterOptions: state.core.data.filterOptions.formats,
 
+        isPropsDialogOpen: state.decks.deckEditor.isPropsModalOpen,
+        deckDialogProperties: state.decks.deckEditor.deckModalProps,
         // cardOverviews: selectDeckOverviews(state),
 
         //deckStats: state.data.deckDetail.deckStats,

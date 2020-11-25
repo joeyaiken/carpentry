@@ -111,6 +111,7 @@ namespace Carpentry.Logic.Implementations
                 new FilterOption() { Value = "name", Name = "Name" },
                 new FilterOption() { Value = "price", Name = "Price" },
                 new FilterOption() { Value = "cmc", Name = "Cmc" },
+                new FilterOption() { Value = "collectorNumber", Name = "Collector Number"}
             };
 
             result.SortBy = allSortOptions;

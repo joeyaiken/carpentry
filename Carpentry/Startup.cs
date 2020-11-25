@@ -74,7 +74,7 @@ namespace Carpentry
 
 
 
-            //Service-layer
+            //Service-layer (these are pretty much useless....)
             services.AddScoped<ICarpentryCardSearchService, CarpentryCardSearchService>();
             services.AddScoped<ICarpentryCoreService, CarpentryCoreService>();
             services.AddScoped<ICarpentryDeckService, CarpentryDeckService>();

@@ -1,6 +1,11 @@
 import { 
     TOGGLE_DECK_VIEW_MODE, 
-    DECK_EDITOR_CARD_SELECTED 
+    DECK_EDITOR_CARD_SELECTED,
+    CLOSE_DECK_PROPS_MODAL,
+    DECK_PROPS_MODAL_CHANGED,
+    DECK_PROPS_SAVE_RECEIVED,
+    DECK_PROPS_SAVE_REQUESTED,
+    OPEN_DECK_PROPS_MODAL,
 } from './DeckEditorActions';
 
 
@@ -29,6 +34,11 @@ export interface State {
     //Next question, how exactly do I handle grouped cards?!?
     groupBy: "type" | null;
     sortBy: "cost" | null; //| "name", 
+
+    //added during refactor
+    isSaving: boolean;
+    isPropsModalOpen: boolean;
+    deckModalProps: DeckPropertiesDto | null;
 
 }
 
@@ -63,8 +73,12 @@ export const deckEditorReducer = (state = initialState, action: ReduxAction): St
                 viewMode: newViewMode,
             } as State;
 
-        default:
-            return(state)
+        case OPEN_DECK_PROPS_MODAL: return { ...state, isPropsModalOpen: true, deckModalProps: action.payload };
+        case CLOSE_DECK_PROPS_MODAL: return { ...state, isPropsModalOpen: false, deckModalProps: null };
+        case DECK_PROPS_SAVE_REQUESTED: return { ...state, isSaving: true };
+        case DECK_PROPS_SAVE_RECEIVED: return { ...state, isSaving: false };
+        case DECK_PROPS_MODAL_CHANGED: return deckPropsModalChanged(state, action);
+        default: return(state);
     }
 }
 
@@ -74,4 +88,18 @@ const initialState: State = {
     secondarySelectedCardId: null,
     groupBy: null,
     sortBy: null, 
+    isSaving: false,
+    isPropsModalOpen: false,
+    deckModalProps: null,
+}
+
+function deckPropsModalChanged(state: State, action: ReduxAction): State {
+    const {name, value} = action.payload;
+    return {
+        ...state,
+        deckModalProps: (state.deckModalProps == null) ? null : {
+            ...state.deckModalProps,
+            [name]: value,
+        },
+    }
 }

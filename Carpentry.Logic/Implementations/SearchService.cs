@@ -230,6 +230,7 @@ namespace Carpentry.Logic.Implementations
                             ColorIdentity = x.ColorIdentity,
                             Text = x.Text,
                             RarityId = x.RarityId,
+                            //CollectorNumber = x.
 
                         });
 
@@ -255,6 +256,7 @@ namespace Carpentry.Logic.Implementations
                             ColorIdentity = x.ColorIdentity,
                             Text = x.Text,
                             RarityId = x.RarityId,
+                            CollectorNumber = x.CollectorNumber,
                         });
 
                     break;
@@ -279,6 +281,7 @@ namespace Carpentry.Logic.Implementations
                             ColorIdentity = x.ColorIdentity,
                             Text = x.Text,
                             RarityId = x.RarityId,
+                            CollectorNumber = x.CollectorNumber,
                         });
 
                     break;
@@ -302,7 +305,7 @@ namespace Carpentry.Logic.Implementations
             {
                 //atm I'm trying to be strict in my matching.  If a color isn't in the list, I'll exclude any card containing that color
                 var excludedColors = _allColors.Where(x => !param.Colors.Contains(x)).Select(x => x).ToList();
-                query = query.Where(x => x.ColorIdentity.ToCharArray().Any(color => excludedColors.Contains(color.ToString())));
+                query = query.Where(x => !x.ColorIdentity.ToCharArray().Any(color => excludedColors.Contains(color.ToString())));
             }
 
             //if (!string.IsNullOrEmpty(param.Format))
@@ -387,7 +390,8 @@ namespace Carpentry.Logic.Implementations
                     break;
 
                 default:
-                    query = query.OrderByDescending(x => x.Id);
+                    //query = query.OrderByDescending(x => x.Id);
+                    query = query.OrderBy(x => x.CollectorNumber);
                     break;
             }
 

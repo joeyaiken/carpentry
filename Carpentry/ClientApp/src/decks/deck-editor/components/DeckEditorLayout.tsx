@@ -12,12 +12,19 @@ import GroupedDeckCardList from "./GroupedDeckCardList";
 
 declare interface ComponentProps{
     //props & modal
+
+    //props
+    deckProperties: DeckPropertiesDto | null;
+
+    //modal
+    dialogDeckProperties: DeckPropertiesDto | null;
     isPropsDialogOpen: boolean;
-    deckProperties: any;
     onPropsModalOpen: () => void;
     onPropsModalClose: () => void;
     onModalPropsChange: (name: string, value: string) => void;
     onPropsModalSave: () => void;
+    onPropsModalDisassembleClick: () => void;
+    onPropsModalDeleteClick: () => void;
     formatFilterOptions: FilterOption[];
 
     //View
@@ -47,18 +54,25 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
 
     return(
         <React.Fragment>
-            <DeckPropsDialog 
-                isOpen={props.isPropsDialogOpen}
-                onCloseClick={props.onPropsModalClose}
-                onFieldChange={props.onModalPropsChange}
-                deckProperties={props.deckProperties}
-                formatFilterOptions={props.formatFilterOptions}
-                onSaveClick={props.onPropsModalSave} />
-
-            <DeckPropsBar 
-                deckProperties={props.deckProperties} 
-                onEditClick={props.onPropsModalOpen} 
-                onToggleViewClick={props.handleToggleDeckView} />
+            {
+                props.dialogDeckProperties && 
+                <DeckPropsDialog 
+                    isOpen={props.isPropsDialogOpen}
+                    onCloseClick={props.onPropsModalClose}
+                    onFieldChange={props.onModalPropsChange}
+                    deckProperties={props.dialogDeckProperties}
+                    formatFilterOptions={props.formatFilterOptions}
+                    onSaveClick={props.onPropsModalSave} 
+                    onDisassembleClick={props.onPropsModalDisassembleClick}
+                    onDeleteClick={props.onPropsModalDeleteClick} />
+            }
+            
+            { props.deckProperties && 
+                <DeckPropsBar 
+                    deckProperties={props.deckProperties} 
+                    onEditClick={props.onPropsModalOpen} 
+                    onToggleViewClick={props.handleToggleDeckView} /> }
+            
 
             <Box className={combineStyles(flexRow, flexSection)} style={{ overflow:'auto', alignItems:'stretch' }}>
                 <div className={flexSection} style={{ overflow:'auto', flex:'1 1 70%' }} >
