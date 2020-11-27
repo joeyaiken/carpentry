@@ -1,10 +1,13 @@
+import { cpuUsage } from 'process';
 import { 
     TOGGLE_DECK_VIEW_MODE, 
     DECK_EDITOR_CARD_SELECTED,
     CLOSE_DECK_PROPS_MODAL,
     DECK_PROPS_MODAL_CHANGED,
-    DECK_PROPS_SAVE_RECEIVED,
-    DECK_PROPS_SAVE_REQUESTED,
+    // DECK_PROPS_SAVE_RECEIVED,
+    // DECK_PROPS_SAVE_REQUESTED,
+    DECK_EDITOR_SAVE_RECEIVED,
+    DECK_EDITOR_SAVE_REQUESTED,
     OPEN_DECK_PROPS_MODAL,
 } from './DeckEditorActions';
 
@@ -75,8 +78,8 @@ export const deckEditorReducer = (state = initialState, action: ReduxAction): St
 
         case OPEN_DECK_PROPS_MODAL: return { ...state, isPropsModalOpen: true, deckModalProps: action.payload };
         case CLOSE_DECK_PROPS_MODAL: return { ...state, isPropsModalOpen: false, deckModalProps: null };
-        case DECK_PROPS_SAVE_REQUESTED: return { ...state, isSaving: true };
-        case DECK_PROPS_SAVE_RECEIVED: return { ...state, isSaving: false };
+        case DECK_EDITOR_SAVE_REQUESTED: return { ...state, isSaving: true };
+        case DECK_EDITOR_SAVE_RECEIVED: return { ...state, isSaving: false };
         case DECK_PROPS_MODAL_CHANGED: return deckPropsModalChanged(state, action);
         default: return(state);
     }
@@ -95,6 +98,26 @@ const initialState: State = {
 
 function deckPropsModalChanged(state: State, action: ReduxAction): State {
     const {name, value} = action.payload;
+    // const appliedValue: string | number = action.payload.value;
+    // console.log('props updated')
+    // console.log(name);
+    // console.log(value);
+    // console.log(appliedValue);
+    // console.log(state.deckModalProps);
+    
+    // if(!state.deckModalProps) return (state);
+    
+    // const updatedState = {
+    //     ...state,
+    //     deckModalProps: {
+    //         ...state.deckModalProps,
+    //         [name]: appliedValue,
+    //     },
+    // }
+    // console.log("updatedState");
+    // console.log(updatedState.deckModalProps);
+    // return updatedState;
+
     return {
         ...state,
         deckModalProps: (state.deckModalProps == null) ? null : {

@@ -52,6 +52,10 @@ namespace Carpentry.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> UpdateDeck([FromBody] DeckPropertiesDto deckProps)
         {
+            if(deckProps == null)
+            {
+                return StatusCode(500, "Deck Properties null, cannot update deck");
+            }
             try
             {
                 await _decks.UpdateDeck(deckProps);

@@ -1,7 +1,7 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
 import { Typography, Box } from '@material-ui/core';
-import { toggleDeckViewMode, deckEditorCardSelected, openDeckPropsModal, closeDeckPropsModal, requestSavePropsModal, deckPropsModalChanged } from './state/DeckEditorActions';
+import { toggleDeckViewMode, deckEditorCardSelected, openDeckPropsModal, closeDeckPropsModal, requestSavePropsModal, deckPropsModalChanged, requestDisassembleDeck, requestDeleteDeck } from './state/DeckEditorActions';
 
 import { AppState } from '../../configureStore';
 import { ensureDeckDetailLoaded } from '../state/decksDataActions';
@@ -142,29 +142,29 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.props.dispatch(requestSavePropsModal());
     }
 
-    handleModalPropsChanged(name: string, value: string): void {
+    handleModalPropsChanged(name: string, value: string | number): void {
         // this.props.dispatch(deckPropertyChanged(event.target.name, event.target.value));
         this.props.dispatch(deckPropsModalChanged(name, value));
     }
 
     handlePropsModalDisassemble(): void {
-        // const confirmText = `Are you sure you want to delete ${deckAnchor.name}?`;
-        // if(window.confirm(confirmText)){
-        //     // console.log('Prentending to delete deck')
-        //     this.props.dispatch(requestDeleteDeck(deckId));
-        //     // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
-        // }
-        // break;
+        //TODO - replace this alert with something classier
+        const confirmText = `Are you sure you want to disassemble this deck? This will return all cards to the inventory, but keep the deck definition.`;
+        if(window.confirm(confirmText)){
+            // console.log('Prentending to disassemble deck')
+            this.props.dispatch(requestDisassembleDeck());
+            // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+        }
     }
     
     handlePropsModalDelete(): void {
-        // const confirmText = `Are you sure you want to delete ${deckAnchor.name}?`;
-        // if(window.confirm(confirmText)){
-        //     // console.log('Prentending to delete deck')
-        //     this.props.dispatch(requestDeleteDeck(deckId));
-        //     // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
-        // }
-        // break;
+        //TODO - replace this alert with something classier
+        const confirmText = `Are you sure you want to delete this deck?  This cannot be undone.`;
+        if(window.confirm(confirmText)){
+            // console.log('Prentending to delete deck')
+            this.props.dispatch(requestDeleteDeck());
+            // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+        }
     }
 
     render() {

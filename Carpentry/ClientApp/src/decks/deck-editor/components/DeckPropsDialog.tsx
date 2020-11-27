@@ -7,7 +7,7 @@ declare interface ComponentProps{
     onSaveClick: () => void;
     onDisassembleClick: () => void;
     onDeleteClick: () => void;
-    onFieldChange: (name: string, value: string) => void;
+    onFieldChange: (name: string, value: string | number) => void;
     formatFilterOptions: FilterOption[];
     deckProperties: DeckPropertiesDto;
     isOpen: boolean;

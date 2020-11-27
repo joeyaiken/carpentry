@@ -21,7 +21,7 @@ declare interface ComponentProps{
     isPropsDialogOpen: boolean;
     onPropsModalOpen: () => void;
     onPropsModalClose: () => void;
-    onModalPropsChange: (name: string, value: string) => void;
+    onModalPropsChange: (name: string, value: string | number) => void;
     onPropsModalSave: () => void;
     onPropsModalDisassembleClick: () => void;
     onPropsModalDeleteClick: () => void;

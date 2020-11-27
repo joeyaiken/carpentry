@@ -2,6 +2,7 @@ import { push } from "react-router-redux";
 import { Dispatch } from "redux";
 import { decksApi } from "../../../api/decksApi";
 import { AppState } from "../../../configureStore";
+import { requestDeckOverviews } from "../../state/decksDataActions";
 
 
 export const NEW_DECK_PROPERTY_CHANGED = 'NEW_DECK_PROPERTY_CHANGED';
@@ -47,6 +48,7 @@ function trySaveNewDeck(dispatch: Dispatch, state: AppState): any {
 
     decksApi.addDeck(deckToSave).then(newId => {
         dispatch(newDeckSaveComplete());
+        dispatch(requestDeckOverviews());
         dispatch(push(`/decks/${newId}`));
     });
 }
