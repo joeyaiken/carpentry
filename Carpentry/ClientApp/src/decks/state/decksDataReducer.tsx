@@ -32,6 +32,8 @@ export interface State {
     
         cardGroups: NamedCardGroup[];
     }
+
+    //searchResults: { overviews }
 }
 
 export const decksDataReducer = (state = initialState, action: ReduxAction): State => {

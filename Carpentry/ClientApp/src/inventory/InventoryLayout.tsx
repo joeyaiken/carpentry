@@ -6,7 +6,8 @@ import InventoryOverviewContianer from './inventory-overview/InventoryOverviewCo
 import TrimmingTipsContainer from './trimming-tips/TrimmingTipsContainer';
 import InventoryDetailContainer from './inventory-detail/InventoryDetailContainer';
 import AppLayout from '../common/components/AppLayout';
-import CardSearchContainer from '../common/card-search/CardSearchContainer';
+// import CardSearchContainer from '../common/card-search/CardSearchContainer';
+import InventoryAddCardsContainer from './inventory-add-cards/InventoryAddCardsContainer';
 
 interface LayoutProps {
     
@@ -21,7 +22,8 @@ export default function InventoryLayout(props: LayoutProps): JSX.Element {
                 <Route path="/inventory"/>
             </Switch>
             <Switch>
-                <Route path="/inventory/addCards" render={(props) => <CardSearchContainer {...props} searchContext="inventory" />} />
+                {/* <Route path="/inventory/addCards" render={(props) => <CardSearchContainer {...props} searchContext="inventory" />} /> */}
+                <Route path="/inventory/addCards" component={InventoryAddCardsContainer} />
                 <Route path="/inventory/trimming-tips" render={(props) => <TrimmingTipsContainer {...props}  />} />
                 <Route path="/inventory" component={InventoryOverviewContianer} />
             </Switch>

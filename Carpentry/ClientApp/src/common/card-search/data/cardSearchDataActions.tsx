@@ -104,14 +104,14 @@ export const requestCardSearchInventory = (card: CardSearchResultDto): any => {
     }
 }
 
-export const SEARCH_CARD_SEARCH_INVENTORY_REQUESTED = 'SEARCH_CARD_SEARCH_INVENTORY_REQUESTED';
-export const searchCardSearchinventoryRequested = (): ReduxAction => ({
-    type: SEARCH_CARD_SEARCH_INVENTORY_REQUESTED,
+export const CARD_SEARCH_INVENTORY_REQUESTED = 'CARD_SEARCH_INVENTORY_REQUESTED';
+export const cardSearchInventoryRequested = (): ReduxAction => ({
+    type: CARD_SEARCH_INVENTORY_REQUESTED,
 });
 
-export const SEARCH_CARD_SEARCH_INVENTORY_RECEIVED = 'SEARCH_CARD_SEARCH_INVENTORY_RECEIVED';
-export const searchCardSearchinventoryReceived = (payload: InventoryDetailDto): ReduxAction => ({
-    type: SEARCH_CARD_SEARCH_INVENTORY_RECEIVED,
+export const CARD_SEARCH_INVENTORY_RECEIVED = 'CARD_SEARCH_INVENTORY_RECEIVED';
+export const cardSearchInventoryReceived = (payload: InventoryDetailDto): ReduxAction => ({
+    type: CARD_SEARCH_INVENTORY_RECEIVED,
     payload: payload,
 });
 
@@ -125,11 +125,11 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ca
         console.log('DAMNIT THERE IS A SEARCH IN PROGRESS');
         return;
     }
-    dispatch(searchCardSearchinventoryRequested());
+    dispatch(cardSearchInventoryRequested());
 
     //need to figure out what API call I'm using, should re-use the existing inventory one
     inventoryApi.getInventoryDetail(card.cardId).then((results) =>{
-        dispatch(searchCardSearchinventoryReceived(results));
+        dispatch(cardSearchInventoryReceived(results));
     });
 
 }

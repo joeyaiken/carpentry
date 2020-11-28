@@ -12,9 +12,11 @@ import { inventoryOverviewAppReducer, State as InventoryOverviewState } from './
 import { coreDataReducer, State as CoreDataReducerState } from './common/state/coreDataReducer';
 import { cardSearchDataReducer, State as CardSearchDataReducerState } from './common/card-search/data/CardSearchDataReducer';
 import { deckEditorReducer, State as DeckEditorReducerState } from './decks/deck-editor/state/DeckEditorReducer';
-import { cardSearchReducer, State as CardSearchReducersState } from './common/card-search/state/cardSearchReducer';
+import { cardSearchReducer, State as CardSearchReducersState } from './common/card-search/state/CardSearchReducer';
 import { trackedSetsReducer, State as TrackedSetsReducerState } from './settings/tracked-sets/state/TrackedSetsReducer';
 import { newDeckReducer, State as NewDeckReducerState } from './decks/new-deck/state/NewDeckReducer';
+import { deckAddCardsReducer, State as DeckAddCardsReducerState } from './decks/deck-add-cards/state/DeckAddCardsReducer';
+import { inventoryAddCardsReducer, State as InventoryAddCardsReducerState } from './inventory/inventory-add-cards/state/InventoryAddCardsReducer';
 // import { settingsDataReducer, State as SettingsDataReducerState } from './settings/state/SettingsDataReducer';
 
 //TODO - consider renaming this file to just "store.tsx"
@@ -25,21 +27,24 @@ const rootReducer = (history: History) => combineReducers({
     // app: reducers.app,
     // ui: reducers.ui,
 
-    cardSearch: combineReducers({  // cardSearch | search | core | common
-        //state | app | cardSearch | search
-        state: cardSearchReducer,
-        data: cardSearchDataReducer,
-    }),
+    // cardSearch: combineReducers({  // cardSearch | search | core | common
+    //     //state | app | cardSearch | search
+    //     state: cardSearchReducer,
+    //     data: cardSearchDataReducer,
+    // }),
 
 
     decks: combineReducers({
         newDeck: newDeckReducer,
         deckEditor: deckEditorReducer,
+        //cardSearch | addDeckCards | deckAddCards | ??
+        deckAddCards: deckAddCardsReducer,
         data: decksDataReducer,
     }),
 
     inventory: combineReducers({
         overviews: inventoryOverviewAppReducer,
+        inventoryAddCards: inventoryAddCardsReducer,
         data: inventoryDataReducer,
     }),
 
@@ -59,13 +64,14 @@ const rootReducer = (history: History) => combineReducers({
 export interface AppState {
     //router state
     //
-    cardSearch: {
-        state: CardSearchReducersState,
-        data: CardSearchDataReducerState
-    }
+    // cardSearch: {
+    //     state: CardSearchReducersState,
+    //     data: CardSearchDataReducerState
+    // }
     decks: {
         newDeck: NewDeckReducerState,
         deckEditor: DeckEditorReducerState,
+        deckAddCards: DeckAddCardsReducerState,
         data: DecksDataReducerState
     }
     inventory:{
@@ -75,6 +81,7 @@ export interface AppState {
         //  detail
         //}
         overviews: InventoryOverviewState,
+        inventoryAddCards: InventoryAddCardsReducerState,
         data: InventoryDataReducerState
     }
     settings: {

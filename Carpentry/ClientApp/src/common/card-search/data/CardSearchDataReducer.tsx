@@ -2,6 +2,8 @@
 // import { CARD_SEARCH_ADD_PENDING_CARD, CARD_SEARCH_REMOVE_PENDING_CARD, CARD_SEARCH_CLEAR_PENDING_CARDS } from '../_actions';
 // import { INVENTORY_ADD_COMPLETE } from '../_actions/inventoryActions';
 
+import { CARD_SEARCH_RECEIVED, CARD_SEARCH_REQUESTED, CARD_SEARCH_INVENTORY_RECEIVED, CARD_SEARCH_INVENTORY_REQUESTED } from "./cardSearchDataActions";
+
 export interface State {
     searchResults: {
         isLoading: boolean;
@@ -29,102 +31,6 @@ export interface State {
         allCardIds: number[];
     };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const apiDataRequested = (state: CardSearchDataReducerState, action: ReduxAction): CardSearchDataReducerState => {
-//     const { scope } = action.payload;
-
-//     if(scope as ApiScopeOption === "cardSearchInventoryDetail"){
-//         const newState: CardSearchDataReducerState = {
-//             ...state,
-//             inventoryDetail: {
-//                 ...initialState.inventoryDetail,
-//                 isLoading: true,
-//             }
-//         };
-
-//         return newState;
-//     } 
-//     else if (scope as ApiScopeOption === "cardSearchResults"){
-//         const newState: CardSearchDataReducerState = {
-//             ...state,
-//             searchResults: {
-//                 ...initialState.searchResults,
-//                 isLoading: true,
-//             }
-//         }
-
-//         return newState;
-//     }
-//     else return (state);
-// }
-
-// const apiDataReceived = (state: CardSearchDataReducerState, action: ReduxAction): CardSearchDataReducerState => {
-//     const { scope, data } = action.payload;
-
-//     if(scope as ApiScopeOption === "cardSearchInventoryDetail"){
-//         console.log('inventory detail received')
-//         const detailResult: InventoryDetailDto = data;
-
-//         let inventoryCardsById = {}
-//         detailResult.inventoryCards.forEach(invCard => inventoryCardsById[invCard.id] = invCard);
-
-//         let cardsById = {}
-//         detailResult.cards.forEach(card => cardsById[card.multiverseId] = card);
-
-//         const newState: CardSearchDataReducerState = {
-//             ...state,
-//             inventoryDetail: {
-//                 ...state.inventoryDetail,
-//                 isLoading: false,
-//                 inventoryCardsById: inventoryCardsById,
-//                 inventoryCardAllIds: detailResult.inventoryCards.map(card => card.id),
-//                 cardsById: cardsById,
-//                 allCardIds: detailResult.cards.map(card => card.multiverseId),
-//             }
-            
-//         };
-//         console.log('new card search state');
-//         console.log(newState);
-//         return newState;
-//     } 
-//     else if (scope as ApiScopeOption === "cardSearchResults"){
-//         console.log('card search results')
-//         console.log(data);
-//         // if(scope as ApiScopeOption !== "cardSearchResults") return (state);
-
-//         const searchResultPayload: CardSearchResultDto[] = data || [];
-
-//         let resultsById = {};
-
-//         searchResultPayload.forEach(card => resultsById[card.cardId] = card);
-
-//         const newState: CardSearchDataReducerState = {
-//             ...state,
-//             searchResults: {
-//                 ...state.searchResults,
-//                 isLoading: false,
-//                 searchResultsById: resultsById,
-//                 allSearchResultIds: searchResultPayload.map(card => card.cardId),
-//             }
-//         }
-
-//         return newState;
-//     }
-//     else return (state);
-// }
 
 // const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): CardSearchDataReducerState => {
 //     //'pending cards' is now a dictionary of 'pending card dto's
@@ -227,12 +133,10 @@ export interface State {
 
 export const cardSearchDataReducer = (state = initialState, action: ReduxAction): State => {
     switch(action.type){
-
-        // case API_DATA_REQUESTED:
-        //     return apiDataRequested(state, action);
-
-        // case API_DATA_RECEIVED:
-        //     return apiDataReceived(state, action);
+        case CARD_SEARCH_REQUESTED: return cardSearchRequested(state, action);
+        case CARD_SEARCH_RECEIVED: return cardSearchReceived(state, action);
+        case CARD_SEARCH_INVENTORY_REQUESTED: return cardSearchInventoryRequested(state, action);
+        case CARD_SEARCH_INVENTORY_RECEIVED: return cardSearchInventoryReceived(state, action);
 
         // case CARD_SEARCH_ADD_PENDING_CARD:
         //     return cardSearchAddPendingCard(state, action);
@@ -254,8 +158,7 @@ export const cardSearchDataReducer = (state = initialState, action: ReduxAction)
         //         // pendingCardsSaving: false,
         //     } //as cardSearchPendingCardsState;
 
-        default:
-            return(state)
+        default: return(state);
     }
 }
 
@@ -272,4 +175,66 @@ const initialState: State = {
         cardsById: {},
         allCardIds: [],
     },
+}
+
+function cardSearchRequested(state: State, action: ReduxAction): State {
+    const newState: State = {
+        ...state,
+        searchResults: {
+            ...initialState.searchResults,
+            isLoading: true,
+        }
+    }
+    return newState;
+}
+
+function cardSearchReceived(state: State, action: ReduxAction): State {
+    const searchResultPayload: CardSearchResultDto[] = action.payload || [];
+    let resultsById = {};
+    searchResultPayload.forEach(card => resultsById[card.cardId] = card);
+    const newState: State = {
+        ...state,
+        searchResults: {
+            ...state.searchResults,
+            isLoading: false,
+            searchResultsById: resultsById,
+            allSearchResultIds: searchResultPayload.map(card => card.cardId),
+        }
+    }
+    return newState;
+}
+
+function cardSearchInventoryRequested(state: State, action: ReduxAction): State {
+    const newState: State = {
+        ...state,
+        inventoryDetail: {
+            ...initialState.inventoryDetail,
+            isLoading: true,
+        }
+    };
+    return newState;
+}
+
+function cardSearchInventoryReceived(state: State, action: ReduxAction): State {
+    const detailResult: InventoryDetailDto = action.payload;
+
+    let inventoryCardsById = {}
+    detailResult.inventoryCards.forEach(invCard => inventoryCardsById[invCard.id] = invCard);
+
+    let cardsById = {}
+    detailResult.cards.forEach(card => cardsById[card.multiverseId] = card);
+
+    const newState: State = {
+        ...state,
+        inventoryDetail: {
+            ...state.inventoryDetail,
+            isLoading: false,
+            inventoryCardsById: inventoryCardsById,
+            inventoryCardAllIds: detailResult.inventoryCards.map(card => card.id),
+            cardsById: cardsById,
+            allCardIds: detailResult.cards.map(card => card.multiverseId),
+        },
+    };
+    
+    return newState;
 }

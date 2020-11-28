@@ -1,19 +1,199 @@
-// import { FILTER_VALUE_CHANGED
-//     //  , MENU_BUTTON_CLICKED
-//   //    , MENU_OPTION_SELECTED 
-//   } from '../_actions/ui.actions';
+import { CARD_SEARCH_RECEIVED, CARD_SEARCH_REQUESTED } from "./InventoryAddCardsActions";
 
-import { deckOverviewsReceived } from "../../../decks/state/decksDataActions";
-import { CARD_SEARCH_ADD_PENDING_CARD, CARD_SEARCH_CLEAR_PENDING_CARDS, CARD_SEARCH_FILTER_VALUE_CHANGED, CARD_SEARCH_REMOVE_PENDING_CARD, CARD_SEARCH_SELECT_CARD } from "./cardSearchActions";
+export interface State {
+    searchResults: {
+        isLoading: boolean;
+        searchResultsById: {[multiverseId: number]: CardSearchResultDto};
+        allSearchResultIds: number[];
+    };
 
-  
-  // import { 
-  //     CARD_SEARCH_SEARCH_METHOD_CHANGED, API_DATA_RECEIVED,
-  // } from '../actions/index.actions';
-  // import { OPEN_NEW_DECK_MODAL, CANCLE_NEW_DECK, NEW_DECK_FIELD_CHANGE, APP_BAR_ADD_CLICKED } from '../actions/core.actions';
-  // import { CARD_MENU_BUTTON_CLICK, DECK_CARD_REQUEST_ALTERNATE_VERSIONS, OPEN_DECK_PROPS_MODAL } from '../actions/deckEditor.actions';
-  // import { inventoryDetail } from './inventoryDetail.reducer';
-  
+    searchFilter: CardFilterProps;
+    viewMode: CardSearchViewMode;
+    pendingCardsSaving: boolean;
+    cardSearchMethod: "set" | "web" | "inventory";
+    selectedCard: CardSearchResultDto | null; //should probably be an AppState ID
+    pendingCards: { [name: string]: PendingCardsDto } //key === name, should this also have a list to track all keys?
+}
+
+export const inventoryAddCardsReducer = (state = initialState, action: ReduxAction): State => {
+    switch(action.type){
+        case CARD_SEARCH_REQUESTED: return cardSearchRequested(state, action);
+        case CARD_SEARCH_RECEIVED: return cardSearchReceived(state, action);
+
+        // case CARD_SEARCH_ADD_PENDING_CARD:
+        //     return cardSearchAddPendingCard(state, action);
+            
+        // case CARD_SEARCH_REMOVE_PENDING_CARD:
+        //     return cardSearchRemovePendingCard(state, action);
+    
+        // case CARD_SEARCH_CLEAR_PENDING_CARDS:
+        //     return {
+        //         ...state,
+                
+        //         pendingCards: {},
+        //     }// as cardSearchPendingCardsState;
+
+        // case INVENTORY_ADD_COMPLETE:
+        //     return {
+        //         ...state,
+        //         pendingCards: {},
+        //         // pendingCardsSaving: false,
+        //     } //as cardSearchPendingCardsState;
+
+        default: return(state);
+    }
+}
+
+const initialState: State = {
+    searchResults: {
+        isLoading: false,
+        searchResultsById: {},
+        allSearchResultIds: [],
+    },
+
+    searchFilter: defaultSearchFilterProps(),
+    viewMode: "list",
+    pendingCardsSaving: false,
+    cardSearchMethod: "set",
+    selectedCard:  null, //should probably be an AppState ID
+    pendingCards: {},
+};
+
+//reducer helpers
+
+
+
+//legacy trash --------------------------------------------------
+
+// const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): CardSearchDataReducerState => {
+//     //'pending cards' is now a dictionary of 'pending card dto's
+//     const {
+//         // data, //0
+//         name,
+//         cardId,
+//         isFoil, //false
+//         // variant, //"normal"
+
+//         //need
+//         //cardId (for inv card)
+//         //cardName (for display, and grouping?)
+//     } = action.payload;
+    
+//     // const magicCardToAdd: MagicCard = data;
+    
+//     let cardToAdd: PendingCardsDto = state.pendingCards[name];
+    
+//     if(!cardToAdd){
+//         cardToAdd = {
+//             name: name,
+//             cards: [],
+//         };
+
+//         //OK - So I need to either pass the name, or the whole card
+        
+        
+//         // const magicCardToAdd = state.
+//         // if we can't find a matching card, nothing gets added and this just continues silently (I guess)
+//     //     if(magicCardToAdd){
+//     //         cardToAdd = {
+//     //             multiverseId: multiverseId,
+//     //             cards: [],
+//     //             // data: magicCardToAdd,
+//     //         };
+//     //     }                    
+//     }
+
+//     //These are the only 3 fields used by the api bulkAdd
+//     cardToAdd.cards.push({
+//         cardId: cardId,
+//         isFoil: isFoil,
+//         statusId: 1,
+//     } as InventoryCard);
+
+//     const newState: CardSearchDataReducerState = {
+//         ...state,
+//         pendingCards: {
+//             ...state.pendingCards,
+//             [name]: cardToAdd
+//         }
+//     }
+//     return newState;
+// }
+
+// const cardSearchRemovePendingCard = (state = initialState, action: ReduxAction): CardSearchDataReducerState => {
+//     const {
+//         name,
+//         cardId,
+//         isFoil,
+//     } = action.payload;
+
+//     // const midToRemove = action.payload.multiverseId;
+//     // const removeFoilCard = action.payload.isFoil;
+//     // const variantToRemove: string = action.payload.variant;
+
+//     let objToRemoveFrom = state.pendingCards[name];
+
+//     if(objToRemoveFrom){
+
+//         //let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.variantName === variantToRemove && x.isFoil === removeFoilCard);
+//         let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.cardId === cardId && x.isFoil === isFoil);
+
+//         if(thisInvCard >= 0){
+//             objToRemoveFrom.cards.splice(thisInvCard,1);
+//         }
+
+//         let pendingCardsAfterRemoval =  {
+//             ...state.pendingCards,
+//             [name]: objToRemoveFrom
+//         }
+//         //if this pending cards object has 0 items, it should be deleted from the dictionary
+//         if(objToRemoveFrom.cards.length === 0){
+//             delete pendingCardsAfterRemoval[name];
+//         }
+//         const newState: CardSearchDataReducerState = {
+//             ...state,
+//             pendingCards: pendingCardsAfterRemoval
+//         }
+//         return newState;
+
+//     } else {
+//         const newState: CardSearchDataReducerState = {
+//             ...state,
+//         }
+//         return newState;
+//     }
+// }
+
+function cardSearchRequested(state: State, action: ReduxAction): State {
+    const newState: State = {
+        ...state,
+        searchResults: {
+            ...initialState.searchResults,
+            isLoading: true,
+        }
+    }
+    return newState;
+}
+
+function cardSearchReceived(state: State, action: ReduxAction): State {
+    const searchResultPayload: CardSearchResultDto[] = action.payload || [];
+    let resultsById = {};
+    searchResultPayload.forEach(card => resultsById[card.cardId] = card);
+    const newState: State = {
+        ...state,
+        searchResults: {
+            ...state.searchResults,
+            isLoading: false,
+            searchResultsById: resultsById,
+            allSearchResultIds: searchResultPayload.map(card => card.cardId),
+        }
+    }
+    return newState;
+}
+
+
+import { CARD_SEARCH_ADD_PENDING_CARD, CARD_SEARCH_CLEAR_PENDING_CARDS, CARD_SEARCH_FILTER_VALUE_CHANGED, CARD_SEARCH_REMOVE_PENDING_CARD, CARD_SEARCH_SELECT_CARD } from "./InventoryAddCardsActions";
+
 export interface State {
     searchFilter: CardFilterProps;
 
@@ -370,110 +550,24 @@ const filterValueChanged = (state: State, action: ReduxAction): State => {
 //         //       return(state)
 //       }
 //   }
-  
-  const emptyDeckDto = (): DeckPropertiesDto   =>  ({
-      basicW: 0,
-      basicU: 0,
-      basicB: 0,
-      basicR: 0,
-      basicG: 0,
-      id: 0,
-      format: "Modern",
-      name: "",
-      notes: ""
-  });
-  
-  // function initialCardSearchFilterProps(): CardFilterProps {
-  //     return {
-  //         // setId: null,
-  //         set: '',
-  //         colorIdentity: [],
-  //         rarity: [], //['mythic','rare','uncommon','common'], //
-  //         type: '',
-  //         exclusiveColorFilters: false,
-  //         multiColorOnly: false,
-  //         cardName: '',
-  //         exclusiveName: false,
-  //         maxCount: 0,
-  //         minCount: 0,
-  //         format: '',
-  //         text: '',
-  //         group: '',
-  //     } as CardFilterProps;
-  // } 
-  
-  function mockFilterProps(): CardFilterProps {
-      return{
-          // setId: null,
-          set: '',
-          colorIdentity: [],
-          rarity: [],//['uncommon','common'], //
-          type: '',//'Creature',
-          exclusiveColorFilters: false,
-          multiColorOnly: false,
-          cardName: '',
-          exclusiveName: false,
-          maxCount: 0,
-          minCount: 0,
-          format: '',
-          text: '',
-          group: '',
-      } as CardFilterProps;
-  }
-
-const initialState: State = {
-    searchFilter: mockFilterProps(),
-    viewMode: "list",
-    pendingCardsSaving: false,
-    cardSearchMethod: "set",
-    selectedCard:  null, //should probably be an AppState ID
-    pendingCards: {},
-};
 
   
-const oldInitialState: UiReducerState = {
-//   inventoryFilterProps: defaultSearchFilterProps(),
-    cardSearchFilterProps: mockFilterProps(),
-//   deckListMenuAnchor: null,
-//   deckEditorMenuAnchor: null,
-//   inventoryDetailMenuAnchor: null,
-    
-    newDeckDto: emptyDeckDto(),
-
-    deckPropsModalOpen: false,
-    isNewDeckModalOpen: false,
-    isInventoryDetailModalOpen: false,
-
-    deckModalProps: null,
-
-
-
-    // inventoryFilterProps: defaultSearchFilterProps(),
-    // cardSearchFilterProps: mockFilterProps(),
-
-    // deckListMenuAnchor: null,
-    // cardMenuAnchor: null,
-
-    // deckPropsModalOpen: false,
-    // isNewDeckModalOpen: false,
+function defaultSearchFilterProps(): CardFilterProps {
+    return {
+        // setId: null,
+        set: '',
+        colorIdentity: [],
+        //rarity: ['mythic','rare','uncommon','common'], //
+        rarity: [], //
+        type: '',//'Creature',
+        exclusiveColorFilters: false,
+        multiColorOnly: false,
+        cardName: '',
+        exclusiveName: false,
+        maxCount: 0,
+        minCount: 0,
+        format: '',
+        text: '',
+        group: '',
+    }
 }
-  
-  function defaultSearchFilterProps(): CardFilterProps {
-      return {
-          // setId: null,
-          set: '',
-          colorIdentity: [],
-          //rarity: ['mythic','rare','uncommon','common'], //
-          rarity: [], //
-          type: '',
-          exclusiveColorFilters: false,
-          multiColorOnly: false,
-          cardName: '',
-          exclusiveName: false,
-          maxCount: 0,
-          minCount: 0,
-          format: '',
-          text: '',
-          group: '',
-      }
-  }

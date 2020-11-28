@@ -54,23 +54,15 @@ export const deckEditorSaveReceived = (): ReduxAction => ({
 // });
 
 function trySaveDeckProps(dispatch: Dispatch, state: AppState): void {
-    //do I bother blocking this? Is a double-click that awful in this situation?
-    //I guess I don't want to set a poor precident
-
     var isSaving = state.decks.deckEditor.isSaving;
     const deckPropsToUpdate = state.decks.deckEditor.deckModalProps;
+
     if(isSaving || deckPropsToUpdate === null){
         return
     }
-
-    //dispatch loading
-    //dispatch(deckPropsSaveRequested());
+    
     dispatch(deckEditorSaveRequested());
 
-    //save
-    
-    // console.log('saving deck props');
-    // console.log(deckPropsToUpdate);
     deckPropsToUpdate.basicW = +deckPropsToUpdate.basicW;
     deckPropsToUpdate.basicU = +deckPropsToUpdate.basicU;
     deckPropsToUpdate.basicB = +deckPropsToUpdate.basicB;
@@ -79,27 +71,9 @@ function trySaveDeckProps(dispatch: Dispatch, state: AppState): void {
 
     decksApi.updateDeck(deckPropsToUpdate).then(() => {
         dispatch(deckEditorSaveReceived());
-        //now what?
         dispatch(closeDeckPropsModal());
         dispatch(reloadDeckDetail(deckPropsToUpdate.id));
-        //do i somehow need to refresh?
-        //this.props.dispatch(push(`/inventory/${cardId}`));
-        // console.log('pushing!');
-        // dispatch(push(`/decks/${deckPropsToUpdate.id}`));
     });
-
-    //dispatch received
-
-
-//     if(state.decks.data.detail.isLoading || state.decks.data.detail.deckId === deckId){
-//         return;
-//     }
-//     dispatch(deckDetailRequested(deckId));
-//     decksApi.getDeckDetail(deckId).then((result) => {
-//         dispatch(deckDetailReceived(result));
-//     });
-    
-
 }
 
 export const DECK_PROPS_MODAL_CHANGED = 'DECK_PROPS_MODAL_CHANGED';
@@ -133,14 +107,10 @@ export const requestDeleteDeck = (): any => {
     }
 }
 function tryDeleteDeck(dispatch: Dispatch, state: AppState): void {
-    //is[Saving|Loading]Check?
     const isSaving = state.decks.deckEditor.isSaving;
     if(isSaving) return;
-    //dispatch
     dispatch(deckEditorSaveRequested());
-    //api
     const idToDelete = state.decks.data.detail.deckId;
-
     decksApi.deleteDeck(idToDelete).then(() => {
         dispatch(deckEditorSaveReceived());
         dispatch(push('/'));
