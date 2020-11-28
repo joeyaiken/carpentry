@@ -1,4 +1,15 @@
-import { CARD_SEARCH_RECEIVED, CARD_SEARCH_REQUESTED } from "./InventoryAddCardsActions";
+import { 
+    CARD_SEARCH_REQUESTED,
+    CARD_SEARCH_RECEIVED,
+    CARD_SEARCH_ADD_PENDING_CARD,
+    CARD_SEARCH_REMOVE_PENDING_CARD,
+    CARD_SEARCH_FILTER_VALUE_CHANGED,
+    TOGGLE_CARD_SEARCH_VIEW_MODE,
+    CARD_SEARCH_SEARCH_METHOD_CHANGED,
+    CARD_SEARCH_CLEAR_PENDING_CARDS,
+    CARD_SEARCH_SELECT_CARD,
+    CARD_SEARCH_SAVE_PENDING_CARDS,
+} from "./InventoryAddCardsActions";
 
 export interface State {
     searchResults: {
@@ -9,10 +20,15 @@ export interface State {
 
     searchFilter: CardFilterProps;
     viewMode: CardSearchViewMode;
+
+    //Consider grouping this in an obj like searchResults
     pendingCardsSaving: boolean;
+    pendingCards: { [name: string]: PendingCardsDto } //key === name, should this also have a list to track all keys?
+    //
+
     cardSearchMethod: "set" | "web" | "inventory";
     selectedCard: CardSearchResultDto | null; //should probably be an AppState ID
-    pendingCards: { [name: string]: PendingCardsDto } //key === name, should this also have a list to track all keys?
+    
 }
 
 export const inventoryAddCardsReducer = (state = initialState, action: ReduxAction): State => {
@@ -58,9 +74,6 @@ const initialState: State = {
     selectedCard:  null, //should probably be an AppState ID
     pendingCards: {},
 };
-
-//reducer helpers
-
 
 
 //legacy trash --------------------------------------------------
@@ -192,7 +205,7 @@ function cardSearchReceived(state: State, action: ReduxAction): State {
 }
 
 
-import { CARD_SEARCH_ADD_PENDING_CARD, CARD_SEARCH_CLEAR_PENDING_CARDS, CARD_SEARCH_FILTER_VALUE_CHANGED, CARD_SEARCH_REMOVE_PENDING_CARD, CARD_SEARCH_SELECT_CARD } from "./InventoryAddCardsActions";
+
 
 export interface State {
     searchFilter: CardFilterProps;

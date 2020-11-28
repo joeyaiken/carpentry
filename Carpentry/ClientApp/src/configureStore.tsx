@@ -27,11 +27,11 @@ const rootReducer = (history: History) => combineReducers({
     // app: reducers.app,
     // ui: reducers.ui,
 
-    // cardSearch: combineReducers({  // cardSearch | search | core | common
-    //     //state | app | cardSearch | search
-    //     state: cardSearchReducer,
-    //     data: cardSearchDataReducer,
-    // }),
+    cardSearch: combineReducers({  // cardSearch | search | core | common
+        //state | app | cardSearch | search
+        state: cardSearchReducer,
+        data: cardSearchDataReducer,
+    }),
 
 
     decks: combineReducers({
@@ -64,10 +64,10 @@ const rootReducer = (history: History) => combineReducers({
 export interface AppState {
     //router state
     //
-    // cardSearch: {
-    //     state: CardSearchReducersState,
-    //     data: CardSearchDataReducerState
-    // }
+    cardSearch: {
+        state: CardSearchReducersState,
+        data: CardSearchDataReducerState
+    }
     decks: {
         newDeck: NewDeckReducerState,
         deckEditor: DeckEditorReducerState,

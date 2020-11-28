@@ -2,7 +2,6 @@ import { Dispatch } from "redux";
 import { cardSearchApi } from "../../../api/cardSearchApi";
 import { inventoryApi } from "../../../api/inventoryApi";
 import { AppState } from "../../../configureStore";
-import { decksApi } from "../../../api/decksApi";
 
 export const requestCardSearch = (): any => {
     return (dispatch: Dispatch, getState: any) => {
@@ -10,12 +9,12 @@ export const requestCardSearch = (): any => {
     }   
 }
 
-export const CARD_SEARCH_REQUESTED = 'CARD_SEARCH_REQUESTED';
+export const CARD_SEARCH_REQUESTED = 'INVENTORY_ADD_CARDS.CARD_SEARCH_REQUESTED';
 export const cardSearchRequested = (): ReduxAction => ({
     type: CARD_SEARCH_REQUESTED,
 });
 
-export const CARD_SEARCH_RECEIVED = 'CARD_SEARCH_RECEIVED'
+export const CARD_SEARCH_RECEIVED = 'INVENTORY_ADD_CARDS.CARD_SEARCH_RECEIVED'
 export const cardSearchReceived = (results: CardSearchResultDto[]): ReduxAction => ({
     type: CARD_SEARCH_RECEIVED,
     payload: results,
@@ -23,20 +22,15 @@ export const cardSearchReceived = (results: CardSearchResultDto[]): ReduxAction 
 });
 
 function searchCards(dispatch: Dispatch, state: AppState): any{
-    // const _localApiScope: ApiScopeOption = "cardSearchResults";
-    const searchInProgress: boolean = state.cardSearch.data.searchResults.isLoading; //state.cardSearch.isLoading;
-
-    //const cardSearchMethod = state.cardSearch.cardSearchMethod;
-    //const cardSearchMethod = state.app.cardSearch.cardSearchMethod;
-    const cardSearchMethod = state.cardSearch.state.cardSearchMethod;
-
+    const containerState = state.inventory.inventoryAddCards;
+    const searchInProgress: boolean = state.inventory.inventoryAddCards.searchResults.isLoading;
     if(searchInProgress){
         return;
     }
     dispatch(cardSearchRequested());
     //why TF am I treating this like a bool?
-    if(cardSearchMethod === "web"){
-        const { cardName, exclusiveName } = state.cardSearch.state.searchFilter;
+    if(containerState.cardSearchMethod === "web"){
+        const { cardName, exclusiveName } = containerState.searchFilter;
         
         cardSearchApi.searchWeb(cardName, exclusiveName).then((results) =>{
             dispatch(cardSearchReceived(results));
@@ -68,7 +62,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
     //     });
 
     } else {
-        const currentFilterProps = state.cardSearch.state.searchFilter;
+        const currentFilterProps = containerState.searchFilter;
         //CardSearchQueryParameter
         const param: CardSearchQueryParameter = {
             colorIdentity: currentFilterProps.colorIdentity,
@@ -95,8 +89,6 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
         // })
     }
 }
-
-
 
 //Add pending cards
 export const CARD_SEARCH_ADD_PENDING_CARD = 'CARD_SEARCH_ADD_PENDING_CARD'
@@ -157,53 +149,53 @@ export const cardSearchSelectCard = (card: CardSearchResultDto): ReduxAction => 
 
 
 //TODO - maybe delete, this isn't referenced in container
-export const requestAddDeckCard = (deckCardDto: DeckCardDto): any => {
-    return (dispatch: Dispatch, getState: any) => {
-        return addDeckCard(dispatch, getState(), deckCardDto);
-    }
-}
+// export const requestAddDeckCard = (deckCardDto: DeckCardDto): any => {
+//     return (dispatch: Dispatch, getState: any) => {
+//         return addDeckCard(dispatch, getState(), deckCardDto);
+//     }
+// }
 
-function addDeckCard(dispatch: Dispatch, state: AppState, deckCardDto: DeckCardDto): any{
-    dispatch(cardSearchAddingDeckCard());
+// function addDeckCard(dispatch: Dispatch, state: AppState, deckCardDto: DeckCardDto): any{
+//     dispatch(cardSearchAddingDeckCard());
 
-    // alert('broken code hit - cardSearchActions - addDeckCard')
+//     // alert('broken code hit - cardSearchActions - addDeckCard')
 
-    // const deckCardDto: DeckCardDto = {
-    //     deckId: state.app.core.selectedDeckId || 0,
-    //     //deckId: state.de,
-    //     id: 0,
-    //     inventoryCard: inventoryCard,
-    //     categoryId: null,
-    // }
-    //console.log
+//     // const deckCardDto: DeckCardDto = {
+//     //     deckId: state.app.core.selectedDeckId || 0,
+//     //     //deckId: state.de,
+//     //     id: 0,
+//     //     inventoryCard: inventoryCard,
+//     //     categoryId: null,
+//     // }
+//     //console.log
 
     
-    decksApi.addDeckCard(deckCardDto).then(() => {
+//     decksApi.addDeckCard(deckCardDto).then(() => {
 
 
         
-        //After response, need to re-request inventory
+//         //After response, need to re-request inventory
 
-        //!! This should be re-added eventually
-        // if(state.app.cardSearch.selectedCard){
-        //     dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
-        // }
+//         //!! This should be re-added eventually
+//         // if(state.app.cardSearch.selectedCard){
+//         //     dispatch(requestCardSearchInventory(state.app.cardSearch.selectedCard));
+//         // }
 
-        // alert('broken code hit - CardSearchActions - addDeckCard (should be added, wont nav)');
+//         // alert('broken code hit - CardSearchActions - addDeckCard (should be added, wont nav)');
 
-        // if(state.app.core.visibleContainer === "deckEditor" && state.data.deckDetail.deckProps != null){
+//         // if(state.app.core.visibleContainer === "deckEditor" && state.data.deckDetail.deckProps != null){
             
-        //     //This should be a "navigate to deck detail"
-        //     // dispatch(requestDeckDetail(state.data.deckDetail.deckProps.id));
-        // }
+//         //     //This should be a "navigate to deck detail"
+//         //     // dispatch(requestDeckDetail(state.data.deckDetail.deckProps.id));
+//         // }
 
-    })
-}
+//     })
+// }
 
-export const CARD_SEARCH_ADDING_DECK_CARD = 'CARD_SEARCH_ADDING_DECK_CARD';
-export const cardSearchAddingDeckCard = (): ReduxAction => ({
-    type: CARD_SEARCH_ADDING_DECK_CARD
-});
+// export const CARD_SEARCH_ADDING_DECK_CARD = 'CARD_SEARCH_ADDING_DECK_CARD';
+// export const cardSearchAddingDeckCard = (): ReduxAction => ({
+//     type: CARD_SEARCH_ADDING_DECK_CARD
+// });
 
 //////
 export const cardSearchRequestSavePendingCards = (): any => {
@@ -223,7 +215,7 @@ export const cardSearchSavingPendingCards = (): ReduxAction => ({
 });
 
 function addCardsFromSearch(dispatch: Dispatch, state: AppState){
-    const isSaving = state.cardSearch.state.pendingCardsSaving;
+    const isSaving = state.inventory.inventoryAddCards.pendingCardsSaving;
     if(isSaving){
         return;
     }
@@ -242,12 +234,12 @@ function addCardsFromSearch(dispatch: Dispatch, state: AppState){
 
     //Object.keys(state.cardSearch.pendingCards).forEach((key: string) => {
     //Object.keys(state.data.cardSearch.pendingCards).forEach((key: string) => {
-    Object.keys(state.cardSearch.state.pendingCards).forEach((key: string) => {
+    Object.keys(state.inventory.inventoryAddCards.pendingCards).forEach((key: string) => {
         //need to rethink this
 
         //see if it exists in the current inventory
 
-        let itemToAdd: PendingCardsDto = state.cardSearch.state.pendingCards[key];
+        let itemToAdd: PendingCardsDto = state.inventory.inventoryAddCards.pendingCards[key];
 
         itemToAdd.cards.forEach(card => {
             const newCard: InventoryCard = {

@@ -82,74 +82,7 @@ export const cardSearchAddingDeckCard = (): ReduxAction => ({
 });
 
 //////
-export const cardSearchRequestSavePendingCards = (): any => {
-    return (dispatch: Dispatch, getState: any) => {
-        addCardsFromSearch(dispatch, getState());
-    }
-}
 
-// export const requestAddCardsFromSearch = (): any => {
-//     return (dispatch: Dispatch, getState: any) => {
-//         addCardsFromSearch(dispatch, getState());
-//     }
-// }
-export const CARD_SEARCH_SAVE_PENDING_CARDS = 'DECK_ADD_CARDS.CARD_SEARCH_SAVE_PENDING_CARDS';
-export const cardSearchSavingPendingCards = (): ReduxAction => ({
-    type: CARD_SEARCH_SAVE_PENDING_CARDS
-});
-
-function addCardsFromSearch(dispatch: Dispatch, state: AppState){
-    const isSaving = state.cardSearch.state.pendingCardsSaving;
-    if(isSaving){
-        return;
-    }
-
-    dispatch(cardSearchSavingPendingCards())
-
-    // console.log('addingCards');
-    // console.log(state.cardSearch.pendingCards);
-
-    //cards to add from pending
-    //var cardsToTryAdding = state.cardSearch.cardSearchPendingCards
-
-    //for each of the keys in pending cards...
-
-    let newCards: InventoryCard[] = [];
-
-    //Object.keys(state.cardSearch.pendingCards).forEach((key: string) => {
-    //Object.keys(state.data.cardSearch.pendingCards).forEach((key: string) => {
-    Object.keys(state.cardSearch.state.pendingCards).forEach((key: string) => {
-        //need to rethink this
-
-        //see if it exists in the current inventory
-
-        let itemToAdd: PendingCardsDto = state.cardSearch.state.pendingCards[key];
-
-        itemToAdd.cards.forEach(card => {
-            const newCard: InventoryCard = {
-                id: 0,
-                isFoil: card.isFoil,
-                // multiverseId: card.multiverseId,
-                statusId: card.statusId,
-                // variantName: card.variantName,
-                cardId: card.cardId,
-                collectorNumber: card.collectorNumber,
-                deckCards: [],
-                name: card.name,
-                set: card.set,
-            }
-
-            newCards.push(newCard);
-
-        })
-    });
-    inventoryApi.addInventoryCardBatch(newCards).then(() => {
-        // dispatch(inventoryAddComplete());
-        // dispatch(requestInventoryOverviews());
-        console.log('!! Need to route to inventory overviews !!'); // TODO - do routing to '/inventory/'
-    });
-
-}
 
 export const requestCardSearch = (): any => {
     return (dispatch: Dispatch, getState: any) => {
@@ -175,7 +108,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
 
     const searchInProgress: boolean = containerState.searchResults.isLoading;
 
-    const cardSearchMethod = state.cardSearch.state.cardSearchMethod;
+    const cardSearchMethod = state.decks.deckAddCards.cardSearchMethod;
     // const cardSearchMethod = containerState.cardSearchMethod;
 
     if(searchInProgress){
@@ -184,7 +117,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
     dispatch(cardSearchRequested());
     //why TF am I treating this like a bool?
     if(cardSearchMethod === "web"){
-        const { cardName, exclusiveName } = state.cardSearch.state.searchFilter;
+        const { cardName, exclusiveName } = state.decks.deckAddCards.searchFilterProps;
         //const { cardName, exclusiveName } = containerState.searchFilter;
         
         cardSearchApi.searchWeb(cardName, exclusiveName).then((results) =>{
@@ -217,7 +150,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
     //     });
 
     } else {
-        const currentFilterProps = state.cardSearch.state.searchFilter;
+        const currentFilterProps = state.decks.deckAddCards.searchFilterProps;
         //CardSearchQueryParameter
         const param: CardSearchQueryParameter = {
             colorIdentity: currentFilterProps.colorIdentity,
@@ -268,9 +201,8 @@ export const cardSearchInventoryReceived = (payload: InventoryDetailDto): ReduxA
 
 //I don't really want to solve this tonight
 function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: CardSearchResultDto): any{
-    // const _localApiScope: ApiScopeOption = "cardSearchInventoryDetail";
     //need another bool for isSearching
-    const searchInProgress: boolean = state.cardSearch.data.inventoryDetail.isLoading;
+    const searchInProgress: boolean = state.decks.deckAddCards.inventoryDetail.isLoading;
     if(searchInProgress){
         console.log('DAMNIT THERE IS A SEARCH IN PROGRESS');
         return;
