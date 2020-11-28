@@ -15,19 +15,11 @@ import DeckAddCardsLayout from './components/DeckAddCardsLayout';
 
 interface PropsFromState { 
     cardSearchMethod: "set" | "web" | "inventory";
-    
-    // pendingCards: { [key:number]: PendingCardsDto }
-
-    // searchContext: "deck" | "inventory";
     deckId: number;
-
     selectedCard: CardSearchResultDto | null;
     selectedCardDetail: InventoryDetailDto | null;
-
     searchResults: CardListItem[];
     viewMode: CardSearchViewMode;
-
-    
     filterOptions: AppFiltersDto;
     searchFilterProps: CardFilterProps;
     visibleFilters: CardFilterVisibilities;
@@ -100,7 +92,6 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
         // this.props.dispatch(requestAddDeckCard(inventoryCard));
     }
     
-    //handleAddNewCardClick(multiverseId: number, isFoil: boolean, variant: string): void{
     handleAddNewCardClick(cardId: number, isFoil: boolean): void{
 
         let deckCard: DeckCardDto = {
@@ -110,37 +101,9 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
             inventoryCardId: 0,
             cardId: cardId,
             isFoil: isFoil,
-            inventoryCardStatusId: 1, //in inventory
-            // inventoryCard: {
-            //     cardId: cardId,
-            //     isFoil: isFoil,
-            //     statusId: 1,
-
-            //     collectorNumber: 0,
-            //     deckCards: [],
-            //     id: 0,
-            //     name: '',
-            //     set: '',
-            // }
-
-            
+            inventoryCardStatusId: 1,
         }
 
-        // let inventoryCard: InventoryCard = {
-        //     id: 0,
-        //     deckCards: [],
-        //     isFoil: isFoil,
-        //     // variantName: variant,
-        //     // multiverseId: multiverseId,
-        //     statusId: 1,
-        //     name: '',
-        //     set: '',
-        //     cardId: 0,
-        //     collectorNumber: 0,
-        // }
-
-        //is this an app or data action?
-        //Maybe app so it can reroute after saving
         this.props.dispatch(requestAddDeckCard(deckCard));  
     }
 
@@ -150,25 +113,19 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
                 cardSearchMethod={this.props.cardSearchMethod}
                 filterOptions={this.props.filterOptions}
                 handleCancelClick={this.handleCancelClick}
-                // handleSaveClick={this.handleSaveClick}
                 handleSearchMethodTabClick={this.handleSearchMethodTabClick}
                 handleToggleViewClick={this.handleToggleViewClick}
                 handleAddExistingCardClick={this.handleAddExistingCardClick}
                 handleAddNewCardClick={this.handleAddNewCardClick}
-                // handleAddPendingCard={this.handleAddPendingCard}
                 handleBoolFilterChange={this.handleBoolFilterChange}
                 handleCardSelected={this.handleCardSelected}
                 handleFilterChange={this.handleFilterChange}
-                // handleRemovePendingCard={this.handleRemovePendingCard}
                 handleSearchButtonClick={this.handleSearchButtonClick}
-                // pendingCards={this.props.pendingCards}
-                // searchContext={this.props.searchContext}
                 searchFilterProps={this.props.searchFilterProps}
                 searchResults={this.props.searchResults}
                 selectedCard={this.props.selectedCard}
                 selectedCardDetail={this.props.selectedCardDetail}
                 viewMode={this.props.viewMode}/>
-                
         );
     }
 }
@@ -220,7 +177,6 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         text: false,
     }
 
-    //switch(state.cardSearch.state.cardSearchMethod){
     switch(state.decks.deckAddCards.cardSearchMethod){
         case "inventory":
             visibleFilters = {
@@ -253,14 +209,14 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     const containerState = state.decks.deckAddCards;
 
     const result: PropsFromState = {
-        cardSearchMethod: containerState.cardSearchMethod,//state.cardSearch.state.cardSearchMethod,
+        cardSearchMethod: containerState.cardSearchMethod,
         deckId: parseInt(ownProps.match.params.deckId) || 0,
-        selectedCard: containerState.selectedCard,//state.cardSearch.state.selectedCard,
+        selectedCard: containerState.selectedCard,
         selectedCardDetail: selectInventoryDetail(state),
         searchResults: mappedSearchResults,
-        viewMode: containerState.viewMode,//state.cardSearch.state.viewMode,
+        viewMode: containerState.viewMode,
         filterOptions: state.core.data.filterOptions,
-        searchFilterProps: containerState.searchFilterProps,//state.cardSearch.state.searchFilter,
+        searchFilterProps: containerState.searchFilterProps,
         visibleFilters: visibleFilters,
     }
 

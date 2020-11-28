@@ -48,6 +48,15 @@ export const deckAddCardsReducer = (state = initialState, action: ReduxAction): 
         case CARD_SEARCH_RECEIVED: return cardSearchReceived(state, action);
         case CARD_SEARCH_INVENTORY_REQUESTED: return cardSearchInventoryRequested(state, action);
         case CARD_SEARCH_INVENTORY_RECEIVED: return cardSearchInventoryReceived(state, action);
+        case CARD_SEARCH_FILTER_VALUE_CHANGED: return filterValueChanged(state, action);
+        case TOGGLE_CARD_SEARCH_VIEW_MODE: return toggleSearchViewMode(state, action);
+
+        case CARD_SEARCH_SEARCH_METHOD_CHANGED: return (state);
+        
+        case CARD_SEARCH_SELECT_CARD: return (state);
+        
+        case CARD_SEARCH_ADDING_DECK_CARD: return (state);
+        
         default: return(state);
     }
 }
@@ -70,6 +79,27 @@ const initialState: State = {
         allCardIds: [],
     },
 }
+
+function defaultSearchFilterProps(): CardFilterProps {
+    return {
+        // setId: null,
+        set: '',
+        colorIdentity: [],
+        //rarity: ['mythic','rare','uncommon','common'], //
+        rarity: [], //
+        type: '',//'Creature',
+        exclusiveColorFilters: false,
+        multiColorOnly: false,
+        cardName: '',
+        exclusiveName: false,
+        maxCount: 0,
+        minCount: 0,
+        format: '',
+        text: '',
+        group: '',
+    }
+}
+
 
 function cardSearchRequested(state: State, action: ReduxAction): State {
     const newState: State = {
@@ -133,22 +163,37 @@ function cardSearchInventoryReceived(state: State, action: ReduxAction): State {
     return newState;
 }
 
-function defaultSearchFilterProps(): CardFilterProps {
-    return {
-        // setId: null,
-        set: '',
-        colorIdentity: [],
-        //rarity: ['mythic','rare','uncommon','common'], //
-        rarity: [], //
-        type: '',//'Creature',
-        exclusiveColorFilters: false,
-        multiColorOnly: false,
-        cardName: '',
-        exclusiveName: false,
-        maxCount: 0,
-        minCount: 0,
-        format: '',
-        text: '',
-        group: '',
+const filterValueChanged = (state: State, action: ReduxAction): State => {
+    //const { type, filter, value } = action.payload;
+    const { type, filter, value } = action.payload;
+    console.log('CS filter changed');
+    console.log(action.payload);
+
+    const existingFilter = state.searchFilterProps;
+    const newState: State = {
+        ...state,
+        searchFilterProps: {
+            ...existingFilter, 
+            [filter]: value,
+        }
     }
+    return newState;
+}
+
+function toggleSearchViewMode(state: State, action: ReduxAction): State {
+    let newViewMode: CardSearchViewMode = "list";
+
+    switch(state.viewMode){
+        case "list":
+            newViewMode = "grid";
+            break;
+        case "grid":
+            newViewMode = "list";
+            break;
+    }
+    
+    return {
+        ...state,
+        viewMode: newViewMode,
+    };
 }
