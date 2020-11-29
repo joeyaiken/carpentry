@@ -6,6 +6,8 @@ import { toggleDeckViewMode, deckEditorCardSelected, openDeckPropsModal, closeDe
 import { AppState } from '../../configureStore';
 import { ensureDeckDetailLoaded } from '../state/decksDataActions';
 import { DeckEditorLayout } from './components/DeckEditorLayout';
+import { disconnect } from 'process';
+import { push } from 'react-router-redux';
 
 /**
  * The Deck Editor is basically a fancy data table
@@ -70,6 +72,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handleCardMenuClosed = this.handleCardMenuClosed.bind(this);
         this.handlePropsModalDisassemble = this.handlePropsModalDisassemble.bind(this);
         this.handlePropsModalDelete = this.handlePropsModalDelete.bind(this);
+        this.handleAddCardsClicked = this.handleAddCardsClicked.bind(this);
     }
 
     componentDidMount() {
@@ -162,6 +165,10 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         }
     }
 
+    handleAddCardsClicked(): void {
+        this.props.dispatch(push(`/decks/${this.props.deckId}/addCards`))
+    }
+    
     render() {
         if(this.props.deckProperties === null || this.props.deckStats === null){
             return(
@@ -184,6 +191,8 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                     formatFilterOptions={this.props.formatFilterOptions}
                     onPropsModalDisassembleClick={this.handlePropsModalDisassemble}
                     onPropsModalDeleteClick={this.handlePropsModalDelete}
+
+                    onAddCardsClick={this.handleAddCardsClicked}
 
                     //View
                     handleToggleDeckView={this.handleToggleDeckView}

@@ -19,7 +19,6 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
         // <Box className={combineStyles([classes.flexSection, classes.flexRow])}>
         <Box className={combineStyles(classes.flexSection, classes.flexRow)}>
             {/* //Text filter */}
-{/*             
             <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
                 <TextField
                     name="text"
@@ -29,7 +28,7 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
                     onChange={props.handleFilterChange}
                     margin="normal"/>
             </Box>
-             */}
+            
             {/* //SET filter */}
             <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
                 <TextField

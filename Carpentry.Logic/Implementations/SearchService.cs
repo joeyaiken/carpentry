@@ -103,6 +103,16 @@ namespace Carpentry.Logic.Implementations
                 query = query.Where(x => x.OwnedCount > 0);
             }
 
+            if (!string.IsNullOrEmpty(filters.Text))
+            {
+                var textFilter = filters.Text.ToLower();
+                query = query.Where(x => 
+                x.Name.ToLower().Contains(textFilter)
+                || x.Type.ToLower().Contains(textFilter)
+                || x.Text.ToLower().Contains(textFilter)
+                );
+            }
+
             if (!string.IsNullOrEmpty(filters.SearchGroup))
             {
                 switch (filters.SearchGroup)

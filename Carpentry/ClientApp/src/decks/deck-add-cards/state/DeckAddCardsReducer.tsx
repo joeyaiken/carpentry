@@ -1,7 +1,7 @@
 import { 
     CARD_SEARCH_FILTER_VALUE_CHANGED,
     TOGGLE_CARD_SEARCH_VIEW_MODE,
-    CARD_SEARCH_SEARCH_METHOD_CHANGED,
+    // CARD_SEARCH_SEARCH_METHOD_CHANGED,
     CARD_SEARCH_SELECT_CARD,
     CARD_SEARCH_ADDING_DECK_CARD,
     CARD_SEARCH_REQUESTED,
@@ -11,7 +11,7 @@ import {
  } from "./DeckAddCardsActions";
 
 export interface State {
-    cardSearchMethod: "set" | "web" | "inventory";
+    // cardSearchMethod: "set" | "web" | "inventory";
     selectedCard: CardSearchResultDto | null;
     viewMode: CardSearchViewMode;
     searchFilterProps: CardFilterProps;
@@ -51,9 +51,15 @@ export const deckAddCardsReducer = (state = initialState, action: ReduxAction): 
         case CARD_SEARCH_FILTER_VALUE_CHANGED: return filterValueChanged(state, action);
         case TOGGLE_CARD_SEARCH_VIEW_MODE: return toggleSearchViewMode(state, action);
 
-        case CARD_SEARCH_SEARCH_METHOD_CHANGED: return (state);
+        // case CARD_SEARCH_SEARCH_METHOD_CHANGED: return (state);
         
-        case CARD_SEARCH_SELECT_CARD: return (state);
+        // case CARD_SEARCH_SELECT_CARD: return (state);
+        case CARD_SEARCH_SELECT_CARD:
+            const selectedCard: CardSearchResultDto = action.payload;
+            return {
+                ...state,
+                selectedCard: selectedCard,
+            };
         
         case CARD_SEARCH_ADDING_DECK_CARD: return (state);
         
@@ -62,7 +68,7 @@ export const deckAddCardsReducer = (state = initialState, action: ReduxAction): 
 }
 
 const initialState: State = {
-    cardSearchMethod: "set",
+    // cardSearchMethod: "set",
     selectedCard: null,
     viewMode: "list",
     searchFilterProps: defaultSearchFilterProps(),
@@ -165,9 +171,9 @@ function cardSearchInventoryReceived(state: State, action: ReduxAction): State {
 
 const filterValueChanged = (state: State, action: ReduxAction): State => {
     //const { type, filter, value } = action.payload;
-    const { type, filter, value } = action.payload;
-    console.log('CS filter changed');
-    console.log(action.payload);
+    const { filter, value } = action.payload;
+    // console.log('CS filter changed');
+    // console.log(action.payload);
 
     const existingFilter = state.searchFilterProps;
     const newState: State = {

@@ -31,6 +31,8 @@ declare interface ComponentProps{
     handleToggleDeckView: () => void;
     viewMode: DeckEditorViewMode;
 
+    onAddCardsClick: () => void;
+
     //overview
     groupedCardOverviews: CardOverviewGroup[];
     onCardSelected: (cardOverview: DeckCardOverview) => void;
@@ -71,6 +73,7 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
                 <DeckPropsBar 
                     deckProperties={props.deckProperties} 
                     onEditClick={props.onPropsModalOpen} 
+                    onAddCardsClick={props.onAddCardsClick}
                     onToggleViewClick={props.handleToggleDeckView} /> }
             
 

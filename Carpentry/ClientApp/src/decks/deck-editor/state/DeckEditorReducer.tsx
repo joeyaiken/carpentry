@@ -1,16 +1,12 @@
-import { cpuUsage } from 'process';
 import { 
     TOGGLE_DECK_VIEW_MODE, 
     DECK_EDITOR_CARD_SELECTED,
     CLOSE_DECK_PROPS_MODAL,
     DECK_PROPS_MODAL_CHANGED,
-    // DECK_PROPS_SAVE_RECEIVED,
-    // DECK_PROPS_SAVE_REQUESTED,
     DECK_EDITOR_SAVE_RECEIVED,
     DECK_EDITOR_SAVE_REQUESTED,
     OPEN_DECK_PROPS_MODAL,
 } from './DeckEditorActions';
-
 
 //
 // The deckEditorReducer is the App reducer for the DeckEditor container
@@ -99,12 +95,7 @@ const initialState: State = {
 function deckPropsModalChanged(state: State, action: ReduxAction): State {
     const {name, value} = action.payload;
     // const appliedValue: string | number = action.payload.value;
-    // console.log('props updated')
-    // console.log(name);
-    // console.log(value);
-    // console.log(appliedValue);
-    // console.log(state.deckModalProps);
-    
+
     // if(!state.deckModalProps) return (state);
     
     // const updatedState = {

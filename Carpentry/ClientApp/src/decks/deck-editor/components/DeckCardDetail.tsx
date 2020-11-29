@@ -49,10 +49,10 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                         // }
                     
                     /> */}
-                    <CardMedia 
-                        style={{height:"310px", width: "223px"}}
-                        // className={itemImage}
-                        image={props.selectedCard.img} />
+                    {
+                        props.selectedCard && 
+                        <CardMedia style={{height:"310px", width: "223px"}} image={props.selectedCard.img} />
+                    }
                     <CardContent>
                         <Table size="small">
                             <TableHead>

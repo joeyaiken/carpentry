@@ -16,6 +16,7 @@ declare interface ValidatedCarpentryImportDto {
 }
 
 declare interface CardSearchQueryParameter {
+    text: string;
     set: string;
     type: string;
     colorIdentity: string[];
@@ -131,8 +132,10 @@ declare interface FilterOption
 declare interface DeckCardDto {
     id: number;
     deckId: number;
+    cardName: string;
     categoryId: string | null;
-    inventoryCardId: number;
+
+    inventoryCardId: number | null;
     cardId: number;
     isFoil: boolean;
     inventoryCardStatusId: number;

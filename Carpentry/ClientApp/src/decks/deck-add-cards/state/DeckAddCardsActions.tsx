@@ -19,12 +19,6 @@ export const toggleCardSearchViewMode = (): ReduxAction => ({
     type: TOGGLE_CARD_SEARCH_VIEW_MODE
 });
 
-export const CARD_SEARCH_SEARCH_METHOD_CHANGED = 'DECK_ADD_CARDS.CARD_SEARCH_SEARCH_METHOD_CHANGED';
-export const cardSearchSearchMethodChanged = (method: string): ReduxAction => ({
-    type: CARD_SEARCH_SEARCH_METHOD_CHANGED,
-    payload: method
-});
-
 //Select search result (to see variant / foil options)
 export const CARD_SEARCH_SELECT_CARD = 'DECK_ADD_CARDS.CARD_SEARCH_SELECT_CARD';
 export const cardSearchSelectCard = (card: CardSearchResultDto): ReduxAction => ({
@@ -81,9 +75,6 @@ export const cardSearchAddingDeckCard = (): ReduxAction => ({
     type: CARD_SEARCH_ADDING_DECK_CARD
 });
 
-//////
-
-
 export const requestCardSearch = (): any => {
     return (dispatch: Dispatch, getState: any) => {
         return searchCards(dispatch, getState());
@@ -108,74 +99,28 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
 
     const searchInProgress: boolean = containerState.searchResults.isLoading;
 
-    const cardSearchMethod = state.decks.deckAddCards.cardSearchMethod;
-    // const cardSearchMethod = containerState.cardSearchMethod;
-
     if(searchInProgress){
         return;
     }
     dispatch(cardSearchRequested());
-    //why TF am I treating this like a bool?
-    if(cardSearchMethod === "web"){
-        const { cardName, exclusiveName } = state.decks.deckAddCards.searchFilterProps;
-        //const { cardName, exclusiveName } = containerState.searchFilter;
-        
-        cardSearchApi.searchWeb(cardName, exclusiveName).then((results) =>{
-            dispatch(cardSearchReceived(results));
-        });
-    // }else if(cardSearchMethod === "inventory"){
 
-    //     const param: InventoryQueryParameter = {
-    //         groupBy: "mid",
-    //         text: state.ui.cardSearchFilterProps.text,
-    //         colors: state.ui.cardSearchFilterProps.colorIdentity,
-    //         types: [],
-    //         skip: 0,
-    //         take: 500,
-    //         format: state.ui.cardSearchFilterProps.format,
-    //         sort: '',
-    //         set: state.ui.cardSearchFilterProps.set,
-    //         // setId: state.ui.cardSearchFilterProps.setId,
-    //         exclusiveColorFilters: state.ui.cardSearchFilterProps.exclusiveColorFilters,
-    //         multiColorOnly: state.ui.cardSearchFilterProps.multiColorOnly,
-    //         maxCount:0,
-    //         minCount:0,
-    //         type: state.ui.cardSearchFilterProps.type,
-    //         rarity: state.ui.cardSearchFilterProps.rarity,
-    //         sortDescending: false,
-    //     }
+    const currentFilterProps = state.decks.deckAddCards.searchFilterProps;
 
-    //     api.cardSearch.searchInventory(param).then((results) => {
-    //         dispatch(apiDataReceived(_localApiScope, results));
-    //     });
-
-    } else {
-        const currentFilterProps = state.decks.deckAddCards.searchFilterProps;
-        //CardSearchQueryParameter
-        const param: CardSearchQueryParameter = {
-            colorIdentity: currentFilterProps.colorIdentity,
-            exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
-            multiColorOnly: currentFilterProps.multiColorOnly,
-            rarity: currentFilterProps.rarity,
-            // set: currentFilterProps.set,
-            set: currentFilterProps.set,
-            // setId: currentFilterProps.setId,
-            type: currentFilterProps.type,
-            searchGroup: currentFilterProps.group,
-            excludeUnowned: false,
-        }
-
-        // console.log('serch by set')
-        // console.log(param);
-
-        cardSearchApi.searchInventory(param).then((results) => {
-            dispatch(cardSearchReceived(results));
-        })
-
-        // api.cardSearch.searchSet(param).then((results) => {
-        //     dispatch(apiDataReceived(_localApiScope, results));
-        // })
+    const param: CardSearchQueryParameter = {
+        text: currentFilterProps.text,
+        colorIdentity: currentFilterProps.colorIdentity,
+        exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
+        multiColorOnly: currentFilterProps.multiColorOnly,
+        rarity: currentFilterProps.rarity,
+        set: currentFilterProps.set,
+        type: currentFilterProps.type,
+        searchGroup: currentFilterProps.group,
+        excludeUnowned: false,
     }
+
+    cardSearchApi.searchInventory(param).then((results) => {
+        dispatch(cardSearchReceived(results));
+    });
 }
 
 

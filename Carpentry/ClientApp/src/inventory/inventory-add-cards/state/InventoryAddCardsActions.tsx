@@ -37,6 +37,7 @@ function trySearchCards(dispatch: Dispatch, state: AppState): any{
     } else {
         const currentFilterProps = containerState.searchFilter;
         const param: CardSearchQueryParameter = {
+            text: currentFilterProps.text,
             colorIdentity: currentFilterProps.colorIdentity,
             exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
             multiColorOnly: currentFilterProps.multiColorOnly,

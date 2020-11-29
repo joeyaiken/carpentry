@@ -5,16 +5,17 @@ import { AppState } from '../../configureStore';
 import { 
     cardSearchFilterValueChanged, 
     toggleCardSearchViewMode, 
-    cardSearchSearchMethodChanged, 
+    // cardSearchSearchMethodChanged, 
     requestAddDeckCard, 
     cardSearchSelectCard, 
     requestCardSearch, 
     requestCardSearchInventory
 } from './state/DeckAddCardsActions';
 import DeckAddCardsLayout from './components/DeckAddCardsLayout';
+import { push } from 'react-router-redux';
 
 interface PropsFromState { 
-    cardSearchMethod: "set" | "web" | "inventory";
+    // cardSearchMethod: "set" | "web" | "inventory";
     deckId: number;
     selectedCard: CardSearchResultDto | null;
     selectedCardDetail: InventoryDetailDto | null;
@@ -22,7 +23,6 @@ interface PropsFromState {
     viewMode: CardSearchViewMode;
     filterOptions: AppFiltersDto;
     searchFilterProps: CardFilterProps;
-    visibleFilters: CardFilterVisibilities;
 }
 
 interface OwnProps {
@@ -38,9 +38,7 @@ type ContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 class DeckAddCardsContainer extends React.Component<ContainerProps>{
     constructor(props: ContainerProps) {
         super(props);
-        // this.handleSaveClick = this.handleSaveClick.bind(this);
-        this.handleCancelClick = this.handleCancelClick.bind(this);
-        this.handleSearchMethodTabClick = this.handleSearchMethodTabClick.bind(this);
+        this.handleCloseClick = this.handleCloseClick.bind(this);
         this.handleToggleViewClick = this.handleToggleViewClick.bind(this);
         this.handleCardSelected = this.handleCardSelected.bind(this);
         this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
@@ -48,18 +46,11 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
         this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
         this.handleAddExistingCardClick = this.handleAddExistingCardClick.bind(this);
         this.handleAddNewCardClick = this.handleAddNewCardClick.bind(this);
+        this.handleAddEmptyCardClick = this.handleAddEmptyCardClick.bind(this);
     }
 
-    // handleSaveClick(){
-    //     this.props.dispatch(cardSearchRequestSavePendingCards());
-    // }
-
-    handleCancelClick(){
-        // this.props.dispatch(cardSearchClearPendingCards());
-    }
-
-    handleSearchMethodTabClick(name: string): void {
-        this.props.dispatch(cardSearchSearchMethodChanged(name));
+    handleCloseClick(){
+        this.props.dispatch(push(`/decks/${this.props.deckId}`));
     }
 
     handleToggleViewClick(): void {
@@ -68,11 +59,7 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
 
     handleCardSelected(item: CardListItem){
         this.props.dispatch(cardSearchSelectCard(item.data));
-        //also search for that selected card
-        //Maybe dispatch a second request to load dat detail
-        if(this.props.cardSearchMethod !== "set"){
-            this.props.dispatch(requestCardSearchInventory(item.data));
-        }
+        this.props.dispatch(requestCardSearchInventory(item.data));
     }
 
     handleSearchButtonClick(){
@@ -84,39 +71,56 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
     }
 
     handleBoolFilterChange(filter: string, value: boolean): void {
-        // console.log(`search filter bar change filter: ${filter} val: ${value}`)
         this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", filter, value));
     }
 
-    handleAddExistingCardClick(inventoryCard: InventoryCard): void{
+    handleAddExistingCardClick(inventoryCard: InventoryCard): void {
         // this.props.dispatch(requestAddDeckCard(inventoryCard));
     }
     
-    handleAddNewCardClick(cardId: number, isFoil: boolean): void{
+    handleAddNewCardClick(cardName: string, cardId: number, isFoil: boolean): void {
 
         let deckCard: DeckCardDto = {
             categoryId: null,
             deckId: this.props.deckId,
+            cardName: cardName,
             id: 0,
             inventoryCardId: 0,
             cardId: cardId,
             isFoil: isFoil,
             inventoryCardStatusId: 1,
         }
-
+        
         this.props.dispatch(requestAddDeckCard(deckCard));  
+    }
+
+    //specify add mainboard vs sidebiard/maybeboard ?
+    handleAddEmptyCardClick(cardName: string): void {
+        let deckCard: DeckCardDto = {
+            categoryId: null,
+            deckId: this.props.deckId,
+            cardName: cardName,
+            id: 0,
+            inventoryCardId: 0,
+            cardId: 0,
+            isFoil: false,
+            inventoryCardStatusId: 0,
+        }
+        // console.log('ping!');
+        this.props.dispatch(requestAddDeckCard(deckCard));
     }
 
     render(){
         return(
             <DeckAddCardsLayout
-                cardSearchMethod={this.props.cardSearchMethod}
+                // cardSearchMethod={this.props.cardSearchMethod}
                 filterOptions={this.props.filterOptions}
-                handleCancelClick={this.handleCancelClick}
-                handleSearchMethodTabClick={this.handleSearchMethodTabClick}
+                handleCloseClick={this.handleCloseClick}
+                // handleSearchMethodTabClick={this.handleSearchMethodTabClick}
                 handleToggleViewClick={this.handleToggleViewClick}
                 handleAddExistingCardClick={this.handleAddExistingCardClick}
                 handleAddNewCardClick={this.handleAddNewCardClick}
+                handleAddEmptyCard={this.handleAddEmptyCardClick}
                 handleBoolFilterChange={this.handleBoolFilterChange}
                 handleCardSelected={this.handleCardSelected}
                 handleFilterChange={this.handleFilterChange}
@@ -166,50 +170,10 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         }) as CardListItem;
     });
 
-    let visibleFilters: CardFilterVisibilities = {
-        name: false,
-        color: false,
-        rarity: false,
-        set: false,
-        type: false,
-        count: false,
-        format: false,
-        text: false,
-    }
-
-    switch(state.decks.deckAddCards.cardSearchMethod){
-        case "inventory":
-            visibleFilters = {
-                ...visibleFilters,
-                format: true,
-                color: true,
-                type: true,
-                set: true,
-                rarity: true,
-                text: true,
-            }
-            break;
-        case "set":
-            visibleFilters = {
-                ...visibleFilters,
-                color: true,
-                rarity: true,
-                set: true,
-                type: true,
-            }
-            break;
-        case "web":
-            visibleFilters = {
-                ...visibleFilters,
-                name: true,
-            }
-            break;
-    }
-
     const containerState = state.decks.deckAddCards;
 
     const result: PropsFromState = {
-        cardSearchMethod: containerState.cardSearchMethod,
+        // cardSearchMethod: containerState.cardSearchMethod,
         deckId: parseInt(ownProps.match.params.deckId) || 0,
         selectedCard: containerState.selectedCard,
         selectedCardDetail: selectInventoryDetail(state),
@@ -217,7 +181,6 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         viewMode: containerState.viewMode,
         filterOptions: state.core.data.filterOptions,
         searchFilterProps: containerState.searchFilterProps,
-        visibleFilters: visibleFilters,
     }
 
     return result;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody, Button } from '@material-ui/core';
 
 interface InventoryDetailTableProps {
     detail: InventoryDetailDto
@@ -18,15 +18,16 @@ export default function InventoryDetailTable(props: InventoryDetailTableProps): 
                 </TableRow>
             </TableHead>
             <TableBody>
-                {/* {
+                {
                     props.detail.inventoryCards.map(item => {
-                        const thisCard = props.detail.cards.find(x => x.multiverseId === item.multiverseId);
+                        //TODO - replace FIND with something that uses a dictionary
+                        const thisCard = props.detail.cards.find(x => x.cardId === item.cardId);
 
                         return(
                         <TableRow key={item.id}>
                             <TableCell>{thisCard && thisCard.set}</TableCell>
-                            <TableCell>{item.variantName}{item.isFoil &&" foil"}</TableCell>
-                            <TableCell>
+                            <TableCell>{item.collectorNumber}{item.isFoil &&" foil"}</TableCell>
+                            {/* <TableCell>
                                 {
                                     item.deckCards.length > 0 &&
                                     item.deckCards[0].deckName
@@ -44,28 +45,28 @@ export default function InventoryDetailTable(props: InventoryDetailTableProps): 
                                     item.statusId === 2 &&
                                     "Sell List"
                                 }
-                            </TableCell>
-                            {
+                            </TableCell> */}
+                            {/* {
                                 item.deckCards.length === 0 && 
                                 <TableCell>
                                     <Button size="small" variant="contained"
                                         onClick={() => props.handleAddCardClick && props.handleAddCardClick(item)}
                                     >Add</Button>
                                 </TableCell>
-                            }
-                            {
+                            } */}
+                            {/* {
                                 item.deckCards.length === 1 && 
                                 <TableCell>
                                     <Button size="small" variant="contained"
                                         onClick={() => props.handleAddCardClick && props.handleAddCardClick(item)}
                                     >Move</Button>
                                 </TableCell>
-                            }
-                            {item.deckCards.length > 1 && <TableCell>In a Deck</TableCell>}
+                            } */}
+                            {/* {item.deckCards.length > 1 && <TableCell>In a Deck</TableCell>} */}
                         </TableRow>
                         )
                     })
-                } */}
+                }
             </TableBody>
         </Table>
     );

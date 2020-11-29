@@ -431,18 +431,19 @@ namespace Carpentry.Logic.Implementations
         /// Adds a card to a deck
         /// If the dto references an existing deck card, and that card is ALREADY in a deck, no new card is added
         ///     Instead, the existing card is moved to this deck
-        /// If the card exists, but isn't in a deck, then a new deck card is created
-        /// If the inventory card doesn't exist, then a new one is mapped
+        /// If the InventoryCardId AND CardId are both null, an empty deck card is created
+        /// Otherwise, if a CardId is specified, then a new inventory card is created
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
         public async Task AddDeckCard(DeckCardDto dto)
         {
+            //InventoryCardId != 0: Select/Move inventory card
             //Don't need to add an inventory card
-            if (dto.InventoryCardId > 0)
+            if (dto.InventoryCardId != null && dto.InventoryCardId > 0)
             {
                 //if a card already exists in a deck it is "moved" to this deck
-                var existingDeckCard = await _deckRepo.GetDeckCardByInventoryId(dto.InventoryCardId);
+                var existingDeckCard = await _deckRepo.GetDeckCardByInventoryId(dto.InventoryCardId.Value);
 
                 if (existingDeckCard != null)
                 {
@@ -455,21 +456,34 @@ namespace Carpentry.Logic.Implementations
 
                 //nothing needs to be created, the deck and inventory cards already exist
             }
+            else
+            {
+                //InventoryCardId == 0 && CardId == 0: Add empty card
+                if (dto.CardId == 0)
+                {
+                    dto.InventoryCardId = null;
+                }
+                //InventoryCardId == 0 && CardId != 0: Add new inventory card
+                else
+                {
+                    var newInventoryCard = new InventoryCardDto()
+                    {
+                        CardId = dto.CardId,
+                        IsFoil = dto.IsFoil,
+                        StatusId = dto.InventoryCardStatusId, //1 == in inventory
+                    };
+
+                    int newInventoryCardId = await _inventoryService.AddInventoryCard(newInventoryCard);
+                    dto.InventoryCardId = newInventoryCardId;
+                }
+            }
 
             //Need to add a new inventory card for this deck card
             //(check how I'm adding inventory cards atm)
-            if (dto.InventoryCardId == 0)
-            {
-                var newInventoryCard = new InventoryCardDto()
-                {
-                    CardId = dto.CardId,
-                    IsFoil = dto.IsFoil,
-                    StatusId = dto.InventoryCardStatusId, //1 == in inventory
-                };
-
-                int newInventoryCardId = await _inventoryService.AddInventoryCard(newInventoryCard);
-                dto.InventoryCardId = newInventoryCardId;
-            }
+            //if (dto.InventoryCardId == 0)
+            //{
+                
+            //}
 
             DeckCardData cardToAdd = new DeckCardData()
             {

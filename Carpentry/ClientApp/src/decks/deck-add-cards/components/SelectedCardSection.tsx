@@ -6,8 +6,9 @@ import { appStyles, combineStyles } from '../../../styles/appStyles';
 interface ComponentProps {
     selectedCard: CardSearchResultDto;
     selectedCardDetail: InventoryDetailDto | null;
-    handleAddInventoryCard?: (inventoryCard: InventoryCard) => void;
-    handleAddNewCard?: (cardId: number, isFoil: boolean) => void;
+    handleAddInventoryCard: (inventoryCard: InventoryCard) => void;
+    handleAddNewCard: (cardName: string, cardId: number, isFoil: boolean) => void;
+    handleAddEmptyCard: (cardName: string) => void;
     // handleMoveCard?: (inventoryCard: InventoryCard) => void;
 }
 
@@ -35,17 +36,31 @@ export default function SelectedCardSection(props: ComponentProps): JSX.Element 
             }
             {/* Each inventory card should have a label for (in # decks) */}
         </Card>
-        
+{/* 
+        <Card className={outlineSection}>
+            <CardHeader titleTypographyProps={{variant:"body1"}} title="Add Empty"/>
+        </Card> */}
+
         <Card className={combineStyles(outlineSection, flexCol)}>
-            <CardHeader titleTypographyProps={{variant:"body1"}} title="Add New"/>
+            <CardHeader 
+                titleTypographyProps={{variant:"body1"}} 
+                title="Add New"
+                action={
+                    <Button variant="outlined" onClick={() => props.handleAddEmptyCard(props.selectedCard.name)}>
+                        Add Empty
+                    </Button>
+                }/>
             
+            
+
             {   
                 //Object.keys(props.selectedCard.variants).map((variant: string) => {
                 props.selectedCard.details.map(detail => {
                 return (
                     // <Card key={id} className= "outline-section flex-col">
                         // <CardHeader titleTypographyProps={{variant:"body1"}} title="Add New"/>
-                        <Box key={detail.cardId} className={combineStyles(outlineSection, flexRow)}>
+                        <Card key={detail.cardId} className={combineStyles(outlineSection, flexRow)}>
+                            <CardHeader titleTypographyProps={{variant:"body1"}} title={`${detail.setCode}-${detail.collectionNumber}`} />
                             <CardMedia 
                                 style={{height:"310px", width: "223px"}}
                                 // className={itemImage}
@@ -56,16 +71,16 @@ export default function SelectedCardSection(props: ComponentProps): JSX.Element 
                                         <Typography>{`${detail.price} | ${detail.priceFoil}`}</Typography>
                                     </Box>
                                     <Box className={flexCol}>
-                                        <Button variant="outlined" onClick={() => { props.handleAddNewCard && props.handleAddNewCard(detail.cardId, false) }}>
+                                        <Button variant="outlined" onClick={() => props.handleAddNewCard(detail.name, detail.cardId, false)}>
                                             Add Normal
                                         </Button>
-                                        <Button variant="outlined" onClick={() => { props.handleAddNewCard && props.handleAddNewCard(detail.cardId, true) }}>
+                                        <Button variant="outlined" onClick={() => props.handleAddNewCard(detail.name, detail.cardId, true)}>
                                             Add Foil
                                         </Button>
                                     </Box>
                                 </Box>
                             </CardContent>
-                        </Box>
+                        </Card>
                     // </Card>
                 )})
             }
