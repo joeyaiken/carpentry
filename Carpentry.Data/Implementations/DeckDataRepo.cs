@@ -214,10 +214,20 @@ namespace Carpentry.Data.Implementations
 
         public async Task<List<char>> GetDeckColorIdentity(int deckId)
         {
+
+            //For deck cards w/o an inventory card, need to get the most recent card by name
+            //Maybe I just do this in a view...
+
+
             var deckColorStrings = await _cardContext.DeckCards
                 .Where(x => x.DeckId == deckId)
                 .Select(x => x.InventoryCard.Card.ColorIdentity)
                 .ToListAsync();
+
+            if(deckColorStrings == null)
+            {
+                return new List<char>();
+            }
 
             var deckCardColors = deckColorStrings
                 .SelectMany(x => x.ToCharArray())
