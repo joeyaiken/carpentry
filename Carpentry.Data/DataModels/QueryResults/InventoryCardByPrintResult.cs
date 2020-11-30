@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Carpentry.Data.DataModels.QueryResults
+﻿namespace Carpentry.Data.DataModels.QueryResults
 {
     public class InventoryCardByPrintResult
     {

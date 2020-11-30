@@ -13,6 +13,7 @@ import InventoryLayout from './inventory/InventoryLayout';
 import { requestCoreData } from './common/state/coreDataActions';
 import TrackedSetsContainer from './settings/tracked-sets/TrackedSetsContainer';
 import NewDeckContainer from './decks/new-deck/NewDeckContainer';
+import { push } from 'react-router-redux';
 
 interface PropsFromState {
 }
@@ -26,6 +27,7 @@ class AppContainer extends React.Component<AppContainerProps>{
 
     componentDidMount() {
         this.props.dispatch(requestCoreData());
+        this.props.dispatch(push('/decks/60'));
     }
 
     render() {

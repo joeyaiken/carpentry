@@ -188,28 +188,187 @@ namespace Carpentry.Data.Implementations
 
         #region Queries
 
+        //Note: this is only ever used by by [Get Deck Detail], the DTO could / should be used to get the desired info for a deck card
+        //The same info in [ThatDevQuery(int deckId)]
+        [Obsolete]
         public async Task<List<DeckCardResult>> GetDeckCards(int deckId)
         {
-            var deckCards = await _cardContext.DeckCards
-                .Where(x => x.DeckId == deckId)
+            var deckCards = await _cardContext.DeckCards.Where(dc => dc.DeckId == deckId)
                 .Select(x => new DeckCardResult()
                 {
-                    Id = x.DeckCardId,
+                    DeckCardId = x.DeckCardId,
+
+                    Name = x.CardName,
+
                     Category = x.CategoryId == null ? null : x.Category.Name,
+                    InventoryCardId = x.InventoryCardId,
                     Cmc = x.InventoryCard.Card.Cmc,
                     Cost = x.InventoryCard.Card.ManaCost,
-                    //Img = x.InventoryCard.Card.Variants.FirstOrDefault(v => v.CardVariantTypeId == 1).ImageUrl,
+                    Img = x.InventoryCard.Card.ImageUrl,
+                    IsFoil = x.InventoryCard.IsFoil,
+                    CollectorNumber = x.InventoryCard.Card.CollectorNumber,
+                    CardId = x.InventoryCard.CardId,
+                    //Set = x.InventoryCard.Card.Set.Code,
+                    SetId = x.InventoryCard.Card.SetId,
+                    Type = x.InventoryCard.Card.Type,
+                    ColorIdentity = x.InventoryCard.Card.ColorIdentity,
+                }).ToListAsync();
+
+            //get all names with null inventory cards
+            var cardNames = deckCards.Where(dc => dc.InventoryCardId == null).Select(dc => dc.Name).Distinct().ToList();
+
+            var relevantCardsByName = await _cardContext.InventoryCardByName
+                .Where(c => cardNames.Contains(c.Name))
+                //.Select(c => new CardData()
+                //{
+                //    CardId = c.CardId,
+                //    Cmc = c.Cmc,
+                //    ManaCost = c.ManaCost,
+                //    Name = c.Name,
+                //    RarityId = c.RarityId,
+                //    SetId = c.SetId,
+                //    Text = c.Text,
+                //    Type = c.Type,
+                //    MultiverseId = c.MultiverseId,
+                //    Price = c.Price,
+                //    PriceFoil = c.PriceFoil,
+                //    ImageUrl = c.ImageUrl,
+                //    CollectorNumber = c.CollectorNumber,
+                //    TixPrice = c.TixPrice,
+                //    Color = c.Color,
+                //    ColorIdentity = c.ColorIdentity,
+                //})
+                .ToDictionaryAsync(c => c.Name, c => c);
+
+            //match everything!
+            //(alternatively, get this all from a view)
+
+            //var result = new List<CardData>();
+
+            foreach (var dc in deckCards)
+            {
+                //var matchingCard =
+                if (dc.InventoryCardId == null)
+                {
+                    //card by id
+                    var match = relevantCardsByName[dc.Name];
+                    dc.Cmc = match.Cmc;
+                    dc.Cost = match.ManaCost;
+                    dc.Img = match.ImageUrl;
+                    //dc.IsFoil = match.IsFoil;
+                    dc.CollectorNumber = match.CollectorNumber;
+                    dc.CardId = match.CardId;
+                    dc.Name = match.Name;
+                    //dc.Set = match.Set;
+                    dc.SetId = match.SetId;
+                    dc.Type = match.Type;
+                    dc.ColorIdentity = match.ColorIdentity;
+                    //result.Add(relevantCardsByName[dc.CardName]);
+                }
+            }
+     
+
+
+            return deckCards;
+        }
+
+        //public async Task<IQueryable<CardData>> QueryMostRecentPrints()
+        //{
+        //    //attempting to get the most recent print for each card name
+        //    //WAIT, doesn't vwInventoryByName get what I need?  Totals by name and info on the most recent print?
+        //}
+
+        //Attempting to get all Cards used in a deck
+        //  for any empty deck card, the newest print will be queried for card stats
+        //  Will include as many copies as cards in a deck
+        public async Task<List<CardData>> ThatDevQuery_(int deckId)
+        {
+            //get all deck cards
+            var deckCards = await _cardContext.DeckCards.Where(dc => dc.DeckId == deckId)
+                .Select(x => new DeckCardResult()
+                {
+                    DeckCardId = x.DeckCardId,
+                    Category = x.CategoryId == null ? null : x.Category.Name,
+                    InventoryCardId = x.InventoryCardId,
+                    Cmc = x.InventoryCard.Card.Cmc,
+                    Cost = x.InventoryCard.Card.ManaCost,
                     Img = x.InventoryCard.Card.ImageUrl,
                     IsFoil = x.InventoryCard.IsFoil,
                     CollectorNumber = x.InventoryCard.Card.CollectorNumber,
                     CardId = x.InventoryCard.CardId,
                     Name = x.InventoryCard.Card.Name,
-                    Set = x.InventoryCard.Card.Set.Code,
+                    //Set = x.InventoryCard.Card.Set.Code,
                     Type = x.InventoryCard.Card.Type,
-                    //VariantType = x.InventoryCard.VariantType.Name,
                 }).ToListAsync();
 
-            return deckCards;
+            //get all inventory card IDs
+            //var inventoryCardIds = deckCards.Where(dc => dc.InventoryCardId != null).Select(dc => dc.InventoryCardId.Value).ToList();
+
+            //var relevantCardsByInventoryId = await _cardContext.InventoryCards
+            //    .Where(ic => inventoryCardIds.Contains(ic.InventoryCardId))
+            //    .Include(ic => ic.Card)
+            //    .ToDictionaryAsync(ic => ic.InventoryCardId, ic => ic.Card);
+                
+
+            //get all names with null inventory cards
+            var cardNames = deckCards.Where(dc => dc.InventoryCardId == null).Select(dc => dc.Name).Distinct().ToList();
+
+            var relevantCardsByName = await _cardContext.InventoryCardByName
+                .Where(c => cardNames.Contains(c.Name))
+                //.Select(c => new CardData()
+                //{
+                //    CardId = c.CardId,
+                //    Cmc = c.Cmc,
+                //    ManaCost = c.ManaCost,
+                //    Name = c.Name,
+                //    RarityId = c.RarityId,
+                //    SetId = c.SetId,
+                //    Text = c.Text,
+                //    Type = c.Type,
+                //    MultiverseId = c.MultiverseId,
+                //    Price = c.Price,
+                //    PriceFoil = c.PriceFoil,
+                //    ImageUrl = c.ImageUrl,
+                //    CollectorNumber = c.CollectorNumber,
+                //    TixPrice = c.TixPrice,
+                //    Color = c.Color,
+                //    ColorIdentity = c.ColorIdentity,
+                //})
+                .ToDictionaryAsync(c => c.Name, c => c);
+
+            //match everything!
+
+            //(alternatively, get this all from a view)
+
+            var result = new List<CardData>();
+
+            foreach(var dc in deckCards)
+            {
+                //var matchingCard =
+                if(dc.InventoryCardId == null)
+                {
+                    //card by id
+                    var match = relevantCardsByName[dc.Name];
+                    dc.Cmc = match.Cmc;
+                    dc.Cost = match.ManaCost;
+                    dc.Img = match.ImageUrl;
+                    //dc.IsFoil = match.IsFoil;
+                    dc.CollectorNumber = match.CollectorNumber;
+                    dc.CardId = match.CardId;
+                    dc.Name = match.Name;
+                    //dc.Set = match.Set;
+                    dc.Type = match.Type;
+                    
+                    //result.Add(relevantCardsByName[dc.CardName]);
+                }
+                //else
+                //{
+                //    //card by name
+                //    var match = relevantCardsByInventoryId[dc.InventoryCardId.Value];
+                //    result.Add(match);
+                //}
+            }
+            return result;
         }
 
         public async Task<List<char>> GetDeckColorIdentity(int deckId)
@@ -219,12 +378,20 @@ namespace Carpentry.Data.Implementations
             //Maybe I just do this in a view...
 
 
-            var deckColorStrings = await _cardContext.DeckCards
-                .Where(x => x.DeckId == deckId)
-                .Select(x => x.InventoryCard.Card.ColorIdentity)
-                .ToListAsync();
+            //first, get all cards in the deck (for empty deck cards, get the most recent print)
 
-            if(deckColorStrings == null)
+            var cards = await GetDeckCards(deckId);
+
+            var deckColorStrings = cards.Select(c => c.ColorIdentity).ToList();
+
+
+
+            //var deckColorStrings = await _cardContext.DeckCards
+            //    .Where(x => x.DeckId == deckId)
+            //    .Select(x => x.InventoryCard.Card.ColorIdentity)
+            //    .ToListAsync();
+
+            if (deckColorStrings == null)
             {
                 return new List<char>();
             }
@@ -263,7 +430,7 @@ namespace Carpentry.Data.Implementations
 
             return deckCardColors;
         }
-
+        
         public async Task<int> GetDeckCardCount(int deckId)
         {
             int basicLandCount = await _cardContext.Decks.Where(x => x.DeckId == deckId).Select(deck => deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG).FirstOrDefaultAsync();
@@ -273,6 +440,11 @@ namespace Carpentry.Data.Implementations
 
         public async Task<IEnumerable<DeckCardStatResult>> GetDeckCardStats(int deckId)
         {
+
+
+
+
+            //This query breaks with empty deck cards
             var query = _cardContext.DeckCards.Where(x => x.DeckId == deckId)
                 .Select(x => new
                 {
