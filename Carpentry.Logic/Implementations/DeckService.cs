@@ -31,6 +31,8 @@ namespace Carpentry.Logic.Implementations
 
         public ICoreDataRepo _coreDataRepo;
 
+        private static string _sideboardCategory = "Sideboard";
+
         //public ICardImportService _cardImportService;
 
         public DeckService(
@@ -624,8 +626,6 @@ namespace Carpentry.Logic.Implementations
             return deckList;
         }
 
-        //TODO - A DeckDTO shouldn't really contain an InventoryOverviewDto/InventoryCardDto,
-        //it should contain a specific DeckDetail and DeckOverview DTO instead, that contains fields relevant to that container
         public async Task<DeckDetailDto> GetDeckDetail(int deckId)
         {
             var dbDeck = await _deckRepo.GetDeckById(deckId);
@@ -645,17 +645,15 @@ namespace Carpentry.Logic.Implementations
 
             DeckDetailDto result = new DeckDetailDto
             {
-                //CardOverviews = new List<InventoryOverviewDto>(),
                 CardOverviews = new List<DeckCardOverview>(),
-                //CardDetails = new List<InventoryCardDto>(),
                 Cards = new List<DeckCard>(),
                 Props = mappedDeckData,
                 Stats = new DeckStatsDto(),
             };
 
-            //Note: GetDeckCards is only called by this service, can be changed however
             var deckCardData = await _deckRepo.GetDeckCards(deckId);
 
+            #region Group & Map for DTO
 
             //Card Overviews
             //var deckOverviewsResult = await _queryService.GetDeckCardOverviews(deckId);
@@ -700,6 +698,8 @@ namespace Carpentry.Logic.Implementations
                 Set = x.SetId.ToString(),
             }).ToList();
 
+            #endregion
+
             #region deck stats
 
             result.Stats = new DeckStatsDto()
@@ -712,143 +712,60 @@ namespace Carpentry.Logic.Implementations
             };
 
             //Total mainboard cards
-            result.Stats.TotalCount = result.Cards.Where(c => c.Category != "Sideboard").Count(); //TODO - replace magic string
+            result.Stats.TotalCount = deckCardData.Where(c => c.Category != _sideboardCategory).Count();
 
             //cmc breakdown of mainboard cards
-
+            result.Stats.CostCounts = deckCardData
+                .Where(c => c.Category != _sideboardCategory && !c.Type.Contains("Land"))
+                .Select(x => x.Cmc)
+                .GroupBy(x => x)
+                .Select(x => new
+                {
+                    Cmc = x.Key,
+                    Count = x.Count(),
+                })
+                .OrderBy(x => x.Cmc)
+                .ToDictionary(x => x.Cmc.ToString(), x => x.Count);
 
             //type breakdown of mainboard cards
+            List<string> cardTypes = deckCardData
+                .Where(c => c.Category != _sideboardCategory)
+                .Select(x => GetCardTypeGroup(x.Type))
+                .ToList();
 
+            int basicLandCount = mappedDeckData.BasicW + mappedDeckData.BasicU + mappedDeckData.BasicB + mappedDeckData.BasicR + mappedDeckData.BasicG;
 
-            //deck color identity (including sideboard)
-            
+            var typeCountsDict = cardTypes
+                .GroupBy(x => x)
+                .Select(x => new
+                {
+                    Name = x.Key,
+                    Count = x.Count()
+                })
+                .ToDictionary(x => x.Name, x => x.Count);
 
-            //deck color identity
-            //all of the basic lands 
-            //+ every card's color identity
-            //TODO - This doesn't actually include basic lands, should it?
-            //var something = result.CardOverviews.SelectMany(c => c.)
+            if (typeCountsDict.Keys.Contains("Lands"))
+            {
+                typeCountsDict["Lands"] = typeCountsDict["Lands"] + basicLandCount;
+            }
+            else
+            {
+                typeCountsDict["Lands"] = basicLandCount;
+            }
 
-            //var deckColorIdentity = statData
-            //    .SelectMany(card => card.ColorIdentity)
-            //    .Distinct().ToList();
+            result.Stats.TypeCounts = typeCountsDict;
 
-
-            ////var cardCIQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-            ////    .Where(x => x.DeckId == deckId)
-            ////    .Select(x => x.InventoryCard.Card)
-            ////    .SelectMany(card => card.CardColorIdentities.Select(ci => ci.ManaTypeId))
-            ////    .Distinct();
-
-            //result.ColorIdentity = deckColorIdentity;
-
-
+            //deck color identity(including sideboard)
+            result.Stats.ColorIdentity = deckCardData
+                .SelectMany(c => c.ColorIdentity.ToCharArray())
+                .Distinct()
+                .Select(c => c.ToString())
+                .ToList();
 
             //Price (should this include sideboard?)
-
-            ////legacy
-
-
-            //var statData = await _deckRepo.GetDeckCardStats(deckId);
-
-            ////total price
-            //decimal? totalPrice = statData.Sum(x => x.Price);
-            //result.TotalCost = totalPrice ?? 0;
-
-            ////
-            ////var priceQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-            ////    .Where(x => x.DeckId == deckId && x.CategoryId != 's')
-            ////    .Select(x => new
-            ////    {
-            ////        CardName = x.InventoryCard.Card.Name,
-            ////        //CardVariantName = x.InventoryCard.VariantType.Name,
-            ////        //VariantTypeId = x.InventoryCard.VariantTypeId,
-            ////        ////price
-            ////        Price = x.InventoryCard.Card.Variants.Where(cardVariant => cardVariant.CardVariantTypeId == x.InventoryCard.VariantTypeId).FirstOrDefault().Price,
-
-            ////    });
-
-            ////var totalPrice = await priceQuery.SumAsync(x => x.Price);
-
-
-
-            ////type-breakdown
-
-            //List<string> cardTypes = statData
-            //    .Select(x => GetCardTypeGroup(x.Type))
-            //    .ToList();
-
-
-            ////var cardTypes = _cardRepo.QueryDeckCards()
-            ////    .Where(x => x.DeckId == deckId && x.CategoryId != 's')
-            ////    .Select(x => x.InventoryCard.Card.Type)
-            ////    .Select(x => GetCardTypeGroup(x))
-            ////    .ToList();
-
-            //var deck = await _deckRepo.GetDeckById(deckId);
-            //int basicLandCount = deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG;
-
-
-            //var typeCountsDict = cardTypes
-            //    .GroupBy(x => x)
-            //    .Select(x => new
-            //    {
-            //        Name = x.Key,
-            //        Count = x.Count()
-            //    })
-            //    .AsEnumerable()
-            //    .ToDictionary(x => x.Name, x => x.Count);
-
-            //if (typeCountsDict.Keys.Contains("Lands"))
-            //{
-            //    typeCountsDict["Lands"] = typeCountsDict["Lands"] + basicLandCount;
-            //}
-            //else
-            //{
-            //    typeCountsDict["Lands"] = basicLandCount;
-            //}
-
-            //result.TypeCounts = typeCountsDict;
-
-            ////this is for the CMC breakdown
-            //Dictionary<string, int> deckCardCostsDict = statData
-            //    .Where(x => x.CategoryId != 's' && !x.Type.Contains("Land"))
-            //    .Select(x => x.Cmc)
-            //    .GroupBy(x => x)
-            //    .Select(x => new
-            //    {
-            //        Cmc = x.Key,
-            //        Count = x.Count(),
-            //    })
-            //    .OrderBy(x => x.Cmc)
-            //    .ToDictionary(x => x.Cmc.ToString(), x => x.Count);
-
-            //result.CostCounts = deckCardCostsDict;
-
-
-            ////deck color identity
-            ////all of the basic lands 
-            ////+ every card's color identity
-            ////TODO - This doesn't actually include basic lands, should it?
-
-            //var deckColorIdentity = statData
-            //    .SelectMany(card => card.ColorIdentity)
-            //    .Distinct().ToList();
-
-
-            ////var cardCIQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-            ////    .Where(x => x.DeckId == deckId)
-            ////    .Select(x => x.InventoryCard.Card)
-            ////    .SelectMany(card => card.CardColorIdentities.Select(ci => ci.ManaTypeId))
-            ////    .Distinct();
-
-            //result.ColorIdentity = deckColorIdentity;
+            result.Stats.TotalCost = deckCardData.Select(c => c.IsFoil ? c.PriceFoil : c.Price).Sum() ?? 0;
 
             #endregion
-
-            //Deck Stats
-            //result.Stats = await GetDeckStats(deckId);
-            //result.Stats = GetDeckStats(re)
 
             return result;
         }

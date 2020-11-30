@@ -190,7 +190,6 @@ namespace Carpentry.Data.Implementations
 
         //Note: this is only ever used by by [Get Deck Detail], the DTO could / should be used to get the desired info for a deck card
         //The same info in [ThatDevQuery(int deckId)]
-        [Obsolete]
         public async Task<List<DeckCardResult>> GetDeckCards(int deckId)
         {
             var deckCards = await _cardContext.DeckCards.Where(dc => dc.DeckId == deckId)
@@ -212,6 +211,8 @@ namespace Carpentry.Data.Implementations
                     SetId = x.InventoryCard.Card.SetId,
                     Type = x.InventoryCard.Card.Type,
                     ColorIdentity = x.InventoryCard.Card.ColorIdentity,
+                    Price = x.InventoryCard.Card.Price,
+                    PriceFoil = x.InventoryCard.Card.PriceFoil,
                 }).ToListAsync();
 
             //get all names with null inventory cards
@@ -255,7 +256,7 @@ namespace Carpentry.Data.Implementations
                     dc.Cmc = match.Cmc;
                     dc.Cost = match.ManaCost;
                     dc.Img = match.ImageUrl;
-                    //dc.IsFoil = match.IsFoil;
+                    //dc.IsFoil = false;
                     dc.CollectorNumber = match.CollectorNumber;
                     dc.CardId = match.CardId;
                     dc.Name = match.Name;
@@ -263,6 +264,8 @@ namespace Carpentry.Data.Implementations
                     dc.SetId = match.SetId;
                     dc.Type = match.Type;
                     dc.ColorIdentity = match.ColorIdentity;
+                    dc.Price = match.Price;
+                    dc.PriceFoil = match.PriceFoil;
                     //result.Add(relevantCardsByName[dc.CardName]);
                 }
             }

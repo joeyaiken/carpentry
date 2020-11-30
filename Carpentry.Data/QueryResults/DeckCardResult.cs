@@ -12,11 +12,8 @@
 
 
         public string Type { get; set; }
-
         public string Cost { get; set; }
-
         public int? Cmc { get; set; }
-
         public string Img { get; set; }
 
 
@@ -30,5 +27,9 @@
         public int? CollectorNumber { get; set; }
         public int CardId { get; set; }
         public string ColorIdentity { get; set; }
+
+        public decimal? Price { get; set; }
+
+        public decimal? PriceFoil { get; set; }
     }
 }
