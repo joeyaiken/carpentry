@@ -11,7 +11,7 @@ interface ComponentProps{
     // onCardSelected: (card: InventoryOverviewDto) => void;
     selectedCard: DeckCardOverview | null;
 
-    inventoryCards: DeckCard[];
+    inventoryCards: DeckCardDetail[];
 
     onMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onMenuClose: () => void;
@@ -72,7 +72,7 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                                     return(
                                     <TableRow key={item.id}>
                                         <TableCell>{item.set}</TableCell>
-                                        <TableCell>{item.variantName}{item.isFoil &&" foil"}</TableCell>
+                                        <TableCell>{item.isFoil &&" foil"}</TableCell>
                                         <TableCell size="small">
                                             {/* <IconButton size="small" onClick={props.onMenuClick} name={item.name} value={item.multiverseId}> */}
                                             {/* item.deckCards[0].id */}

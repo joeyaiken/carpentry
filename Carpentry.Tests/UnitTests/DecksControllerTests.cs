@@ -248,7 +248,7 @@ namespace Carpentry.Tests.UnitTests
                 .ReturnsAsync(new DeckDetailDto
                 {
                     CardOverviews = new List<DeckCardOverview>(),
-                    Cards = new List<DeckCard>(),
+                    Cards = new List<DeckCardDetail>(),
                     //CardDetails = new List<InventoryCardDto>(),
                     //CardOverviews = new List<InventoryOverviewDto>(),
                     Props = new DeckPropertiesDto(),

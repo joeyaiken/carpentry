@@ -160,9 +160,8 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         //Apparently THIS IS BAD but I can't figure out a better approach right now
         //Clarification, .Find() is BAD
         //const cardExistsInDeck = state.data.deckDetail.cardOverviewsByName[card.name];
-        const { cardOverviewsById, allCardOverviewIds } = state.decks.data.detail;
-
-        const cardExistsInDeck = Boolean(allCardOverviewIds.find(id => cardOverviewsById[id].name === card.name));
+        const { cardOverviews } = state.decks.data.detail;
+        const cardExistsInDeck = Boolean(cardOverviews.allIds.find(id => cardOverviews.byId[id].name === card.name));
 
         return ({
             data: card,

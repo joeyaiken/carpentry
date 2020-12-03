@@ -75,7 +75,7 @@ namespace Carpentry.Legacy.Controllers
                 {
                     
                 },
-                Cards = new List<DeckCard>()
+                Cards = new List<DeckCardDetail>()
                 {
 
                 },

@@ -13,18 +13,36 @@ export interface State {
 
         deckId: number;
     
-        deckProps: DeckPropertiesDto | null;
-    
+        //deckProps: DeckPropertiesDto | null;
+        deckProps: DeckPropertiesDto;
+
+        cardOverviews: {
+        //    ById[#:{
+        //        name; count; cmc;
+        //        details[#,#,#]
+        //    }]
+        //    AllIds
+            byId: { [id: number]: DeckCardOverview }
+            allIds: number[];
+        };
+
+        cardDetails: {
+            byId: { [deckCardId: number]: DeckCardDetail };
+            allIds: number[];
+        };
+
+
         //This (InventoryOverviewDto) might need a GropId or something
         //THIS ISN'T GROUPED BY ID
         //It's grouped by NAME
         //cardOverviewsByName: { [name: string]: InventoryOverviewDto } //This contains a "group name" field
-        cardOverviewsById: { [id: number]: DeckCardOverview } //This contains a "group name" field
+        // cardOverviewsById: { [id: number]: DeckCardOverview } //This contains a "group name" field
+
         //allCardOverviewNames: string[];
-        allCardOverviewIds: number[];
+        // allCardOverviewIds: number[];
     
-        cardDetailsById: { [id: number]: DeckCard }; 
-        allCardDetailIds: number[];
+        // cardDetailsById: { [id: number]: DeckCard }; 
+        // allCardDetailIds: number[];
     
         selectedInventoryCardIds: number[];
     
@@ -57,14 +75,28 @@ const initialState: State = {
         isLoading: false,
 
         deckId: 0,
-        deckProps: null,
-            
-        cardOverviewsById: {}, //This contains a "group name" field
-        allCardOverviewIds: [],
+        deckProps: {
+            id: 0,
+            name: '',
+            format: null,
+            notes: '',
+            basicW: 0,
+            basicU: 0,
+            basicB: 0,
+            basicR: 0,
+            basicG: 0,
+        },
 
-        cardDetailsById: {},
-        allCardDetailIds: [],
-        
+        cardDetails: {
+            byId: {},
+            allIds: [],
+        },
+
+        cardOverviews: {
+            byId: {},
+            allIds: [],
+        },
+
         deckStats: null,
         cardGroups: [],
         selectedInventoryCardIds: [],
@@ -118,14 +150,67 @@ const deckDetailRequested = (state: State, action: ReduxAction): State => {
 const deckDetailReceived = (state: State, action: ReduxAction): State => {
     const dto: DeckDetailDto = action.payload;
     
-    let overviewsById = {};
-    let cardsById = {};
-    
-    dto.cardOverviews.forEach(card => overviewsById[card.id] = card);
-    dto.cards.forEach(card => cardsById[card.id] = card);
+    let overviewsById: {[id: number]: DeckCardOverview} = {};
+    let overviewIds: number[] = [];
 
-    const allCardOverviewIds: number[] = dto.cardOverviews.map(card => card.id);
+    let detailsById: {[id: number]: DeckCardDetail} = {};
+    let detailIds: number[] = [];
 
+    dto.cards.forEach(cardOverview => {
+        const overviewId = cardOverview.id;
+        overviewIds.push(overviewId);
+        overviewsById[overviewId] = {
+            category: cardOverview.category,
+            cmc: cardOverview.cmc,
+            cost: cardOverview.cost,
+            count: cardOverview.count,
+            detailIds: cardOverview.details.map(detail => detail.id),
+            id: cardOverview.id,
+            img: cardOverview.img,
+            name: cardOverview.name,
+            type: cardOverview.type,
+        };
+        cardOverview.details.forEach(detail => {
+            const detailId = detail.id;
+            detailIds.push(detailId);
+            detailsById[detailId] = {
+                category: detail.category,
+                id: detail.id,
+                isFoil: detail.isFoil,
+                name: detail.name,
+                overviewId: cardOverview.id,
+                set: detail.set,
+            };
+        });
+    });
+
+
+
+
+    // dto.cardOverviews.forEach(card => overviewsById[card.id] = card);
+    // dto.cards.forEach(card => cardsById[card.id] = card);
+
+    // dto.cards.forEach(card => {
+    //     overviewIds.push(card.id);
+    //     overviewsById[card.id] = {
+    //         category: card.category,
+    //         cmc: card.cmc,
+    //     }
+
+    // });
+
+    // const allCardOverviewIds: number[] = dto.cardOverviews.map(card => card.id);
+    /* 
+    cardOverviews: {
+        byId: { [id: number]: DeckCardOverview }
+        allIds: number[];
+    };
+
+    cardDetails: {
+        byId: { [deckCardId: number]: DeckCardDetail };
+        allIds: number[];
+    };
+    */
     const newState: State = {
         ...state,
         detail: {
@@ -133,19 +218,20 @@ const deckDetailReceived = (state: State, action: ReduxAction): State => {
 
             isLoading: false,
 
-            // selectedDeckDto: data,
             deckId: dto.props.id,
             deckProps: dto.props,
     
-            //cardOverviewsById: overviewsByName
-            cardOverviewsById: overviewsById,
-            allCardOverviewIds: allCardOverviewIds,
-    
-            cardDetailsById: cardsById,
-            allCardDetailIds: dto.cards.map(card => card.id),
-    
+            cardOverviews: {
+                byId: overviewsById,
+                allIds: overviewIds,   
+            },
+            cardDetails: {
+                byId: detailsById,
+                allIds: detailIds,
+            },
+
             // cardGroups: [],
-            cardGroups: selectGroupedDeckCards(overviewsById, allCardOverviewIds),
+            cardGroups: selectGroupedDeckCards(overviewsById, overviewIds),
             // cardGroupNames: [],
             deckStats: dto.stats,
         },
@@ -155,8 +241,10 @@ const deckDetailReceived = (state: State, action: ReduxAction): State => {
 
 function selectGroupedDeckCards(overviewsById: { [id: number]: DeckCardOverview }, allOverviewIds: number[]): NamedCardGroup[] {
     var result: NamedCardGroup[] = [];
-    // console.log('grouping deck editor cards')
+    
     const cardGroups = ["Commander", "Creatures", "Spells", "Enchantments", "Artifacts", "Planeswalkers", "Lands", "Sideboard"];
+
+    //Am I worried about the fact that cards might get excluded if I mess up the groups?....
     
     cardGroups.forEach(groupName => {
 

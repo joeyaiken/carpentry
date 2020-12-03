@@ -53,7 +53,7 @@ interface PropsFromState {
     //Detail
     cardMenuAnchor: HTMLButtonElement | null;
     selectedCard: DeckCardOverview | null;
-    selectedInventoryCards: DeckCard[];
+    selectedInventoryCards: DeckCardDetail[];
 }
 
 type DeckEditorProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -218,13 +218,13 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 }
 
 function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
-    const { allCardOverviewIds, cardOverviewsById, cardGroups } = state.decks.data.detail; //state.data.deckDetail;
+    const { cardOverviews, cardGroups } = state.decks.data.detail; //state.data.deckDetail;
 
     if(state.decks.deckEditor.viewMode === "grouped"){
         const result = cardGroups.map(group => {
             const groupResult: CardOverviewGroup = {
                 name: group.name,
-                cardOverviews: group.cardOverviewIds.map(id => cardOverviewsById[id]),
+                cardOverviews: group.cardOverviewIds.map(id => cardOverviews.byId[id]),
             }
             return groupResult;
         });
@@ -234,7 +234,7 @@ function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
 
         return [{
             name: "All",
-            cardOverviews: allCardOverviewIds.map(id => cardOverviewsById[id]),
+            cardOverviews: cardOverviews.allIds.map(id => cardOverviews.byId[id]),
         }];
 
     }
@@ -243,14 +243,14 @@ function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
 function getSelectedCardOverview(state: AppState): DeckCardOverview | null {
     const selectedOverviewCardId = state.decks.deckEditor.selectedOverviewCardId;
     if(selectedOverviewCardId){
-        return state.decks.data.detail.cardOverviewsById[selectedOverviewCardId];
+        return state.decks.data.detail.cardOverviews.byId[selectedOverviewCardId];
     }
     return null;
 }
 
-function getSelectedDeckDetails(state: AppState): DeckCard[] {
-    const { selectedInventoryCardIds, cardDetailsById } = state.decks.data.detail;
-    return selectedInventoryCardIds.map(id => cardDetailsById[id]);
+function getSelectedDeckDetails(state: AppState): DeckCardDetail[] {
+    const { selectedInventoryCardIds, cardDetails } = state.decks.data.detail;
+    return selectedInventoryCardIds.map(id => cardDetails.byId[id]);
     //selectedInventoryCards: state.deckEditor.selectedInventoryCards,
 }
 

@@ -3,7 +3,7 @@
 namespace Carpentry.Logic.Models
 {
     //This is used by the Deck Detail DTO 
-    public class DeckCard
+    public class DeckCardDetail
     {
         //set
         //IsFoil
@@ -12,19 +12,16 @@ namespace Carpentry.Logic.Models
         //MID
 
 
-        [JsonProperty("id")]
         public int Id { get; set; }
+        public int OverviewId { get; set; }
 
         //[JsonProperty("multiverseId")]
         //public int MultiverseId { get; set; }
 
-        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("set")]
         public string Set { get; set; }
 
-        [JsonProperty("isFoil")]
         public bool IsFoil { get; set; }
 
         //[JsonProperty("variantName")]
@@ -32,7 +29,6 @@ namespace Carpentry.Logic.Models
 
         public int? CollectorNumber { get; set; }
 
-        [JsonProperty("category")]
         public string Category { get; set; }
 
 

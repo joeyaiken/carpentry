@@ -630,24 +630,24 @@ namespace Carpentry.Logic.Implementations
         {
             var dbDeck = await _deckRepo.GetDeckById(deckId);
 
-            DeckPropertiesDto mappedDeckData = new DeckPropertiesDto()
-            {
-                Id = dbDeck.DeckId,
-                BasicB = dbDeck.BasicB,
-                BasicG = dbDeck.BasicG,
-                BasicR = dbDeck.BasicR,
-                BasicU = dbDeck.BasicU,
-                BasicW = dbDeck.BasicW,
-                Format = dbDeck.Format.Name,
-                Name = dbDeck.Name,
-                Notes = dbDeck.Notes,
-            };
-
             DeckDetailDto result = new DeckDetailDto
             {
-                CardOverviews = new List<DeckCardOverview>(),
-                Cards = new List<DeckCard>(),
-                Props = mappedDeckData,
+                //CardOverviews = new List<DeckCardOverview>(),
+                //Cards = new List<DeckCardDetail>(),
+
+                Props = new DeckPropertiesDto()
+                {
+                    Id = dbDeck.DeckId,
+                    BasicB = dbDeck.BasicB,
+                    BasicG = dbDeck.BasicG,
+                    BasicR = dbDeck.BasicR,
+                    BasicU = dbDeck.BasicU,
+                    BasicW = dbDeck.BasicW,
+                    Format = dbDeck.Format.Name,
+                    Name = dbDeck.Name,
+                    Notes = dbDeck.Notes,
+                },
+                Cards = new List<DeckCardOverview>(),
                 Stats = new DeckStatsDto(),
             };
 
@@ -655,48 +655,123 @@ namespace Carpentry.Logic.Implementations
 
             #region Group & Map for DTO
 
+            //need to re-think how this should all be grouped & returned
+            //In the actual react app, data should be applied as a dict
+            //(Should this still return overviews / details as separate objects, or have them be parent/child objects?)
+            //  It doesn't ultimately matter
+
+
+            /*
+             
+            API State:
+                Props {}
+                Stats {}
+                Overviews[{
+                    Overview Id
+                    {common card props (name, count, cmc, ...}
+                    Details[{
+                        Id
+                        CardName
+                        InventoryId
+                        ???
+                    }]
+                }]
+
+            React app state:
+                Props {}
+                Stats {}
+                Overviews {
+                    ById[#:{
+                        name; count; cmc;
+                        details[#,#,#]
+                    }]
+                    AllIds
+                }
+
+                Details {
+                    ById
+                    AllIds
+
+                }
+             
+
+
+            How do I...visually map details for a card overview
+             */
+
+            //No matter what, I want to group by Name&Category, & map to other records
+
             //Card Overviews
             //var deckOverviewsResult = await _queryService.GetDeckCardOverviews(deckId);
 
-            var groupedCards = deckCardData
+
+            //Remember this is all in-memory data.  Commonly no more than 100, probably never more than 500 records
+            //var groupedCards = deckCardData
+            result.Cards = deckCardData
                 .GroupBy(x => new
                 {
                     x.Name,
                     x.Category,
                 })
-                .Select(x => new
+                .Select((g, i) => new DeckCardOverview
                 {
-                    Name = x.Key.Name,
-                    Count = x.Count(),
+                    Id = (i+1),
+                    Name = g.Key.Name,
+                    Category = g.Key.Category,
+                    Cmc = g.First().Cmc,
+                    Cost = g.First().Cost,
+                    Count = g.Count(),
                     //TODO - I wanted to make sure that, if I had several versions of a card in a deck, then I show the "newest" card
-                    //I can't do that with the current fields on the Result class
-                    //Item = x.OrderByDescending(c => c.MultiverseId).FirstOrDefault(), //why is this MID DESC ? - I wanted the "newest image" for a card
-                    Item = x.FirstOrDefault(),
+                    //I should investigate if that's actually happening
+                    Img = g.First().Img,
+                    Type = g.First().Type,
+                    Details = g.Select(d => new DeckCardDetail
+                    {
+                        Id = d.DeckCardId,
+                        OverviewId = (i + 1),
+                        Category = d.Category,
+                        CollectorNumber = d.CollectorNumber,
+                        IsFoil = d.IsFoil,
+                        Name = d.Name,
+                        //Set = d.SetId
+
+
+                        //Id = i + 1, //Incremented because I want it to start at 1 instead of 0
+                        
+                        //Cost = x.Item.Cost,
+                        //Name = x.Item.Name,
+                        //Count = x.Count,
+                        //Img = x.Item.Img,
+                        //Type = x.Item.Type,
+                        //Category = x.Item.Category ?? GetCardTypeGroup(x.Item.Type),
+                        //Cmc = x.Item.Cmc,
+                    }).ToList(),
                 })
                 .ToList();
 
-            result.CardOverviews = groupedCards.Select((x, i) => new DeckCardOverview()
-            {
-                Id = i + 1, //Incremented because I want it to start at 1 instead of 0
-                Cost = x.Item.Cost,
-                Name = x.Item.Name,
-                Count = x.Count,
-                Img = x.Item.Img,
-                Type = x.Item.Type,
-                Category = x.Item.Category ?? GetCardTypeGroup(x.Item.Type),
-                Cmc = x.Item.Cmc,
-            }).ToList();
+            //result.CardOverviews = groupedCards.Select((x, i) => new DeckCardOverview()
+            //{
+            //    Id = i + 1, //Incremented because I want it to start at 1 instead of 0
+            //    Cost = x.Item.Cost,
+            //    Name = x.Item.Name,
+            //    Count = x.Count,
+            //    Img = x.Item.Img,
+            //    Type = x.Item.Type,
+            //    Category = x.Item.Category ?? GetCardTypeGroup(x.Item.Type),
+            //    Cmc = x.Item.Cmc,
+            //}).ToList();
 
-            //Card Details
-            result.Cards = deckCardData.Select(x => new DeckCard()
-            {
-                Id = x.DeckCardId,
-                IsFoil = x.IsFoil,
-                Name = x.Name,
-                Category = x.Category,
-                CollectorNumber = x.CollectorNumber,
-                Set = x.SetId.ToString(),
-            }).ToList();
+            ////Card Details
+            //result.Cards = deckCardData.Select(x => new DeckCardDetail()
+            //{
+            //    Id = x.DeckCardId,
+            //    IsFoil = x.IsFoil,
+            //    Name = x.Name,
+            //    Category = x.Category,
+            //    CollectorNumber = x.CollectorNumber,
+            //    Set = x.SetId.ToString(),
+            //}).ToList();
+            
 
             #endregion
 
@@ -733,7 +808,7 @@ namespace Carpentry.Logic.Implementations
                 .Select(x => GetCardTypeGroup(x.Type))
                 .ToList();
 
-            int basicLandCount = mappedDeckData.BasicW + mappedDeckData.BasicU + mappedDeckData.BasicB + mappedDeckData.BasicR + mappedDeckData.BasicG;
+            int basicLandCount = result.Props.BasicW + result.Props.BasicU + result.Props.BasicB + result.Props.BasicR + result.Props.BasicG;
 
             var typeCountsDict = cardTypes
                 .GroupBy(x => x)

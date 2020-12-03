@@ -40,7 +40,7 @@ declare interface ComponentProps{
     //detail
     cardMenuAnchor: HTMLButtonElement | null;
     selectedCard: DeckCardOverview | null;
-    selectedInventoryCards: DeckCard[];
+    selectedInventoryCards: DeckCardDetail[];
     onCardMenuSelected: (name: DeckEditorCardMenuOption) => void;
     onCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onCardMenuClosed: () => void;

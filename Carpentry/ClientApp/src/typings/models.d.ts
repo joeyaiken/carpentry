@@ -49,32 +49,57 @@ declare interface cardSearchResultDetail {
     imageUrl: string;
 }
 
-declare interface DeckCard {
-    id: number;
-    multiverseId: number;
-    name: string;
-    set: string;
-    isFoil: boolean;
-    variantName: string;
-    category: string;
+// declare interface DeckCard {
+//     id: number;
+//     multiverseId: number;
+//     name: string;
+//     set: string;
+//     isFoil: boolean;
+//     variantName: string;
+//     category: string;
+// }
+
+// declare interface DeckCardOverview {
+//     id: number;
+//     name: string;
+//     type: string;
+//     cost: string;
+//     cmc: number;
+//     category: string;
+//     img: string;
+//     count: number;
+// }
+
+declare interface DeckDetailDto {
+    props: DeckPropertiesDto;
+    // cardOverviews: DeckCardOverview[];
+    // cards: DeckCard[];
+    cards: ApiDeckCardOverview[];
+    stats: DeckStats;
 }
 
-declare interface DeckCardOverview {
+declare interface ApiDeckCardOverview {
     id: number;
     name: string;
     type: string;
     cost: string;
     cmc: number;
-    category: string;
     img: string;
     count: number;
+    category: string;
+    details: ApiDeckCardDetail[];
 }
 
-declare interface DeckDetailDto {
-    props: DeckPropertiesDto;
-    cardOverviews: DeckCardOverview[];
-    cards: DeckCard[];
-    stats: DeckStats;
+declare interface ApiDeckCardDetail {
+    id: number;
+    overviewId: number;
+    //multiverseId: number;
+    name: string;
+    set: string;
+    isFoil: boolean;
+    //variantName: string;
+    collectorNumber: number | null;
+    category: string;
 }
 
 declare interface DeckOverviewDto {

@@ -85,6 +85,29 @@ interface CardFilterVisibilities {
     text: boolean;
 }
 
+declare interface DeckCardDetail {
+    id: number;
+    overviewId: number;
+    // multiverseId: number;
+    name: string;
+    set: string;
+    isFoil: boolean;
+    // variantName: string;
+    category: string;
+}
+
+declare interface DeckCardOverview {
+    id: number;
+    name: string;
+    type: string;
+    cost: string;
+    cmc: number;
+    category: string;
+    img: string;
+    count: number;
+    detailIds: number[];
+}
+
 ///////
 // /// <reference types="react-scripts" />
 // /// <reference types="redux" />
