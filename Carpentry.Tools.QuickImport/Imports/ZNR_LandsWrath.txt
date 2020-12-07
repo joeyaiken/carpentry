@@ -5,7 +5,7 @@
 1 Arcane Signet (ZNC) 297
 1 Armorcraft Judge (ZNC) 218
 1 Banishing Light (ZNC) 11
-1 Beanstalk Giant (ZNC) 61
+1 Beanstalk Giant // Fertile Footsteps (ZNC) 61
 1 Blighted Woodland (ZNC) 476
 1 Boros Garrison (ZNC) 477
 1 Boros Guildgate (ZNC) 478
@@ -48,7 +48,7 @@
 1 Naya Panorama (ZNC) 136
 1 Needle Spires (ZNC) 137
 1 Nissa's Renewal (ZNC) 76
-1 Obuun, Mul Daya Ancestor (ZNC) 2
+1 Obuun, Mul Daya Ancestor (ZNC) 2 FOIL
 1 Omnath, Locus of Rage (ZNC) 97
 7 Plains (ZNC) 504
 1 Planar Outburst (ZNC) 19
@@ -80,4 +80,3 @@
 1 Waker of the Wilds (ZNC) 86
 1 Yavimaya Elder (ZNC) 441
 1 Zendikar's Roil (ZNC) 88
-

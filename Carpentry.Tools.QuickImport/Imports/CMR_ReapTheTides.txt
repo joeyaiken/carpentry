@@ -1,4 +1,5 @@
-﻿1 Avenger of Zendikar (CMR) 0
+﻿1 Aesi, Tyrant of Gyre Strait (CMR) FOIL
+1 Avenger of Zendikar (CMR) 0
 1 Trench Behemoth (CMR) 366
 1 Stumpsquall Hydra (CMR) 367
 1 Elder Deep-Fiend (CMR) 368
@@ -69,5 +70,3 @@
 1 Woodland Stream (CMR) 503
 15 Forest (CMR) 511
 15 Island (CMR) 507
-
-

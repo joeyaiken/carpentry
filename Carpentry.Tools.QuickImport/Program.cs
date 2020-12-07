@@ -38,39 +38,68 @@ namespace Carpentry.Tools.QuickImport
 
             List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
             {
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Arm for Battle",
+                //    FormatName = "commander",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\CMR_ArmForBattle.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Reap the Tides",
+                //    FormatName = "commander",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\CMR_ReapTheTides.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Lands Wrath",
+                //    FormatName = "commander",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\ZNR_LandsWrath.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Sneak Attack",
+                //    FormatName = "commander",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\ZNR_SneakAttack.txt",
+                //},
+
                 //New EDH
-                new DeckImportTemplate()
-                {
-                    Name = "Arcane Maelstrom",
-                    FormatName = "commander",
-                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\ArcaneMaelstrom_EDH.txt",
-                },
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Arcane Maelstrom",
+                //    FormatName = "commander",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\ArcaneMaelstrom_EDH.txt",
+                //},
+
+
+                
+
 
                 //4 JMP decks
-                new DeckImportTemplate()
-                {
-                    Name = "Enchanted (1)",
-                    FormatName = "jumpstart",
-                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Enchanted1_JMP.txt",
-                },
-                new DeckImportTemplate()
-                {
-                    Name = "Witchcraft (2)",
-                    FormatName = "jumpstart",
-                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Witchcraft2_JMP.txt",
-                },
-                new DeckImportTemplate()
-                {
-                    Name = "Vampires (2)",
-                    FormatName = "jumpstart",
-                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Vampires2_JMP.txt",
-                },
-                new DeckImportTemplate()
-                {
-                    Name = "Ranimated (1)",
-                    FormatName = "jumpstart",
-                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Ranimated1_JMP.txt",
-                },
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Enchanted (1)",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Enchanted1_JMP.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Witchcraft (2)",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Witchcraft2_JMP.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Vampires (2)",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Vampires2_JMP.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Ranimated (1)",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\Ranimated1_JMP.txt",
+                //},
 
                 ////Populate EDH deck:
                 //new DeckImportTemplate
@@ -146,7 +175,7 @@ namespace Carpentry.Tools.QuickImport
 
                 await importService.AddValidatedDeckImport(validatedPayload);
 
-                logger.LogInformation($"Successfully imported deck {deck.Name}");
+                logger.LogInformation($"Successfully 'imported' deck {deck.Name}");
             }
         }
 
@@ -202,7 +231,7 @@ namespace Carpentry.Tools.QuickImport
 
 
 
-            //.AddSingleton<IDataBackupConfig, CarpentryAppConfig>()
+            .AddSingleton<IDataBackupConfig, FakeAppConfig>()
 
             // v
 
