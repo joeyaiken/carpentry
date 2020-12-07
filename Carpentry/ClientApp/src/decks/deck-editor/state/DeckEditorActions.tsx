@@ -118,4 +118,94 @@ function tryDeleteDeck(dispatch: Dispatch, state: AppState): void {
     });
 }
 
+export const CARD_MENU_BUTTON_CLICKED = 'CARD_MENU_BUTTON_CLICKED';
+export const cardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
+    type: CARD_MENU_BUTTON_CLICKED,
+    payload: cardMenuAnchor
+});
 
+
+////////////
+export const requestUpdateDeckCardStatus = (deckCardId: number, status: string): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return updateDeckCardStatus(dispatch, getState(), deckCardId, status);
+    }
+}
+
+//"status" should be "category" but w/e
+function updateDeckCardStatus(dispatch: Dispatch, state: AppState, deckCardId: number, status: string): any {
+
+    const cardDetail = state.decks.data.detail.cardDetails.byId[deckCardId];
+
+
+    // const something = state.data.deckDetail.cardDetailsById[deckCardId];
+
+    // declare interface InventoryCard {
+    //     id: number;
+    //     multiverseId: number;
+    //     name: string;
+    //     set: string;
+    //     isFoil: boolean;
+    //     variantName: string;
+    //     statusId: number; //normal === 1, buylist === 2, sellList === 3
+    //     deckCards: InventoryDeckCardDto[];
+    // }
+
+    let categoryId: string | null = null;
+
+    switch(status){
+        case "mainboard":
+        //     categoryId = null;
+            break;
+        case "sideboard":
+            categoryId = 's';
+            break;
+        case "commander":
+            categoryId = 'c';
+            break;
+    }
+
+
+    let dto: DeckCardDto = {
+        id: deckCardId,
+        deckId: cardDetail.deckId,//
+        cardName: cardDetail.name,
+        categoryId: categoryId,
+
+
+
+        inventoryCardId: cardDetail.inventoryCardId,//
+        cardId: cardDetail.cardId ?? 0,//
+        isFoil: cardDetail.isFoil,//
+        inventoryCardStatusId: cardDetail.inventoryCardStatusId ?? 0,//
+
+        // inventoryCard: {
+        //     deckCards: [],
+        //     id: 0,
+        //     isFoil: false,
+        //     multiverseId: 0,
+        //     name: "",
+        //     set: "",
+        //     statusId: 0,
+        //     variantName: ""
+        // },
+        // //inventoryCard: something, 
+        // deckId: state.data.deckDetail.deckId,
+
+    }
+    console.log('submitting DTO');
+    console.log(dto);
+    console.log(state);
+
+
+    decksApi.updateDeckCard(dto).then(() => {
+        dispatch(reloadDeckDetail(dto.deckId));
+    });
+
+
+
+    // api_Decks_Update(props).then(() => {
+    //     dispatch(requestDeckDetail(props.id));
+    // })
+}
+/////////////

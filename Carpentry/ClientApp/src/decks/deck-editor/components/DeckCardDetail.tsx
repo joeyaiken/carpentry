@@ -57,22 +57,29 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Set</TableCell>
-                                    <TableCell>Style</TableCell>
+                                    <TableCell>Card Detail</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                             {
                                 props.inventoryCards.map(item => {
-                                    // const thisCard = props.detail.cards.find(x => x.multiverseId === item.multiverseId);
 
                                     const rowDeckCardId = item.id;
-                                    // console.log(item);
                                     return(
                                     <TableRow key={item.id}>
-                                        <TableCell>{item.set}</TableCell>
-                                        <TableCell>{item.isFoil &&" foil"}</TableCell>
+                                        {
+                                            item.inventoryCardId && 
+                                            <TableCell style={{textTransform:"uppercase"}}>
+                                                {`${item.set} - ${item.collectorNumber}`}{item.isFoil &&" (foil)"}
+                                            </TableCell>
+                                        }
+                                        {
+                                            !item.inventoryCardId &&
+                                            <TableCell>
+                                                Empty
+                                            </TableCell>
+                                        }
                                         <TableCell size="small">
                                             {/* <IconButton size="small" onClick={props.onMenuClick} name={item.name} value={item.multiverseId}> */}
                                             {/* item.deckCards[0].id */}

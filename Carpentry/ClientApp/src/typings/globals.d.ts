@@ -87,12 +87,15 @@ interface CardFilterVisibilities {
 
 declare interface DeckCardDetail {
     id: number;
-    overviewId: number;
-    // multiverseId: number;
+    deckId: number;
     name: string;
-    set: string;
+    inventoryCardId: number | null;
     isFoil: boolean;
-    // variantName: string;
+    inventoryCardStatusId: number | null;
+    cardId: number | null;
+    set: string;
+    collectorNumber: number | null;
+    overviewId: number;
     category: string;
 }
 

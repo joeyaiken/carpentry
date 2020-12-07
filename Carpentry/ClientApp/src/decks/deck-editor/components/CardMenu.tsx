@@ -19,8 +19,8 @@ export default function CardMenu(props: ComponentProps): JSX.Element {
                 <MenuItem onClick={() => {props.onCardMenuSelect("")}} value=""></MenuItem>
                 <MenuItem onClick={() => {props.onCardMenuSelect("")}} value=""></MenuItem> */}
                 {/* <MenuItem onClick={() => {props.onCardMenuSelect("inventory")}} value="inventory">Move to Inventory</MenuItem> */}
-                <MenuItem onClick={() => {props.onCardMenuSelect("delete")}} value="delete">Remove from deck</MenuItem>
-                <MenuItem onClick={() => {props.onCardMenuSelect("search")}} value="search">Search alternate versions</MenuItem>
+                {/* <MenuItem onClick={() => {props.onCardMenuSelect("delete")}} value="delete">Remove from deck</MenuItem>
+                <MenuItem onClick={() => {props.onCardMenuSelect("search")}} value="search">Search alternate versions</MenuItem> */}
             </Menu>
         </React.Fragment>
     )

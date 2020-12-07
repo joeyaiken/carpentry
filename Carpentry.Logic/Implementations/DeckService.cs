@@ -717,7 +717,7 @@ namespace Carpentry.Logic.Implementations
                 {
                     Id = (i+1),
                     Name = g.Key.Name,
-                    Category = g.Key.Category,
+                    Category = g.Key.Category ?? GetCardTypeGroup(g.First().Type),
                     Cmc = g.First().Cmc,
                     Cost = g.First().Cost,
                     Count = g.Count(),
@@ -728,13 +728,16 @@ namespace Carpentry.Logic.Implementations
                     Details = g.Select(d => new DeckCardDetail
                     {
                         Id = d.DeckCardId,
+                        DeckId = d.DeckId,
                         OverviewId = (i + 1),
-                        Category = d.Category,
+                        Category = d.Category ?? GetCardTypeGroup(d.Type),
                         CollectorNumber = d.CollectorNumber,
                         IsFoil = d.IsFoil,
                         Name = d.Name,
-                        //Set = d.SetId
-
+                        Set = d.SetCode,
+                        InventoryCardId = d.InventoryCardId,
+                        CardId = d.CardId,
+                        //DeckId = d.
 
                         //Id = i + 1, //Incremented because I want it to start at 1 instead of 0
                         
@@ -787,7 +790,9 @@ namespace Carpentry.Logic.Implementations
             };
 
             //Total mainboard cards
-            result.Stats.TotalCount = deckCardData.Where(c => c.Category != _sideboardCategory).Count();
+            int basicLandCount = result.Props.BasicW + result.Props.BasicU + result.Props.BasicB + result.Props.BasicR + result.Props.BasicG;
+
+            result.Stats.TotalCount = deckCardData.Where(c => c.Category != _sideboardCategory).Count() + basicLandCount;
 
             //cmc breakdown of mainboard cards
             result.Stats.CostCounts = deckCardData
@@ -807,8 +812,6 @@ namespace Carpentry.Logic.Implementations
                 .Where(c => c.Category != _sideboardCategory)
                 .Select(x => GetCardTypeGroup(x.Type))
                 .ToList();
-
-            int basicLandCount = result.Props.BasicW + result.Props.BasicU + result.Props.BasicB + result.Props.BasicR + result.Props.BasicG;
 
             var typeCountsDict = cardTypes
                 .GroupBy(x => x)

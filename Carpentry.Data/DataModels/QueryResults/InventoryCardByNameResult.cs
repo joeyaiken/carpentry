@@ -13,7 +13,8 @@
         public string ColorIdentity { get; set; }
         public char RarityId { get; set; }
         public int CollectorNumber { get; set; }
-        public int SetId { get; set; }
+        //public int SetId { get; set; }
+        public string SetCode { get; set; }
         public int? MultiverseId { get; set; }
         public decimal? Price { get; set; }
         public decimal? PriceFoil { get; set; }

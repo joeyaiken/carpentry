@@ -44,7 +44,7 @@ export interface State {
         // cardDetailsById: { [id: number]: DeckCard }; 
         // allCardDetailIds: number[];
     
-        selectedInventoryCardIds: number[];
+        // selectedInventoryCardIds: number[];
     
         deckStats: DeckStats | null;
     
@@ -99,7 +99,7 @@ const initialState: State = {
 
         deckStats: null,
         cardGroups: [],
-        selectedInventoryCardIds: [],
+        // selectedInventoryCardIds: [],
     }   
 }
 
@@ -180,6 +180,14 @@ const deckDetailReceived = (state: State, action: ReduxAction): State => {
                 name: detail.name,
                 overviewId: cardOverview.id,
                 set: detail.set,
+                collectorNumber: detail.collectorNumber,
+                inventoryCardId: detail.inventoryCardId,
+
+                inventoryCardStatusId: 0,
+                cardId: detail.cardId,
+                deckId: detail.deckId,
+                
+
             };
         });
     });

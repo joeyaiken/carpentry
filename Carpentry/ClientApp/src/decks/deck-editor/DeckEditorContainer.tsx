@@ -1,12 +1,22 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
 import { Typography, Box } from '@material-ui/core';
-import { toggleDeckViewMode, deckEditorCardSelected, openDeckPropsModal, closeDeckPropsModal, requestSavePropsModal, deckPropsModalChanged, requestDisassembleDeck, requestDeleteDeck } from './state/DeckEditorActions';
+import { 
+    toggleDeckViewMode, 
+    deckEditorCardSelected, 
+    openDeckPropsModal, 
+    closeDeckPropsModal, 
+    requestSavePropsModal, 
+    deckPropsModalChanged, 
+    requestDisassembleDeck, 
+    requestDeleteDeck,
+    cardMenuButtonClicked,
+    requestUpdateDeckCardStatus,
+} from './state/DeckEditorActions';
 
 import { AppState } from '../../configureStore';
 import { ensureDeckDetailLoaded } from '../state/decksDataActions';
 import { DeckEditorLayout } from './components/DeckEditorLayout';
-import { disconnect } from 'process';
 import { push } from 'react-router-redux';
 
 /**
@@ -89,45 +99,48 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
     handleCardMenuClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
         // this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", event.currentTarget));
+        this.props.dispatch(cardMenuButtonClicked(event.currentTarget));
     }
 
     handleCardMenuSelected(name: DeckEditorCardMenuOption){
-        console.log('card anchor');
-        console.log(this.props.cardMenuAnchor);
+        // console.log('card anchor');
+        // console.log(this.props.cardMenuAnchor);
         switch (name){
-            case "search":
-                if(this.props.cardMenuAnchor != null){
-                    // this.props.dispatch(deckCardRequestAlternateVersions(this.props.cardMenuAnchor.name))
-                }
-                break;
-            case "delete":
-                    if(this.props.cardMenuAnchor != null){
-                        const confirmText = `Are you sure you want to delete ${this.props.cardMenuAnchor.name}?`;
-                        if(window.confirm(confirmText)){
-                            // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
-                        }
-                    }
-                    break;
+            // case "search":
+            //     if(this.props.cardMenuAnchor != null){
+            //         // this.props.dispatch(deckCardRequestAlternateVersions(this.props.cardMenuAnchor.name))
+            //     }
+            //     break;
+            // case "delete":
+            //         if(this.props.cardMenuAnchor != null){
+            //             const confirmText = `Are you sure you want to delete ${this.props.cardMenuAnchor.name}?`;
+            //             if(window.confirm(confirmText)){
+            //                 // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+            //             }
+            //         }
+            //         break;
             case "sideboard":
                 if(this.props.cardMenuAnchor != null){
-                    // this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "sideboard"));
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "sideboard"));
                 }
                 break;
             case "mainboard":
                 if(this.props.cardMenuAnchor != null){
-                    // this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "mainboard"));
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "mainboard"));
                 }
                 break;
             case "commander":
                 if(this.props.cardMenuAnchor != null){
-                    // this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "commander"));
+                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "commander"));
                 }
                 break;
         }
+
+        this.props.dispatch(cardMenuButtonClicked(null));
     }
 
     handleCardMenuClosed(): void {
-        // this.props.dispatch(cardMenuButtonClick(null));
+        this.props.dispatch(cardMenuButtonClicked(null));
         // this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", null));
     }
 
@@ -249,16 +262,20 @@ function getSelectedCardOverview(state: AppState): DeckCardOverview | null {
 }
 
 function getSelectedDeckDetails(state: AppState): DeckCardDetail[] {
-    const { selectedInventoryCardIds, cardDetails } = state.decks.data.detail;
-    return selectedInventoryCardIds.map(id => cardDetails.byId[id]);
-    //selectedInventoryCards: state.deckEditor.selectedInventoryCards,
+    const { cardOverviews, cardDetails } = state.decks.data.detail;
+    const { selectedOverviewCardId } = state.decks.deckEditor;
+    if(selectedOverviewCardId){
+        const match = cardOverviews.byId[selectedOverviewCardId];
+        if(match){
+            return match.detailIds.map(id => cardDetails.byId[id]);
+        }
+        // return cardOverviews.byId[selectedOverviewCardId].detailIds.map(id => cardDetails.byId[id]);
+    }
+    return [];
 }
 
 function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
 
-    // console.log('DE state to props');
-    // console.log(state);
-    // console.log(ownProps);
     const result: PropsFromState = {
         deckId: ownProps.match.params.deckId,
         viewMode: state.decks.deckEditor.viewMode,  //state.app.deckEditor.viewMode,
@@ -266,27 +283,20 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         // selectedCard: getSelectedCardOverview(state),
         // selectedInventoryCards: getSelectedDeckDetails(state),
         
-        //deckProperties: state.data.deckDetail.deckProps,
+        
         deckProperties: state.decks.data.detail.deckProps,
         formatFilterOptions: state.core.data.filterOptions.formats,
 
         isPropsDialogOpen: state.decks.deckEditor.isPropsModalOpen,
         deckDialogProperties: state.decks.deckEditor.deckModalProps,
-        // cardOverviews: selectDeckOverviews(state),
-
-        //deckStats: state.data.deckDetail.deckStats,
         deckStats: state.decks.data.detail.deckStats,
         
-        
-        // deckPropsModalOpen: state.ui.deckPropsModalOpen,
-        
-
         
         //Overview
         groupedCardOverviews: selectDeckOverviews(state),
 
         //Detail
-        cardMenuAnchor: null, //state.ui.deckEditorMenuAnchor,
+        cardMenuAnchor: state.decks.deckEditor.cardMenuAnchor, //state.ui.deckEditorMenuAnchor,
         selectedCard: getSelectedCardOverview(state),
         selectedInventoryCards: getSelectedDeckDetails(state),
     }

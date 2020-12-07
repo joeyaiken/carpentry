@@ -92,6 +92,7 @@ declare interface ApiDeckCardOverview {
 
 declare interface ApiDeckCardDetail {
     id: number;
+    deckId: number;
     overviewId: number;
     //multiverseId: number;
     name: string;
@@ -100,6 +101,8 @@ declare interface ApiDeckCardDetail {
     //variantName: string;
     collectorNumber: number | null;
     category: string;
+    inventoryCardId: number | null;
+    cardId: number | null;
 }
 
 declare interface DeckOverviewDto {

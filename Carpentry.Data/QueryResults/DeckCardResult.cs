@@ -6,6 +6,7 @@
     public class DeckCardResult
     {
         public int DeckCardId { get; set; }
+        public int DeckId { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
         public int? InventoryCardId { get; set; }
@@ -18,8 +19,8 @@
 
 
 
-        //public string Set { get; set; }
-        public int SetId { get; set; }
+        public string SetCode { get; set; }
+        //public int SetId { get; set; }
 
         public bool IsFoil { get; set; }
 

@@ -11,14 +11,18 @@ namespace Carpentry.Logic.Models
         //Category
         //MID
 
-
-        public int Id { get; set; }
         public int OverviewId { get; set; }
 
+
+        public int Id { get; set; }
+        public int DeckId { get; set; }
+        public string Name { get; set; }
+        public string Category { get; set; }
+
+        
         //[JsonProperty("multiverseId")]
         //public int MultiverseId { get; set; }
 
-        public string Name { get; set; }
 
         public string Set { get; set; }
 
@@ -29,16 +33,14 @@ namespace Carpentry.Logic.Models
 
         public int? CollectorNumber { get; set; }
 
-        public string Category { get; set; }
 
-
-
+        public int? InventoryCardId { get; set; }
+        public int? CardId { get; set; }
 
 
 
 
         //[JsonProperty("deckId")]
-        //public int DeckId { get; set; }
 
         //[JsonProperty("categoryId")]
         //public char? CategoryId { get; set; }

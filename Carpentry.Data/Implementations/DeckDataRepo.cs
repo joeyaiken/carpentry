@@ -196,11 +196,12 @@ namespace Carpentry.Data.Implementations
                 .Select(x => new DeckCardResult()
                 {
                     DeckCardId = x.DeckCardId,
-
+                    DeckId = x.DeckId,
                     Name = x.CardName,
 
                     Category = x.CategoryId == null ? null : x.Category.Name,
                     InventoryCardId = x.InventoryCardId,
+                    
                     Cmc = x.InventoryCard.Card.Cmc,
                     Cost = x.InventoryCard.Card.ManaCost,
                     Img = x.InventoryCard.Card.ImageUrl,
@@ -208,7 +209,8 @@ namespace Carpentry.Data.Implementations
                     CollectorNumber = x.InventoryCard.Card.CollectorNumber,
                     CardId = x.InventoryCard.CardId,
                     //Set = x.InventoryCard.Card.Set.Code,
-                    SetId = x.InventoryCard.Card.SetId,
+                    //SetId = x.InventoryCard.Card.SetId,
+                    SetCode = x.InventoryCard.Card.Set.Code,
                     Type = x.InventoryCard.Card.Type,
                     ColorIdentity = x.InventoryCard.Card.ColorIdentity,
                     Price = x.InventoryCard.Card.Price,
@@ -261,7 +263,8 @@ namespace Carpentry.Data.Implementations
                     dc.CardId = match.CardId;
                     dc.Name = match.Name;
                     //dc.Set = match.Set;
-                    dc.SetId = match.SetId;
+                    //dc.SetId = match.SetId;
+                    dc.SetCode = match.SetCode;
                     dc.Type = match.Type;
                     dc.ColorIdentity = match.ColorIdentity;
                     dc.Price = match.Price;
