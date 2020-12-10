@@ -29,7 +29,7 @@ namespace Carpentry.Data.Interfaces
         Task RemoveAllCardDefinitionsForSetId(int setId);
         IQueryable<CardData> QueryCardDefinitions();
 
-
+        Task<Dictionary<string, MagicFormatData>> GetAllFormatsByName();
     }
 }
 

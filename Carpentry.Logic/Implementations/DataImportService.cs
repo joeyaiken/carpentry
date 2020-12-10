@@ -44,6 +44,7 @@ namespace Carpentry.Logic.Implementations
         private readonly IDataUpdateService _dataUpdateService;
         private readonly ICardDataRepo _cardDataRepo;
         private readonly IDeckService _deckService;
+        private readonly IDeckDataRepo _deckDataRepo;
         private readonly IInventoryService _inventoryService;
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly int _cardStatus_InInventory = 1;
@@ -52,6 +53,7 @@ namespace Carpentry.Logic.Implementations
             IDataUpdateService dataUpdateService,
             ICardDataRepo cardDataRepo,
             IDeckService deckService,
+            IDeckDataRepo deckDataRepo,
             IInventoryService inventoryService,
             IInventoryDataRepo inventoryRepo,
             IDataBackupConfig config
@@ -60,11 +62,17 @@ namespace Carpentry.Logic.Implementations
             _dataUpdateService = dataUpdateService;
             _cardDataRepo = cardDataRepo;
             _deckService = deckService;
+            _deckDataRepo = deckDataRepo;
             _inventoryService = inventoryService;
             _inventoryRepo = inventoryRepo;
             _config = config;
         }
 
+        /// <summary>
+        /// Used by the Quick Import Tool to import a deck
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <returns></returns>
         public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload)
         {
             var result = new ValidatedDeckImportDto();
@@ -107,6 +115,8 @@ namespace Carpentry.Logic.Implementations
             foreach (var card in mappedRecords)
             {
                 var matchingCard = await _cardDataRepo.GetCardData(card.Name, card.Code);
+
+                //if (matchingCard == null) continue;
 
                 ValidatedCardDto newCard = new ValidatedCardDto()
                 {
@@ -173,6 +183,14 @@ namespace Carpentry.Logic.Implementations
             await _deckService.AddDeckCardBatch(cardsToAdd);
         }
 
+
+
+        /// <summary>
+        /// A carpentry import (dto) is just a directory where backups can be found
+        /// maybe some day this can be refactored to take a file
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <returns></returns>
         public async Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto payload)
         {
             //TODO - Is there a better way to submit a file than reading from a directory?
@@ -192,7 +210,8 @@ namespace Carpentry.Logic.Implementations
 
             //Getting all sets
             var allSets = await _dataUpdateService.GetTrackedSets(true, false);
-
+            //TODO - I feel like this can be refactored to use less itterations
+            //remember this is already looking at the result of a query
             foreach(var setCode in backupProps.SetCodes)
             {
                 var setTracking = allSets.Where(s => s.Code.ToLower() == setCode.ToLower()).FirstOrDefault();
@@ -217,16 +236,15 @@ namespace Carpentry.Logic.Implementations
             //
             return result;
         }
-
         public async Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto payload)
         {
-
-
-            string deckBackupLocation = $"{payload.BackupDirectory}{_config.DeckBackupFilename}";
-            await LoadDeckBackups(deckBackupLocation);
+            //new approach requires inventory cards to be loaded before deck cards
 
             string cardBackupLocation = $"{payload.BackupDirectory}{_config.CardBackupFilename}";
             await LoadCardBackups(cardBackupLocation);
+
+            string deckBackupLocation = $"{payload.BackupDirectory}{_config.DeckBackupFilename}";
+            await LoadDeckBackups(deckBackupLocation);
 
             //Note: Required card definitions should exist at this point
 
@@ -260,6 +278,7 @@ namespace Carpentry.Logic.Implementations
 
         private async Task LoadDeckBackups(string directory)
         {
+            //throw new NotImplementedException("Updates/review required");
             //int existingDeckCount = _cardContext.Decks.Select(x => x.Id).Count();
             //int existingDeckCount = (await _deckDataRepo.GetAllDecks()).Count();
             //if (existingDeckCount > 0)
@@ -270,25 +289,132 @@ namespace Carpentry.Logic.Implementations
 
             //_logger.LogWarning("LoadDeckBackups - Loading parsed decks");
 
-            //string deckBackupLocation = ""; // $"{_config.BackupDirectory}{_config.DeckBackupFilename}";
+            var formats = await _cardDataRepo.GetAllFormatsByName();
 
             string deckBackupsDataString = await System.IO.File.ReadAllTextAsync(directory);
             List<BackupDeck> parsedBackupDecks = JArray.Parse(deckBackupsDataString).ToObject<List<BackupDeck>>();
 
-            List<DeckPropertiesDto> newDecks = parsedBackupDecks.Select(x => new DeckPropertiesDto()
-            {
-                BasicB = x.BasicB,
-                BasicG = x.BasicG,
-                BasicR = x.BasicR,
-                BasicU = x.BasicU,
-                BasicW = x.BasicW,
-                Name = x.Name,
-                Notes = x.Notes,
-                Format = x.Format,
-                Id = x.ExportId
-            }).ToList();
+            /*
+                Ways to get unused inventory cards:
+                    Query once for each deck card (kinda eww)
+                    Get possible matches by...name or something?
+                        I COULD get all distinct names, then get all (unused) inventory cards by that name
+                        ATM all inventory cards 'should' be unused inventory cards
 
-            await _deckService.AddImportedDeckBatch(newDecks);
+             
+             
+             */
+
+            var allCardNames = parsedBackupDecks.SelectMany(d => d.Cards.Select(c => c.Name)).Distinct();
+
+
+            var unusedCards = await _inventoryRepo.GetUnusedInventoryCards(allCardNames);
+
+            //running off the assumption that, since this is only used by import atm, I can assume no cards are in a deck
+
+            //I want to submit a list of card names, and get a collection of inventory cards for each name
+
+            var newDeckList = new List<DeckData>();
+
+            foreach (var parsedDeck in parsedBackupDecks)
+            {
+                var newDeck = new DeckData()
+                {
+                    Name = parsedDeck.Name,
+                    Notes = parsedDeck.Notes,
+                    Format = formats[parsedDeck.Format],
+                    BasicB = parsedDeck.BasicB,
+                    BasicG = parsedDeck.BasicG,
+                    BasicR = parsedDeck.BasicR,
+                    BasicU = parsedDeck.BasicU,
+                    BasicW = parsedDeck.BasicW,
+                    Cards = new List<DeckCardData>(),
+                };
+
+                foreach (var parsedDeckCard in parsedDeck.Cards)
+                {
+                    var newDeckCard = new DeckCardData
+                    {
+                        CardName = parsedDeckCard.Name,
+                        CategoryId = parsedDeckCard.Category,
+                    };
+
+                    if (parsedDeckCard.InventoryCard != null)
+                    {
+                        var localUnusedCards = unusedCards[parsedDeckCard.Name];
+
+                        var parsedInvCard = parsedDeckCard.InventoryCard;
+
+                        var matchingUnusedCard = localUnusedCards.First(ic =>
+                            ic.Card.Set.Code == parsedDeckCard.InventoryCard.SetCode
+                            && ic.IsFoil == parsedDeckCard.InventoryCard.IsFoil
+                            && ic.Card.CollectorNumber == parsedDeckCard.InventoryCard.CollectorNumber
+                            && ic.InventoryCardStatusId == parsedDeckCard.InventoryCard.InventoryCardStatusId
+                        );
+
+                        unusedCards[parsedDeckCard.Name].Remove(matchingUnusedCard);
+
+
+
+                        //get matching unused inventory card id
+                        //var inventoryCardId = 0;
+
+                        //So, I only want each inventory card to belong to at most 1 deck card
+                        //Is EF smart enough to track this all before SaveChangesAsync?...
+                        //I should try to avoid a query per deck-card
+
+
+
+
+
+                        //newDeckCard.InventoryCardId = inventoryCardId;
+                        newDeckCard.InventoryCardId = matchingUnusedCard.InventoryCardId;
+                    }
+                    
+                    newDeck.Cards.Add(newDeckCard);
+                }
+                newDeckList.Add(newDeck);
+            }
+
+            await _deckDataRepo.AddImportedDeckBatch(newDeckList);
+
+            //var newerDecks = parsedBackupDecks.Select(x => new DeckData
+            //{
+            //    Name = x.Name,
+            //    Notes = x.Notes,
+            //    //Format = x.Format,
+            //    BasicB = x.BasicB,
+            //    BasicG = x.BasicG,
+            //    BasicR = x.BasicR,
+            //    BasicU = x.BasicU,
+            //    BasicW = x.BasicW,
+            //    Cards = x.Cards.Select(dc => new DeckCardData
+            //    {
+            //        CardName = dc.Name,
+            //        CategoryId = dc.Category,
+                    
+            //    }).ToList(),
+            //}).ToList();
+
+
+
+
+
+            //List<DeckPropertiesDto> newDecks = parsedBackupDecks.Select(x => new DeckPropertiesDto()
+            //{
+            //    BasicB = x.BasicB,
+            //    BasicG = x.BasicG,
+            //    BasicR = x.BasicR,
+            //    BasicU = x.BasicU,
+            //    BasicW = x.BasicW,
+            //    Name = x.Name,
+            //    Notes = x.Notes,
+            //    Format = x.Format,
+                
+            //    //Id = x.ExportId
+            //}).ToList();
+            //throw new NotImplementedException("that shouldn't be used anymore");
+            //await _deckService.AddImportedDeckBatch(newDecks);
 
             //List<Task<int>> newDeckTasks = newDecks.Select(deck => _deckDataRepo.AddDeck(deck)).ToList();
 
@@ -297,8 +423,10 @@ namespace Carpentry.Logic.Implementations
             //_logger.LogWarning("LoadDeckBackups - Complete");
         }
 
-        public async Task LoadCardBackups(string directory) //TODO - Should this take a string payload instead?
+        private async Task LoadCardBackups(string directory) //TODO - Should this take a string payload instead?
         {
+            //throw new NotImplementedException("Updates/review required");
+
             //I don't need to check if card definitions exist anymore
             //If I own a card from a set, all definitions for that set should exist in the DB at this point
             //I can safely grab any backup card by MID
@@ -337,12 +465,12 @@ namespace Carpentry.Logic.Implementations
                 CardId = x.Card.CardId,
                 //MultiverseId = x.MultiverseId,
                 //VariantTypeId = allVariants.FirstOrDefault(v => v.Name == x.VariantName).Id,
-                DeckCards =
-                    x.Backup.DeckCards.Select(d => new DeckCardData()
-                    {
-                        DeckId = d.DeckId,
-                        CategoryId = d.Category,
-                    }).ToList(),
+                //DeckCards =
+                //    x.Backup.DeckCards.Select(d => new DeckCardData()
+                //    {
+                //        DeckId = d.DeckId,
+                //        CategoryId = d.Category,
+                //    }).ToList(),
             }).ToList();
 
             //await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);

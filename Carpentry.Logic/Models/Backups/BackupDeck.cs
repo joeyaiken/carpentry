@@ -1,12 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Carpentry.Logic.Models.Backups
 {
-    class BackupDeck
+    public class BackupDeck
     {
-        [JsonProperty("id")]
-        public int ExportId { get; set; }
-
         [JsonProperty("n")]
         public string Name { get; set; }
 
@@ -30,5 +28,8 @@ namespace Carpentry.Logic.Models.Backups
 
         [JsonProperty("G")]
         public int BasicG { get; set; }
+
+        [JsonProperty("c")]
+        public List<BackupDeckCard> Cards { get; set; }
     }
 }

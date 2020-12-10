@@ -414,6 +414,11 @@ namespace Carpentry.Logic.Implementations
             return newId;
         }
 
+        /// <summary>
+        /// This method allows the Data Import Service to use the Import Service and not the Deck Data Repo
+        /// </summary>
+        /// <param name="decks"></param>
+        /// <returns></returns>
         public async Task AddImportedDeckBatch(List<DeckPropertiesDto> decks)
         {
             var allFormats = await _coreDataRepo.GetAllMagicFormats();

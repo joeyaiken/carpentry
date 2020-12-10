@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[vwInventoryCardsByUnique] AS
+﻿CREATE OR ALTER VIEW [dbo].[vwInventoryCardsByUnique] AS
 	/*
 	Should this include things I DO NOT own?
 		Do I care that I don't have a FOIL SHOWCASE of some shit?
@@ -8,6 +8,7 @@
 			,s.Code AS SetCode
 			,c.Name
 			,c.Type
+			,c.Text
 			,c.ManaCost
 			,c.Cmc
 			,c.RarityId
@@ -19,13 +20,17 @@
 				THEN PriceFoil
 				ELSE Price
 			END AS Price
-			,Totals.CardCount
+			,Totals.CardCount AS OwnedCount
+			,Totals.DeckCount
 			,c.ImageUrl
 	FROM (
 		SELECT	ic.CardId
 				,ic.IsFoil
 				,COUNT(ic.InventoryCardId) as CardCount
+				,SUM(CASE WHEN dc.DeckCardId IS NULL THEN 0 ELSE 1 END) AS DeckCount
 		FROM	InventoryCards ic
+	LEFT JOIN	DeckCards dc
+			ON	ic.InventoryCardId = dc.InventoryCardId
 		GROUP BY ic.CardId, ic.IsFoil
 	) AS Totals
 	JOIN		Cards c
@@ -34,6 +39,3 @@
 		ON		c.RarityId = r.RarityId
 	JOIN		Sets s
 		ON		c.SetId = s.SetId
---GO
-
-

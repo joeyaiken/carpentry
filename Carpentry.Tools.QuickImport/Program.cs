@@ -38,6 +38,58 @@ namespace Carpentry.Tools.QuickImport
 
             List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
             {
+                new DeckImportTemplate()
+                {
+                    Name = "Devilish (1)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Devilish_1.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Goblins (1)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Goblins_1.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Minions (3)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Minions_3.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Minotaurs (1)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Minotaurs_1.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Rogues (2)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Rogues_2.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Spooky (4)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Spooky_4.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Tree-Hugging (4)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\TreeHugging_4.txt",
+                },
+                new DeckImportTemplate()
+                {
+                    Name = "Wizards (2)",
+                    FormatName = "jumpstart",
+                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Wizards_2.txt",
+                },
+            };
+
+            List<DeckImportTemplate> legacyDecksToImport = new List<DeckImportTemplate>()
+            {
                 //new DeckImportTemplate()
                 //{
                 //    Name = "Arm for Battle",

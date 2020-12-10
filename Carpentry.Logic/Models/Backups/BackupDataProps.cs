@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Carpentry.Logic.Models.Backups
 {
-    class BackupDataProps
+    public class BackupDataProps
     {
         //backup date
         public DateTime TimeStamp { get; set; }

@@ -5,6 +5,7 @@ using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Backups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,13 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations
 {
+    /*
+    I need to redesign the card backup process to account for Deck Cards potentially being empty (not having a designated Inventory Card)
+    Deck Cards will now need to be a child of the deck backup itself, inventory card backups won't have info about if they belong to a deck
+    */
+
+
+
     /// <summary>
     /// This class contains the logic for saving relevant DB contents to a text file, or exporting as a zip file
     /// </summary>
@@ -38,8 +46,36 @@ namespace Carpentry.Logic.Implementations
             _exportCompressionLevel = CompressionLevel.Fastest;
         }
 
-        #region public methods
+        //public async Task BackupCollection_New(string directory)
+        //{
+        //    _logger.LogInformation("DataBackupService - BackupCollectionToDirectory...");
 
+        //    if (string.IsNullOrEmpty(directory))
+        //    {
+        //        throw new ArgumentNullException("Directory cannot be blank");
+        //    }
+
+        //    string deckBackupFilepath = $"{directory}{_config.DeckBackupFilename}";
+        //    string cardBackupFilepath = $"{directory}{_config.CardBackupFilename}";
+        //    string propsBackupFilepath = $"{directory}{_config.PropsBackupFilename}";
+
+        //    var deckBackupObj = await GetDeckBackups();
+        //    var cardBackupObj = await GetCardBackups();
+        //    var propsBackupObj = await GetBackupProps();
+
+        //    await File.WriteAllTextAsync(deckBackupFilepath, deckBackupObj.ToString());
+        //    await File.WriteAllTextAsync(cardBackupFilepath, cardBackupObj.ToString());
+        //    await File.WriteAllTextAsync(propsBackupFilepath, propsBackupObj.ToString());
+
+        //    _logger.LogInformation("DataBackupService - BackupCollectionToDirectory...completed successfully");
+        //}
+
+
+
+
+        #region legacy public methods
+
+        //Method called by Quick Backup Tool
         public async Task BackupCollectionToDirectory(string directory)
         {
             _logger.LogInformation("DataBackupService - BackupCollectionToDirectory...");
@@ -164,11 +200,10 @@ namespace Carpentry.Logic.Implementations
 
         private async Task<JArray> GetDeckBackups()
         {
-
-            //Need to "Get All Deck Props"
+            //Need to get all deck props, and all deck cards
             var deckExports = await _cardContext.Decks.Select(x => new BackupDeck
             {
-                ExportId = x.DeckId,
+                //ExportId = x.DeckId,
                 Name = x.Name,
                 Format = x.Format.Name,
                 Notes = x.Notes,
@@ -176,8 +211,22 @@ namespace Carpentry.Logic.Implementations
                 BasicU = x.BasicU,
                 BasicB = x.BasicB,
                 BasicR = x.BasicR,
-                BasicG = x.BasicG
-            }).OrderBy(x => x.ExportId).ToListAsync();
+                BasicG = x.BasicG,
+                Cards = x.Cards.Select(dc => new BackupDeckCard
+                {
+                    Name = dc.CardName,
+                    Category = dc.CategoryId,
+                    InventoryCard = dc.InventoryCardId == null ? null : new BackupInventoryCard()
+                    {
+                        SetCode = dc.InventoryCard.Card.Set.Code,
+                        CollectorNumber = dc.InventoryCard.Card.CollectorNumber,
+                        InventoryCardStatusId = dc.InventoryCard.InventoryCardStatusId,
+                        IsFoil = dc.InventoryCard.IsFoil,
+                    },
+                }).ToList(),
+
+
+            }).OrderBy(x => x.Name).ToListAsync();
 
             var result = JArray.FromObject(deckExports);
 
@@ -186,23 +235,25 @@ namespace Carpentry.Logic.Implementations
 
         private async Task<JArray> GetCardBackups()
         {
-            //Need to query all inventory cards (with  included deck card info)
+            //Need to query all inventory cards ////(with  included deck card info)
+            //  This will no longer include deck card info
+
             var cardExports = await _cardContext.InventoryCards
                 .Select(x => new BackupInventoryCard
                 {
                     SetCode = x.Card.Set.Code,
                     CollectorNumber = x.Card.CollectorNumber,
                     
-
+                    
                     //MultiverseId = x.MultiverseId,
                     InventoryCardStatusId = x.InventoryCardStatusId,
                     IsFoil = x.IsFoil,
                     //VariantName = x.VariantType.Name,
-                    DeckCards = x.DeckCards.Select(c => new BackupDeckCard
-                    {
-                        DeckId = c.DeckId,
-                        Category = c.CategoryId,
-                    }).ToList(),
+                    //DeckCards = x.DeckCards.Select(c => new BackupDeckCard
+                    //{
+                    //    DeckId = c.DeckId,
+                    //    Category = c.CategoryId,
+                    //}).ToList(),
                 })
                 //.OrderBy(x => x.MultiverseId)
                 .OrderBy(x => x.SetCode)
@@ -216,14 +267,13 @@ namespace Carpentry.Logic.Implementations
 
         private async Task<JObject> GetBackupProps()
         {
-            //Need to "Get All Tracked Set Codes"
-            var setCodes = await _cardContext.InventoryCards
+            var allTrackedSetCodes = await _cardContext.InventoryCards
                 .Where(x => x.Card.Set.IsTracked)
                 .Select(x => x.Card.Set.Code).Distinct().OrderBy(x => x).ToListAsync();
 
             var backupProps = new BackupDataProps()
             {
-                SetCodes = setCodes,
+                SetCodes = allTrackedSetCodes,
                 TimeStamp = DateTime.Now,
             };
 
@@ -231,7 +281,7 @@ namespace Carpentry.Logic.Implementations
 
             return result;
         }
-        
+
         #endregion
     }
 }

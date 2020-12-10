@@ -39,18 +39,18 @@ namespace Carpentry.Data.Implementations
 
         public async Task AddImportedDeckBatch(IEnumerable<DeckData> deckList)
         {
-            using (var transaction = _cardContext.Database.BeginTransaction())
-            {
-                _cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] ON");
+            //using (var transaction = _cardContext.Database.BeginTransaction())
+            //{
+                //_cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] ON");
 
                 _cardContext.Decks.AddRange(deckList);
 
                 await _cardContext.SaveChangesAsync();
 
-                _cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] OFF");
+                //_cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] OFF");
 
-                transaction.Commit();
-            }
+            //    transaction.Commit();
+            //}
 
         }
 

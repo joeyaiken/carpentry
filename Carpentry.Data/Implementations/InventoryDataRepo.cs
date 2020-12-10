@@ -566,6 +566,24 @@ namespace Carpentry.Data.Implementations
             var result = await query.ToListAsync();
             return result.Single().TotalRecomendedTrimming;
         }
-    
+
+
+        //I want to submit a list of card names, and get a collection of inventory cards for each name
+        public async Task<Dictionary<string, List<InventoryCardData>>> GetUnusedInventoryCards(IEnumerable<string> cardNames)
+        {
+            //TODO - consider filtering out inventory cards that are already in a deck
+
+            var result = (await _cardContext.InventoryCards
+                .Where(ic => cardNames.Contains(ic.Card.Name))
+                .Include(ic => ic.Card).ThenInclude(c => c.Set)
+                .ToListAsync())
+                .GroupBy(ic => ic.Card.Name)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            return result;
+        }
+
+
+
     }
 }

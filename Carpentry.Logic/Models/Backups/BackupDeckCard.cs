@@ -6,13 +6,16 @@ using System.Text;
 namespace Carpentry.Logic.Models.Backups
 {
     //Minimalistic class representing a deck card
-    //Doesn't contain personal id, or inventory id, because it will be part of a backup inventory card
-    class BackupDeckCard
+    //(wrong) //Doesn't contain personal id, or inventory id, because it will be part of a backup inventory card
+    public class BackupDeckCard
     {
-        [JsonProperty("d")]
-        public int DeckId { get; set; }
+        [JsonProperty("n")]
+        public string Name { get; set; }
 
         [JsonProperty("c")]
         public char? Category { get; set; }
+
+        [JsonProperty("i")]
+        public BackupInventoryCard InventoryCard { get; set; }
     }
 }

@@ -319,6 +319,7 @@ namespace Carpentry.Data.Implementations
             if(matchingCard == null)
             {
                 throw new CardNotFoundException(setCode, name);
+                //_logger.LogError($"Could not find card {name} in set {setCode}");
             }
 
             //CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);
@@ -388,6 +389,13 @@ namespace Carpentry.Data.Implementations
         public IQueryable<CardData> QueryCardDefinitions()
         {
             return _cardContext.Cards.AsQueryable();
+        }
+
+
+        public async Task<Dictionary<string, MagicFormatData>> GetAllFormatsByName()
+        {
+            var formats = await _cardContext.MagicFormats.ToDictionaryAsync(f => f.Name, f => f);
+            return formats;
         }
 
         #region private

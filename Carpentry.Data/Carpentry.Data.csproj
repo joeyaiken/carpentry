@@ -35,6 +35,15 @@
     <None Update="DataScripts\spGetInventoryTotals.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="DataScripts\spGetTotalTrimCount.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\spGetTrimmingTips.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwAllInventoryCards.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="DataScripts\vwInventoryCardsByName.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

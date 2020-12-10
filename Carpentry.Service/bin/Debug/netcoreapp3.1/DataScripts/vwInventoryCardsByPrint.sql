@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[vwInventoryCardsByPrint] AS
+﻿CREATE OR ALTER VIEW [dbo].[vwInventoryCardsByPrint] AS
 
 	SELECT	c.CardId
 			,s.Code AS SetCode
@@ -31,7 +31,3 @@
 		GROUP BY	ic.CardId
 	) AS Counts
 		ON	c.CardId = Counts.CardId
-
---GO
-
-
