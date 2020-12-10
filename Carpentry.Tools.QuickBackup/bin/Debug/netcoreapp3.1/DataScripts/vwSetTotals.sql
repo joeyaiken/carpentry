@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[vwSetTotals]
+﻿CREATE OR ALTER VIEW [dbo].[vwSetTotals]
 AS
 	SELECT	Sets.SetId AS SetId
 			,Sets.Code
@@ -49,6 +49,3 @@ AS
 
 	) AS InventoryCounts
 		ON	InventoryCounts.SetId = Sets.SetId
---GO
-
-
