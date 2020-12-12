@@ -22,6 +22,10 @@
     <Compile Remove="OldUnitTests\InventoryControllerServiceTests.cs" />
     <Compile Remove="OldUnitTests\InventorySearchTests.cs" />
     <Compile Remove="OldUnitTests\TrimmingTipsTests.cs" />
+    <Compile Remove="UnitTests\CarpentryCardSerachServiceTests.cs" />
+    <Compile Remove="UnitTests\CarpentryCoreServiceTests.cs" />
+    <Compile Remove="UnitTests\CarpentryDeckServiceTests.cs" />
+    <Compile Remove="UnitTests\CarpentryInventoryServiceTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="OldUnitTests\" />
+    <Folder Include="UnitTests\" />
   </ItemGroup>
 
   <ItemGroup>

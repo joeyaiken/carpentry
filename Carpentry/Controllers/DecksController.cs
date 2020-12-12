@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
-using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace Carpentry.Controllers
 {
@@ -16,11 +15,15 @@ namespace Carpentry.Controllers
             return $"An error occured when processing the {functionName} method of the Decks controller: {ex.Message}";
         }
 
-        private readonly ICarpentryDeckService _decks;
+        private readonly IDeckService _deckService;
+        private readonly IDataImportService _cardImportService;
+        private readonly IDataExportService _exportService;
 
-        public DecksController(ICarpentryDeckService decks)
+        public DecksController(IDeckService deckService, IDataImportService cardImportService, IDataExportService exportService)
         {
-            _decks = decks;
+            _deckService = deckService;
+            _cardImportService = cardImportService;
+            _exportService = exportService;
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                int newDeckId = await _decks.AddDeck(deckProps);
+                int newDeckId = await _deckService.AddDeck(deckProps);
                 return Ok(newDeckId);
             }
             catch (Exception ex)
@@ -58,7 +61,7 @@ namespace Carpentry.Controllers
             }
             try
             {
-                await _decks.UpdateDeck(deckProps);
+                await _deckService.UpdateDeck(deckProps);
                 return Ok();
             }
             catch (Exception ex)
@@ -72,7 +75,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _decks.DeleteDeck(deckId);
+                await _deckService.DeleteDeck(deckId);
                 return Ok();
             }
             catch (Exception ex)
@@ -100,17 +103,11 @@ namespace Carpentry.Controllers
         #region Deck Cards CRUD
 
         [HttpPost("[action]")]
-        //public async Task<ActionResult> AddDeckCard([FromBody] object rawDto)
         public async Task<ActionResult> AddDeckCard([FromBody] DeckCardDto dto)
         {
-            //int breakpoint = 1;
-            //return Ok();
             try
             {
-
-
-                //DeckCardDto dto = (DeckCardDto)rawDto;
-                await _decks.AddDeckCard(dto);
+                await _deckService.AddDeckCard(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -124,7 +121,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _decks.UpdateDeckCard(card);
+                await _deckService.UpdateDeckCard(card);
                 return Ok();
             }
             catch (Exception ex)
@@ -138,7 +135,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _decks.DeleteDeckCard(id);
+                await _deckService.DeleteDeckCard(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -156,7 +153,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                IEnumerable<DeckOverviewDto> results = await _decks.GetDeckOverviews();
+                IEnumerable<DeckOverviewDto> results = await _deckService.GetDeckOverviews();
                 return Ok(results);
             }
             catch (Exception ex)
@@ -170,7 +167,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                DeckDetailDto results = await _decks.GetDeckDetail(deckId);
+                DeckDetailDto results = await _deckService.GetDeckDetail(deckId);
                 return Ok(results);
             }
             catch (Exception ex)
@@ -188,7 +185,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                ValidatedDeckImportDto results = await _decks.ValidateDeckImport(dto);
+                ValidatedDeckImportDto results = await _cardImportService.ValidateDeckImport(dto);
                 return Ok(results);
             }
             catch (Exception ex)
@@ -202,7 +199,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _decks.AddValidatedDeckImport(dto);
+                await _cardImportService.AddValidatedDeckImport(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -220,7 +217,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                string results = await _decks.ExportDeckList(deckId);
+                string results = await _exportService.GetDeckListExport(deckId);
                 return Ok(results);
             }
             catch (Exception ex)

@@ -5,9 +5,7 @@ using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Search;
-using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace Carpentry.Controllers
 {
@@ -20,11 +18,13 @@ namespace Carpentry.Controllers
             return $"An error occured when processing the {functionName} method of the Card Search controller: {ex.Message}";
         }
 
-        private readonly ICarpentryCardSearchService _cardSearch;
+        private readonly ISearchService _searchService;
+        private readonly IScryfallService _scryService;
 
-        public CardSearchController(ICarpentryCardSearchService cardSearch)
+        public CardSearchController(ISearchService searchService, IScryfallService scryService)
         {
-            _cardSearch = cardSearch;
+            _searchService = searchService;
+            _scryService = scryService;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var cards = await _cardSearch.SearchInventory(filters);
+                var cards = await _searchService.SearchCardDefinitions(filters);
                 return Ok(cards);
             }
             catch (Exception ex)
@@ -70,8 +70,8 @@ namespace Carpentry.Controllers
             //TODO - swap return object for CardSearchResultDto
             try
             {
-                IEnumerable<MagicCardDto> cards = await _cardSearch.SearchWeb(param);
-                return Ok(cards);
+                var result = await _scryService.SearchScryfallByName(param.Name, param.Exclusive);
+                return Ok(result);
             }
             catch (Exception ex)
             {

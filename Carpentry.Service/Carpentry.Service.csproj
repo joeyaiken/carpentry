@@ -13,20 +13,6 @@
     <Compile Remove="Interfaces\ICoreControllerService.cs" />
     <Compile Remove="Interfaces\IDeckControllerService.cs" />
     <Compile Remove="Interfaces\IInventoryControllerService.cs" />
-    <Compile Remove="Models\AppFiltersDto.cs" />
-    <Compile Remove="Models\CardSearchQueryParameter.cs" />
-    <Compile Remove="Models\DeckCardDto.cs" />
-    <Compile Remove="Models\DeckDetailDto.cs" />
-    <Compile Remove="Models\DeckPropertiesDto.cs" />
-    <Compile Remove="Models\DeckStatsDto.cs" />
-    <Compile Remove="Models\FilterOptionDto.cs" />
-    <Compile Remove="Models\InventoryCardDto.cs" />
-    <Compile Remove="Models\InventoryDeckCardDto.cs" />
-    <Compile Remove="Models\InventoryDetailDto.cs" />
-    <Compile Remove="Models\InventoryOverviewDto.cs" />
-    <Compile Remove="Models\InventoryQueryParameter.cs" />
-    <Compile Remove="Models\MagicCardDto.cs" />
-    <Compile Remove="Models\NameSearchQueryParameter.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,10 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carpentry.Logic\Carpentry.Logic.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

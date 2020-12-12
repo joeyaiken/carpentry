@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Data.QueryParameters;
+using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
-using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.Controllers
@@ -17,15 +17,26 @@ namespace Carpentry.Controllers
             return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
         }
 
-        private readonly ICarpentryInventoryService _inventory;
+        private readonly IInventoryService _inventoryService;
+        private readonly IDataExportService _dataExportService;
+        private readonly IDataImportService _dataImportService;
+        private readonly ISearchService _searchService;
 
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
         /// <param name="repo"></param>
-        public InventoryController(ICarpentryInventoryService inventory)
+        public InventoryController(
+            IInventoryService inventoryService,
+            IDataExportService dataExportService,
+            IDataImportService dataImportService,
+            ISearchService searchService
+            )
         {
-            _inventory = inventory;
+            _inventoryService = inventoryService;
+            _dataExportService = dataExportService;
+            _dataImportService = dataImportService;
+            _searchService = searchService;
         }
 
         /// <summary>
@@ -45,7 +56,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var updatedId = await _inventory.AddInventoryCard(dto);
+                var updatedId = await _inventoryService.AddInventoryCard(dto);
                 return Ok(updatedId);
             }
             catch (Exception ex)
@@ -59,7 +70,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _inventory.AddInventoryCardBatch(dto);
+                await _inventoryService.AddInventoryCardBatch(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -73,7 +84,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _inventory.UpdateInventoryCard(dto);
+                await _inventoryService.UpdateInventoryCard(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -87,7 +98,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _inventory.UpdateInventoryCardBatch(batch);
+                await _inventoryService.UpdateInventoryCardBatch(batch);
                 return Ok();
             }
             catch (Exception ex)
@@ -101,7 +112,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _inventory.DeleteInventoryCard(id);
+                await _inventoryService.DeleteInventoryCard(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -115,7 +126,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _inventory.DeleteInventoryCardBatch(batchIDs);
+                await _inventoryService.DeleteInventoryCardBatch(batchIDs);
                 return Ok();
             }
             catch (Exception ex)
@@ -133,7 +144,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                IEnumerable<InventoryOverviewDto> result = await _inventory.GetInventoryOverviews(param);
+                IEnumerable<InventoryOverviewDto> result = await _searchService.SearchInventoryCards(param);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -153,76 +164,12 @@ namespace Carpentry.Controllers
         {
             try
             {
-                InventoryDetailDto result = await _inventory.GetInventoryDetail(cardId);
+                InventoryDetailDto result = await _inventoryService.GetInventoryDetail(cardId);
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, FormatExceptionMessage("GetByName", ex));
-            }
-        }
-
-        #endregion
-
-        #region Collection Builder
-        
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> GetCollectionBuilderSuggestions()
-        {
-            try
-            {
-                List<InventoryOverviewDto> result = await _inventory.GetCollectionBuilderSuggestions();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("GetCollectionBuilderSuggestions", ex));
-            }
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> HideCollectionBuilderSuggestion(InventoryOverviewDto dto)
-        {
-            try
-            {
-                await _inventory.HideCollectionBuilderSuggestion(dto);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("HideCollectionBuilderSuggestion", ex));
-            }
-        }
-
-        #endregion
-
-        #region Trimming Tips
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> GetTrimmingTips()
-        {
-            try
-            {
-                List<InventoryOverviewDto> result = await _inventory.GetTrimmingTips();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("GetTrimmingTips", ex));
-            }
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> HideTrimmingTip(InventoryOverviewDto dto)
-        {
-            try
-            {
-                await _inventory.HideTrimmingTip(dto);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("HideTrimmingTip", ex));
             }
         }
 
@@ -235,7 +182,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var result = await _inventory.ValidateCarpentryImport(cardImportDto);
+                var result = await _dataImportService.ValidateCarpentryImport(cardImportDto);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -249,7 +196,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _inventory.AddValidatedCarpentryImport(dto);
+                await _dataImportService.AddValidatedCarpentryImport(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -268,8 +215,7 @@ namespace Carpentry.Controllers
             try
             {
                 const string contentType = "application/zip";
-                var resultStream = await _inventory.ExportInventoryBackup();
-                //var resultStream = await _dataBackupService.GenerateZipBackup();
+                var resultStream = await _dataExportService.GenerateZipBackup();
                 return File(resultStream, contentType);
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
-﻿using Carpentry.Logic.Models.Scryfall;
+﻿using Carpentry.Logic.Models;
+using Carpentry.Logic.Models.Scryfall;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Carpentry.Logic.Interfaces
 
         Task<ScryfallMagicCard> GetCardByMid(int multiverseId);
 
-        Task<List<ScryfallMagicCard>> SearchScryfallByName(string name, bool exclusive);
+        Task<List<MagicCardDto>> SearchScryfallByName(string name, bool exclusive);
 
         Task<List<ScryfallSetOverviewDto>> GetAllSets();
 

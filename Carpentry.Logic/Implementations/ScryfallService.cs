@@ -1,4 +1,5 @@
 ﻿using Carpentry.Logic.Interfaces;
+using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Scryfall;
 using Newtonsoft.Json.Linq;
 using System;
@@ -227,7 +228,7 @@ namespace Carpentry.Logic.Implementations
             }
         }
 
-        public async Task<List<ScryfallMagicCard>> SearchScryfallByName(string name, bool exclusive)
+        public async Task<List<MagicCardDto>> SearchScryfallByName(string name, bool exclusive)
         {
             //What does SET SEARCH return?
             string endpoint;
@@ -250,7 +251,9 @@ namespace Carpentry.Logic.Implementations
 
             List<ScryfallMagicCard> mappedCards = MapScryfallDataToCards(cardResultData);
 
-            return mappedCards;
+            var result = mappedCards.Select(c => c.ToMagicCard()).ToList();
+
+            return result;
         }
 
 

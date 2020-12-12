@@ -89,7 +89,7 @@ namespace Carpentry.Logic.Implementations
 
         Why am I even re-querying anything? I should be able to grab anything I need 
         */
-        private async Task<DeckStatsDto> GetDeckStats(DeckDetailDto detail)
+        private  DeckStatsDto GetDeckStats(DeckDetailDto detail)
         {
             DeckStatsDto result = new DeckStatsDto();
 

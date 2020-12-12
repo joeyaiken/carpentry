@@ -3,17 +3,11 @@ using Carpentry.Data.Implementations;
 using Carpentry.Data.Interfaces;
 using Carpentry.Logic.Implementations;
 using Carpentry.Logic.Interfaces;
-using Carpentry.Service.Implementations;
-using Carpentry.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-//using Microsoft.AspNetCore.HttpsPolicy;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 
@@ -67,19 +61,7 @@ namespace Carpentry
 
             services.AddScoped<IScryfallService, ScryfallService>();
             services.AddHttpClient<IScryfallService, ScryfallService>();
-
-            services.AddScoped<ICollectionBuilderService, CollectionBuilderService>();
-            services.AddScoped<ITrimmingTipsService, TrimmingTipsService>();
-
-
-
-
-            //Service-layer (these are pretty much useless....)
-            services.AddScoped<ICarpentryCardSearchService, CarpentryCardSearchService>();
-            services.AddScoped<ICarpentryCoreService, CarpentryCoreService>();
-            services.AddScoped<ICarpentryDeckService, CarpentryDeckService>();
-            services.AddScoped<ICarpentryInventoryService, CarpentryInventoryService>();
-
+            
             services.AddControllersWithViews();
 
             services.AddSpaStaticFiles(configuration =>
