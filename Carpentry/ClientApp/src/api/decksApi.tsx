@@ -22,6 +22,18 @@ export const decksApi = {
         return;
     },
 
+    async cloneDeck(deckId: number): Promise<void> {
+        const url = `api/Decks/CloneDeck?deckId=${deckId}`;
+        await Get(url);
+        return;
+    },
+    
+    async dissassembleDeck(deckId: number): Promise<void> {
+        const url = `api/Decks/DissassembleDeck?deckId=${deckId}`;
+        await Get(url);
+        return;
+    },
+
     async addDeckCard(deckCardProps: DeckCardDto): Promise<void> {
         const endpoint = `api/Decks/AddDeckCard`;
         const result = await Post(endpoint, deckCardProps);

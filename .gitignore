@@ -440,3 +440,9 @@ Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwInventoryCardsByPrint.sql
 Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwInventoryCardsByUnique.sql
 Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwInventoryTotalsByStatus.sql
 Carpentry.UI/bin/Debug/netcoreapp3.1/DataScripts/vwSetTotals.sql
+Carpentry.Logic.Tests/bin/Debug/netcoreapp3.1/DataScripts/spGetTotalTrimCount.sql
+Carpentry.Logic.Tests/bin/Debug/netcoreapp3.1/DataScripts/spGetTrimmingTips.sql
+Carpentry.Logic.Tests/bin/Debug/netcoreapp3.1/DataScripts/vwAllInventoryCards.sql
+Carpentry.Service.Tests/bin/Debug/netcoreapp3.1/DataScripts/spGetTotalTrimCount.sql
+Carpentry.Service.Tests/bin/Debug/netcoreapp3.1/DataScripts/spGetTrimmingTips.sql
+Carpentry.Service.Tests/bin/Debug/netcoreapp3.1/DataScripts/vwAllInventoryCards.sql

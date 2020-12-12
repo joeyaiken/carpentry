@@ -33,7 +33,7 @@ namespace Carpentry.Controllers
             return Ok("Online");
         }
 
-        #region Deck Props
+        #region Deck CRUD
 
         [HttpPost("[action]")]
         public async Task<ActionResult<int>> AddDeck([FromBody] DeckPropertiesDto deckProps)
@@ -81,9 +81,23 @@ namespace Carpentry.Controllers
             }
         }
 
-        #endregion Deck Props
+        [HttpGet("[action]")]
+        public async Task<ActionResult> CloneDeck(int deckId)
+        {
+            await Task.CompletedTask;
+            throw new NotImplementedException();
+        }
 
-        #region Deck Cards
+        [HttpGet("[action]")]
+        public async Task<ActionResult> DissassembleDeck(int deckId)
+        {
+            await Task.CompletedTask;
+            throw new NotImplementedException();
+        }
+
+        #endregion Deck
+
+        #region Deck Cards CRUD
 
         [HttpPost("[action]")]
         //public async Task<ActionResult> AddDeckCard([FromBody] object rawDto)
@@ -216,6 +230,5 @@ namespace Carpentry.Controllers
         }
 
         #endregion Export
-
     }
 }

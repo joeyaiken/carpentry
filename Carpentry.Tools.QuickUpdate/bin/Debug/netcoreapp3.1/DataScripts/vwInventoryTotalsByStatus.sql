@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[vwInventoryTotalsByStatus] AS
+﻿CREATE OR ALTER VIEW [dbo].[vwInventoryTotalsByStatus] AS
 	SELECT	cs.CardStatusId AS StatusId
 			,cs.Name AS StatusName
 			,ISNULL(SUM(Price), 0) AS TotalPrice
@@ -21,6 +21,3 @@
 	RIGHT JOIN	CardStatuses cs
 		ON		PricedItems.InventoryCardStatusId = cs.CardStatusId
 	GROUP BY cs.Name, cs.CardStatusId
---GO
-
-

@@ -585,7 +585,7 @@ namespace Carpentry.Logic.Implementations
         {
             //List<DeckPropertiesDto> deckList = _deckRepo.GetAllDecks().Result.Select(x => MapDeckDataToProperties(x)).ToList();
 
-            List<DeckOverviewDto> deckList = _deckRepo.GetAllDecks().Result.Select(dbDeck => new DeckOverviewDto()
+            List<DeckOverviewDto> deckList = (await _deckRepo.GetAllDecks()).Select(dbDeck => new DeckOverviewDto()
             {
                 Id = dbDeck.DeckId,
                 //BasicB = dbDeck.BasicB,
@@ -598,7 +598,9 @@ namespace Carpentry.Logic.Implementations
 
                 //don't want to populate notes here right?
 
-            }).ToList();
+            })
+            .OrderBy(d => d.Name)
+            .ToList();
 
             for (int i = 0; i < deckList.Count(); i++)
             {

@@ -1,7 +1,4 @@
-﻿/**
-** Gets total value of inventory, and total card count
-**/
-CREATE PROCEDURE [dbo].[spGetInventoryTotals] 
+﻿CREATE OR ALTER PROCEDURE [dbo].[spGetInventoryTotals] 
 AS
 	SELECT	SUM(Price) AS TotalPrice
 			,COUNT(InventoryCardId) AS TotalCount
@@ -22,6 +19,3 @@ AS
 		--	AND	ic.MultiverseId = cv.CardId
 
 	) As PricedItems
---GO
-
-

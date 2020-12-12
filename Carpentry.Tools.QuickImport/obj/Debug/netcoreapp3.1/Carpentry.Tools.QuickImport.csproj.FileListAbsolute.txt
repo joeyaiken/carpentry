@@ -4,6 +4,9 @@ C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.T
 C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csproj.CoreCompileInputs.cache
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.exe
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\spGetInventoryTotals.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\spGetTotalTrimCount.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\spGetTrimmingTips.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwAllInventoryCards.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByName.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByPrint.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByUnique.sql

@@ -67,22 +67,22 @@ namespace Carpentry.Legacy.Controllers
         //decks/Get
         //- get a deck (with cards)
         [HttpGet("[action]")]
-        public async Task<ActionResult<DeckDetailDto>> Get(int deckId)
+        public async Task<ActionResult<LegacyDeckDetailDto>> Get(int deckId)
         {
-            var result = new DeckDetailDto()
+            var result = new LegacyDeckDetailDto()
             {
-                CardOverviews = new List<DeckCardOverview>()
+                CardOverviews = new List<LegacyInventoryOverviewDto>()
                 {
                     
                 },
-                Cards = new List<DeckCardDetail>()
+                CardDetails = new List<LegacyInventoryCardDto>()
                 {
 
                 },
-                Props = new DeckPropertiesDto(),
-                Stats = new DeckStatsDto()
+                Props = new LegacyDeckPropertiesDto(),
+                Stats = new LegacyDeckStatsDto()
                 {
-                    ColorIdentity = new List<string>(),
+                    ColorIdentity = new List<char>(),
                     CostCounts = new Dictionary<string, int>(),
                     TotalCost = 0,
                     TotalCount = 0,
