@@ -15,6 +15,7 @@ interface ComponentProps{
 
     onMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onMenuClose: () => void;
+    onCardDetailClick: (cardName: string) => void;
     // onMenuSelect: (option: string) => void;
 }
 
@@ -96,10 +97,10 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
                     </CardContent>
                     <CardActions>
                         <Button 
-                            onClick={() => { }} 
+                            onClick={() => props.selectedCard && props.onCardDetailClick(props.selectedCard.name)} 
                             color="primary" 
                             variant="contained"
-                            >Find More</Button>
+                            >Card Details</Button>
                     </CardActions>
                 </Card>
             </Box>

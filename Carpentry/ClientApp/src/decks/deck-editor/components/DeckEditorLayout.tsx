@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
 import { appStyles, combineStyles } from "../../../styles/appStyles";
 import CardMenu from "./CardMenu";
@@ -44,6 +44,11 @@ declare interface ComponentProps{
     onCardMenuSelected: (name: DeckEditorCardMenuOption) => void;
     onCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onCardMenuClosed: () => void;
+    onCardDetailClick: (cardName: string) => void;
+
+    //cardDetail
+    isCardDetailDialogOpen: boolean;
+    cardDetailName: string | null;
 
     //stats
     deckStats: DeckStats;
@@ -68,6 +73,29 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
                     onDisassembleClick={props.onPropsModalDisassembleClick}
                     onDeleteClick={props.onPropsModalDeleteClick} />
             }
+
+            {/* Card detail dialog
+                A dialog that lists all cards in the deck matching a provided name, as well as all inventory cards under the same name
+
+            */}
+            
+            <Dialog open={props.isCardDetailDialogOpen} onClose={() => {}} >
+                <DialogTitle>Card Detail</DialogTitle>
+                <DialogContent>
+                    <Typography>{props.cardDetailName}</Typography>
+                    {/* <DeckPropertiesLayout formatFilters={props.formatFilterOptions} deck={props.deckProperties}
+                        onChange={event => props.onFieldChange(event.target.name, event.target.value)} /> */}
+                </DialogContent>
+                {/* <DialogTitle>Advanced</DialogTitle> */}
+                {/* <DialogActions>
+                    <Button size="medium" variant="contained" color="secondary" onClick={props.onDisassembleClick}>Disassemble</Button>
+                    <Button size="medium" variant="contained" color="secondary" onClick={props.onDeleteClick}>Delete</Button>
+                </DialogActions>
+                <DialogActions>
+                    <Button size="medium" onClick={props.onCloseClick}>Cancel</Button>
+                    <Button size="medium" variant="contained" color="primary" onClick={props.onSaveClick}>Save</Button>
+                </DialogActions> */}
+            </Dialog>
             
             { props.deckProperties && 
                 <DeckPropsBar 
@@ -90,7 +118,8 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
                         selectedCard={props.selectedCard} 
                         inventoryCards={props.selectedInventoryCards} 
                         onMenuClick={props.onCardMenuClick}
-                        onMenuClose={props.onCardMenuClosed} />
+                        onMenuClose={props.onCardMenuClosed}
+                        onCardDetailClick={props.onCardDetailClick} />
                 </div>
             </Box>
 
