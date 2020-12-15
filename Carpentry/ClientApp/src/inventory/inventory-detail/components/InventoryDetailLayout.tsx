@@ -3,36 +3,46 @@ import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, Tabl
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 interface InventoryDetailProps {
-    selectedDetailItem: InventoryDetailDto;
+    // selectedDetailItem: InventoryDetailDto;
+
+    // selectedCardId: number;
+    allCardIds: number[];
+    cardsById: { [cardId: number]: MagicCard }
+    inventoryCardsById: { [inventoryCardId: number]: InventoryCard }
+    cardGroups: { [cardId: number]: number[] }
+
+
 }
 
-interface InventoryDetailCardProps {
-    card: MagicCard;
-    inventoryCards: InventoryCard[];
-}
+// interface InventoryDetailCardProps {
+//     card: MagicCard;
+//     inventoryCards: InventoryCard[];
+// }
 
 
 export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.Element {
     const { flexCol, flexSection, outlineSection, flexRow, staticSection, scrollSection } = appStyles();
 
     //TODO - Grouping REALLY should be done in a container...
-    const displayCards: InventoryDetailCardProps[] = props.selectedDetailItem.cards.map(card => {
-        return {
-            card: card,
-            inventoryCards: props.selectedDetailItem.inventoryCards
-                .filter(inventoryCard => inventoryCard.set === card.set && inventoryCard.collectorNumber === card.collectionNumber),
-        } as InventoryDetailCardProps;
-    });
+    // const displayCards: InventoryDetailCardProps[] = props.selectedDetailItem.cards.map(card => {
+    //     return {
+    //         card: card,
+    //         inventoryCards: props.selectedDetailItem.inventoryCards
+    //             .filter(inventoryCard => inventoryCard.set === card.set && inventoryCard.collectorNumber === card.collectionNumber),
+    //     } as InventoryDetailCardProps;
+    // });
 
     return(<React.Fragment>
         <Box className={combineStyles(flexCol, flexSection)}>
             {
-                displayCards.map(displayCard => {
-                    let img = displayCard.card.imageUrl;
+                props.allCardIds.map(cardId => {
+                    let card = props.cardsById[cardId];
+                    let inventoryCardIds = props.cardGroups[cardId];
+                    let img = card.imageUrl;
+                    let cardTitle = `${card.set} (${card.collectionNumber}) - $${card.price} | $${card.priceFoil}`;
 
-                    let cardTitle = `${displayCard.card.set} (${displayCard.card.collectionNumber}) - $${displayCard.card.price} | $${displayCard.card.priceFoil}`;
                     return (
-                        <Card key={displayCard.card.cardId} className={combineStyles(outlineSection, flexCol)}>
+                        <Card key={card.cardId} className={combineStyles(outlineSection, flexCol)}>
                             <CardHeader titleTypographyProps={{variant:"body1"}} style={{textTransform:"uppercase"}} title={cardTitle} />
                             
                             <Box className={combineStyles(flexRow, flexSection)}> 
@@ -62,7 +72,8 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
                                         </TableHead>
                                         <TableBody>
                                             {
-                                                displayCard.inventoryCards.map(item => {
+                                                inventoryCardIds.map(inventoryCardId => {
+                                                    const item = props.inventoryCardsById[inventoryCardId];
                                                     return(
                                                     <TableRow key={item.id}>
                                                         <TableCell>

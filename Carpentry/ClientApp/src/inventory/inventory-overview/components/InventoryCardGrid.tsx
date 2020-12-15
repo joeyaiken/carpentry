@@ -8,7 +8,9 @@ import { appStyles } from '../../../styles/appStyles';
 // import { Link } from 'react-router-dom';
 
 interface ComponentProps{
-    cardOverviews: InventoryOverviewDto[];
+    // cardOverviews: InventoryOverviewDto[];
+    cardOverviewsById: { [key: number]: InventoryOverviewDto }
+    cardOverviewIds: number[];
     onCardSelected: (cardId: number) => void;
 }
 
@@ -34,8 +36,10 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
         <React.Fragment>
             <CardGridContainer layout="grid">
                 {
-                    props.cardOverviews.map(cardItem => 
-                        
+                    props.cardOverviewIds.map(overviewId => {
+
+                        const cardItem = props.cardOverviewsById[overviewId];
+                        return(
                         <Card 
                         key={cardItem.id} 
                         className={classes.outlineSection}>
@@ -88,8 +92,9 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                 </CardActions>
                             </Box>
                         </Card>
-                    )
-                }
+                    )} 
+                )}
+            
             </CardGridContainer>
         </React.Fragment>
     );

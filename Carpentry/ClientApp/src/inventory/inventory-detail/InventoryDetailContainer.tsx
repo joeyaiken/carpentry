@@ -20,9 +20,16 @@ interface OwnProps {
 }
 
 interface PropsFromState { 
-    selectedDetailItem: InventoryDetailDto;
+    // selectedDetailItem: InventoryDetailDto;
     modalIsOpen: boolean;
     selectedCardId: number;
+
+    // selectedCardId: number;
+    cardsById: { [cardId: number]: MagicCard }
+    allCardIds: number[];
+    inventoryCardsById: { [inventoryCardId: number]: InventoryCard }
+    cardGroups: { [cardId: number]: number[] }
+
 }
 
 type InventoryDetailContainerProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -47,15 +54,22 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
         // let title: string = (this.props.selectedDetailItem != null) ? 
         // `Inventory Detail - ${this.props.selectedDetailItem.cards[0].name}` : "Inventory Detail - Unknown";
         let cardName = "Unknown";
-        if(this.props.selectedDetailItem.cards.length > 0){
-            cardName = this.props.selectedDetailItem.cards[0].name;
+        if(this.props.allCardIds.length > 0){
+            cardName = this.props.cardsById[this.props.allCardIds[0]].name;
         }
         return (
             <React.Fragment>
                 <Dialog open={this.props.modalIsOpen} onClose={() => {this.handleCloseModalClick()}} >
                     <DialogTitle>{`Inventory Detail - ${cardName}`}</DialogTitle>
                     <DialogContent>
-                        <InventoryDetailLayout selectedDetailItem={this.props.selectedDetailItem} />
+                        <InventoryDetailLayout
+                        //  selectedDetailItem={this.props.selectedDetailItem}
+                        // selectedCardId={this.props.selectedCardId}
+                        cardGroups={this.props.cardGroups}
+                        cardsById={this.props.cardsById}
+                        allCardIds={this.props.allCardIds}
+                        inventoryCardsById={this.props.inventoryCardsById}
+                         />
                     </DialogContent>
                     <DialogActions>
                         <Button size="medium" onClick={() => this.handleCloseModalClick()}>Close</Button>
@@ -67,24 +81,29 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
 }
 
 //Eventually this should be replaced with something different...(like a different container)
-function selectInventoryDetail(state: AppState): InventoryDetailDto {
-    const { inventoryCardsById, inventoryCardAllIds, cardsById, allCardIds, selectedCardName } = state.inventory.data.detail;
-    const result: InventoryDetailDto = {
-        cardId: 0,
-        name: selectedCardName,
-        inventoryCards: inventoryCardAllIds.map(invId => inventoryCardsById[invId]),
-        cards: allCardIds.map(cardId => cardsById[cardId]),
-    }
-    return result;
-}
+// function selectInventoryDetail(state: AppState): InventoryDetailDto {
+//     const { inventoryCardsById, inventoryCardAllIds, cardsById, allCardIds, selectedCardName } = state.inventory.data.detail;
+//     const result: InventoryDetailDto = {
+//         cardId: 0,
+//         name: selectedCardName,
+//         inventoryCards: inventoryCardAllIds.map(invId => inventoryCardsById[invId]),
+//         cards: allCardIds.map(cardId => cardsById[cardId]),
+//     }
+//     return result;
+// }
 
 //State
 function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+    // const containterState = state.
+    const detailData = state.inventory.data.detail;
     const result: PropsFromState = {
-        selectedDetailItem: selectInventoryDetail(state),
+        // selectedDetailItem: selectInventoryDetail(state),
         // modalIsOpen: state.ui.isInventoryDetailModalOpen, //TODO - get this mapped from router state
         selectedCardId: ownProps.match.params.cardId,
-
+        allCardIds: detailData.allCardIds,
+        cardsById: detailData.cardsById,
+        cardGroups: detailData.cardGroups,
+        inventoryCardsById: detailData.inventoryCardsById,
         modalIsOpen: Boolean(ownProps.match.params.cardId != null),
     }
     return result;

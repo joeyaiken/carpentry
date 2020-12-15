@@ -17,7 +17,10 @@ interface PropsFromState {
 
     viewMethod: "grid" | "table";
 
-    searchResults: InventoryOverviewDto[];
+    // searchResults: InventoryOverviewDto[];
+
+    searchResultsById: { [key: number]: InventoryOverviewDto }
+    searchReusltIds: number[];
 
     searchFilter: InventoryFilterProps;
     filterOptions: AppFiltersDto;
@@ -136,17 +139,22 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
     renderCardOverviews() {
         return (
             <React.Fragment>
-                { (this.props.isLoading) ? <LoadingBox /> : <InventoryCardGrid cardOverviews={this.props.searchResults} onCardSelected={this.handleCardDetailSelected} /> }
+                { (this.props.isLoading) ? <LoadingBox /> : <InventoryCardGrid 
+                // cardOverviews={this.props.searchResults}
+                cardOverviewIds={this.props.searchReusltIds}
+                cardOverviewsById={this.props.searchResultsById}
+                 onCardSelected={this.handleCardDetailSelected} /> }
             </React.Fragment>
         );
     }
 }
 
-function selectInventoryOverviews(state: AppState): InventoryOverviewDto[] {
-    const { byId, allIds } = state.inventory.data.overviews;
-    const result: InventoryOverviewDto[] = allIds.map(id => byId[id]);
-    return result;
-}
+//Oh I cleaned up the deail when I should really clean up this too
+// function selectInventoryOverviews(state: AppState): InventoryOverviewDto[] {
+//     const { byId, allIds } = state.inventory.data.overviews;
+//     const result: InventoryOverviewDto[] = allIds.map(id => byId[id]);
+//     return result;
+// }
 
 function getFilterVisibilities(groupBy: string): CardFilterVisibilities {
     let visibleFilters: CardFilterVisibilities = {
@@ -195,7 +203,9 @@ function mapStateToProps(state: AppState): PropsFromState {
     // console.log('---state-----');
     // console.log(state);
     const result: PropsFromState = {
-        searchResults: selectInventoryOverviews(state),
+        // searchResults: selectInventoryOverviews(state),
+        searchResultsById: state.inventory.data.overviews.byId,
+        searchReusltIds: state.inventory.data.overviews.allIds,
         
         // isLoading: state.data.
         isLoading: state.inventory.data.overviews.isLoading,

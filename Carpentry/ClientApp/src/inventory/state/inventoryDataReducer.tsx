@@ -28,6 +28,8 @@ export interface InventoryDataReducerState {
         //magic cards belonging to inventory cards
         cardsById: { [multiverseId: number]: MagicCard };
         allCardIds: number[];
+
+        cardGroups: { [cardId: number]: number[] }
     }
 }
 
@@ -60,6 +62,7 @@ const initialState: InventoryDataReducerState = {
         inventoryCardAllIds: [],
         cardsById: {},
         allCardIds: [],
+        cardGroups: {},
     }   
 }
 
@@ -122,9 +125,22 @@ const inventoryDetailReceived = (state: InventoryDataReducerState, action: Redux
 
     let inventoryCardsById = {}
     detailResult.inventoryCards.forEach(invCard => inventoryCardsById[invCard.id] = invCard);
+    const allInventoryCardIds = detailResult.inventoryCards.map(card => card.id);
 
     let cardsById = {}
     detailResult.cards.forEach(card => cardsById[card.multiverseId] = card);
+    const allCardIds = detailResult.cards.map(card => card.multiverseId);
+
+    let cardGroups: { [cardId: number]: number[] } = {};
+    // let cardGroupIds: number[];
+    allCardIds.forEach(cardId => {
+        const thisCard = cardsById[cardId];
+        // cardGroupIds.push()
+        const inventoryCardIds = allInventoryCardIds
+            .filter(inventoryCardId => inventoryCardsById[inventoryCardId].set === thisCard.set 
+                && inventoryCardsById[inventoryCardId].collectorNumber === thisCard.collectionNumber);
+        cardGroups[cardId] = inventoryCardIds;
+    });
 
     const newState: InventoryDataReducerState = {
         ...state,
@@ -134,10 +150,12 @@ const inventoryDetailReceived = (state: InventoryDataReducerState, action: Redux
             isLoading: false,
 
             inventoryCardsById: inventoryCardsById,
-            inventoryCardAllIds: detailResult.inventoryCards.map(card => card.id),
+            inventoryCardAllIds: allInventoryCardIds,
             
             cardsById: cardsById,
-            allCardIds: detailResult.cards.map(card => card.multiverseId),
+            allCardIds: allCardIds,
+
+            cardGroups: {},
         },
     };
     return newState;
