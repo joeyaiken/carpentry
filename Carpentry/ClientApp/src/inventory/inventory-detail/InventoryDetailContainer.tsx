@@ -7,6 +7,8 @@ import AppModal from '../../common/components/AppModal';
 
 import { ensureInventoryDetailLoaded } from './state/InventoryDetailActions';
 import { AppState } from '../../configureStore';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
+import { push } from 'connected-react-router';
 // import { parseConfigFileTextToJson } from 'typescript';
 
 interface OwnProps {
@@ -37,10 +39,9 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
         this.props.dispatch(ensureInventoryDetailLoaded(this.props.selectedCardId))
     }
 
-    handleCloseModalClick(cardId: number | null){
-        // this.props.dispatch(requestInventoryDetail(cardId));
+    handleCloseModalClick(){
+        this.props.dispatch(push('/inventory'));
     }
-
 
     render() {
         // let title: string = (this.props.selectedDetailItem != null) ? 
@@ -51,18 +52,15 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
         }
         return (
             <React.Fragment>
-                <AppModal 
-                    title={ `Inventory Detail - ${cardName}`}
-                    isOpen={this.props.modalIsOpen} 
-                    onCloseClick={() => {this.handleCloseModalClick(null)}} 
-                    >
-                        {
-                            this.props.selectedDetailItem &&
-                            <InventoryDetailLayout 
-                                selectedDetailItem={this.props.selectedDetailItem}
-                            />
-                        }
-                </AppModal>
+                <Dialog open={this.props.modalIsOpen} onClose={() => {this.handleCloseModalClick()}} >
+                    <DialogTitle>{`Inventory Detail - ${cardName}`}</DialogTitle>
+                    <DialogContent>
+                        <InventoryDetailLayout selectedDetailItem={this.props.selectedDetailItem} />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button size="medium" onClick={() => this.handleCloseModalClick()}>Close</Button>
+                    </DialogActions>
+                </Dialog>
             </React.Fragment>
         );
     }
@@ -72,6 +70,7 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
     const { inventoryCardsById, inventoryCardAllIds, cardsById, allCardIds, selectedCardName } = state.inventory.data.detail;
     const result: InventoryDetailDto = {
+        cardId: 0,
         name: selectedCardName,
         inventoryCards: inventoryCardAllIds.map(invId => inventoryCardsById[invId]),
         cards: allCardIds.map(cardId => cardsById[cardId]),

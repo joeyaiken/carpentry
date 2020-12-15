@@ -29,9 +29,11 @@ export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.
             {
                 displayCards.map(displayCard => {
                     let img = displayCard.card.imageUrl;
+
+                    let cardTitle = `${displayCard.card.set} (${displayCard.card.collectionNumber}) - $${displayCard.card.price} | $${displayCard.card.priceFoil}`;
                     return (
                         <Card key={displayCard.card.cardId} className={combineStyles(outlineSection, flexCol)}>
-                            <CardHeader titleTypographyProps={{variant:"body1"}} style={{textTransform:"uppercase"}} title={ `${displayCard.card.set} (${displayCard.card.collectionNumber})` } />
+                            <CardHeader titleTypographyProps={{variant:"body1"}} style={{textTransform:"uppercase"}} title={cardTitle} />
                             
                             <Box className={combineStyles(flexRow, flexSection)}> 
                                 <Box className={staticSection}>

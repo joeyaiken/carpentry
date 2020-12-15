@@ -6,6 +6,7 @@ namespace Carpentry.Logic.Models
     public class InventoryDetailDto
     {
         //[JsonProperty("name")]
+        public int CardId { get; set; }
         public string Name { get; set; }
 
         //[JsonProperty("cards")]

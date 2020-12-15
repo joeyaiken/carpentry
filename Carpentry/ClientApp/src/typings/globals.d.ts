@@ -108,6 +108,7 @@ declare interface DeckCardOverview {
     category: string;
     img: string;
     count: number;
+    cardId: number;
     detailIds: number[];
 }
 

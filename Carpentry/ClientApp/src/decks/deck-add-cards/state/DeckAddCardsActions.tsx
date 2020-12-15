@@ -156,6 +156,9 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ca
 
     //need to figure out what API call I'm using, should re-use the existing inventory one
     inventoryApi.getInventoryDetail(card.cardId).then((results) =>{
+        //So this uses the CardId of whatever card is selected
+        //  In theory, in the deck editor, I'll always be looking at SOMETHING with a card id when I click 'card details'
+        //  That can use a Card Id instead of the name...
         dispatch(cardSearchInventoryReceived(results));
     });
 

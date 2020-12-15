@@ -1,6 +1,7 @@
-import { Box, Dialog, DialogContent, DialogTitle, Typography } from "@material-ui/core";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@material-ui/core";
 import React from "react";
 import { appStyles, combineStyles } from "../../../styles/appStyles";
+import CardDetailContainer from "../../card-detail/CardDetailContainer";
 import CardMenu from "./CardMenu";
 import DeckCardDetail from "./DeckCardDetail";
 import DeckCardGrid from "./DeckCardGrid";
@@ -44,11 +45,12 @@ declare interface ComponentProps{
     onCardMenuSelected: (name: DeckEditorCardMenuOption) => void;
     onCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onCardMenuClosed: () => void;
-    onCardDetailClick: (cardName: string) => void;
 
     //cardDetail
+    onCardDetailClick: (cardId: number) => void;
+    onCardDetailClose: () => void;
     isCardDetailDialogOpen: boolean;
-    cardDetailName: string | null;
+    selectedCardId: number;
 
     //stats
     deckStats: DeckStats;
@@ -82,19 +84,15 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
             <Dialog open={props.isCardDetailDialogOpen} onClose={() => {}} >
                 <DialogTitle>Card Detail</DialogTitle>
                 <DialogContent>
-                    <Typography>{props.cardDetailName}</Typography>
+                    <CardDetailContainer selectedCardId={props.selectedCardId} />
                     {/* <DeckPropertiesLayout formatFilters={props.formatFilterOptions} deck={props.deckProperties}
                         onChange={event => props.onFieldChange(event.target.name, event.target.value)} /> */}
+
+                        
                 </DialogContent>
-                {/* <DialogTitle>Advanced</DialogTitle> */}
-                {/* <DialogActions>
-                    <Button size="medium" variant="contained" color="secondary" onClick={props.onDisassembleClick}>Disassemble</Button>
-                    <Button size="medium" variant="contained" color="secondary" onClick={props.onDeleteClick}>Delete</Button>
-                </DialogActions>
                 <DialogActions>
-                    <Button size="medium" onClick={props.onCloseClick}>Cancel</Button>
-                    <Button size="medium" variant="contained" color="primary" onClick={props.onSaveClick}>Save</Button>
-                </DialogActions> */}
+                    <Button size="medium" onClick={props.onCardDetailClose}>Close</Button>
+                </DialogActions>
             </Dialog>
             
             { props.deckProperties && 

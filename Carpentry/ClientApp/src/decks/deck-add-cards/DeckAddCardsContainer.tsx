@@ -137,6 +137,7 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
 function selectInventoryDetail(state: AppState): InventoryDetailDto {
     const { allCardIds, cardsById, inventoryCardAllIds, inventoryCardsById } = state.decks.deckAddCards.inventoryDetail;//state.cardSearch.data.inventoryDetail;
     const result: InventoryDetailDto = {
+        cardId: 0,
         name: "",
         cards: allCardIds.map(id => cardsById[id]),
         inventoryCards: inventoryCardAllIds.map(id => inventoryCardsById[id]),

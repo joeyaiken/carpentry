@@ -69,7 +69,7 @@ interface PropsFromState {
     selectedInventoryCards: DeckCardDetail[];
 
     //card detail
-    cardDetailName: string | null;
+    selectedCardId: number;
     isCardDetailDialogOpen: boolean;
     
 }
@@ -92,6 +92,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handlePropsModalDelete = this.handlePropsModalDelete.bind(this);
         this.handleAddCardsClicked = this.handleAddCardsClicked.bind(this);
         this.handleCardDetailClick = this.handleCardDetailClick.bind(this);
+        this.handleCardDetailClose = this.handleCardDetailClose.bind(this);
     }
 
     componentDidMount() {
@@ -191,11 +192,18 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.props.dispatch(push(`/decks/${this.props.deckId}/addCards`))
     }
     
-    handleCardDetailClick(cardName: string){
+    //handleCardDetailClick(cardName: string){
+    handleCardDetailClick(cardId: number){
         // console.log(`handleCardDetailClick: ${cardName}`)
-        const encodedCardName = encodeURI(cardName);
-        this.props.dispatch(push(`/decks/${this.props.deckId}?card=${encodedCardName}`));
+        // const encodedCardName = encodeURI(cardName);
+        //this.props.dispatch(push(`/decks/${this.props.deckId}?card=${encodedCardName}`));
+        this.props.dispatch(push(`/decks/${this.props.deckId}?cardId=${cardId}`));
     }
+
+    handleCardDetailClose(){
+        this.props.dispatch(push(`/decks/${this.props.deckId}`));
+    }
+
     render() {
         if(this.props.deckProperties === null || this.props.deckStats === null){
             return(
@@ -236,11 +244,12 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                     onCardMenuSelected={this.handleCardMenuSelected}
                     onCardMenuClick={this.handleCardMenuClick}
                     onCardMenuClosed={this.handleCardMenuClosed}
-                    onCardDetailClick={this.handleCardDetailClick}
 
                     //detail dialog
-                    cardDetailName={this.props.cardDetailName}
+                    onCardDetailClick={this.handleCardDetailClick}
+                    selectedCardId={this.props.selectedCardId}
                     isCardDetailDialogOpen={this.props.isCardDetailDialogOpen}
+                    onCardDetailClose={this.handleCardDetailClose}
 
                     //stats
                     deckStats={this.props.deckStats} />
@@ -320,7 +329,8 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
 
     const queryString = parseQueryString(ownProps.location.search);
 
-    const selectedCardName = decodeURI(queryString['card'] || '');
+    //const selectedCardName = decodeURI(queryString['card'] || '');
+    const selectedCardId = +queryString['cardId'] || 0;
 
     const result: PropsFromState = {
         deckId: ownProps.match.params.deckId,
@@ -346,8 +356,9 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         selectedInventoryCards: getSelectedDeckDetails(state),
 
         //card detail
-        cardDetailName: selectedCardName,
-        isCardDetailDialogOpen: selectedCardName.length > 0,
+        //cardDetailName: selectedCardName,
+        selectedCardId: selectedCardId,
+        isCardDetailDialogOpen: selectedCardId !== 0,
     }
 
     return result;

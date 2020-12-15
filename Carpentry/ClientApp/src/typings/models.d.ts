@@ -87,6 +87,7 @@ declare interface ApiDeckCardOverview {
     img: string;
     count: number;
     category: string;
+    cardId: number;
     details: ApiDeckCardDetail[];
 }
 
@@ -231,6 +232,7 @@ declare interface InventoryCard {
 // }
 
 interface InventoryDetailDto {
+    cardId: number;
     name: string;
     cards: MagicCard[];
     inventoryCards: InventoryCard[];

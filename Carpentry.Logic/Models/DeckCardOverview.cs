@@ -20,6 +20,7 @@ namespace Carpentry.Logic.Models
         public string Img { get; set; }
         public int Count { get; set; }
         public string Category { get; set; }
+        public int CardId { get; set; }
 
         public List<DeckCardDetail> Details { get; set; }
     }

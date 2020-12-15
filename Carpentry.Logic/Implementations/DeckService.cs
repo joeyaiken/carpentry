@@ -732,6 +732,7 @@ namespace Carpentry.Logic.Implementations
                     //I should investigate if that's actually happening
                     Img = g.First().Img,
                     Type = g.First().Type,
+                    CardId = g.First().CardId,
                     Details = g.Select(d => new DeckCardDetail
                     {
                         Id = d.DeckCardId,

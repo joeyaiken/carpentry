@@ -267,6 +267,7 @@ namespace Carpentry.Logic.Implementations
 
             InventoryDetailDto result = new InventoryDetailDto()
             {
+                CardId = cardId,
                 Name = matchingCard.Name,
                 Cards = new List<MagicCardDto>(),
                 InventoryCards = new List<InventoryCardDto>(),
