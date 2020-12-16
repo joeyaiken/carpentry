@@ -522,16 +522,26 @@ namespace Carpentry.Data.Implementations
 				.SelectMany(x => x.InventoryCards)
 				.Select(x => new InventoryCardResult()
 				{
+                    Id = x.InventoryCardId,
+                    IsFoil = x.IsFoil,
+                    InventoryCardStatusId = x.InventoryCardStatusId,
+
                     CardId = x.CardId,
-                    CollectorNumber = x.Card.CollectorNumber,
+                    Name = x.Card.Name,
                     Type = x.Card.Type,
-					Id = x.InventoryCardId,
-					IsFoil = x.IsFoil,
-					InventoryCardStatusId = x.InventoryCardStatusId,
+                    Set = x.Card.Set.Code,
+                    CollectorNumber = x.Card.CollectorNumber,
+                    
+					DeckId = x.DeckCards.SingleOrDefault().DeckId,
+                    DeckName = x.DeckCards.SingleOrDefault().Deck.Name, //this probs causes an exception
+                    DeckCardId = x.DeckCards.SingleOrDefault().DeckCardId,
+                    DeckCardCategory = x.DeckCards.SingleOrDefault().CategoryId,
+					
+					
 					//MultiverseId = x.MultiverseId,
 					//VariantType = x.VariantType.Name,
-					Name = x.Card.Name,
-					Set = x.Card.Set.Code,
+					
+					
 					//DeckCards = x.DeckCards.Select(c => new DeckCardResult()
 					//{
 					//    Id = c.Id,
@@ -569,13 +579,16 @@ namespace Carpentry.Data.Implementations
 
 
         //I want to submit a list of card names, and get a collection of inventory cards for each name
+        //TODO - Consider renaming to 'GetInventoryCardsByName'
         public async Task<Dictionary<string, List<InventoryCardData>>> GetUnusedInventoryCards(IEnumerable<string> cardNames)
         {
             //TODO - consider filtering out inventory cards that are already in a deck
+            //  I don't want to do that, but DO want details on deck cards
 
             var result = (await _cardContext.InventoryCards
                 .Where(ic => cardNames.Contains(ic.Card.Name))
                 .Include(ic => ic.Card).ThenInclude(c => c.Set)
+                .Include(ic => ic.DeckCards)
                 .ToListAsync())
                 .GroupBy(ic => ic.Card.Name)
                 .ToDictionary(g => g.Key, g => g.ToList());

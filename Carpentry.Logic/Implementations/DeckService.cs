@@ -26,17 +26,22 @@ namespace Carpentry.Logic.Implementations
         private readonly ILogger<DeckService> _logger;
 
         private readonly IDeckDataRepo _deckRepo;
-
+        private readonly IInventoryDataRepo _inventoryRepo;
         private readonly IInventoryService _inventoryService;
-
         public ICoreDataRepo _coreDataRepo;
 
         private static string _sideboardCategory = "Sideboard";
+
+        private static readonly int _availability_InDeck = 1;
+        private static readonly int _availability_InInventory = 2;
+        private static readonly int _availability_InOtherDeck = 3;
+        private static readonly int _availability_Unowned = 4;
 
         //public ICardImportService _cardImportService;
 
         public DeckService(
             IDeckDataRepo deckRepo,
+            IInventoryDataRepo inventoryRepo,
             IInventoryService inventoryService, 
             ILogger<DeckService> logger,
             ICoreDataRepo coreDataRepo
@@ -44,6 +49,7 @@ namespace Carpentry.Logic.Implementations
             )
         {
             _deckRepo = deckRepo;
+            _inventoryRepo = inventoryRepo;
             _inventoryService = inventoryService;
             _logger = logger;
             _coreDataRepo = coreDataRepo;
@@ -660,6 +666,23 @@ namespace Carpentry.Logic.Implementations
 
             var deckCardData = await _deckRepo.GetDeckCards(deckId);
 
+
+
+
+            //for each card, I want to populate card 'availability'
+            //availability options are: In this deck, In inventory, In another deck, Unowned
+
+            //How do I map this data?
+
+
+            //One option: Get all names of empty cards, call [that service used in restoring inventory, that gets available inv cards by name], use that to map
+
+            var emptyCardNames = deckCardData.Where(dc => dc.InventoryCardId == null).Select(dc => dc.Name).Distinct();
+
+            var inventoryCardsByName = await _inventoryRepo.GetUnusedInventoryCards(emptyCardNames);
+            //GetUnusedInventoryCards
+
+
             #region Group & Map for DTO
 
             //need to re-think how this should all be grouped & returned
@@ -759,6 +782,34 @@ namespace Carpentry.Logic.Implementations
                     }).ToList(),
                 })
                 .ToList();
+
+
+            foreach(var cardOverview in result.Cards)
+            {
+                foreach (var cardDetail in cardOverview.Details)
+                {
+                    if (cardDetail.InventoryCardId != null)
+                    {
+                        cardDetail.AvailabilityId = _availability_InDeck;
+                    }
+                    else if (inventoryCardsByName.TryGetValue(cardOverview.Name, out var availableCards) && availableCards.Count > 0)
+                    {
+                        var firstAvailableCard = availableCards
+                            .OrderBy(ic => ic.DeckCards.Count)
+                            .First();
+
+                        cardDetail.AvailabilityId = (firstAvailableCard.DeckCards.Count == 0) ? _availability_InInventory : _availability_InOtherDeck;
+
+                        inventoryCardsByName[cardOverview.Name].Remove(firstAvailableCard);
+                    }
+                    else
+                    {
+                        cardDetail.AvailabilityId = _availability_Unowned;
+                    }
+
+                }
+
+            }
 
             //result.CardOverviews = groupedCards.Select((x, i) => new DeckCardOverview()
             //{

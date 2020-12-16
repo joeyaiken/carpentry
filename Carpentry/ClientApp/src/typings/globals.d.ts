@@ -97,6 +97,7 @@ declare interface DeckCardDetail {
     collectorNumber: number | null;
     overviewId: number;
     category: string;
+    availabilityId: number;
 }
 
 declare interface DeckCardOverview {

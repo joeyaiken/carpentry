@@ -36,6 +36,8 @@ declare interface ComponentProps{
 
     //overview
     groupedCardOverviews: CardOverviewGroup[];
+    cardDetailsById: { [deckCardId: number]: DeckCardDetail };
+
     onCardSelected: (cardOverview: DeckCardOverview) => void;
     
     //detail
@@ -107,7 +109,11 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
                 <div className={flexSection} style={{ overflow:'auto', flex:'1 1 70%' }} >
                     {props.viewMode === "list" && <DeckCardList cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
                     {props.viewMode === "grid" && <DeckCardGrid cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
-                    {props.viewMode === "grouped" && <GroupedDeckCardList groupedCardOverviews={props.groupedCardOverviews} onCardSelected={props.onCardSelected} />}
+                    { props.viewMode === "grouped" && 
+                        <GroupedDeckCardList 
+                            groupedCardOverviews={props.groupedCardOverviews} 
+                            cardDetailsById={props.cardDetailsById} 
+                            onCardSelected={props.onCardSelected} /> }
                 </div>
                 <div className={flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
                     <CardMenu cardMenuAnchor={props.cardMenuAnchor} onCardMenuSelect={props.onCardMenuSelected} onCardMenuClose={props.onCardMenuClosed} />

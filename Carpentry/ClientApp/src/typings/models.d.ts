@@ -104,6 +104,7 @@ declare interface ApiDeckCardDetail {
     category: string;
     inventoryCardId: number | null;
     cardId: number | null;
+    availabilityId: number;
 }
 
 declare interface DeckOverviewDto {
@@ -212,15 +213,22 @@ declare interface DeckCardDto {
 
 declare interface InventoryCard {
     id: number;
+    isFoil: boolean;
+    statusId: number; //normal === 1, buylist === 2, sellList === 3
+
     cardId: number;
-    // multiverseId: number;
     name: string;
     set: string;
-    isFoil: boolean;
     collectorNumber: number;
+    
+    deckCardId: number | null;
+    deckId: number | null;
+    deckName: string | null;
+    deckCardCategory: string | null;
+
     // variantName: string;
-    statusId: number; //normal === 1, buylist === 2, sellList === 3
-    deckCards: InventoryDeckCardDto[];
+    
+    //deckCards: InventoryDeckCardDto[];
 }
 
 // declare interface InventoryDeckCardDto {

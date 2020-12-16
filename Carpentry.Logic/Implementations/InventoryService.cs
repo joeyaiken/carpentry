@@ -290,6 +290,12 @@ namespace Carpentry.Logic.Implementations
 
                     Name = x.Name,
                     Set = x.Set,
+
+                    DeckId = x.DeckId,
+                    DeckName = x.DeckName,
+                    DeckCardId = x.DeckCardId,
+                    DeckCardCategory = x.DeckCardCategory,
+
                     //DeckCards = x.DeckCards.Select(c => new InventoryDeckCardDto
                     //{
                     //    Id = c.Id,

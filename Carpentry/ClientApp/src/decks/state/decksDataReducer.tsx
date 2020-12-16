@@ -7,7 +7,7 @@ export interface State {
         isLoading: boolean;
         isInitialized: boolean;
     };
-    detail: {
+    detail: { //TODO - rename to 'deckDetail' or something
         isLoading: boolean;
 
 
@@ -187,7 +187,7 @@ const deckDetailReceived = (state: State, action: ReduxAction): State => {
                 inventoryCardStatusId: 0,
                 cardId: detail.cardId,
                 deckId: detail.deckId,
-                
+                availabilityId: detail.availabilityId,
 
             };
         });

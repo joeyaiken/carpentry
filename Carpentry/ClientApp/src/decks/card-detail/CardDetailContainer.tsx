@@ -15,10 +15,6 @@ import CardDetailLayout from './components/CardDetailLayout';
 import { ensureCardDetailLoaded } from './state/CardDetailActions';
 // import { push } from 'react-router-redux';
 
-interface NamedCardGroup {
-    cardId: number;
-    inventoryCardIds: number[];
-}
 
 //This 'new state' probably actually belongs on the app reducer
 //That way I'm not recalculating this info everytime an action occurrs
@@ -57,11 +53,6 @@ interface OwnProps {
     selectedCardId: number;
 }
 
-interface thisNewObj {
-    cardId: number;
-    inventoryCardIds: number[];
-}
-
 type ContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 
 class CardDetailContainer extends React.Component<ContainerProps>{
@@ -73,9 +64,9 @@ class CardDetailContainer extends React.Component<ContainerProps>{
         // this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
         // this.handleFilterChange = this.handleFilterChange.bind(this);
         // this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
-        this.handleAddExistingCardClick = this.handleAddExistingCardClick.bind(this);
-        this.handleAddNewCardClick = this.handleAddNewCardClick.bind(this);
-        this.handleAddEmptyCardClick = this.handleAddEmptyCardClick.bind(this);
+        // this.handleAddExistingCardClick = this.handleAddExistingCardClick.bind(this);
+        // this.handleAddNewCardClick = this.handleAddNewCardClick.bind(this);
+        // this.handleAddEmptyCardClick = this.handleAddEmptyCardClick.bind(this);
     }
 
     //on-mount: ensure name loaded
@@ -109,41 +100,41 @@ class CardDetailContainer extends React.Component<ContainerProps>{
     //     this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", filter, value));
     // }
 
-    handleAddExistingCardClick(inventoryCard: InventoryCard): void {
-        // this.props.dispatch(requestAddDeckCard(inventoryCard));
-    }
+    // handleAddExistingCardClick(inventoryCard: InventoryCard): void {
+    //     // this.props.dispatch(requestAddDeckCard(inventoryCard));
+    // }
     
-    handleAddNewCardClick(cardName: string, cardId: number, isFoil: boolean): void {
+    // handleAddNewCardClick(cardName: string, cardId: number, isFoil: boolean): void {
 
-        // let deckCard: DeckCardDto = {
-        //     categoryId: null,
-        //     deckId: this.props.deckId,
-        //     cardName: cardName,
-        //     id: 0,
-        //     inventoryCardId: 0,
-        //     cardId: cardId,
-        //     isFoil: isFoil,
-        //     inventoryCardStatusId: 1,
-        // }
+    //     // let deckCard: DeckCardDto = {
+    //     //     categoryId: null,
+    //     //     deckId: this.props.deckId,
+    //     //     cardName: cardName,
+    //     //     id: 0,
+    //     //     inventoryCardId: 0,
+    //     //     cardId: cardId,
+    //     //     isFoil: isFoil,
+    //     //     inventoryCardStatusId: 1,
+    //     // }
         
-        // this.props.dispatch(requestAddDeckCard(deckCard));  
-    }
+    //     // this.props.dispatch(requestAddDeckCard(deckCard));  
+    // }
 
-    // //specify add mainboard vs sidebiard/maybeboard ?
-    handleAddEmptyCardClick(cardName: string): void {
-        // let deckCard: DeckCardDto = {
-        //     categoryId: null,
-        //     deckId: this.props.deckId,
-        //     cardName: cardName,
-        //     id: 0,
-        //     inventoryCardId: 0,
-        //     cardId: 0,
-        //     isFoil: false,
-        //     inventoryCardStatusId: 0,
-        // }
-        // // console.log('ping!');
-        // this.props.dispatch(requestAddDeckCard(deckCard));
-    }
+    // // //specify add mainboard vs sidebiard/maybeboard ?
+    // handleAddEmptyCardClick(cardName: string): void {
+    //     // let deckCard: DeckCardDto = {
+    //     //     categoryId: null,
+    //     //     deckId: this.props.deckId,
+    //     //     cardName: cardName,
+    //     //     id: 0,
+    //     //     inventoryCardId: 0,
+    //     //     cardId: 0,
+    //     //     isFoil: false,
+    //     //     inventoryCardStatusId: 0,
+    //     // }
+    //     // // console.log('ping!');
+    //     // this.props.dispatch(requestAddDeckCard(deckCard));
+    // }
 
     render(){
         return(
@@ -153,9 +144,9 @@ class CardDetailContainer extends React.Component<ContainerProps>{
                 cardsById={this.props.cardsById}
                 allCardIds={this.props.allCardIds}
                 inventoryCardsById={this.props.inventoryCardsById}
-                handleAddExistingCardClick={this.handleAddExistingCardClick}
-                handleAddNewCardClick={this.handleAddNewCardClick}
-                handleAddEmptyCard={this.handleAddEmptyCardClick}
+                // handleAddExistingCardClick={this.handleAddExistingCardClick}
+                // handleAddNewCardClick={this.handleAddNewCardClick}
+                // handleAddEmptyCard={this.handleAddEmptyCardClick}
                 
                 // selectedCard={this.props.selectedCard}
                 // selectedCardDetail={this.props.selectedCardDetail}

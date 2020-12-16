@@ -1,4 +1,4 @@
-import { Box, Card, CardHeader, CardMedia, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Box, Button, Card, CardHeader, CardMedia, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import React from 'react';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 import InventoryDetailTable from './InventoryDetailTable';
@@ -12,9 +12,9 @@ interface ContainerLayoutProps {
     inventoryCardsById: { [inventoryCardId: number]: InventoryCard }
     cardGroups: { [cardId: number]: number[] }
 
-    handleAddNewCardClick: (cardName: string, cardId: number, isFoil: boolean) => void;
-    handleAddExistingCardClick: (inventoryCard: InventoryCard) => void;
-    handleAddEmptyCard: (cardName: string) => void;
+    // handleAddNewCardClick: (cardName: string, cardId: number, isFoil: boolean) => void;
+    // handleAddExistingCardClick: (inventoryCard: InventoryCard) => void;
+    // handleAddEmptyCard: (cardName: string) => void;
 
 }
 
@@ -22,52 +22,56 @@ export default function CardDetailLayout(props: ContainerLayoutProps): JSX.Eleme
     const { outlineSection, flexCol, flexRow, flexSection, staticSection, scrollSection,  } = appStyles();
     return(
     <React.Fragment>
+
         <Box className={outlineSection}>
-            <Typography variant="h6">
-                {props.selectedCardId}
-            </Typography>
+            Deck Cards
+            <Paper>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Card</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    
+                    {/* 
+                        <IconButton size="small" onClick={props.onMenuClick} name={item.name} value={rowDeckCardId}>
+                            <MoreVert />
+                        </IconButton>
+                    */}
+
+                    <TableRow>
+                        <TableCell>Set/#/Foil | empty</TableCell>
+                        <TableCell>Mainboard|Sideboard|Commander</TableCell>
+                        <TableCell>[actions]</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell>Empty</TableCell>
+                        <TableCell>Commander</TableCell>
+                        <TableCell>[actions]</TableCell>
+                    </TableRow>
+                </Table>
+            </Paper>
         </Box>
-        <Box className={outlineSection}>
-            Deck Contents
-        </Box>
-        <Box className={outlineSection}>
-            Inventory Contents
-        </Box>
-        <Box className={outlineSection}>
-            [wishlist/buylist?]
-        </Box>
+
+
+
+        {/* Inventory Card section */}
         <Box className={flexCol}>
-        <Card className={combineStyles(outlineSection, flexCol)}>
-            <CardHeader titleTypographyProps={{variant:"body1"}} title="Inventory"/>
-            {
-                //What if this just itterated over the collection of inventory items, and displayed card data?
-                //At the end of the day, I shouldn't have a ton of each card, including variants
-                //Should this be Card components, or a table?
-                //What if I don't allow cards that are already in a deck?
-
-                // Inventory detail info will go here
-                // How many exist of each variant?
-                // How many foil / non foil?
-                // How many in existing decks?
-
-
-
-                // props.selectedCardDetail && //props.selectedCardDetail.inventoryCards &&
-                // <InventoryDetailTable detail={props.selectedCardDetail} handleAddCardClick={props.handleAddExistingCardClick} />
-                
-            }
-            {/* Each inventory card should have a label for (in # decks) */}
-        </Card>
 
         <Card className={combineStyles(outlineSection, flexCol)}>
-            {/* <CardHeader 
+            <CardHeader 
                 titleTypographyProps={{variant:"body1"}} 
-                title="Add New"
+                title="Inventory"
                 action={
-                    <Button variant="outlined" onClick={() => props.handleAddEmptyCard(props.selectedCard.name)}>
+                    <Button variant="outlined" 
+                    // onClick={() => props.handleAddEmptyCard(props.selectedCard.name)}
+                    >
                         Add Empty
                     </Button>
-                }/> */}
+                }/>
             
             <Box className={combineStyles(flexCol, flexSection)}>
             {
@@ -119,9 +123,12 @@ export default function CardDetailLayout(props: ContainerLayoutProps): JSX.Eleme
                                                         </TableCell>
                                                         <TableCell>
                                                             <Typography>
-                                                                { item.statusId === 1 && "Inventory/Deck" }
+
+                                                                { item.deckId && item.deckName }
+                                                                { !item.deckId && "Inventory" }
+                                                                {/* { item.statusId === 1  && "Inventory/Deck" }
                                                                 { item.statusId === 2 && "Wish List" }
-                                                                { item.statusId === 3 && "Sell List" }
+                                                                { item.statusId === 3 && "Sell List" } */}
                                                             </Typography>
                                                             {/* {item.deckCards.length > 0 && "In a Deck"}
                                                             {item.deckCards.length === 0 && item.statusId === 1 && "Inventory"}

@@ -27,7 +27,7 @@ class AppContainer extends React.Component<AppContainerProps>{
 
     componentDidMount() {
         this.props.dispatch(requestCoreData());
-        // this.props.dispatch(push('/decks/61'));
+        this.props.dispatch(push('/decks/52'));
     }
 
     render() {

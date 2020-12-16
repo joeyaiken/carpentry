@@ -37,7 +37,7 @@ namespace Carpentry.Logic.Models
         public int? InventoryCardId { get; set; }
         public int? CardId { get; set; }
 
-
+        public int AvailabilityId { get; set; }
 
 
         //[JsonProperty("deckId")]

@@ -61,6 +61,8 @@ interface PropsFromState {
     //Overview
     groupedCardOverviews: CardOverviewGroup[];
     //Non-grouped views will just snag cards from item at position 0
+    cardDetailsById: { [deckCardId: number]: DeckCardDetail };
+
 
 
     //Detail
@@ -236,7 +238,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                     //overview
                     groupedCardOverviews={this.props.groupedCardOverviews}
                     onCardSelected={this.handleCardSelected} 
-                    
+                    cardDetailsById={this.props.cardDetailsById}
                     //detail
                     cardMenuAnchor={this.props.cardMenuAnchor}
                     selectedCard={this.props.selectedCard} 
@@ -332,6 +334,9 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //const selectedCardName = decodeURI(queryString['card'] || '');
     const selectedCardId = +queryString['cardId'] || 0;
 
+
+    //const x = state.decks.data.detail.cardDetails.byId
+
     const result: PropsFromState = {
         deckId: ownProps.match.params.deckId,
         viewMode: state.decks.deckEditor.viewMode,  //state.app.deckEditor.viewMode,
@@ -349,6 +354,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         
         //Overview
         groupedCardOverviews: selectDeckOverviews(state),
+        cardDetailsById: state.decks.data.detail.cardDetails.byId,
 
         //Detail
         cardMenuAnchor: state.decks.deckEditor.cardMenuAnchor, //state.ui.deckEditorMenuAnchor,

@@ -141,9 +141,13 @@ function trySavePendingCards(dispatch: Dispatch, state: AppState){
                 statusId: card.statusId,
                 cardId: card.cardId,
                 collectorNumber: card.collectorNumber,
-                deckCards: [],
+                // deckCards: [],
                 name: card.name,
                 set: card.set,
+                deckCardCategory: null,
+                deckCardId: null,
+                deckId: null,
+                deckName: null,
             }
             newCards.push(newCard);
         });

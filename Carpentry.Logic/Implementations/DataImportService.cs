@@ -240,9 +240,11 @@ namespace Carpentry.Logic.Implementations
         {
             //new approach requires inventory cards to be loaded before deck cards
 
+            //inv cards
             string cardBackupLocation = $"{payload.BackupDirectory}{_config.CardBackupFilename}";
             await LoadCardBackups(cardBackupLocation);
 
+            //deck cards
             string deckBackupLocation = $"{payload.BackupDirectory}{_config.DeckBackupFilename}";
             await LoadDeckBackups(deckBackupLocation);
 
