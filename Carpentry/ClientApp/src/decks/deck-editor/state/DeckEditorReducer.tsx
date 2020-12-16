@@ -41,7 +41,8 @@ export interface State {
     isPropsModalOpen: boolean;
     deckModalProps: DeckPropertiesDto | null;
 
-    cardMenuAnchor: HTMLButtonElement | null; 
+    cardMenuAnchor: HTMLButtonElement | null;
+    cardMenuAnchorId: number;
 
 }
 
@@ -82,7 +83,7 @@ export const deckEditorReducer = (state = initialState, action: ReduxAction): St
         case DECK_EDITOR_SAVE_REQUESTED: return { ...state, isSaving: true };
         case DECK_EDITOR_SAVE_RECEIVED: return { ...state, isSaving: false };
         case DECK_PROPS_MODAL_CHANGED: return deckPropsModalChanged(state, action);
-        case CARD_MENU_BUTTON_CLICKED: return { ...state, cardMenuAnchor: action.payload }
+        case CARD_MENU_BUTTON_CLICKED: return { ...state, cardMenuAnchor: action.payload, cardMenuAnchorId: parseInt(action.payload?.value) }
         // case DECK_DETAIL_REQUESTED: return { ...state, selectedOverviewCardId: null }
         default: return(state);
     }
@@ -98,6 +99,7 @@ const initialState: State = {
     isPropsModalOpen: false,
     deckModalProps: null,
     cardMenuAnchor: null,
+    cardMenuAnchorId: 0,
 }
 
 function deckPropsModalChanged(state: State, action: ReduxAction): State {

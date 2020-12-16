@@ -57,46 +57,22 @@ namespace Carpentry.Logic.Implementations
         {
             List<MagicCardDto> result = query.Select(card => new MagicCardDto()
             {
-                
+                CardId = card.CardId,
                 Cmc = card.Cmc,
                 ManaCost = card.ManaCost,
                 MultiverseId = card.MultiverseId,
                 Name = card.Name,
-
                 CollectionNumber = card.CollectorNumber,
                 ImageUrl = card.ImageUrl,
                 Price = card.Price,
                 PriceFoil = card.PriceFoil,
                 PriceTix = card.TixPrice,
-                
-                //Prices = card.Variants.ToDictionary(v => (v.)  )
-
-                //Prices = card.Variants.SelectMany(x => new[]
-                //{
-                //            new {
-                //                Name = x.Type.Name,
-                //                Price = x.Price,
-                //            },
-                //            new {
-                //                Name = $"{x.Type.Name}_foil",
-                //                Price = x.PriceFoil,
-                //            }
-                //        }).ToDictionary(v => v.Name, v => v.Price),
-
-                //Variants = card.Variants.ToDictionary(v => v.Type.Name, v => v.ImageUrl),
-                //Variants = card.Variants.Select(v => new { v.Type.Name, v.ImageUrl }).ToDictionary(v => v.Name, v => v.ImageUrl),
-                
-                //Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
                 Colors = card.Color.Split().ToList(),
-
                 Rarity = card.Rarity.Name,
                 Set = card.Set.Code,
                 Text = card.Text,
                 Type = card.Type,
-
-                //ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),
                 ColorIdentity = card.ColorIdentity.Split().ToList(),
-                
                 Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
             }).ToList();
             return result;

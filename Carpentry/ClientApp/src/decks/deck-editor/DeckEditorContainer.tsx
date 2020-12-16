@@ -67,6 +67,8 @@ interface PropsFromState {
 
     //Detail
     cardMenuAnchor: HTMLButtonElement | null;
+    cardMenuAnchorId: number;
+
     selectedCard: DeckCardOverview | null;
     selectedInventoryCards: DeckCardDetail[];
 
@@ -133,17 +135,17 @@ class DeckEditor extends React.Component<DeckEditorProps> {
             //         break;
             case "sideboard":
                 if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "sideboard"));
+                    this.props.dispatch(requestUpdateDeckCardStatus(this.props.cardMenuAnchorId, "sideboard"));
                 }
                 break;
             case "mainboard":
                 if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "mainboard"));
+                    this.props.dispatch(requestUpdateDeckCardStatus(this.props.cardMenuAnchorId, "mainboard"));
                 }
                 break;
             case "commander":
                 if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(parseInt(this.props.cardMenuAnchor.value), "commander"));
+                    this.props.dispatch(requestUpdateDeckCardStatus(this.props.cardMenuAnchorId, "commander"));
                 }
                 break;
         }
@@ -241,6 +243,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                     cardDetailsById={this.props.cardDetailsById}
                     //detail
                     cardMenuAnchor={this.props.cardMenuAnchor}
+                    cardMenuAnchorId={this.props.cardMenuAnchorId}
                     selectedCard={this.props.selectedCard} 
                     selectedInventoryCards={this.props.selectedInventoryCards} 
                     onCardMenuSelected={this.handleCardMenuSelected}
@@ -358,6 +361,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
 
         //Detail
         cardMenuAnchor: state.decks.deckEditor.cardMenuAnchor, //state.ui.deckEditorMenuAnchor,
+        cardMenuAnchorId: state.decks.deckEditor.cardMenuAnchorId,
         selectedCard: getSelectedCardOverview(state),
         selectedInventoryCards: getSelectedDeckDetails(state),
 

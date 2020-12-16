@@ -42,6 +42,7 @@ declare interface ComponentProps{
     
     //detail
     cardMenuAnchor: HTMLButtonElement | null;
+    cardMenuAnchorId: number;
     selectedCard: DeckCardOverview | null;
     selectedInventoryCards: DeckCardDetail[];
     onCardMenuSelected: (name: DeckEditorCardMenuOption) => void;
@@ -52,7 +53,7 @@ declare interface ComponentProps{
     onCardDetailClick: (cardId: number) => void;
     onCardDetailClose: () => void;
     isCardDetailDialogOpen: boolean;
-    selectedCardId: number;
+    selectedCardId: number; //selected DETAIL card ID for MODAL
 
     //stats
     deckStats: DeckStats;
@@ -116,7 +117,13 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
                             onCardSelected={props.onCardSelected} /> }
                 </div>
                 <div className={flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
-                    <CardMenu cardMenuAnchor={props.cardMenuAnchor} onCardMenuSelect={props.onCardMenuSelected} onCardMenuClose={props.onCardMenuClosed} />
+                    <CardMenu 
+                        cardMenuAnchor={props.cardMenuAnchor} 
+                        onCardMenuSelect={props.onCardMenuSelected} 
+                        onCardMenuClose={props.onCardMenuClosed} 
+                        cardCategoryId={props.selectedCard?.category || ''}
+                        hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}
+                        />
 
                     <DeckCardDetail 
                         selectedCard={props.selectedCard} 

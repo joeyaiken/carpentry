@@ -1,6 +1,8 @@
-import { Box, Button, Card, CardHeader, CardMedia, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Box, Button, Card, CardHeader, CardMedia, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { MoreVert } from '@material-ui/icons';
 import React from 'react';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
+import CardMenu from '../../deck-editor/components/CardMenu';
 import InventoryDetailTable from './InventoryDetailTable';
 // import SelectedCardSection from './SelectedCardSection';
 
@@ -12,21 +14,42 @@ interface ContainerLayoutProps {
     inventoryCardsById: { [inventoryCardId: number]: InventoryCard }
     cardGroups: { [cardId: number]: number[] }
 
+    //deck cards
+    deckCardDetailsById: { [deckCardId: number]: DeckCardDetail };
+    activeDeckCardIds: number[];
+
     // handleAddNewCardClick: (cardName: string, cardId: number, isFoil: boolean) => void;
     // handleAddExistingCardClick: (inventoryCard: InventoryCard) => void;
-    // handleAddEmptyCard: (cardName: string) => void;
+    onAddEmptyCardClick: () => void;
 
+    //menu anchor
+    // menuAnchor: HTMLButtonElement | null;
+    // menuAnchorId: number;
+    // // selectedCard: DeckCardOverview | null;
+    // // selectedInventoryCards: DeckCardDetail[];
+    // onCardMenuSelected: (name: DeckEditorCardMenuOption) => void;
+    onInventoryCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onDeckCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    // onCardMenuClosed: () => void;
 }
 
 export default function CardDetailLayout(props: ContainerLayoutProps): JSX.Element {
     const { outlineSection, flexCol, flexRow, flexSection, staticSection, scrollSection,  } = appStyles();
     return(
     <React.Fragment>
-
+        {/* <CardMenu 
+            cardMenuAnchor={props.menuAnchor} 
+            onCardMenuSelect={props.onCardMenuSelected} 
+            onCardMenuClose={props.onCardMenuClosed} 
+            cardCategoryId={''}
+            hasInventoryCard={false}
+            // cardCategoryId={props.selectedCard?.category || ''}
+            // hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}
+            /> */}
         <Box className={outlineSection}>
             Deck Cards
             <Paper>
-                <Table>
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Card</TableCell>
@@ -34,29 +57,26 @@ export default function CardDetailLayout(props: ContainerLayoutProps): JSX.Eleme
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
-                    
-                    {/* 
-                        <IconButton size="small" onClick={props.onMenuClick} name={item.name} value={rowDeckCardId}>
-                            <MoreVert />
-                        </IconButton>
-                    */}
-
-                    <TableRow>
-                        <TableCell>Set/#/Foil | empty</TableCell>
-                        <TableCell>Mainboard|Sideboard|Commander</TableCell>
-                        <TableCell>[actions]</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                        <TableCell>Empty</TableCell>
-                        <TableCell>Commander</TableCell>
-                        <TableCell>[actions]</TableCell>
-                    </TableRow>
+                    {
+                        props.activeDeckCardIds.map(id => {
+                            const deckCard = props.deckCardDetailsById[id];
+                            
+                            return(
+                            <TableRow>
+                                <TableCell>{ deckCard.inventoryCardId ? `${deckCard.set} (${deckCard.collectorNumber}) ${deckCard.isFoil ? 'Foil' : 'Normal'}`  : "Empty"  }</TableCell>
+                                <TableCell>{deckCard.category}</TableCell>
+                                <TableCell>
+                                    <IconButton size="small" value={id} onClick={props.onDeckCardMenuClick}>
+                                        <MoreVert />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                            )
+                        })
+                    }
                 </Table>
             </Paper>
         </Box>
-
-
 
         {/* Inventory Card section */}
         <Box className={flexCol}>
@@ -67,7 +87,7 @@ export default function CardDetailLayout(props: ContainerLayoutProps): JSX.Eleme
                 title="Inventory"
                 action={
                     <Button variant="outlined" 
-                    // onClick={() => props.handleAddEmptyCard(props.selectedCard.name)}
+                    onClick={() => props.onAddEmptyCardClick()}
                     >
                         Add Empty
                     </Button>
@@ -88,27 +108,16 @@ export default function CardDetailLayout(props: ContainerLayoutProps): JSX.Eleme
                             
                             <Box className={combineStyles(flexRow, flexSection)}> 
                                 <Box className={staticSection}>
-                                    <CardMedia 
-                                        style={{height:"310px", width: "223px"}}
-                                        // className={itemImage}
-                                        image={img}
-                                        />
+                                    <CardMedia style={{height:"310px", width: "223px"}} image={img} />
                                 </Box>
-                                
                                 <Box className={combineStyles(flexSection, flexCol)}>
                                     <Box className={scrollSection}style={{overflow:"auto"}}>
-                                        {/* 
-                                        className="flexSection flexCol"
-                                         className="staticSection"
-                                         className="flexSection" style={{overflow:"auto"}}
-                                          style={{overflow:"auto"}}
-                                        */}
                                     <Table size="small" >
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell>Style</TableCell>
                                                 <TableCell>Status</TableCell>
-                                                {/* <TableCell>Action</TableCell> */}
+                                                <TableCell>Action</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -123,36 +132,16 @@ export default function CardDetailLayout(props: ContainerLayoutProps): JSX.Eleme
                                                         </TableCell>
                                                         <TableCell>
                                                             <Typography>
-
                                                                 { item.deckId && item.deckName }
                                                                 { !item.deckId && "Inventory" }
-                                                                {/* { item.statusId === 1  && "Inventory/Deck" }
-                                                                { item.statusId === 2 && "Wish List" }
-                                                                { item.statusId === 3 && "Sell List" } */}
                                                             </Typography>
-                                                            {/* {item.deckCards.length > 0 && "In a Deck"}
-                                                            {item.deckCards.length === 0 && item.statusId === 1 && "Inventory"}
-                                                            { item.statusId === 2 && "Buy List"}
-                                                            { item.statusId === 3 && "Sell List"} */}
                                                         </TableCell>
-
-                                                        {/* <TableCell>
-                                                            {item.deckCards.length === 0 && item.statusId === 1 && 
-                                                                <Button size="small" variant="contained" onClick={() => props.handleUpdateCardClick && props.handleUpdateCardClick(item, 3)}>
-                                                                    To Sell List
-                                                                </Button>
-                                                            }
-                                                            { item.statusId === 2 && 
-                                                                <Button size="small" variant="contained" onClick={() => props.handleUpdateCardClick && props.handleUpdateCardClick(item, 1)}>
-                                                                    Mark as Arrived
-                                                                </Button>
-                                                            }
-                                                            { item.statusId === 3 && 
-                                                                <Button size="small" variant="contained" onClick={() => props.handleDeleteCardClick && props.handleDeleteCardClick(item.id)}>
-                                                                    Delte
-                                                                </Button>
-                                                            }
-                                                        </TableCell> */}
+                                                        
+                                                        <TableCell>
+                                                            <IconButton size="small" value={item.id} onClick={props.onInventoryCardMenuClick}>
+                                                                <MoreVert />
+                                                            </IconButton>
+                                                        </TableCell>
                                                     </TableRow>
                                                     )
                                                 })

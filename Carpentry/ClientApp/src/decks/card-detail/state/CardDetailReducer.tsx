@@ -1,7 +1,10 @@
+// import { DECK_DETAIL_REQUESTED, DECK_DETAIL_RECEIVED } from "../../state/decksDataActions";
 import { 
     CARD_DETAIL_RECEIVED,
     CARD_DETAIL_REQUESTED,
- } from "./CardDetailActions";
+} from "./CardDetailActions";
+
+
 
 export interface State {
 
@@ -12,13 +15,18 @@ export interface State {
 
     isLoading: boolean;
     activeCardId: number;
+    activeCardName: string;
+
+    // deckCards: { //deck cards matching this selected name
+
+    // }
 
     inventoryCards: {
         byId: { [id: number]: InventoryCard };
         allIds: number[];
     }
 
-    cards:{
+    cards:{ //card definitions
         byId: { [multiverseId: number]: MagicCard };
         allIds: number[];
     }
@@ -71,6 +79,8 @@ export const cardDetailReducer = (state = initialState, action: ReduxAction): St
     switch(action.type){
         case CARD_DETAIL_REQUESTED: return cardDetailRequested(state, action);
         case CARD_DETAIL_RECEIVED: return cardDetailReceived(state, action);
+        // case DECK_DETAIL_REQUESTED: return state;
+        // case DECK_DETAIL_RECEIVED: return state;
         // case CARD_SEARCH_REQUESTED: return cardSearchRequested(state, action);
         // case CARD_SEARCH_RECEIVED: return cardSearchReceived(state, action);
         // case CARD_SEARCH_INVENTORY_REQUESTED: return cardSearchInventoryRequested(state, action);
@@ -107,6 +117,7 @@ const initialState: State = {
 
     isLoading: false,
     activeCardId: 0,
+    activeCardName: '',
     inventoryCards: {
         byId: {},
         allIds: [],
@@ -213,9 +224,9 @@ function cardDetailReceived(state: State, action: ReduxAction): State {
     detailResult.inventoryCards.forEach(invCard => inventoryCardsById[invCard.id] = invCard);
     const allInventoryCardIds = detailResult.inventoryCards.map(card => card.id);
 
-    let cardsById: { [multiverseId: number]: MagicCard } = {};
-    detailResult.cards.forEach(card => cardsById[card.multiverseId] = card);
-    const allCardIds = detailResult.cards.map(card => card.multiverseId);
+    let cardsById: { [cardId: number]: MagicCard } = {};
+    detailResult.cards.forEach(card => cardsById[card.cardId] = card);
+    const allCardIds = detailResult.cards.map(card => card.cardId);
 
     let cardGroups: { [cardId: number]: number[] } = {};
     // let cardGroupIds: number[];
@@ -233,6 +244,7 @@ function cardDetailReceived(state: State, action: ReduxAction): State {
         ...state,
         isLoading: false,
         activeCardId: detailResult.cardId,
+        activeCardName: detailResult.name,
         inventoryCards: {
             byId: inventoryCardsById,
             allIds: allInventoryCardIds,

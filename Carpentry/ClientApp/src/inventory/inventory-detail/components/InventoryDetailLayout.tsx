@@ -14,23 +14,8 @@ interface InventoryDetailProps {
 
 }
 
-// interface InventoryDetailCardProps {
-//     card: MagicCard;
-//     inventoryCards: InventoryCard[];
-// }
-
-
 export default function InventoryDetailLayout(props: InventoryDetailProps): JSX.Element {
     const { flexCol, flexSection, outlineSection, flexRow, staticSection, scrollSection } = appStyles();
-
-    //TODO - Grouping REALLY should be done in a container...
-    // const displayCards: InventoryDetailCardProps[] = props.selectedDetailItem.cards.map(card => {
-    //     return {
-    //         card: card,
-    //         inventoryCards: props.selectedDetailItem.inventoryCards
-    //             .filter(inventoryCard => inventoryCard.set === card.set && inventoryCard.collectorNumber === card.collectionNumber),
-    //     } as InventoryDetailCardProps;
-    // });
 
     return(<React.Fragment>
         <Box className={combineStyles(flexCol, flexSection)}>
