@@ -126,16 +126,16 @@ export const cardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): Redux
 
 
 ////////////
-export const requestUpdateDeckCardStatus = (deckCardId: number, status: string): any => {
+export const requestUpdateDeckCard = (detail: DeckCardDetail): any => {
     return (dispatch: Dispatch, getState: any) => {
-        return updateDeckCardStatus(dispatch, getState(), deckCardId, status);
+        return updateDeckCard(dispatch, getState(), detail);
     }
 }
 
 //"status" should be "category" but w/e
-function updateDeckCardStatus(dispatch: Dispatch, state: AppState, deckCardId: number, status: string): any {
+function updateDeckCard(dispatch: Dispatch, state: AppState, cardDetail: DeckCardDetail): any {
 
-    const cardDetail = state.decks.data.detail.cardDetails.byId[deckCardId];
+    // const cardDetail = state.decks.data.detail.cardDetails.byId[deckCardId];
 
 
     // const something = state.data.deckDetail.cardDetailsById[deckCardId];
@@ -153,7 +153,7 @@ function updateDeckCardStatus(dispatch: Dispatch, state: AppState, deckCardId: n
 
     let categoryId: string | null = null;
 
-    switch(status){
+    switch(cardDetail.category){
         case "mainboard":
         //     categoryId = null;
             break;
@@ -167,17 +167,17 @@ function updateDeckCardStatus(dispatch: Dispatch, state: AppState, deckCardId: n
 
 
     let dto: DeckCardDto = {
-        id: deckCardId,
-        deckId: cardDetail.deckId,//
+        id: cardDetail.id,
+        deckId: cardDetail.deckId,
         cardName: cardDetail.name,
         categoryId: categoryId,
+        inventoryCardId: cardDetail.inventoryCardId,
 
 
 
-        inventoryCardId: cardDetail.inventoryCardId,//
-        cardId: cardDetail.cardId ?? 0,//
-        isFoil: cardDetail.isFoil,//
-        inventoryCardStatusId: cardDetail.inventoryCardStatusId ?? 0,//
+        cardId: cardDetail.cardId ?? 0,
+        isFoil: cardDetail.isFoil,
+        inventoryCardStatusId: cardDetail.inventoryCardStatusId ?? 0,
 
         // inventoryCard: {
         //     deckCards: [],
@@ -193,19 +193,25 @@ function updateDeckCardStatus(dispatch: Dispatch, state: AppState, deckCardId: n
         // deckId: state.data.deckDetail.deckId,
 
     }
-    console.log('submitting DTO');
-    console.log(dto);
-    console.log(state);
+    // console.log('submitting DTO');
+    // console.log(dto);
+    // console.log(state);
 
 
     decksApi.updateDeckCard(dto).then(() => {
         dispatch(reloadDeckDetail(dto.deckId));
     });
-
-
-
-    // api_Decks_Update(props).then(() => {
-    //     dispatch(requestDeckDetail(props.id));
-    // })
 }
-/////////////
+
+export const requestDeleteDeckCard = (deckCardId: number): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        return deleteDeckCard(dispatch, getState(), deckCardId);
+    }
+}
+
+function deleteDeckCard(dispatch: Dispatch, state: AppState, deckCardId: number): any {
+    const currentDeckId = state.decks.data.detail.deckId;
+    decksApi.removeDeckCard(deckCardId).then(() => {
+        dispatch(reloadDeckDetail(currentDeckId));
+    });
+}

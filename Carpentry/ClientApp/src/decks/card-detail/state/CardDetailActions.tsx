@@ -1,4 +1,3 @@
-import { FormatAlignCenterRounded } from '@material-ui/icons';
 import { Dispatch } from 'redux';
 import { inventoryApi } from '../../../api/inventoryApi';
 import { AppState } from '../../../configureStore';
@@ -32,3 +31,46 @@ function tryLoadCardDetail(dispatch: Dispatch, state: AppState, cardId: number, 
         dispatch(cardDetailReceived(result));
     });
 }
+
+//whatever, everything's unique, I can refactor & reduce later
+
+export const DECK_CARD_MENU_BUTTON_CLICKED = 'DECK_CARD_DETAIL.DECK_CARD_MENU_BUTTON_CLICKED'
+export const deckCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
+    type: DECK_CARD_MENU_BUTTON_CLICKED,
+    payload: cardMenuAnchor
+});
+
+export const INVENTORY_CARD_MENU_BUTTON_CLICKED = 'DECK_CARD_DETAIL.INVENTORY_CARD_MENU_BUTTON_CLICKED';
+export const inventoryCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
+    type: INVENTORY_CARD_MENU_BUTTON_CLICKED,
+    payload: cardMenuAnchor
+});
+
+
+
+//handleDeckCardMenuClick
+// handleInventoryCardMenuClick
+
+/*
+    cardMenuButtonClick(deck|inventory, Element)
+
+    deckCardMenuButtonClicked(Element)
+    inventoryCardMenuButtonClicked(Element)
+
+    [deck|inventory]MenuButtonClicked
+
+export const  = 'DECK_CARD_DETAIL.DECK_CARD_MENU_BUTTON_CLICKED'
+export const deckCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
+    type: DECK_CARD_MENU_BUTTON_CLICKED,
+    payload: cardMenuAnchor
+});
+
+export const  = 'DECK_CARD_DETAIL.INVENTORY_CARD_MENU_BUTTON_CLICKED';
+export const inventoryCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
+    type: INVENTORY_CARD_MENU_BUTTON_CLICKED,
+    payload: cardMenuAnchor
+});
+DECK_CARD_MENU_BUTTON_CLICKED
+INVENTORY_CARD_MENU_BUTTON_CLICKED
+*/
+

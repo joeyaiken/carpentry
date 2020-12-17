@@ -85,17 +85,31 @@ namespace Carpentry.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> CloneDeck(int deckId)
+        public async Task<ActionResult<int>> CloneDeck(int deckId)
         {
-            await Task.CompletedTask;
-            throw new NotImplementedException();
+            try
+            {
+                int clonedDeckId = await _deckService.CloneDeck(deckId);
+                return Ok(clonedDeckId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("CloneDeck", ex));
+            }
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult> DissassembleDeck(int deckId)
         {
-            await Task.CompletedTask;
-            throw new NotImplementedException();
+            try
+            {
+                await _deckService.DissassembleDeck(deckId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("DissassembleDeck", ex));
+            }
         }
 
         #endregion Deck

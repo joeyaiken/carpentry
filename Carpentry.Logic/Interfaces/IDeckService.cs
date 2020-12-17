@@ -13,12 +13,13 @@ namespace Carpentry.Logic.Interfaces
         Task UpdateDeck(DeckPropertiesDto props);
         Task DeleteDeck(int deckId);
 
+        Task DissassembleDeck(int deckId);
+        Task<int> CloneDeck(int deckId);
 
         Task AddDeckCard(DeckCardDto dto);
         Task AddDeckCardBatch(IEnumerable<DeckCardDto> dto);
         Task UpdateDeckCard(DeckCardDto card);
         Task DeleteDeckCard(int deckCardId);
-
 
         Task<List<DeckOverviewDto>> GetDeckOverviews();
         Task<DeckDetailDto> GetDeckDetail(int deckId);

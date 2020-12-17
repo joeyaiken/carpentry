@@ -37,6 +37,11 @@ namespace Carpentry.Controllers
             return Ok("Online");
         }
 
+        //What if this replaced the Inventory Overview search?
+        //Everything that needs a list of cards could use this controller
+        //  inventory overviews (search by name/print/unique)
+        //  inventory add cards (search by print, group by name?... actuyally IDK how that should go)
+        //  deck add cards (search by name)
         #region Search Methods
 
         /// <summary>
@@ -61,6 +66,7 @@ namespace Carpentry.Controllers
 
         /// <summary>
         /// Will call the scryfall API to get cards by name, returning mapped results
+        /// ! Pretty sure this is obsolete
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>

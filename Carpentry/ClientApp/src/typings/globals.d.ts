@@ -15,7 +15,9 @@ declare type ApiScopeOption =
 
 declare type DeckFormatOption = 'Standard' | 'Legacy' | 'Modern' | 'Commander' | 'Oathbreaker';
 
-declare type DeckEditorCardMenuOption = "commander" | "sideboard" | "mainboard" | "inventory" | "delete" | "search";
+declare type DeckEditorCardMenuOption = "commander" | "sideboard" | "mainboard" | "inventory" | "delete"; // | "search";
+declare type InventoryCardMenuOption = "add" | "remove" | "view";
+
 declare type DeckEditorViewMode = 'grid' | 'list' | 'grouped';
 
 

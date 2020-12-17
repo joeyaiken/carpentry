@@ -11,8 +11,11 @@ import {
 //     requestCardSearchInventory
 } from '../deck-add-cards/state/DeckAddCardsActions';
 import CardDetailLayout from './components/CardDetailLayout';
-import { ensureCardDetailLoaded } from './state/CardDetailActions';
+import { deckCardMenuButtonClicked, ensureCardDetailLoaded, inventoryCardMenuButtonClicked } from './state/CardDetailActions';
 import CardMenu from '../deck-editor/components/CardMenu';
+import { Menu, MenuItem } from '@material-ui/core';
+import { requestDeleteDeckCard, requestUpdateDeckCard } from '../deck-editor/state/DeckEditorActions';
+import { push } from 'react-router-redux';
 // import { requestAddDeckCard } from '../deck-add-cards/state/DeckAddCardsActions';
 // import { push } from 'react-router-redux';
 
@@ -28,6 +31,12 @@ interface PropsFromState {
 
     deckCardDetailsById: { [deckCardId: number]: DeckCardDetail };
     activeDeckCardIds: number[];
+
+    deckCardMenuAnchor: HTMLButtonElement | null;
+    deckCardMenuAnchorId: number;
+
+    inventoryCardMenuAnchor: HTMLButtonElement | null;
+    inventoryCardMenuAnchorId: number;
 }
 
 interface OwnProps {
@@ -42,19 +51,20 @@ class CardDetailContainer extends React.Component<ContainerProps>{
         this.handleAddEmptyCardClick = this.handleAddEmptyCardClick.bind(this);
         this.handleDeckCardMenuClick = this.handleDeckCardMenuClick.bind(this);
         this.handleInventoryCardMenuClick = this.handleInventoryCardMenuClick.bind(this);
-        this.handleCardMenuSelected = this.handleCardMenuSelected.bind(this);
-        this.handleCardMenuClose = this.handleCardMenuClose.bind(this);
+        this.handleDeckCardMenuSelected = this.handleDeckCardMenuSelected.bind(this);
+        this.handleInventoryCardMenuSelected = this.handleInventoryCardMenuSelected.bind(this);
+        this.handleDeckCardMenuClose = this.handleDeckCardMenuClose.bind(this);
+        this.handleInventoryCardMenuClose = this.handleInventoryCardMenuClose.bind(this);
     }
 
     componentDidMount() {
         this.props.dispatch(ensureCardDetailLoaded(this.props.selectedCardId));
     }
   
-    // //specify add mainboard vs sidebiard/maybeboard ?
+    //specify add mainboard vs sidebiard/maybeboard ?
     handleAddEmptyCardClick(): void {
         const selectedCard = this.props.cardsById[this.props.selectedCardId];
 
-        
         let deckCard: DeckCardDto = {
             categoryId: null,
             deckId: this.props.deckId,
@@ -66,22 +76,73 @@ class CardDetailContainer extends React.Component<ContainerProps>{
             isFoil: false,
             inventoryCardStatusId: 0,
         }
-        console.log('ping!');
+        
         this.props.dispatch(requestAddDeckCard(deckCard));
     }
 
     handleDeckCardMenuClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        // this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", event.currentTarget));
-        // this.props.dispatch(cardMenuButtonClicked(event.currentTarget));
+        this.props.dispatch(deckCardMenuButtonClicked(event.currentTarget));
     }
-
 
     handleInventoryCardMenuClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        // this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", event.currentTarget));
-        // this.props.dispatch(cardMenuButtonClicked(event.currentTarget));
+        this.props.dispatch(inventoryCardMenuButtonClicked(event.currentTarget));
     }
 
-    handleCardMenuSelected(name: DeckEditorCardMenuOption){
+    handleDeckCardMenuSelected(name: DeckEditorCardMenuOption){
+
+        const deckCardDetail = this.props.deckCardDetailsById[this.props.deckCardMenuAnchorId];
+
+        switch(name){
+            case "sideboard":
+                deckCardDetail.category = name;
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
+                break;
+            case "mainboard":
+                deckCardDetail.category = "";
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
+                break;
+            case "commander":
+                deckCardDetail.category = name;
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
+                break;
+            case "inventory":
+                deckCardDetail.inventoryCardId = null;
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
+                break;
+            case "delete":
+                const confirmText = `Are you sure you want to remove ${this.props.deckCardMenuAnchor?.name} from the deck?`;
+                if(window.confirm(confirmText)){
+                    deckCardDetail.inventoryCardId = null;
+                    this.props.dispatch(requestDeleteDeckCard(deckCardDetail.id));
+                }
+                break;
+        }
+
+        this.props.dispatch(deckCardMenuButtonClicked(null));
+    }
+
+    handleInventoryCardMenuSelected(name: InventoryCardMenuOption){
+        //inventoryCardMenuAnchorId
+        const inventoryCard = this.props.inventoryCardsById[this.props.inventoryCardMenuAnchorId];
+        switch(name){
+            case "add": 
+                //is there an empty card in the deck that can be filled?
+
+                //if not, a new should be added
+                
+                break;
+            case "remove": 
+                // const confirmText = `Are you sure you want to remove ${this.props.deckCardMenuAnchor?.name} from the deck?`;
+                // if(window.confirm(confirmText)){
+                //     deckCardDetail.inventoryCardId = null;
+                //     this.props.dispatch(requestDeleteDeckCard(deckCardDetail.id));
+                // }
+                break;
+            case "view": 
+                this.props.dispatch(push(`/decks/${inventoryCard.deckId}?cardId=${inventoryCard.cardId}`));
+                break;
+        }
+
         // // console.log('card anchor');
         // // console.log(this.props.cardMenuAnchor);
         // switch (name){
@@ -115,29 +176,58 @@ class CardDetailContainer extends React.Component<ContainerProps>{
         //         break;
         // }
 
-        // this.props.dispatch(cardMenuButtonClicked(null));
+        this.props.dispatch(inventoryCardMenuButtonClicked(null));
     }
 
-    handleCardMenuClose(): void {
-        // this.props.dispatch(cardMenuButtonClicked(null));
-        // this.props.dispatch(menuButtonClicked("deckEditorMenuAnchor", null));
+    handleDeckCardMenuClose(): void {
+        this.props.dispatch(deckCardMenuButtonClicked(null));
     }
+
+    handleInventoryCardMenuClose(): void {
+        this.props.dispatch(inventoryCardMenuButtonClicked(null));
+    }
+
+    
 
     render(){
         //does the layout really need to controll things like the modal? I may have lost sense of things in refactoring
         //TODO - consider wrapping this in a React.Fragment or something, and pulling out the card menu
+
+        //selected deck card category id
+        const categoryId = getCategoryId(this.props.deckCardDetailsById[this.props.deckCardMenuAnchorId]?.category);
+
+        //selected inventory card deck id
+        const invCardDeckId = this.props.inventoryCardsById[this.props.inventoryCardMenuAnchorId]?.deckId;
+        
+
         return(
             <React.Fragment>
                 <CardMenu 
-                    cardMenuAnchor={null} 
-                    onCardMenuSelect={() => {}} 
-                    onCardMenuClose={() => {}} 
-                    cardCategoryId={''}
-                    hasInventoryCard={false}
-                    // cardCategoryId={props.selectedCard?.category || ''}
-                    // hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}
+                    cardMenuAnchor={this.props.deckCardMenuAnchor} 
+                    onCardMenuSelect={this.handleDeckCardMenuSelected} 
+                    onCardMenuClose={this.handleDeckCardMenuClose} 
+                    cardCategoryId={categoryId}
+                    hasInventoryCard={Boolean(this.props.deckCardDetailsById[this.props.deckCardMenuAnchorId]?.inventoryCardId)}
                     />
+                <React.Fragment>
+            <Menu open={Boolean(this.props.inventoryCardMenuAnchor)} onClose={this.handleInventoryCardMenuClose} anchorEl={this.props.inventoryCardMenuAnchor} >
+                {/* <MenuItem onClick={() => { this.handleInventoryCardMenuSelected("") }} value="">Fill Empty Card</MenuItem> */}
+                {/* <MenuItem onClick={() => { this.handleInventoryCardMenuSelected("inventory") }} value="">View Inventory Detail</MenuItem> */}
+
+                { //Only show if not in a deck
+                    !invCardDeckId &&
+                    <MenuItem onClick={() => { this.handleInventoryCardMenuSelected("add") }} value="">Add to Deck</MenuItem> }
                 
+                { //Only show if in this deck
+                    invCardDeckId &&  invCardDeckId === this.props.deckId &&
+                    <MenuItem onClick={() => { this.handleInventoryCardMenuSelected("remove") }} value="">Remove from Deck</MenuItem> }
+                
+                { //Only show if in another deck
+                    invCardDeckId && invCardDeckId !== this.props.deckId &&
+                    <MenuItem onClick={() => { this.handleInventoryCardMenuSelected("view") }} value="">View Deck</MenuItem> }
+
+            </Menu>
+        </React.Fragment>
             <CardDetailLayout
                 selectedCardId={this.props.selectedCardId}
                 cardGroups={this.props.cardGroups}
@@ -154,13 +244,8 @@ class CardDetailContainer extends React.Component<ContainerProps>{
                 deckCardDetailsById={this.props.deckCardDetailsById}
                 activeDeckCardIds={this.props.activeDeckCardIds}
 
-                
-                // menuAnchor={null}
-                // menuAnchorId={0}
-                // onCardMenuSelected={() => {}}
-                onDeckCardMenuClick={() => {}}
-                onInventoryCardMenuClick={() => {}}
-                // onCardMenuClosed={() => {}}
+                onDeckCardMenuClick={this.handleDeckCardMenuClick}
+                onInventoryCardMenuClick={this.handleInventoryCardMenuClick}
                 />
                 
             </React.Fragment>
@@ -185,6 +270,13 @@ class CardDetailContainer extends React.Component<ContainerProps>{
 //     return result;
 // }
 
+function getCategoryId(category: string): string {
+    switch(category){
+        case "Sideboard": return 's';
+        case "Commander": return 'c'
+        default: return '';
+    }
+}
 
 function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //I need to get all deck card details for (the name mapping to this ID)
@@ -227,6 +319,12 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
 
         deckCardDetailsById: state.decks.data.detail.cardDetails.byId,
         activeDeckCardIds: matchingIds,
+
+        deckCardMenuAnchor: containerState.deckCardMenuAnchor,
+        deckCardMenuAnchorId: containerState.deckCardMenuAnchorId,
+
+        inventoryCardMenuAnchor: containerState.inventoryCardMenuAnchor,
+        inventoryCardMenuAnchorId: containerState.inventoryCardMenuAnchorId,
         // cardSearchMethod: containerState.cardSearchMethod,
         // deckId: parseInt(ownProps.match.params.deckId) || 0,
         // selectedCard: containerState.selectedCard,

@@ -11,7 +11,8 @@ import {
     requestDisassembleDeck, 
     requestDeleteDeck,
     cardMenuButtonClicked,
-    requestUpdateDeckCardStatus,
+    requestUpdateDeckCard,
+    requestDeleteDeckCard,
 } from './state/DeckEditorActions';
 
 import { AppState } from '../../configureStore';
@@ -119,37 +120,48 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     handleCardMenuSelected(name: DeckEditorCardMenuOption){
         // console.log('card anchor');
         // console.log(this.props.cardMenuAnchor);
-        switch (name){
-            // case "search":
-            //     if(this.props.cardMenuAnchor != null){
-            //         // this.props.dispatch(deckCardRequestAlternateVersions(this.props.cardMenuAnchor.name))
-            //     }
-            //     break;
-            // case "delete":
-            //         if(this.props.cardMenuAnchor != null){
-            //             const confirmText = `Are you sure you want to delete ${this.props.cardMenuAnchor.name}?`;
-            //             if(window.confirm(confirmText)){
-            //                 // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
-            //             }
-            //         }
-            //         break;
+        // switch (name){
+        //     // case "search":
+        //     //     if(this.props.cardMenuAnchor != null){
+        //     //         // this.props.dispatch(deckCardRequestAlternateVersions(this.props.cardMenuAnchor.name))
+        //     //     }
+        //     //     break;
+        //     // case "delete":
+        //     //         if(this.props.cardMenuAnchor != null){
+        //     //             const confirmText = `Are you sure you want to delete ${this.props.cardMenuAnchor.name}?`;
+        //     //             if(window.confirm(confirmText)){
+        //     //                 // this.props.dispatch(requestDeleteDeckCard(parseInt(this.props.cardMenuAnchor.value)));
+        //     //             }
+        //     //         }
+        //     //         break;
+
+        //hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}
+        const deckCardDetail = this.props.cardDetailsById[this.props.cardMenuAnchorId];
+        switch(name){
             case "sideboard":
-                if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(this.props.cardMenuAnchorId, "sideboard"));
-                }
+                deckCardDetail.category = name;
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
                 break;
             case "mainboard":
-                if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(this.props.cardMenuAnchorId, "mainboard"));
-                }
+                deckCardDetail.category = "";
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
                 break;
             case "commander":
-                if(this.props.cardMenuAnchor != null){
-                    this.props.dispatch(requestUpdateDeckCardStatus(this.props.cardMenuAnchorId, "commander"));
+                deckCardDetail.category = name;
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
+                break;
+            case "inventory":
+                deckCardDetail.inventoryCardId = null;
+                this.props.dispatch(requestUpdateDeckCard(deckCardDetail));
+                break;
+            case "delete":
+                const confirmText = `Are you sure you want to delete ${this.props.cardMenuAnchor?.name}?`;
+                if(window.confirm(confirmText)){
+                    deckCardDetail.inventoryCardId = null;
+                    this.props.dispatch(requestDeleteDeckCard(deckCardDetail.id));
                 }
                 break;
         }
-
         this.props.dispatch(cardMenuButtonClicked(null));
     }
 

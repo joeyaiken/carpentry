@@ -42,7 +42,7 @@ namespace Carpentry.Logic.Implementations
         public DeckService(
             IDeckDataRepo deckRepo,
             IInventoryDataRepo inventoryRepo,
-            IInventoryService inventoryService, 
+            IInventoryService inventoryService,
             ILogger<DeckService> logger,
             ICoreDataRepo coreDataRepo
             //ICardImportService cardImportService
@@ -95,18 +95,18 @@ namespace Carpentry.Logic.Implementations
 
         Why am I even re-querying anything? I should be able to grab anything I need 
         */
-        private  DeckStatsDto GetDeckStats(DeckDetailDto detail)
+        private DeckStatsDto GetDeckStats(DeckDetailDto detail)
         {
             DeckStatsDto result = new DeckStatsDto();
 
             //get deck cards
 
             //Total mainboard cards
-            
+
             //cmc breakdown of mainboard cards
-            
+
             //type breakdown of mainboard cards
-            
+
             //deck color identity (including sideboard)
 
             //Price (should this include sideboard?)
@@ -183,7 +183,7 @@ namespace Carpentry.Logic.Implementations
             result.TypeCounts = typeCountsDict;
 
             //this is for the CMC breakdown
-            Dictionary<string,int> deckCardCostsDict = statData
+            Dictionary<string, int> deckCardCostsDict = statData
                 .Where(x => x.CategoryId != 's' && !x.Type.Contains("Land"))
                 .Select(x => x.Cmc)
                 .GroupBy(x => x)
@@ -194,7 +194,7 @@ namespace Carpentry.Logic.Implementations
                 })
                 .OrderBy(x => x.Cmc)
                 .ToDictionary(x => x.Cmc.ToString(), x => x.Count);
-   
+
             result.CostCounts = deckCardCostsDict;
 
 
@@ -221,7 +221,7 @@ namespace Carpentry.Logic.Implementations
 
         private static string GetCardTypeGroup(string cardType)
         {
-            if(cardType == null)
+            if (cardType == null)
             {
                 return null;
             }
@@ -474,6 +474,19 @@ namespace Carpentry.Logic.Implementations
             await _deckRepo.DeleteDeck(deckId);
         }
 
+
+        public async Task DissassembleDeck(int deckId)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<int> CloneDeck(int deckId)
+        {
+            throw new NotImplementedException();
+
+
+
+        }
+
         #endregion Deck Props
 
         #region Deck Cards
@@ -574,6 +587,7 @@ namespace Carpentry.Logic.Implementations
 
             dbCard.DeckId = card.DeckId;
             dbCard.CategoryId = card.CategoryId;
+            dbCard.InventoryCardId = card.InventoryCardId;
 
             await _deckRepo.UpdateDeckCard(dbCard);
         }

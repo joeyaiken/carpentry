@@ -11,81 +11,20 @@ namespace Carpentry.Logic.Implementations
     public class InventoryService : IInventoryService
     {
         private readonly IInventoryDataRepo _inventoryRepo;
-        //private readonly IDataUpdateService _dataUpdateService;
-        //private readonly ICoreDataRepo _coreDataRepo;
         private readonly ICardDataRepo _cardDataRepo;
-        //private readonly ISearchService _searchService;
+
         public InventoryService(
             IInventoryDataRepo inventoryRepo,
-            //IDataUpdateService dataUpdateService,
-            //ICoreDataRepo coreDataRepo,
             ICardDataRepo cardDataRepo
-            //ISearchService searchService
         )
         {
             _inventoryRepo = inventoryRepo;
-            //_dataUpdateService = dataUpdateService;
-            //_coreDataRepo = coreDataRepo;
             _cardDataRepo = cardDataRepo;
-            //_searchService = searchService;
         }
-
-        #region private methods
-
-        //private static InventoryOverviewDto MapCardResultToInventoryOverview(CardOverviewResult data)
-        //{
-        //    InventoryOverviewDto result = new InventoryOverviewDto()
-        //    {
-        //        Cmc = data.Cmc,
-        //        Cost = data.Cost,
-        //        Count = data.Count,
-        //        //Description = data.,
-        //        Id = data.Id,
-        //        Img = data.Img,
-        //        Name = data.Name,
-        //        Type = data.Type,
-        //        Price = data.Price,
-        //        IsFoil = data.IsFoil,
-        //        Category = data.Category,
-        //        Description = data.Category,
-        //        //Variant = data.Variant,
-        //    };
-        //    return result;
-        //}
-
-        private static List<MagicCardDto> MapInventoryQueryToMagicCardObject(List<Data.DataModels.CardData> query)
-        {
-            List<MagicCardDto> result = query.Select(card => new MagicCardDto()
-            {
-                CardId = card.CardId,
-                Cmc = card.Cmc,
-                ManaCost = card.ManaCost,
-                MultiverseId = card.MultiverseId,
-                Name = card.Name,
-                CollectionNumber = card.CollectorNumber,
-                ImageUrl = card.ImageUrl,
-                Price = card.Price,
-                PriceFoil = card.PriceFoil,
-                PriceTix = card.TixPrice,
-                Colors = card.Color.Split().ToList(),
-                Rarity = card.Rarity.Name,
-                Set = card.Set.Code,
-                Text = card.Text,
-                Type = card.Type,
-                ColorIdentity = card.ColorIdentity.Split().ToList(),
-                Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
-            }).ToList();
-            return result;
-        }
-
-        #endregion
-
-        #region Inventory Card add/update/delete
 
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
             //TODO - validate card ID, instead of blindly trusting it if > 0
-
             var newInventoryCard = new Data.DataModels.InventoryCardData()
             {
                 IsFoil = dto.IsFoil,
@@ -212,24 +151,6 @@ namespace Carpentry.Logic.Implementations
             }
         }
 
-        #endregion Inventory Card add/update/delete
-
-        #region Search
-
-        //public async Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param)
-        //{
-        //    if (param == null)
-        //    {
-        //        throw new ArgumentNullException("param");
-        //    }
-
-        //    //IEnumerable<CardOverviewResult> result = await _inventoryRepo.GetInventoryOverviews(param);
-
-        //    var result = await _searchService.SearchInventory(param);
-
-        //    return result;
-        //}
-
         public async Task<InventoryDetailDto> GetInventoryDetail(int cardId)
         {
 
@@ -311,12 +232,29 @@ namespace Carpentry.Logic.Implementations
             //var cardDefinitionsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name);
             var cardDefinitions = await _cardDataRepo.GetCardsByName(matchingCard.Name);
 
-            result.Cards = MapInventoryQueryToMagicCardObject(cardDefinitions).ToList();
+            result.Cards = cardDefinitions.Select(card => new MagicCardDto()
+            {
+                CardId = card.CardId,
+                Cmc = card.Cmc,
+                ManaCost = card.ManaCost,
+                MultiverseId = card.MultiverseId,
+                Name = card.Name,
+                CollectionNumber = card.CollectorNumber,
+                ImageUrl = card.ImageUrl,
+                Price = card.Price,
+                PriceFoil = card.PriceFoil,
+                PriceTix = card.TixPrice,
+                Colors = card.Color.Split().ToList(),
+                Rarity = card.Rarity.Name,
+                Set = card.Set.Code,
+                Text = card.Text,
+                Type = card.Type,
+                ColorIdentity = card.ColorIdentity.Split().ToList(),
+                Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
+            }).ToList();
 
             return result;
         }
-
-        #endregion Search
 
     }
 }

@@ -3,6 +3,7 @@ import { cardSearchApi } from "../../../api/cardSearchApi";
 import { decksApi } from "../../../api/decksApi";
 import { inventoryApi } from "../../../api/inventoryApi";
 import { AppState } from "../../../configureStore";
+import { reloadDeckDetail } from "../../state/decksDataActions";
 
 export const CARD_SEARCH_FILTER_VALUE_CHANGED = 'DECK_ADD_CARDS.CARD_SEARCH_FILTER_VALUE_CHANGED';
 export const cardSearchFilterValueChanged = (type: 'inventoryFilterProps' | 'cardSearchFilterProps', filter: string, value: string | boolean): ReduxAction => ({
@@ -29,10 +30,10 @@ export const cardSearchSelectCard = (card: CardSearchResultDto): ReduxAction => 
 
 export const requestAddDeckCard = (deckCardDto: DeckCardDto): any => {
     return (dispatch: Dispatch, getState: any) => {
-        return addDeckCard(dispatch, getState(), deckCardDto);
+        return addDeckCard(dispatch, getState(), deckCardDto);        
     }
 }
-
+//TODO - should this belong in data actions?
 function addDeckCard(dispatch: Dispatch, state: AppState, deckCardDto: DeckCardDto): any{
     dispatch(cardSearchAddingDeckCard());
 
@@ -49,6 +50,11 @@ function addDeckCard(dispatch: Dispatch, state: AppState, deckCardDto: DeckCardD
 
     
     decksApi.addDeckCard(deckCardDto).then(() => {
+        //need to re-query deck data
+
+        dispatch(reloadDeckDetail(deckCardDto.deckId));
+
+
 
 
         

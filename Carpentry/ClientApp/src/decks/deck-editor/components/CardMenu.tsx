@@ -16,7 +16,7 @@ export default function CardMenu(props: ComponentProps): JSX.Element {
         <React.Fragment>
             <Menu open={Boolean(props.cardMenuAnchor)} onClose={props.onCardMenuClose} anchorEl={props.cardMenuAnchor} >
                 
-                { props.cardCategoryId !== 'c' && 
+                { props.cardCategoryId !== 'c'  && 
                     <MenuItem onClick={() => {props.onCardMenuSelect("commander")}} value="">Make Commander</MenuItem> }
                 
                 { props.cardCategoryId !== 's' && 
