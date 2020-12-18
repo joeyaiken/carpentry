@@ -794,7 +794,7 @@ namespace Carpentry.Logic.Implementations
                         //Category = x.Item.Category ?? GetCardTypeGroup(x.Item.Type),
                         //Cmc = x.Item.Cmc,
                     }).ToList(),
-                })
+                }).OrderBy(c => c.Name)
                 .ToList();
 
 
@@ -917,6 +917,8 @@ namespace Carpentry.Logic.Implementations
             result.Stats.TotalCost = deckCardData.Select(c => c.IsFoil ? c.PriceFoil : c.Price).Sum() ?? 0;
 
             #endregion
+
+            
 
             return result;
         }

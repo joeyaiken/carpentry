@@ -2,19 +2,13 @@ import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
 import { AppState } from '../../configureStore';
 import { 
-//     cardSearchFilterValueChanged, 
-//     toggleCardSearchViewMode, 
-//     // cardSearchSearchMethodChanged, 
-    requestAddDeckCard, 
-//     cardSearchSelectCard, 
-    // requestCardSearch, 
-//     requestCardSearchInventory
+    requestAddDeckCard, //TODO - This should be moved to the Deck Data Reducer
 } from '../deck-add-cards/state/DeckAddCardsActions';
 import CardDetailLayout from './components/CardDetailLayout';
-import { deckCardMenuButtonClicked, ensureCardDetailLoaded, inventoryCardMenuButtonClicked } from './state/CardDetailActions';
+import { deckCardMenuButtonClicked, ensureCardDetailLoaded, forceLoadCardDetail, inventoryCardMenuButtonClicked } from './state/CardDetailActions';
 import CardMenu from '../deck-editor/components/CardMenu';
 import { Menu, MenuItem } from '@material-ui/core';
-import { requestDeleteDeckCard, requestUpdateDeckCard } from '../deck-editor/state/DeckEditorActions';
+import { requestDeleteDeckCard, requestUpdateDeckCard } from '../deck-editor/state/DeckEditorActions'; //This should ALSO be moved to the Deck Data Reducer
 import { push } from 'react-router-redux';
 // import { requestAddDeckCard } from '../deck-add-cards/state/DeckAddCardsActions';
 // import { push } from 'react-router-redux';
@@ -126,10 +120,34 @@ class CardDetailContainer extends React.Component<ContainerProps>{
         const inventoryCard = this.props.inventoryCardsById[this.props.inventoryCardMenuAnchorId];
         switch(name){
             case "add": 
-                //is there an empty card in the deck that can be filled?
 
-                //if not, a new should be added
-                
+                //is there an empty card in the deck that can be filled?
+                var firstEmptyId = this.props.activeDeckCardIds.find(id => !Boolean(this.props.deckCardDetailsById[id].inventoryCardId));
+
+                if(firstEmptyId){
+                    //If so, update it
+                    var thisDeckCard = this.props.deckCardDetailsById[firstEmptyId];
+                    thisDeckCard.inventoryCardId = inventoryCard.id;
+                    this.props.dispatch(requestUpdateDeckCard(thisDeckCard));
+
+                } else {
+                    //if not, a new should be added
+                    
+                    let newDeckCard: DeckCardDto = {
+                        id: 0,
+                        deckId: this.props.deckId,
+                        cardName: inventoryCard.name,
+                        categoryId: null,
+                        inventoryCardId: inventoryCard.id,
+
+                        cardId: inventoryCard.cardId,
+                        isFoil: inventoryCard.isFoil,
+                        inventoryCardStatusId: 1,
+                    }
+
+                    this.props.dispatch(requestAddDeckCard(newDeckCard));
+                    this.props.dispatch(forceLoadCardDetail(this.props.selectedCardId));
+                }
                 break;
             case "remove": 
                 // const confirmText = `Are you sure you want to remove ${this.props.deckCardMenuAnchor?.name} from the deck?`;

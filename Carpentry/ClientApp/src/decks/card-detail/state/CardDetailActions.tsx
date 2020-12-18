@@ -8,6 +8,12 @@ export const ensureCardDetailLoaded = (cardId: number): any => {
     }
 }
 
+export const forceLoadCardDetail = (cardId: number): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        tryLoadCardDetail(dispatch, getState(), cardId, true);
+    }
+}
+
 export const CARD_DETAIL_REQUESTED = 'DECK_CARD_DETAIL.CARD_DETAIL_REQUESTED';
 export const cardDetailRequested = (): ReduxAction => ({
     type: CARD_DETAIL_REQUESTED,
