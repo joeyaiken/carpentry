@@ -20,6 +20,7 @@ declare type InventoryCardMenuOption = "add" | "remove" | "view";
 
 declare type DeckEditorViewMode = 'grid' | 'list' | 'grouped';
 
+declare type DeckExportType = 'list' | 'empty' | 'suggestions';
 
 declare interface ReduxAction extends AnyAction {
     type: any, //Should be combined type of all fuckin action types?

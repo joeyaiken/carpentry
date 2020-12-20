@@ -9,6 +9,7 @@ interface ComponentProps{
     onEditClick: () => void;
     onToggleViewClick: () => void;
     onAddCardsClick: () => void;
+    onExportClick: () => void;
 }
 
 const ManaChip = (type: String, value: number): JSX.Element => 
@@ -47,6 +48,9 @@ export default function DeckPropsBar(props: ComponentProps): JSX.Element {
                     </Button>
                     <Button onClick={props.onEditClick} color="primary" variant="contained">
                         Edit
+                    </Button>
+                    <Button onClick={props.onExportClick} color="primary" variant="contained">
+                        Export
                     </Button>
                     <Button onClick={props.onAddCardsClick} color="primary" variant="contained">
                         Add Cards

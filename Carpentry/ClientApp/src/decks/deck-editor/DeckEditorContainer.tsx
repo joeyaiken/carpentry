@@ -19,6 +19,11 @@ import { AppState } from '../../configureStore';
 import { ensureDeckDetailLoaded } from '../state/decksDataActions';
 import { DeckEditorLayout } from './components/DeckEditorLayout';
 import { push } from 'react-router-redux';
+import { DeckPropsDialog } from './components/DeckPropsDialog';
+import { CardDetailDialog } from './components/CardDetailDialog';
+// import { DeckExportDialog } from './components/DeckExportDialog';
+import DeckExportContainer from '../deck-export/DeckExportContainer';
+import { openExportDialog } from '../deck-export/state/DeckExportActions';
 
 /**
  * The Deck Editor is basically a fancy data table
@@ -64,8 +69,6 @@ interface PropsFromState {
     //Non-grouped views will just snag cards from item at position 0
     cardDetailsById: { [deckCardId: number]: DeckCardDetail };
 
-
-
     //Detail
     cardMenuAnchor: HTMLButtonElement | null;
     cardMenuAnchorId: number;
@@ -76,7 +79,10 @@ interface PropsFromState {
     //card detail
     selectedCardId: number;
     isCardDetailDialogOpen: boolean;
-    
+
+    //export
+    isExportDialogOpen: boolean;
+    selectedExportType: DeckExportType;
 }
 
 type DeckEditorProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -98,6 +104,11 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handleAddCardsClicked = this.handleAddCardsClicked.bind(this);
         this.handleCardDetailClick = this.handleCardDetailClick.bind(this);
         this.handleCardDetailClose = this.handleCardDetailClose.bind(this);
+        // this.handleExportOpenClick = this.handleExportOpenClick.bind(this);
+        // this.handleExportTypechange = this.handleExportTypechange.bind(this);
+        // this.handleExportDialogButtonClick = this.handleExportDialogButtonClick.bind(this);
+        // this.handleExportCloseClick = this.handleExportCloseClick.bind(this);
+        this.handleExportClicked = this.handleExportClicked.bind(this);
     }
 
     componentDidMount() {
@@ -220,6 +231,10 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.props.dispatch(push(`/decks/${this.props.deckId}`));
     }
 
+    handleExportClicked(): void {
+        this.props.dispatch(openExportDialog());
+    }
+
     render() {
         if(this.props.deckProperties === null || this.props.deckStats === null){
             return(
@@ -230,46 +245,64 @@ class DeckEditor extends React.Component<DeckEditorProps> {
             )
         } else {
             return(
-                <DeckEditorLayout 
-                    //props & modal
-                    deckProperties={this.props.deckProperties}
-                    dialogDeckProperties={this.props.deckDialogProperties}
-                    isPropsDialogOpen={this.props.isPropsDialogOpen}
-                    onPropsModalOpen={this.handlePropsModalOpen}
-                    onPropsModalClose={this.handlePropsModalClose}
-                    onModalPropsChange={this.handleModalPropsChanged}
-                    onPropsModalSave={this.handlePropsModalSave}
-                    formatFilterOptions={this.props.formatFilterOptions}
-                    onPropsModalDisassembleClick={this.handlePropsModalDisassemble}
-                    onPropsModalDeleteClick={this.handlePropsModalDelete}
+                <React.Fragment>
+                    {
+                        this.props.deckDialogProperties && 
+                        <DeckPropsDialog 
+                            isOpen={this.props.isPropsDialogOpen}
+                            onCloseClick={this.handlePropsModalClose}
+                            onFieldChange={this.handleModalPropsChanged}
+                            deckProperties={this.props.deckDialogProperties}
+                            formatFilterOptions={this.props.formatFilterOptions}
+                            onSaveClick={this.handlePropsModalSave} 
+                            onDisassembleClick={this.handlePropsModalDisassemble}
+                            onDeleteClick={this.handlePropsModalDelete} />
+                    }
+                    <CardDetailDialog 
+                        onCardDetailClose={this.handleCardDetailClose}
+                        isCardDetailDialogOpen={this.props.isCardDetailDialogOpen}
+                        selectedCardId={this.props.selectedCardId} />
 
-                    onAddCardsClick={this.handleAddCardsClicked}
+                    <DeckExportContainer />
+                    {/* <DeckExportDialog 
+                        isDialogOpen={this.props.isExportDialogOpen}
+                        selectedExportType={this.props.selectedExportType} 
+                        onExportTypeChange={this.handleExportTypechange}
+                        onExportButtonClick={this.handleExportDialogButtonClick}
+                        onExportCloseClick={this.handleExportCloseClick} /> */}
 
-                    //View
-                    handleToggleDeckView={this.handleToggleDeckView}
-                    viewMode={this.props.viewMode}
-                
-                    //overview
-                    groupedCardOverviews={this.props.groupedCardOverviews}
-                    onCardSelected={this.handleCardSelected} 
-                    cardDetailsById={this.props.cardDetailsById}
-                    //detail
-                    cardMenuAnchor={this.props.cardMenuAnchor}
-                    cardMenuAnchorId={this.props.cardMenuAnchorId}
-                    selectedCard={this.props.selectedCard} 
-                    selectedInventoryCards={this.props.selectedInventoryCards} 
-                    onCardMenuSelected={this.handleCardMenuSelected}
-                    onCardMenuClick={this.handleCardMenuClick}
-                    onCardMenuClosed={this.handleCardMenuClosed}
+                    <DeckEditorLayout 
+                        //props & modal
+                        deckProperties={this.props.deckProperties}
+                        onPropsModalOpen={this.handlePropsModalOpen}
 
-                    //detail dialog
-                    onCardDetailClick={this.handleCardDetailClick}
-                    selectedCardId={this.props.selectedCardId}
-                    isCardDetailDialogOpen={this.props.isCardDetailDialogOpen}
-                    onCardDetailClose={this.handleCardDetailClose}
+                        onAddCardsClick={this.handleAddCardsClicked}
+                        onExportClick={this.handleExportClicked}
 
-                    //stats
-                    deckStats={this.props.deckStats} />
+                        //View
+                        handleToggleDeckView={this.handleToggleDeckView}
+                        viewMode={this.props.viewMode}
+                    
+                        //overview
+                        groupedCardOverviews={this.props.groupedCardOverviews}
+                        onCardSelected={this.handleCardSelected} 
+                        cardDetailsById={this.props.cardDetailsById}
+                        //detail
+                        cardMenuAnchor={this.props.cardMenuAnchor}
+                        cardMenuAnchorId={this.props.cardMenuAnchorId}
+                        selectedCard={this.props.selectedCard} 
+                        selectedInventoryCards={this.props.selectedInventoryCards} 
+                        onCardMenuSelected={this.handleCardMenuSelected}
+                        onCardMenuClick={this.handleCardMenuClick}
+                        onCardMenuClosed={this.handleCardMenuClosed}
+
+                        //detail dialog
+                        onCardDetailClick={this.handleCardDetailClick}
+
+                        //stats
+                        deckStats={this.props.deckStats} />
+
+                </React.Fragment>
             )
         }
     }
@@ -381,6 +414,10 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         //cardDetailName: selectedCardName,
         selectedCardId: selectedCardId,
         isCardDetailDialogOpen: selectedCardId !== 0,
+
+        //export
+        isExportDialogOpen: true,
+        selectedExportType: 'list',
     }
 
     return result;

@@ -73,9 +73,9 @@ export const decksApi = {
         await Post(endpoint, dto);
         return;
     },
-    async exportDeckList(deckId: number): Promise<string> {
+    async exportDeckList(deckId: number, exportType: DeckExportType): Promise<string> {
         const endpoint = `api/Decks/ExportDeckList`;
-        const url = `${endpoint}?deckId=${deckId}`;
+        const url = `${endpoint}?deckId=${deckId}&exportType=${exportType}`;
         const result = await Get(url);
         return result;
     }

@@ -19,6 +19,7 @@ import { deckAddCardsReducer, State as DeckAddCardsReducerState } from './decks/
 import { inventoryAddCardsReducer, State as InventoryAddCardsReducerState } from './inventory/inventory-add-cards/state/InventoryAddCardsReducer';
 import { cardDetailReducer, State as CardDetailReducerState } from './decks/card-detail/state/CardDetailReducer';
 import { homeReducer, State as HomeReducerState } from './home/state/HomeReducer';
+import { deckExportReducer, State as DeckExportReducerState } from './decks/deck-export/state/DeckExportReducer';
 // import { settingsDataReducer, State as SettingsDataReducerState } from './settings/state/SettingsDataReducer';
 
 //TODO - consider renaming this file to just "store.tsx"
@@ -42,6 +43,7 @@ const rootReducer = (history: History) => combineReducers({
         cardDetail: cardDetailReducer,
         //cardSearch | addDeckCards | deckAddCards | ??
         deckAddCards: deckAddCardsReducer,
+        deckExport: deckExportReducer,
         data: decksDataReducer,
     }),
 
@@ -78,6 +80,7 @@ export interface AppState {
         deckEditor: DeckEditorReducerState,
         cardDetail: CardDetailReducerState,
         deckAddCards: DeckAddCardsReducerState,
+        deckExport: DeckExportReducerState,
         data: DecksDataReducerState
     }
     inventory:{

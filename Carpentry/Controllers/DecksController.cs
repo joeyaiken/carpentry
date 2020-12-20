@@ -227,7 +227,7 @@ namespace Carpentry.Controllers
         #region Export
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<string>> ExportDeckList(int deckId)
+        public async Task<ActionResult<string>> ExportDeckList(int deckId, string exportType)
         {
             try
             {

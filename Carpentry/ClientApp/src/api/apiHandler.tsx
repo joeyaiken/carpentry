@@ -3,14 +3,18 @@
 export async function Get(url: string): Promise<any> {
     // console.log(`get fetching URL ${url}`)
     const response = await fetch(url);
-    // console.log('updating tracked sets ping 7?');
+    // console.log('updating ...something');
     // console.log(response);
 
     const contentType = response.headers.get("content-type");
     if(contentType && contentType.indexOf("application/json") !== -1){
         const result = await response.json();
         return result;
+    } else if(contentType && contentType.indexOf("text/plain") !== -1){
+        const result = await response.text();
+        return result;
     }
+    
     return;
 
     // if (response.status === 202) {
