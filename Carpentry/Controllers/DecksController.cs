@@ -17,13 +17,11 @@ namespace Carpentry.Controllers
 
         private readonly IDeckService _deckService;
         private readonly IDataImportService _cardImportService;
-        private readonly IDataExportService _exportService;
 
-        public DecksController(IDeckService deckService, IDataImportService cardImportService, IDataExportService exportService)
+        public DecksController(IDeckService deckService, IDataImportService cardImportService)
         {
             _deckService = deckService;
             _cardImportService = cardImportService;
-            _exportService = exportService;
         }
 
         /// <summary>
@@ -231,12 +229,12 @@ namespace Carpentry.Controllers
         {
             try
             {
-                string results = await _exportService.GetDeckListExport(deckId);
+                string results = await _deckService.GetDeckListExport(deckId, exportType);
                 return Ok(results);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("ValidateDeckImport", ex));
+                return StatusCode(500, FormatExceptionMessage("ExportDeckList", ex));
             }
         }
 

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UnitTests\CardSearchControllerTests.cs" />
+    <Compile Remove="UnitTests\CoreControllerTests.cs" />
+    <Compile Remove="UnitTests\DecksControllerTests.cs" />
+    <Compile Remove="UnitTests\InventoryControllerTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Moq" Version="4.13.1" />
@@ -18,6 +25,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Carpentry.Service\Carpentry.Service.csproj" />
     <ProjectReference Include="..\Carpentry\Carpentry.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UnitTests\" />
   </ItemGroup>
 
 </Project>

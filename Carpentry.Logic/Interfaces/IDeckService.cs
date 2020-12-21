@@ -24,6 +24,8 @@ namespace Carpentry.Logic.Interfaces
         Task<List<DeckOverviewDto>> GetDeckOverviews();
         Task<DeckDetailDto> GetDeckDetail(int deckId);
 
+        Task<string> GetDeckListExport(int deckId, string exportType);
+
 
         //Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto);
         //Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto);

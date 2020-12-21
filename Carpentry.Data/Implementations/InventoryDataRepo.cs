@@ -588,7 +588,7 @@ namespace Carpentry.Data.Implementations
             var result = (await _cardContext.InventoryCards
                 .Where(ic => cardNames.Contains(ic.Card.Name))
                 .Include(ic => ic.Card).ThenInclude(c => c.Set)
-                .Include(ic => ic.DeckCards)
+                .Include(ic => ic.DeckCards).ThenInclude(dc => dc.Deck)
                 .ToListAsync())
                 .GroupBy(ic => ic.Card.Name)
                 .ToDictionary(g => g.Key, g => g.ToList());

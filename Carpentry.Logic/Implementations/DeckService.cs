@@ -927,6 +927,8 @@ namespace Carpentry.Logic.Implementations
 
         #region Import / Export
 
+
+
         //public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto)
         //{
         //    var validatedResult = await _cardImportService.ValidateDeckImport(dto);
@@ -939,11 +941,123 @@ namespace Carpentry.Logic.Implementations
         //    await _cardImportService.AddValidatedDeckImport(validatedDto);
         //}
 
-        //public async Task<string> ExportDeckList(int deckId)
-        //{
-        //    //This can't be implemented until I add Set Number to CardData, and properly track that in the DB
-        //    throw new NotImplementedException();
-        //}
+        public async Task<string> GetDeckListExport(int deckId, string exportType)
+        {
+            var deckCardData = await _deckRepo.GetDeckCards(deckId);
+
+            if (exportType == "empty") return FormatExportEmptyCards(deckCardData);
+
+            if (exportType == "suggestions") return await FormatExportCardSuggestions(deckCardData);
+
+            return FormatExportDeckList(deckCardData);
+        }
+
+        private string FormatExportDeckList(IEnumerable<DeckCardResult> deckCardData)
+        {
+            var deckCardStrings = deckCardData.Select(dc => new
+            {
+                CardString = $"{dc.Name} ({dc.SetCode}) {dc.CollectorNumber}",
+                Category = dc.Category,
+            });
+
+            var cardStrings = deckCardStrings
+                .GroupBy(dc => new
+                {
+                    dc.Category,
+                    dc.CardString,
+                })
+                .Select(g => new
+                {
+                    g.Key.Category,
+                    CardString = $"{g.Count()} {g.Key.CardString}",
+                }).ToList();
+
+            var cardStringCategories = cardStrings
+                .GroupBy(g => g.Category)
+                .Select(g => new
+                {
+                    Category = g.Key,
+                    Cards = g.Select(i => i.CardString),
+                })
+                .ToList();
+
+            var exportList = new List<string>();
+
+            foreach (var group in cardStringCategories)
+            {
+                exportList.Add(group.Category);
+                exportList.AddRange(group.Cards);
+                exportList.Add("");
+            }
+
+            var result = string.Join('\n', exportList);
+
+            return result;
+        }
+
+        private string FormatExportEmptyCards(IEnumerable<DeckCardResult> deckCardData)
+        {
+            var emptyCards = deckCardData.Where(dc => dc.InventoryCardId == null);
+            return FormatExportDeckList(emptyCards);
+        }
+
+        private async Task<string> FormatExportCardSuggestions(IEnumerable<DeckCardResult> deckCardData)
+        {
+            var emptyCards = deckCardData.Where(dc => dc.InventoryCardId == null);
+
+            var emptyCardNames = deckCardData.Select(dc => dc.Name).Distinct();
+
+            var availableInventoryCards = await _inventoryRepo.GetUnusedInventoryCards(emptyCardNames);
+
+            //current plan won't involve grouping things by category, just by name
+            //Will only list cards needed by name (including # needed), then list available cards
+
+            var groupedEmptyCards = emptyCards.GroupBy(c => c.Name).OrderBy(g => g.Key);
+
+            var exportList = new List<string>();
+
+            foreach (var group in groupedEmptyCards)
+            {
+                exportList.Add($"Card: {group.Key} Count: {group.Count()}");
+
+                if(availableInventoryCards.TryGetValue(group.Key, out var matchingCards))
+                {
+                    if(matchingCards == null || matchingCards.Count == 0)
+                    {
+                        exportList.Add("{No owned copies}");
+                        continue;
+                    }
+
+                    //available cards will be grouped by [cardId,isFoil,deckId], and presented with group counts
+
+                    var groupedMatches = matchingCards.GroupBy(c => new
+                    {
+                        c.CardId,
+                        c.IsFoil,
+                        c.DeckCards.FirstOrDefault()?.DeckId,
+                    }).ToList();
+
+                    foreach(var groupMatch in groupedMatches)
+                    {
+                        var invCard = groupMatch.First();
+
+                        var deckId = invCard.DeckCards.FirstOrDefault()?.DeckId;
+                        var deckName = deckId == null ? "Inventory" : invCard.DeckCards.First().Deck.Name;
+
+                        var foil = invCard.IsFoil ? " (foil)" : "";
+                        //set , collNum , foil , location , count
+                        exportList.Add($"{invCard.Card.Set.Code} {invCard.Card.CollectorNumber} ({invCard.Card.RarityId}) {foil} - {deckName} - {groupMatch.Count()}");
+                    }
+                }
+
+                exportList.Add("");
+
+            }
+
+            var result = string.Join('\n', exportList);
+
+            return result;
+        }
 
         #endregion Import / Export
 
