@@ -158,6 +158,52 @@ namespace Carpentry.Controllers
 
         #endregion Deck Cards
 
+        #region Card Tags
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<CardTagDetailDto>> GetCardTagDetails(int deckId, int cardId)
+        {
+            try
+            {
+                await _deckService.GetCardTagDetails(deckId, cardId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetCardTagDetails", ex));
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddCardTag([FromBody] CardTagDto cardTag)
+        {
+            try
+            {
+                await _deckService.AddCardTag(cardTag);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("AddCardTag", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> RemoveCardTag([FromHeader] int cardTagId)
+        {
+            try
+            {
+                await _deckService.RemoveCardTag(cardTagId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("RemoveCardTag", ex));
+            }
+        }
+
+        #endregion
+
         #region Search
 
         [HttpGet("[action]")]

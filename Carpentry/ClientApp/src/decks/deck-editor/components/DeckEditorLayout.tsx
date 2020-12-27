@@ -39,8 +39,9 @@ declare interface ComponentProps{
     onCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onCardMenuClosed: () => void;
 
-    //cardDetail
+    //cardDetail/tags
     onCardDetailClick: (cardId: number) => void;
+    onCardTagsClick: (cardId: number) => void;
 
     //stats
     deckStats: DeckStats;
@@ -88,7 +89,8 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
                         inventoryCards={props.selectedInventoryCards} 
                         onMenuClick={props.onCardMenuClick}
                         onMenuClose={props.onCardMenuClosed}
-                        onCardDetailClick={props.onCardDetailClick} />
+                        onCardDetailClick={props.onCardDetailClick} 
+                        onCardTagsClick={props.onCardTagsClick} />
                 </div>
             </Box>
 

@@ -1,8 +1,3 @@
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.csprojAssemblyReference.cache
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cs
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cache
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfoInputs.cache
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfo.cs
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Views.dll
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Views.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\appsettings.Development.json
@@ -191,6 +186,11 @@ C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Data.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Logic.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Service.pdb
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.csprojAssemblyReference.cache
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cs
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cache
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfoInputs.cache
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfo.cs
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.RazorTargetAssemblyInfo.cache
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.csproj.CopyComplete
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\staticwebassets\Carpentry.Tests.StaticWebAssets.Manifest.cache

@@ -24,6 +24,8 @@ import { CardDetailDialog } from './components/CardDetailDialog';
 // import { DeckExportDialog } from './components/DeckExportDialog';
 import DeckExportContainer from '../deck-export/DeckExportContainer';
 import { openExportDialog } from '../deck-export/state/DeckExportActions';
+import CardTagsContainer from '../card-tags/CardTagsContainer';
+import { CardTagsDialog } from './components/CardTagsDialog';
 
 /**
  * The Deck Editor is basically a fancy data table
@@ -79,6 +81,7 @@ interface PropsFromState {
     //card detail
     selectedCardId: number;
     isCardDetailDialogOpen: boolean;
+    isCardTagsDialogOpen: boolean;
 
     //export
     isExportDialogOpen: boolean;
@@ -103,12 +106,16 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         this.handlePropsModalDelete = this.handlePropsModalDelete.bind(this);
         this.handleAddCardsClicked = this.handleAddCardsClicked.bind(this);
         this.handleCardDetailClick = this.handleCardDetailClick.bind(this);
-        this.handleCardDetailClose = this.handleCardDetailClose.bind(this);
+        this.handleDialogClose = this.handleDialogClose.bind(this);
         // this.handleExportOpenClick = this.handleExportOpenClick.bind(this);
         // this.handleExportTypechange = this.handleExportTypechange.bind(this);
         // this.handleExportDialogButtonClick = this.handleExportDialogButtonClick.bind(this);
         // this.handleExportCloseClick = this.handleExportCloseClick.bind(this);
+
+        this.handleCardTagsClick = this.handleCardTagsClick.bind(this);
+
         this.handleExportClicked = this.handleExportClicked.bind(this);
+
     }
 
     componentDidMount() {
@@ -224,11 +231,15 @@ class DeckEditor extends React.Component<DeckEditorProps> {
         // console.log(`handleCardDetailClick: ${cardName}`)
         // const encodedCardName = encodeURI(cardName);
         //this.props.dispatch(push(`/decks/${this.props.deckId}?card=${encodedCardName}`));
-        this.props.dispatch(push(`/decks/${this.props.deckId}?cardId=${cardId}`));
+        this.props.dispatch(push(`/decks/${this.props.deckId}?cardId=${cardId}&show=detail`));
     }
 
-    handleCardDetailClose(){
+    handleDialogClose(){
         this.props.dispatch(push(`/decks/${this.props.deckId}`));
+    }
+
+    handleCardTagsClick(cardId: number){
+        this.props.dispatch(push(`/decks/${this.props.deckId}?cardId=${cardId}&show=tags`));
     }
 
     handleExportClicked(): void {
@@ -259,17 +270,16 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                             onDeleteClick={this.handlePropsModalDelete} />
                     }
                     <CardDetailDialog 
-                        onCardDetailClose={this.handleCardDetailClose}
-                        isCardDetailDialogOpen={this.props.isCardDetailDialogOpen}
+                        onCloseClick={this.handleDialogClose}
+                        isDialogOpen={this.props.isCardDetailDialogOpen}
+                        selectedCardId={this.props.selectedCardId} />
+
+                    <CardTagsDialog
+                        onCloseClick={this.handleDialogClose}
+                        isDialogOpen={this.props.isCardTagsDialogOpen}
                         selectedCardId={this.props.selectedCardId} />
 
                     <DeckExportContainer />
-                    {/* <DeckExportDialog 
-                        isDialogOpen={this.props.isExportDialogOpen}
-                        selectedExportType={this.props.selectedExportType} 
-                        onExportTypeChange={this.handleExportTypechange}
-                        onExportButtonClick={this.handleExportDialogButtonClick}
-                        onExportCloseClick={this.handleExportCloseClick} /> */}
 
                     <DeckEditorLayout 
                         //props & modal
@@ -296,9 +306,9 @@ class DeckEditor extends React.Component<DeckEditorProps> {
                         onCardMenuClick={this.handleCardMenuClick}
                         onCardMenuClosed={this.handleCardMenuClosed}
 
-                        //detail dialog
+                        //dialogs
                         onCardDetailClick={this.handleCardDetailClick}
-
+                        onCardTagsClick={this.handleCardTagsClick}
                         //stats
                         deckStats={this.props.deckStats} />
 
@@ -382,6 +392,18 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //const selectedCardName = decodeURI(queryString['card'] || '');
     const selectedCardId = +queryString['cardId'] || 0;
 
+    const show = queryString['show'];
+
+    let isDetailDialogOpen = false;
+    let isTagsDialogOpen = false;
+
+    if(show === "tags"){
+        isTagsDialogOpen = true;
+    }
+    if(show === "detail"){
+        isDetailDialogOpen = true;
+    }
+
 
     //const x = state.decks.data.detail.cardDetails.byId
 
@@ -413,7 +435,8 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         //card detail
         //cardDetailName: selectedCardName,
         selectedCardId: selectedCardId,
-        isCardDetailDialogOpen: selectedCardId !== 0,
+        isCardDetailDialogOpen: isDetailDialogOpen,
+        isCardTagsDialogOpen: isTagsDialogOpen,
 
         //export
         isExportDialogOpen: true,

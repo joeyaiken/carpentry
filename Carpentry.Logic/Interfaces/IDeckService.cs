@@ -21,6 +21,10 @@ namespace Carpentry.Logic.Interfaces
         Task UpdateDeckCard(DeckCardDto card);
         Task DeleteDeckCard(int deckCardId);
 
+        Task<CardTagDetailDto> GetCardTagDetails(int deckId, int cardId);
+        Task AddCardTag(CardTagDto cardTag);
+        Task RemoveCardTag(int cardTagId);
+
         Task<List<DeckOverviewDto>> GetDeckOverviews();
         Task<DeckDetailDto> GetDeckDetail(int deckId);
 

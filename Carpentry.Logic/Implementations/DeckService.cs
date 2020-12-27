@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Carpentry.Data.DataModels;
 using System.Linq;
 using Carpentry.Data.QueryResults;
+using Carpentry.Data.Implementations;
 //using Carpentry.Data.DataContext;
 //using Carpentry.Data.DataModels;
 
@@ -16,6 +17,13 @@ namespace Carpentry.Logic.Implementations
 {
     public class DeckService : IDeckService
     {
+        //Question: Why shouldn't this have access to a repo?
+        //  Abstracting this away just makes things more confusing, really
+        //  I can still have things that make life easier in the data-layer
+
+        //Answer (maybe): Abstracting it away makes it easier for me to possibly switch to a different database
+        //  Counterpoint: That's what Entity Framework does for me anyways...
+
         //All methods should return a model specific to THIS project, not the data project (evevntually)
 
         //What if all data layer models were either
@@ -25,10 +33,11 @@ namespace Carpentry.Logic.Implementations
         //Should have no access to data context classes, only repo classes
         private readonly ILogger<DeckService> _logger;
 
-        private readonly IDeckDataRepo _deckRepo;
+        private readonly DeckDataRepo _deckRepo;
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly IInventoryService _inventoryService;
-        public ICoreDataRepo _coreDataRepo;
+        public readonly ICoreDataRepo _coreDataRepo;
+        private readonly ICardDataRepo _cardDataRepo;
 
         private static string _sideboardCategory = "Sideboard";
 
@@ -40,11 +49,12 @@ namespace Carpentry.Logic.Implementations
         //public ICardImportService _cardImportService;
 
         public DeckService(
-            IDeckDataRepo deckRepo,
+            DeckDataRepo deckRepo,
             IInventoryDataRepo inventoryRepo,
             IInventoryService inventoryService,
             ILogger<DeckService> logger,
-            ICoreDataRepo coreDataRepo
+            ICoreDataRepo coreDataRepo,
+            ICardDataRepo cardDataRepo
             //ICardImportService cardImportService
             )
         {
@@ -53,6 +63,7 @@ namespace Carpentry.Logic.Implementations
             _inventoryService = inventoryService;
             _logger = logger;
             _coreDataRepo = coreDataRepo;
+            _cardDataRepo = cardDataRepo;
             //_cardImportService = cardImportService;
         }
 
@@ -598,6 +609,73 @@ namespace Carpentry.Logic.Implementations
         }
 
         #endregion Deck Cards
+
+        #region Card Tags
+
+        public async Task<CardTagDetailDto> GetCardTagDetails(int deckId, int cardId)
+        {
+            var result = new CardTagDetailDto() { CardId = cardId };
+
+            //get name by ID
+            var matchingCard = await _cardDataRepo.GetCardData(cardId);
+
+            if (matchingCard == null)
+            {
+                throw new Exception($"No card found for ID {cardId}");
+            }
+
+            result.CardName = matchingCard.Name;
+
+            //get existing tags
+            //  (this name, this deck, as dto)
+            var existingTags = await _deckRepo.GetDeckCardTags(deckId, matchingCard.Name);
+
+            //get tag suggestions (strings)
+            //  get all from this deck
+            var deckTags = await _deckRepo.GetAllDeckCardTags(deckId);
+
+            //  get all from anywhere
+            var allTags = await _deckRepo.GetAllDeckCardTags(null);
+
+            //  remove any existing tags
+            //  sort accordingly
+            //      Need to know "tags in this deck" vs "all distinct tags"
+            var existingTagNames = existingTags.Select(c => c.CardName);
+
+            deckTags = deckTags.Where(t => !existingTagNames.Contains(t)).OrderBy(t => t).ToList();
+
+            allTags = allTags.Where(t => !existingTagNames.Contains(t) && !deckTags.Contains(t)).OrderBy(t => t).ToList();
+
+            result.TagSuggestions = deckTags;
+            result.TagSuggestions.AddRange(allTags);
+
+            result.ExistingTags = existingTags.Select(t => new CardTag()
+            {
+                CardTagId = t.DeckCardTagId,
+                Tag = t.Description,
+            }).ToList();
+
+            return result;
+        }
+
+        public async Task AddCardTag(CardTagDto cardTag)
+        {
+            var tagToAdd = new DeckCardTagData()
+            {
+                CardName = cardTag.CardName,
+                DeckId = cardTag.DeckId,
+                Description = cardTag.Tag,
+            };
+
+            await _deckRepo.AddDeckCardTag(tagToAdd);
+        }
+
+        public async Task RemoveCardTag(int cardTagId)
+        {
+            await _deckRepo.RemoveDeckCardTag(cardTagId);
+        }
+
+        #endregion Card Tags
 
         #region Search
 

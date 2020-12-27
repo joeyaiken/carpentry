@@ -38,18 +38,48 @@ namespace Carpentry.Tools.QuickImport
 
             List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
             {
-                new DeckImportTemplate()
-                {
-                    Name = "Cats (2)",
-                    FormatName = "jumpstart",
-                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Cats_2.txt",
-                },
-                new DeckImportTemplate()
-                {
-                    Name = "Feathered Friends (3)",
-                    FormatName = "jumpstart",
-                    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\FeatheredFriends_3.txt",
-                },
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Archaeology_3",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Archaeology_3.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Devilish_1",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Devilish_1.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "PlusOne_4",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\PlusOne_4.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Rogues_1",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Rogues_1.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Rogues_2",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Rogues_2.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Spooky_2",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Spooky_2.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "TreeHugging_1",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\TreeHugging_1.txt",
+                //},
 
                 //new DeckImportTemplate()
                 //{
@@ -298,7 +328,7 @@ namespace Carpentry.Tools.QuickImport
 
             //DB repos
             .AddScoped<ICardDataRepo, CardDataRepo>()
-            .AddScoped<IDeckDataRepo, DeckDataRepo>()
+            .AddScoped<DeckDataRepo>()
             .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
             .AddScoped<IScryfallDataRepo, ScryfallRepo>()
             .AddScoped<ICoreDataRepo, CoreDataRepo>()

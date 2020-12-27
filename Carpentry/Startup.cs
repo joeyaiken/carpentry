@@ -44,7 +44,7 @@ namespace Carpentry
 
             //DB repos
             services.AddScoped<ICardDataRepo, CardDataRepo>();
-            services.AddScoped<IDeckDataRepo, DeckDataRepo>();
+            services.AddScoped<DeckDataRepo>();
             services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
             services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
             services.AddScoped<ICoreDataRepo, CoreDataRepo>();

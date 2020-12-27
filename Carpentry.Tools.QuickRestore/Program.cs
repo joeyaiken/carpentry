@@ -126,7 +126,7 @@ namespace Carpentry.Tools.QuickRestore
 
                 ////DB repos
                 .AddScoped<ICardDataRepo, CardDataRepo>()
-                .AddScoped<IDeckDataRepo, DeckDataRepo>()
+                .AddScoped<DeckDataRepo>()
                 .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
                 .AddScoped<IScryfallDataRepo, ScryfallRepo>()
                 .AddScoped<ICoreDataRepo, CoreDataRepo>()

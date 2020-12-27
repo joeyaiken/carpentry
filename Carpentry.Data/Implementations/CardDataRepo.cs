@@ -398,6 +398,9 @@ namespace Carpentry.Data.Implementations
             return formats;
         }
 
+        
+
+
         #region private
 
         private static char GetRarityId(string rarityName)

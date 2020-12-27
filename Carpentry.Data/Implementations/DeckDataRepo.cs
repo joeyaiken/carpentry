@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Data.Implementations
 {
-    public class DeckDataRepo : IDeckDataRepo
+    public class DeckDataRepo //: IDeckDataRepo
     {
         #region Constructor & globals
 
@@ -490,6 +490,46 @@ namespace Carpentry.Data.Implementations
 
 
             //    }).ToList();
+        }
+
+        //get card tags for a deck card
+        public async Task<List<DeckCardTagData>> GetDeckCardTags(int deckId, string cardName) //cardId / cardName ?
+        {
+            var tags = await _cardContext.CardTags.Where(t => t.CardName == cardName && t.DeckId == deckId).ToListAsync();
+            return tags;
+        }
+
+        public async Task<List<DeckCardTagData>> GetDeckCardTags(int deckCardId)
+        {
+            var deckCard = await _cardContext.DeckCards.FirstOrDefaultAsync(dc => dc.DeckCardId == deckCardId);
+            return await GetDeckCardTags(deckCard.DeckId, deckCard.CardName);
+        }
+
+        public async Task<List<string>> GetAllDeckCardTags(int? deckId)
+        {
+            var tagsQuery = _cardContext.CardTags.AsQueryable();
+            
+            if(deckId != null)
+            {
+                tagsQuery = tagsQuery.Where(t => t.DeckId == deckId);
+            }
+
+            var tags = await tagsQuery.Select(t => t.Description).Distinct().ToListAsync();
+            
+            return tags;
+        }
+
+        public async Task AddDeckCardTag(DeckCardTagData newTag)
+        {
+            _cardContext.CardTags.Add(newTag);
+            await _cardContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveDeckCardTag(int deckCardTagId)
+        {
+            var tag = await _cardContext.CardTags.SingleAsync(t => t.DeckCardTagId == deckCardTagId);
+            _cardContext.Remove(tag);
+            await _cardContext.SaveChangesAsync();
         }
 
         #endregion
