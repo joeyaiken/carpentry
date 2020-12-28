@@ -165,8 +165,9 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _deckService.GetCardTagDetails(deckId, cardId);
-                return Ok();
+                //https://localhost:44333/decks/52?cardId=4006&show=tags
+                var result = await _deckService.GetCardTagDetails(deckId, cardId);
+                return Ok(result);
             }
             catch (Exception ex)
             {

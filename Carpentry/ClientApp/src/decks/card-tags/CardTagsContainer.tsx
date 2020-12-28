@@ -11,13 +11,17 @@ import { Menu, MenuItem } from '@material-ui/core';
 import { requestDeleteDeckCard, requestUpdateDeckCard } from '../deck-editor/state/DeckEditorActions'; //This should ALSO be moved to the Deck Data Reducer
 import { push } from 'react-router-redux';
 import CardTagsLayout from './components/CardTagsLayout';
+import { ensureTagDetailLoaded, newTagChange } from './state/CardTagsActions';
 // import { requestAddDeckCard } from '../deck-add-cards/state/DeckAddCardsActions';
 // import { push } from 'react-router-redux';
 
 interface PropsFromState { 
     // deckId: number;
 
-    // selectedCardId: number; //selected card [CardId]
+    selectedCardId: number; //selected card [CardId]
+    selectedCardName: string;
+
+    newTagName: string;
     // cardsById: { [cardId: number]: MagicCard } //magic cards by CardId ?
     // allCardIds: number[]; //card definition IDs, will itterate over for bottom
 
@@ -43,6 +47,8 @@ type ContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 class CardDetailContainer extends React.Component<ContainerProps>{
     constructor(props: ContainerProps) {
         super(props);
+        this.handleAddTagClick = this.handleAddTagClick.bind(this);
+        this.handleNewTagChange = this.handleNewTagChange.bind(this);
         // this.handleAddEmptyCardClick = this.handleAddEmptyCardClick.bind(this);
         // this.handleDeckCardMenuClick = this.handleDeckCardMenuClick.bind(this);
         // this.handleInventoryCardMenuClick = this.handleInventoryCardMenuClick.bind(this);
@@ -54,8 +60,16 @@ class CardDetailContainer extends React.Component<ContainerProps>{
 
     componentDidMount() {
         // this.props.dispatch(ensureCardDetailLoaded(this.props.selectedCardId));
+        this.props.dispatch(ensureTagDetailLoaded(this.props.selectedCardId))
     }
   
+    handleAddTagClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        // this.props.dispatch()
+    }
+
+    handleNewTagChange(newValue: string) {
+        this.props.dispatch(newTagChange(newValue));
+    }
     // //specify add mainboard vs sidebiard/maybeboard ?
     // handleAddEmptyCardClick(): void {
     //     const selectedCard = this.props.cardsById[this.props.selectedCardId];
@@ -266,9 +280,11 @@ class CardDetailContainer extends React.Component<ContainerProps>{
                 />
                  */}
 
-                 <CardTagsLayout 
-                 
-                    />
+                 <CardTagsLayout
+                    newTagName={this.props.newTagName}
+                    selectedCardName={this.props.selectedCardName}
+                    onAddTagClick={this.handleAddTagClick}
+                    onNewTagChange={this.handleNewTagChange} />
             </React.Fragment>
         );
     }
@@ -327,12 +343,14 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //     }) as CardListItem;
     // });
 
-    const containerState = state.decks.cardDetail;
+    const containerState = state.decks.cardTags;
 
     const result: PropsFromState = {
         // deckId: state.decks.data.detail.deckId,
 
-        // selectedCardId: ownProps.selectedCardId,
+        selectedCardId: ownProps.selectedCardId,
+        selectedCardName: containerState.cardName,
+        newTagName: containerState.newTagName,
         // cardGroups: containerState.cardGroups,
         // cardsById: containerState.cards.byId,
         // allCardIds: containerState.cards.allIds,

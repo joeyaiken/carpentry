@@ -313,3 +313,21 @@ declare interface SetDetailDto {
     totalCount: number;
     isTracked: boolean;
 }
+
+
+
+declare interface CardTagDto {
+    deckId: number;
+    cardName: string;
+    tag: string;
+}
+declare interface CardTagDetailDto {
+    cardId: number;
+    cardName: string;
+    existingTags: CardTagDetailTag[];
+    tagSuggestions: string[];
+}
+declare interface CardTagDetailTag {
+    cardTagId: number;
+    tag: string;
+}

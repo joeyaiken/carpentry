@@ -1,4 +1,5 @@
 ﻿using Carpentry.Data.DataModels;
+using Carpentry.Data.Implementations;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.QueryResults;
 using Carpentry.Logic.Interfaces;
@@ -44,7 +45,7 @@ namespace Carpentry.Logic.Implementations
         private readonly IDataUpdateService _dataUpdateService;
         private readonly ICardDataRepo _cardDataRepo;
         private readonly IDeckService _deckService;
-        private readonly IDeckDataRepo _deckDataRepo;
+        private readonly DeckDataRepo _deckDataRepo;
         private readonly IInventoryService _inventoryService;
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly int _cardStatus_InInventory = 1;
@@ -53,7 +54,7 @@ namespace Carpentry.Logic.Implementations
             IDataUpdateService dataUpdateService,
             ICardDataRepo cardDataRepo,
             IDeckService deckService,
-            IDeckDataRepo deckDataRepo,
+            DeckDataRepo deckDataRepo,
             IInventoryService inventoryService,
             IInventoryDataRepo inventoryRepo,
             IDataBackupConfig config

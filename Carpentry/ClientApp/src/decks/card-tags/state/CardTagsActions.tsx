@@ -1,82 +1,64 @@
 import { Dispatch } from 'redux';
-import { inventoryApi } from '../../../api/inventoryApi';
+import { decksApi } from '../../../api/decksApi';
 import { AppState } from '../../../configureStore';
 
-// export const ensureCardDetailLoaded = (cardId: number): any => {
-//     return (dispatch: Dispatch, getState: any) => {
-//         tryLoadCardDetail(dispatch, getState(), cardId, false);
-//     }
-// }
+export const ensureTagDetailLoaded = (cardId: number): any => {
+    return (dispatch: Dispatch, getState: any) => {
+        tryLoadTagDetail(dispatch, getState(), cardId, false);
+    } 
+}
 
-// export const forceLoadCardDetail = (cardId: number): any => {
-//     return (dispatch: Dispatch, getState: any) => {
-//         tryLoadCardDetail(dispatch, getState(), cardId, true);
-//     }
-// }
+function tryLoadTagDetail(dispatch: Dispatch, state: AppState, cardId: number, forceReload: boolean): void {
 
-// export const CARD_DETAIL_REQUESTED = 'DECK_CARD_DETAIL.CARD_DETAIL_REQUESTED';
-// export const cardDetailRequested = (): ReduxAction => ({
-//     type: CARD_DETAIL_REQUESTED,
-// });
+    const isLoading = state.decks.cardTags.isLoading;
+    const activeCardId = state.decks.cardTags.cardId;
+    if(isLoading || (!forceReload && activeCardId === cardId)) return;
 
-// export const CARD_DETAIL_RECEIVED = 'DECK_CARD_DETAIL.CARD_DETAIL_RECEIVED';
-// export const cardDetailReceived = (payload: InventoryDetailDto): ReduxAction => ({
-//     type: CARD_DETAIL_RECEIVED,
-//     payload: payload,
-// });
+    //const deckId = state.decks.
+    const deckId = 0; //TODO - need to populate this properly
 
-// function tryLoadCardDetail(dispatch: Dispatch, state: AppState, cardId: number, forceReload: boolean): void {
+    dispatch(tagDetailRequested());
 
-//     const isLoading = state.decks.cardDetail.isLoading;
-//     const activeCardId = state.decks.cardDetail.activeCardId;
-//     if(isLoading || (!forceReload && activeCardId === cardId)) return;
+    decksApi.getCardTagDetails(deckId, cardId).then((result) => {
+        dispatch(tagDetailReceived(result));
+    });
+}
 
-//     dispatch(cardDetailRequested());
+export const TAG_DETAIL_REQUESTED = 'CARD_TAGS.TAG_DETAIL_REQUESTED';
+export const tagDetailRequested = (): ReduxAction => ({
+    type: TAG_DETAIL_REQUESTED,
+});
 
-//     inventoryApi.getInventoryDetail(cardId).then((result) => {
-//         dispatch(cardDetailReceived(result));
-//     });
-// }
+export const TAG_DETAIL_RECEIVED = 'CARD_TAGS.TAG_DETAIL_RECEIVED';
+export const tagDetailReceived = (payload: CardTagDetailDto): ReduxAction => ({
+    type: TAG_DETAIL_RECEIVED,
+    payload: payload,
+});
 
-// //whatever, everything's unique, I can refactor & reduce later
+export const NEW_TAG_CHANGE = 'CARD_TAGS.NEW_TAG_CHANGE';
+export const newTagChange = (value: string): ReduxAction => ({
+    type: NEW_TAG_CHANGE,
+    payload: value,
+});
 
-// export const DECK_CARD_MENU_BUTTON_CLICKED = 'DECK_CARD_DETAIL.DECK_CARD_MENU_BUTTON_CLICKED'
-// export const deckCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
-//     type: DECK_CARD_MENU_BUTTON_CLICKED,
-//     payload: cardMenuAnchor
-// });
+//tryAddCardTag
 
-// export const INVENTORY_CARD_MENU_BUTTON_CLICKED = 'DECK_CARD_DETAIL.INVENTORY_CARD_MENU_BUTTON_CLICKED';
-// export const inventoryCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
-//     type: INVENTORY_CARD_MENU_BUTTON_CLICKED,
-//     payload: cardMenuAnchor
-// });
+export const ADD_TAG_REQUESTED = 'CARD_TAGS.ADD_TAG_REQUESTED';
+export const addTagRequested = (): ReduxAction => ({
+    type: ADD_TAG_REQUESTED,
+});
+export const ADD_TAG_RECEIVED = 'CARD_TAGS.ADD_TAG_RECEIVED';
+export const addTagReceived = (): ReduxAction => ({
+    type: ADD_TAG_RECEIVED,
+});
 
+//tryRemoveCardTag
 
-
-// //handleDeckCardMenuClick
-// // handleInventoryCardMenuClick
-
-// /*
-//     cardMenuButtonClick(deck|inventory, Element)
-
-//     deckCardMenuButtonClicked(Element)
-//     inventoryCardMenuButtonClicked(Element)
-
-//     [deck|inventory]MenuButtonClicked
-
-// export const  = 'DECK_CARD_DETAIL.DECK_CARD_MENU_BUTTON_CLICKED'
-// export const deckCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
-//     type: DECK_CARD_MENU_BUTTON_CLICKED,
-//     payload: cardMenuAnchor
-// });
-
-// export const  = 'DECK_CARD_DETAIL.INVENTORY_CARD_MENU_BUTTON_CLICKED';
-// export const inventoryCardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
-//     type: INVENTORY_CARD_MENU_BUTTON_CLICKED,
-//     payload: cardMenuAnchor
-// });
-// DECK_CARD_MENU_BUTTON_CLICKED
-// INVENTORY_CARD_MENU_BUTTON_CLICKED
-// */
-
+export const REMOVE_TAG_REQUESTED = 'CARD_TAGS.REMOVE_TAG_REQUESTED';
+export const removeTagRequested = (): ReduxAction => ({
+    type: REMOVE_TAG_REQUESTED,
+});
+export const REMOVE_TAG_RECEIVED = 'CARD_TAGS.REMOVE_TAG_RECEIVED';
+export const removeTagReceived = (): ReduxAction => ({
+    type: REMOVE_TAG_RECEIVED,
+});

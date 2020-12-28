@@ -1,13 +1,16 @@
-import { Box, Button, Card, CardHeader, CardMedia, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import { Box, Button, Card, CardHeader, CardMedia, IconButton, MenuItem, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@material-ui/core';
 import { MoreVert } from '@material-ui/icons';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 import CardMenu from '../../deck-editor/components/CardMenu';
 // import InventoryDetailTable from './InventoryDetailTable';
 // import SelectedCardSection from './SelectedCardSection';
 
 interface ContainerLayoutProps {
+    selectedCardName: string;
 
+    newTagName: string;
+    
     // selectedCardId: number;
     // allCardIds: number[];
     // cardsById: { [cardId: number]: MagicCard }
@@ -30,6 +33,9 @@ interface ContainerLayoutProps {
     // // onCardMenuSelected: (name: DeckEditorCardMenuOption) => void;
     // onInventoryCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     // onDeckCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onAddTagClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onNewTagChange: (value: string) => void;
+
     // // onCardMenuClosed: () => void;
 }
 
@@ -38,13 +44,23 @@ export default function CardTagsLayout(props: ContainerLayoutProps): JSX.Element
     return(
     <React.Fragment>
         <Box className={outlineSection}>
-            Card Name
+            <Typography>{props.selectedCardName}</Typography>
         </Box>
         <Box className={outlineSection}>
             Existing Tags
         </Box>
         <Box className={outlineSection}>
-            New Tag
+            <TextField
+                name="New Tag"
+                label="New Tag"
+                value={props.newTagName}
+                onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => props.onNewTagChange(event.target.value)}
+                // margin="normal"
+                />
+            <Button color={"primary"} variant={"contained"} onClick={props.onAddTagClick}>
+                Add
+            </Button>
+     
         </Box>
         <Box className={outlineSection}>
             Tag Suggestions

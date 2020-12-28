@@ -52,6 +52,7 @@ export const decksApi = {
     },
 
     async getDeckOverviews(): Promise<DeckOverviewDto[]> {
+        // console.log('------------------------------GETTING OVERVIEWS------------------------------')
         const endpoint = `api/Decks/GetDeckOverviews`;
         const result = await Get(endpoint);
         return result;
@@ -78,5 +79,24 @@ export const decksApi = {
         const url = `${endpoint}?deckId=${deckId}&exportType=${exportType}`;
         const result = await Get(url);
         return result;
-    }
+    },
+
+    async getCardTagDetails(deckId: number, cardId: number): Promise<CardTagDetailDto> {
+        const endpoint = `api/Decks/GetCardTagDetails`;
+        const url = `${endpoint}?deckId=${deckId}&cardId=${cardId}`;
+        const result = await Get(url);
+        return result;
+    },
+    async addCardTag(dto: CardTagDto): Promise<void> {
+        const endpoint = `api/Decks/AddCardTag`;
+        await Post(endpoint, dto);
+        return;
+    },
+    async removeCardTag(cardTagId: number): Promise<CardTagDetailDto> {
+        const endpoint = `api/Decks/RemoveCardTag`;
+        const url = `${endpoint}?cardTagId=${cardTagId}`;
+        const result = await Get(url);
+        return result;
+    },
+
 }
