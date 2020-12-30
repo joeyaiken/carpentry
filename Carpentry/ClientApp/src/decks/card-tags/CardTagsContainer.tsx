@@ -11,12 +11,14 @@ import { Menu, MenuItem } from '@material-ui/core';
 import { requestDeleteDeckCard, requestUpdateDeckCard } from '../deck-editor/state/DeckEditorActions'; //This should ALSO be moved to the Deck Data Reducer
 import { push } from 'react-router-redux';
 import CardTagsLayout from './components/CardTagsLayout';
-import { ensureTagDetailLoaded, newTagChange } from './state/CardTagsActions';
+import { ensureTagDetailLoaded, newTagChange, requestAddCardTag } from './state/CardTagsActions';
 // import { requestAddDeckCard } from '../deck-add-cards/state/DeckAddCardsActions';
 // import { push } from 'react-router-redux';
 
 interface PropsFromState { 
     // deckId: number;
+
+    selectedDeckId: number;
 
     selectedCardId: number; //selected card [CardId]
     selectedCardName: string;
@@ -47,7 +49,7 @@ type ContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 class CardDetailContainer extends React.Component<ContainerProps>{
     constructor(props: ContainerProps) {
         super(props);
-        this.handleAddTagClick = this.handleAddTagClick.bind(this);
+        this.handleAddTagButtonClick = this.handleAddTagButtonClick.bind(this);
         this.handleNewTagChange = this.handleNewTagChange.bind(this);
         // this.handleAddEmptyCardClick = this.handleAddEmptyCardClick.bind(this);
         // this.handleDeckCardMenuClick = this.handleDeckCardMenuClick.bind(this);
@@ -63,8 +65,13 @@ class CardDetailContainer extends React.Component<ContainerProps>{
         this.props.dispatch(ensureTagDetailLoaded(this.props.selectedCardId))
     }
   
-    handleAddTagClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        // this.props.dispatch()
+    handleAddTagButtonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        const dto: CardTagDto = {
+            cardName: this.props.selectedCardName,
+            deckId: this.props.selectedDeckId,
+            tag: this.props.newTagName,
+        }
+        this.props.dispatch(requestAddCardTag(dto));
     }
 
     handleNewTagChange(newValue: string) {
@@ -283,7 +290,7 @@ class CardDetailContainer extends React.Component<ContainerProps>{
                  <CardTagsLayout
                     newTagName={this.props.newTagName}
                     selectedCardName={this.props.selectedCardName}
-                    onAddTagClick={this.handleAddTagClick}
+                    onAddTagButtonClick={this.handleAddTagButtonClick}
                     onNewTagChange={this.handleNewTagChange} />
             </React.Fragment>
         );
@@ -318,10 +325,10 @@ function getCategoryId(category: string): string {
 function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     //I need to get all deck card details for (the name mapping to this ID)
 
-    var matchingIds = state.decks.data.detail.cardDetails.allIds.filter(id => {
-        const card = state.decks.data.detail.cardDetails.byId[id];
-        return (card.name === state.decks.cardDetail.activeCardName);
-    });
+    // var matchingIds = state.decks.data.detail.cardDetails.allIds.filter(id => {
+    //     const card = state.decks.data.detail.cardDetails.byId[id];
+    //     return (card.name === state.decks.cardDetail.activeCardName);
+    // });
 
 
 
@@ -348,6 +355,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     const result: PropsFromState = {
         // deckId: state.decks.data.detail.deckId,
 
+        selectedDeckId: state.decks.data.detail.deckId,
         selectedCardId: ownProps.selectedCardId,
         selectedCardName: containerState.cardName,
         newTagName: containerState.newTagName,

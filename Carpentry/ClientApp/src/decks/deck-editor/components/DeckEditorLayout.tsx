@@ -73,7 +73,9 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
                         <GroupedDeckCardList 
                             groupedCardOverviews={props.groupedCardOverviews} 
                             cardDetailsById={props.cardDetailsById} 
-                            onCardSelected={props.onCardSelected} /> }
+                            onCardSelected={props.onCardSelected}
+                            onCardDetailClick={props.onCardDetailClick} 
+                            onCardTagsClick={props.onCardTagsClick}  /> }
                 </div>
                 <div className={flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
                     <CardMenu 

@@ -170,6 +170,7 @@ const deckDetailReceived = (state: State, action: ReduxAction): State => {
             name: cardOverview.name,
             type: cardOverview.type,
             cardId: cardOverview.cardId,
+            tags: cardOverview.tags,
         };
         cardOverview.details.forEach(detail => {
             const detailId = detail.id;

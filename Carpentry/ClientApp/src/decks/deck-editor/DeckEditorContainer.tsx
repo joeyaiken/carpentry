@@ -245,7 +245,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     handleExportClicked(): void {
         this.props.dispatch(openExportDialog());
     }
-
+    
     render() {
         if(this.props.deckProperties === null || this.props.deckStats === null){
             return(

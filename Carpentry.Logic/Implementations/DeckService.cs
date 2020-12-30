@@ -640,7 +640,7 @@ namespace Carpentry.Logic.Implementations
             //  remove any existing tags
             //  sort accordingly
             //      Need to know "tags in this deck" vs "all distinct tags"
-            var existingTagNames = existingTags.Select(c => c.CardName);
+            var existingTagNames = existingTags.Select(t => t.Description).ToList();
 
             deckTags = deckTags.Where(t => !existingTagNames.Contains(t)).OrderBy(t => t).ToList();
 
@@ -848,6 +848,7 @@ namespace Carpentry.Logic.Implementations
                     Img = g.First().Img,
                     Type = g.First().Type,
                     CardId = g.First().CardId,
+                    Tags = g.First().Tags,
                     Details = g.Select(d => new DeckCardDetail
                     {
                         Id = d.DeckCardId,

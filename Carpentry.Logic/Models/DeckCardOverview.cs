@@ -9,6 +9,7 @@ namespace Carpentry.Logic.Models
     {
         public DeckCardOverview()
         {
+            Tags = new List<string>();
             Details = new List<DeckCardDetail>();
         }
 
@@ -21,6 +22,8 @@ namespace Carpentry.Logic.Models
         public int Count { get; set; }
         public string Category { get; set; }
         public int CardId { get; set; }
+
+        public List<string> Tags { get; set; }
 
         public List<DeckCardDetail> Details { get; set; }
     }

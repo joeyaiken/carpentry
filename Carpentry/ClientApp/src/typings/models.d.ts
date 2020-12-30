@@ -89,6 +89,7 @@ declare interface ApiDeckCardOverview {
     category: string;
     cardId: number;
     details: ApiDeckCardDetail[];
+    tags: string[];
 }
 
 declare interface ApiDeckCardDetail {

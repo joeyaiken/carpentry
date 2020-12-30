@@ -1,4 +1,6 @@
-﻿namespace Carpentry.Data.QueryResults
+﻿using System.Collections.Generic;
+
+namespace Carpentry.Data.QueryResults
 {
     //This is just a DTO used to get detailed data about the cards in a deck
     //When a card is empty, this should be populated with the most recent info
@@ -32,5 +34,7 @@
         public decimal? Price { get; set; }
 
         public decimal? PriceFoil { get; set; }
+
+        public List<string> Tags { get; set; }
     }
 }

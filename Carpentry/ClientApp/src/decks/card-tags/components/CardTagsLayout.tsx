@@ -33,7 +33,10 @@ interface ContainerLayoutProps {
     // // onCardMenuSelected: (name: DeckEditorCardMenuOption) => void;
     // onInventoryCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     // onDeckCardMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    onAddTagClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onAddTagButtonClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    
+    // onRemoveTagClick: (tagId: number) => void;
+
     onNewTagChange: (value: string) => void;
 
     // // onCardMenuClosed: () => void;
@@ -47,7 +50,12 @@ export default function CardTagsLayout(props: ContainerLayoutProps): JSX.Element
             <Typography>{props.selectedCardName}</Typography>
         </Box>
         <Box className={outlineSection}>
-            Existing Tags
+            <Typography>Existing Tags</Typography>
+            <ul>
+                <li>Tag</li>
+                <li>Tag</li>
+                <li>Tag</li>
+            </ul>
         </Box>
         <Box className={outlineSection}>
             <TextField
@@ -57,13 +65,18 @@ export default function CardTagsLayout(props: ContainerLayoutProps): JSX.Element
                 onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => props.onNewTagChange(event.target.value)}
                 // margin="normal"
                 />
-            <Button color={"primary"} variant={"contained"} onClick={props.onAddTagClick}>
+            <Button color={"primary"} variant={"contained"} onClick={props.onAddTagButtonClick}>
                 Add
             </Button>
      
         </Box>
         <Box className={outlineSection}>
-            Tag Suggestions
+            <Typography>Tag Suggestions</Typography>
+            <ul>
+                <li>Tag</li>
+                <li>Tag</li>
+                <li>Tag</li>
+            </ul>
         </Box>
         {/* <CardMenu 
             cardMenuAnchor={props.menuAnchor} 

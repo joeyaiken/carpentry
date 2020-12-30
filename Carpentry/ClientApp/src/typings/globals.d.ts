@@ -114,6 +114,7 @@ declare interface DeckCardOverview {
     count: number;
     cardId: number;
     detailIds: number[];
+    tags: string[];
 }
 
 ///////

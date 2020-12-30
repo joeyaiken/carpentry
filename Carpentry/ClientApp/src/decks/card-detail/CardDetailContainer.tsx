@@ -157,7 +157,7 @@ class CardDetailContainer extends React.Component<ContainerProps>{
                 // }
                 break;
             case "view": 
-                this.props.dispatch(push(`/decks/${inventoryCard.deckId}?cardId=${inventoryCard.cardId}`));
+                this.props.dispatch(push(`/decks/${inventoryCard.deckId}?cardId=${inventoryCard.cardId}&show=detail`));
                 break;
         }
 

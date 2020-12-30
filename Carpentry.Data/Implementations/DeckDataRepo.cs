@@ -215,6 +215,7 @@ namespace Carpentry.Data.Implementations
                     ColorIdentity = x.InventoryCard.Card.ColorIdentity,
                     Price = x.InventoryCard.Card.Price,
                     PriceFoil = x.InventoryCard.Card.PriceFoil,
+                    Tags = x.Deck.Tags.Where(t => t.CardName == x.CardName).Select(t => t.Description).ToList(),
                 }).ToListAsync();
 
             //get all names with null inventory cards

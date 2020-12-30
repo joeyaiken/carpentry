@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Button } from '@material-ui/core';
 import ManaCostChip from '../../../common/components/ManaCostChip';
 import { Star } from '@material-ui/icons';
 // import ManaCostChip from '../../../_components/ManaCostChip';
@@ -17,6 +17,10 @@ interface ComponentProps{
     // cardGroups: GroupedInventoryOverview[];
 
     onCardSelected: (card: DeckCardOverview) => void;
+    
+    //cardDetail/tags
+    onCardDetailClick: (cardId: number) => void;
+    onCardTagsClick: (cardId: number) => void;
 }
 
 export default function GroupedDeckCardList(props: ComponentProps): JSX.Element {
@@ -39,7 +43,7 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                             <TableHead key={`th-${group.name}`}>
                                 <TableRow>
                                     <TableCell size="medium"></TableCell>
-                                    <TableCell size="medium" colSpan={3}>{group.name} ({group.cardOverviews.length})</TableCell>
+                                    <TableCell size="medium" colSpan={4}>{group.name} ({group.cardOverviews.length})</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody key={`tb-${group.name}`}>
@@ -50,12 +54,27 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                                             {/* <TableCell>{(cardItem.count > 1) && cardItem.count}</TableCell> */}
                                             <TableCell>{cardItem.count}</TableCell>
                                             <TableCell>{cardItem.name}</TableCell>
+                                            <TableCell>
+                                                {
+                                                    Boolean(cardItem.tags.length) ? 
+                                                    <Button variant="outlined" onClick={()=>{props.onCardTagsClick(cardItem.cardId)}} >
+                                                        {cardItem.tags.toString()}
+                                                    </Button>
+                                                    
+                                                    :
+                                                    <Button style={{textTransform:"none"}} onClick={()=>{props.onCardTagsClick(cardItem.cardId)}}>
+                                                    untagged
+                                                    </Button>
+                                                    
+                                                }
+                                            </TableCell>
                                             {/* <TableCell>{cardItem.count}</TableCell> */}
                                             {/* <TableCell>{cardItem.type}</TableCell> */}
                                             {/* <TableCell>{cardItem.cost}</TableCell> */}
                                             <TableCell><ManaCostChip costString={cardItem.cost} /></TableCell>
                                             
                                             <TableCell>
+                                            <Button color="inherit" onClick={()=>{props.onCardDetailClick(cardItem.cardId)}} >
                                                 {
                                                     cardItem.detailIds.map(id => {
                                                         const cardDetail = props.cardDetailsById[id];
@@ -63,6 +82,7 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                                                         return(<Star style={{color: color}} key={id} />);
                                                     })
                                                 }
+                                            </Button>
                                             </TableCell>
                                             {/* <TableCell>{cardItem.description}</TableCell> */}
                                         </TableRow>
