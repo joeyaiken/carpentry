@@ -16,7 +16,7 @@ import {
 } from './state/DeckEditorActions';
 
 import { AppState } from '../../configureStore';
-import { ensureDeckDetailLoaded } from '../state/decksDataActions';
+import { ensureDeckDetailLoaded, reloadDeckDetail } from '../state/decksDataActions';
 import { DeckEditorLayout } from './components/DeckEditorLayout';
 import { push } from 'react-router-redux';
 import { DeckPropsDialog } from './components/DeckPropsDialog';
@@ -236,6 +236,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
 
     handleDialogClose(){
         this.props.dispatch(push(`/decks/${this.props.deckId}`));
+        // this.props.dispatch(reloadDeckDetail(this.props.deckId));
     }
 
     handleCardTagsClick(cardId: number){

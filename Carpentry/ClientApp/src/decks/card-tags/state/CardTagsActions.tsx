@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { decksApi } from '../../../api/decksApi';
 import { AppState } from '../../../configureStore';
+import { reloadDeckDetail } from '../../state/decksDataActions';
 
 export const ensureTagDetailLoaded = (cardId: number): any => {
     return (dispatch: Dispatch, getState: any) => {
@@ -60,6 +61,7 @@ function tryAddCardTag(dispatch: Dispatch, state: AppState, dto: CardTagDto): vo
     decksApi.addCardTag(dto).then(() => {
         dispatch(addTagReceived());
         dispatch(reloadTagDetail(state.decks.cardTags.cardId));
+        // dispatch(reloadDeckDetail(state.decks.data.detail.deckId));
     });
 }
 
@@ -89,6 +91,7 @@ function tryRemoveCardTag(dispatch: Dispatch, state: AppState, cardTagId: number
     decksApi.removeCardTag(cardTagId).then(() => {
         dispatch(removeTagReceived());
         dispatch(reloadTagDetail(state.decks.cardTags.cardId));
+        // dispatch(reloadDeckDetail(state.decks.data.detail.deckId));
     });
 }
 

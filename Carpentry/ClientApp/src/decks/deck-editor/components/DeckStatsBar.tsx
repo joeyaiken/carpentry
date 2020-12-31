@@ -84,6 +84,25 @@ export default function DeckStatsBar(props: ComponentProps): JSX.Element {
                 } */}
             </Box>
 
+            <Box className={outlineSection}>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            {
+                                Object.keys(props.deckStats.tagCounts).map((key) => <TableCell key={`stats-type-head-${key}`} size="small">{key}</TableCell>)
+                            }
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <TableRow>
+                            {
+                                Object.keys(props.deckStats.tagCounts).map((key) => <TableCell key={`stats-type-cell-${key}`} size="small">{props.deckStats.tagCounts[key]}</TableCell>)
+                            }
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Box>
+
             <Box className={combineStyles(outlineSection, flexCol)}>
                 <Typography variant="h6">Total Cost</Typography>
                 <Typography variant="h5">{props.deckStats.totalCost}</Typography>

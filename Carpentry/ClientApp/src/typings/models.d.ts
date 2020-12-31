@@ -134,8 +134,10 @@ declare interface DeckPropertiesDto {
 declare interface DeckStats {
     totalCount: number;
     typeCounts: {[type: string]: number};
-    costCounts: {[type: string]: number};
+    costCounts: {[cost: string]: number};
+    tagCounts: {[tag: string]: number}
     totalCost: number;
+    colorIdentity: string[];
 }
 
 

@@ -190,7 +190,7 @@ namespace Carpentry.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveCardTag([FromHeader] int cardTagId)
+        public async Task<ActionResult> RemoveCardTag(int cardTagId) //[FromHeader] 
         {
             try
             {

@@ -985,6 +985,34 @@ namespace Carpentry.Logic.Implementations
 
             result.Stats.TypeCounts = typeCountsDict;
 
+            //tag counts
+            var cardTags = deckCardData
+                .Where(c => c.Category != _sideboardCategory)
+                .Select(c => c.Tags.Any() ? c.Tags : new List<string>() { "Untagged" })
+                .SelectMany(tags => tags)
+                //.SelectMany(card => card.Tags)
+                .ToList();
+
+            var cardTagsDict = cardTags
+                .GroupBy(t => t)
+                .Select(g => new
+                {
+                    Tag = g.Key,
+                    Count = g.Count()
+                })
+                .ToDictionary(x => x.Tag, x => x.Count);
+
+            if (cardTagsDict.Keys.Contains("Land"))
+            {
+                cardTagsDict["Land"] = cardTagsDict["Land"] + basicLandCount;
+            }
+            else
+            {
+                cardTagsDict["Land"] = basicLandCount;
+            }
+
+            result.Stats.TagCounts = cardTagsDict;
+
             //deck color identity(including sideboard)
             result.Stats.ColorIdentity = deckCardData
                 .SelectMany(c => c.ColorIdentity.ToCharArray())
@@ -993,7 +1021,12 @@ namespace Carpentry.Logic.Implementations
                 .ToList();
 
             //Price (should this include sideboard?)
-            result.Stats.TotalCost = deckCardData.Select(c => c.IsFoil ? c.PriceFoil : c.Price).Sum() ?? 0;
+            var cardsToPrice = deckCardData;
+            if(result.Props.Format.ToLower() == "commander")
+            {
+                cardsToPrice = cardsToPrice.Where(c => c.Category != _sideboardCategory).ToList();
+            }
+            result.Stats.TotalCost = cardsToPrice.Select(c => c.IsFoil ? c.PriceFoil : c.Price).Sum() ?? 0;
 
             #endregion
 

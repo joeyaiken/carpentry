@@ -57,15 +57,13 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                                             <TableCell>
                                                 {
                                                     Boolean(cardItem.tags.length) ? 
-                                                    <Button variant="outlined" onClick={()=>{props.onCardTagsClick(cardItem.cardId)}} >
+                                                    <Button variant="outlined" style={{textTransform:"none"}} onClick={()=>{props.onCardTagsClick(cardItem.cardId)}} >
                                                         {cardItem.tags.toString()}
-                                                    </Button>
-                                                    
+                                                    </Button>                                                    
                                                     :
                                                     <Button style={{textTransform:"none"}} onClick={()=>{props.onCardTagsClick(cardItem.cardId)}}>
-                                                    untagged
+                                                        untagged
                                                     </Button>
-                                                    
                                                 }
                                             </TableCell>
                                             {/* <TableCell>{cardItem.count}</TableCell> */}
