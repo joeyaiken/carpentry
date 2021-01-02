@@ -1,6 +1,6 @@
 //app reducer for the inventory overview container
 
-import { CARD_MENU_BUTTON_CLICKED, INVENTORY_OVERVIEW_FILTER_CHANGED } from "./InventoryOverviewActions";
+import { CARD_MENU_BUTTON_CLICKED, INVENTORY_OVERVIEW_FILTER_CHANGED, QUICK_FILTER_APPLIED } from "./InventoryOverviewActions";
 
 // import { INVENTORY_OVERVIEW_FILTER_CHANGED } from "./inventoryOverviewActions";
 
@@ -41,12 +41,20 @@ export interface State {
 //     return newState;
 // }
 
+/*
+export const QUICK_FILTER_APPLIED = 'QUICK_FILTER_APPLIED';
+export const quickFilterApplied = (filter: InventoryFilterProps): ReduxAction => ({
+    type: QUICK_FILTER_APPLIED,
+    payload: filter,
+});
+*/
+
 export const inventoryOverviewAppReducer = (state = initialState, action: ReduxAction): State => {
     switch(action.type){
         case INVENTORY_OVERVIEW_FILTER_CHANGED: return inventoryOverviewFilterChanged(state, action);
-
         case CARD_MENU_BUTTON_CLICKED: return { ...state, cardImageMenuAnchor: action.payload };
-        default: return(state)
+        case QUICK_FILTER_APPLIED: return { ...state, filters: action.payload }
+        default: return(state);
     }
 }
 

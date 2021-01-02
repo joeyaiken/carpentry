@@ -27,20 +27,13 @@
 			--	ELSE Price
 			--END AS Price
 			--counts
-			,Totals.CardCount AS OwnedCount
+			,Totals.TotalCount
 			,Totals.DeckCount
+			,Totals.InventoryCount
+			,Totals.SellCount
 
 			,Totals.IsFoil
-	FROM (
-		SELECT	ic.CardId
-				,ic.IsFoil
-				,COUNT(ic.InventoryCardId) as CardCount
-				,SUM(CASE WHEN dc.DeckCardId IS NULL THEN 0 ELSE 1 END) AS DeckCount
-		FROM	InventoryCards ic
-	LEFT JOIN	DeckCards dc
-			ON	ic.InventoryCardId = dc.InventoryCardId
-		GROUP BY ic.CardId, ic.IsFoil
-	) AS Totals
+	FROM vwCardTotals AS Totals
 	JOIN		Cards c
 		ON		c.CardId = Totals.CardId
 	JOIN		Rarities r

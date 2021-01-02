@@ -7,39 +7,29 @@ namespace Carpentry.Logic.Models
     //inventory overview | inventory detail | deck overview | deck detail | Card Search Overview/Search Result Overview | Search Detail
     public class InventoryOverviewDto 
     {
-        //[JsonProperty("id")]
         public int Id { get; set; }
 
+        //card definition properties
         public int CardId { get; set; }
-        
-        //[JsonProperty("name")]
+        public string SetCode { get; set; }
         public string Name { get; set; }
-        
-        [JsonProperty("type")]
         public string Type { get; set; }
-        
-        [JsonProperty("cost")]
-        public string Cost { get; set; }
-        
-        [JsonProperty("cmc")]
+        public string Text { get; set; }
+        public string ManaCost { get; set; }
         public int? Cmc { get; set; }
-        
-        [JsonProperty("img")]
-        public string Img { get; set; }
-        
-        [JsonProperty("count")]
-        public int Count { get; set; }
-
-        //category / status / group
-        [JsonProperty("description")]
-        public string Description { get; set; }
-        [JsonProperty("category")]
-        public string Category { get; set; }
-        [JsonProperty("price")]
+        public char RarityId { get; set; }
+        public string ImageUrl { get; set; }
+        public int? CollectorNumber { get; set; }
+        public string Color { get; set; }
+        public string ColorIdentity { get; set; }
+        //prices
         public decimal? Price { get; set; }
-        [JsonProperty("isFoil")]
-        public bool? IsFoil { get; set; }
-        [JsonProperty("variant")]
-        public string Variant { get; set; }
+        public decimal? PriceFoil { get; set; }
+        public decimal? TixPrice { get; set; }
+        //counts
+        public int OwnedCount { get; set; }
+        public int DeckCount { get; set; }
+
+        public bool? IsFoil { get; set; } //only populated for ByUnique, otherwise NULL
     }
 }

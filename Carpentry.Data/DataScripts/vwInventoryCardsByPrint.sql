@@ -18,16 +18,14 @@
 			,c.PriceFoil
 			,c.TixPrice
 			--counts
-			,ISNULL(Counts.OwnedCount,0) AS OwnedCount
-			,0 AS DeckCount
+			,ISNULL(Counts.TotalCount,0) AS TotalCount
+			,ISNULL(Counts.DeckCount,0) AS DeckCount
+			,ISNULL(Counts.InventoryCount,0) AS InventoryCount
+			,ISNULL(Counts.SellCount,0) AS SellCount
+			--
 			,NULL AS IsFoil
 	FROM	Cards c
 	JOIN	Sets s
 		ON	c.SetId = s.SetId
-	LEFT JOIN (
-		SELECT		ic.CardId
-					,COUNT(ic.InventoryCardId) AS OwnedCount
-		FROM		InventoryCards ic
-		GROUP BY	ic.CardId
-	) AS Counts
+	LEFT JOIN vwCardTotals AS Counts
 		ON	c.CardId = Counts.CardId

@@ -1,10 +1,12 @@
 ﻿CREATE OR ALTER VIEW [dbo].[vwInventoryCardsByUnique] AS
+	--SELECT * FROM [dbo].[vwInventoryCardsByUnique] ORDER BY OwnedCount DESC
 	/*
 	Should this include things I DO NOT own?
 		Do I care that I don't have a FOIL SHOWCASE of some shit?
 		I think it should only include things I do actually own
 	*/
-	SELECT	c.CardId
+	SELECT	CAST(ROW_NUMBER() OVER (ORDER BY c.Name) AS INT) AS Id
+			,c.CardId
 			,s.Code AS SetCode
 			,c.Name
 			,c.Type
@@ -12,17 +14,23 @@
 			,c.ManaCost
 			,c.Cmc
 			,c.RarityId
+			,c.ImageUrl
 			,c.CollectorNumber
 			,c.Color
 			,c.ColorIdentity
-			,Totals.IsFoil
-			,CASE WHEN Totals.IsFoil = 1
-				THEN PriceFoil
-				ELSE Price
-			END AS Price
+			--prices
+			,c.Price
+			,c.PriceFoil
+			,c.TixPrice
+			--,CASE WHEN Totals.IsFoil = 1
+			--	THEN PriceFoil
+			--	ELSE Price
+			--END AS Price
+			--counts
 			,Totals.CardCount AS OwnedCount
 			,Totals.DeckCount
-			,c.ImageUrl
+
+			,Totals.IsFoil
 	FROM (
 		SELECT	ic.CardId
 				,ic.IsFoil

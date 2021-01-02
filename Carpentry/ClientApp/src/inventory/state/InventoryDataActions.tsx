@@ -92,3 +92,4 @@ export const TRIMMING_TIPS_RECEIVED = 'TRIMMING_TIPS_RECEIVED';
 export const trimmingTipsReceived = (): ReduxAction => ({
     type: TRIMMING_TIPS_RECEIVED
 });
+

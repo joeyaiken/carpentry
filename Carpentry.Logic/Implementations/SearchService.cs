@@ -100,7 +100,7 @@ namespace Carpentry.Logic.Implementations
 
             if (filters.ExcludeUnowned)
             {
-                query = query.Where(x => x.OwnedCount > 0);
+                query = query.Where(x => x.TotalCount > 0);
             }
 
             if (!string.IsNullOrEmpty(filters.Text))
@@ -218,87 +218,22 @@ namespace Carpentry.Logic.Implementations
             //that way I can apply the same filtering regardless of where I get my IQueryable
             IEnumerable<CardOverviewResult> query;
 
-            #region query
-
             switch (param.GroupBy)
             {
                 case "name":
-
-                    query = _inventoryRepo.QueryCardsByName().AsEnumerable() //remember this executes the query
-                        //.Select(x => new CardOverviewResult
-                        //{
-                        //    Id = x.CardId,
-                        //    CardId = x.CardId,
-                        //    Cmc = x.Cmc,
-                        //    Cost = x.ManaCost,
-                        //    Count = x.OwnedCount,
-                        //    Img = x.ImageUrl,
-                        //    Name = x.Name,
-                        //    Type = x.Type,
-                        //    Color = x.Color,
-                        //    ColorIdentity = x.ColorIdentity,
-                        //    Text = x.Text,
-                        //    RarityId = x.RarityId,
-                        //    //CollectorNumber = x.
-                        //})
-                        ;
-
+                    query = _inventoryRepo.QueryCardsByName().AsEnumerable(); //remember this executes the query
                     break;
 
                 case "unique":
-                    query = _inventoryRepo.QueryCardsByUnique().AsEnumerable() //remember this executes the query
-                        //.Select((x, i) => new CardOverviewResult()
-                        //{
-                        //    Id = (i + 1),
-                        //    CardId = x.CardId,
-                        //    SetCode = x.SetCode,
-                        //    Name = x.Name,
-                        //    Type = x.Type,
-                        //    Cost = x.ManaCost,
-                        //    Cmc = x.Cmc,
-                        //    IsFoil = x.IsFoil,
-                        //    Price = x.Price,
-                        //    Count = x.OwnedCount ?? 0,
-                        //    Img = x.ImageUrl,
-                        //    Color = x.Color,
-                        //    ColorIdentity = x.ColorIdentity,
-                        //    Text = x.Text,
-                        //    RarityId = x.RarityId,
-                        //    CollectorNumber = x.CollectorNumber,
-                        //})
-                        ;
-
+                    query = _inventoryRepo.QueryCardsByUnique().AsEnumerable(); //remember this executes the query
                     break;
 
                 //case "print":
                 default: //assuming group by print for default
 
-                    query = _inventoryRepo.QueryCardsByPrint().AsEnumerable() //remember this executes the query
-                        //.Select(x => new CardOverviewResult()
-                        //{
-                        //    Id = x.CardId,
-                        //    CardId = x.CardId,
-                        //    SetCode = x.SetCode,
-                        //    Cmc = x.Cmc,
-                        //    Cost = x.ManaCost,
-                        //    Count = x.OwnedCount,
-                        //    Img = x.ImageUrl,
-                        //    Name = x.Name,
-                        //    Type = x.Type,
-                        //    Color = x.Color,
-                        //    ColorIdentity = x.ColorIdentity,
-                        //    Text = x.Text,
-                        //    RarityId = x.RarityId,
-                        //    CollectorNumber = x.CollectorNumber,
-                        //})
-                        ;
-
+                    query = _inventoryRepo.QueryCardsByPrint().AsEnumerable(); //remember this executes the query;
                     break;
             }
-
-            #endregion
-
-            var test = query.ToList();
 
             #region Filters
 
@@ -360,12 +295,12 @@ namespace Carpentry.Logic.Implementations
 
             if (param.MinCount > 0)
             {
-                query = query.Where(x => x.OwnedCount >= param.MinCount);
+                query = query.Where(x => x.TotalCount >= param.MinCount);
             }
 
             if (param.MaxCount > 0)
             {
-                query = query.Where(x => x.OwnedCount <= param.MinCount);
+                query = query.Where(x => x.TotalCount <= param.MinCount);
             }
 
             #endregion
@@ -375,7 +310,7 @@ namespace Carpentry.Logic.Implementations
             switch (param.Sort)
             {
                 case "count":
-                    query = query.OrderByDescending(x => x.OwnedCount);
+                    query = query.OrderByDescending(x => x.TotalCount);
                     break;
 
                 case "name":
@@ -416,18 +351,24 @@ namespace Carpentry.Logic.Implementations
             List<InventoryOverviewDto> result = query.Select(x => new InventoryOverviewDto
             {
                 CardId = x.CardId,
-                Category = null,
                 Cmc = x.Cmc,
-                Cost = x.ManaCost,
-                Count = x.OwnedCount,
-                Description = null,
+                CollectorNumber = x.CollectorNumber,
+                Color = x.Color,
+                ColorIdentity = x.ColorIdentity,
+                DeckCount = x.DeckCount,
                 Id = x.Id,
-                Img = x.ImageUrl,
-                IsFoil = x.IsFoil,
-                Name = x.Name,
+                ImageUrl = x.ImageUrl,
+                OwnedCount = x.TotalCount,
+                TixPrice = x.TixPrice,
+                PriceFoil = x.PriceFoil,
                 Price = x.Price,
+                Name = x.Name,
+                ManaCost = x.ManaCost,
+                IsFoil = x.IsFoil,
+                RarityId = x.RarityId,
+                SetCode = x.SetCode,
+                Text = x.Text,
                 Type = x.Type,
-                Variant = null,
             }).ToList();
 
             return result;

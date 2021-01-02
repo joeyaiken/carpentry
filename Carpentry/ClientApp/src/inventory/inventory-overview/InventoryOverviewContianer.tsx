@@ -9,8 +9,9 @@ import { Publish } from '@material-ui/icons';
 import { push } from 'react-router-redux';
 import { requestInventoryOverviews } from '../state/InventoryDataActions';
 import LoadingBox from '../../common/components/LoadingBox';
-import { cardMenuButtonClick, inventoryOverviewFilterChanged } from './state/InventoryOverviewActions';
+import { cardMenuButtonClick, inventoryOverviewFilterChanged, quickFilterApplied } from './state/InventoryOverviewActions';
 import { appStyles } from '../../styles/appStyles';
+import { group } from 'console';
 
 interface PropsFromState { 
     // searchMethod: "name" | "quantity" | "price";
@@ -43,9 +44,11 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
         this.handleFilterChange = this.handleFilterChange.bind(this);
         this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
         this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
-        this.handleExportClick = this.handleExportClick.bind(this);
+        // this.handleExportClick = this.handleExportClick.bind(this);
         this.handleCardDetailButtonClick = this.handleCardDetailButtonClick.bind(this);
         this.handleCardDetailMenuClose = this.handleCardDetailMenuClose.bind(this);
+        this.handleQuickFilterClick = this.handleQuickFilterClick.bind(this);
+        this.handleAddCardsClick = this.handleAddCardsClick.bind(this);
     }
 
     componentDidMount() {
@@ -85,8 +88,60 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
         this.props.dispatch(requestInventoryOverviews());
     }
 
-    handleExportClick() {
+    // handleExportClick() {
 
+    // }
+
+    handleQuickFilterClick(filter: string) {
+        //apply filter changes
+        //  do I just start applying props to the existing filter? Clear everything?
+        let newFilter =  {...this.props.searchFilter};
+
+        switch(filter){
+            case "Most Expensive": //by unique, price descending
+                newFilter = {
+                    ...newFilter,
+                    groupBy: 'unique',
+                    sortBy: 'price',
+                    sortDescending: true,
+                }
+                break;
+            case "Highest Count": //by name, owned count descending
+                newFilter = {
+                    ...newFilter,
+                    groupBy: 'name',
+                    sortBy: 'count',
+                    sortDescending: true,
+                }
+                break;
+            case "Owned Cards": //by name, by name, where MinCount == 1
+                newFilter = {
+                    ...newFilter,
+                    groupBy: 'name',
+                    sortBy: 'name',
+                    sortDescending: false,
+                    minCount: 1,
+                }
+                break;
+            case "Clear Secondary": //
+                newFilter = {
+                    ...newFilter,
+                    set: "",
+                    type: "",
+                    colorIdentity: [],
+                    exclusiveColorFilters: false,
+                    multiColorOnly: false,
+                    text: "",
+                    rarity: [],
+                }
+                break;
+        }
+
+        this.props.dispatch(quickFilterApplied(newFilter));
+    }
+
+    handleAddCardsClick() {
+        this.props.dispatch(push('/inventory/addCards/'));
     }
 
     render() {
@@ -101,18 +156,29 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
                             <Typography variant="h6">
                                 Inventory
                             </Typography>
+                            <QuickFilter name="Most Expensive" onClick={()=>this.handleQuickFilterClick("Most Expensive")} /> {/* by unique, price descending */}
+                            <QuickFilter name="Highest Count" onClick={()=>this.handleQuickFilterClick("Highest Count")} />{/*  */}
+                            <QuickFilter name="Owned Cards" onClick={()=>this.handleQuickFilterClick("Owned Cards")} />{/*  */}
 
-                            <Tabs value={this.props.visibleSection}>
+                            <QuickFilter name="Clear Secondary" secondary={true} onClick={()=>this.handleQuickFilterClick("Clear Secondary")} />
+                            {/* <QuickFilter name="Wish List" onClick={()=>this.handleQuickFilterClick("")} />
+                            <QuickFilter name="Sell List" onClick={()=>this.handleQuickFilterClick("")} /> */}
+                            {/* <Button>(Trimming Tips replacement)</Button>
+                            <Button>(Wishlist Helper replacement)</Button>
+                            <Button>( replacement)</Button>
+                            <Button>( replacement)</Button> */}
+
+                            {/* <Tabs value={this.props.visibleSection}>
                                 <Tab value='inventory' label='Inventory' component={Link} to={'/inventory'} />
                                 <Tab value='trimmingTips' label='Trimming Tips' component={Link} to={'/inventory/trimming-tips'} />
                                 <Tab value='wishlistHelper' label='Wishlist Helper' component={Link} to={'/inventory/wishlist-helper'} />
                                 <Tab value='buylistHelper' label='Buylist Helper' component={Link} to={'/inventory/buylist-helper'} />
-                            </Tabs>
+                            </Tabs> */}
 
-                            <Link to={'/inventory/addCards/'}>
-                                <Button>Add Cards</Button>
-                            </Link>
-                            <IconButton size="medium" onClick={this.handleExportClick}><Publish /></IconButton>
+                            {/* <Link to={'/inventory/addCards/'}> */}
+                                <Button onClick={this.handleAddCardsClick}>Add Cards</Button>
+                            {/* </Link> */}
+                            {/* <IconButton size="medium" onClick={this.handleExportClick}><Publish /></IconButton> */}
                             {/* {
                                 props.tabNames &&
                                 <Tabs value={props.activeTab} onChange={(e, value) => {props.onTabClick && props.onTabClick(value)}} >
@@ -159,7 +225,7 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
                 <CardImagePopper 
                     menuAnchor={this.props.cardImageMenuAnchor}
                     onClose={this.handleCardDetailMenuClose}
-                    image={selectedOverview?.img}
+                    image={selectedOverview?.imageUrl}
                     />
                 { (this.props.isLoading) ? <LoadingBox /> : <InventoryCardGrid 
                 // cardOverviews={this.props.searchResults}
@@ -198,6 +264,20 @@ function CardImagePopper(props: CardImagePopperProps): JSX.Element {
                 </CardContent> */}
             </Card>
         </Popper>
+    );
+}
+
+interface QuickFilterProps {
+    name: string;
+    secondary?: boolean;
+    onClick?: () => void;
+}
+
+function QuickFilter(props: QuickFilterProps): JSX.Element {
+    return(
+        <Button color={Boolean(props.secondary) ? "secondary" : "primary"} variant="outlined" size="small" style={{textTransform:"none"}} onClick={props.onClick}>
+            {props.name}
+        </Button>
     );
 }
 

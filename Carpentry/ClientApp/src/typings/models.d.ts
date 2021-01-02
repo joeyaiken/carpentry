@@ -251,20 +251,29 @@ interface InventoryDetailDto {
 
 
 interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
-    cardId: number;
-    category: string;
-    cmc: number;
-    cost: string;
-    count: number;
-    description: string;
     id: number;
-    img: string;
-    isFoil: boolean;
+    //card definition properties
+    cardId: number;
+    setCode: string;
     name: string;
-    price: number;
     type: string;
-    variant: string;
-    // multiverseId: number;
+    text: string;
+    manaCost: string;
+    cmc: number;
+    rarityId: string;
+    imageUrl: string;
+    collectorNumber: number | null;
+    color: string;
+    colorIdentity: string;
+    //prices
+    price: number;
+    priceFoil: number | null;
+    tixPrice: number | null;
+    //counts
+    ownedCount: number;
+    deckCount: number;
+    //
+    isFoil: boolean | null; //only populated for ByUnique, otherwise NULL
 }
 
 declare interface InventoryQueryParameter {

@@ -12,3 +12,9 @@ export const cardMenuButtonClick = (menuAnchor: HTMLButtonElement | null): Redux
     type: CARD_MENU_BUTTON_CLICKED,
     payload: menuAnchor
 });
+
+export const QUICK_FILTER_APPLIED = 'QUICK_FILTER_APPLIED';
+export const quickFilterApplied = (filter: InventoryFilterProps): ReduxAction => ({
+    type: QUICK_FILTER_APPLIED,
+    payload: filter,
+});

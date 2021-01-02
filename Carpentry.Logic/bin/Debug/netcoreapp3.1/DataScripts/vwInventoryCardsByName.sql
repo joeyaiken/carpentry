@@ -26,19 +26,23 @@ AS
 			,RecentCard.PriceFoil
 			,RecentCard.TixPrice
 			--counts
-			,Counts.OwnedCount
+			,Counts.TotalCount
 			,Counts.DeckCount
-
+			,Counts.InventoryCount
+			,Counts.SellCount
+			--
 			,NULL AS IsFoil
 	FROM	(
 		SELECT		c.Name
-					,COUNT(ic.InventoryCardId) AS OwnedCount
-					,SUM(CASE WHEN dc.DeckCardId IS NULL THEN 0 ELSE 1 END) AS DeckCount
+					,SUM(t.DeckCount) AS DeckCount
+					,SUM(t.InventoryCount) AS InventoryCount
+					,SUM(t.SellCount) AS SellCount
+					,SUM(t.TotalCount) AS TotalCount
+
 		FROM		Cards c
-		LEFT JOIN	InventoryCards ic
-				ON	ic.CardId = c.CardId
-		LEFT JOIN	DeckCards dc
-				ON	ic.InventoryCardId = dc.InventoryCardId
+		LEFT JOIN	vwCardTotals t
+			ON		c.CardId = t.CardId
+
 		GROUP BY	c.Name
 	) AS Counts
 	JOIN	(

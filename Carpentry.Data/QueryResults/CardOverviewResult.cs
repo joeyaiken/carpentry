@@ -17,11 +17,21 @@
         public int? CollectorNumber { get; set; }
         public string Color { get; set; }
         public string ColorIdentity { get; set; }
+        //prices
         public decimal? Price { get; set; }
         public decimal? PriceFoil { get; set; }
         public decimal? TixPrice { get; set; }
-        public int OwnedCount { get; set; }
+        //counts
+
+        public int TotalCount { get; set; }
+
         public int DeckCount { get; set; }
+        public int InventoryCount { get; set; }
+        public int SellCount { get; set; }
+        //(I can add more when I actually need them)        
+        //wishlist count
+
+
         public bool? IsFoil { get; set; } //only populated for ByUnique, otherwise NULL
     }
 }

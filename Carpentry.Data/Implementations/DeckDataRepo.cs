@@ -192,6 +192,8 @@ namespace Carpentry.Data.Implementations
         //The same info in [ThatDevQuery(int deckId)]
         public async Task<List<DeckCardResult>> GetDeckCards(int deckId)
         {
+            var test = await _cardContext.InventoryCardByName.ToListAsync();
+
             var deckCards = await _cardContext.DeckCards.Where(dc => dc.DeckId == deckId)
                 .Select(x => new DeckCardResult()
                 {

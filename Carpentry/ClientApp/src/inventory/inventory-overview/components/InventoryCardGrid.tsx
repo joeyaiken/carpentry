@@ -41,13 +41,13 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                             <CardMedia 
                                 style={{height:"310px", width: "223px"}}
                                 //image={`https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=${props.card.}&type=card`}
-                                image={cardItem.img}
+                                image={cardItem.imageUrl}
                                 title={cardItem.name} />
                             <Box className={classes.flexRow}>
                                 <CardContent className={classes.flexSection}>
                                     <Box className={classes.flexCol}>
                                         <Box className={classes.flexRow}>
-                                            {cardItem.count && (<Typography>{cardItem.count} Total {cardItem.isFoil && " - (FOIL)"}</Typography>)}
+                                            {cardItem.ownedCount && (<Typography>{cardItem.ownedCount} Total {cardItem.isFoil && " - (FOIL)"}</Typography>)}
                                         </Box>
                                         <Box className={classes.flexRow}>
                                             {cardItem.price && (<Typography>${cardItem.price}</Typography>)}

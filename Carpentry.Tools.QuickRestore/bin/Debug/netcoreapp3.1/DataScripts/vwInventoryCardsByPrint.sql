@@ -1,26 +1,26 @@
 ﻿CREATE OR ALTER VIEW [dbo].[vwInventoryCardsByPrint] AS
-
-	SELECT	c.CardId
+	--SELECT * FROM [dbo].[vwInventoryCardsByPrint]
+	SELECT	c.CardId AS Id
+			,c.CardId
 			,s.Code AS SetCode
 			,c.Name
-			,c.CollectorNumber
 			,c.Type
+			,c.Text
 			,c.ManaCost
 			,c.Cmc
 			,c.RarityId
 			,c.ImageUrl
-			--added
-			,c.MultiverseId
-			,c.Text
+			,c.CollectorNumber
+			,c.Color
+			,c.ColorIdentity
+			--prices
 			,c.Price
 			,c.PriceFoil
 			,c.TixPrice
-			,c.Color
-			,c.ColorIdentity
-
-
-			--
+			--counts
 			,ISNULL(Counts.OwnedCount,0) AS OwnedCount
+			,0 AS DeckCount
+			,NULL AS IsFoil
 	FROM	Cards c
 	JOIN	Sets s
 		ON	c.SetId = s.SetId
