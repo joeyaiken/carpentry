@@ -506,8 +506,6 @@ namespace Carpentry.Data.Implementations
 
             //return query;
 
-
-
             return _cardContext.InventoryCardByUnique.AsQueryable();
         }
 

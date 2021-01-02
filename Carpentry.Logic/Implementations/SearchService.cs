@@ -165,7 +165,7 @@ namespace Carpentry.Logic.Implementations
                         CardId = c.CardId,
                         Name = c.Name,
                         CollectionNumber = c.CollectorNumber ?? 0,
-                        ImageUrl = c.Img,
+                        ImageUrl = c.ImageUrl,
                         Price = c.Price,
                         PriceFoil = c.PriceFoil,
                         PriceTix = c.PriceFoil,
@@ -298,6 +298,8 @@ namespace Carpentry.Logic.Implementations
 
             #endregion
 
+            var test = query.ToList();
+
             #region Filters
 
             if (!string.IsNullOrEmpty(param.Set))
@@ -420,7 +422,7 @@ namespace Carpentry.Logic.Implementations
                 Count = x.OwnedCount,
                 Description = null,
                 Id = x.Id,
-                Img = x.Img,
+                Img = x.ImageUrl,
                 IsFoil = x.IsFoil,
                 Name = x.Name,
                 Price = x.Price,

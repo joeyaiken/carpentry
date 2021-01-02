@@ -5,7 +5,7 @@
 		Do I care that I don't have a FOIL SHOWCASE of some shit?
 		I think it should only include things I do actually own
 	*/
-	SELECT	ROW_NUMBER() OVER (ORDER BY c.Name) AS Id
+	SELECT	CAST(ROW_NUMBER() OVER (ORDER BY c.Name) AS INT) AS Id
 			,c.CardId
 			,s.Code AS SetCode
 			,c.Name

@@ -1,30 +1,35 @@
 ﻿CREATE OR ALTER VIEW [dbo].[vwInventoryCardsByName]
 AS
+	--SELECT * FROM [dbo].[vwInventoryCardsByName]
 	--What are the unique card names, and how many do I own of each?
 	--inventory cards can have statuses, maybe this should filter out buy-list/sell-list cards
 
 	--Note that if I don't own the most recent printing of a card, this will still show the most recent
 	--For each cardn name, I want the most recent card, and owned count for each name
 
-	SELECT	RecentCard.CardId
+	SELECT	RecentCard.CardId AS Id
+			--card props
+			,RecentCard.CardId
+			,s.Code AS [SetCode]
 			,RecentCard.Name
 			,RecentCard.Type
 			,RecentCard.Text
 			,RecentCard.ManaCost
 			,RecentCard.Cmc
+			,RecentCard.RarityId
 			,RecentCard.ImageUrl
+			,RecentCard.CollectorNumber
 			,RecentCard.Color
 			,RecentCard.ColorIdentity
-			,RecentCard.RarityId
-			,RecentCard.CollectorNumber
-			--,RecentCard.SetId
-			,s.Code AS [SetCode]
-			,RecentCard.MultiverseId
+			--prices
 			,RecentCard.Price
 			,RecentCard.PriceFoil
 			,RecentCard.TixPrice
+			--counts
 			,Counts.OwnedCount
 			,Counts.DeckCount
+
+			,NULL AS IsFoil
 	FROM	(
 		SELECT		c.Name
 					,COUNT(ic.InventoryCardId) AS OwnedCount

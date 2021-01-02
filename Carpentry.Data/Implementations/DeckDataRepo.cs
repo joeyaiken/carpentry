@@ -221,8 +221,9 @@ namespace Carpentry.Data.Implementations
             //get all names with null inventory cards
             var cardNames = deckCards.Where(dc => dc.InventoryCardId == null).Select(dc => dc.Name).Distinct().ToList();
 
-            var relevantCardsByName = await _cardContext.InventoryCardByName
+            var relevantCardsByName = (await _cardContext.InventoryCardByName
                 .Where(c => cardNames.Contains(c.Name))
+                .ToListAsync())
                 //.Select(c => new CardData()
                 //{
                 //    CardId = c.CardId,
@@ -242,7 +243,7 @@ namespace Carpentry.Data.Implementations
                 //    Color = c.Color,
                 //    ColorIdentity = c.ColorIdentity,
                 //})
-                .ToDictionaryAsync(c => c.Name, c => c);
+                .ToDictionary(c => c.Name, c => c);
 
             //match everything!
             //(alternatively, get this all from a view)
@@ -258,7 +259,7 @@ namespace Carpentry.Data.Implementations
                     var match = relevantCardsByName[dc.Name];
                     dc.Cmc = match.Cmc;
                     dc.Cost = match.ManaCost;
-                    dc.Img = match.Img;
+                    dc.Img = match.ImageUrl;
                     //dc.IsFoil = false;
                     dc.CollectorNumber = match.CollectorNumber;
                     dc.CardId = match.CardId;
@@ -358,7 +359,7 @@ namespace Carpentry.Data.Implementations
                     var match = relevantCardsByName[dc.Name];
                     dc.Cmc = match.Cmc;
                     dc.Cost = match.ManaCost;
-                    dc.Img = match.Img;
+                    dc.Img = match.ImageUrl;
                     //dc.IsFoil = match.IsFoil;
                     dc.CollectorNumber = match.CollectorNumber;
                     dc.CardId = match.CardId;

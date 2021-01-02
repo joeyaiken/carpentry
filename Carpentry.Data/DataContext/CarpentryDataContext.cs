@@ -42,9 +42,9 @@ namespace Carpentry.Data.DataContext
         public DbSet<DeckCardTagData> CardTags { get; set; }
 
         //Views
-        public DbSet<QueryResults.CardOverviewResult> InventoryCardByName { get; set; }
-        public DbSet<QueryResults.CardOverviewResult> InventoryCardByPrint { get; set; }
-        public DbSet<QueryResults.CardOverviewResult> InventoryCardByUnique { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByPrintResult> InventoryCardByPrint { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
         public DbSet<DataModels.QueryResults.SetTotalsResult> SetTotals { get; set; }
         public DbSet<DataModels.QueryResults.TrimmingTipsResult> TrimmingTips { get; set; }
         public DbSet<DataModels.QueryResults.TrimmingTipsCountResult> TrimmingTipsTotalCount { get; set; }

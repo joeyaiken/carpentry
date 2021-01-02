@@ -13,7 +13,7 @@
         public string ManaCost { get; set; }
         public int? Cmc { get; set; }
         public char RarityId { get; set; }
-        public string Img { get; set; }
+        public string ImageUrl { get; set; }
         public int? CollectorNumber { get; set; }
         public string Color { get; set; }
         public string ColorIdentity { get; set; }
