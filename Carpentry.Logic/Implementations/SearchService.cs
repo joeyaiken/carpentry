@@ -164,8 +164,8 @@ namespace Carpentry.Logic.Implementations
                     {
                         CardId = c.CardId,
                         Name = c.Name,
-                        CollectionNumber = c.CollectorNumber,
-                        ImageUrl = c.ImageUrl,
+                        CollectionNumber = c.CollectorNumber ?? 0,
+                        ImageUrl = c.Img,
                         Price = c.Price,
                         PriceFoil = c.PriceFoil,
                         PriceTix = c.PriceFoil,
@@ -225,49 +225,48 @@ namespace Carpentry.Logic.Implementations
                 case "name":
 
                     query = _inventoryRepo.QueryCardsByName().AsEnumerable() //remember this executes the query
-
-                        .Select(x => new CardOverviewResult
-                        {
-                            Id = x.CardId,
-                            CardId = x.CardId,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.OwnedCount,
-                            Img = x.ImageUrl,
-                            Name = x.Name,
-                            Type = x.Type,
-                            Color = x.Color,
-                            ColorIdentity = x.ColorIdentity,
-                            Text = x.Text,
-                            RarityId = x.RarityId,
-                            //CollectorNumber = x.
-
-                        });
+                        //.Select(x => new CardOverviewResult
+                        //{
+                        //    Id = x.CardId,
+                        //    CardId = x.CardId,
+                        //    Cmc = x.Cmc,
+                        //    Cost = x.ManaCost,
+                        //    Count = x.OwnedCount,
+                        //    Img = x.ImageUrl,
+                        //    Name = x.Name,
+                        //    Type = x.Type,
+                        //    Color = x.Color,
+                        //    ColorIdentity = x.ColorIdentity,
+                        //    Text = x.Text,
+                        //    RarityId = x.RarityId,
+                        //    //CollectorNumber = x.
+                        //})
+                        ;
 
                     break;
 
                 case "unique":
                     query = _inventoryRepo.QueryCardsByUnique().AsEnumerable() //remember this executes the query
-
-                        .Select((x, i) => new CardOverviewResult()
-                        {
-                            Id = (i + 1),
-                            CardId = x.CardId,
-                            SetCode = x.SetCode,
-                            Name = x.Name,
-                            Type = x.Type,
-                            Cost = x.ManaCost,
-                            Cmc = x.Cmc,
-                            IsFoil = x.IsFoil,
-                            Price = x.Price,
-                            Count = x.OwnedCount ?? 0,
-                            Img = x.ImageUrl,
-                            Color = x.Color,
-                            ColorIdentity = x.ColorIdentity,
-                            Text = x.Text,
-                            RarityId = x.RarityId,
-                            CollectorNumber = x.CollectorNumber,
-                        });
+                        //.Select((x, i) => new CardOverviewResult()
+                        //{
+                        //    Id = (i + 1),
+                        //    CardId = x.CardId,
+                        //    SetCode = x.SetCode,
+                        //    Name = x.Name,
+                        //    Type = x.Type,
+                        //    Cost = x.ManaCost,
+                        //    Cmc = x.Cmc,
+                        //    IsFoil = x.IsFoil,
+                        //    Price = x.Price,
+                        //    Count = x.OwnedCount ?? 0,
+                        //    Img = x.ImageUrl,
+                        //    Color = x.Color,
+                        //    ColorIdentity = x.ColorIdentity,
+                        //    Text = x.Text,
+                        //    RarityId = x.RarityId,
+                        //    CollectorNumber = x.CollectorNumber,
+                        //})
+                        ;
 
                     break;
 
@@ -275,24 +274,24 @@ namespace Carpentry.Logic.Implementations
                 default: //assuming group by print for default
 
                     query = _inventoryRepo.QueryCardsByPrint().AsEnumerable() //remember this executes the query
-
-                        .Select(x => new CardOverviewResult()
-                        {
-                            Id = x.CardId,
-                            CardId = x.CardId,
-                            SetCode = x.SetCode,
-                            Cmc = x.Cmc,
-                            Cost = x.ManaCost,
-                            Count = x.OwnedCount,
-                            Img = x.ImageUrl,
-                            Name = x.Name,
-                            Type = x.Type,
-                            Color = x.Color,
-                            ColorIdentity = x.ColorIdentity,
-                            Text = x.Text,
-                            RarityId = x.RarityId,
-                            CollectorNumber = x.CollectorNumber,
-                        });
+                        //.Select(x => new CardOverviewResult()
+                        //{
+                        //    Id = x.CardId,
+                        //    CardId = x.CardId,
+                        //    SetCode = x.SetCode,
+                        //    Cmc = x.Cmc,
+                        //    Cost = x.ManaCost,
+                        //    Count = x.OwnedCount,
+                        //    Img = x.ImageUrl,
+                        //    Name = x.Name,
+                        //    Type = x.Type,
+                        //    Color = x.Color,
+                        //    ColorIdentity = x.ColorIdentity,
+                        //    Text = x.Text,
+                        //    RarityId = x.RarityId,
+                        //    CollectorNumber = x.CollectorNumber,
+                        //})
+                        ;
 
                     break;
             }
@@ -359,12 +358,12 @@ namespace Carpentry.Logic.Implementations
 
             if (param.MinCount > 0)
             {
-                query = query.Where(x => x.Count >= param.MinCount);
+                query = query.Where(x => x.OwnedCount >= param.MinCount);
             }
 
             if (param.MaxCount > 0)
             {
-                query = query.Where(x => x.Count <= param.MinCount);
+                query = query.Where(x => x.OwnedCount <= param.MinCount);
             }
 
             #endregion
@@ -374,7 +373,7 @@ namespace Carpentry.Logic.Implementations
             switch (param.Sort)
             {
                 case "count":
-                    query = query.OrderByDescending(x => x.Count);
+                    query = query.OrderByDescending(x => x.OwnedCount);
                     break;
 
                 case "name":
@@ -417,8 +416,8 @@ namespace Carpentry.Logic.Implementations
                 CardId = x.CardId,
                 Category = null,
                 Cmc = x.Cmc,
-                Cost = x.Cost,
-                Count = x.Count,
+                Cost = x.ManaCost,
+                Count = x.OwnedCount,
                 Description = null,
                 Id = x.Id,
                 Img = x.Img,

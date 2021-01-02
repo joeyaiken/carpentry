@@ -258,7 +258,7 @@ namespace Carpentry.Data.Implementations
                     var match = relevantCardsByName[dc.Name];
                     dc.Cmc = match.Cmc;
                     dc.Cost = match.ManaCost;
-                    dc.Img = match.ImageUrl;
+                    dc.Img = match.Img;
                     //dc.IsFoil = false;
                     dc.CollectorNumber = match.CollectorNumber;
                     dc.CardId = match.CardId;
@@ -358,7 +358,7 @@ namespace Carpentry.Data.Implementations
                     var match = relevantCardsByName[dc.Name];
                     dc.Cmc = match.Cmc;
                     dc.Cost = match.ManaCost;
-                    dc.Img = match.ImageUrl;
+                    dc.Img = match.Img;
                     //dc.IsFoil = match.IsFoil;
                     dc.CollectorNumber = match.CollectorNumber;
                     dc.CardId = match.CardId;

@@ -256,7 +256,7 @@ namespace Carpentry.Data.Implementations
 			await _cardContext.SaveChangesAsync();
 		}
 
-		public IQueryable<InventoryCardByNameResult> QueryCardsByName()
+		public IQueryable<CardOverviewResult> QueryCardsByName()
 		{
             /*
 			SELECT	RecentCard.CardId
@@ -406,12 +406,12 @@ namespace Carpentry.Data.Implementations
             return _cardContext.InventoryCardByName.AsQueryable();
         }
 
-		public IQueryable<InventoryCardByPrintResult> QueryCardsByPrint()
+		public IQueryable<CardOverviewResult> QueryCardsByPrint()
 		{
 			return _cardContext.InventoryCardByPrint.AsQueryable();
 		}
 
-		public IQueryable<InventoryCardByUniqueResult> QueryCardsByUnique()
+		public IQueryable<CardOverviewResult> QueryCardsByUnique()
 		{
             /*
              SELECT	c.CardId

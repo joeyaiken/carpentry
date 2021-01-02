@@ -20,9 +20,10 @@ namespace Carpentry.Data.Interfaces
         Task<InventoryCardData> GetInventoryCard(int inventoryCardId);
         Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName); //Used for "Get Inventory Detail"
 
-        IQueryable<InventoryCardByNameResult> QueryCardsByName();
-        IQueryable<InventoryCardByPrintResult> QueryCardsByPrint();
-        IQueryable<InventoryCardByUniqueResult> QueryCardsByUnique();
+        //CardOverviewResult | InventoryOverviewResult
+        IQueryable<CardOverviewResult> QueryCardsByName();
+        IQueryable<CardOverviewResult> QueryCardsByPrint();
+        IQueryable<CardOverviewResult> QueryCardsByUnique();
 
         Task<List<TrimmingTipsResult>> GetTrimmingTips(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null);
         Task<int> GetTotalTrimCount(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null);
