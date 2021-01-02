@@ -26,10 +26,10 @@ AS
 			,RecentCard.PriceFoil
 			,RecentCard.TixPrice
 			--counts
-			,Counts.TotalCount
-			,Counts.DeckCount
-			,Counts.InventoryCount
-			,Counts.SellCount
+			,ISNULL(Counts.TotalCount, 0) AS TotalCount
+			,ISNULL(Counts.DeckCount, 0) AS DeckCount
+			,ISNULL(Counts.InventoryCount, 0) AS InventoryCount
+			,ISNULL(Counts.SellCount, 0) AS SellCount
 			--
 			,NULL AS IsFoil
 	FROM	(
@@ -44,6 +44,7 @@ AS
 			ON		c.CardId = t.CardId
 
 		GROUP BY	c.Name
+
 	) AS Counts
 	JOIN	(
 		SELECT	ROW_NUMBER() OVER(PARTITION BY c.Name ORDER BY s.ReleaseDate DESC, c.CollectorNumber) AS CardRank
