@@ -1,26 +1,21 @@
 import React from 'react';
-import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card } from '@material-ui/core';
+import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card, IconButton } from '@material-ui/core';
 // import VisualCard from './VisualCard';
 import CardGridContainer from './CardGridContainer';
 // import GridCard from './GridCard';
 
 import { appStyles } from '../../../styles/appStyles';
+import { Info, InfoOutlined } from '@material-ui/icons';
 // import { Link } from 'react-router-dom';
 
 interface ComponentProps{
-    // cardOverviews: InventoryOverviewDto[];
     cardOverviewsById: { [key: number]: InventoryOverviewDto }
     cardOverviewIds: number[];
     onCardSelected: (cardId: number) => void;
-}
 
-// function DetailsButton(): JSX.Element {
-//     return (
-//     <Button color="primary" size="small">
-//         Details
-//     </Button>
-//     );
-// }
+    onInfoButtonEnter: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onInfoButtonLeave: () => void;
+}
 
 export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
     const classes = appStyles();
@@ -85,10 +80,21 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                         component={DetailsButton}
                                         // variant="contained"
                                     /> */}
+                                    
                                         <Button color="primary" size="small" onClick={() => {props.onCardSelected(cardItem.cardId)}} >
                                             Details
                                         </Button>
-                                    {/* </Link> */}
+                                        <IconButton 
+                                            value={cardItem.id} 
+                                            color="primary" 
+                                            size="small" 
+                                            onMouseEnter={props.onInfoButtonEnter}
+                                            onMouseLeave={props.onInfoButtonLeave}
+                                            // on
+                                            
+                                            >
+                                            <InfoOutlined />
+                                        </IconButton>
                                 </CardActions>
                             </Box>
                         </Card>

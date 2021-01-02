@@ -49,6 +49,11 @@ class HomeContainer extends React.Component<HomeProps> {
         this.props.dispatch(push('/inventory'));
     }
 
+    //(JSX attribute) onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined
+    handleDetailButtonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+        
+    }
+
     render() {
         return (
             <React.Fragment>

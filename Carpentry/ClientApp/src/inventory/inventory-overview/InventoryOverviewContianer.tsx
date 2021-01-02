@@ -1,7 +1,7 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
 import { AppState } from '../../configureStore'
-import { Box, Tabs, AppBar, Typography, Toolbar, Button, IconButton, Tab } from '@material-ui/core';
+import { Box, Tabs, AppBar, Typography, Toolbar, Button, IconButton, Tab, Menu, Card, CardMedia, CardContent, Paper, Popper } from '@material-ui/core';
 import InventoryCardGrid from './components/InventoryCardGrid';
 import InventoryFilterBar from './components/InventoryFilterBar';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,8 @@ import { Publish } from '@material-ui/icons';
 import { push } from 'react-router-redux';
 import { requestInventoryOverviews } from '../state/InventoryDataActions';
 import LoadingBox from '../../common/components/LoadingBox';
-import { inventoryOverviewFilterChanged } from './state/InventoryOverviewActions';
+import { cardMenuButtonClick, inventoryOverviewFilterChanged } from './state/InventoryOverviewActions';
+import { appStyles } from '../../styles/appStyles';
 
 interface PropsFromState { 
     // searchMethod: "name" | "quantity" | "price";
@@ -24,9 +25,13 @@ interface PropsFromState {
 
     searchFilter: InventoryFilterProps;
     filterOptions: AppFiltersDto;
-    visibleFilters: CardFilterVisibilities;
+    // visibleFilters: CardFilterVisibilities;
 
     visibleSection: "inventory" | "trimmingTips" | "wishlistHelper" | "buylistHelper";
+    
+    //
+    cardImageMenuAnchor: HTMLButtonElement | null;
+    // cardImageMenuId: number | null;
 }
 
 type InventoryOverviewProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -39,6 +44,8 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
         this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
         this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
         this.handleExportClick = this.handleExportClick.bind(this);
+        this.handleCardDetailButtonClick = this.handleCardDetailButtonClick.bind(this);
+        this.handleCardDetailMenuClose = this.handleCardDetailMenuClose.bind(this);
     }
 
     componentDidMount() {
@@ -53,6 +60,14 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
     handleCardDetailSelected(cardId: number | null){
         // console.log(`card selected: ${cardId}`);
         this.props.dispatch(push(`/inventory/${cardId}`));
+    }
+
+    handleCardDetailButtonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        this.props.dispatch(cardMenuButtonClick(event.currentTarget));
+    }
+
+    handleCardDetailMenuClose() {
+        this.props.dispatch(cardMenuButtonClick(null));
     }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -131,22 +146,59 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
                 handleFilterChange={this.handleFilterChange}
                 handleSearchButtonClick={this.handleSearchButtonClick}
                 searchFilter={this.props.searchFilter}
-                visibleFilters={this.props.visibleFilters}
+                // visibleFilters={this.props.visibleFilters}
                 />
         );
     }
 
     renderCardOverviews() {
+        const cardImageAnchorId = this.props.cardImageMenuAnchor?.value;
+        const selectedOverview: InventoryOverviewDto = this.props.searchResultsById[cardImageAnchorId ?? 0];
         return (
             <React.Fragment>
+                <CardImagePopper 
+                    menuAnchor={this.props.cardImageMenuAnchor}
+                    onClose={this.handleCardDetailMenuClose}
+                    image={selectedOverview?.img}
+                    />
                 { (this.props.isLoading) ? <LoadingBox /> : <InventoryCardGrid 
                 // cardOverviews={this.props.searchResults}
                 cardOverviewIds={this.props.searchReusltIds}
                 cardOverviewsById={this.props.searchResultsById}
-                 onCardSelected={this.handleCardDetailSelected} /> }
+                onCardSelected={this.handleCardDetailSelected} 
+                
+                onInfoButtonEnter={this.handleCardDetailButtonClick}
+                onInfoButtonLeave={this.handleCardDetailMenuClose} /> }
             </React.Fragment>
         );
     }
+}
+
+interface CardImagePopperProps { 
+    menuAnchor: HTMLElement | null;
+    image: string;
+    onClose: () => void;
+}
+
+function CardImagePopper(props: CardImagePopperProps): JSX.Element {
+    const classes = appStyles();
+    return (
+        <Popper open={Boolean(props.menuAnchor)} anchorEl={props.menuAnchor}>
+            <Card>
+                <CardMedia style={{height:"310px", width: "223px"}} image={props.image} />
+                {/* <CardContent className={classes.flexSection}>
+                    <Box className={classes.flexCol}>
+                        <Box className={classes.flexRow}>
+                            {cardItem.count && (<Typography>{cardItem.count} Total {cardItem.isFoil && " - (FOIL)"}</Typography>)}
+                        </Box>
+                        <Box className={classes.flexRow}>
+                            {cardItem.price && (<Typography>${cardItem.price}</Typography>)}
+                        </Box>
+                    </Box>
+                </CardContent> */}
+            </Card>
+        </Popper>
+    );
 }
 
 //Oh I cleaned up the deail when I should really clean up this too
@@ -156,52 +208,10 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
 //     return result;
 // }
 
-function getFilterVisibilities(groupBy: string): CardFilterVisibilities {
-    let visibleFilters: CardFilterVisibilities = {
-        name: false,
-        color: false,
-        rarity: false,
-        set: false,
-        type: false,
-        count: false,
-        format: false,
-        text: false,
-    }
-    // group by: name | print | unique
-    switch(groupBy){
-        case "name":
-            visibleFilters = {
-                ...visibleFilters,
-                set: true,
-                count: true,
-                color: true,
-                type: true,
-                rarity: true,
-                format: true,
-                text: true,
-            }
-            break;
-        case "print":
-            visibleFilters = {
-                ...visibleFilters,
-            }
-            break;
-        case "unique":
-            visibleFilters = {
-                ...visibleFilters,
-                set: true,
-            }
-            break;
-    }
-
-    return visibleFilters;
-}
-
 
 //State
 function mapStateToProps(state: AppState): PropsFromState {
-    // console.log('---state-----');
-    // console.log(state);
+
     const result: PropsFromState = {
         // searchResults: selectInventoryOverviews(state),
         searchResultsById: state.inventory.data.overviews.byId,
@@ -213,12 +223,17 @@ function mapStateToProps(state: AppState): PropsFromState {
         viewMethod: state.inventory.overviews.viewMethod,
 
         searchFilter: state.inventory.overviews.filters,
-        visibleFilters: getFilterVisibilities(state.inventory.overviews.filters.groupBy),
+        // visibleFilters: getFilterVisibilities(state.inventory.overviews.filters.groupBy),
         filterOptions: state.core.data.filterOptions,
         // searchMethod: state.app.inventory.searchMethod,
 
         visibleSection: "inventory",
 
+        //
+        cardImageMenuAnchor: state.inventory.overviews.cardImageMenuAnchor,
+        // cardImageMenuId: null,
+        // cardImageMenuId: state.inventory.overviews.cardImageMenuAnchor?.value,
+        //cardImageMenu
     }
     return result;
 }

@@ -1,6 +1,6 @@
 //app reducer for the inventory overview container
 
-import { INVENTORY_OVERVIEW_FILTER_CHANGED } from "./InventoryOverviewActions";
+import { CARD_MENU_BUTTON_CLICKED, INVENTORY_OVERVIEW_FILTER_CHANGED } from "./InventoryOverviewActions";
 
 // import { INVENTORY_OVERVIEW_FILTER_CHANGED } from "./inventoryOverviewActions";
 
@@ -13,6 +13,7 @@ export interface State {
 
     filters: InventoryFilterProps;
 
+    cardImageMenuAnchor: HTMLButtonElement | null;
 
     //groupBy
     // ? search filters??
@@ -43,6 +44,8 @@ export interface State {
 export const inventoryOverviewAppReducer = (state = initialState, action: ReduxAction): State => {
     switch(action.type){
         case INVENTORY_OVERVIEW_FILTER_CHANGED: return inventoryOverviewFilterChanged(state, action);
+
+        case CARD_MENU_BUTTON_CLICKED: return { ...state, cardImageMenuAnchor: action.payload };
         default: return(state)
     }
 }
@@ -81,6 +84,7 @@ function initialCardSearchFilterProps(): InventoryFilterProps {
 const initialState: State = {
     viewMethod: "grid",
     filters: initialCardSearchFilterProps(),
+    cardImageMenuAnchor: null,
     // searchMethod: "mid",
     // groupBy: "unique",
     // viewMode: "grid",

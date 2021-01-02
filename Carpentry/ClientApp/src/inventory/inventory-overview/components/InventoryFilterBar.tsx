@@ -7,7 +7,6 @@ import { appStyles, combineStyles } from '../../../styles/appStyles';
 interface InventoryFilterBarProps{
     searchFilter: InventoryFilterProps,
     viewMethod: "grid" | "table";
-    visibleFilters: CardFilterVisibilities;
     filterOptions: AppFiltersDto,
     handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleBoolFilterChange: (filter: string, value: boolean) => void;
