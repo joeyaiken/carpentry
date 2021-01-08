@@ -38,7 +38,7 @@ namespace Carpentry.Controllers
             return Ok("Online");
         }
 
-        #region Filter Options
+        #region Other
 
         /// <summary>
         /// Returns default reference/filter values used by the app
@@ -59,7 +59,11 @@ namespace Carpentry.Controllers
             }
         }
 
-        #endregion Filter Options
+        //ensure DB exists / is up to date
+        //(don't know what exactly to call this)
+        //TODO - Consider trying to move this to Startup.cs or something
+
+        #endregion 
 
         #region Tracked Sets
 

@@ -26,6 +26,16 @@ class AppContainer extends React.Component<AppContainerProps>{
     // }
 
     componentDidMount() {
+        //ensureAppInitialized
+        //ensureInitialized
+        //initialize
+        //
+        //something that calls a thunk which:
+        //  checks if the DB exists / is up to date
+        //      (should this really exist here and not on Startup?)
+        //  loads core data
+        //  any future required initialization steps
+        //
         this.props.dispatch(requestCoreData());
         // this.props.dispatch(push('/decks/52'));
     }
