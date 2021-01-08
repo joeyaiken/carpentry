@@ -270,8 +270,10 @@ interface InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
     priceFoil: number | null;
     tixPrice: number | null;
     //counts
-    ownedCount: number;
+    totalCount: number;
     deckCount: number;
+    inventoryCount: number;
+    sellCount: number;
     //
     isFoil: boolean | null; //only populated for ByUnique, otherwise NULL
 }

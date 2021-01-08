@@ -27,8 +27,10 @@ namespace Carpentry.Logic.Models
         public decimal? PriceFoil { get; set; }
         public decimal? TixPrice { get; set; }
         //counts
-        public int OwnedCount { get; set; }
+        public int TotalCount { get; set; }
         public int DeckCount { get; set; }
+        public int InventoryCount { get; set; }
+        public int SellCount { get; set; }
 
         public bool? IsFoil { get; set; } //only populated for ByUnique, otherwise NULL
     }

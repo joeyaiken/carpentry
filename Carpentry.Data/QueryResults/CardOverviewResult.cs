@@ -22,9 +22,7 @@
         public decimal? PriceFoil { get; set; }
         public decimal? TixPrice { get; set; }
         //counts
-
         public int TotalCount { get; set; }
-
         public int DeckCount { get; set; }
         public int InventoryCount { get; set; }
         public int SellCount { get; set; }

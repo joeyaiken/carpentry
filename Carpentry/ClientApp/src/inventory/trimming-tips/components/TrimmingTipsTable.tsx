@@ -34,7 +34,7 @@ export default function TrimmingTipsTable(props: ComponentProps): JSX.Element {
                             <TableRow 
                                 key={cardItem.id+cardItem.name}>
                                 <TableCell>{cardItem.name}</TableCell>
-                                <TableCell>{cardItem.ownedCount}</TableCell>
+                                {/* <TableCell>{cardItem.ownedCount}</TableCell> */}
                                 <TableCell>{cardItem.type}</TableCell>
                                 <TableCell>{cardItem.manaCost}</TableCell>
                                 {/* <TableCell>{cardItem.category}</TableCell> */}

@@ -34,9 +34,97 @@ namespace Carpentry.Tools.QuickImport
             logger.LogInformation("Beginning import tool");
 
             var importService = serviceProvider.GetService<IDataImportService>();
-            var deckRepo = serviceProvider.GetService<IDeckDataRepo>();
+            var deckRepo = serviceProvider.GetService<DeckDataRepo>();
 
             List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
+            {
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Goblins_3_1_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Goblins_3.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Predatory_2_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Predatory_2.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Legion_4_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Legion_4.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Elves_1_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Elves_1.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Basri_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Basri.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Predatory_4_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Predatory_4.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Goblins_3_2_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Goblins_3.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Archaeology_3_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Archaeology_3.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Lightning_1_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Lightning_1.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Cats_1_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Cats_1.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Legion_1_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Legion_1.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Vampires_4_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Vampires_4.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Devilish_2_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Devilish_2.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Spirits_1_jmp",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Spirits_1.txt",
+                //},
+            };
+
+            List<DeckImportTemplate> otherDecksToImport = new List<DeckImportTemplate>()
             {
                 //new DeckImportTemplate()
                 //{

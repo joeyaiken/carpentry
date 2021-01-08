@@ -27,5 +27,13 @@
 	FROM	Cards c
 	JOIN	Sets s
 		ON	c.SetId = s.SetId
-	LEFT JOIN vwCardTotals AS Counts
+	LEFT JOIN (
+		SELECT	CardId
+				,SUM(InventoryCount) AS InventoryCount
+				,SUM(DeckCount) AS DeckCount
+				,SUM(SellCount) AS SellCount
+				,SUM(TotalCount) AS TotalCount
+		FROM vwCardTotals
+		GROUP BY CardId
+	) AS Counts
 		ON	c.CardId = Counts.CardId

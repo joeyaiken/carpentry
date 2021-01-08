@@ -19,13 +19,15 @@
 			,c.Color
 			,c.ColorIdentity
 			--prices
-			,c.Price
-			,c.PriceFoil
-			,c.TixPrice
-			--,CASE WHEN Totals.IsFoil = 1
-			--	THEN PriceFoil
-			--	ELSE Price
-			--END AS Price
+			--,c.Price
+			,CASE WHEN Totals.IsFoil = 1
+				THEN PriceFoil
+				ELSE Price
+			END AS Price
+			--,c.PriceFoil
+			,CAST(0 AS DECIMAL) AS PriceFoil
+			--,c.TixPrice
+			,CAST(0 AS DECIMAL) AS TixPrice
 			--counts
 			,Totals.TotalCount
 			,Totals.DeckCount
@@ -33,7 +35,7 @@
 			,Totals.SellCount
 
 			,Totals.IsFoil
-	FROM vwCardTotals AS Totals
+	FROM	vwCardTotals AS Totals
 	JOIN		Cards c
 		ON		c.CardId = Totals.CardId
 	JOIN		Rarities r
