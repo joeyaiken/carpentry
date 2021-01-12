@@ -228,22 +228,19 @@ namespace Carpentry.Data.Implementations
             //await _cardContext.Database.EnsureDeletedAsync();
             await _cardContext.Database.EnsureCreatedAsync();
 
+
             await ExecuteSqlScript("vwAllInventoryCards");
+            await ExecuteSqlScript("vwCardTotals");
             await ExecuteSqlScript("vwInventoryCardsByName");
             await ExecuteSqlScript("vwInventoryCardsByPrint");
             await ExecuteSqlScript("vwInventoryCardsByUnique");
             await ExecuteSqlScript("vwInventoryTotalsByStatus");
             await ExecuteSqlScript("vwSetTotals");
-
-
             await ExecuteSqlScript("spGetInventoryTotals");
-            await ExecuteSqlScript("spGetTotalTrimCount");
-            await ExecuteSqlScript("spGetTrimmingTips");
-
-            //await _cardContext.SaveChangesAsync();
-
-
+            //await ExecuteSqlScript("spGetTotalTrimCount");
+            //await ExecuteSqlScript("spGetTrimmingTips");
         }
+
         private async Task ExecuteSqlScript(string scriptName)
         {
             try

@@ -263,6 +263,12 @@ namespace Carpentry.Logic.Implementations
 
         #region Public Methods
 
+        public async Task ValidateDatabase()
+        {
+            await EnsureDatabasesCreated();
+            await EnsureDefaultRecordsExist();
+        }
+
         public async Task EnsureDatabasesCreated()
         {
             await _scryfallRepo.EnsureDatabaseExists();

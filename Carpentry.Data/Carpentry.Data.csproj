@@ -44,6 +44,9 @@
     <None Update="DataScripts\vwAllInventoryCards.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="DataScripts\vwCardTotals.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="DataScripts\vwInventoryCardsByName.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

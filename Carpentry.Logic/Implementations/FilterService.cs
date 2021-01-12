@@ -16,7 +16,7 @@ namespace Carpentry.Logic.Implementations
             _coreDataRepo = coreDataRepo;
         }
 
-        public async Task<AppFiltersDto> GetAppFilterValues()
+        public async Task<AppFiltersDto> GetAppCoreData()
         {
             AppFiltersDto result = new AppFiltersDto();
 

@@ -21,7 +21,7 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                     const cardItem = props.cardOverviewsById[overviewId];
                     return(
                         <Card 
-                            title={cardItem.name}
+                            
                         key={cardItem.id} 
                         className={classes.outlineSection}>
                             <CardMedia 

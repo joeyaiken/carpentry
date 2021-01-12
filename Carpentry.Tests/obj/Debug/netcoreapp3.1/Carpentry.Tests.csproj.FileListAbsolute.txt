@@ -197,3 +197,4 @@ C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\staticwebassets\Carp
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.dll
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.genruntimeconfig.cache
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cs

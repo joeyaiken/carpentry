@@ -46,22 +46,20 @@ namespace Carpentry.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("[action]")]
-        public async Task<ActionResult<AppFiltersDto>> GetFilterValues()
+        public async Task<ActionResult<AppFiltersDto>> GetCoreData()
         {
             try
             {
-                AppFiltersDto result = await _filterService.GetAppFilterValues();
+                //ummm does this call a single 'core service' or does it
+                await _dataUpdateService.ValidateDatabase();
+                AppFiltersDto result = await _filterService.GetAppCoreData();
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("GetFilterValues", ex));
+                return StatusCode(500, FormatExceptionMessage("GetCoreData", ex));
             }
         }
-
-        //ensure DB exists / is up to date
-        //(don't know what exactly to call this)
-        //TODO - Consider trying to move this to Startup.cs or something
 
         #endregion 
 

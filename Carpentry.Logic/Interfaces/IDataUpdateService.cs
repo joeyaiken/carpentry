@@ -8,7 +8,8 @@ namespace Carpentry.Logic.Interfaces
 {
     public interface IDataUpdateService
     {
-        Task EnsureDatabasesCreated(); //Currently only used by QuickRestore, I don't know where these would otherwise get called
+        Task ValidateDatabase();
+        Task EnsureDatabasesCreated(); //Currently only used by QuickRestore, I don't know where these would otherwise get called (validateDB)
         Task EnsureDefaultRecordsExist();
 
         Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update);
@@ -17,5 +18,6 @@ namespace Carpentry.Logic.Interfaces
         Task UpdateTrackedSet(int setId);
 
         Task TryUpdateAvailableSets();
+
     }
 }

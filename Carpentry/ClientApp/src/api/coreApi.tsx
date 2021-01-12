@@ -5,8 +5,8 @@ import {
 } from '../api/apiHandler'
 
 export const coreApi = {
-    async getFilterValues(): Promise<AppFiltersDto> {
-        const endpoint = `api/Core/GetFilterValues`;
+    async getCoreData(): Promise<AppFiltersDto> {
+        const endpoint = `api/Core/GetCoreData`;
         const result = await Get(endpoint);
         return result;
     },

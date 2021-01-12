@@ -7,25 +7,29 @@ export const requestCoreData = (): any => {
         return getCoreData(dispatch, getState());
     }
 }
+
 function getCoreData(dispatch: Dispatch, state: AppState): any {
     const dataIsLoading = state.core.data.filterDataIsLoading;
     if(dataIsLoading) {
         return;
     }
-    dispatch(appFilterOptionsRequested());
-    coreApi.getFilterValues().then((results) => {
-        dispatch(appFilterOptionsReceived(results));
+
+    dispatch(appCoreDataRequested()); //todo - rename
+    coreApi.getCoreData().then((results) => {//todo - rename
+        dispatch(appCoreDataReceived(results));//todo - rename
     });
 }
 
-export const APP_FILTER_OPTIONS_REQUESTED = 'APP_FILTER_OPTIONS_REQUESTED';
-export const appFilterOptionsRequested = (): ReduxAction => ({
-    type: APP_FILTER_OPTIONS_REQUESTED
+//todo - rename
+export const APP_CORE_DATA_REQUESTED = 'CORE_DATA.APP_CORE_DATA_REQUESTED';
+export const appCoreDataRequested = (): ReduxAction => ({
+    type: APP_CORE_DATA_REQUESTED
 });
 
-export const APP_FILTER_OPTIONS_RECEIVED = 'APP_FILTER_OPTIONS_RECEIVED';
-export const appFilterOptionsReceived = (filters: AppFiltersDto): ReduxAction => ({
-    type: APP_FILTER_OPTIONS_RECEIVED,
+//todo - rename
+export const APP_CORE_DATA_RECEIVED = 'CORE_DATA.APP_CORE_DATA_RECEIVED';
+export const appCoreDataReceived = (filters: AppFiltersDto): ReduxAction => ({
+    type: APP_CORE_DATA_RECEIVED,
     payload: filters
 });
 

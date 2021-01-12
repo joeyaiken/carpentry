@@ -1061,14 +1061,37 @@ namespace Carpentry.Logic.Implementations
 
             if (exportType == "suggestions") return await FormatExportCardSuggestions(deckCardData);
 
+            //add basic lands for default format
+            var deckData = await _deckRepo.GetDeckById(deckId);
+
+            if (deckData.BasicW > 0)
+                for(var i = 0; i < deckData.BasicW; i++)
+                    deckCardData.Add(new DeckCardResult() { Name = "Plains" });
+
+            if (deckData.BasicU > 0)
+                for (var i = 0; i < deckData.BasicU; i++)
+                    deckCardData.Add(new DeckCardResult() { Name = "Island" });
+
+            if (deckData.BasicB > 0)
+                for (var i = 0; i < deckData.BasicB; i++)
+                    deckCardData.Add(new DeckCardResult() { Name = "Swamp" });
+
+            if (deckData.BasicR > 0)
+                for (var i = 0; i < deckData.BasicR; i++)
+                    deckCardData.Add(new DeckCardResult() { Name = "Mountain" });
+
+            if (deckData.BasicG > 0)
+                for (var i = 0; i < deckData.BasicG; i++)
+                    deckCardData.Add(new DeckCardResult() { Name = "Forest" });
+
             return FormatExportDeckList(deckCardData);
         }
 
         private string FormatExportDeckList(IEnumerable<DeckCardResult> deckCardData)
         {
             var deckCardStrings = deckCardData.Select(dc => new
-            {
-                CardString = $"{dc.Name} ({dc.SetCode}) {dc.CollectorNumber}",
+            {   //if I'm exporting it, and it has a set code, that means it will also have a collector number
+                CardString = $"{dc.Name}{(dc.SetCode == null ? "" : $"({dc.SetCode}) {dc.CollectorNumber}")}{(dc.IsFoil ? " FOIL" : "")}",
                 Category = dc.Category,
             });
 
@@ -1078,11 +1101,14 @@ namespace Carpentry.Logic.Implementations
                     dc.Category,
                     dc.CardString,
                 })
+                .OrderBy(g => g.Key.CardString)
                 .Select(g => new
                 {
                     g.Key.Category,
                     CardString = $"{g.Count()} {g.Key.CardString}",
-                }).ToList();
+                })
+                //.OrderBy(g => g)
+                .ToList();
 
             var cardStringCategories = cardStrings
                 .GroupBy(g => g.Category)

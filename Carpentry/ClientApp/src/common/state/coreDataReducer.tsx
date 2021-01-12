@@ -1,4 +1,4 @@
-import { APP_FILTER_OPTIONS_RECEIVED, APP_FILTER_OPTIONS_REQUESTED } from "./coreDataActions";
+import { APP_CORE_DATA_REQUESTED, APP_CORE_DATA_RECEIVED } from "./coreDataActions";
 
 export interface State {
     filterDataIsLoading: boolean;
@@ -7,10 +7,10 @@ export interface State {
 
 export const coreDataReducer = (state = initialState, action: ReduxAction): State => {
     switch(action.type){
-        case APP_FILTER_OPTIONS_REQUESTED:
+        case APP_CORE_DATA_REQUESTED:
             return appFiltersRequested(state, action);
 
-        case APP_FILTER_OPTIONS_RECEIVED:
+        case APP_CORE_DATA_RECEIVED:
             return appFiltersReceived(state, action);
             
         default:

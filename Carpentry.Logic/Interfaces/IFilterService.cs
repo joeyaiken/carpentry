@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Carpentry.Logic.Interfaces
 {
     public interface IFilterService
-    {
-        Task<AppFiltersDto> GetAppFilterValues();
+    {        
+        Task<AppFiltersDto> GetAppCoreData();
     }
 }

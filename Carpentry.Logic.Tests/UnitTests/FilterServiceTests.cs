@@ -15,7 +15,7 @@ namespace Carpentry.Logic.Tests.UnitTests
     public class FilterServiceTests
     {
         [TestMethod]
-        public async Task FilterService_GetAppFilterValues_Test()
+        public async Task FilterService_GetAppCoreData_Test()
         {
             //Arrange
             var mockCoreRepo = new Mock<ICoreDataRepo>(MockBehavior.Strict);
@@ -43,7 +43,7 @@ namespace Carpentry.Logic.Tests.UnitTests
             FilterService service = new FilterService(mockCoreRepo.Object);
 
             //Act
-            AppFiltersDto resultValue = await service.GetAppFilterValues();
+            AppFiltersDto resultValue = await service.GetAppCoreData();
 
             //Assert
             Assert.IsNotNull(resultValue);
