@@ -1091,7 +1091,7 @@ namespace Carpentry.Logic.Implementations
         {
             var deckCardStrings = deckCardData.Select(dc => new
             {   //if I'm exporting it, and it has a set code, that means it will also have a collector number
-                CardString = $"{dc.Name}{(dc.SetCode == null ? "" : $"({dc.SetCode}) {dc.CollectorNumber}")}{(dc.IsFoil ? " FOIL" : "")}",
+                CardString = $"{dc.Name}{(dc.SetCode == null ? "" : $" ({dc.SetCode}) {dc.CollectorNumber}")}{(dc.IsFoil ? " FOIL" : "")}",
                 Category = dc.Category,
             });
 

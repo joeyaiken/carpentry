@@ -15,18 +15,6 @@ using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Implementations
 {
-    
-    public class ImportListRecord
-    {
-        public int Count { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public int Number { get; set; }
-        //Maybe I change the Number on select records to "{number}_FOIL"
-        //There will be 1-3 foil cards per deck I'm adding (3 for commander, 1 for brawl)
-        public bool IsFoil { get; set; }
-    }
-    
     public class LandType
     {
         private LandType(string value) { Value = value; }
@@ -37,7 +25,6 @@ namespace Carpentry.Logic.Implementations
         public static LandType Mountain { get { return new LandType("Mountain"); } }
         public static LandType Forest { get { return new LandType("Forest"); } }
     }
-
 
     //Maybe this SHOULD have access to the repo
     public class DataImportService : IDataImportService
@@ -76,20 +63,38 @@ namespace Carpentry.Logic.Implementations
         /// <returns></returns>
         public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload)
         {
-            var result = new ValidatedDeckImportDto();
+            var result = new ValidatedDeckImportDto() { IsValid = true };
 
             //Get paload split into lines
             string[] importRows = payload.ImportPayload.Split(Environment.NewLine);
 
             var mappedRecords = new List<ImportListRecord>();
+            
+            char? category = null;
 
-            foreach(var row in importRows)
+            foreach (var row in importRows)
             {
-                mappedRecords.Add(ParseImportListRecord(row));
-            }
-            //importRows.Select(line => ParseImportListRecord(line)).ToList();
+                //is this an empty line?
+                if (string.IsNullOrWhiteSpace(row)) continue;
 
-            //DeckPropertiesDto deckProps = new DeckPropertiesDto();
+                if (row == "Deck")
+                {
+                    category = null;
+                    continue;
+                };
+                if (row == "Commander")
+                {
+                    category = 'c';
+                    continue;
+                };
+                if (row == "Sideboard")
+                {
+                    category = 's';
+                    continue;
+                };
+
+                mappedRecords.Add(ParseImportListRecord(row, category));
+            }
 
             result.DeckProps.BasicW = PullLandCount(LandType.Plains, mappedRecords);
             result.DeckProps.BasicU = PullLandCount(LandType.Island, mappedRecords);
@@ -110,28 +115,48 @@ namespace Carpentry.Logic.Implementations
                 //await _dataUpdateService.AddTrackedSet(set.Id);
             }
 
+            if (result.UntrackedSets.Any()) result.IsValid = false;
+
             //List<ValidatedCardDto> validatedCards = new List<ValidatedCardDto>();
 
             //for each card, get the matching DB card by Name+Code (from the carpentry DB)
             foreach (var card in mappedRecords)
             {
-                var matchingCard = await _cardDataRepo.GetCardData(card.Name, card.Code);
-
-                //if (matchingCard == null) continue;
-
-                ValidatedCardDto newCard = new ValidatedCardDto()
+                //I feel like this could be cleaner...
+                var recordIsUntracked = result.UntrackedSets.Any(s => s.SetCode == card.Code);
+                if (recordIsUntracked)
                 {
-                    CardId = matchingCard.CardId,
-                    Name = matchingCard.Name,
-                    SetCode = matchingCard.Set.Code,
-                    CollectorNumber = matchingCard.CollectorNumber,
-                    IsFoil = card.IsFoil,
-                };
-
-                for (int i = 0; i < card.Count; i++)
-                {
-                    result.ValidatedCards.Add(newCard);
+                    result.InvalidCards.Add(card);
+                    result.IsValid = false;
+                    continue;
                 }
+
+                try
+                {
+                    var matchingCard = await _cardDataRepo.GetCardData(card.Name, card.Code);
+
+                    //if (matchingCard == null) continue;
+
+                    ValidatedCardDto newCard = new ValidatedCardDto()
+                    {
+                        CardId = matchingCard.CardId,
+                        Name = matchingCard.Name,
+                        SetCode = matchingCard.Set.Code,
+                        CollectorNumber = matchingCard.CollectorNumber,
+                        IsFoil = card.IsFoil,
+                    };
+
+                    for (int i = 0; i < card.Count; i++)
+                    {
+                        result.ValidatedCards.Add(newCard);
+                    }
+                }
+                catch
+                {
+                    result.InvalidCards.Add(card);
+                    result.IsValid = false;
+                }
+                
             }
 
             return result;
@@ -488,24 +513,20 @@ namespace Carpentry.Logic.Implementations
         /// </summary>
         /// <param name="recordString">String to parse, assuming Arena style record</param>
         /// <returns>The mapped ImportLiistRecord object</returns>
-        private static ImportListRecord ParseImportListRecord(string recordString)
+        private static ImportListRecord ParseImportListRecord(string recordString, char? category = null)
         {
-            //TODO - re-think this, allowing for a different way of detecting foils (and variants) other than #_FOIL
-
-
-
-
             var importLineTokens = recordString.Split(' ').ToList();
 
             if (importLineTokens.Count() < 2)
             {
-                throw new Exception("Expected at least 2 tokens in a line, bad data");
+                throw new Exception("Bad Data: Expected at least 2 tokens in a line.");
             }
 
-
+            var mappedRecord = new ImportListRecord()
+            {
+                Category = category
+            };
             
-            var mappedRecord = new ImportListRecord();
-
             //first token will be the count
             if (int.TryParse(importLineTokens[0], out int parsedCount))
             {
@@ -539,25 +560,6 @@ namespace Carpentry.Logic.Implementations
             //Everything else should be the name
             mappedRecord.Name = string.Join(' ', importLineTokens);
 
-
-
-
-            //number will be also used to determine if a card is foil
-            //var numberToken = importLineTokens[importLineTokens.Count() - 1];
-
-            //if (int.TryParse(importLineTokens[importLineTokens.Count() - 1], out int parsedNumber))
-            //if (int.TryParse(numberToken.Split('_')[0], out int parsedNumber))
-            //    mappedRecord.Number = parsedNumber;
-
-            //if (numberToken.Split('_').Length > 1)
-            //    mappedRecord.IsFoil = true;
-
-            //Only need the code, but it's wrapped in parens (123)
-            //assuming always a 3-char code
-            //mappedRecord.Code = importLineTokens[importLineTokens.Count() - 2].Substring(1, 3);
-
-            //mappedRecord.Name = importLineTokens.Skip(1).Take(importLineTokens.Length - 3).Aggregate((i, j) => $"{i} {j}");
-
             return mappedRecord;
         }
 
@@ -566,15 +568,10 @@ namespace Carpentry.Logic.Implementations
             var basicLands = cards.FirstOrDefault(x => x.Name == landType.Value);
             if (basicLands != null)
             {
-                //var count = basicLands.Count;
                 cards.Remove(basicLands);
-                //return count;
-                return basicLands.Count; //can I do this after it's removed from the parent list?
+                return basicLands.Count;
             }
-            else
-            {
-                return 0;
-            }
+            else return 0;
         }
 
     }

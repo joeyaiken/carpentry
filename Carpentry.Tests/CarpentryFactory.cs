@@ -23,7 +23,8 @@ namespace Carpentry.Tests
             {
                 return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, true)
+                //.AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile("appsettings.Development.json", false, true)
                 //.AddUserSecrets<CarpentryFactory>()
                 .AddEnvironmentVariables()
                 .Build();

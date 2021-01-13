@@ -1,10 +1,5 @@
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.csprojAssemblyReference.cache
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cache
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfoInputs.cache
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfo.cs
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Views.dll
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Views.pdb
-C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\package-lock.json
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.exe
@@ -16,11 +11,13 @@ C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\spGetInv
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\spGetTotalTrimCount.sql
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\spGetTrimmingTips.sql
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\vwAllInventoryCards.sql
+C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\vwCardTotals.sql
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByName.sql
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByPrint.sql
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByUnique.sql
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryTotalsByStatus.sql
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\DataScripts\vwSetTotals.sql
+C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\appsettings.json
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Tests.deps.json
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Tests.runtimeconfig.json
@@ -190,6 +187,11 @@ C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Data.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Logic.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\bin\Debug\netcoreapp3.1\Carpentry.Service.pdb
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.csprojAssemblyReference.cache
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cs
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cache
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfoInputs.cache
+C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.AssemblyInfo.cs
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.RazorTargetAssemblyInfo.cache
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.csproj.CopyComplete
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\staticwebassets\Carpentry.Tests.StaticWebAssets.Manifest.cache
@@ -197,4 +199,3 @@ C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\staticwebassets\Carp
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.dll
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.pdb
 C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.genruntimeconfig.cache
-C:\DotNet\Carpentry\Carpentry.Tests\obj\Debug\netcoreapp3.1\Carpentry.Tests.MvcApplicationPartsAssemblyInfo.cs

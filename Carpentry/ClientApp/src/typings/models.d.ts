@@ -4,7 +4,9 @@
 /// <reference types="redux-thunk" />
 
 declare interface CardImportDto {
-
+    importType: number; //should really be removed
+    importPayload: string;
+    //Thoughts: props can just be added on a validated payload
 }
 
 declare interface ValidatedDeckImportDto {

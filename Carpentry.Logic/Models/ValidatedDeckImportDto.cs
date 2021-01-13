@@ -11,12 +11,18 @@ namespace Carpentry.Logic.Models
             DeckProps = new DeckPropertiesDto();
             ValidatedCards = new List<ValidatedCardDto>();
             UntrackedSets = new List<ValidatedDtoUntrackedSet>();
+            InvalidCards = new List<ImportListRecord>();
         }
 
         //Should this also have a "existingDeckId" or do I just exclusively set the ID of DeckProps?
         public DeckPropertiesDto DeckProps { get; set; }
         public List<ValidatedCardDto> ValidatedCards { get; set; }
         public List<ValidatedDtoUntrackedSet> UntrackedSets { get; set; }
+
+        public bool IsValid { get; set; }
+
+        public List<ImportListRecord> InvalidCards { get; set; }
+
         //public List<string> UntrackedSets { get; set; }
 
     }
@@ -42,4 +48,14 @@ namespace Carpentry.Logic.Models
         public string ImageUrl { get; set; }
     }
 
+    public class ImportListRecord
+    {
+        public int Count { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public int Number { get; set; }
+        public bool IsFoil { get; set; }
+
+        public char? Category { get; set; }
+    }
 }

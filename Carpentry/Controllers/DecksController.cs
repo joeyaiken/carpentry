@@ -240,7 +240,7 @@ namespace Carpentry.Controllers
         #region Import
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<ValidatedDeckImportDto>> ValidateDeckImport(CardImportDto dto)
+        public async Task<ActionResult<ValidatedDeckImportDto>> ValidateDeckImport([FromBody] CardImportDto dto)
         {
             try
             {
@@ -254,7 +254,7 @@ namespace Carpentry.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> AddValidatedDeckImport(ValidatedDeckImportDto dto)
+        public async Task<ActionResult> AddValidatedDeckImport([FromBody] ValidatedDeckImportDto dto)
         {
             try
             {

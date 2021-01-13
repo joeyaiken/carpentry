@@ -2,14 +2,12 @@ C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.T
 C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfoInputs.cache
 C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfo.cs
 C:\Dev\carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csproj.CoreCompileInputs.cache
-C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csprojAssemblyReference.cache
-C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfoInputs.cache
-C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfo.cs
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.exe
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\spGetInventoryTotals.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\spGetTotalTrimCount.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\spGetTrimmingTips.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwAllInventoryCards.sql
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwCardTotals.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByName.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByPrint.sql
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\DataScripts\vwInventoryCardsByUnique.sql
@@ -91,6 +89,9 @@ C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentr
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Logic.dll
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Logic.pdb
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\bin\Debug\netcoreapp3.1\Carpentry.Data.pdb
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csprojAssemblyReference.cache
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfoInputs.cache
+C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.AssemblyInfo.cs
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.csproj.CopyComplete
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.dll
 C:\DotNet\Carpentry\Carpentry.Tools.QuickImport\obj\Debug\netcoreapp3.1\Carpentry.Tools.QuickImport.pdb

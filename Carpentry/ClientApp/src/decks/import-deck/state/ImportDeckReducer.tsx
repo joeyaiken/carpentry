@@ -5,6 +5,10 @@ import {
 export interface State{
     // deckProps: DeckPropertiesDto;
     // isSaving: boolean;
+    importString: string;
+
+    importIsValidated: boolean;
+    importIsValid: boolean;
 }
 
 export const importDeckReducer = (state = initialState, action: ReduxAction): State => {
@@ -30,6 +34,12 @@ const initialState: State = {
     //     basicG: 0,
     // },
     // isSaving: false,
+
+    //isSaving | validating | loading | waiting | importing
+    importString: "",
+
+    importIsValidated: false,
+    importIsValid: false,
 }
 
 // function deckPropertyChanged(state: State, action: ReduxAction): State {

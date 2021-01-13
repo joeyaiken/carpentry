@@ -10,6 +10,6 @@ namespace Carpentry.Logic.Interfaces
         Task BackupCollectionToDirectory(string directory);
         Task<byte[]> GenerateZipBackup();
 
-        Task<string> GetDeckListExport(int deckId);
+        //Task<string> GetDeckListExport(int deckId);
     }
 }
