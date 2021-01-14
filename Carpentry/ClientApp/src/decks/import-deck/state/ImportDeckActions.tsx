@@ -1,19 +1,7 @@
 import { push } from "react-router-redux";
 import { Dispatch } from "redux";
 import { decksApi } from "../../../api/decksApi";
-// import { decksApi } from "../../../api/decksApi";
 import { AppState } from "../../../configureStore";
-// import { requestDeckOverviews } from "../../state/decksDataActions";
-
-
-// handleBackClick() {
-// }
-
-// handleValidateClick() {
-// }
-
-//importSaveRequested
-//importSaveReceived
 
 export const requestValidateImport = (dto: CardImportDto): any => {
     return(dispatch: Dispatch, getState: any) => {
@@ -22,28 +10,14 @@ export const requestValidateImport = (dto: CardImportDto): any => {
 }
 
 function tryValidateImport(dispatch: Dispatch, state: AppState, dto: CardImportDto): any {
-    
-    const isSaving = true;
-    if(isSaving) return;
-    
-    
-//     dispatch(newDeckSaveRequested());
+    const { isValidating, isSaving } = state.decks.importDeck;
+    if(isValidating || isSaving) return;
+
     dispatch(validateImportRequested());
-
-    
-
 
     decksApi.validateDeckImport(dto).then((result) => {
         dispatch(validateImportReceived(result));
     });
-//     const deckToSave = state.decks.newDeck.deckProps;
-
-//     decksApi.addDeck(deckToSave).then(newId => {
-//         dispatch(newDeckSaveComplete());
-//         dispatch(requestDeckOverviews());
-//         dispatch(push(`/decks/${newId}`));
-//     });
-
 }
 
 export const VALIDATE_IMPORT_REQUESTED = 'VALIDATE_IMPORT_REQUESTED';
@@ -74,34 +48,30 @@ export const requestSaveImport = (): any => {
     }
 }
 
-
 function trySaveImport(dispatch: Dispatch, state: AppState): any {
     
-    //     const isSaving = false;
-    //     if(isSaving){
-    //         return;
-    //     }
-        
-    //     dispatch(newDeckSaveRequested());
-        
-    //     const deckToSave = state.decks.newDeck.deckProps;
-    
-    //     decksApi.addDeck(deckToSave).then(newId => {
-    //         dispatch(newDeckSaveComplete());
-    //         dispatch(requestDeckOverviews());
-    //         dispatch(push(`/decks/${newId}`));
-    //     });
-    
-    }
+    const { isValidating, isSaving } = state.decks.importDeck;
+    if(isValidating || isSaving) return;
 
-// handleSaveClick() {
-//     // this.props.dispatch(requestSaveImport());
-// }
+    dispatch(saveImportRequested());
 
+    //const dto = state.decks.importDeck.
 
+    // decksApi.addValidatedDeckImport().then((newId) => {
+    //     dispatch(saveImportReceived());
+    //     dispatch(push(`/decks/${newId}`));
+    // });    
+}
 
+export const SAVE_IMPORT_REQUESTED = 'SAVE_IMPORT_REQUESTED';
+export const saveImportRequested = (): ReduxAction => ({
+    type: SAVE_IMPORT_REQUESTED,
+});
 
-
+export const SAVE_IMPORT_RECEIVED = 'SAVE_IMPORT_RECEIVED';
+export const saveImportReceived = (): ReduxAction => ({
+    type: SAVE_IMPORT_RECEIVED
+});
 
 
 

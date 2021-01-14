@@ -5,6 +5,7 @@ import DeckPropertiesLayout from '../../../common/components/DeckPropertiesLayou
 interface ComponentProps {
     // deckProps: DeckPropertiesDto;
     // formatFilters: FilterOption[];
+    
     // onChange: (name: string, value: string) => void;
     
     onCloseClick?: () => void;
@@ -14,7 +15,7 @@ interface ComponentProps {
 
 
     importString: string;
-    
+
     //stage // screen
     //maybe an enum?
 

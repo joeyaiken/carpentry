@@ -93,7 +93,14 @@ namespace Carpentry.Logic.Implementations
                     continue;
                 };
 
-                mappedRecords.Add(ParseImportListRecord(row, category));
+                try
+                {
+                    mappedRecords.Add(ParseImportListRecord(row, category));
+                }
+                catch
+                {
+                    result.InvalidRows.Add(row);
+                }   
             }
 
             result.DeckProps.BasicW = PullLandCount(LandType.Plains, mappedRecords);
@@ -161,7 +168,7 @@ namespace Carpentry.Logic.Implementations
 
             return result;
         }
-        public async Task AddValidatedDeckImport(ValidatedDeckImportDto validatedPayload)
+        public async Task<int> AddValidatedDeckImport(ValidatedDeckImportDto validatedPayload)
         {
             //If deck == null, just adding inventory cards
             if (validatedPayload.DeckProps == null)
@@ -179,7 +186,7 @@ namespace Carpentry.Logic.Implementations
 
                 await _inventoryService.AddInventoryCardBatch(cardBatch); // TODO - consider removing this bit of logic, it would mean the inventory service could be removed from this completely
 
-                return;
+                return 0;
             }
 
             int deckId = validatedPayload.DeckProps.Id;
@@ -207,6 +214,8 @@ namespace Carpentry.Logic.Implementations
             }).ToList();
 
             await _deckService.AddDeckCardBatch(cardsToAdd);
+
+            return deckId;
         }
 
 

@@ -244,7 +244,7 @@ namespace Carpentry.Logic.Implementations
                 Price = card.Price,
                 PriceFoil = card.PriceFoil,
                 PriceTix = card.TixPrice,
-                Colors = card.Color.Split().ToList(),
+                Colors = card.Color?.Split().ToList(),
                 Rarity = card.Rarity.Name,
                 Set = card.Set.Code,
                 Text = card.Text,

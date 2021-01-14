@@ -5,10 +5,19 @@ import {
 export interface State{
     // deckProps: DeckPropertiesDto;
     // isSaving: boolean;
+
+    //at some point I might want a single variable, but I have no idea what to name it
+    //Different vars == more detailed loading screens I guess
+    isValidating: boolean;
+    isSaving: boolean;
+
     importString: string;
 
     importIsValidated: boolean;
     importIsValid: boolean;
+
+
+    //to add - the validated import dto
 }
 
 export const importDeckReducer = (state = initialState, action: ReduxAction): State => {
@@ -36,6 +45,10 @@ const initialState: State = {
     // isSaving: false,
 
     //isSaving | validating | loading | waiting | importing
+
+    isValidating: false,
+    isSaving: false,
+
     importString: "",
 
     importIsValidated: false,

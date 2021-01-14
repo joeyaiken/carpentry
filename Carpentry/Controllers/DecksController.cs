@@ -254,12 +254,12 @@ namespace Carpentry.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> AddValidatedDeckImport([FromBody] ValidatedDeckImportDto dto)
+        public async Task<ActionResult<int>> AddValidatedDeckImport([FromBody] ValidatedDeckImportDto dto)
         {
             try
             {
-                await _cardImportService.AddValidatedDeckImport(dto);
-                return Ok();
+                var newId = await _cardImportService.AddValidatedDeckImport(dto);
+                return Ok(newId);
             }
             catch (Exception ex)
             {

@@ -69,10 +69,10 @@ export const decksApi = {
         const result = await Post(endpoint, dto);
         return result;
     },
-    async addValidatedDeckImport(dto: ValidatedDeckImportDto): Promise<void> {
+    async addValidatedDeckImport(dto: ValidatedDeckImportDto): Promise<number> {
         const endpoint = `api/Decks/AddValidatedDeckImport`;
-        await Post(endpoint, dto);
-        return;
+        var newId = await Post(endpoint, dto);
+        return newId;
     },
     async exportDeckList(deckId: number, exportType: DeckExportType): Promise<string> {
         const endpoint = `api/Decks/ExportDeckList`;

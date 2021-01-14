@@ -10,7 +10,35 @@ declare interface CardImportDto {
 }
 
 declare interface ValidatedDeckImportDto {
+    isValid: boolean;
+    deckProps: DeckPropertiesDto;
+    validatedCards: ValidatedCardDto[];
+    untrackedSets: ValidatedDtoUntrackedSet[];
+    invalidCards: ImportListRecord[];
+    invalidRows: string[];
+}
 
+declare interface ValidatedCardDto
+{
+    cardId: number;
+    setCode: string;
+    name: string;
+    collectorNumber: number;
+    isFoil: boolean;
+}
+
+declare interface ValidatedDtoUntrackedSet {
+    setId: number;
+    setCode: string;
+}
+
+declare interface ImportListRecord {
+    count: number;
+    name: string;
+    code: string;
+    number: number;
+    isFoil: boolean;
+    category: string | null;
 }
 
 declare interface ValidatedCarpentryImportDto {

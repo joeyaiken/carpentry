@@ -10,7 +10,7 @@ namespace Carpentry.Logic.Interfaces
 
         //deck import
         Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload);
-        Task AddValidatedDeckImport(ValidatedDeckImportDto validatedPayload);
+        Task<int> AddValidatedDeckImport(ValidatedDeckImportDto validatedPayload);
 
         //inventory import
         Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto payload);
