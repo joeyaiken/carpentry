@@ -1,0 +1,91 @@
+﻿
+1 Abominable Treefolk (mh1) 194 {Snow,Stompy}
+1 Adarkar Windform (csp) 26 {Snow}
+1 Arcum's Astrolabe (mh1) 220 {Snow,Draw}
+1 Ascendant Spirit (khm) 43 {Snow,Draw}
+1 Avalanche Caller (khm) 45
+1 Balduvian Frostwaker (csp) 28
+1 Berg Strider (khm) 47
+1 Blessing of Frost (khm) 161
+1 Blizzard Brawl (khm) 162 {Removal,Protection}
+1 Blizzard Specter (csp) 126
+1 Blizzard Strix (mh1) 42
+1 Blood on the Snow (khm) 79 {Snow Support,Board Wipe}
+1 Boreal Centaur (csp) 104
+1 Boreal Druid (csp) 105 {Ramp}
+1 Boreal Outrider (khm) 163
+1 Chillerpillar (mh1) 43
+1 Chilling Shade (csp) 53
+1 Coldsteel Heart (csp) 136 {Ramp,Snow}
+1 Conifer Wurm (mh1) 159 {Stompy}
+1 Dark Depths (csp) 145 {Land}
+1 Dead of Winter (mh1) 85 {Board Wipe}
+1 Draugr Necromancer (khm) 86 {Snow}
+1 Faceless Haven (khm) 255 {Land}
+1 Forest
+1 Frost Augur (khm) 56 {Draw,Snow}
+1 Frost Marsh (csp) 146 {Land}
+1 Frost Raptor (csp) 34 {Snow}
+1 Frostpeak Yeti (khm) 57 {Snow}
+1 Frostwalk Bastion (mh1) 240 {Land,Snow}
+1 Frostwalla (mh1) 165
+1 Frostweb Spider (csp) 109
+1 Glacial Revelation (mh1) 167 {Draw}
+1 Glittering Frost (khm) 171 {Ramp}
+1 Graven Lore (khm) 61 {Draw}
+1 Grim Draugr (khm) 96
+1 Gutless Ghoul (csp) 60
+1 Hailstorm Valkyrie (khm) 97 {Stompy}
+1 Heidar, Rimewind Master (csp) 36 {Removal}
+1 Ice Tunnel (khm) 262 {Land}
+1 Iceberg Cancrix (mh1) 54 {Snow,Mill}
+1 Icebreaker Kraken (khm) 63
+1 Ice-Fang Coatl (mh1) 203 {Draw,Removal}
+1 Icehide Golem (mh1) 224
+1 Icehide Troll (khm) 176
+1 Into the North (csp) 111 {Ramp}
+1 Island
+1 Marit Lage's Slumber (mh1) 56
+1 Moritte of the Frost (khm) 223 {Snow}
+1 Mouth of Ronom (csp) 148 {Land}
+1 Narfi, Betrayer King (khm) 224
+1 Ohran Viper (csp) 115
+1 Phyrexian Ironfoot (csp) 139
+1 Phyrexian Snowcrusher (csp) 140
+1 Phyrexian Soulgorger (csp) 141
+1 Pilfering Hawk (khm) 71
+1 Priest of the Haunted Edge (khm) 104
+1 Replicating Ring (khm) 244 {Ramp,Snow}
+1 Rime Tender (mh1) 176
+1 Rime Transfusion (csp) 68
+1 Rimebound Dead (csp) 69
+1 Rimefeather Owl (csp) 42
+1 Rimehorn Aurochs (csp) 118
+1 Rimewind Cryomancer (csp) 43
+1 Rimewind Taskmage (csp) 44
+1 Rimewood Falls (khm) 266 {Land}
+1 Ronom Hulk (csp) 119
+1 Ronom Serpent (csp) 45
+1 Saddled Rimestag (mh1) 177
+1 Scrying Sheets (csp) 149 {Land}
+1 Sculptor of Winter (khm) 193 {Snow,Ramp}
+1 Shimmerdrift Vale (khm) 267
+8 Snow-Covered Forest (khm) 284 {Land,Snow}
+8 Snow-Covered Island (khm) 278 {Land,Snow}
+8 Snow-Covered Swamp (khm) 280 {Land,Snow}
+1 Spirit of the Aldergard (khm) 195
+1 Swamp
+1 Winter's Rest (mh1) 78 {Removal}
+1 Withering Wisps (ice) 168
+1 Woodland Chasm (khm) 274 {Snow,Land}
+
+Commander
+1 Jorn, God of Winter // Kaldring, the Rimestaff (khm) 179 {Snow,Snow Support}
+
+Sideboard
+1 Chill to the Bone (csp) 52
+1 Drift of the Dead (ice) 123
+1 Freyalise's Radiance (csp) 108
+1 Sunstone (ice) 341
+1 Thermal Flux (csp) 49
+1 Zombie Musher (csp) 75

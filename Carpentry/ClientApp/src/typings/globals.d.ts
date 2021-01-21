@@ -333,3 +333,12 @@ declare interface PendingCardsDto {
 // declare interface ICardIndex {
 //     [set: string]: ICardDictionary;
 // }
+
+
+declare interface DeckImportUiProps {
+    name: string;
+    format: null | DeckFormatOption;
+    notes: string;
+    importMethod: string;
+    importString: string;
+};

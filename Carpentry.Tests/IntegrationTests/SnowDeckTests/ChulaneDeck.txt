@@ -1,0 +1,51 @@
+﻿
+1 Arcane Signet (eld) 331
+1 Azorius Guildgate (rna) 243
+1 Beanstalk Giant // Fertile Footsteps (eld) 149
+1 Biomancer's Familiar (rna) 158
+1 Blossoming Sands (m20) 243
+1 Circuitous Route (grn) 125
+1 Command Tower (eld) 333
+1 District Guide (grn) 128
+1 End-Raze Forerunners (rna) 124
+1 Evolving Wilds (rix) 186
+1 Faerie Formation (eld) 316
+1 Faerie Vandal (eld) 45
+1 Firemind Vessel (war) 237
+1 Flower // Flourish (grn) 226
+1 Forbidding Spirit (rna) 9
+6 Forest
+1 Frilled Mystic (rna) 174
+1 Growth Spiral (rna) 178
+1 Gyre Engineer (rna) 180
+1 Hallowed Fountain (rna) 251
+1 Incubation // Incongruity (rna) 226
+1 Incubation Druid (rna) 131
+4 Island
+1 Keeper of Fables (eld) 163
+1 Kraul Harpooner (grn) 136
+1 Leafkin Druid (m20) 178
+1 Maraleaf Pixie (eld) 196
+1 Meteor Golem (m19) 241
+1 Paradise Druid (war) 171
+1 Parhelion II (war) 24
+5 Plains
+1 Prison Realm (war) 26
+1 Risen Reef (m20) 217
+1 Rosethorn Acolyte // Seasonal Ritual (eld) 174
+1 Run Away Together (eld) 62
+1 Selesnya Guildgate (grn) 255
+1 Sharktocrab (rna) 206
+1 Silhana Wayfinder (rna) 141
+1 Spectral Sailor (m20) 76
+1 Simic Guildgate (rna) 257
+1 Steelbane Hydra (eld) 322
+1 Temple of Mystery (m20) 255
+1 Thorn Mammoth (eld) 323
+1 Thornwood Falls (m20) 258
+1 Time Wipe (war) 223
+1 Tome of Legends (eld) 332
+1 Tranquil Cove (m20) 259
+
+Commander
+1 Chulane, Teller of Tales (eld) 326 FOIL

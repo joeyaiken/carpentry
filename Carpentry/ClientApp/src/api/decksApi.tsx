@@ -67,6 +67,8 @@ export const decksApi = {
     async validateDeckImport(dto: CardImportDto): Promise<ValidatedDeckImportDto> {
         const endpoint = `api/Decks/ValidateDeckImport`;
         const result = await Post(endpoint, dto);
+        console.log('validated import');
+        console.log(result);
         return result;
     },
     async addValidatedDeckImport(dto: ValidatedDeckImportDto): Promise<number> {

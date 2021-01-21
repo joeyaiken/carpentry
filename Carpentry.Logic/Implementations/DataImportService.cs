@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,8 @@ namespace Carpentry.Logic.Implementations
         public static LandType Forest { get { return new LandType("Forest"); } }
     }
 
+    
+
     //Maybe this SHOULD have access to the repo
     public class DataImportService : IDataImportService
     {
@@ -37,6 +40,8 @@ namespace Carpentry.Logic.Implementations
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly int _cardStatus_InInventory = 1;
         private readonly IDataBackupConfig _config;
+
+        private static List<string> BasicLands = new List<string>() { "Plains", "Island", "Swamp", "Mountain", "Forest" };
         public DataImportService(
             IDataUpdateService dataUpdateService,
             ICardDataRepo cardDataRepo,
@@ -57,7 +62,11 @@ namespace Carpentry.Logic.Implementations
         }
 
         /// <summary>
-        /// Used by the Quick Import Tool to import a deck
+        /// (old)Used by the Quick Import Tool to import a deck(old)
+        /// 
+        /// Parses & validates a string deck list
+        /// Returns a list of validation objects containing parsed data & validation results
+        /// (1 object for each card line)
         /// </summary>
         /// <param name="payload"></param>
         /// <returns></returns>
@@ -68,8 +77,15 @@ namespace Carpentry.Logic.Implementations
             //Get paload split into lines
             string[] importRows = payload.ImportPayload.Split(Environment.NewLine);
 
-            var mappedRecords = new List<ImportListRecord>();
-            
+            if(importRows.Count() == 1)
+            {
+                var otherNewline = payload.ImportPayload.Split('\n');
+                if(otherNewline.Count() > 1) importRows = otherNewline;
+            }
+
+            //var mappedRecords = new List<ImportListRecord>();
+            var mappedRecords = new List<ValidatedCardDto>();
+
             char? category = null;
 
             foreach (var row in importRows)
@@ -93,23 +109,19 @@ namespace Carpentry.Logic.Implementations
                     continue;
                 };
 
-                try
-                {
-                    mappedRecords.Add(ParseImportListRecord(row, category));
-                }
-                catch
-                {
-                    result.InvalidRows.Add(row);
-                }   
+                mappedRecords.Add(ParseImportListRecord(row, category));
+
+                //try
+                //{
+                //    mappedRecords.Add(ParseImportListRecord(row, category));
+                //}
+                //catch
+                //{
+                //    result.InvalidRows.Add(row);
+                //}   
             }
 
-            result.DeckProps.BasicW = PullLandCount(LandType.Plains, mappedRecords);
-            result.DeckProps.BasicU = PullLandCount(LandType.Island, mappedRecords);
-            result.DeckProps.BasicB = PullLandCount(LandType.Swamp, mappedRecords);
-            result.DeckProps.BasicR = PullLandCount(LandType.Mountain, mappedRecords);
-            result.DeckProps.BasicG = PullLandCount(LandType.Forest, mappedRecords);
-
-            var distinctSetCodes = mappedRecords.Select(x => x.Code).Distinct().ToList();
+            var distinctSetCodes = mappedRecords.Where(c => !c.IsBasicLand && !c.IsEmpty).Select(x => x.SetCode).Distinct().ToList();
 
             foreach (var code in distinctSetCodes)
             {
@@ -129,41 +141,73 @@ namespace Carpentry.Logic.Implementations
             //for each card, get the matching DB card by Name+Code (from the carpentry DB)
             foreach (var card in mappedRecords)
             {
-                //I feel like this could be cleaner...
-                var recordIsUntracked = result.UntrackedSets.Any(s => s.SetCode == card.Code);
-                if (recordIsUntracked)
+
+                //For each basic land, just continue
+                if (card.IsBasicLand) continue;
+
+                if (card.IsEmpty)
                 {
-                    result.InvalidCards.Add(card);
-                    result.IsValid = false;
-                    continue;
+                    //For each valid, EMPTY card, I need to ensure there's at least 1 card with the same name in the db
+                    var namedCardCount = (await _cardDataRepo.GetCardsByName(card.Name)).Count;
+                    if(namedCardCount == 0) card.IsValid = false;
                 }
-
-                try
+                else
                 {
-                    var matchingCard = await _cardDataRepo.GetCardData(card.Name, card.Code);
+                    //for each valid, non-empty card, I need to get the CardId for the instance specified
 
-                    //if (matchingCard == null) continue;
-
-                    ValidatedCardDto newCard = new ValidatedCardDto()
+                    //I can't add a card for an untracked set
+                    var recordIsUntracked = result.UntrackedSets.Any(s => s.SetCode == card.SetCode);
+                    if (recordIsUntracked)
                     {
-                        CardId = matchingCard.CardId,
-                        Name = matchingCard.Name,
-                        SetCode = matchingCard.Set.Code,
-                        CollectorNumber = matchingCard.CollectorNumber,
-                        IsFoil = card.IsFoil,
-                    };
+                        //result.InvalidCards.Add(card);
+                        card.IsValid = false;
+                        continue;
+                    }
 
-                    for (int i = 0; i < card.Count; i++)
+                    //I feel like this could be cleaner...
+                    try
                     {
-                        result.ValidatedCards.Add(newCard);
+                        var matchingCard = await _cardDataRepo.GetCardData(card.Name, card.SetCode); //throws an exception if no match (dumb)
+
+                        //if (matchingCard == null) continue;
+
+                        ValidatedCardDto newCard = new ValidatedCardDto()
+                        {
+                            CardId = matchingCard.CardId,
+                            Name = matchingCard.Name,
+                            SetCode = matchingCard.Set.Code,
+                            CollectorNumber = matchingCard.CollectorNumber,
+                            IsFoil = card.IsFoil,
+                        };
+
+                        for (int i = 0; i < card.Count; i++)
+                        {
+                            result.ValidatedCards.Add(newCard);
+                        }
+                    }
+                    catch
+                    {
+                        card.IsValid = false;
+                        //result.InvalidCards.Add(card);
+                        //result.IsValid = false;
                     }
                 }
-                catch
-                {
-                    result.InvalidCards.Add(card);
-                    result.IsValid = false;
-                }
-                
+            }
+
+            if (mappedRecords.Any(c => !c.IsValid))
+            {
+                var invalidRecords = mappedRecords.Where(c => !c.IsValid).ToList();
+                result.IsValid = false;
+            }
+
+            //only pull land counts if all cards are valid
+            if (result.IsValid)
+            {
+                result.DeckProps.BasicW = PullLandCount(LandType.Plains, mappedRecords);
+                result.DeckProps.BasicU = PullLandCount(LandType.Island, mappedRecords);
+                result.DeckProps.BasicB = PullLandCount(LandType.Swamp, mappedRecords);
+                result.DeckProps.BasicR = PullLandCount(LandType.Mountain, mappedRecords);
+                result.DeckProps.BasicG = PullLandCount(LandType.Forest, mappedRecords);
             }
 
             return result;
@@ -522,19 +566,23 @@ namespace Carpentry.Logic.Implementations
         /// </summary>
         /// <param name="recordString">String to parse, assuming Arena style record</param>
         /// <returns>The mapped ImportLiistRecord object</returns>
-        private static ImportListRecord ParseImportListRecord(string recordString, char? category = null)
+        private static ValidatedCardDto ParseImportListRecord(string recordString, char? category = null)
         {
+            var mappedRecord = new ValidatedCardDto()
+            {
+                Category = category,
+                SourceString = recordString,
+                IsValid = true,
+            };
+
             var importLineTokens = recordString.Split(' ').ToList();
 
             if (importLineTokens.Count() < 2)
             {
-                throw new Exception("Bad Data: Expected at least 2 tokens in a line.");
+                mappedRecord.IsValid = false;
+                return mappedRecord;
+                //throw new Exception("Bad Data: Expected at least 2 tokens in a line.");
             }
-
-            var mappedRecord = new ImportListRecord()
-            {
-                Category = category
-            };
             
             //first token will be the count
             if (int.TryParse(importLineTokens[0], out int parsedCount))
@@ -542,19 +590,36 @@ namespace Carpentry.Logic.Implementations
                 mappedRecord.Count = parsedCount;
                 importLineTokens.RemoveAt(0);
             }
-            
+
+            //check if the last token is a tag list
+            var tagTokenChars = importLineTokens.Last().ToCharArray();
+            if (tagTokenChars[0] == '{' && tagTokenChars[tagTokenChars.Length - 1] == '}')
+            {
+                var encodedTagList = importLineTokens.Last().Substring(1, tagTokenChars.Length - 2);// In reality Substring should always take 3
+                var tagList = WebUtility.UrlDecode(encodedTagList);
+                mappedRecord.Tags = tagList.Split(',').ToList();
+                importLineTokens.RemoveAt(importLineTokens.Count() - 1);
+                //mappedRecord.IsEmpty = false;
+
+
+
+                //var tagString = string.Join(',', dc.Tags);
+                //var encodedString = WebUtility.UrlEncode(tagString);
+                //cardString = $"{cardString} {{{ encodedString }}}";
+            }
+
             //Check if the last token is "FOIL"
-            if(importLineTokens.Last().ToLower() == "foil")
+            if (importLineTokens.Last().ToLower() == "foil")
             {
                 mappedRecord.IsFoil = true;
                 importLineTokens.RemoveAt(importLineTokens.Count() - 1);
             }
 
 
-            //Is the next line a #, or a set code wrapped in parens?
+            //Is the next line a #?
             if(int.TryParse(importLineTokens.Last(), out int parsedCollectorNumber))
             {
-                mappedRecord.Number = parsedCollectorNumber;
+                mappedRecord.CollectorNumber = parsedCollectorNumber;
                 importLineTokens.RemoveAt(importLineTokens.Count() - 1);
             }
 
@@ -562,17 +627,22 @@ namespace Carpentry.Logic.Implementations
             var lastTokenChars = importLineTokens.Last().ToCharArray();
             if(lastTokenChars[0] == '(' && lastTokenChars[lastTokenChars.Length-1] == ')')
             {
-                mappedRecord.Code = importLineTokens.Last().Substring(1, lastTokenChars.Length - 2);// In reality Substring should always take 3
+                mappedRecord.SetCode = importLineTokens.Last().Substring(1, lastTokenChars.Length - 2);// In reality Substring should always take 3
                 importLineTokens.RemoveAt(importLineTokens.Count() - 1);
+                mappedRecord.IsEmpty = false;
             }
 
             //Everything else should be the name
             mappedRecord.Name = string.Join(' ', importLineTokens);
 
+            //if the name matches a basic land name, clear set/num/foil fields
+            //var basicLands = new List<string>() { "Plains","Island","Swamp","Mountain","Forest" };
+            if (BasicLands.Contains(mappedRecord.Name)) mappedRecord.IsBasicLand = true;
+
             return mappedRecord;
         }
 
-        private int PullLandCount(LandType landType, List<ImportListRecord> cards)
+        private int PullLandCount(LandType landType, List<ValidatedCardDto> cards)
         {
             var basicLands = cards.FirstOrDefault(x => x.Name == landType.Value);
             if (basicLands != null)

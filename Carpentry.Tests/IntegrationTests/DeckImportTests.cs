@@ -21,7 +21,7 @@ namespace Carpentry.Tests.IntegrationTests
         }
 
         [TestMethod]
-        public async Task ImportDeck_EmptyDeck_Works()
+        public async Task ImportDeck_ValidateDeck_Works()
         {
             var payloadString = @"
 1 Arcane Signet (eld) 331

@@ -3,13 +3,15 @@ import React from 'react'
 import { AppState } from '../../configureStore';
 import ImportDeckLayout from './components/ImportDeckLayout';
 import { push } from 'react-router-redux';
-import { requestValidateImport } from './state/ImportDeckActions';
+import { importDeckPropertyChanged, requestValidateImport } from './state/ImportDeckActions';
 // import { newDeckModalClosed, newDeckPropertyChanged, requestSaveNewDeck } from './state/NewDeckActions';
 
 interface PropsFromState {
     // deckProps: DeckPropertiesDto;
-    // formatFilters: FilterOption[];
-    importString: string;
+    importProps: DeckImportUiProps;
+    formatFilters: FilterOption[];
+    // importString: string;
+    validatedImport: ValidatedDeckImportDto;
 }
 
 type ContainerProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -21,7 +23,7 @@ class NewDeckContainer extends React.Component<ContainerProps> {
         this.handleBackClick = this.handleBackClick.bind(this);
         this.handleValidateClick = this.handleValidateClick.bind(this);
         this.handleSaveClick = this.handleSaveClick.bind(this);
-        // this.handleFieldChange = this.handleFieldChange.bind(this);
+        this.handleFieldChange = this.handleFieldChange.bind(this);
     }
 
     //on mount - clear state?
@@ -38,7 +40,7 @@ class NewDeckContainer extends React.Component<ContainerProps> {
     handleValidateClick() {
         const dto: CardImportDto = {
             importType: 1,
-            importPayload: this.props.importString
+            importPayload: this.props.importProps.importString,
         };
         this.props.dispatch(requestValidateImport(dto));
     }
@@ -47,9 +49,9 @@ class NewDeckContainer extends React.Component<ContainerProps> {
         // this.props.dispatch(requestSaveNewDeck());
     }
 
-    // handleFieldChange(name: string, value: string){
-    //     this.props.dispatch(newDeckPropertyChanged(name, value));
-    // }
+    handleFieldChange(name: string, value: string){
+        this.props.dispatch(importDeckPropertyChanged(name, value));
+    }
 
     render() {
         return (
@@ -59,13 +61,14 @@ class NewDeckContainer extends React.Component<ContainerProps> {
                 onValidateClick={this.handleValidateClick}
                 onSaveClick={this.handleSaveClick}
 
-                importString={this.props.importString}
+                // importString={this.props.importString}
                 
-                // onChange={this.handleFieldChange}
-                // formatFilters={this.props.formatFilters}
-                // deckProps={this.props.deckProps}
-                isValidated={false}
-                isValid={false}
+                onChange={this.handleFieldChange}
+                formatFilters={this.props.formatFilters}
+                importProps={this.props.importProps}
+                isValidated={true}
+                // isValid={false}
+                validatedImport={this.props.validatedImport}
             />
         )
     }
@@ -74,9 +77,10 @@ class NewDeckContainer extends React.Component<ContainerProps> {
 function mapStateToProps(state: AppState): PropsFromState {
     
     const result: PropsFromState = {
-        // deckProps: state.decks.newDeck.deckProps,
-        // formatFilters: state.core.data.filterOptions.formats,
-        importString: state.decks.importDeck.importString,    
+        importProps: state.decks.importDeck.ui,
+        formatFilters: state.core.data.filterOptions.formats,
+        validatedImport: state.decks.importDeck.validatedImport,
+        // importString: state.decks.importDeck.importString,    
     }
     
     return result;

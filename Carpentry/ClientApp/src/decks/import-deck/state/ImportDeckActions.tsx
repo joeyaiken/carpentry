@@ -80,18 +80,18 @@ export const saveImportReceived = (): ReduxAction => ({
 
 
 
+//importDeckPropertyChanged
 
 
 
-
-// export const NEW_DECK_PROPERTY_CHANGED = 'NEW_DECK_PROPERTY_CHANGED';
-// export const newDeckPropertyChanged = (name: string, value: string): ReduxAction => ({
-//     type: NEW_DECK_PROPERTY_CHANGED,
-//     payload: {
-//         name: name,
-//         value: value
-//     }
-// });
+export const IMPORT_DECK_PROPERTY_CHANGED = 'IMPORT_DECK_PROPERTY_CHANGED';
+export const importDeckPropertyChanged = (name: string, value: string): ReduxAction => ({
+    type: IMPORT_DECK_PROPERTY_CHANGED,
+    payload: {
+        name: name,
+        value: value
+    }
+});
 
 // export const NEW_DECK_MODAL_CLOSED = 'NEW_DECK_MODAL_CLOSED';
 // export const newDeckModalClosed = (): ReduxAction => ({

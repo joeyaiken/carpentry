@@ -10,11 +10,19 @@ using Carpentry.Data.DataModels;
 using System.Linq;
 using Carpentry.Data.QueryResults;
 using Carpentry.Data.Implementations;
+using System.Net;
 //using Carpentry.Data.DataContext;
 //using Carpentry.Data.DataModels;
 
 namespace Carpentry.Logic.Implementations
 {
+
+    class CardLine
+    {
+        public string Category { get; set; }
+        public string CardString { get; set; }
+    }
+
     public class DeckService : IDeckService
     {
         //Question: Why shouldn't this have access to a repo?
@@ -1084,17 +1092,45 @@ namespace Carpentry.Logic.Implementations
                 for (var i = 0; i < deckData.BasicG; i++)
                     deckCardData.Add(new DeckCardResult() { Name = "Forest" });
 
+            if(exportType == "detail")
+            {
+                return FormatExportDeckList(deckCardData, true);
+            }
+
             return FormatExportDeckList(deckCardData);
         }
 
-        private string FormatExportDeckList(IEnumerable<DeckCardResult> deckCardData)
+        private string FormatExportDeckList(IEnumerable<DeckCardResult> deckCardData, bool includeTags = false)
         {
-            var deckCardStrings = deckCardData.Select(dc => new
-            {   //if I'm exporting it, and it has a set code, that means it will also have a collector number
-                CardString = $"{dc.Name}{(dc.SetCode == null ? "" : $" ({dc.SetCode}) {dc.CollectorNumber}")}{(dc.IsFoil ? " FOIL" : "")}",
-                Category = dc.Category,
-            });
+            var deckCardStrings = new List<CardLine>();
 
+            foreach(var dc in deckCardData)
+            {
+                string cardString = dc.Name;
+
+                if(dc.SetCode != null)
+                    cardString = $"{cardString} ({dc.SetCode}) {dc.CollectorNumber}";
+
+                if(dc.IsFoil)
+                    cardString = $"{cardString} FOIL";
+
+                //If I'm worried about special characters in tags, I can encode/wrap them some other way (not just comma-separated)
+                if (includeTags && dc.Tags?.Count > 0)
+                {
+                    var tagString = string.Join(',', dc.Tags);
+                    var encodedString = WebUtility.UrlEncode(tagString);
+                    cardString = $"{cardString} {{{ encodedString }}}";
+                }
+                    
+               
+                deckCardStrings.Add(new CardLine
+                {
+                    Category = dc.Category,
+                    CardString = cardString,
+                });
+            }
+
+            //each card string, and its category
             var cardStrings = deckCardStrings
                 .GroupBy(dc => new
                 {
@@ -1107,7 +1143,6 @@ namespace Carpentry.Logic.Implementations
                     g.Key.Category,
                     CardString = $"{g.Count()} {g.Key.CardString}",
                 })
-                //.OrderBy(g => g)
                 .ToList();
 
             var cardStringCategories = cardStrings
@@ -1117,6 +1152,7 @@ namespace Carpentry.Logic.Implementations
                     Category = g.Key,
                     Cards = g.Select(i => i.CardString),
                 })
+                .OrderBy(g => g.Category)
                 .ToList();
 
             var exportList = new List<string>();

@@ -9,42 +9,61 @@ namespace Carpentry.Logic.Models
         public ValidatedDeckImportDto()
         {
             DeckProps = new DeckPropertiesDto();
-            ValidatedCards = new List<ValidatedCardDto>();
             UntrackedSets = new List<ValidatedDtoUntrackedSet>();
-            InvalidCards = new List<ImportListRecord>();
-            InvalidRows = new List<string>();
+            ValidatedCards = new List<ValidatedCardDto>();
+            //InvalidCards = new List<ImportListRecord>();
+            //InvalidRows = new List<string>();
         }
 
         public bool IsValid { get; set; }
+
         public DeckPropertiesDto DeckProps { get; set; }
-        public List<ValidatedCardDto> ValidatedCards { get; set; }
         public List<ValidatedDtoUntrackedSet> UntrackedSets { get; set; }
-        public List<ImportListRecord> InvalidCards { get; set; }
-        public List<string> InvalidRows { get; set; }
+        public List<ValidatedCardDto> ValidatedCards { get; set; }
+
+        //These two should be refactored into the ValidatedCardDto
+        //  including IsValid 
+        //public List<ImportListRecord> InvalidCards { get; set; }
+        //public List<string> InvalidRows { get; set; }
     }
 
+    //Represents a validated row of the import text
     public class ValidatedCardDto
     {
-        //What data does this actually need?
+        public ValidatedCardDto()
+        {
+            IsValid = true;
+            IsEmpty = true;
+            Tags = new List<string>();
+        }
+        public string SourceString { get; set; } //raw unparsed record
+        public bool IsValid { get; set; }
+        public bool IsBasicLand { get; set; }
+        public bool IsEmpty { get; set; }
 
-        //public int MultiverseId { get; set; }
-        public int CardId { get; set; }
-        public string SetCode { get; set; }
-        public string Name { get; set; }
-        public int CollectorNumber { get; set; }
-        //public List<ValidatedCardVariant> Variants { get; set; }
-        //public string VariantName { get; set; }
-        public bool IsFoil { get; set; }
-    }
-
-    public class ImportListRecord
-    {
+        //parsed card data
         public int Count { get; set; }
         public string Name { get; set; }
-        public string Code { get; set; }
-        public int Number { get; set; }
-        public bool IsFoil { get; set; }
-
         public char? Category { get; set; }
+
+        //Should these be null when empty card?
+        //Should they be a class instead of flat props?
+        public int CardId { get; set; }
+        public string SetCode { get; set; }
+        public int CollectorNumber { get; set; }
+        public bool IsFoil { get; set; }
+        public List<string> Tags { get; set; }
     }
+
+    //public class ImportListRecord
+    //{
+    //    public int Count { get; set; }
+    //    public string Name { get; set; }
+    //    public char? Category { get; set; }
+
+    //    //optional (not set when card empty)
+    //    public string Code { get; set; }
+    //    public int Number { get; set; }
+    //    public bool IsFoil { get; set; }
+    //}
 }

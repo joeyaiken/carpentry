@@ -26,6 +26,7 @@ export function DeckExportLayout(props: ComponentProps): JSX.Element {
                         onChange={(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => props.onExportTypeChange(event.target.value)}
                         margin="normal">
                         <MenuItem key={'list'} value={'list'}>Deck List</MenuItem>
+                        <MenuItem key={'detail'} value={'detail'}>Detailed List</MenuItem>
                         <MenuItem key={'empty'} value={'empty'}>Empty Cards</MenuItem>
                         <MenuItem key={'suggestions'} value={'suggestions'}>Empty Card Suggestions</MenuItem>
                     </TextField>

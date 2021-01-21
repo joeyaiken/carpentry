@@ -14,15 +14,21 @@ declare interface ValidatedDeckImportDto {
     deckProps: DeckPropertiesDto;
     validatedCards: ValidatedCardDto[];
     untrackedSets: ValidatedDtoUntrackedSet[];
-    invalidCards: ImportListRecord[];
-    invalidRows: string[];
 }
 
 declare interface ValidatedCardDto
 {
+    sourceString: string;
+    isValid: boolean;
+    isBasicLand: boolean;
+    isEmpty: boolean;
+
+    count: number;
+    name: string;
+    category: string | null;
+
     cardId: number;
     setCode: string;
-    name: string;
     collectorNumber: number;
     isFoil: boolean;
 }
