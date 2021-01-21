@@ -56,19 +56,16 @@ namespace Carpentry.Tests.IntegrationTests.SnowDeckTests
             //  (not sure how to accomplish this yet)
             //Clear DB
             //    Should export current DB to a local folder everytime an export happens
-            //Set base tracked sets
-            //    refresh list
-            //    add (those 4 snow sets)
-            //        khm
-            //        mh1
-            //        csp
-            //        ice
+
+            //Set base tracked sets (khm,mh1,csp,ice)
             await SetTrackSets_SnowSets();
 
             //Import Jorn Snow deck, fully empty
             await ImportDeck_JornSnow();
             //    validate tags got created in addition to empty cards
             //    Inventory should be empty at that point
+
+
             //Create the bant snow deck
             //    Import chulane deck, adding new deck cards
             //    Clone the chulane deck
