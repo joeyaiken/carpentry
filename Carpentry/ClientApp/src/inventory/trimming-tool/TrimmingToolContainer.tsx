@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { Box, Tabs, AppBar, Typography, Toolbar, Button, IconButton, Tab, CardHeader, Card, CardContent } from '@material-ui/core';
+import { Box, Tabs, AppBar, Typography, Toolbar, Button, IconButton, Tab, CardHeader, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 // import CardFilterBar from './CardFilterBar';
 // import InventoryCardGrid from './components/InventoryCardGrid';
 // import LoadingBox from '../../_components/LoadingBox';
@@ -22,6 +22,7 @@ import {
     ensureTrimmingTipsLoaded,
 } from './state/TrimmingTipsActions';
 import { AppState } from '../../configureStore';
+import TrimmingToolLayout from './TrimmingToolLayout';
 
 interface PropsFromState { 
     // // searchMethod: "name" | "quantity" | "price";
@@ -31,12 +32,16 @@ interface PropsFromState {
 
     // searchResults: TrimmingTipsDto[];
 
+    modalIsOpen: boolean;
+
+
     trimmingTipsResults: InventoryOverviewDto[];
     // searchFilter: InventoryFilterProps;
-    // filterOptions: AppFiltersDto;
+    filterOptions: AppFiltersDto;
     // visibleFilters: CardFilterVisibilities;
 
-    visibleSection: "inventory" | "trimmingTips" | "wishlistHelper" | "buylistHelper";
+    
+    pendingCards: { [key:number]: PendingCardsDto }
 }
 
 type TrimmingTipsProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -44,11 +49,11 @@ type TrimmingTipsProps = PropsFromState & DispatchProp<ReduxAction>;
 class TrimmingTipsContainer extends React.Component<TrimmingTipsProps>{
     constructor(props: TrimmingTipsProps) {
         super(props);
-        this.handleCardDetailSelected = this.handleCardDetailSelected.bind(this);
         this.handleFilterChange = this.handleFilterChange.bind(this);
-        this.handleBoolFilterChange = this.handleBoolFilterChange.bind(this);
         this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this);
-        this.handleExportClick = this.handleExportClick.bind(this);
+        this.handleCloseModalClick = this.handleCloseModalClick.bind(this);
+        this.handleAddPendingCard = this.handleAddPendingCard.bind(this);
+        this.handleRemovePendingCard = this.handleRemovePendingCard.bind(this);
     }
 
     componentDidMount() {
@@ -61,76 +66,77 @@ class TrimmingTipsContainer extends React.Component<TrimmingTipsProps>{
     //     this.props.dispatch(inventorySearchMethodChanged(name));
     // }
 
-    handleCardDetailSelected(cardId: number | null){
-        console.log(`card selected: ${cardId}`);
-        // this.props.dispatch(requestInventoryDetail(cardId));
-        this.props.dispatch(push(`/inventory/${cardId}`));
+    // handleCardDetailSelected(cardId: number | null){
+    //     console.log(`card selected: ${cardId}`);
+    //     // this.props.dispatch(requestInventoryDetail(cardId));
+    //     this.props.dispatch(push(`/inventory/${cardId}`));
 
-        // let history = useHistory();
-        // history.push(`/inventory/${cardId}`)
+    //     // let history = useHistory();
+    //     // history.push(`/inventory/${cardId}`)
 
-    }
+    // }
 
     handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
         // this.props.dispatch(filterValueChanged("inventoryFilterProps", event.target.name, event.target.value));
     }
 
-    handleBoolFilterChange(filter: string, value: boolean): void {
-        // this.props.dispatch(filterValueChanged("inventoryFilterProps", filter, value));
-    }
+    // handleBoolFilterChange(filter: string, value: boolean): void {
+    //     // this.props.dispatch(filterValueChanged("inventoryFilterProps", filter, value));
+    // }
 
     handleSearchButtonClick() {
         // this.props.dispatch(requestInventoryItems());
+        // this.props.dispatch(requestInventoryOverviews());
     }
 
-    handleExportClick() {
+    handleCloseModalClick(){
+        this.props.dispatch(push('/inventory'));
+    }
 
+    handleAddPendingCard(name: string, cardId: number, isFoil: boolean){
+        // this.props.dispatch(addPendingCard(name, cardId, isFoil));
+    }
+
+    handleRemovePendingCard(name: string, cardId: number, isFoil: boolean){
+        // this.props.dispatch(removePendingCard(name, cardId, isFoil));
     }
 
     render() {
-        // const {  flexCol } = appStyles();
         return (
             <React.Fragment>
-                {/* <InventoryDetailModal /> */}
-                
-                {/* <Box className={flexCol}> */}
-                <Box >
-                    <AppBar color="default" position="relative">
-                        <Toolbar>
-                            <Typography variant="h6">
-                                Inventory
-                            </Typography>
+                <Dialog open={this.props.modalIsOpen} onClose={() => {this.handleCloseModalClick()}} >
+                    <DialogTitle>{`Trimming Tool`}</DialogTitle>
+                    <DialogContent>
+                        <TrimmingToolLayout
+                            cards={this.props.trimmingTipsResults}
 
-                            <Tabs value={this.props.visibleSection}>
-                                <Tab value='inventory' label='Inventory' component={Link} to={'/inventory'} />
-                                <Tab value='trimmingTips' label='Trimming Tips' component={Link} to={'/inventory/trimming-tips'} />
-                                <Tab value='wishlistHelper' label='Wishlist Helper' component={Link} to={'/inventory/wishlist-helper'} />
-                                <Tab value='buylistHelper' label='Buylist Helper' component={Link} to={'/inventory/buylist-helper'} />
-                            </Tabs>
+                            pendingCards={[]}
+                            
+                            //onSaveClick
 
-                            <Link to={'/inventory/addCards/'}>
-                                <Button>Add Cards</Button>
-                            </Link>
-                            <IconButton size="medium" onClick={this.handleExportClick}><Publish /></IconButton>
-                        </Toolbar>
-                    </AppBar>
-                    <Box>
-                        <Card>
-                            <CardHeader titleTypographyProps={{variant:"body1"}} title={ `found {x} total cards that could probably be trimmed...` } />
-                            <CardContent>
-                                <TrimmingTipsTable 
-                                    trimmingTips={this.props.trimmingTipsResults}
+                            
+                            onSearchClick={this.handleSearchButtonClick}
 
-                                    />
-              
-                            </CardContent>
-                        </Card>
+                            filterOptions={this.props.filterOptions}
 
-                        
-                        {/* { this.renderFilterBar() }
-                        { this.renderCardOverviews() } */}
-                    </Box>
-                </Box>
+                            onAddPendingCard={this.handleAddPendingCard}
+                            onRemovePendingCard={this.handleRemovePendingCard}
+
+
+                            onFilterChange={this.handleFilterChange}
+
+                        //  selectedDetailItem={this.props.selectedDetailItem}
+                        // selectedCardId={this.props.selectedCardId}
+                        // cardGroups={this.props.cardGroups}
+                        // cardsById={this.props.cardsById}
+                        // allCardIds={this.props.allCardIds}
+                        // inventoryCardsById={this.props.inventoryCardsById}
+                         />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button size="medium" onClick={() => this.handleCloseModalClick()}>Close</Button>
+                    </DialogActions>
+                </Dialog>
             </React.Fragment>
         );
     }
@@ -214,6 +220,7 @@ function mapStateToProps(state: AppState): PropsFromState {
     // console.log('---state-----');
     // console.log(state);
     const result: PropsFromState = {
+        modalIsOpen: true,
         // searchResults: selectTrimmingTips(state),
         
         // // isLoading: state.data.
@@ -223,10 +230,11 @@ function mapStateToProps(state: AppState): PropsFromState {
 
         // searchFilter: state.app.inventory.filters,
         // visibleFilters: getFilterVisibilities(state.app.inventory.filters.groupBy),
-        // filterOptions: state.data.appFilterOptions.filterOptions,
+        filterOptions: state.core.data.filterOptions,
         // // searchMethod: state.app.inventory.searchMethod,
         trimmingTipsResults: [],
-        visibleSection: "trimmingTips",
+        // visibleSection: "trimmingTips",
+        pendingCards: [],
     }
     return result;
 }

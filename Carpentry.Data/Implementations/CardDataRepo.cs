@@ -318,8 +318,8 @@ namespace Carpentry.Data.Implementations
 
             if(matchingCard == null)
             {
+                _logger.LogError($"Could not find card {name} in set {setCode}");
                 throw new CardNotFoundException(setCode, name);
-                //_logger.LogError($"Could not find card {name} in set {setCode}");
             }
 
             //CardData result = await _cardContext.Cards.FirstOrDefaultAsync(x => x.Id == multiverseId);

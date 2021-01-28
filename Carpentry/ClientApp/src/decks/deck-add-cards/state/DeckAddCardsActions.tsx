@@ -121,7 +121,7 @@ function searchCards(dispatch: Dispatch, state: AppState): any{
         set: currentFilterProps.set,
         type: currentFilterProps.type,
         searchGroup: currentFilterProps.group,
-        excludeUnowned: false,
+        excludeUnowned: Boolean((currentFilterProps.minCount ?? 0) > 0),
     }
 
     cardSearchApi.searchInventory(param).then((results) => {

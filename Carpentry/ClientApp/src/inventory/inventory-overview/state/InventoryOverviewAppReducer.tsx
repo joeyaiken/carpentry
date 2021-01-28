@@ -79,7 +79,7 @@ function initialCardSearchFilterProps(): InventoryFilterProps {
         exclusiveColorFilters: false,
         multiColorOnly: false,
         skip: 0,
-        take: 100,
+        take: 25,
         type: "",
         colorIdentity: [],
         rarity: [],

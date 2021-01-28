@@ -496,11 +496,54 @@ namespace Carpentry.Logic.Implementations
 
         public async Task DissassembleDeck(int deckId)
         {
-            throw new NotImplementedException();
+            //get all cards in the deck
+            var existingDeckCards = await _deckRepo.GetDeckCardsByDeckId(deckId);
+
+            //itterate over each deck card, clearing inventoryCardId
+            foreach(var deckCard in existingDeckCards)
+            {
+                deckCard.InventoryCardId = null;
+            }
+
+            await _deckRepo.UpdateDeckCardBatch(existingDeckCards);
         }
         public async Task<int> CloneDeck(int deckId)
         {
-            throw new NotImplementedException();
+            //get deck detail
+            var existingDeck = await _deckRepo.GetDeckById(deckId);
+            //copy deck props
+
+            var newDeck = new DeckData()
+            {
+                Name = $"Clone of {existingDeck.Name}",
+                MagicFormatId = existingDeck.MagicFormatId,
+                Notes = existingDeck.Notes,
+                BasicW = existingDeck.BasicW,
+                BasicU = existingDeck.BasicU,
+                BasicB = existingDeck.BasicB,
+                BasicR = existingDeck.BasicR,
+                BasicG = existingDeck.BasicG,
+                Tags = existingDeck.Tags?.Select(tag => new DeckCardTagData
+                {
+                    CardName = tag.CardName,
+                    Description = tag.Description,
+                }).ToList(),
+                Cards = existingDeck.Cards.Select(card => new DeckCardData
+                {
+                    CardName = card.CardName,
+                    CategoryId = card.CategoryId,
+                    InventoryCardId = null,
+                }).ToList(),
+            };
+
+            //copy deck cards
+            //add deck
+            var newId = await _deckRepo.AddDeck(newDeck);
+            //add cards in bulk
+
+            return newId;
+
+            //throw new NotImplementedException();
 
 
 

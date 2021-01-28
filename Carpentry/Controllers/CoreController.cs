@@ -61,6 +61,27 @@ namespace Carpentry.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns default reference/filter values used by the app
+        /// When the app loads, values will be queried to populate dropdown lists
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("[action]")]
+        public async Task<ActionResult> ValidateDatabase()
+        {
+            try
+            {
+                //ummm does this call a single 'core service' or does it
+                await _dataUpdateService.ValidateDatabase();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("ValidateDatabase", ex));
+            }
+        }
+
+
         #endregion 
 
         #region Tracked Sets

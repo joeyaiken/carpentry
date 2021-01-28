@@ -381,3 +381,10 @@ declare interface CardTagDetailTag {
     cardTagId: number;
     tag: string;
 }
+
+declare interface TrimmingToolSearchProps {
+    setCode: string;
+    group: string;
+    minCount: number;
+    minBy: string;
+}

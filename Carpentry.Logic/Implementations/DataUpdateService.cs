@@ -287,6 +287,8 @@ namespace Carpentry.Logic.Implementations
             _logger.LogInformation("Finished adding default records");
         }
 
+        //reset database?(SomeConfirmationClass dto){ ; }
+
         public async Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update)
         {
             //update first?

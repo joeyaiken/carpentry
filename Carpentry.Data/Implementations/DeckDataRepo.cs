@@ -101,9 +101,11 @@ namespace Carpentry.Data.Implementations
 
         public async Task<DeckData> GetDeckById(int deckId)
         {
-            var matchingDeck = await _cardContext.Decks.Where(x => x.DeckId == deckId)
-                .Include(x => x.Format)
+            var matchingDeck = await _cardContext.Decks.Where(d => d.DeckId == deckId)
+                .Include(d => d.Format)
+                .Include(d => d.Cards)
                 .FirstOrDefaultAsync();
+
             return matchingDeck;
         }
 
@@ -157,6 +159,12 @@ namespace Carpentry.Data.Implementations
             await _cardContext.SaveChangesAsync();
         }
 
+        public async Task UpdateDeckCardBatch(IEnumerable<DeckCardData> batch)
+        {
+            _cardContext.DeckCards.UpdateRange(batch);
+            await _cardContext.SaveChangesAsync();
+        }
+
         //Deletes a deck card, does not delete the associated inventory card
         public async Task DeleteDeckCard(int deckCardId)
         {
@@ -182,6 +190,13 @@ namespace Carpentry.Data.Implementations
         {
             var matchingDeckCard = await _cardContext.DeckCards.Where(x => x.InventoryCardId == inventoryCardId).FirstOrDefaultAsync();
             return matchingDeckCard;
+        }
+
+        //This is an example of why this class may have been a bad idea
+        public async Task<List<DeckCardData>> GetDeckCardsByDeckId(int deckId)
+        {
+            var deckCards = await _cardContext.DeckCards.Where(deck => deck.DeckId == deckId).ToListAsync();
+            return deckCards;
         }
 
         #endregion

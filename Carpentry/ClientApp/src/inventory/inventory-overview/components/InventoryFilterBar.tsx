@@ -3,6 +3,9 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import { Paper, Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox, Button } from '@material-ui/core';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
+import NumericFilter from '../../../common/components/NumericFilter';
+import TextFilter from '../../../common/components/TextFilter';
+import SelectFilter from '../../../common/components/SelectFilter';
 
 interface InventoryFilterBarProps{
     searchFilter: InventoryFilterProps,
@@ -86,77 +89,6 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
 
         </Paper>
     );
-}
-
-
-
-interface NumericFilterProps {
-    name: string;
-    value: number;
-    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-function NumericFilter(props: NumericFilterProps): JSX.Element {
-    const { flexSection, sidePadded, stretch } = appStyles();
-    return(
-        <Box className={`${flexSection} ${sidePadded}`}>
-            <TextField
-                name={props.name}
-                className={stretch}
-                label={props.name}
-                value={props.value}
-                onChange={props.handleFilterChange}
-                style={{textTransform: "capitalize"}}
-                margin="normal"/>
-        </Box>
-    )
-}
-
-interface SelectFilterProps {
-    name: string;
-    options: FilterOption[];
-    value: string | string[];
-    selectMultiple: boolean;
-    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-function SelectFilter(props: SelectFilterProps): JSX.Element {
-    const { flexSection, sidePadded, stretch } = appStyles();
-    return(
-        <Box className={`${flexSection} ${sidePadded}`}>
-                <TextField
-                    name={props.name}
-                    className={stretch}
-                    select
-                    SelectProps={{ multiple: props.selectMultiple }}
-                    label={props.name}
-                    value={props.value}
-                    onChange={props.handleFilterChange}
-                    style={{textTransform: "capitalize"}}
-                    margin="normal" >
-                    { props.options.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
-                </TextField>
-            </Box>
-    );
-}
-
-interface TextFilterProps {
-    name: string;
-    value: string;
-    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-function TextFilter(props: TextFilterProps): JSX.Element {
-    const { flexSection, sidePadded, stretch } = appStyles();
-    return(
-        <Box className={`${flexSection} ${sidePadded}`}>
-            <TextField
-                name={props.name}
-                className={stretch}
-                label={props.name}
-                value={props.value}
-                onChange={props.handleFilterChange}
-                style={{textTransform: "capitalize"}}
-                margin="normal"/>
-        </Box>
-    )
 }
 
 interface BooleanCheckboxOption {

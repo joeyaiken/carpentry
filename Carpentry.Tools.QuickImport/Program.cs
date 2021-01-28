@@ -40,6 +40,29 @@ namespace Carpentry.Tools.QuickImport
             {
                 //new DeckImportTemplate()
                 //{
+                //    Name = "Well-Read 4",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\WellRead_4.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Dogs 2",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Dogs_2.txt",
+                //},
+                //new DeckImportTemplate()
+                //{
+                //    Name = "Well-Read 3",
+                //    FormatName = "jumpstart",
+                //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\WellRead_3.txt",
+                //},
+            };
+
+
+            List<DeckImportTemplate> moredecksToImport = new List<DeckImportTemplate>()
+            {
+                //new DeckImportTemplate()
+                //{
                 //    Name = "Goblins_3_1_jmp",
                 //    FormatName = "jumpstart",
                 //    FilePath = "C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\Goblins_3.txt",
@@ -350,6 +373,12 @@ namespace Carpentry.Tools.QuickImport
                 if(validatedPayload.UntrackedSets.Count > 0)
                 {
                     throw new Exception("Untracked set encountered (not automatically adding for now)");
+                }
+
+                if (!validatedPayload.IsValid)
+                {
+                    //throw new Exception("Invalid import, won't add");
+                    logger.LogInformation($"Invalid import, won't add {deck.Name}");
                 }
 
                 await importService.AddValidatedDeckImport(validatedPayload);

@@ -49,6 +49,7 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
         this.handleCardDetailMenuClose = this.handleCardDetailMenuClose.bind(this);
         this.handleQuickFilterClick = this.handleQuickFilterClick.bind(this);
         this.handleAddCardsClick = this.handleAddCardsClick.bind(this);
+        this.handleTrimmingToolClick = this.handleTrimmingToolClick.bind(this);
     }
 
     componentDidMount() {
@@ -141,7 +142,11 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
     }
 
     handleAddCardsClick() {
-        this.props.dispatch(push('/inventory/addCards/'));
+        this.props.dispatch(push('/inventory/addCards/')); //todo - this should be renamed to add-cards
+    }
+
+    handleTrimmingToolClick() {
+        this.props.dispatch(push('/inventory/trimming-tool'))
     }
 
     render() {
@@ -178,6 +183,9 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
                             {/* <Link to={'/inventory/addCards/'}> */}
                                 <Button onClick={this.handleAddCardsClick}>Add Cards</Button>
                             {/* </Link> */}
+
+                            <Button onClick={this.handleTrimmingToolClick}>Trimming Tool</Button>
+                            
                             {/* <IconButton size="medium" onClick={this.handleExportClick}><Publish /></IconButton> */}
                             {/* {
                                 props.tabNames &&

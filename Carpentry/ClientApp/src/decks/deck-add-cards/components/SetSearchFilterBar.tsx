@@ -140,6 +140,13 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
                     { props.filterOptions.rarities.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
                 </TextField>
             </Box>
+
+            {/* Bool: Include Unowned */}
+            {/* DDL:  */}
+            {/* Fuck it, just adding Min Count for now... */}
+            <NumericFilter name="minCount" value={props.searchFilter.minCount}
+                handleFilterChange={props.handleFilterChange} />
+
             {/* //Format */}
             {/* <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
                 <TextField
@@ -165,3 +172,51 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
   );
 }
 
+// //////////////////////////////////////
+
+// <NumericFilter name="minCount" value={props.searchFilter.minCount}
+// handleFilterChange={props.handleFilterChange} />
+
+// <NumericFilter name="maxCount" value={props.searchFilter.maxCount}
+// handleFilterChange={props.handleFilterChange} />
+
+// <NumericFilter name="skip" value={props.searchFilter.skip}
+// handleFilterChange={props.handleFilterChange} />
+
+// <NumericFilter name="take" value={props.searchFilter.take}
+// handleFilterChange={props.handleFilterChange} />
+
+// </Box>
+// <Box className={combineStyles(staticSection, center, sidePadded)}>
+// <Button variant="contained" size="medium" color="primary" onClick={() => props.handleSearchButtonClick()}>
+// Search
+// </Button>
+// </Box>
+// </Box>
+
+// </Paper>
+// );
+// }
+
+
+
+interface NumericFilterProps {
+    name: string;
+    value: number|null;
+    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+function NumericFilter(props: NumericFilterProps): JSX.Element {
+const { flexSection, sidePadded, stretch } = appStyles();
+    return(
+        <Box className={`${flexSection} ${sidePadded}`}>
+            <TextField
+                name={props.name}
+                className={stretch}
+                label={props.name}
+                value={props.value}
+                onChange={props.handleFilterChange}
+                style={{textTransform: "capitalize"}}
+                margin="normal"/>
+        </Box>
+    )
+}

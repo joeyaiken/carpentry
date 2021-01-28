@@ -51,31 +51,63 @@ namespace Carpentry.Tests.IntegrationTests.SnowDeckTests
         [TestMethod]
         public async Task SnowDeck_EndToEnd_Works()
         {
-            //ensure DB exists
-            //Ensure not production
-            //  (not sure how to accomplish this yet)
-            //Clear DB
-            //    Should export current DB to a local folder everytime an export happens
+            //In this scenario, do I want to reset the DB everytime I run the test?
+            //  Why not...the goal is to just ensure I can run this test on a test DB
+            //  DB should be swapped to sqlite
+
+            //await ResetDatabase();
 
             //Set base tracked sets (khm,mh1,csp,ice)
-            await SetTrackSets_SnowSets();
+            //await TrackSnowSets();
 
             //Import Jorn Snow deck, fully empty
-            await ImportDeck_JornSnow();
+            //await ImportDeckJornSnow();
             //    validate tags got created in addition to empty cards
             //    Inventory should be empty at that point
 
 
             //Create the bant snow deck
-            //    Import chulane deck, adding new deck cards
-            //    Clone the chulane deck
-            //    Dissasemble the original
+
+            //Import chulane deck, adding new deck cards
+            var chulaneDeckId = 2;// await ImportDeckChulane(); // 2
+
+            //Clone the chulane deck
+            var clonedDeckId = 3; // await ApiCloneDeck(chulaneDeckId);
+
+            //Dissasemble the original
+            //await ApiDissassembleDeck(chulaneDeckId);
+
             //Rename the clone, change to EDH, set snow desc
 
-            Assert.Fail("Not fully implemented");
+            //get the chulane deck (props?)
+            var chulaneDeck = await ApiGetDeckDetail(clonedDeckId);
+
+            //update chulane deck props
+            chulaneDeck.Props.Name = "";
+            chulaneDeck.Props.Format = "";
+            chulaneDeck.Props.Notes = "";
+
+            await ApiUpdateDeckProps(chulaneDeck.Props);
+
+            //start asserting things
         }
-        
-        public async Task SetTrackSets_SnowSets()
+
+        private async Task ResetDatabase()
+        {
+
+            //ensure DB exists
+            //await ApiValidateDatabase();
+
+            //Ensure not production
+            //  (not sure how to accomplish this yet, could just ensure backed up instead)
+
+            //Clear DB
+            //    Should export current DB to a local folder everytime an export happens
+
+            throw new NotImplementedException();
+        }
+
+        private async Task TrackSnowSets()
         {
             //Set base tracked sets
             
@@ -98,7 +130,7 @@ namespace Carpentry.Tests.IntegrationTests.SnowDeckTests
             await ApiAddTrackedSet(iceage.SetId);
         }
 
-        public async Task ImportDeck_JornSnow()
+        private async Task ImportDeckJornSnow()
         {
             var deckString = @"
 1 Abominable Treefolk (mh1) 194 {Snow%2CStompy}
@@ -141,6 +173,7 @@ namespace Carpentry.Tests.IntegrationTests.SnowDeckTests
 1 Heidar, Rimewind Master (csp) 36 {Removal}
 1 Ice Tunnel (khm) 262 {Land}
 1 Iceberg Cancrix (mh1) 54 {Snow%2CMill}
+1 Icebind Pillar (khm) 62
 1 Icebreaker Kraken (khm) 63
 1 Ice-Fang Coatl (mh1) 203 {Draw%2CRemoval}
 1 Icehide Golem (mh1) 224
@@ -177,6 +210,7 @@ namespace Carpentry.Tests.IntegrationTests.SnowDeckTests
 8 Snow-Covered Swamp (khm) 280 {Land%2CSnow}
 1 Spirit of the Aldergard (khm) 195
 1 Swamp
+1 The Three Seasons (khm) 231
 1 Winter's Rest (mh1) 78 {Removal}
 1 Withering Wisps (ice) 168
 1 Woodland Chasm (khm) 274 {Snow%2CLand}
@@ -193,18 +227,24 @@ Sideboard
 1 Zombie Musher (csp) 75
 ";
             var dto = new CardImportDto() { ImportPayload = deckString };
-            var validationResult = await ValidateImport(dto);
+            var validationResult = await ApiValidateImport(dto);
 
             Assert.AreEqual(0, validationResult.UntrackedSets?.Count);
 
             Assert.IsTrue(validationResult.IsValid);
 
-            //Assert.Fail();
-            //var newId = AddValidatedImport(validationResult);
 
+
+            validationResult.DeckProps.Name = "You Know Nothing";
+            validationResult.DeckProps.Format = "commander";
+            validationResult.DeckProps.Notes = "Jorn Snow";
+
+            var newId = await ApiAddValidatedImport(validationResult);
+            Assert.IsNotNull(newId); //Wait, it's a non-nullable int, would this ever fail?
+            Assert.AreNotEqual(0, newId);
         }
 
-        public async Task ImportDeck_Chulane()
+        private async Task<int> ImportDeckChulane()
         {
             var deckString = @"
 1 Arcane Signet (eld) 331
@@ -259,12 +299,25 @@ Commander
 1 Chulane, Teller of Tales (eld) 326 FOIL
 ";
             var dto = new CardImportDto() { ImportPayload = deckString };
-            var validationResult = await ValidateImport(dto);
+            var validationResult = await ApiValidateImport(dto);
 
-            Assert.IsTrue(validationResult.UntrackedSets?.Count > 0);
+            if (validationResult.UntrackedSets?.Count > 0)
+            {
+                foreach (var set in validationResult.UntrackedSets)
+                {
+                    await ApiAddTrackedSet(set.SetId);
+                }
+                validationResult = await ApiValidateImport(dto);
+            }
 
-            var newId = AddValidatedImport(validationResult);
+            validationResult.DeckProps.Name = "Wild Bounty";
+            validationResult.DeckProps.Format = "brawl";
+            validationResult.DeckProps.Notes = "Chulane brawl precon";
 
+            //Assert.IsTrue(validationResult.UntrackedSets?.Count > 0);
+
+            var newId = await ApiAddValidatedImport(validationResult);
+            return newId;
         }
 
 
@@ -296,7 +349,14 @@ Commander
             // Assert that call was successful?
         }
 
-        private async Task<ValidatedDeckImportDto> ValidateImport(CardImportDto importPayload)
+        private async Task ApiValidateDatabase()
+        {
+            var apiEndpoint = $"api/Core/ValidateDatabase";
+            var response = await _client.GetAsync(apiEndpoint);
+            // Assert that call was successful?
+        }
+
+        private async Task<ValidatedDeckImportDto> ApiValidateImport(CardImportDto importPayload)
         {
             var apiEndpoint = "api/Decks/ValidateDeckImport";
 
@@ -315,7 +375,7 @@ Commander
             return result;
         }
         
-        private async Task<int> AddValidatedImport(ValidatedDeckImportDto validatedPayload)
+        private async Task<int> ApiAddValidatedImport(ValidatedDeckImportDto validatedPayload)
         {
             var apiEndpoint = "api/Decks/AddValidatedDeckImport";
 
@@ -334,11 +394,68 @@ Commander
             return result;
         }
 
-        private static async Task<string> ReadFileContents(string directory)
+        private async Task<int> ApiCloneDeck(int deckId)
         {
-            string fileContents = await File.ReadAllTextAsync(directory);
-            return fileContents;
+            var apiEndpoint = $"api/Decks/CloneDeck?deckId={deckId}";
+
+            var response = await _client.GetAsync(apiEndpoint);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<int>(responseContent);
+
+            return result;
         }
+
+        private async Task ApiDissassembleDeck(int deckId)
+        {
+            var apiEndpoint = $"api/Decks/DissassembleDeck?deckId={deckId}";
+
+            var response = await _client.GetAsync(apiEndpoint);
+
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //var result = JsonConvert.DeserializeObject<int>(responseContent);
+
+        }
+
+        private async Task<DeckDetailDto> ApiGetDeckDetail(int deckId)
+        {
+            var apiEndpoint = $"api/Decks/GetDeckDetail?deckId={deckId}";
+
+            var response = await _client.GetAsync(apiEndpoint);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<DeckDetailDto>(responseContent);
+
+            return result;
+        }
+
+        private async Task ApiUpdateDeckProps(DeckPropertiesDto dto)
+        {
+            var apiEndpoint = "api/Decks/UpdateDeck";
+
+            //var client = _factory.CreateClient();
+
+            var queryParamStringBody = JsonConvert.SerializeObject(dto, Formatting.None);
+
+            var queryParamStringContent = new StringContent(queryParamStringBody, Encoding.UTF8, "application/json");
+
+            var response = await _client.PostAsync(apiEndpoint, queryParamStringContent);
+
+            //var responseContent = await response.Content.ReadAsStringAsync();
+
+            //var result = JsonConvert.DeserializeObject<int>(responseContent);
+
+            //return result;
+        }
+
+        //private static async Task<string> ReadFileContents(string directory)
+        //{
+        //    string fileContents = await File.ReadAllTextAsync(directory);
+        //    return fileContents;
+        //}
 
 
     }
