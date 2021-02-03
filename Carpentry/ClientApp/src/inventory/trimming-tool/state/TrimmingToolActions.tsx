@@ -70,6 +70,11 @@ export const removePendingCard = (name: string, cardId: number, isFoil: boolean)
     }
 });
 
+export const CLEAR_PENDING_CARDS = 'TRIMMING_TOOL.CLEAR_PENDING_CARDS'
+export const clearPendingCards = () =>({
+    type: CLEAR_PENDING_CARDS
+});
+
 export const requestTrimCards = (): any => {
     return (dispatch: Dispatch, getState: any) => {
         tryTrimCards(dispatch, getState());

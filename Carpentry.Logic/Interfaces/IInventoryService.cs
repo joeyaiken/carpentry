@@ -1,4 +1,5 @@
-﻿using Carpentry.Logic.Models;
+﻿using Carpentry.Data.QueryResults;
+using Carpentry.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@ namespace Carpentry.Logic.Interfaces
         //Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
         Task<InventoryDetailDto> GetInventoryDetail(int cardId);
 
-        //Task<List<InventoryOverviewDto>> GetTrimmingToolCards();
+        Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string searchGroup = null);
+        Task TrimCards(List<TrimmedCardDto> cardsToTrim);
     }
 }

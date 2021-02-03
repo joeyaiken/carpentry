@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Data.Interfaces;
 using System.Linq;
+using Carpentry.Data.QueryResults;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -257,12 +258,25 @@ namespace Carpentry.Logic.Implementations
         }
 
 
-        //public async Task<List<InventoryOverviewDto>> GetTrimmingToolCards()
-        //{
-        //    var result = new List<InventoryOverviewDto>();
+        public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string searchGroup = null)
+        {
+            //need:
+            //  inventory cards by print
+            //  joined with inventoryCardsByName
+            //  filtered accordingly
 
-        //    return result;
-        //}
+
+
+            var result = await _inventoryRepo.TrimmingToolQuery(setCode, minCount, searchGroup);
+
+            return result;
+        }
+
+
+        public async Task TrimCards(List<TrimmedCardDto> cardsToTrim)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

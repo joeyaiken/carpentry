@@ -5,6 +5,7 @@ import {
     CARD_IMAGE_ANCHOR_SET,
     ADD_PENDING_CARD,
     REMOVE_PENDING_CARD,
+    CLEAR_PENDING_CARDS,
 } from './TrimmingToolActions';
 
 export interface State {
@@ -18,7 +19,7 @@ export interface State {
 
     pendingCards: {
         isSaving: boolean;
-        byId: { [id: number]: PendingCardsDto };
+        byId: { [cardId: number]: TrimmedCard };
         allIds: number[];
     }
 
@@ -36,7 +37,7 @@ export const trimmingToolReducer = (state = initialState, action: ReduxAction): 
         case ADD_PENDING_CARD: return addPendingCard(state, action);
         case REMOVE_PENDING_CARD: return removePendingCard(state, action);
 
-        // case CARD_SEARCH_CLEAR_PENDING_CARDS: return {...state, pendingCards: {}}
+        case CLEAR_PENDING_CARDS: return {...state, pendingCards: { byId: {}, allIds: [], isSaving: false }}
 
         // case SAVE_REQUESTED: return { ...state, pendingCardsSaving: true };
         // case SAVE_COMPLETED: return { ...state, pendingCardsSaving: false, pendingCards: {} };
@@ -58,8 +59,11 @@ const initialState: State = {
         allIds: [],
     },
 
+
+    
     pendingCards: {
         isSaving: false,
+        //If this is a dictionary built on CardId, this will have to store both foil & non-foil counts
         byId: {},
         allIds: [],
     },
@@ -106,17 +110,16 @@ const addPendingCard = (state = initialState, action: ReduxAction): State => {
     
     if(!cardToAdd){
         cardToAdd = {
-            name: name,
-            cards: [],
+            cardName: name,
+            cardId: cardId,
+            numberToTrim: 0,
+            foilToTrim: 0,
         };
         cardIds.push(cardId);
     }
 
-    cardToAdd.cards.push({
-        cardId: cardId,
-        isFoil: isFoil,
-    } as InventoryCard);
-    
+    isFoil ? cardToAdd.foilToTrim++ : cardToAdd.numberToTrim++;
+
     const newState: State = {
         ...state,
         pendingCards: {
@@ -143,11 +146,13 @@ const removePendingCard = (state = initialState, action: ReduxAction): State => 
 
     if(objToRemoveFrom){
 
-        let thisInvCardIndex = objToRemoveFrom.cards.findIndex(x => x.cardId === cardId && x.isFoil === isFoil);
+        // let thisInvCardIndex = objToRemoveFrom.cards.findIndex(x => x.cardId === cardId && x.isFoil === isFoil);
 
-        if(thisInvCardIndex >= 0){
-            objToRemoveFrom.cards.splice(thisInvCardIndex,1);
-        }
+        // if(thisInvCardIndex >= 0){
+        //     objToRemoveFrom.cards.splice(thisInvCardIndex,1);
+        // }
+
+        isFoil ? objToRemoveFrom.foilToTrim-- : objToRemoveFrom.numberToTrim--;
 
         let pendingCardsAfterRemoval =  {
             ...state.pendingCards.byId,
@@ -157,7 +162,7 @@ const removePendingCard = (state = initialState, action: ReduxAction): State => 
         const pendingCardIds = state.pendingCards.allIds;
 
         //if this pending cards object has 0 items, it should be deleted from the dictionary
-        if(objToRemoveFrom.cards.length === 0){
+        if(objToRemoveFrom.numberToTrim === 0 && objToRemoveFrom.foilToTrim === 0){
             delete pendingCardsAfterRemoval[cardId];
             
             const idIndex = pendingCardIds.findIndex(x => x === cardId);

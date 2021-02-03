@@ -342,3 +342,12 @@ declare interface DeckImportUiProps {
     importMethod: string;
     importString: string;
 };
+
+
+declare interface TrimmedCard { //NOT dto, used in UI, not sent to controller
+    cardName: string; //For display purposes, maybe validation
+    cardId: number;
+    //isFoil: boolean;
+    numberToTrim: number;
+    foilToTrim: number;
+}

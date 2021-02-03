@@ -13,7 +13,7 @@ interface ComponentProps {
     searchResultsById: { [key: number]: InventoryOverviewDto }
     searchReusltIds: number[];
 
-    pendingCardsById: { [id: number]: PendingCardsDto }
+    pendingCardsById: { [id: number]: TrimmedCard }
     pendingCardsIds: number[];
 
     onAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
@@ -41,6 +41,8 @@ export default function TrimmingToolLayout(props: ComponentProps): JSX.Element {
             <SearchResultTable
                 searchResultsById={props.searchResultsById}
                 searchReusltIds={props.searchReusltIds}
+                pendingCardsById={props.pendingCardsById}
+
                 onAddPendingCard={props.onAddPendingCard}
                 onRemovePendingCard={props.onRemovePendingCard}
 
@@ -140,7 +142,7 @@ function FilterBar(props: FilterBarProps): JSX.Element{
 }
 
 interface CardSearchPendingCardsProps {
-    pendingCardsById: { [id: number]: PendingCardsDto }
+    pendingCardsById: { [id: number]: TrimmedCard }
     pendingCardsIds: number[];
 }
 
@@ -149,15 +151,15 @@ function PendingCardsSection(props: CardSearchPendingCardsProps): JSX.Element {
     return (<Paper className={combineStyles(outlineSection, flexRow)}>
         {
             props.pendingCardsIds.map((id: number) => {
-                let thisCard: PendingCardsDto = props.pendingCardsById[id];
+                let thisCard: TrimmedCard = props.pendingCardsById[id];
                 return(
                 <Paper key={id}>
-                    <Typography variant="h5">{ thisCard.name }</Typography>
-                    <Typography variant="h6">{ thisCard.cards.length }</Typography>
+                    <Typography variant="h5">{ thisCard.cardName }</Typography>
+                    <Typography variant="h6">{ thisCard.numberToTrim }{(thisCard.foilToTrim > 0 && ` (${thisCard.foilToTrim} foil)`) }</Typography>
                     {/* <Typography variant="h6">{ thisCard.countFoil }</Typography> */}
                 </Paper>
-            )
-        })
+                )
+            })
         }
     </Paper>);
 }
@@ -165,6 +167,7 @@ function PendingCardsSection(props: CardSearchPendingCardsProps): JSX.Element {
 interface SearchResultTableProps {
     searchResultsById: { [key: number]: InventoryOverviewDto }
     searchReusltIds: number[];
+    pendingCardsById: { [id: number]: TrimmedCard }
 
     onAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
     onRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
@@ -174,7 +177,7 @@ interface SearchResultTableProps {
 }
 
 function SearchResultTable(props: SearchResultTableProps): JSX.Element {
-    const { flexRow } = appStyles();
+    // const { flexRow } = appStyles();
     return (
         <Table size="small">
             <TableHead>
@@ -191,19 +194,23 @@ function SearchResultTable(props: SearchResultTableProps): JSX.Element {
             {
                 props.searchReusltIds.map(overviewId => {
                     const result = props.searchResultsById[overviewId];
+                    const pendingCard = props.pendingCardsById[result.cardId]
+                    const currentlyPending = pendingCard ? (result.isFoil ? pendingCard?.foilToTrim : pendingCard?.numberToTrim) : 0;
+
                     return (
                   
                     <TableRow key={result.cardId}>
                         <TableCell>{result.name}</TableCell>
-                        <TableCell>{`${result.setCode} - ${result.collectorNumber}`}{result.isFoil && " (FOIL)" }</TableCell>
+                        <TableCell>{`${result.setCode} - ${result.collectorNumber}`}{Boolean(result.isFoil) && " (FOIL)" }</TableCell>
                         <TableCell>{result.totalCount}</TableCell>
                         <TableCell>#</TableCell>
                         <TableCell>
-                            <IconButton color="inherit" size="small" onClick={() => {props.onRemovePendingCard(result.name, result.cardId, result.isFoil ?? false)} }>
+                            <IconButton disabled={currentlyPending===0}
+                                color="inherit" size="small" onClick={() => {props.onRemovePendingCard(result.name, result.cardId, result.isFoil ?? false)} }>
                                 <KeyboardArrowLeft />
                                 {/* <Remove /> */}
                             </IconButton>
-                            [#]
+                            { currentlyPending }
                             <IconButton color="inherit" size="small" onClick={() => {props.onAddPendingCard(result.name, result.cardId, result.isFoil ?? false)} }>
                                 <KeyboardArrowRight />
                                 {/* <Add /> */}

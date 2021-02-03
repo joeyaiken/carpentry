@@ -388,3 +388,10 @@ declare interface TrimmingToolRequest {
     minCount: number;
     // minBy: string;
 }
+
+declare interface TrimmedCardDto {
+    cardName: string; //For display purposes, maybe validation
+    cardId: number;
+    isFoil: boolean;
+    numberToTrim: number;
+}

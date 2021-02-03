@@ -4,7 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mate
 import { push } from 'react-router-redux';
 import { AppState } from '../../configureStore';
 import TrimmingToolLayout from './TrimmingToolLayout';
-import { addPendingCard, cardImageAnchorSet, removePendingCard, requestTrimmingToolCards, trimmingToolFilterChanged } from './state/TrimmingToolActions'
+import { addPendingCard, cardImageAnchorSet, clearPendingCards, removePendingCard, requestTrimmingToolCards, trimmingToolFilterChanged } from './state/TrimmingToolActions'
 import CardImagePopper from '../../common/components/CardImagePopper';
 
 interface PropsFromState { 
@@ -14,7 +14,7 @@ interface PropsFromState {
     searchResultsById: { [key: number]: InventoryOverviewDto }
     searchReusltIds: number[];
     cardImageMenuAnchor: HTMLButtonElement | null;
-    pendingCardsById: { [id: number]: PendingCardsDto }
+    pendingCardsById: { [id: number]: TrimmedCard }
     pendingCardsIds: number[];
 }
 
@@ -46,6 +46,8 @@ class TrimmingTipsContainer extends React.Component<TrimmingTipsProps>{
     }
 
     handleCloseModalClick(){
+        //clear pending cards
+        this.props.dispatch(clearPendingCards());
         this.props.dispatch(push('/inventory'));
     }
 
@@ -66,7 +68,7 @@ class TrimmingTipsContainer extends React.Component<TrimmingTipsProps>{
     }
 
     handleTrimClick() {
-        // 
+        //
     }
 
     render() {
