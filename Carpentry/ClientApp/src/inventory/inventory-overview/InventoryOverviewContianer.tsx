@@ -12,6 +12,7 @@ import LoadingBox from '../../common/components/LoadingBox';
 import { cardMenuButtonClick, inventoryOverviewFilterChanged, quickFilterApplied } from './state/InventoryOverviewActions';
 import { appStyles } from '../../styles/appStyles';
 import { group } from 'console';
+import CardImagePopper from '../../common/components/CardImagePopper';
 
 interface PropsFromState { 
     // searchMethod: "name" | "quantity" | "price";
@@ -246,33 +247,6 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
             </React.Fragment>
         );
     }
-}
-
-interface CardImagePopperProps { 
-    menuAnchor: HTMLElement | null;
-    image: string;
-    onClose: () => void;
-}
-
-function CardImagePopper(props: CardImagePopperProps): JSX.Element {
-    const classes = appStyles();
-    return (
-        <Popper open={Boolean(props.menuAnchor)} anchorEl={props.menuAnchor}>
-            <Card>
-                <CardMedia style={{height:"310px", width: "223px"}} image={props.image} />
-                {/* <CardContent className={classes.flexSection}>
-                    <Box className={classes.flexCol}>
-                        <Box className={classes.flexRow}>
-                            {cardItem.count && (<Typography>{cardItem.count} Total {cardItem.isFoil && " - (FOIL)"}</Typography>)}
-                        </Box>
-                        <Box className={classes.flexRow}>
-                            {cardItem.price && (<Typography>${cardItem.price}</Typography>)}
-                        </Box>
-                    </Box>
-                </CardContent> */}
-            </Card>
-        </Popper>
-    );
 }
 
 interface QuickFilterProps {

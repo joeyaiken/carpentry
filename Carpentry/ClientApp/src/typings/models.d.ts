@@ -382,9 +382,9 @@ declare interface CardTagDetailTag {
     tag: string;
 }
 
-declare interface TrimmingToolSearchProps {
+declare interface TrimmingToolRequest {
     setCode: string;
-    group: string;
+    searchGroup: string;
     minCount: number;
-    minBy: string;
+    // minBy: string;
 }

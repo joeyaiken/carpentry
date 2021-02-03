@@ -22,6 +22,7 @@ import { homeReducer, State as HomeReducerState } from './home/state/HomeReducer
 import { deckExportReducer, State as DeckExportReducerState } from './decks/deck-export/state/DeckExportReducer';
 import { cardTagsReducer, State as CardTagsReducerState } from './decks/card-tags/state/CardTagsReducer';
 import { importDeckReducer, State as ImportDeckReducerState } from './decks/import-deck/state/ImportDeckReducer';
+import { trimmingToolReducer, State as TrimmingToolReducerState } from './inventory/trimming-tool/state/TrimmingToolReducer';
 // import { settingsDataReducer, State as SettingsDataReducerState } from './settings/state/SettingsDataReducer';
 
 //TODO - consider renaming this file to just "store.tsx"
@@ -54,6 +55,7 @@ const rootReducer = (history: History) => combineReducers({
     inventory: combineReducers({
         overviews: inventoryOverviewAppReducer,
         inventoryAddCards: inventoryAddCardsReducer,
+        trimmingTool: trimmingToolReducer,
         data: inventoryDataReducer,
     }),
 
@@ -97,6 +99,9 @@ export interface AppState {
         //}
         overviews: InventoryOverviewState,
         inventoryAddCards: InventoryAddCardsReducerState,
+
+        trimmingTool: TrimmingToolReducerState,
+
         data: InventoryDataReducerState
     }
     settings: {

@@ -49,24 +49,30 @@ export const inventoryApi = {
         return result;
     },
 
-    async getCollectionBuilderSuggestions(): Promise<InventoryOverviewDto[]> {
-        const endpoint = `api/Inventory/GetCollectionBuilderSuggestions`;
-        const result = await Get(endpoint);
-        return result;
-    },
-    async hideCollectionBuilderSuggestion(dto: InventoryOverviewDto): Promise<void> {
-        const endpoint = `api/Inventory/HideCollectionBuilderSuggestion`;
-        const result = await Post(endpoint, dto);
-        return result;
-    },
+    // async getCollectionBuilderSuggestions(): Promise<InventoryOverviewDto[]> {
+    //     const endpoint = `api/Inventory/GetCollectionBuilderSuggestions`;
+    //     const result = await Get(endpoint);
+    //     return result;
+    // },
+    // async hideCollectionBuilderSuggestion(dto: InventoryOverviewDto): Promise<void> {
+    //     const endpoint = `api/Inventory/HideCollectionBuilderSuggestion`;
+    //     const result = await Post(endpoint, dto);
+    //     return result;
+    // },
     
-    async getTrimmingTips(): Promise<InventoryOverviewDto[]> {
-        const endpoint = `api/Inventory/GetTrimmingTips`;
-        const result = await Get(endpoint);
-        return result;
-    },
-    async hideTrimmingTip(dto: InventoryOverviewDto): Promise<void> {
-        const endpoint = `api/Inventory/HideTrimmingTip`;
+    // async getTrimmingTips(): Promise<InventoryOverviewDto[]> {
+    //     const endpoint = `api/Inventory/GetTrimmingTips`;
+    //     const result = await Get(endpoint);
+    //     return result;
+    // },
+    // async hideTrimmingTip(dto: InventoryOverviewDto): Promise<void> {
+    //     const endpoint = `api/Inventory/HideTrimmingTip`;
+    //     const result = await Post(endpoint, dto);
+    //     return result;
+    // },
+
+    async getTrimmingToolCards(dto: TrimmingToolRequest): Promise<InventoryOverviewDto[]> {
+        const endpoint = `api/Inventory/GetTrimmingToolCards`;
         const result = await Post(endpoint, dto);
         return result;
     },

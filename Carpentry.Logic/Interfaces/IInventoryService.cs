@@ -17,5 +17,7 @@ namespace Carpentry.Logic.Interfaces
         //Search
         //Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
         Task<InventoryDetailDto> GetInventoryDetail(int cardId);
+
+        //Task<List<InventoryOverviewDto>> GetTrimmingToolCards();
     }
 }

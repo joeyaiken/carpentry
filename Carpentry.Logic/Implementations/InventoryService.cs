@@ -256,5 +256,13 @@ namespace Carpentry.Logic.Implementations
             return result;
         }
 
+
+        //public async Task<List<InventoryOverviewDto>> GetTrimmingToolCards()
+        //{
+        //    var result = new List<InventoryOverviewDto>();
+
+        //    return result;
+        //}
+
     }
 }

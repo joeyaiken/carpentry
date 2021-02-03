@@ -225,5 +225,51 @@ namespace Carpentry.Controllers
         }
 
         #endregion
+
+        #region Trimming Tool
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> GetTrimmingToolCards([FromBody] TrimmingToolRequest request) //payload: TrimmingTool[Card]Request
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request.SetCode)) return new List<InventoryOverviewDto>();
+
+                //var result = new List<InventoryOverviewDto>();
+
+                //result = await _inventoryService.GetTrimmingToolCards();
+                InventoryQueryParameter param = new InventoryQueryParameter()
+                {
+                    Colors = new List<string>(),
+                    ExclusiveColorFilters = false,
+                    GroupBy = "print",
+                    MaxCount = 0,
+                    MinCount = request.MinCount,
+                    MultiColorOnly = false,
+                    Rarity = new List<string>(),
+                    Set = request.SetCode,
+                    Skip = 0,
+                    Take = 25,
+                    Sort = "name",
+                    SortDescending = false,
+                    Text = "",
+                    Type = "",
+                };
+
+                IEnumerable<InventoryOverviewDto> result = await _searchService.SearchInventoryCards(param);
+                //Task<List<CardSearchResultDto>> SearchCardDefinitions(CardSearchQueryParameter filters);
+
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetTrimmingToolCards", ex));
+            }
+        }
+
+        //save payload of cards
+
+        #endregion
     }
 }

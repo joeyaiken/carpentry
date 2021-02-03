@@ -1,42 +1,36 @@
-//table of deck cards
 import React from 'react';
-
-import { Table, TableHead, TableRow, TableCell, TableBody, Paper, Box, Button, TextField, FormControl, FormControlLabel, Checkbox, MenuItem, Typography, Card, CardMedia, CardContent } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody, Paper, Box, Button, TextField, MenuItem, Typography, IconButton } from '@material-ui/core';
 import { appStyles, combineStyles } from '../../styles/appStyles';
-
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
-import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import NumericFilter from '../../common/components/NumericFilter';
+import { InfoOutlined, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 
 interface ComponentProps {
-    //totalPrice: number;
-    // deckProperties: DeckProperties;
-    // onEditClick: () => void;
-    // cardOverviews: DeckCardOverview[];
-    // onCardSelected: (card: DeckCardOverview) => void;
-
+    searchFilters: TrimmingToolRequest;
     filterOptions: AppFiltersDto;
     onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onSearchClick: () => void;
 
-    cards: InventoryOverviewDto[];
+    searchResultsById: { [key: number]: InventoryOverviewDto }
+    searchReusltIds: number[];
 
-    pendingCards: { [key:number]: PendingCardsDto }
+    pendingCardsById: { [id: number]: PendingCardsDto }
+    pendingCardsIds: number[];
 
     onAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
     onRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
 
+    onInfoButtonEnter: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onInfoButtonLeave: () => void;
 }
 
 export default function TrimmingToolLayout(props: ComponentProps): JSX.Element {
     const {  flexRow, flexSection, outlineSection } = appStyles();
     return (
-        <React.Fragment>
+        <Box>
             <FilterBar 
-
+                searchFilters={props.searchFilters}
                 filterOptions={props.filterOptions}
                 onFilterChange={props.onFilterChange}
-                // searchFilterProps={props.searchFilterProps}
                 onSearchClick={props.onSearchClick} 
                 />
 
@@ -45,112 +39,45 @@ export default function TrimmingToolLayout(props: ComponentProps): JSX.Element {
          >
 
             <SearchResultTable
-                cards={props.cards}
+                searchResultsById={props.searchResultsById}
+                searchReusltIds={props.searchReusltIds}
                 onAddPendingCard={props.onAddPendingCard}
                 onRemovePendingCard={props.onRemovePendingCard}
 
-                // onCardSelected={props.handleCardSelected}
+                onInfoButtonEnter={props.onInfoButtonEnter}
+                onInfoButtonLeave={props.onInfoButtonLeave}
                 />
 
         </Paper>
-        <Box className={combineStyles(flexRow,flexSection)} style={{ overflow:'auto', alignItems:'stretch' }}>
-            <Paper style={{ overflow:'auto', flex:'1 1 70%' }} >
-            {/* { props.viewMode === "list" && 
-                <SearchResultTable 
-                    searchResults={props.searchResults}
-                    handleAddPendingCard={props.handleAddPendingCard}
-                    handleRemovePendingCard={props.handleRemovePendingCard}
-                    onCardSelected={props.handleCardSelected}
-                    />
-            }
-            { props.viewMode === "grid" &&
-                <SearchResultGrid 
-                    searchResults={props.searchResults}
-                    onCardSelected={props.handleCardSelected}
-                    />
-            }
-            </Paper>
-            <Paper style={{ overflow:'auto', flex:'1 1 30%' }} > 
-            { props.selectedCard &&
-                <SelectedCardSection 
-                    selectedCard={props.selectedCard}
-                    pendingCards={props.pendingCards[props.selectedCard.name]}
-                    handleAddPendingCard={props.handleAddPendingCard}
-                    handleRemovePendingCard={props.handleRemovePendingCard}
-                    selectedCardDetail={null} />
-            } */}
-            </Paper>
-        </Box>
+
         <PendingCardsSection 
-            pendingCards={props.pendingCards} 
-            />
-        <Paper className={combineStyles(outlineSection, flexRow)}>
-            <Button 
-            // onClick={props.handleCancelClick}
-            >
-                Cancel
-            </Button>
-            <Button color="primary" variant="contained" 
-            // onClick={props.handleSaveClick}
-            >
-                Save
-            </Button>
-        </Paper>
-
-
-            {/* <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Set</TableCell>
-                        <TableCell>Variant</TableCell>
-                        <TableCell># to Trim</TableCell>
-                        <TableCell>Reason to Trim</TableCell>
-                        <TableCell>[options]</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        // Table Row:
-                        // onClick={() => props.onCardSelected(cardItem)} onMouseEnter={() => props.onCardSelected(cardItem)}
-                        props.cards.map(cardItem => 
-                            <TableRow 
-                                key={cardItem.id+cardItem.name}>
-                                <TableCell>{cardItem.name}</TableCell>
-                                <TableCell>{cardItem.type}</TableCell>
-                                <TableCell>{cardItem.manaCost}</TableCell>
-                            </TableRow>
-                        )
-                    }
-                </TableBody>
-            </Table> */}
-        </React.Fragment>
+            pendingCardsById={props.pendingCardsById} 
+            pendingCardsIds={props.pendingCardsIds} />
+        </Box>
     );
 }
 
 interface FilterBarProps {
+    searchFilters: TrimmingToolRequest;
     filterOptions: AppFiltersDto;
-    // handleBoolFilterChange: (filter: string, value: boolean) => void;
     onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    // searchFilterProps: CardFilterProps;
-    // cardSearchMethod: "set" | "web" | "inventory";
     onSearchClick: () => void;
 }
 
 function FilterBar(props: FilterBarProps): JSX.Element{
     const {  flexRow, outlineSection, staticSection, center, sidePadded,flexSection, stretch } = appStyles();
-    return(<React.Fragment>
+    return(<Box>
         <Paper className={combineStyles(outlineSection, flexRow)}>
 
             <Box className={combineStyles(flexSection, flexRow)}>
                 {/* SET filter */}
                 <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
-                        name="set"
+                        name="setCode"
                         className={stretch}
                         select
                         label="Set filter"
-                        // value={props.searchFilterProps.set}
+                        value={props.searchFilters.setCode}
                         onChange={props.onFilterChange}
                         margin="normal" >
                             <MenuItem key="null" value=""></MenuItem>
@@ -161,14 +88,14 @@ function FilterBar(props: FilterBarProps): JSX.Element{
                 {/* Group filter */}
                 <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
-                        name="group"
+                        name="searchGroup"
                         className={stretch}
                         select
                         SelectProps={{
                             displayEmpty: true
                         }}
                         label="Group"
-                        // value={props.searchFilterProps.group}
+                        value={props.searchFilters.searchGroup}
                         onChange={props.onFilterChange}
                         margin="normal">
                             <MenuItem key="null" value=""></MenuItem>
@@ -180,7 +107,7 @@ function FilterBar(props: FilterBarProps): JSX.Element{
 
                 <NumericFilter name="minCount" 
                     // value={props.searchFilter.minCount}
-                    value={0}
+                    value={props.searchFilters.minCount}
                     handleFilterChange={props.onFilterChange} 
                     />                
 
@@ -194,7 +121,7 @@ function FilterBar(props: FilterBarProps): JSX.Element{
                             displayEmpty: true
                         }}
                         label="By"
-                        // value={props.searchFilterProps.group}
+                        //value={props.searchFilters.groupBy}
                         onChange={props.onFilterChange}
                         margin="normal">
                             <MenuItem key="name" value="name">Name</MenuItem>
@@ -209,20 +136,20 @@ function FilterBar(props: FilterBarProps): JSX.Element{
                 </Button>
             </Box>
         </Paper>
-    </React.Fragment>);
+    </Box>);
 }
 
 interface CardSearchPendingCardsProps {
-    pendingCards: { [key:number]: PendingCardsDto }
+    pendingCardsById: { [id: number]: PendingCardsDto }
+    pendingCardsIds: number[];
 }
 
 function PendingCardsSection(props: CardSearchPendingCardsProps): JSX.Element {
     const { outlineSection, flexRow } = appStyles();
     return (<Paper className={combineStyles(outlineSection, flexRow)}>
-        {/* [Pending Cards] */}
         {
-            Object.keys(props.pendingCards).map((id: string) => {
-                let thisCard: PendingCardsDto = props.pendingCards[id];
+            props.pendingCardsIds.map((id: number) => {
+                let thisCard: PendingCardsDto = props.pendingCardsById[id];
                 return(
                 <Paper key={id}>
                     <Typography variant="h5">{ thisCard.name }</Typography>
@@ -236,11 +163,14 @@ function PendingCardsSection(props: CardSearchPendingCardsProps): JSX.Element {
 }
 
 interface SearchResultTableProps {
-    cards: InventoryOverviewDto[];
-    // searchResults: CardListItem[];
+    searchResultsById: { [key: number]: InventoryOverviewDto }
+    searchReusltIds: number[];
+
     onAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
     onRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
-    // onCardSelected: (item: CardListItem) => void;
+
+    onInfoButtonEnter: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onInfoButtonLeave: () => void;
 }
 
 function SearchResultTable(props: SearchResultTableProps): JSX.Element {
@@ -250,32 +180,48 @@ function SearchResultTable(props: SearchResultTableProps): JSX.Element {
             <TableHead>
                 <TableRow>
                     <TableCell>Name</TableCell>
-                    <TableCell>Set | num | foil</TableCell>
-                    <TableCell>Print #</TableCell>
-                    <TableCell>Total #</TableCell>
+                    <TableCell>Print</TableCell>
+                    <TableCell>Count</TableCell>
+                    <TableCell>Total</TableCell>
                     <TableCell>Trim</TableCell>
                     <TableCell>Img</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
             {
-                props.cards.map(result => (
+                props.searchReusltIds.map(overviewId => {
+                    const result = props.searchResultsById[overviewId];
+                    return (
+                  
                     <TableRow key={result.cardId}>
                         <TableCell>{result.name}</TableCell>
-                        <TableCell>Set | num | foil</TableCell>
-                        {/* <TableCell>Print #</TableCell> */}
+                        <TableCell>{`${result.setCode} - ${result.collectorNumber}`}{result.isFoil && " (FOIL)" }</TableCell>
                         <TableCell>{result.totalCount}</TableCell>
-                        <TableCell>Total #</TableCell>
-                        {/* <TableCell>[-] [# to trim] [+]</TableCell> */}
-                        <Box className={flexRow}>
-                            <Button variant="contained" size="small" onClick={() => {props.onRemovePendingCard(result.name, result.cardId, result.isFoil ?? false)} } >-</Button>
-                            [# to trim]
-                            <Button variant="contained" size="small" onClick={() => {props.onAddPendingCard(result.name, result.cardId, result.isFoil ?? false)} } >+</Button>
-                        </Box>
-                        <TableCell>[img]</TableCell>
-                      
+                        <TableCell>#</TableCell>
+                        <TableCell>
+                            <IconButton color="inherit" size="small" onClick={() => {props.onRemovePendingCard(result.name, result.cardId, result.isFoil ?? false)} }>
+                                <KeyboardArrowLeft />
+                                {/* <Remove /> */}
+                            </IconButton>
+                            [#]
+                            <IconButton color="inherit" size="small" onClick={() => {props.onAddPendingCard(result.name, result.cardId, result.isFoil ?? false)} }>
+                                <KeyboardArrowRight />
+                                {/* <Add /> */}
+                            </IconButton>
+                        </TableCell>
+                        <TableCell>
+                            <IconButton 
+                                value={result.id} 
+                                color="primary" 
+                                size="small" 
+                                onMouseEnter={props.onInfoButtonEnter}
+                                onMouseLeave={props.onInfoButtonLeave}
+                                >
+                                <InfoOutlined />
+                            </IconButton>
+                        </TableCell>
                     </TableRow>
-                ))
+                );})
             }
             </TableBody>
         </Table>
