@@ -269,6 +269,7 @@ namespace Carpentry.Controllers
         }
 
         //save payload of cards
+        [HttpPost("[action]")]
         public async Task<ActionResult> TrimCards([FromBody] List<TrimmedCardDto> cardsToTrim)
         {
             try

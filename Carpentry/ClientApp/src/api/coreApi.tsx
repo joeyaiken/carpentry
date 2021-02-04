@@ -20,9 +20,7 @@ export const coreApi = {
     //TODO - These next 3 should be POST not GET
     async addTrackedSet(setId: number): Promise<void> {
         const endpoint = `api/Core/AddTrackedSet?setId=${setId}`;
-        console.log('updating tracked sets ping 4');
         await Get(endpoint);
-        console.log('updating tracked sets ping 5');
         return;
     },
     async updateTrackedSet(setId: number): Promise<void> {

@@ -86,22 +86,53 @@ function tryTrimCards(dispatch: Dispatch, state: AppState): any {
 
     if(isSaving) return;
 
-    // dispatch(trimmingToolCardsRequested());
+    dispatch(trimCardsRequested());
     
     // let searchProps = state.inventory.trimmingTool.searchProps;
     // searchProps.minCount = +searchProps.minCount;
-    // inventoryApi.getTrimmingToolCards(state.inventory.trimmingTool.searchProps).then((result) => {
-        // dispatch(trimmingToolCardsReceived(result));
-    // });
+
+    let cardsToTrim: TrimmedCardDto[] = [];
+    //for each pending card, 
+    //  add
+
+    const { byId } = state.inventory.trimmingTool.pendingCards;
+
+    Object.keys(byId).forEach(id => {
+        const card = byId[id];
+
+        if(card.numberToTrim) {
+            cardsToTrim.push({
+                cardId: card.cardId,
+                cardName: card.cardName,
+                isFoil: false,
+                numberToTrim: card.numberToTrim,
+            });
+        }
+        
+        if(card.foilToTrim) {
+            cardsToTrim.push({
+                cardId: card.cardId,
+                cardName: card.cardName,
+                isFoil: true,
+                numberToTrim: card.foilToTrim,
+            });
+        }
+        
+    });
+    
+    inventoryApi.trimCards(cardsToTrim).then(() => {
+        dispatch(trimCardsReceived());
+        dispatch(requestTrimmingToolCards());
+    });
     
 }
 
-// export const TRIM__CARDS_REQUESTED = 'TRIMMING_TOOL.TRIM_CARDS_REQUESTED';
-// export const trimCardsRequested = (): ReduxAction => ({
-//     type: TRIMMING_TOOL_CARDS_REQUESTED,
-// });
+export const TRIM_CARDS_REQUESTED = 'TRIMMING_TOOL.TRIM_CARDS_REQUESTED';
+export const trimCardsRequested = (): ReduxAction => ({
+    type: TRIM_CARDS_REQUESTED,
+});
 
-// export const TRIM__CARDS_RECEIVED = 'TRIMMING_TOOL.TRIM_CARDS_RECEIVED';
-// export const trimCardsReceived = (): ReduxAction => ({
-//     type: TRIMMING_TOOL_CARDS_RECEIVED,
-// });
+export const TRIM_CARDS_RECEIVED = 'TRIMMING_TOOL.TRIM_CARDS_RECEIVED';
+export const trimCardsReceived = (): ReduxAction => ({
+    type: TRIM_CARDS_RECEIVED,
+});

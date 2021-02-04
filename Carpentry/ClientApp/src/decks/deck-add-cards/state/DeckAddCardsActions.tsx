@@ -155,7 +155,6 @@ function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: Ca
     //need another bool for isSearching
     const searchInProgress: boolean = state.decks.deckAddCards.inventoryDetail.isLoading;
     if(searchInProgress){
-        console.log('DAMNIT THERE IS A SEARCH IN PROGRESS');
         return;
     }
     dispatch(cardSearchInventoryRequested());

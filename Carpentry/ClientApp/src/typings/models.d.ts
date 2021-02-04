@@ -389,8 +389,34 @@ declare interface TrimmingToolRequest {
     // minBy: string;
 }
 
+declare interface TrimmingToolResult {
+    id: number;
+    isFoil: boolean | null;
+    cardId: number;
+    setCode: string;
+    name: string;
+    type: string;
+    imageUrl: string;
+    collectorNumber: number | null;
+    colorIdentity: string;
+    
+    price: number;
+    priceFoil: number | null;
+    tixPrice: number | null;
+    
+    printTotalCount: number;
+    printDeckCount: number;
+    printInventoryCount: number;
+    printSellCount: number;
+
+    allTotalCount: number;
+    allDeckCount: number;
+    allInventoryCount: number;
+    allSellCount: number;
+}
+
 declare interface TrimmedCardDto {
-    cardName: string; //For display purposes, maybe validation
+    cardName: string;
     cardId: number;
     isFoil: boolean;
     numberToTrim: number;

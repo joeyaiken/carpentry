@@ -4,18 +4,17 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mate
 import { push } from 'react-router-redux';
 import { AppState } from '../../configureStore';
 import TrimmingToolLayout from './TrimmingToolLayout';
-import { addPendingCard, cardImageAnchorSet, clearPendingCards, removePendingCard, requestTrimmingToolCards, trimmingToolFilterChanged } from './state/TrimmingToolActions'
+import { addPendingCard, cardImageAnchorSet, clearPendingCards, removePendingCard, requestTrimCards, requestTrimmingToolCards, trimmingToolFilterChanged } from './state/TrimmingToolActions'
 import CardImagePopper from '../../common/components/CardImagePopper';
 
 interface PropsFromState { 
     modalIsOpen: boolean;
     filterOptions: AppFiltersDto;
     searchFilters: TrimmingToolRequest;
-    searchResultsById: { [key: number]: InventoryOverviewDto }
+    searchResultsById: { [key: number]: TrimmingToolResult }
     searchReusltIds: number[];
     cardImageMenuAnchor: HTMLButtonElement | null;
     pendingCardsById: { [id: number]: TrimmedCard }
-    pendingCardsIds: number[];
 }
 
 type TrimmingTipsProps = PropsFromState & DispatchProp<ReduxAction>;
@@ -68,12 +67,12 @@ class TrimmingTipsContainer extends React.Component<TrimmingTipsProps>{
     }
 
     handleTrimClick() {
-        //
+        this.props.dispatch(requestTrimCards());
     }
 
     render() {
         const cardImageAnchorId = this.props.cardImageMenuAnchor?.value;
-        const selectedOverview: InventoryOverviewDto = this.props.searchResultsById[cardImageAnchorId ?? 0];
+        const selectedOverview: TrimmingToolResult = this.props.searchResultsById[cardImageAnchorId ?? 0];
         return (
             <React.Fragment>
                 <CardImagePopper 
@@ -88,8 +87,9 @@ class TrimmingTipsContainer extends React.Component<TrimmingTipsProps>{
                             searchReusltIds={this.props.searchReusltIds}
                             searchResultsById={this.props.searchResultsById}
                             searchFilters={this.props.searchFilters}
+
                             pendingCardsById={this.props.pendingCardsById}
-                            pendingCardsIds={this.props.pendingCardsIds}
+                            
                             onSearchClick={this.handleSearchButtonClick}
                             filterOptions={this.props.filterOptions}
                             onAddPendingCard={this.handleAddPendingCard}
@@ -118,8 +118,8 @@ function mapStateToProps(state: AppState): PropsFromState {
         searchResultsById: containterState.searchResults.byId,
         searchReusltIds: containterState.searchResults.allIds,
         cardImageMenuAnchor: containterState.cardImageMenuAnchor,
+
         pendingCardsById: containterState.pendingCards.byId,
-        pendingCardsIds: containterState.pendingCards.allIds,
     }
     return result;
 }

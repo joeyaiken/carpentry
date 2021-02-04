@@ -235,8 +235,6 @@ function toggleSearchViewMode(state: State, action: ReduxAction): State {
 const filterValueChanged = (state: State, action: ReduxAction): State => {
     //const { type, filter, value } = action.payload;
     const { type, filter, value } = action.payload;
-    console.log('CS filter changed');
-    console.log(action.payload);
 
     const existingFilter = state.searchFilter;
     const newState: State = {

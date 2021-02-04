@@ -4,8 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Data.Interfaces;
+using Carpentry.Data.DataModels;
 using System.Linq;
 using Carpentry.Data.QueryResults;
+using Carpentry.Data.DataContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -13,14 +16,19 @@ namespace Carpentry.Logic.Implementations
     {
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly ICardDataRepo _cardDataRepo;
+        private readonly CarpentryDataContext _cardContext;
 
         public InventoryService(
             IInventoryDataRepo inventoryRepo,
             ICardDataRepo cardDataRepo
+            //fuck it, adding DB context directly because 
+            ,CarpentryDataContext cardContext
         )
         {
             _inventoryRepo = inventoryRepo;
             _cardDataRepo = cardDataRepo;
+            //repos are making querying too challenging
+            _cardContext = cardContext;
         }
 
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
@@ -258,6 +266,9 @@ namespace Carpentry.Logic.Implementations
         }
 
 
+        //Consider moving this region to a unique service
+        #region Trimming Tool
+
         public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string searchGroup = null)
         {
             //need:
@@ -265,18 +276,121 @@ namespace Carpentry.Logic.Implementations
             //  joined with inventoryCardsByName
             //  filtered accordingly
 
+            var query = from uniqueCard in _cardContext.InventoryCardByUnique
+                        join namedCard in _cardContext.InventoryCardByName
+                        on uniqueCard.Name equals namedCard.Name
+                        where uniqueCard.SetCode == setCode
+                        && uniqueCard.TotalCount >= minCount
+                        select new { ByUnique = uniqueCard, ByName = namedCard };
 
+            if (!string.IsNullOrEmpty(searchGroup))
+            {
+                switch (searchGroup)
+                {
+                    case "Red":
+                        query = query.Where(x => x.ByUnique.ColorIdentity == "R" && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
+                        break;
+                    case "Blue":
+                        query = query.Where(x => x.ByUnique.ColorIdentity == "U" && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
+                        break;
+                    case "Green":
+                        query = query.Where(x => x.ByUnique.ColorIdentity == "G" && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
+                        break;
+                    case "White":
+                        query = query.Where(x => x.ByUnique.ColorIdentity == "W" && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
+                        break;
+                    case "Black":
+                        query = query.Where(x => x.ByUnique.ColorIdentity == "B" && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
+                        break;
+                    case "Multicolored":
+                        query = query.Where(x => x.ByUnique.ColorIdentity.Length > 1 && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
+                        break;
+                    case "Colorless":
+                        query = query.Where(x => x.ByUnique.ColorIdentity.Length == 0 && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
+                        break;
+                    case "Lands":
+                        query = query.Where(x => x.ByUnique.Type.Contains("Land") && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));// && !x.Type.Contains()
+                        break;
+                    case "RareMythic":
+                        query = query.Where(x => x.ByUnique.RarityId == 'R' || x.ByUnique.RarityId == 'M');
+                        break;
+                }
+            }
 
-            var result = await _inventoryRepo.TrimmingToolQuery(setCode, minCount, searchGroup);
+            var queryResult = await query.Select(c => new TrimmingToolResult
+            {
+                Id = c.ByUnique.Id,
+                CardId = c.ByUnique.CardId,
+                SetCode = c.ByUnique.SetCode,
+                Name = c.ByUnique.Name,
+                ImageUrl = c.ByUnique.ImageUrl,
+                CollectorNumber = c.ByUnique.CollectorNumber,
 
-            return result;
+                Type = c.ByUnique.Type,
+                ColorIdentity = c.ByUnique.ColorIdentity,
+
+                IsFoil = c.ByUnique.IsFoil,
+
+                Price = c.ByUnique.Price,
+                PriceFoil = c.ByUnique.PriceFoil,
+                TixPrice = c.ByUnique.TixPrice,
+
+                PrintTotalCount = c.ByUnique.TotalCount,
+                PrintDeckCount = c.ByUnique.DeckCount,
+                PrintInventoryCount = c.ByUnique.InventoryCount,
+                PrintSellCount = c.ByUnique.SellCount,
+
+                AllTotalCount = c.ByName.TotalCount,
+                AllDeckCount = c.ByName.DeckCount,
+                AllInventoryCount = c.ByName.InventoryCount,
+                AllSellCount = c.ByName.SellCount,
+
+            }).ToListAsync();
+
+            return queryResult;
         }
-
 
         public async Task TrimCards(List<TrimmedCardDto> cardsToTrim)
         {
-            throw new NotImplementedException();
+            //for each card, need to get all matching inventory cards
+
+            //get all ids
+            var allIds = cardsToTrim.Select(c => c.CardId).ToArray();
+
+            //get a dictionary of all inventory cards with a card id contained in a provided list
+            var relevantCardsById = (await _cardContext.InventoryCards
+                .Where(ic => ic.InventoryCardStatusId == 1 && ic.DeckCards.Count == 0 && allIds.Contains(ic.CardId))
+
+                //includes
+                .ToListAsync())
+                .GroupBy(ic => ic.CardId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach(var card in cardsToTrim)
+            {
+                //  Get matching card by id/foil, ensure enough inventory cards exist to meet the request, update the cards along the way
+
+                var relevantInventoryCards = relevantCardsById[card.CardId].Where(c => c.IsFoil == card.IsFoil).ToArray();
+
+                if(relevantInventoryCards.Length < card.NumberToTrim)
+                {
+                    //Should never attempt to trim more cards than exist.  Attempting to do so is a red flag
+                    throw new Exception($"Not enough unused cards to trim. Card Name: {card.CardName}, Number to trim: {card.NumberToTrim}, Available: {relevantInventoryCards.Length}");
+                }
+
+                for(int i = 0; i < card.NumberToTrim; i++)
+                {
+                    var cardToUpdate = relevantInventoryCards[i];
+                    cardToUpdate.InventoryCardStatusId = 3;
+                    _cardContext.InventoryCards.Update(cardToUpdate);
+                }
+            }
+
+            //disabling this for now until the UI appears to be working again
+            int breakpoint = 1;
+            //await _cardContext.SaveChangesAsync();
         }
 
+        #endregion
     }
 }

@@ -48,7 +48,6 @@ interface LayoutProps {
 // );
 export default function AppLayout(props: LayoutProps): JSX.Element {
     const { stretch, flexCol, flexSection } = appStyles();
-//   console.log('is add selected? ' + props.isAddSelected)
   //flex-col flex-section 
   return(
   <div className={combineStyles(stretch, flexCol)}>

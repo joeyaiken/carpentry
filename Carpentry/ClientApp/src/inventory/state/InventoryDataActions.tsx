@@ -17,14 +17,10 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
     if(dataQueryInProgress){
         return;
     }
-    console.log('actions - getInventoryOverviews - calling inventoryItemsRequested');
-
+    
     //dispatch(inventoryItemsRequested());
     dispatch(inventoryOverviewsRequested());
     
-    console.log('actions - getInventoryOverviews - calling api_getAllInventoryItems');
-
-
     //TODO -- This whole chunk shouyld come from the inventory overview app reducer
     //  It should also probably be passed as a param and not purely read from app state
 
@@ -45,8 +41,7 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
         type: existingFilters.type,
         rarity: existingFilters.rarity,
     }
-    console.log('Getting overviews with params');
-    console.log(param);
+
     inventoryApi.searchCards(param).then((result) => {
         dispatch(inventoryOverviewsReceived(result));
     });

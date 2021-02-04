@@ -77,6 +77,12 @@ export const inventoryApi = {
         return result;
     },
 
+    async trimCards(cardsToTrim: TrimmedCardDto[]): Promise<void> {
+        const endpoint = `api/Inventory/TrimCards`;
+        await Post(endpoint, cardsToTrim);
+        return;  
+    },
+
     async validateCarpentryImport(dto: CardImportDto): Promise<ValidatedCarpentryImportDto> {
         const endpoint = `api/Inventory/ValidateCarpentryImport`;
         const result = await Post(endpoint, dto);

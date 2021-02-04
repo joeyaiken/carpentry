@@ -29,6 +29,5 @@ namespace Carpentry.Data.Interfaces
         Task<int> GetTotalTrimCount(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null);
         Task<Dictionary<string, List<InventoryCardData>>> GetUnusedInventoryCards(IEnumerable<string> cardNames);
 
-        Task<List<TrimmingToolResult>> TrimmingToolQuery(string setCode, int minCount, string searchGroup = null);
     }
 }

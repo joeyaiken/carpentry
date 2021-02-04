@@ -6,6 +6,8 @@ import {
     ADD_PENDING_CARD,
     REMOVE_PENDING_CARD,
     CLEAR_PENDING_CARDS,
+    TRIM_CARDS_REQUESTED,
+    TRIM_CARDS_RECEIVED,
 } from './TrimmingToolActions';
 
 export interface State {
@@ -13,14 +15,14 @@ export interface State {
     
     searchResults: {
         isLoading: boolean;
-        byId: { [id: number]: InventoryOverviewDto };
+        byId: { [id: number]: TrimmingToolResult };
         allIds: number[];
     };
 
     pendingCards: {
         isSaving: boolean;
         byId: { [cardId: number]: TrimmedCard };
-        allIds: number[];
+        // allIds: number[];
     }
 
     cardImageMenuAnchor: HTMLButtonElement | null;
@@ -37,13 +39,17 @@ export const trimmingToolReducer = (state = initialState, action: ReduxAction): 
         case ADD_PENDING_CARD: return addPendingCard(state, action);
         case REMOVE_PENDING_CARD: return removePendingCard(state, action);
 
-        case CLEAR_PENDING_CARDS: return {...state, pendingCards: { byId: {}, allIds: [], isSaving: false }}
+        case TRIM_CARDS_REQUESTED: return trimRequested(state, action);
+        case TRIM_CARDS_RECEIVED: return trimReceived(state, action);
+
+        case CLEAR_PENDING_CARDS: return {...state, pendingCards: { byId: {}, isSaving: false }}
 
         // case SAVE_REQUESTED: return { ...state, pendingCardsSaving: true };
         // case SAVE_COMPLETED: return { ...state, pendingCardsSaving: false, pendingCards: {} };
         default: return(state);
     }
 }
+
 
 const initialState: State = {
     searchProps: {
@@ -59,13 +65,11 @@ const initialState: State = {
         allIds: [],
     },
 
-
-    
     pendingCards: {
         isSaving: false,
         //If this is a dictionary built on CardId, this will have to store both foil & non-foil counts
         byId: {},
-        allIds: [],
+        // allIds: [], //Why isn't this safe?!?!?!  Something's messing with it
     },
     
     cardImageMenuAnchor: null,
@@ -75,10 +79,16 @@ function searchRequested(state: State, action: ReduxAction): State {
     const newState: State = {
         ...state,
         searchResults: {
+            ...state.searchResults,
             ...initialState.searchResults,
+            // byId: {},
+            // allIds: [],
             isLoading: true,
         }
     }
+
+    // console.log('search requested initial state IDs');
+    // console.log(initialState.pendingCards.allIds)
     return newState;
 }
 
@@ -98,7 +108,44 @@ function searchReceived(state: State, action: ReduxAction): State {
     return newState;
 }
 
-const addPendingCard = (state = initialState, action: ReduxAction): State => {
+function trimRequested(state: State, action: ReduxAction): State {
+    const newState: State = {
+        ...state,
+        pendingCards: {
+            ...state.pendingCards,
+            isSaving: true,
+        }
+    }
+    return newState;
+}
+
+function trimReceived(state: State, action: ReduxAction): State {
+ 
+    // console.log(initialState.pendingCards.allIds);
+    // let resultsById = {};
+    // searchResultPayload.forEach(card => resultsById[card.id] = card);
+    // console.log('trim received new state 0');
+    const newState: State = {
+        ...state,
+        pendingCards: {
+            ...initialState.pendingCards,
+            // allIds: initialState.pendingCards.allIds,
+            // ...state.pendingCards,
+            // isSaving: false,
+            // byId: {},
+            // allIds: [],
+        }
+    }
+    // console.log('trim received new state');
+    // console.log(newState);
+
+    // console.log(initialState.pendingCards.allIds);
+    return newState;
+}
+
+const addPendingCard = (state: State, action: ReduxAction): State => {
+    
+
     const {
         name,
         cardId,
@@ -106,8 +153,7 @@ const addPendingCard = (state = initialState, action: ReduxAction): State => {
     } = action.payload;
 
     let cardToAdd = state.pendingCards.byId[cardId];
-    let cardIds = state.pendingCards.allIds;
-    
+
     if(!cardToAdd){
         cardToAdd = {
             cardName: name,
@@ -115,7 +161,6 @@ const addPendingCard = (state = initialState, action: ReduxAction): State => {
             numberToTrim: 0,
             foilToTrim: 0,
         };
-        cardIds.push(cardId);
     }
 
     isFoil ? cardToAdd.foilToTrim++ : cardToAdd.numberToTrim++;
@@ -124,18 +169,16 @@ const addPendingCard = (state = initialState, action: ReduxAction): State => {
         ...state,
         pendingCards: {
             ...state.pendingCards,
-            allIds: cardIds,
             byId: {
                 ...state.pendingCards.byId,
                 [cardId]: cardToAdd,
             }
         }
     }
-    
     return newState;
 }
 
-const removePendingCard = (state = initialState, action: ReduxAction): State => {
+const removePendingCard = (state: State, action: ReduxAction): State => {
     const {
         name,
         cardId,
@@ -159,14 +202,9 @@ const removePendingCard = (state = initialState, action: ReduxAction): State => 
             [cardId]: objToRemoveFrom
         }
 
-        const pendingCardIds = state.pendingCards.allIds;
-
         //if this pending cards object has 0 items, it should be deleted from the dictionary
         if(objToRemoveFrom.numberToTrim === 0 && objToRemoveFrom.foilToTrim === 0){
             delete pendingCardsAfterRemoval[cardId];
-            
-            const idIndex = pendingCardIds.findIndex(x => x === cardId);
-            pendingCardIds.splice(idIndex,1);
         }
 
         const newState: State = {
