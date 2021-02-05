@@ -387,6 +387,7 @@ declare interface TrimmingToolRequest {
     searchGroup: string;
     minCount: number;
     // minBy: string;
+    filterBy: string;
 }
 
 declare interface TrimmingToolResult {

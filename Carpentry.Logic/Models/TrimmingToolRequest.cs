@@ -13,5 +13,6 @@ namespace Carpentry.Logic.Models
         public int MinCount { get; set; }
 
         //public string MinBy { get; set; }
+        public string FilterBy { get; set; }
     }
 }

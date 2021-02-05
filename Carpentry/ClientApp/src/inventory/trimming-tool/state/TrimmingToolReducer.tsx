@@ -55,8 +55,9 @@ const initialState: State = {
     searchProps: {
         setCode: 'znr',
         searchGroup: 'Red',
-        minCount: 11,
+        minCount: 9,
         // minBy: '',
+        filterBy: 'owned',
     },
 
     searchResults: {

@@ -111,20 +111,23 @@ function FilterBar(props: FilterBarProps): JSX.Element{
                     handleFilterChange={props.onFilterChange} 
                     />                
 
-                {/* MinBy */}
+                {/* Filter By */}
                 <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
-                        name="minBy"
+                        name="filterBy"
                         className={stretch}
                         select
                         SelectProps={{
                             displayEmpty: true
                         }}
                         label="By"
-                        //value={props.searchFilters.groupBy}
+                        value={props.searchFilters.filterBy}
                         onChange={props.onFilterChange}
                         margin="normal">
-                            <MenuItem key="name" value="name">Name</MenuItem>
+                            <MenuItem key="inventory" value="inventory">Inventory</MenuItem>
+                            {/* owned == inventory + decks, not sell-list */}
+                            <MenuItem key="owned" value="owned">Owned</MenuItem>
+                            {/* inventory by name + decks by name */}
                             <MenuItem key="total" value="total">Total</MenuItem>
                     </TextField>
                 </Box>

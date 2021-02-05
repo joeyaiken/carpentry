@@ -269,7 +269,7 @@ namespace Carpentry.Logic.Implementations
         //Consider moving this region to a unique service
         #region Trimming Tool
 
-        public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string searchGroup = null)
+        public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null)
         {
             //need:
             //  inventory cards by print
@@ -280,7 +280,8 @@ namespace Carpentry.Logic.Implementations
                         join namedCard in _cardContext.InventoryCardByName
                         on uniqueCard.Name equals namedCard.Name
                         where uniqueCard.SetCode == setCode
-                        && uniqueCard.TotalCount >= minCount
+                        //&& uniqueCard.TotalCount >= minCount
+                        //&& (uniqueCard.InventoryCount + uniqueCard.DeckCount) >= minCount
                         select new { ByUnique = uniqueCard, ByName = namedCard };
 
             if (!string.IsNullOrEmpty(searchGroup))
@@ -315,6 +316,21 @@ namespace Carpentry.Logic.Implementations
                         query = query.Where(x => x.ByUnique.RarityId == 'R' || x.ByUnique.RarityId == 'M');
                         break;
                 }
+            }
+
+            switch (filterBy)
+            {
+                case "inventory":
+                    query = query.Where(c => c.ByUnique.InventoryCount >= minCount);
+                    break;
+
+                case "owned":
+                    query = query.Where(c => (c.ByUnique.InventoryCount + c.ByUnique.DeckCount) >= minCount);
+                    break;
+
+                case "total":
+                    query = query.Where(c => (c.ByName.InventoryCount + c.ByName.DeckCount) >= minCount);
+                    break;
             }
 
             var queryResult = await query.Select(c => new TrimmingToolResult
@@ -387,8 +403,8 @@ namespace Carpentry.Logic.Implementations
             }
 
             //disabling this for now until the UI appears to be working again
-            int breakpoint = 1;
-            //await _cardContext.SaveChangesAsync();
+            //int breakpoint = 1;
+            await _cardContext.SaveChangesAsync();
         }
 
         #endregion

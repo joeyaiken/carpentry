@@ -237,7 +237,7 @@ namespace Carpentry.Controllers
 
                 //var result = new List<InventoryOverviewDto>();
 
-                var result = await _inventoryService.GetTrimmingToolCards(request.SetCode, request.MinCount, request.SearchGroup);
+                var result = await _inventoryService.GetTrimmingToolCards(request.SetCode, request.MinCount, request.FilterBy, request.SearchGroup);
                 //InventoryQueryParameter param = new InventoryQueryParameter()
                 //{
                 //    Colors = new List<string>(),
