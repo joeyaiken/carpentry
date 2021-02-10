@@ -11,6 +11,9 @@ using System.Linq;
 using Carpentry.Data.QueryResults;
 using Carpentry.Data.Implementations;
 using System.Net;
+using Carpentry.Data.DataContext;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 //using Carpentry.Data.DataContext;
 //using Carpentry.Data.DataModels;
 
@@ -41,6 +44,8 @@ namespace Carpentry.Logic.Implementations
         //Should have no access to data context classes, only repo classes
         private readonly ILogger<DeckService> _logger;
 
+        private readonly CarpentryDataContext _cardContext;
+
         private readonly DeckDataRepo _deckRepo;
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly IInventoryService _inventoryService;
@@ -63,6 +68,10 @@ namespace Carpentry.Logic.Implementations
             ILogger<DeckService> logger,
             ICoreDataRepo coreDataRepo,
             ICardDataRepo cardDataRepo
+
+            //fuck it, adding DB context directly
+            , CarpentryDataContext cardContext
+
             //ICardImportService cardImportService
             )
         {
@@ -73,6 +82,7 @@ namespace Carpentry.Logic.Implementations
             _coreDataRepo = coreDataRepo;
             _cardDataRepo = cardDataRepo;
             //_cardImportService = cardImportService;
+            _cardContext = cardContext;
         }
 
         #region private methods
@@ -114,9 +124,32 @@ namespace Carpentry.Logic.Implementations
 
         Why am I even re-querying anything? I should be able to grab anything I need 
         */
-        private DeckStatsDto GetDeckStats(DeckDetailDto detail)
+        private async Task<DeckStatsDto> GetDeckStats(int deckId)
         {
-            DeckStatsDto result = new DeckStatsDto();
+            //DeckStatsDto result = new DeckStatsDto();
+
+            var deckStats = new DeckStatsDto();
+
+
+
+            //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
+
+            var colorChars = await _deckRepo.GetDeckColorIdentity(deckId);
+
+            deckStats.ColorIdentity = colorChars.Select(x => x.ToString()).ToList();
+
+            //string validationResults = await ValidateDeck(deckList[i].Id);
+            string validationResults = await ValidateDeck(deckId);
+
+            if (string.IsNullOrEmpty(validationResults))
+            {
+                //deckList[i].IsValid = true;
+                deckStats.IsValid = true;
+            }
+            else
+            {
+                deckStats.ValidationIssues = validationResults;
+            }
 
             //get deck cards
 
@@ -130,7 +163,7 @@ namespace Carpentry.Logic.Implementations
 
             //Price (should this include sideboard?)
 
-            return result;
+            return deckStats;
         }
 
         private async Task<DeckStatsDto> GetDeckStats_legacy(int deckId)
@@ -732,9 +765,57 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<List<DeckOverviewDto>> GetDeckOverviews()
         {
-            //List<DeckPropertiesDto> deckList = _deckRepo.GetAllDecks().Result.Select(x => MapDeckDataToProperties(x)).ToList();
+            var deckList = await _cardContext.Decks
+                .Include(x => x.Format)
+                .ToListAsync();
 
-            List<DeckOverviewDto> deckList = (await _deckRepo.GetAllDecks()).Select(dbDeck => new DeckOverviewDto()
+            var parsedStats = new Dictionary<int, DeckStatsDto>();
+
+            for (int i = 0; i < deckList.Count(); i++)
+            {
+                var deckProps = deckList[i];
+
+                var statsShouldBeUpdated = true;
+
+                if(deckProps.Stats != null)
+                {
+                    try
+                    {
+                        var stats = JsonConvert.DeserializeObject<DeckStatsDto>(deckProps.Stats);
+                        parsedStats[deckProps.DeckId] = stats;
+                        statsShouldBeUpdated = false;
+                    }
+                    catch
+                    {
+                        deckProps.Stats = "";
+                    }
+                }
+
+                //deck stats should be a separate class that can be saved as a string with the Deck Props
+
+                if (statsShouldBeUpdated)
+                {
+                    var deckStats = await GetDeckStats(deckProps.DeckId);
+
+                    parsedStats[deckProps.DeckId] = deckStats;
+
+                    var deckStatsString = JsonConvert.SerializeObject(deckStats);
+
+                    deckProps.Stats = deckStatsString;
+
+                    _cardContext.Decks.Update(deckProps);
+                }
+
+                if (_cardContext.ChangeTracker.HasChanges()) 
+                    await _cardContext.SaveChangesAsync();
+
+                //deckList[i].Notes = await ValidateDeck(deckList[i].Id);
+            }
+
+            //save changes
+
+            //map to object
+            List<DeckOverviewDto> result = deckList.Select(dbDeck => new DeckOverviewDto()
             {
                 Id = dbDeck.DeckId,
                 //BasicB = dbDeck.BasicB,
@@ -745,41 +826,18 @@ namespace Carpentry.Logic.Implementations
                 Format = dbDeck.Format.Name,
                 Name = dbDeck.Name,
 
+                Colors = parsedStats[dbDeck.DeckId].ColorIdentity,
+                ValidationIssues = parsedStats[dbDeck.DeckId].ValidationIssues,
+                IsValid = string.IsNullOrEmpty(parsedStats[dbDeck.DeckId].ValidationIssues),
+
+                //stats = ParseDeckStats(dbDeck.Stats);
+
                 //don't want to populate notes here right?
 
             })
             .OrderBy(d => d.Name)
             .ToList();
-
-            for (int i = 0; i < deckList.Count(); i++)
-            {
-                var deckToUdpate = deckList[i];
-
-                //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
-
-                var colorChars = await _deckRepo.GetDeckColorIdentity(deckToUdpate.Id);
-
-                deckToUdpate.Colors = colorChars.Select(x => x.ToString()).ToList();
-
-                //string validationResults = await ValidateDeck(deckList[i].Id);
-                string validationResults = await ValidateDeck(deckToUdpate.Id);
-
-                if (string.IsNullOrEmpty(validationResults))
-                {
-                    //deckList[i].IsValid = true;
-                    deckToUdpate.IsValid = true;
-                }
-                else
-                {
-                    deckToUdpate.ValidationIssues = validationResults;
-                }
-
-
-
-                //deckList[i].Notes = await ValidateDeck(deckList[i].Id);
-            }
-
-            return deckList;
+            return result;
         }
 
         public async Task<DeckDetailDto> GetDeckDetail(int deckId)

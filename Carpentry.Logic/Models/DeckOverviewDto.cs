@@ -7,22 +7,24 @@ namespace Carpentry.Logic.Models
 {
     public class DeckOverviewDto
     {
-        [JsonProperty("id")]
+        //[JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name")]
+        //[JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("format")]
+        //[JsonProperty("format")]
         public string Format { get; set; }
 
-        [JsonProperty("colors")]
+        //[JsonProperty("colors")]
         public List<string> Colors { get; set; }
 
-        [JsonProperty("isValid")]
+        //[JsonProperty("isValid")]
         public bool IsValid { get; set; }
 
-        [JsonProperty("validationIssues")]
+        //[JsonProperty("validationIssues")]
         public string ValidationIssues { get; set; }
+
+        //public DeckStatsDto Stats { get; set; }
     }
 }

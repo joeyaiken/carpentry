@@ -125,6 +125,10 @@ namespace Carpentry.Data.DataContext
                 .WithMany(x => x.Tags)
                 .HasForeignKey(x => x.DeckId);
 
+            modelBuilder.Entity<DeckCardData>()
+                .HasIndex(dc => dc.InventoryCardId)
+                .IsUnique();
+
             #endregion
 
             #region Views

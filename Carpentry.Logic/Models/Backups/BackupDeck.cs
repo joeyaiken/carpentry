@@ -31,5 +31,12 @@ namespace Carpentry.Logic.Models.Backups
 
         [JsonProperty("c")]
         public List<BackupDeckCard> Cards { get; set; }
+
+        //technically tags are a property of the deck props, not linked to a deck card
+        //so what obj should I use....
+        //maybe a dictionary where key == card name
+        [JsonProperty("t")]
+        //public List<string> Tags { get; set; }
+        public Dictionary<string, List<string>> Tags { get; set; }
     }
 }

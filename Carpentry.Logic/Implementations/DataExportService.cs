@@ -200,19 +200,15 @@ namespace Carpentry.Logic.Implementations
 
         private async Task<JArray> GetDeckBackups()
         {
-            //Need to get all deck props, and all deck cards
-            var deckExports = await _cardContext.Decks.Select(x => new BackupDeck
+
+            var deckExports = (await _cardContext.Decks.Select(d => new
             {
-                //ExportId = x.DeckId,
-                Name = x.Name,
-                Format = x.Format.Name,
-                Notes = x.Notes,
-                BasicW = x.BasicW,
-                BasicU = x.BasicU,
-                BasicB = x.BasicB,
-                BasicR = x.BasicR,
-                BasicG = x.BasicG,
-                Cards = x.Cards.Select(dc => new BackupDeckCard
+                Props = d,
+                Format = d.Format.Name,
+                Tags = d.Tags.ToList(),
+                //Tags = d.Tags.GroupBy(t => t.CardName).ToDictionary(g => g.Key, g => g.Select(t => t.Description).ToList()),
+                //Tags = d.Tags.GroupBy(t => t.CardName).ToDictionary(g => g.Key, g => g.Count()),
+                Cards = d.Cards.Select(dc => new BackupDeckCard
                 {
                     Name = dc.CardName,
                     Category = dc.CategoryId,
@@ -225,8 +221,21 @@ namespace Carpentry.Logic.Implementations
                     },
                 }).ToList(),
 
-
-            }).OrderBy(x => x.Name).ToListAsync();
+            }).ToListAsync())
+            .Select(d => new BackupDeck
+            {
+                //ExportId = x.DeckId,
+                Name = d.Props.Name,
+                Format = d.Format,
+                Notes = d.Props.Notes,
+                BasicW = d.Props.BasicW,
+                BasicU = d.Props.BasicU,
+                BasicB = d.Props.BasicB,
+                BasicR = d.Props.BasicR,
+                BasicG = d.Props.BasicG,
+                Cards = d.Cards,
+                Tags = d.Tags.GroupBy(t => t.CardName).ToDictionary(g => g.Key, g => g.Select(t => t.Description).ToList()),
+            }).OrderBy(x => x.Name).ToList();
 
             var result = JArray.FromObject(deckExports);
 
