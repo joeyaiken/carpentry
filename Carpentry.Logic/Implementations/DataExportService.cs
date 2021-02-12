@@ -206,8 +206,6 @@ namespace Carpentry.Logic.Implementations
                 Props = d,
                 Format = d.Format.Name,
                 Tags = d.Tags.ToList(),
-                //Tags = d.Tags.GroupBy(t => t.CardName).ToDictionary(g => g.Key, g => g.Select(t => t.Description).ToList()),
-                //Tags = d.Tags.GroupBy(t => t.CardName).ToDictionary(g => g.Key, g => g.Count()),
                 Cards = d.Cards.Select(dc => new BackupDeckCard
                 {
                     Name = dc.CardName,
