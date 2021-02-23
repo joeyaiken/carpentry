@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "QuickBackup": {
+      "commandName": "Project",
+      "commandLineArgs": "QuickBackup"
+    },
+    "QuickImport": {
+      "commandName": "Project",
+      "commandLineArgs": "QuickImport"
+    },
+    "QuickRestore": {
+      "commandName": "Project",
+      "commandLineArgs": "QuickRestore"
+    },
+    "QuickUpdate": {
+      "commandName": "Project",
+      "commandLineArgs": "QuickUpdate"
+    }
+  }
+}

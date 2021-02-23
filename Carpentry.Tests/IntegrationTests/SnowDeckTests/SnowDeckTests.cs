@@ -69,7 +69,7 @@ namespace Carpentry.Tests.IntegrationTests.SnowDeckTests
             //Create the bant snow deck
 
             //Import chulane deck, adding new deck cards
-            var chulaneDeckId = 2;// await ImportDeckChulane(); // 2
+            //var chulaneDeckId = 2;// await ImportDeckChulane(); // 2
 
             //Clone the chulane deck
             var clonedDeckId = 3; // await ApiCloneDeck(chulaneDeckId);
@@ -92,20 +92,20 @@ namespace Carpentry.Tests.IntegrationTests.SnowDeckTests
             //start asserting things
         }
 
-        private async Task ResetDatabase()
-        {
+        //private async Task ResetDatabase()
+        //{
 
-            //ensure DB exists
-            //await ApiValidateDatabase();
+        //    //ensure DB exists
+        //    //await ApiValidateDatabase();
 
-            //Ensure not production
-            //  (not sure how to accomplish this yet, could just ensure backed up instead)
+        //    //Ensure not production
+        //    //  (not sure how to accomplish this yet, could just ensure backed up instead)
 
-            //Clear DB
-            //    Should export current DB to a local folder everytime an export happens
+        //    //Clear DB
+        //    //    Should export current DB to a local folder everytime an export happens
 
-            throw new NotImplementedException();
-        }
+        //    throw new NotImplementedException();
+        //}
 
         private async Task TrackSnowSets()
         {
