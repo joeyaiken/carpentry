@@ -1,10 +1,16 @@
+using Carpentry.Data.DataContext;
+using Carpentry.Data.Implementations;
+using Carpentry.Data.Interfaces;
+using Carpentry.Logic.Implementations;
+using Carpentry.Logic.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace Carpentry.Angular
 {
@@ -20,6 +26,35 @@ namespace Carpentry.Angular
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //DBs
+
+            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")));
+
+            //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
+
+            services.AddSingleton<IDataBackupConfig, CarpentryAppConfig>();
+
+            //DB repos
+            services.AddScoped<ICardDataRepo, CardDataRepo>();
+            services.AddScoped<DeckDataRepo>();
+            services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
+            services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
+            services.AddScoped<ICoreDataRepo, CoreDataRepo>();
+
+            //Logic services
+            services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<IDeckService, DeckService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+
+            services.AddScoped<IDataImportService, DataImportService>();
+            services.AddScoped<IDataUpdateService, DataUpdateService>();
+            services.AddScoped<IDataExportService, DataExportService>();
+            services.AddScoped<IFilterService, FilterService>();
+
+            services.AddScoped<IScryfallService, ScryfallService>();
+            services.AddHttpClient<IScryfallService, ScryfallService>();
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

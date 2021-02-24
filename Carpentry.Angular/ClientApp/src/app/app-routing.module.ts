@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CounterComponent } from './counter/counter.component';
+import { DeckListComponent } from './decks/deck-list/deck-list.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { HomeComponent } from './home/home.component';
 import { LandingComponent } from './landing/landing.component';
-//imports
-
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   { 
@@ -14,6 +14,10 @@ const routes: Routes = [
     component: HomeComponent, 
     children: [
       { path: '', component: LandingComponent },
+      { path: 'decks', component: DeckListComponent },
+      
+      { path: 'settings', component: SettingsComponent },
+      
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ]

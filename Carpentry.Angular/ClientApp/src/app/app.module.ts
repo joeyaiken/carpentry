@@ -12,6 +12,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LandingComponent } from './landing/landing.component';
 import { MaterialModule } from './material.module';
+import { DeckListComponent } from './decks/deck-list/deck-list.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,10 @@ import { MaterialModule } from './material.module';
     CounterComponent,
     FetchDataComponent,
     LandingComponent,
+    
+    DeckListComponent,
+
+    SettingsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
