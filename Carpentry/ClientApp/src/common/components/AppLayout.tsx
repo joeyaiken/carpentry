@@ -6,6 +6,7 @@ import {
   Toolbar,
   IconButton,
   Container,
+  Button,
 } from '@material-ui/core';
 
 import { 
@@ -63,19 +64,13 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
                         props.routes.map(route => <Route key={route.path} path={route.path}>{route.name}</Route>)
                 }</Switch>} */}
             </Typography>
-            {/* <Container> */}
-                <NavLink
-                    to="/decks">
-                    Decks
-                </NavLink>
-                <NavLink
-                    to="/inventory">
-                    Inventory
-                </NavLink>
 
-            {/* </Container> */}
-            
+            <Link to="/decks" component={Button}>Decks</Link>
         
+            <Link to="/inventory" component={Button}>Inventory</Link>
+
+            <Link to="/settings/sets" component={Button}>Settings</Link>
+
             {/* <Route
                 path='/'
                 render={

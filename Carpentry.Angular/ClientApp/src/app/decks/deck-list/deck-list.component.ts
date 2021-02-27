@@ -17,29 +17,14 @@ export class DeckListComponent implements OnInit {
         private decksService: DecksService
     ) { }
 
-    
-
     ngOnInit(): void { 
         this.getDeckOverviews();
     }
 
-
-
-    getDeckOverviews(): Promise<DeckOverviewDto[]> {
-        // return this.decksService.getDeckOverviews()
-        //     .then(result => {
-        //         return result });
-        console.log('component get overviews');
-
-        //TODO - replace promise with observable
-        return this.decksService.getDeckOverviews().then(result => {
-            console.log('assigning overviews');
-            this.deckOverviews = result;
-            console.log(result);
-
-            return result;
-        });
+    getDeckOverviews(): void {
+        this.decksService.getDeckOverviews().subscribe(result => {
+            this,this.deckOverviews = result;
+        }, err => console.log(`getDeckOverviews error: ${err}`));
     }
 
-    //process deck overviews ?? 
 }

@@ -1,4 +1,5 @@
-﻿using Carpentry.Data.QueryResults;
+﻿using Carpentry.Data.DataModels.QueryResults;
+using Carpentry.Data.QueryResults;
 using Carpentry.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,5 +22,7 @@ namespace Carpentry.Logic.Interfaces
 
         Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null);
         Task TrimCards(List<TrimmedCardDto> cardsToTrim);
+
+        Task<IEnumerable<InventoryTotalsByStatusResult>> GetCollectionTotals();
     }
 }

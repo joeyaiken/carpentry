@@ -48,6 +48,7 @@ namespace Carpentry.Data.DataContext
         public DbSet<DataModels.QueryResults.SetTotalsResult> SetTotals { get; set; }
         public DbSet<DataModels.QueryResults.TrimmingTipsResult> TrimmingTips { get; set; }
         public DbSet<DataModels.QueryResults.TrimmingTipsCountResult> TrimmingTipsTotalCount { get; set; }
+        public DbSet<DataModels.QueryResults.InventoryTotalsByStatusResult> InventoryTotalsByStatus { get; set; }
 
         #endregion
 
@@ -159,6 +160,12 @@ namespace Carpentry.Data.DataContext
             {
                 eb.HasNoKey();
                 eb.ToView("vwSetTotals");
+            });
+
+            modelBuilder.Entity<DataModels.QueryResults.InventoryTotalsByStatusResult>(eb =>
+            {
+                eb.HasNoKey();
+                eb.ToView("vwInventoryTotalsByStatus");
             });
 
             #endregion

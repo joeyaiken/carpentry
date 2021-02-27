@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { pathToFileURL } from 'url';
 
 import { CounterComponent } from './counter/counter.component';
 import { DeckListComponent } from './decks/deck-list/deck-list.component';
@@ -14,12 +15,29 @@ const routes: Routes = [
     component: HomeComponent, 
     children: [
       { path: '', component: LandingComponent },
-      { path: 'decks', component: DeckListComponent },
+      { 
+        path: 'decks', 
+        children: [
+          // { path: '/decks/addCards', },
+          // { path: '/decks', },
+          { path: '', component: DeckListComponent },
+        ]
+      },
+      {
+        path: 'inventory',
+        children: [
+          // { path: '', component: InventoryOverviewsComponent }
+          // <Route path="/inventory/addCards" />
+          // <Route path="/inventory/trimming-tool" component={TrimmingToolContainer}/>
+          // <Route path="/inventory/:cardId" component={InventoryDetailContainer} />
+          // <Route path="/inventory"/>
+        ]
+      },
       
       { path: 'settings', component: SettingsComponent },
       
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      // { path: 'counter', component: CounterComponent },
+      // { path: 'fetch-data', component: FetchDataComponent },
     ]
   },
   

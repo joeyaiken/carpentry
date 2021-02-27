@@ -12,9 +12,9 @@ import { CardImportDto, CardTagDetailDto, CardTagDto, DeckCardDto, DeckDetailDto
 export class DecksService extends HttpService 
 {
     constructor(
-        // http: HttpClient
+        http: HttpClient
         ) {
-        super();
+        super(http);
     }
 
     //TODO - replace all promises with observables
@@ -41,19 +41,19 @@ export class DecksService extends HttpService
     // async deleteDeck(deckId: number): Promise<void> {
     //     const endpoint = `api/Decks/DeleteDeck`;
     //     const url = `${endpoint}?deckId=${deckId}`;
-    //     await this.Get(url);
+    //     await this.GetAsync(url);
     //     return;
     // };
 
     // async cloneDeck(deckId: number): Promise<void> {
     //     const url = `api/Decks/CloneDeck?deckId=${deckId}`;
-    //     await this.Get(url);
+    //     await this.GetAsync(url);
     //     return;
     // };
     
     // async dissassembleDeck(deckId: number): Promise<void> {
     //     const url = `api/Decks/DissassembleDeck?deckId=${deckId}`;
-    //     await this.Get(url);
+    //     await this.GetAsync(url);
     //     return;
     // };
 
@@ -67,23 +67,22 @@ export class DecksService extends HttpService
     //     const result = await this.Post(endpoint, dto);
     //     return result;
     // };
-    // async removeDeckCard(deckCardId: number): Promise<void> {
+    // async removeDeckCardAsync(deckCardId: number): Promise<void> {
     //     const endpoint = `api/Decks/RemoveDeckCard`;
     //     const url = `${endpoint}?id=${deckCardId}`;
-    //     await this.Get(url);
+    //     await this.GetAsync(url);
     //     return;
     // };
 
-    async getDeckOverviews(): Promise<DeckOverviewDto[]> {
-        console.log('get deck overviews')
+    getDeckOverviews(): Observable<DeckOverviewDto[]> {
         const endpoint = `api/Decks/GetDeckOverviews`;
-        const result = await this.Get(endpoint);
-        return result;
-    };
+        return this.Get(endpoint);
+    }
+
     // async getDeckDetail(deckId: number): Promise<DeckDetailDto> {
     //     const endpoint = `api/Decks/GetDeckDetail`;
     //     const url = `${endpoint}?deckId=${deckId}`;
-    //     const result = await this.Get(url);
+    //     const result = await this.GetAsync(url);
     //     return result;
     // };
 
@@ -101,14 +100,14 @@ export class DecksService extends HttpService
     //     async exportDeckList(deckId: number, exportType: string): Promise<string> {
     //     const endpoint = `api/Decks/ExportDeckList`;
     //     const url = `${endpoint}?deckId=${deckId}&exportType=${exportType}`;
-    //     const result = await this.Get(url);
+    //     const result = await this.GetAsync(url);
     //     return result;
     // };
 
     // async getCardTagDetails(deckId: number, cardId: number): Promise<CardTagDetailDto> {
     //     const endpoint = `api/Decks/GetCardTagDetails`;
     //     const url = `${endpoint}?deckId=${deckId}&cardId=${cardId}`;
-    //     const result = await this.Get(url);
+    //     const result = await this.GetAsync(url);
     //     return result;
     // };
     // async addCardTag(dto: CardTagDto): Promise<void> {
@@ -119,7 +118,7 @@ export class DecksService extends HttpService
     // async removeCardTag(cardTagId: number): Promise<CardTagDetailDto> {
     //     const endpoint = `api/Decks/RemoveCardTag`;
     //     const url = `${endpoint}?cardTagId=${cardTagId}`;
-    //     const result = await this.Get(url);
+    //     const result = await this.GetAsync(url);
     //     return result;
     // };
 }

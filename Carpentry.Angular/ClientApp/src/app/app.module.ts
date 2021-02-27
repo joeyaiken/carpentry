@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -14,6 +13,8 @@ import { LandingComponent } from './landing/landing.component';
 import { MaterialModule } from './material.module';
 import { DeckListComponent } from './decks/deck-list/deck-list.component';
 import { SettingsComponent } from './settings/settings.component';
+import { TrackedSetsComponent } from './settings/tracked-sets/tracked-sets.component';
+import { CollectionTotalsComponent } from './settings/collection-totals/collection-totals.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,8 @@ import { SettingsComponent } from './settings/settings.component';
     DeckListComponent,
 
     SettingsComponent,
+    CollectionTotalsComponent,
+    TrackedSetsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

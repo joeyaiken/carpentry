@@ -4,12 +4,13 @@ import { Observable, of } from "rxjs";
 
 export abstract class HttpService {
     constructor(
-        // protected http: HttpClient, public baseUrl: string
+        protected http: HttpClient
+        // , public baseUrl: string
         ) {
         
     }
 
-    async Get(url: string): Promise<any> {
+    async GetAsync(url: string): Promise<any> {
         // console.log(`get fetching URL ${url}`)
         const response = await fetch(url);
         // console.log('updating ...something');
@@ -33,29 +34,27 @@ export abstract class HttpService {
         // return result;
     }
 
-    // async Get(url: string): Observable<any> {
-    //     fetch(url).then(response => {
+    Get<T>(url: string): Observable<T> {
+        return this.http.get<T>(url);
+    }
 
-    //     })
-    // }
-    
-    // async Post(endpoint: string, payload: any): Promise<any> {
-    //     // console.log('post');
-    //     // console.log(payload);
-    //     const bodyToAdd = JSON.stringify(payload);
-    //     const response = await fetch(endpoint, {
-    //         method: 'post',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: bodyToAdd
-    //     });
-    //     const result = await response.json().catch(() => {
-    //         return;
-    //     });
-    //     return result;
-    // }
+    async PostAsync(endpoint: string, payload: any): Promise<any> {
+        // console.log('post');
+        // console.log(payload);
+        const bodyToAdd = JSON.stringify(payload);
+        const response = await fetch(endpoint, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: bodyToAdd
+        });
+        const result = await response.json().catch(() => {
+            return;
+        });
+        return result;
+    }
     
 
 

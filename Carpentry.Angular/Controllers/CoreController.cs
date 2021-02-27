@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.Data.DataModels.QueryResults;
 
-namespace Carpentry.Angular.Controllers
+namespace Carpentry.Controllers
 {
     /// <summary>
     /// This controller will return general/core app information.
@@ -21,11 +22,13 @@ namespace Carpentry.Angular.Controllers
 
         private readonly IDataUpdateService _dataUpdateService;
         private readonly IFilterService _filterService;
+        private readonly IInventoryService _inventoryService;
 
-        public CoreController(IDataUpdateService dataUpdateService, IFilterService filterService)
+        public CoreController(IDataUpdateService dataUpdateService, IFilterService filterService, IInventoryService inventoryService)
         {
             _dataUpdateService = dataUpdateService;
             _filterService = filterService;
+            _inventoryService = inventoryService;
         }
 
         /// <summary>
@@ -81,6 +84,23 @@ namespace Carpentry.Angular.Controllers
             }
         }
 
+
+        //_inventoryService
+        //public async Task<IEnumerable<InventoryTotalsByStatusResult>> GetCollectionTotals()
+        [HttpGet("[action]")]
+        public async Task<ActionResult<InventoryTotalsByStatusResult>> GetCollectionTotals()
+        {
+            try
+            {
+                //ummm does this call a single 'core service' or does it
+                var result = await _inventoryService.GetCollectionTotals();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetCollectionTotals", ex));
+            }
+        }
 
         #endregion 
 
@@ -143,6 +163,8 @@ namespace Carpentry.Angular.Controllers
         }
 
         #endregion Tracked Sets
+
+
 
     }
 }

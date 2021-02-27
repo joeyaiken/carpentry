@@ -9,6 +9,7 @@ using System.Linq;
 using Carpentry.Data.QueryResults;
 using Carpentry.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
+using Carpentry.Data.DataModels.QueryResults;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -408,5 +409,14 @@ namespace Carpentry.Logic.Implementations
         }
 
         #endregion
+
+        //get collection/inventory totals by status
+        // GetTotalsByStatus | GetCollectionTotals | GetInventoryTotals
+        public async Task<IEnumerable<InventoryTotalsByStatusResult>> GetCollectionTotals()
+        {
+            var result = await _cardContext.InventoryTotalsByStatus.ToListAsync();
+            //Should really return a DTO instead but whatever
+            return result;
+        }
     }
 }
