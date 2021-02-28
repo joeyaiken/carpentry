@@ -1,3 +1,88 @@
 <div>
-    Tracked Sets
+    <mat-card>
+        <div fxLayout="row">
+            <div fxFill>
+                <h4>Tracked Sets</h4>
+            </div>
+
+            <mat-slide-toggle [checked]="showUntracked" (change)="showUntrackedToggleChange($event)" color="primary" >Show Untracked</mat-slide-toggle>
+
+            <button mat-button disabled color="primary" variant="contained" >Update All</button>
+
+            <a mat-icon-button (click)="loadTrackedSets(true)">
+                <mat-icon>refresh</mat-icon>
+            </a>
+        </div>
+
+        <table mat-table [dataSource]="setDetails" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef>
+                    Code
+                </th>
+                <td mat-cell *matCellDef="let setDetail">
+                    {{setDetail.code}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>
+                    Name
+                </th>
+                <td mat-cell *matCellDef="let setDetail">
+                    {{setDetail.name}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="owned">
+                <th mat-header-cell *matHeaderCellDef>
+                    Owned
+                </th>
+                <td mat-cell *matCellDef="let setDetail">
+                    {{setDetail.inventoryCount}}
+                </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="collected">
+                <th mat-header-cell *matHeaderCellDef>
+                    Collected
+                </th>
+                <td mat-cell *matCellDef="let setDetail">
+                    {{setDetail.collectedCount}}/{{setDetail.totalCount}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastUpdated">
+                <th mat-header-cell *matHeaderCellDef>
+                    Last Updated
+                </th>
+                <td mat-cell *matCellDef="let setDetail">
+                    {{setDetail.dataLastUpdated}}
+                </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>
+                    Actions
+                </th>
+                <!-- TODO - get these icons to render on the same line, instead of stacked -->
+                <td mat-cell *matCellDef="let setDetail">
+                    <a mat-icon-button *ngIf="!setDetail.isTracked" (click)="addTrackedSetClick(setDetail.setId)">
+                        <mat-icon>add</mat-icon>
+                    </a>
+
+                    <a mat-icon-button *ngIf="setDetail.isTracked" (click)="updateTrackedSetClick(setDetail.setId)">
+                        <mat-icon>refresh</mat-icon>
+                    </a>
+
+                    <a mat-icon-button *ngIf="setDetail.isTracked" (click)="removeTrackedSetClick(setDetail.setId)">
+                        <mat-icon>delete</mat-icon>
+                    </a>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </mat-card>
 </div>

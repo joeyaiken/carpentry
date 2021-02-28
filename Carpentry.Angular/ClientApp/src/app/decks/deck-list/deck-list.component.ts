@@ -23,7 +23,7 @@ export class DeckListComponent implements OnInit {
 
     getDeckOverviews(): void {
         this.decksService.getDeckOverviews().subscribe(result => {
-            this,this.deckOverviews = result;
+            this.deckOverviews = result;
         }, err => console.log(`getDeckOverviews error: ${err}`));
     }
 

@@ -1,0 +1,86 @@
+<div>
+    <mat-toolbar color="default" position="relative">
+
+        <h5 >Deck Editor </h5>
+        &nbsp;
+        <h5> {{deckProperties.name}} </h5>
+
+            <div>
+                <mat-chip-list>
+
+                
+                <mat-chip *ngIf="deckProperties.basicW">
+                    <img width="20" height="20" src='/assets/W.svg' />
+                    {{deckProperties.basicW}}
+                </mat-chip>
+
+                <mat-chip *ngIf="deckProperties.basicU">
+                    <img width="20" height="20" src='/assets/U.svg' />
+                    {{deckProperties.basicU}}
+                </mat-chip>
+
+                <mat-chip *ngIf="deckProperties.basicB">
+                    <img width="20" height="20" src='/assets/B.svg' />
+                    {{deckProperties.basicB}}
+                </mat-chip>
+
+                <mat-chip *ngIf="deckProperties.basicR">
+                    <img width="20" height="20" src='/assets/R.svg' />
+                    {{deckProperties.basicR}}
+                </mat-chip>
+
+                <mat-chip *ngIf="deckProperties.basicG">
+                    <img width="20" height="20" src='/assets/G.svg' />
+                    {{deckProperties.basicG}}
+                </mat-chip>
+
+            </mat-chip-list>
+                <!-- <mat-chip-list>
+                    <mat-chip  avatar=>
+
+                    </mat-chip>
+                </mat-chip-list> -->
+                
+
+                <!-- <Chip size="small" avatar={<Avatar src={'/img/W.svg'}/>} label={ basicW }/> -->
+                <!-- <Chip size="small" avatar={<Avatar src={'/img/U.svg'}/>} label={ basicU }/> -->
+                <!-- <Chip size="small" avatar={<Avatar src={'/img/B.svg'}/>} label={ basicB }/> -->
+                <!-- <Chip size="small" avatar={<Avatar src={'/img/R.svg'}/>} label={ basicR }/> -->
+                <!-- <Chip size="small" avatar={<Avatar src={'/img/G.svg'}/>} label={ basicG }/> -->
+
+<!-- 
+const ManaChip = (type: String, value: number): JSX.Element => 
+(<Chip size="small" avatar={<Avatar src={`/img/${type}.svg`}/>} label={ value }/>); -->
+
+            </div>
+            <div>
+                <button mat-button (click)="onToggleViewClick()" color="primary" variant="contained">
+                    Toggle View
+                </button>
+                <button mat-button (click)="onEditClick()" color="primary" variant="contained">
+                    Edit
+                </button>
+                <button mat-button (click)="onExportClick()" color="primary" variant="contained">
+                    Export
+                </button>
+                <button mat-button (click)="onAddCardsClick()" color="primary" variant="contained">
+                    Add Cards
+                </button>
+            </div>
+        
+     
+    </mat-toolbar>
+</div>
+<!-- 
+<header>
+    <mat-toolbar color="primary" class="mat-elevation-z6">
+      <div class="container">
+        <a class="navbar-brand" [routerLink]="['/']">Carpentry</a>
+        <a mat-button [routerLink]="['/decks']">Decks</a>
+        <a mat-button [routerLink]="['/inventory']">Inventory</a>
+        <a mat-button [routerLink]="['/settings']">Settings</a>
+      </div>
+    </mat-toolbar>
+  </header>
+  
+   -->

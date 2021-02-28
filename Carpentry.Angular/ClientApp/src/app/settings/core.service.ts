@@ -1,6 +1,7 @@
 import { ContentObserver } from "@angular/cdk/observers";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { HttpService } from "../common/HttpService";
 import { AppFiltersDto, InventoryTotalsByStatusResult, SetDetailDto } from "./models";
 
@@ -13,40 +14,35 @@ export class CoreService extends HttpService
         super(http);
     }
 
-    async getCoreDataAsync(): Promise<AppFiltersDto> {
+    getCoreData(): Observable<AppFiltersDto> {
         const endpoint = `api/Core/GetCoreData`;
-        const result = await this.GetAsync(endpoint);
-        return result;
+        return this.Get(endpoint);
     }
 
-    async getTrackedSetsAsync(showUntracked: boolean, update: boolean): Promise<SetDetailDto> {
+    getTrackedSets(showUntracked: boolean, update: boolean): Observable<SetDetailDto[]> {
         const endpoint = `api/Core/GetTrackedSets?showUntracked=${showUntracked}&update=${update}`;
-        const result = await this.GetAsync(endpoint);
-        return result;
+        return this.Get(endpoint);
     }
 
     //TODO - These next 3 should be POST not GET
-    async addTrackedSetAsync(setId: number): Promise<void> {
+    addTrackedSet(setId: number): Observable<void> {
         const endpoint = `api/Core/AddTrackedSet?setId=${setId}`;
-        await this.GetAsync(endpoint);
-        return;
+        return this.Get(endpoint);
     }
-    async updateTrackedSetAsync(setId: number): Promise<void> {
+
+    updateTrackedSet(setId: number): Observable<void> {
         const endpoint = `api/Core/UpdateTrackedSet?setId=${setId}`;
-        await this.GetAsync(endpoint);
-        return;
+        return this.Get(endpoint);
     }
-    async removeTrackedSetAsync(setId: number): Promise<void> {
-        const endpoint = `api/Core/RemoveTrackedSet?setId=${setId}`;
-        await this.GetAsync(endpoint);
-        return;
+    
+    removeTrackedSet(setId: number): Observable<void> {
+        const endpoint = `api/Core/RemoveTrackedSet?setId=${setId}`;        
+        return this.Get(endpoint);
     }
+    //
 
-    async getCollectionTotalsAsync(): Promise<InventoryTotalsByStatusResult[]> {
+    getCollectionTotals(): Observable<InventoryTotalsByStatusResult[]> {
         const endpoint = 'api/Core/GetCollectionTotals';
-        const result = await this.GetAsync(endpoint);
-        return result;
+        return this.Get(endpoint);
     }
-
-
 }

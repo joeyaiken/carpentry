@@ -15,6 +15,9 @@ import { DeckListComponent } from './decks/deck-list/deck-list.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TrackedSetsComponent } from './settings/tracked-sets/tracked-sets.component';
 import { CollectionTotalsComponent } from './settings/collection-totals/collection-totals.component';
+import { DeckEditorComponent } from './decks/deck-editor/deck-editor.component';
+import { DeckPropsBarComponent } from './decks/deck-editor/deck-props-bar/deck-props-bar.component';
+import { ManaChipComponent } from './common/mana-chip/mana-chip.component';
 
 @NgModule({
   declarations: [
@@ -24,9 +27,13 @@ import { CollectionTotalsComponent } from './settings/collection-totals/collecti
     CounterComponent,
     FetchDataComponent,
     LandingComponent,
+
+    ManaChipComponent,
     
     DeckListComponent,
-
+    DeckEditorComponent,
+    DeckPropsBarComponent,
+    
     SettingsComponent,
     CollectionTotalsComponent,
     TrackedSetsComponent,
