@@ -18,6 +18,9 @@ import { CollectionTotalsComponent } from './settings/collection-totals/collecti
 import { DeckEditorComponent } from './decks/deck-editor/deck-editor.component';
 import { DeckPropsBarComponent } from './decks/deck-editor/deck-props-bar/deck-props-bar.component';
 import { ManaChipComponent } from './common/mana-chip/mana-chip.component';
+import { DeckStatsBarComponent } from './decks/deck-editor/deck-stats-bar/deck-stats-bar.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { DeckCardListComponent } from './decks/deck-editor/deck-card-list/deck-card-list.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,8 @@ import { ManaChipComponent } from './common/mana-chip/mana-chip.component';
     DeckListComponent,
     DeckEditorComponent,
     DeckPropsBarComponent,
+    DeckStatsBarComponent,
+    DeckCardListComponent,
     
     SettingsComponent,
     CollectionTotalsComponent,
@@ -44,6 +49,7 @@ import { ManaChipComponent } from './common/mana-chip/mana-chip.component';
     FormsModule,
     AppRoutingModule,
     MaterialModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

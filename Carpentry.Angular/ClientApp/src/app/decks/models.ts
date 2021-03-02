@@ -64,6 +64,20 @@ export class DeckCardDto {
     // inventoryCard: InventoryCard;
 }
 
+export class DeckCardOverview {
+    id: number;
+    name: string;
+    type: string;
+    cost: string;
+    cmc: number;
+    category: string;
+    img: string;
+    count: number;
+    cardId: number;
+    detailIds: number[];
+    tags: string[];
+}
+
 export class DeckDetailDto {
     props: DeckPropertiesDto;
     // cardOverviews: DeckCardOverview[];

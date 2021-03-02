@@ -4,8 +4,6 @@ import { Observable } from "rxjs";
 import { HttpService } from "../common/HttpService";
 import { CardImportDto, CardTagDetailDto, CardTagDto, DeckCardDto, DeckDetailDto, DeckOverviewDto, DeckPropertiesDto, ValidatedDeckImportDto } from "./models";
 
-
-
 @Injectable({
     providedIn: 'root',
 })
@@ -17,108 +15,82 @@ export class DecksService extends HttpService
         super(http);
     }
 
-    //TODO - replace all promises with observables
+    addDeck(deckProps: DeckPropertiesDto): Observable<number> {
+        const endpoint = `api/Decks/AddDeck`;
+        return this.http.post<number>(endpoint, deckProps);
+    }
 
+    updateDeck(deckProps: DeckPropertiesDto): Observable<void> {
+        const url = `api/Decks/UpdateDeck`;
+        return this.http.post<void>(url, deckProps);
+    }; 
 
-    // getDeckOverviews(): Observable<any> { }
+    deleteDeck(deckId: number): Observable<void> {
+        const url = `api/Decks/DeleteDeck?deckId=${deckId}`;
+        return this.http.get<void>(url);
+    };
+
+    cloneDeck(deckId: number): Observable<void> {
+        const url = `api/Decks/CloneDeck?deckId=${deckId}`;
+        return this.http.get<void>(url);
+    };
     
-    // async addDeck(deckProps: DeckPropertiesDto): Promise<number> {
-    //     const endpoint = `api/Decks/AddDeck`;
-    //     const result = await this.Post(endpoint, deckProps);
-    //     return result;
-    // }
+    dissassembleDeck(deckId: number): Observable<void> {
+        const url = `api/Decks/DissassembleDeck?deckId=${deckId}`;
+        return this.http.get<void>(url);
+    };
 
-    // // addDeck(deckProps:DeckPropertiesDto): Observable<number> {
+    addDeckCard(deckCardProps: DeckCardDto): Observable<void> {
+        const endpoint = `api/Decks/AddDeckCard`;
+        return this.http.post<void>(endpoint, deckCardProps);
+    };
 
-    // // }
+    updateDeckCard(dto: DeckCardDto): Observable<void> {
+        const endpoint = `api/Decks/UpdateDeckCard`;
+        return this.http.post<void>(endpoint, dto);
+    };
 
-    // async updateDeck(deckProps: DeckPropertiesDto): Promise<void> {
-    //     const endpoint = `api/Decks/UpdateDeck`;
-    //     await this.Post(endpoint, deckProps);
-    //     return;
-    // }; 
-
-    // async deleteDeck(deckId: number): Promise<void> {
-    //     const endpoint = `api/Decks/DeleteDeck`;
-    //     const url = `${endpoint}?deckId=${deckId}`;
-    //     await this.GetAsync(url);
-    //     return;
-    // };
-
-    // async cloneDeck(deckId: number): Promise<void> {
-    //     const url = `api/Decks/CloneDeck?deckId=${deckId}`;
-    //     await this.GetAsync(url);
-    //     return;
-    // };
-    
-    // async dissassembleDeck(deckId: number): Promise<void> {
-    //     const url = `api/Decks/DissassembleDeck?deckId=${deckId}`;
-    //     await this.GetAsync(url);
-    //     return;
-    // };
-
-    // async addDeckCard(deckCardProps: DeckCardDto): Promise<void> {
-    //     const endpoint = `api/Decks/AddDeckCard`;
-    //     const result = await this.Post(endpoint, deckCardProps);
-    //     return result;
-    // };
-    // async updateDeckCard(dto: DeckCardDto): Promise<void> {
-    //     const endpoint = `api/Decks/UpdateDeckCard`;
-    //     const result = await this.Post(endpoint, dto);
-    //     return result;
-    // };
-    // async removeDeckCardAsync(deckCardId: number): Promise<void> {
-    //     const endpoint = `api/Decks/RemoveDeckCard`;
-    //     const url = `${endpoint}?id=${deckCardId}`;
-    //     await this.GetAsync(url);
-    //     return;
-    // };
+    removeDeckCard(deckCardId: number): Observable<void> {
+        const url = `api/Decks/RemoveDeckCard?id=${deckCardId}`;
+        return this.http.get<void>(url);
+    };
 
     getDeckOverviews(): Observable<DeckOverviewDto[]> {
         const endpoint = `api/Decks/GetDeckOverviews`;
-        return this.Get(endpoint);
+        return this.http.get<DeckOverviewDto[]>(endpoint);
     }
 
-    // async getDeckDetail(deckId: number): Promise<DeckDetailDto> {
-    //     const endpoint = `api/Decks/GetDeckDetail`;
-    //     const url = `${endpoint}?deckId=${deckId}`;
-    //     const result = await this.GetAsync(url);
-    //     return result;
-    // };
+    getDeckDetail(deckId: number): Observable<DeckDetailDto> {
+        const url = `api/Decks/GetDeckDetail?deckId=${deckId}`;
+        return this.http.get<DeckDetailDto>(url);
+    };
 
-    // async validateDeckImport(dto: CardImportDto): Promise<ValidatedDeckImportDto> {
-    //     const endpoint = `api/Decks/ValidateDeckImport`;
-    //     const result = await this.Post(endpoint, dto);
-    //     return result;
-    // };
-    // async addValidatedDeckImport(dto: ValidatedDeckImportDto): Promise<number> {
-    //     const endpoint = `api/Decks/AddValidatedDeckImport`;
-    //     var newId = await this.Post(endpoint, dto);
-    //     return newId;
-    // };
-    // //async exportDeckList(deckId: number, exportType: DeckExportType): Promise<string> {
-    //     async exportDeckList(deckId: number, exportType: string): Promise<string> {
-    //     const endpoint = `api/Decks/ExportDeckList`;
-    //     const url = `${endpoint}?deckId=${deckId}&exportType=${exportType}`;
-    //     const result = await this.GetAsync(url);
-    //     return result;
-    // };
+    validateDeckImport(dto: CardImportDto): Observable<ValidatedDeckImportDto> {
+        const endpoint = `api/Decks/ValidateDeckImport`;
+        return this.http.post<ValidatedDeckImportDto>(endpoint, dto);
+    };
+    addValidatedDeckImport(dto: ValidatedDeckImportDto): Observable<number> {
+        const endpoint = `api/Decks/AddValidatedDeckImport`;
+        return this.http.post<number>(endpoint, dto);
+    };
+    
+    exportDeckList(deckId: number, exportType: string): Observable<string> {
+        const url = `api/Decks/ExportDeckList?deckId=${deckId}&exportType=${exportType}`;
+        return this.http.get<string>(url);
+    };
 
-    // async getCardTagDetails(deckId: number, cardId: number): Promise<CardTagDetailDto> {
-    //     const endpoint = `api/Decks/GetCardTagDetails`;
-    //     const url = `${endpoint}?deckId=${deckId}&cardId=${cardId}`;
-    //     const result = await this.GetAsync(url);
-    //     return result;
-    // };
-    // async addCardTag(dto: CardTagDto): Promise<void> {
-    //     const endpoint = `api/Decks/AddCardTag`;
-    //     await this.Post(endpoint, dto);
-    //     return;
-    // };
-    // async removeCardTag(cardTagId: number): Promise<CardTagDetailDto> {
-    //     const endpoint = `api/Decks/RemoveCardTag`;
-    //     const url = `${endpoint}?cardTagId=${cardTagId}`;
-    //     const result = await this.GetAsync(url);
-    //     return result;
-    // };
+    getCardTagDetails(deckId: number, cardId: number): Observable<CardTagDetailDto> {
+        const url = `api/Decks/GetCardTagDetails?deckId=${deckId}&cardId=${cardId}`;
+        return this.http.get<CardTagDetailDto>(url);
+    };
+
+    addCardTag(dto: CardTagDto): Observable<void> {
+        const endpoint = `api/Decks/AddCardTag`;
+        return this.http.post<void>(endpoint, dto);
+    };
+
+    removeCardTag(cardTagId: number): Observable<CardTagDetailDto> {
+        const url = `api/Decks/RemoveCardTag?cardTagId=${cardTagId}`;
+        return this.http.get<CardTagDetailDto>(url);
+    };
 }

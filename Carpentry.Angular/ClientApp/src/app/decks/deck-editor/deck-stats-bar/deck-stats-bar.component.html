@@ -1,0 +1,44 @@
+<div fxLayout="row" fxLayoutAlign=" none" class="outline-section" *ngIf="deckStats">
+    <div class="outline-section">
+        <h6>Card Count</h6>
+        <h5>{{deckStats.totalCount}}</h5>
+    </div>
+
+    <div class="outline-section">
+        <table size="small">
+            <tr>
+                <th *ngFor="let item of deckStats.typeCounts | keyvalue">{{item.key}}</th>
+            </tr>
+            <tr>
+                <td *ngFor="let item of deckStats.typeCounts | keyvalue">{{item.value}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="outline-section">
+        <table size="small">
+            <tr>
+                <th *ngFor="let item of deckStats.costCounts | keyvalue">{{item.key}}</th>
+            </tr>
+            <tr>
+                <td *ngFor="let item of deckStats.costCounts | keyvalue">{{item.value}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="outline-section">
+        <table size="small">
+            <tr>
+                <th *ngFor="let item of deckStats.tagCounts | keyvalue">{{item.key}}</th>
+            </tr>
+            <tr>
+                <td *ngFor="let item of deckStats.tagCounts | keyvalue">{{item.value}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="outline-section">
+        <h6>Total Cost</h6>
+        <h5>{{deckStats.totalCost}}</h5>
+    </div>
+</div>

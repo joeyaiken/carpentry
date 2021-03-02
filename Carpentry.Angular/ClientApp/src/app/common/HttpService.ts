@@ -34,10 +34,6 @@ export abstract class HttpService {
         // return result;
     }
 
-    Get<T>(url: string): Observable<T> {
-        return this.http.get<T>(url);
-    }
-
     async PostAsync(endpoint: string, payload: any): Promise<any> {
         // console.log('post');
         // console.log(payload);

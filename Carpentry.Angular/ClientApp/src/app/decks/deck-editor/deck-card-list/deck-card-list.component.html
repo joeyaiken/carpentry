@@ -1,0 +1,19 @@
+<div>
+    <!-- TODO Replace with angular table -->
+    <table size="small">
+        <tr>
+            <th>Name</th>
+            <th>Count</th>
+            <th>Type</th>
+            <th>Cost</th>
+            <th>Category</th>
+        </tr>
+        <tr *ngFor="let cardItem of cardOverviews" (click)="cardSelected(cardItem)" (mouseenter)="cardSelected(cardItem)">
+            <td>{{cardItem.name}}</td>
+            <td>{{cardItem.count}}</td>
+            <td>{{cardItem.type}}</td>
+            <td>{{cardItem.cost}}</td>
+            <td>{{cardItem.category}}</td>
+        </tr>
+    </table>
+</div>

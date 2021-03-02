@@ -1,5 +1,5 @@
 <div>
-    <mat-toolbar color="default" position="relative">
+    <mat-toolbar color="default" position="relative" *ngIf="deckProperties">
 
         <h5 >Deck Editor </h5>
         &nbsp;
@@ -54,16 +54,16 @@ const ManaChip = (type: String, value: number): JSX.Element =>
 
             </div>
             <div>
-                <button mat-button (click)="onToggleViewClick()" color="primary" variant="contained">
+                <button mat-button (click)="onToggleView()" color="primary" variant="contained">
                     Toggle View
                 </button>
-                <button mat-button (click)="onEditClick()" color="primary" variant="contained">
+                <button mat-button (click)="onEdit()" color="primary" variant="contained">
                     Edit
                 </button>
-                <button mat-button (click)="onExportClick()" color="primary" variant="contained">
+                <button mat-button (click)="onExport()" color="primary" variant="contained">
                     Export
                 </button>
-                <button mat-button (click)="onAddCardsClick()" color="primary" variant="contained">
+                <button mat-button (click)="onAddCards()" color="primary" variant="contained">
                     Add Cards
                 </button>
             </div>

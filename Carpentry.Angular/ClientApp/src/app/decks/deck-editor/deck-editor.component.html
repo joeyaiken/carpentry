@@ -1,17 +1,19 @@
 <div>
-
-
-    <app-deck-props-bar></app-deck-props-bar>
-    <!-- { props.deckProperties && 
-        <DeckPropsBar 
-            deckProperties={props.deckProperties} 
-            onEditClick={props.onPropsModalOpen} 
-            onAddCardsClick={props.onAddCardsClick}
-            onToggleViewClick={props.handleToggleDeckView}
-            onExportClick={props.onExportClick} /> }
+    <app-deck-props-bar 
+        [deckProperties]="deckDetail?.props"
+        (onToggleViewClick)="onToggleViewClick()"
+        (onEditClick)="onEditClick()"
+        (onExportClick)="onExportClick()"
+        (onAddCardsClick)="onAddCardsClick()">
+    </app-deck-props-bar>
     
-    <div className={combineStyles(flexRow, flexSection)} style={{ overflow:'auto', alignItems:'stretch' }}>
-        <div className={flexSection} style={{ overflow:'auto', flex:'1 1 70%' }} >
+    <div className="flexRow flexSection" style="overflow:auto; align-items:stretch">
+
+        <div className="flexSection" style="overflow:auto; flex: 1 1 70%">
+
+        <app-deck-card-list *ngIf="viewMode==='list'" [cardOverviews]="deckDetail.cards" (onCardSelected)="onCardSelected($event)"></app-deck-card-list>
+
+        <!-- 
             {props.viewMode === "list" && <DeckCardList cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
             {props.viewMode === "grid" && <DeckCardGrid cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
             { props.viewMode === "grouped" && 
@@ -21,8 +23,12 @@
                     onCardSelected={props.onCardSelected}
                     onCardDetailClick={props.onCardDetailClick} 
                     onCardTagsClick={props.onCardTagsClick}  /> }
-        </div>
-        <div className={flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
+     -->
+    </div>
+
+    <div className="flexSection" style="overflow:auto; flex:1 1 30%">
+
+    <!-- 
             <CardMenu 
                 cardMenuAnchor={props.cardMenuAnchor} 
                 onCardMenuSelect={props.onCardMenuSelected} 
@@ -38,8 +44,8 @@
                 onMenuClose={props.onCardMenuClosed}
                 onCardDetailClick={props.onCardDetailClick} 
                 onCardTagsClick={props.onCardTagsClick} />
-        </div>
+    -->
     </div>
-
-    <DeckStatsBar deckStats={props.deckStats} /> -->
+    </div>
+    <app-deck-stats-bar [deckStats]="deckDetail?.stats"></app-deck-stats-bar>
 </div>
