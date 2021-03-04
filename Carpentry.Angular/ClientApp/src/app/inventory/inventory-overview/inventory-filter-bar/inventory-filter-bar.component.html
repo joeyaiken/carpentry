@@ -1,0 +1,145 @@
+<mat-card fxLayout="column" class="outline-section">
+    <div fxLayout="row" class="flex-section">
+
+        <div class="flex-section side-padded">
+            <mat-form-field class="stretch">
+                <mat-label>Group by</mat-label>
+                <mat-select [(ngModel)]="searchFilter.groupBy">
+                    <mat-option *ngFor="let item of filterOptions?.groupBy" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- <SelectFilter name="groupBy" value={props.searchFilter.groupBy} selectMultiple={false} 
+            options={props.filterOptions.groupBy} handleFilterChange={props.handleFilterChange} /> -->
+
+        <div class="flex-section side-padded">
+            <mat-form-field class="stretch">
+                <mat-label>Sort by</mat-label>
+                <mat-select [(ngModel)]="searchFilter.sortBy">
+                    <mat-option *ngFor="let item of filterOptions?.sortBy" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- <SelectFilter name="sortBy" value={props.searchFilter.sortBy} selectMultiple={false}
+            options={props.filterOptions.sortBy} handleFilterChange={props.handleFilterChange} /> -->
+
+
+
+        <!-- <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
+            options={[{name: "Desc", value: "sortDescending", checked: props.searchFilter.sortDescending}]} /> -->
+
+
+        <div class="flex-section side-padded">
+            <mat-form-field class="stretch">
+                <mat-label>Set</mat-label>
+                <mat-select [(ngModel)]="searchFilter.set">
+                    <mat-option *ngFor="let item of filterOptions?.sets" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- <SelectFilter name="set" value={props.searchFilter.set} selectMultiple={false}
+            options={props.filterOptions.sets} handleFilterChange={props.handleFilterChange} /> -->
+
+        <div class="flex-section side-padded">
+            <mat-form-field class="stretch">
+                <mat-label>Type</mat-label>
+                <mat-select [(ngModel)]="searchFilter.type">
+                    <mat-option *ngFor="let item of filterOptions?.types" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- <SelectFilter name="type" value={props.searchFilter.type} selectMultiple={false}
+            options={props.filterOptions.types} handleFilterChange={props.handleFilterChange} /> -->
+
+        <div class="flex-section side-padded">
+            <mat-form-field class="stretch">
+                <mat-label>Color Identity</mat-label>
+                <mat-select [(ngModel)]="searchFilter.colorIdentity">
+                    <mat-option *ngFor="let item of filterOptions?.colors" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <!-- <SelectFilter name="colorIdentity" selectMultiple={true} value={props.searchFilter.colorIdentity}
+            options={props.filterOptions.colors} handleFilterChange={props.handleFilterChange} /> -->
+
+
+
+        <!-- <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
+            options={[{name: "Exclusive", value: "exclusiveColorFilters", checked: props.searchFilter.exclusiveColorFilters},
+            {name: "Multi", value: "multiColorOnly", checked: props.searchFilter.multiColorOnly}]} /> -->
+        
+
+    </div>
+
+    <div fxLayout="row" class="flex-section">
+        <div fxLayout="row" class="flex-section">
+
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Text</mat-label>
+                    <!-- (change)="filterChange($event)"  style="text-transform: capitalize" -->
+                    <input matInput [(ngModel)]="searchFilter.text" margin="normal" />
+                </mat-form-field>
+            </div>
+
+            <!-- (onFilterChange)="handleFilterChange($event)" -->
+            <!-- <app-text-filter [name]="'Text'" [(value)]="searchFilter.text"></app-text-filter> -->
+            <!-- <TextFilter name="text" value={props.searchFilter.text}
+            handleFilterChange={props.handleFilterChange} /> -->
+
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Rarity</mat-label>
+                    <mat-select [(ngModel)]="searchFilter.rarity">
+                        <mat-option *ngFor="let item of filterOptions?.rarities" [value]="item.value">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <!-- <SelectFilter name="rarity" value={props.searchFilter.rarity} selectMultiple={true}
+                options={props.filterOptions.rarities} handleFilterChange={props.handleFilterChange} /> -->
+
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Min Count</mat-label>
+                    <input matInput type="number" [(ngModel)]="searchFilter.minCount" />
+                </mat-form-field>
+            </div>
+            <!-- <NumericFilter name="minCount" value={props.searchFilter.minCount}
+                handleFilterChange={props.handleFilterChange} /> -->
+
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Max Count</mat-label>
+                    <input matInput type="number" [(ngModel)]="searchFilter.maxCount" />
+                </mat-form-field>
+            </div>
+            <!-- <NumericFilter name="maxCount" value={props.searchFilter.maxCount}
+                handleFilterChange={props.handleFilterChange} /> -->
+
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Skip</mat-label>
+                    <input matInput type="number" [(ngModel)]="searchFilter.skip" />
+                </mat-form-field>
+            </div>
+            <!-- <NumericFilter name="skip" value={props.searchFilter.skip}
+                handleFilterChange={props.handleFilterChange} /> -->
+
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Take</mat-label>
+                    <input matInput type="number" [(ngModel)]="searchFilter.take" />
+                </mat-form-field>
+            </div>
+            <!-- <NumericFilter name="take" value={props.searchFilter.take}
+                handleFilterChange={props.handleFilterChange} /> -->
+
+        </div>
+        <div className="static-section center side-padded">
+            <button mat-button variant="contained" size="medium" color="primary" (click)="searchButtonClick()">
+                Search
+            </button>
+        </div>
+    </div>
+
+</mat-card>

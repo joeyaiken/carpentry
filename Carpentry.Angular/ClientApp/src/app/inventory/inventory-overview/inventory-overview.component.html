@@ -1,0 +1,60 @@
+<div>
+    <!-- <AppBar color="default" position="relative">
+        <Toolbar>
+            <Typography variant="h6">
+                Inventory
+            </Typography>
+            <QuickFilter name="Most Expensive" (click)="handleQuickFilterClick('Most Expensive')" />
+            <QuickFilter name="Highest Count" (click)='handleQuickFilterClick("Highest Count")'  />
+            <QuickFilter name="Owned Cards" (click)='handleQuickFilterClick("Owned Cards")' />
+            <QuickFilter name="Clear Secondary" secondary={true} (click)='handleQuickFilterClick("Clear Secondary")' />
+            <button mat-button (click)="handleAddCardsClick()">Add Cards</button>
+            <button mat-button (click)="handleTrimmingToolClick()">Trimming Tool</button>
+        </Toolbar>
+    </AppBar> -->
+    <div>
+        <app-inventory-filter-bar
+            [searchFilter]="searchFilter"
+            [filterOptions]="filterOptions"
+            (onSearchButtonClick)="onSearchClick()">
+        </app-inventory-filter-bar>
+        <!-- <InventoryFilterBar 
+                viewMethod={this.props.viewMethod}
+                filterOptions={this.props.filterOptions}
+                handleBoolFilterChange={this.handleBoolFilterChange}
+                handleFilterChange={this.handleFilterChange}
+                handleSearchButtonClick={this.handleSearchButtonClick}
+                searchFilter={this.props.searchFilter}
+                /> -->
+
+                <div>
+                    <!-- <CardImagePopper 
+                        menuAnchor={this.props.cardImageMenuAnchor}
+                        onClose={this.handleCardDetailMenuClose}
+                        image={selectedOverview?.imageUrl}
+                        /> -->
+                    <!-- <LoadingBox *ngIf="isLoading" /> -->
+                    <app-inventory-card-grid *ngIf="!isLoading"
+                        [cardOverviews]="searchResults"
+                        (onCardSelected)="cardDetailSelected($event)" 
+                        (onInfoButtonEnter)="cardDetailButtonClick($event)"
+                        (onInfoButtonLeave)="cardDetailMenuClose()" >
+                    </app-inventory-card-grid>
+                </div>
+    </div>
+    <div>
+        <p>Loading: {{isLoading}}</p>
+        <p>PROPS</p>
+
+        <p>groupBy: {{searchFilter?.groupBy}}</p>
+        <p>sortBy: {{searchFilter?.sortBy}}</p>
+        <p>sortDescending: {{searchFilter?.sortDescending}}</p>
+        <p>set: {{searchFilter?.set}}</p>
+        <p>type: {{searchFilter?.type}}</p>
+        <p>colorIdentity: {{searchFilter?.colorIdentity}}</p>
+
+        <p>text: {{searchFilter?.text}}</p>
+        <p>minCount: {{searchFilter?.minCount}}</p>
+    </div>
+    
+</div>

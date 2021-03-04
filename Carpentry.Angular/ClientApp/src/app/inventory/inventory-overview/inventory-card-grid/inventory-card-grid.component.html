@@ -1,0 +1,54 @@
+<div fxLayout="row wrap" class="flex-row-wrap">                
+    <mat-card class="outlineSection" *ngFor="let cardItem of cardOverviews">
+        <!-- <CardMedia 
+            style="height: 310px; width: 223px"
+            image="cardItem.imageUrl"
+            title="cardItem.name" /> -->
+        <img mat-card-image [src]="cardItem.imageUrl" [alt]="cardItem.name" style="height: 310px; width: 223px;" />
+        <div fxLayout="row">
+            <mat-card-content>
+                <div fxLayout="column">
+         
+                    <span *ngIf="cardItem.totalCount">
+                        no cards
+                    </span>
+                
+                    <span *ngIf="cardItem.inventoryCount">
+                        Inventory: {{cardItem.inventoryCount}}
+                    </span>
+                    
+                    <span *ngIf="cardItem.deckCount">
+                        Decks: {{cardItem.deckCount}}
+                    </span>
+                
+                    <span *ngIf="cardItem.sellCount">
+                        Sell: {{cardItem.sellCount}}
+                    </span>
+                
+                    <span *ngIf="cardItem.totalCount">
+                        Total: {{cardItem.totalCount}}
+                    </span>
+                
+                    <span *ngIf="cardItem.isFoil">(FOIL)</span>
+                    
+                    <span>{{cardItem.price}}</span>
+                </div>
+            </mat-card-content>
+            <mat-card-actions class="flexSection">
+                    <button mat-button color="primary" size="small" (click)="cardSelected(cardItem.cardId)">
+                        Details
+                    </button>
+                    <!-- <IconButton 
+                        value={cardItem.id} 
+                        color="primary" 
+                        size="small" 
+                        onMouseEnter={props.onInfoButtonEnter}
+                        onMouseLeave={props.onInfoButtonLeave}
+                        >
+                        <InfoOutlined />
+                    </IconButton> -->
+            </mat-card-actions>
+        </div>
+    </mat-card>
+
+</div>

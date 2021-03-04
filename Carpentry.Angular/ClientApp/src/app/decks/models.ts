@@ -34,6 +34,11 @@ export class CardImportDto {
     //Thoughts: props can just be added on a validated payload
 }
 
+export class CardOverviewGroup {
+    name: string;
+    cardOverviews: DeckCardOverview[];
+}
+
 export class CardTagDto {
     deckId: number;
     cardName: string;
@@ -62,6 +67,21 @@ export class DeckCardDto {
     isFoil: boolean;
     inventoryCardStatusId: number;
     // inventoryCard: InventoryCard;
+}
+
+export class DeckCardDetail {
+    id: number;
+    deckId: number;
+    name: string;
+    inventoryCardId: number | null;
+    isFoil: boolean;
+    inventoryCardStatusId: number | null;
+    cardId: number | null;
+    set: string;
+    collectorNumber: number | null;
+    overviewId: number;
+    category: string;
+    availabilityId: number;
 }
 
 export class DeckCardOverview {

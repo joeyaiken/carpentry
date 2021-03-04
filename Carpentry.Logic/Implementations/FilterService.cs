@@ -20,59 +20,85 @@ namespace Carpentry.Logic.Implementations
         {
             AppFiltersDto result = new AppFiltersDto();
 
-            var allFormats = await _coreDataRepo.GetAllMagicFormats();
+            result.Formats = await GetFormatFilters();
 
-            result.Formats = allFormats
+            result.Rarities = await GetRarityFilters();
+
+            result.Sets = await GetCardSetFilters();
+
+            result.Statuses = await GetStatusFilters();
+
+            result.Types = GetCardTypeFilters();
+
+            result.Colors = GetManaTypeFilters();
+
+            result.SearchGroups = GetCardGroupFilters();
+
+            result.GroupBy = GetInventoryGroupOptions();
+            
+            result.SortBy = GetInventorySortOptions();
+
+            return result;
+        }
+
+        public async Task<List<FilterOption>> GetFormatFilters()
+        {
+            return (await _coreDataRepo.GetAllMagicFormats())
                 .Select(x => new FilterOption()
                 {
                     Value = x.Id.ToString(),
                     Name = x.Name
-                })
-                .ToList();
+                }).ToList();
+        }
 
-            var allRarities = await _coreDataRepo.GetAllRarities();
-
-            result.Rarities = allRarities
+        public async Task<List<FilterOption>> GetRarityFilters()
+        {
+            return (await _coreDataRepo.GetAllRarities())
                 .Select(x => new FilterOption()
                 {
                     Value = x.Id.ToString(),
                     Name = x.Name
-                })
-                .ToList();
-
-            var allSets = await _coreDataRepo.GetAllSets();
-
-            result.Sets = allSets
+                }).ToList();
+        }
+    
+        public async Task<List<FilterOption>> GetCardSetFilters()
+        {
+            return (await _coreDataRepo.GetAllSets())
                 .Select(x => new FilterOption()
                 {
                     Value = x.Id.ToString(),
                     Name = x.Name
-                })
-                .ToList();
+                }).ToList();
+        }
 
-            var allStatuses = await _coreDataRepo.GetAllStatuses();
-
-            result.Statuses = allStatuses
+        public async Task<List<FilterOption>> GetStatusFilters()
+        {
+            return (await _coreDataRepo.GetAllStatuses())
                 .Select(x => new FilterOption()
                 {
                     Value = x.Id.ToString(),
                     Name = x.Name
-                })
-                .ToList();
+                }).ToList();
+        }
 
+        public List<FilterOption> GetCardTypeFilters()
+        {
+            return new List<FilterOption>()
+            {
+                new FilterOption(){ Value = "Creature", Name = "Creature" },
+                new FilterOption(){ Value = "Instant", Name = "Instant" },
+                new FilterOption(){ Value = "Sorcery", Name = "Sorcery" },
+                new FilterOption(){ Value = "Enchantment", Name = "Enchantment" },
+                new FilterOption(){ Value = "Land", Name = "Land" },
+                new FilterOption(){ Value = "Planeswalker", Name = "Planeswalker" },
+                new FilterOption(){ Value = "Artifact", Name = "Artifact" },
+                new FilterOption(){ Value = "Legendary", Name = "Legendary" },
+            };
+        }
 
-            var allTypes = _coreDataRepo.GetAllTypes();
-
-            result.Types = allTypes
-                .Select(x => new FilterOption()
-                {
-                    Value = x.Id.ToLower(),
-                    Name = x.Name
-                })
-                .ToList();
-
-            //var allManaTypes = await _coreDataRepo.GetAllManaColors();
-            var allManaTypes = new List<FilterOption>()
+        public List<FilterOption> GetManaTypeFilters()
+        {
+            return new List<FilterOption>()
             {
                 new FilterOption() {Value = "W", Name = "White"},
                 new FilterOption() {Value = "U",Name = "Blue"},
@@ -80,10 +106,11 @@ namespace Carpentry.Logic.Implementations
                 new FilterOption() {Value = "R",Name = "Red"},
                 new FilterOption() {Value = "G",Name = "Green"},
             };
+        }
 
-            result.Colors = allManaTypes;
-
-            var allSearchGroups = new List<FilterOption>()
+        public List<FilterOption> GetCardGroupFilters()
+        {
+            return new List<FilterOption>()
             {
                 new FilterOption() { Value = "Red", Name = "Red" },
                 new FilterOption() { Value = "Blue", Name = "Blue" },
@@ -95,17 +122,21 @@ namespace Carpentry.Logic.Implementations
                 new FilterOption() { Value = "Lands", Name = "Lands" },
                 new FilterOption() { Value = "RareMythic", Name = "Rare/Mythic" },
             };
+        }
 
-            result.SearchGroups = allSearchGroups;
-
-            var allGroupOptions = new List<FilterOption>()
+        public List<FilterOption> GetInventoryGroupOptions()
+        {
+            return new List<FilterOption>()
             {
                 new FilterOption() { Value = "name", Name = "Name" },
                 new FilterOption() { Value = "print", Name = "Print" },
                 new FilterOption() { Value = "unique", Name = "Unique" },
             };
-            result.GroupBy = allGroupOptions;
-            var allSortOptions = new List<FilterOption>()
+        }
+
+        public List<FilterOption> GetInventorySortOptions()
+        {
+            return new List<FilterOption>()
             {
                 new FilterOption() { Value = "count", Name = "Count" },
                 new FilterOption() { Value = "name", Name = "Name" },
@@ -113,10 +144,6 @@ namespace Carpentry.Logic.Implementations
                 new FilterOption() { Value = "cmc", Name = "Cmc" },
                 new FilterOption() { Value = "collectorNumber", Name = "Collector Number"}
             };
-
-            result.SortBy = allSortOptions;
-
-            return result;
         }
     }
 }

@@ -14,10 +14,11 @@ export class CoreService extends HttpService
         super(http);
     }
 
-    getCoreData(): Observable<AppFiltersDto> {
-        const endpoint = `api/Core/GetCoreData`;
-        return this.http.get<AppFiltersDto>(endpoint);
-    }
+    //Don't think this will be used by angular
+    // getCoreData(): Observable<AppFiltersDto> {
+    //     const endpoint = `api/Core/GetCoreData`;
+    //     return this.http.get<AppFiltersDto>(endpoint);
+    // }
 
     getTrackedSets(showUntracked: boolean, update: boolean): Observable<SetDetailDto[]> {
         const endpoint = `api/Core/GetTrackedSets?showUntracked=${showUntracked}&update=${update}`;

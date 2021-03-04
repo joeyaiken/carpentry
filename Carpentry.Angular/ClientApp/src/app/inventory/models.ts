@@ -31,6 +31,23 @@ export class InventoryDetailDto {
     inventoryCards: InventoryCard[];
 }
 
+export class InventoryFilterProps {
+    groupBy: string; // "name" | "print" | "unique"; //InventoryGroupMethod;
+    sortBy: string; //"name" | "price" | "cmc" | "count" | "collectorNumber"; //InventorySortMethod;
+    set: string;
+    text: string;
+    type: string;
+    colorIdentity: string[];
+    exclusiveColorFilters: boolean;
+    multiColorOnly: boolean;
+    rarity: string[];
+    minCount: number;
+    maxCount: number;
+    skip: number;
+    take: number;
+    sortDescending: boolean;
+}
+
 export class InventoryOverviewDto { //maybe rename this to "CardOverviewDto" ?
     id: number;
     //card definition properties

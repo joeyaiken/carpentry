@@ -22,7 +22,7 @@ namespace Carpentry
     public class Program
     {
         //TODO - ensure serilog is working for this...
-        //private static IConfiguration Configuration
+        //private static   Configuration
         //{
         //    get
         //    {

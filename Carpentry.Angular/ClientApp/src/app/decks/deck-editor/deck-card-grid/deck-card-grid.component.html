@@ -1,0 +1,4 @@
+<!-- TODO - consider merging this into the deck editor component, it's kinda useless as-is  -->
+<div class="flexRowWrap">
+    <app-visual-card *ngFor="let card of cardOverviews" [cardOverview]="card" (onCardSelected)="cardSelected($event)"></app-visual-card>
+</div>

@@ -7,6 +7,7 @@ import { DeckEditorComponent } from './decks/deck-editor/deck-editor.component';
 import { DeckListComponent } from './decks/deck-list/deck-list.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { HomeComponent } from './home/home.component';
+import { InventoryOverviewComponent } from './inventory/inventory-overview/inventory-overview.component';
 import { LandingComponent } from './landing/landing.component';
 import { SettingsComponent } from './settings/settings.component';
 
@@ -19,6 +20,8 @@ const routes: Routes = [
       { path: 'decks', component: DeckListComponent },
       { path: 'decks/:deckId', component: DeckEditorComponent },
       // { path}
+
+      { path: 'inventory', component: InventoryOverviewComponent },
 
 
       // { 

@@ -26,7 +26,7 @@ namespace Carpentry.Data.Interfaces
         Task<IEnumerable<DataReferenceValue<char>>> GetAllRarities();
         Task<IEnumerable<DataReferenceValue<string>>> GetAllSets();
         Task<IEnumerable<DataReferenceValue<int>>> GetAllStatuses();
-        List<DataReferenceValue<string>> GetAllTypes();
+        //List<DataReferenceValue<string>> GetAllTypes();
 
 
         //DB check

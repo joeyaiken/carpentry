@@ -133,22 +133,22 @@ namespace Carpentry.Data.Implementations
             return results;
         }
 
-        public List<DataReferenceValue<string>> GetAllTypes()
-        {
-            List<DataReferenceValue<string>> results = new List<DataReferenceValue<string>>()
-            {
-                new DataReferenceValue<string>(){ Id = "Creature", Name = "Creature" },
-                new DataReferenceValue<string>(){ Id = "Instant", Name = "Instant" },
-                new DataReferenceValue<string>(){ Id = "Sorcery", Name = "Sorcery" },
-                new DataReferenceValue<string>(){ Id = "Enchantment", Name = "Enchantment" },
-                new DataReferenceValue<string>(){ Id = "Land", Name = "Land" },
-                new DataReferenceValue<string>(){ Id = "Planeswalker", Name = "Planeswalker" },
-                new DataReferenceValue<string>(){ Id = "Artifact", Name = "Artifact" },
-                new DataReferenceValue<string>(){ Id = "Legendary", Name = "Legendary" },
-            };
+        //public List<DataReferenceValue<string>> GetAllTypes()
+        //{
+        //    List<DataReferenceValue<string>> results = new List<DataReferenceValue<string>>()
+        //    {
+        //        new DataReferenceValue<string>(){ Id = "Creature", Name = "Creature" },
+        //        new DataReferenceValue<string>(){ Id = "Instant", Name = "Instant" },
+        //        new DataReferenceValue<string>(){ Id = "Sorcery", Name = "Sorcery" },
+        //        new DataReferenceValue<string>(){ Id = "Enchantment", Name = "Enchantment" },
+        //        new DataReferenceValue<string>(){ Id = "Land", Name = "Land" },
+        //        new DataReferenceValue<string>(){ Id = "Planeswalker", Name = "Planeswalker" },
+        //        new DataReferenceValue<string>(){ Id = "Artifact", Name = "Artifact" },
+        //        new DataReferenceValue<string>(){ Id = "Legendary", Name = "Legendary" },
+        //    };
 
-            return results;
-        }
+        //    return results;
+        //}
 
         #endregion
 

@@ -21,6 +21,15 @@ import { ManaChipComponent } from './common/mana-chip/mana-chip.component';
 import { DeckStatsBarComponent } from './decks/deck-editor/deck-stats-bar/deck-stats-bar.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DeckCardListComponent } from './decks/deck-editor/deck-card-list/deck-card-list.component';
+import { GroupedDeckCardListComponent } from './decks/deck-editor/grouped-deck-card-list/grouped-deck-card-list.component';
+import { DeckCardDetailComponent } from './decks/deck-editor/deck-card-detail/deck-card-detail.component';
+import { DeckCardGridComponent } from './decks/deck-editor/deck-card-grid/deck-card-grid.component';
+import { VisualCardComponent } from './common/visual-card/visual-card.component';
+import { InventoryOverviewComponent } from './inventory/inventory-overview/inventory-overview.component';
+import { InventoryFilterBarComponent } from './inventory/inventory-overview/inventory-filter-bar/inventory-filter-bar.component';
+import { TextFilterComponent } from './common/text-filter/text-filter.component';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { InventoryCardGridComponent } from './inventory/inventory-overview/inventory-card-grid/inventory-card-grid.component';
 
 @NgModule({
   declarations: [
@@ -32,12 +41,22 @@ import { DeckCardListComponent } from './decks/deck-editor/deck-card-list/deck-c
     LandingComponent,
 
     ManaChipComponent,
+    TextFilterComponent,
+    VisualCardComponent,
+    
     
     DeckListComponent,
     DeckEditorComponent,
     DeckPropsBarComponent,
     DeckStatsBarComponent,
     DeckCardListComponent,
+    GroupedDeckCardListComponent,
+    DeckCardDetailComponent,
+    DeckCardGridComponent,
+
+    InventoryOverviewComponent,
+    InventoryFilterBarComponent,
+    InventoryCardGridComponent,
     
     SettingsComponent,
     CollectionTotalsComponent,
@@ -50,6 +69,7 @@ import { DeckCardListComponent } from './decks/deck-editor/deck-card-list/deck-c
     AppRoutingModule,
     MaterialModule,
     FlexLayoutModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

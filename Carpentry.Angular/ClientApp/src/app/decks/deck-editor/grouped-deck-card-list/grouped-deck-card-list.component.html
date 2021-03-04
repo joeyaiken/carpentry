@@ -1,0 +1,48 @@
+<mat-card>
+    <!-- TODO - replace with material table -->
+
+    <table size="small">
+        <!-- Need to research better ways to handle this style table, it might work even better as a mat table -->
+        <!-- I'm adding a DIV but that really may break things, I don't know what the Angular equivalent to a React.Fragment is -->
+        <div class="react-fragment" *ngFor="let group of groupedCardOverviews">
+            <tr>
+                <th size="medium"></th>
+                <th size="medium" colspan="4">{{group.name}} ({{group.cardOverviews.length}})</th>
+            </tr>
+
+            <tr *ngFor="let cardItem of group.cardOverviews"
+                (click)="cardSelected(cardItem)" (mouseenter)="cardSelected(cardItem)">
+                
+                <td>{{cardItem.count}}</td>
+                <td>{{cardItem.name}}</td>
+                <td>
+                    <button mat-button *ngIf="cardItem.tags.length" variant="outlined" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
+                        {{cardItem.tags.toString()}}
+                    </button>                                                    
+                    
+                    <button mat-button *ngIf="!cardItem.tags.length" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
+                        untagged
+                    </button>
+                </td>
+                <td>
+                    <!-- <ManaCostChip costString={cardItem.cost} /> -->
+                </td>
+                <td>
+                <button color="inherit" (click)="cardDetailClick(cardItem.cardId)">
+
+                    <!-- {
+                        cardItem.detailIds.map(id => {
+                            const cardDetail = props.cardDetailsById[id];
+                            let color = GetAvailabilityColor(cardDetail.availabilityId);
+                            return(<Star style={{color: color}} key={id} />);
+                        })
+                    } -->
+                </button>
+                </td>
+                
+            </tr>
+    
+        </div>
+    
+    </table>
+</mat-card>

@@ -1,0 +1,54 @@
+<!-- (props.selectedCard === null) -->
+<div className="staticSection">
+    <mat-card>
+        <mat-card-header>
+            <!-- TODO - figure out to how to render as a body1 instead of [whatever the title is] -->
+            <mat-card-title>
+                <p>no card selected</p>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>select a card</p>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<!-- else -->
+<div className="staticSection">
+                
+    <mat-card>
+        <img *ngIf="selectedCard" style="height:310px; width: 223px" src="selectedCard.img" />
+
+        <mat-card-content>
+            <table size="small">
+                <tr>
+                    <th>Card Detail</th>
+                    <th></th>
+                </tr>
+            
+                <tr *ngFor="let item of inventoryCards">
+
+                    <td *ngIf="item.inventoryCardId" style="text-transform:uppercase">
+                        {{item.set}} - {{item.collectorNumber}}{{item.isFoil && "(foil)"}}
+                    </td>
+                    <td *ngIf="!item.inventoryCardId">
+                        Empty
+                    </td>
+                    
+                    <td size="small">
+                        <a mat-icon-button (click)="menuClick()">more_vert</a>
+                        <!-- <IconButton size="small" onClick={props.onMenuClick} name={item.name} value="item.id">
+                            <MoreVert />
+                        </IconButton> -->
+                    </td>
+                </tr>
+            </table>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="selectedCard && cardDetailClick(selectedCard.cardId)"
+                color="primary" variant="contained">Details</button>
+            <button mat-button (click)="selectedCard && cardTagsClick(selectedCard.cardId)"
+                color="primary" variant="contained">Tags</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
