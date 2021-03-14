@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card, IconButton } from '@material-ui/core';
+import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card, IconButton, TableRow, Table, TableCell, TableBody } from '@material-ui/core';
 import CardGridContainer from './CardGridContainer';
 import { appStyles } from '../../../styles/appStyles';
 import { InfoOutlined } from '@material-ui/icons';
@@ -29,7 +29,7 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                 //image={`https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=${props.card.}&type=card`}
                                 image={cardItem.imageUrl}
                                 title={cardItem.name} />
-                            <Box className={classes.flexRow}>
+                            <Box className={classes.flexCol}>
                                 <CardContent className={classes.flexSection}>
                                     <Box className={classes.flexCol}>
                                         { cardItem.totalCount === 0 &&
@@ -37,31 +37,68 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                                                 no cards
                                             </Typography>
                                         }
-                                        { Boolean(cardItem.inventoryCount) &&
+
+                                        { Boolean(cardItem.totalCount) &&
+                                            <Table size="small">
+                                                <TableBody>
+                                                { Boolean(cardItem.inventoryCount) &&
+                                                    <TableRow>
+                                                        <TableCell size="small">Inventory</TableCell>
+                                                        <TableCell>{cardItem.inventoryCount}</TableCell>
+                                                    </TableRow>
+                                                }    
+                                                { Boolean(cardItem.deckCount) &&
+                                                    <TableRow>
+                                                        <TableCell>Decks</TableCell>
+                                                        <TableCell>{cardItem.deckCount}</TableCell>
+                                                    </TableRow> 
+                                                }
+                                                { Boolean(cardItem.sellCount) &&
+                                                    <TableRow>
+                                                        <TableCell>Sell</TableCell>
+                                                        <TableCell>{cardItem.sellCount}</TableCell>
+                                                    </TableRow> 
+                                                }
+                                                { Boolean(cardItem.totalCount) &&
+                                                    <TableRow>
+                                                        <TableCell>Total</TableCell>
+                                                        <TableCell>{cardItem.totalCount}</TableCell>
+                                                    </TableRow> 
+                                                }    
+                                                <TableRow>
+                                                        <TableCell>${cardItem.price}</TableCell>
+                                                        <TableCell>{ cardItem.isFoil && <Typography>*F</Typography> }</TableCell>
+                                                    </TableRow> 
+                                                </TableBody>
+                                            </Table>
+                                        }
+
+
+                                        {/* { Boolean(cardItem.inventoryCount) &&
                                             <Typography>
                                                 {`Inventory: ${cardItem.inventoryCount}`}
                                             </Typography>
-                                        }
-                                        { Boolean(cardItem.deckCount) &&
+                                        } */}
+                                        {/* { Boolean(cardItem.deckCount) &&
                                             <Typography>
                                                 {`Decks: ${cardItem.deckCount}`}
                                             </Typography>
-                                        }
-                                        { Boolean(cardItem.sellCount) &&
+                                        } */}
+                                        {/* { Boolean(cardItem.sellCount) &&
                                             <Typography>
                                                 {`Sell: ${cardItem.sellCount}`}
                                             </Typography>
-                                        }
-                                        { Boolean(cardItem.totalCount) &&
+                                        } */}
+                                        {/* { Boolean(cardItem.totalCount) &&
                                             <Typography>
                                                 {`Total: ${cardItem.totalCount}`}
                                             </Typography>
-                                        }
-                                        { cardItem.isFoil && <Typography>(FOIL)</Typography> }
+                                        } */}
+                                        {/* { cardItem.isFoil && <Typography>(FOIL)</Typography> } */}
                                         {/* <Typography>
                                             ${ cardItem.isFoil ? cardItem.priceFoil : cardItem.price }
                                         </Typography> */}
-                                        <Typography>${cardItem.price}</Typography>
+                                        {/* <Typography>${cardItem.price}</Typography> */}
                                     </Box>
                                 </CardContent>
                                 <CardActions className={classes.flexSection}>

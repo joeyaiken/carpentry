@@ -18,25 +18,18 @@ namespace Carpentry.Logic.Implementations
 
         public async Task<AppFiltersDto> GetAppCoreData()
         {
-            AppFiltersDto result = new AppFiltersDto();
-
-            result.Formats = await GetFormatFilters();
-
-            result.Rarities = await GetRarityFilters();
-
-            result.Sets = await GetCardSetFilters();
-
-            result.Statuses = await GetStatusFilters();
-
-            result.Types = GetCardTypeFilters();
-
-            result.Colors = GetManaTypeFilters();
-
-            result.SearchGroups = GetCardGroupFilters();
-
-            result.GroupBy = GetInventoryGroupOptions();
-            
-            result.SortBy = GetInventorySortOptions();
+            var result = new AppFiltersDto
+            {
+                Formats = await GetFormatFilters(),
+                Rarities = await GetRarityFilters(),
+                Sets = await GetCardSetFilters(),
+                Statuses = await GetStatusFilters(),
+                Types = GetCardTypeFilters(),
+                Colors = GetManaTypeFilters(),
+                SearchGroups = GetCardGroupFilters(),
+                GroupBy = GetInventoryGroupOptions(),
+                SortBy = GetInventorySortOptions(),
+            };
 
             return result;
         }
