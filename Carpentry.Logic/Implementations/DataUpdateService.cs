@@ -112,6 +112,11 @@ namespace Carpentry.Logic.Implementations
                     RarityId = 'C',
                     Name = "common",
                 },
+                new CardRarityData
+                {
+                    RarityId = 'S',
+                    Name = "special",
+                },
             };
 
             for (int i = 0; i < allRarities.Count(); i++)

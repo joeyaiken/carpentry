@@ -421,6 +421,10 @@ namespace Carpentry.Data.Implementations
                 case "common":
                     rarity = 'C';
                     break;
+                //I guess 'special' is required for Time Spiral timeshifted cards 
+                case "special":
+                    rarity = 'S';
+                    break;
                 default:
                     throw new Exception("Error reading scryfall rarity");
 
