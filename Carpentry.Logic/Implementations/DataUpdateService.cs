@@ -278,7 +278,7 @@ namespace Carpentry.Logic.Implementations
         {
             await _scryfallRepo.EnsureDatabaseExists();
             await _coreDataRepo.EnsureDatabaseExists();
-        }
+        } 
 
         public async Task EnsureDefaultRecordsExist()
         {

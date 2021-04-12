@@ -131,6 +131,8 @@ const inventoryDetailReceived = (state: InventoryDataReducerState, action: Redux
     detailResult.cards.forEach(card => cardsById[card.multiverseId] = card);
     const allCardIds = detailResult.cards.map(card => card.multiverseId);
 
+    //fill card groups
+    
     let cardGroups: { [cardId: number]: number[] } = {};
     // let cardGroupIds: number[];
     allCardIds.forEach(cardId => {
@@ -141,6 +143,9 @@ const inventoryDetailReceived = (state: InventoryDataReducerState, action: Redux
                 && inventoryCardsById[inventoryCardId].collectorNumber === thisCard.collectionNumber);
         cardGroups[cardId] = inventoryCardIds;
     });
+    
+    //
+
 
     const newState: InventoryDataReducerState = {
         ...state,
@@ -155,7 +160,7 @@ const inventoryDetailReceived = (state: InventoryDataReducerState, action: Redux
             cardsById: cardsById,
             allCardIds: allCardIds,
 
-            cardGroups: {},
+            cardGroups: cardGroups,
         },
     };
     return newState;

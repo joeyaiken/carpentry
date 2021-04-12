@@ -1,19 +1,31 @@
 <div>
-    <!-- TODO Replace with angular table -->
-    <table size="small">
-        <tr>
-            <th>Name</th>
-            <th>Count</th>
-            <th>Type</th>
-            <th>Cost</th>
-            <th>Category</th>
-        </tr>
-        <tr *ngFor="let cardItem of cardOverviews" (click)="cardSelected(cardItem)" (mouseenter)="cardSelected(cardItem)">
-            <td>{{cardItem.name}}</td>
-            <td>{{cardItem.count}}</td>
-            <td>{{cardItem.type}}</td>
-            <td>{{cardItem.cost}}</td>
-            <td>{{cardItem.category}}</td>
-        </tr>
+    <table id="card-overviews-table" mat-table [dataSource]="cardOverviews" class="mat-elevation-z8" >
+        <ng-container matColumnDef="name"> 
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="count"> 
+            <th mat-header-cell *matHeaderCellDef>Count</th>
+            <td mat-cell *matCellDef="let cardItem">{{cardItem.count}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type"> 
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let cardItem">{{cardItem.type}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="cost"> 
+            <th mat-header-cell *matHeaderCellDef>Cost</th>
+            <td mat-cell *matCellDef="let cardItem">{{cardItem.cost}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let cardItem">{{cardItem.category}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 </div>

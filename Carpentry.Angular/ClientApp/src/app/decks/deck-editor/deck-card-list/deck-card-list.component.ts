@@ -10,10 +10,16 @@ export class DeckCardListComponent implements OnInit {
     @Input() cardOverviews: DeckCardOverview[];
     @Output() onCardSelected = new EventEmitter<DeckCardOverview>();
 
+    displayedColumns: string[] = ['name','count','type','cost','category'];
+
     constructor() { }
     ngOnInit(): void { }    
 
     cardSelected(card: DeckCardOverview): void {
         this.onCardSelected.emit(card);
+    }
+
+    assertRecordType(card: DeckCardOverview): DeckCardOverview{
+        return card;
     }
 }
