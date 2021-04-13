@@ -1,13 +1,88 @@
 <mat-card>
     <!-- TODO - replace with material table -->
 
+    <!-- <table mat-table [dataSource]="groupedCardOverviews" > -->
+    <table mat-table [dataSource]="cardOverviews" class="mat-elevation-z8" >
+
+
+        <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef>Count</th>
+            <td mat-cell *matCellDef="let cardItem">{{cardItem.count}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let cardItem">{{cardItem.name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tags">
+            <th mat-header-cell *matHeaderCellDef>Tags</th>
+            <td mat-cell *matCellDef="let cardItem">
+                <!-- {{cardItem.tags}} -->
+                <button mat-button *ngIf="cardItem.tags?.length" variant="outlined" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
+                    {{cardItem.tags.toString()}}
+                </button>                                                    
+                
+                <button mat-button *ngIf="!cardItem.tags?.length" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
+                    untagged
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cost">
+            <th mat-header-cell *matHeaderCellDef>Cost</th>
+            <td mat-cell *matCellDef="let cardItem">{{cardItem.cost}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let cardItem">
+                <button mat-button color="inherit" (click)="cardDetailClick(cardItem.cardId)">
+                    <span *ngFor="let detail of cardItem.details">*</span>
+                    <!-- {
+                        cardItem.detailIds.map(id => {
+                            const cardDetail = props.cardDetailsById[id];
+                            let color = GetAvailabilityColor(cardDetail.availabilityId);
+                            return(<Star style={{color: color}} key={id} />);
+                        })
+                    } -->
+                </button>
+            </td>
+            <!-- <td mat-cell *matCellDef="let cardItem">{{cardItem}}</td> -->
+        </ng-container>
+        <!-- Col 1 column def header/cell -->
+        <!-- col 2 column def header/cell -->
+        <!-- .... column def header/cell -->
+
+        <!-- mat-header-row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- mat-row -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <!-- group column def -->
+        <!-- mat-row (for groups) -->
+        <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+        
+        <ng-container matColumnDef="groupHeader">
+            <td mat-cell colspan="999" *matCellDef="let group"><strong>{{group.name}}</strong></td>
+        </ng-container>
+
+        <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"></tr>
+        <!-- <mat-row *matRowDef="let row; columns: ['groupHeader']; when: row.isGroup"></mat-row> -->
+        <!-- <mat-row *matRowDef="let row; columns: ['groupHeader']; when true"></mat-row> -->
+
+
+    </table>
+
+        <h1>SPLIT</h1>
+
     <table size="small">
         <!-- Need to research better ways to handle this style table, it might work even better as a mat table -->
         <!-- I'm adding a DIV but that really may break things, I don't know what the Angular equivalent to a React.Fragment is -->
         <div class="react-fragment" *ngFor="let group of groupedCardOverviews">
             <tr>
                 <th size="medium"></th>
-                <th size="medium" colspan="4">{{group.name}} ({{group.cardOverviews.length}})</th>
+                <th size="medium" colspan="4">{{group.name}} ({{group.cardOverviews?.length}})</th>
             </tr>
 
             <tr *ngFor="let cardItem of group.cardOverviews"
@@ -16,11 +91,11 @@
                 <td>{{cardItem.count}}</td>
                 <td>{{cardItem.name}}</td>
                 <td>
-                    <button mat-button *ngIf="cardItem.tags.length" variant="outlined" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
+                    <button mat-button *ngIf="cardItem.tags?.length" variant="outlined" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
                         {{cardItem.tags.toString()}}
                     </button>                                                    
                     
-                    <button mat-button *ngIf="!cardItem.tags.length" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
+                    <button mat-button *ngIf="!cardItem.tags?.length" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
                         untagged
                     </button>
                 </td>
@@ -28,8 +103,8 @@
                     <!-- <ManaCostChip costString={cardItem.cost} /> -->
                 </td>
                 <td>
-                <button color="inherit" (click)="cardDetailClick(cardItem.cardId)">
-
+                <button mat-button color="inherit" (click)="cardDetailClick(cardItem.cardId)">
+                    <span *ngFor="let detail of cardItem.details">*</span>
                     <!-- {
                         cardItem.detailIds.map(id => {
                             const cardDetail = props.cardDetailsById[id];

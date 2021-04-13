@@ -15,7 +15,11 @@
 
         <app-deck-card-grid *ngIf="viewMode==='grid'" ></app-deck-card-grid>
 
-        <app-grouped-deck-card-list *ngIf="viewMode==='grouped'" ></app-grouped-deck-card-list>
+        <!-- [cardDetailsById]="cardDetails.byId" -->
+        <app-grouped-deck-card-list *ngIf="viewMode==='grouped'"
+            [groupedCardOverviews]="groupedCardOverviews"
+            [cardOverviews]="newGroupingMethod"
+        ></app-grouped-deck-card-list>
         <!-- 
             {props.viewMode === "grid" && <DeckCardGrid cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
             { props.viewMode === "grouped" && 

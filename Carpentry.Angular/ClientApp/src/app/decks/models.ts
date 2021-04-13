@@ -34,9 +34,18 @@ export class CardImportDto {
     //Thoughts: props can just be added on a validated payload
 }
 
+//Old approach, was being used in react app
 export class CardOverviewGroup {
     name: string;
-    cardOverviews: DeckCardOverview[];
+    cardOverviews: ApiDeckCardOverview[];
+}
+//new approach: some class that can be used as a group OR row
+export class GroupedCardOverview extends ApiDeckCardOverview {
+    // constructor(){
+    //     super();
+    // }
+
+    isGroup: boolean;
 }
 
 export class CardTagDto {
@@ -136,6 +145,11 @@ export class DeckStats {
     tagCounts: {[tag: string]: number}
     totalCost: number;
     colorIdentity: string[];
+}
+
+export class NamedCardGroup {
+    name: string;
+    cardOverviewIds: number[];
 }
 
 export class ValidatedCardDto
