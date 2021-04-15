@@ -1,4 +1,4 @@
-<div>
+<div id="deck-editor" fxFill fxLayout="column">
     <app-deck-props-bar 
         [deckProperties]="deckDetail?.props"
         (onToggleViewClick)="onToggleViewClick()"
@@ -7,53 +7,55 @@
         (onAddCardsClick)="onAddCardsClick()">
     </app-deck-props-bar>
     
-    <div className="flexRow flexSection" style="overflow:auto; align-items:stretch">
+    <div fxLayout="row" className="flexSection" fxFlex style="overflow:auto; align-items:stretch">
 
-        <div className="flexSection" style="overflow:auto; flex: 1 1 70%">
+        <div fxFlex="70"  style="overflow:auto;">
 
-        <app-deck-card-list *ngIf="viewMode==='list'" [cardOverviews]="deckDetail.cards" (onCardSelected)="onCardSelected($event)"></app-deck-card-list>
+            <app-deck-card-list *ngIf="viewMode==='list'" [cardOverviews]="deckDetail.cards" (onCardSelected)="onCardSelected($event)"></app-deck-card-list>
 
-        <app-deck-card-grid *ngIf="viewMode==='grid'" ></app-deck-card-grid>
+            <app-deck-card-grid *ngIf="viewMode==='grid'" ></app-deck-card-grid>
 
-        <!-- [cardDetailsById]="cardDetails.byId" -->
-        <app-grouped-deck-card-list *ngIf="viewMode==='grouped'"
-            [groupedCardOverviews]="groupedCardOverviews"
-            [cardOverviews]="newGroupingMethod"
-        ></app-grouped-deck-card-list>
+            <!-- [cardDetailsById]="cardDetails.byId" -->
+            <app-grouped-deck-card-list *ngIf="viewMode==='grouped'"
+                [groupedCardOverviews]="groupedCardOverviews"
+                [cardOverviews]="newGroupingMethod"
+            ></app-grouped-deck-card-list>
+            <!-- 
+                {props.viewMode === "grid" && <DeckCardGrid cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
+                { props.viewMode === "grouped" && 
+                    <GroupedDeckCardList 
+                        groupedCardOverviews={props.groupedCardOverviews} 
+                        cardDetailsById={props.cardDetailsById} 
+                        onCardSelected={props.onCardSelected}
+                        onCardDetailClick={props.onCardDetailClick} 
+                        onCardTagsClick={props.onCardTagsClick}  /> }
+        -->
+        </div>
+
+        <div fxFlex="30" style="overflow:auto;">
+
         <!-- 
-            {props.viewMode === "grid" && <DeckCardGrid cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
-            { props.viewMode === "grouped" && 
-                <GroupedDeckCardList 
-                    groupedCardOverviews={props.groupedCardOverviews} 
-                    cardDetailsById={props.cardDetailsById} 
-                    onCardSelected={props.onCardSelected}
+                <CardMenu 
+                    cardMenuAnchor={props.cardMenuAnchor} 
+                    onCardMenuSelect={props.onCardMenuSelected} 
+                    onCardMenuClose={props.onCardMenuClosed} 
+                    cardCategoryId={props.selectedCard?.category || ''}
+                    hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}
+                    />
+
+                <DeckCardDetail 
+                    selectedCard={props.selectedCard} 
+                    inventoryCards={props.selectedInventoryCards} 
+                    onMenuClick={props.onCardMenuClick}
+                    onMenuClose={props.onCardMenuClosed}
                     onCardDetailClick={props.onCardDetailClick} 
-                    onCardTagsClick={props.onCardTagsClick}  /> }
-     -->
+                    onCardTagsClick={props.onCardTagsClick} />
+        -->
+
+            <app-deck-card-detail></app-deck-card-detail>
+        </div>
+
     </div>
 
-    <div className="flexSection" style="overflow:auto; flex:1 1 30%">
-
-    <!-- 
-            <CardMenu 
-                cardMenuAnchor={props.cardMenuAnchor} 
-                onCardMenuSelect={props.onCardMenuSelected} 
-                onCardMenuClose={props.onCardMenuClosed} 
-                cardCategoryId={props.selectedCard?.category || ''}
-                hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}
-                />
-
-            <DeckCardDetail 
-                selectedCard={props.selectedCard} 
-                inventoryCards={props.selectedInventoryCards} 
-                onMenuClick={props.onCardMenuClick}
-                onMenuClose={props.onCardMenuClosed}
-                onCardDetailClick={props.onCardDetailClick} 
-                onCardTagsClick={props.onCardTagsClick} />
-    -->
-
-        <app-deck-card-detail></app-deck-card-detail>
-    </div>
-    </div>
     <app-deck-stats-bar [deckStats]="deckDetail?.stats"></app-deck-stats-bar>
 </div>

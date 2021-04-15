@@ -95,7 +95,7 @@ export class DeckEditorComponent implements OnInit {
 
     //Just going to snag redux logic instead of bothering to refactor out the dictionary for now
     applyDeckDetail(detail: DeckDetailDto){
-        // this.deckDetail = detail;
+        this.deckDetail = detail;
 
         this.deckProperties = detail.props;
 

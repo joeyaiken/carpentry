@@ -1,7 +1,6 @@
 <mat-card>
     <table mat-table [dataSource]="cardOverviews" class="mat-elevation-z8 table-small" >
 
-
         <ng-container matColumnDef="count">
             <th mat-header-cell *matHeaderCellDef>Count</th>
             <td mat-cell *matCellDef="let cardItem">{{cardItem.count}}</td>
@@ -15,7 +14,6 @@
         <ng-container matColumnDef="tags">
             <th mat-header-cell *matHeaderCellDef>Tags</th>
             <td mat-cell *matCellDef="let cardItem">
-                <!-- {{cardItem.tags}} -->
                 <button mat-button *ngIf="cardItem.tags?.length" variant="outlined" style="text-transform:none" (click)="cardTagsClick(cardItem.cardId)">
                     {{cardItem.tags.toString()}}
                 </button>                                                    
@@ -46,10 +44,8 @@
                     } -->
                 </button>
             </td>
-            <!-- <td mat-cell *matCellDef="let cardItem">{{cardItem}}</td> -->
         </ng-container>
 
-        <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
         <ng-container matColumnDef="groupHeader">
@@ -60,7 +56,7 @@
         </ng-container>
         <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"></tr>
     </table>
-    <h1>SPLIT</h1>
+    <!-- <h1>SPLIT</h1> -->
     <!-- <table size="small">
         <div class="react-fragment" *ngFor="let group of groupedCardOverviews">
             <tr *ngFor="let cardItem of group.cardOverviews"

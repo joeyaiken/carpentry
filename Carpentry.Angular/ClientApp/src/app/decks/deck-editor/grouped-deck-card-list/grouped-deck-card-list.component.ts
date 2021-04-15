@@ -10,7 +10,7 @@ import { CardOverviewGroup, DeckCardDetail, DeckCardOverview, GroupedCardOvervie
 })
 export class GroupedDeckCardListComponent implements OnInit {
     //This needs to take a new class that can function as either a row or group (screw that any[] bullshit)
-
+        //That new class is/was the GroupedCardOverviews[]
 
 
 
