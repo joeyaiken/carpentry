@@ -134,6 +134,17 @@ namespace Carpentry.Logic.Models.Scryfall
                     //Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
                     IsPremium = true; 
                 }
+                else if (collectorNumberStr.EndsWith('e'))
+                {
+                        //I don't know what this represents yet
+                        throw new NotImplementedException("I don't know what this means yet");
+                    ////main-face of a double-faced card.  Trim the A and add to Cards
+                    //var trimmedNumber = collectorNumberStr.Trim('e');
+                    //CollectionNumber = int.Parse(trimmedNumber);
+
+                    ////Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
+                    //IsPremium = true; 
+                }
                 else
                 {
                     CollectionNumber = int.Parse(collectorNumberStr);

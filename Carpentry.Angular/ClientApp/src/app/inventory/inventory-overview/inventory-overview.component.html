@@ -1,17 +1,15 @@
 <div>
-    <!-- <AppBar color="default" position="relative">
-        <Toolbar>
-            <Typography variant="h6">
-                Inventory
-            </Typography>
-            <QuickFilter name="Most Expensive" (click)="handleQuickFilterClick('Most Expensive')" />
-            <QuickFilter name="Highest Count" (click)='handleQuickFilterClick("Highest Count")'  />
-            <QuickFilter name="Owned Cards" (click)='handleQuickFilterClick("Owned Cards")' />
-            <QuickFilter name="Clear Secondary" secondary={true} (click)='handleQuickFilterClick("Clear Secondary")' />
-            <button mat-button (click)="handleAddCardsClick()">Add Cards</button>
-            <button mat-button (click)="handleTrimmingToolClick()">Trimming Tool</button>
-        </Toolbar>
-    </AppBar> -->
+    <mat-toolbar color="default" position="relative">
+        <h6>
+            Inventory
+        </h6>
+        <button mat-stroked-button color="primary" (click)="quickFilterClick('Most Expensive')" >Most Expensive</button>
+        <button mat-stroked-button color="primary" (click)='quickFilterClick("Highest Count")'  >Highest Count</button>
+        <button mat-stroked-button color="primary" (click)='quickFilterClick("Owned Cards")' >Owned Cards</button>
+        <button mat-stroked-button color="accent" (click)='quickFilterClick("Clear Secondary")' >Clear Secondary</button>
+        <button mat-button (click)="addCardsClick()">Add Cards</button>
+        <button mat-button (click)="trimmingToolClick()">Trimming Tool</button>
+    </mat-toolbar>
     <div>
         <app-inventory-filter-bar
             [searchFilter]="searchFilter"
@@ -42,7 +40,7 @@
                     </app-inventory-card-grid>
                 </div>
     </div>
-    <div>
+    <!-- <div>
         <p>Loading: {{isLoading}}</p>
         <p>PROPS</p>
 
@@ -55,6 +53,6 @@
 
         <p>text: {{searchFilter?.text}}</p>
         <p>minCount: {{searchFilter?.minCount}}</p>
-    </div>
+    </div> -->
     
 </div>

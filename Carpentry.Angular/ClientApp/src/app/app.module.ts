@@ -30,6 +30,7 @@ import { InventoryFilterBarComponent } from './inventory/inventory-overview/inve
 import { TextFilterComponent } from './common/text-filter/text-filter.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { InventoryCardGridComponent } from './inventory/inventory-overview/inventory-card-grid/inventory-card-grid.component';
+import { InventoryCardComponent } from './inventory/inventory-overview/inventory-card/inventory-card.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { InventoryCardGridComponent } from './inventory/inventory-overview/inven
     InventoryOverviewComponent,
     InventoryFilterBarComponent,
     InventoryCardGridComponent,
+    InventoryCardComponent,
     
     SettingsComponent,
     CollectionTotalsComponent,

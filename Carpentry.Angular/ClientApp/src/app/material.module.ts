@@ -9,6 +9,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
     imports: [
@@ -22,6 +23,7 @@ import { MatSelectModule } from "@angular/material/select";
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
+        MatCheckboxModule,
     ],
     exports: [
         MatToolbarModule,
@@ -34,6 +36,7 @@ import { MatSelectModule } from "@angular/material/select";
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
+        MatCheckboxModule,
     ],
     providers: [
 

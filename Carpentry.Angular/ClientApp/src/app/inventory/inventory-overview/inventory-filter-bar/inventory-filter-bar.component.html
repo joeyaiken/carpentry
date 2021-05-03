@@ -24,7 +24,9 @@
             options={props.filterOptions.sortBy} handleFilterChange={props.handleFilterChange} /> -->
 
 
-
+        <div class="flex-section side-padded">
+            <mat-checkbox [(ngModel)]="searchFilter.sortDescending" color="primary">Desc</mat-checkbox>
+        </div>
         <!-- <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
             options={[{name: "Desc", value: "sortDescending", checked: props.searchFilter.sortDescending}]} /> -->
 
@@ -62,7 +64,10 @@
         <!-- <SelectFilter name="colorIdentity" selectMultiple={true} value={props.searchFilter.colorIdentity}
             options={props.filterOptions.colors} handleFilterChange={props.handleFilterChange} /> -->
 
-
+        <div class="flex-section side-padded">
+            <mat-checkbox [(ngModel)]="searchFilter.exclusiveColorFilters" color="primary">Exclusive</mat-checkbox>
+            <mat-checkbox [(ngModel)]="searchFilter.multiColorOnly" color="primary">Multi</mat-checkbox>
+        </div>
 
         <!-- <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
             options={[{name: "Exclusive", value: "exclusiveColorFilters", checked: props.searchFilter.exclusiveColorFilters},

@@ -243,15 +243,69 @@ export class InventoryOverviewComponent implements OnInit {
         }, err => console.log(err));
     }
 
+    quickFilterClick(filterValue: string) {
+        //TODO - maybe refactor out this ...apply nonsense
+        let newFilter: InventoryFilterProps =  {...this.searchFilter};
 
-    
+        switch(filterValue){
+            case "Most Expensive": //by unique, price descending
+                newFilter = {
+                    ...newFilter,
+                    groupBy: 'unique',
+                    sortBy: 'price',
+                    sortDescending: true,
+                }
+                break;
+            case "Highest Count": //by name, owned count descending
+                newFilter = {
+                    ...newFilter,
+                    groupBy: 'name',
+                    sortBy: 'count',
+                    sortDescending: true,
+                }
+                break;
+            case "Owned Cards": //by name, by name, where MinCount == 1
+                newFilter = {
+                    ...newFilter,
+                    groupBy: 'name',
+                    sortBy: 'name',
+                    sortDescending: false,
+                    minCount: 1,
+                }
+                break;
+            case "Clear Secondary": //
+                newFilter = {
+                    ...newFilter,
+                    set: "",
+                    type: "",
+                    colorIdentity: [],
+                    exclusiveColorFilters: false,
+                    multiColorOnly: false,
+                    text: "",
+                    rarity: [],
+                }
+                break;
+        }
+
+        this.searchFilter = newFilter;
+        
+    }
+
+    // <button mat-button (click)="handleAddCardsClick()">Add Cards</button>
+    addCardsClick() {
+        alert('Not implemented yet!')
+    }
+    // <button mat-button (click)="handleTrimmingToolClick()">Trimming Tool</button>
+    trimmingToolClick() {
+        alert('Not implemented yet!')
+    }
     cardDetailSelected(): void {
-
+        alert('Not implemented yet!')
     }
     cardDetailButtonClick(): void {
-
+        alert('Not implemented yet!')
     }
     cardDetailMenuClose(): void {
-
+        alert('Not implemented yet!')
     }
 }
