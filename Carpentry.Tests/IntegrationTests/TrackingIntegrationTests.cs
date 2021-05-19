@@ -40,5 +40,20 @@ namespace Carpentry.Tests.IntegrationTests
 
             Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
         }
+
+        [TestMethod]
+        public async Task UpdateSets_Works()
+        {
+            var apiEndpoint = $"api/Core/GetTrackedSets?showUntracked=true&update=true";
+            var client = _factory.CreateClient();
+
+            //var queryParamStringBody = JsonConvert.SerializeObject(queryParamToRequest, Formatting.None);
+
+            //var queryParamStringContent = new StringContent(queryParamStringBody, Encoding.UTF8, "application/json");
+
+            var response = await client.GetAsync(apiEndpoint);
+
+            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode);
+        }
     }
 }

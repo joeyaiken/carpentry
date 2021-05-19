@@ -5,7 +5,7 @@ using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Carpentry.Angular.Controllers
+namespace Carpentry.Angular.Controllers 
 {
     [Route("api/[controller]")]
     public class DecksController : ControllerBase

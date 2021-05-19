@@ -27,6 +27,9 @@ namespace Carpentry.Tools.QuickImport
     {
         static async Task Main(string[] args)
         {
+            //var SAVE_DECKS = false;
+
+
             var serviceProvider = BuildServiceProvider();
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
@@ -36,6 +39,264 @@ namespace Carpentry.Tools.QuickImport
             var importService = serviceProvider.GetService<IDataImportService>();
             var deckRepo = serviceProvider.GetService<DeckDataRepo>();
 
+            var decksToImport = GetImports();
+
+            if (decksToImport.Count == 0)
+            {
+                logger.LogInformation($"No decks specified, will now exit");
+                return;
+            }
+
+            logger.LogInformation($"Will attempt to import {decksToImport.Count} decks");
+
+            foreach (var deck in decksToImport)
+            {
+                logger.LogInformation($"Attempting to import deck {deck.Name}");
+
+                //check if the deck already exists
+                var existingDeck = await deckRepo.GetDeckByName(deck.Name);
+                if(existingDeck != null)
+                {
+                    logger.LogInformation($"Deck {deck.Name} already exists in the database, skipping...");
+                    continue;
+                }
+
+
+                string fileContents = await GetRawListFromFile(deck.FilePath);
+
+                CardImportDto importPayload = new CardImportDto()
+                {
+                    ImportType = CardImportPayloadType.Arena,
+                    ImportPayload = fileContents,
+                };
+
+                var validatedPayload = await importService.ValidateDeckImport(importPayload);
+                validatedPayload.DeckProps.Name = deck.Name;
+                validatedPayload.DeckProps.Format = deck.FormatName;
+
+                if(validatedPayload.UntrackedSets.Count > 0)
+                {
+                    throw new Exception("Untracked set encountered (not automatically adding for now)");
+                }
+
+                if (!validatedPayload.IsValid)
+                {
+                    //throw new Exception("Invalid import, won't add");
+                    logger.LogInformation($"Invalid import, won't add {deck.Name}");
+                }
+
+                //if (SAVE_DECKS)
+                //{
+                //await importService.AddValidatedDeckImport(validatedPayload);
+                //}
+
+                logger.LogInformation($"Successfully 'imported' deck {deck.Name}");
+            }
+        }
+
+        private static ServiceProvider BuildServiceProvider()
+        {
+            //var appConfig = new BackupToolConfig(Configuration);
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
+
+            //string cardDatabaseLocation = $"Data Source={appConfig.DatabaseLocation}";
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(Configuration)
+                //.AddSingleton<IDataBackupConfig, BackupToolConfig>()
+
+                .AddLogging(config => config.AddSerilog())
+
+                ////DB context
+                .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
+                .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
+
+
+            ////data services
+            //.AddSingleton<ICardDataRepo, CardDataRepo>()
+            ////.AddSingleton<IDeckDataRepo, DeckDataRepo>()
+            ////.AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
+            ////.AddSingleton<IScryfallDataRepo, ScryfallRepo>()
+            ////.AddSingleton<IDataReferenceService, DataReferenceService>()
+            ////.AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
+
+            ////logic services
+            ////.AddScoped<IDataRestoreService, DataRestoreService>()
+            .AddSingleton<IDataUpdateService, DataUpdateService>()
+            //.AddSingleton<IDataImportService, DataImportService>()
+
+            //.AddScoped<IScryfallService, ScryfallService>()
+            //.AddHttpClient<IScryfallService, ScryfallService>().Services
+
+
+
+            ////private readonly IDataUpdateService _dataUpdateService;
+            ////.AddScoped<>
+            ////private readonly ICardDataRepo _cardDataRepo;
+            ////private readonly IDeckService _deckService;
+            ////private readonly IInventoryService _inventoryService;
+
+
+
+
+            .AddSingleton<IDataBackupConfig, FakeAppConfig>()
+
+            // v
+
+            //DB repos
+            .AddScoped<ICardDataRepo, CardDataRepo>()
+            .AddScoped<DeckDataRepo>()
+            .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
+            .AddScoped<IScryfallDataRepo, ScryfallRepo>()
+            .AddScoped<ICoreDataRepo, CoreDataRepo>()
+
+            //Logic services
+            //.AddScoped<ISearchService, SearchService>()
+            .AddScoped<IDeckService, DeckService>()
+            .AddScoped<IInventoryService, InventoryService>()
+
+            .AddScoped<IDataImportService, DataImportService>()
+            .AddScoped<IDataUpdateService, DataUpdateService>()
+                //.AddScoped<IDataExportService, DataExportService>()
+                //.AddScoped<IFilterService, FilterService>()
+
+                .AddScoped<IScryfallService, ScryfallService>()
+                .AddHttpClient<IScryfallService, ScryfallService>().Services
+
+                //.AddScoped<ICollectionBuilderService, CollectionBuilderService>()
+                //.AddScoped<ITrimmingTipsService, TrimmingTipsService>()
+
+                // ^
+
+
+                //Service-layer
+                //.AddScoped<ICarpentryCardSearchService, CarpentryCardSearchService>()
+                //.AddScoped<ICarpentryCoreService, CarpentryCoreService>()
+                //.AddScoped<ICarpentryDeckService, CarpentryDeckService>()
+                //.AddScoped<ICarpentryInventoryService, CarpentryInventoryService>()
+
+
+                .BuildServiceProvider();
+
+            return serviceProvider;
+        }
+
+        private static IConfiguration Configuration
+        {
+            get
+            {
+                return new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+            }
+        }
+
+        private static async Task<string> GetRawListFromFile(string directory)
+        {
+            string fileContents = await File.ReadAllTextAsync(directory);
+            return fileContents;
+        }
+
+        private static List<DeckImportTemplate> Get2ndJmpBox()
+        {
+            var deckTemplates = new List<DeckImportTemplate>();
+
+            var jumpstartDecks = new List<string>()
+            {
+                "Minotaurs_2",
+                "Dragons_2",
+                "Devilish_2",
+                "Devilish_4",
+                "Pirates_2",
+                "Spirits_1",
+                "Archaeology_1",
+                "Archaeology_2",
+                "Archaeology_3",
+                "WellRead_2",
+                "WellRead_3",
+                "Walls",
+                "Lands_1",
+                "Predatory_1",
+                "Dogs_1",
+                "Dogs_2",
+                "Doctor_3",
+                "FeatheredFriends_1",
+                "Legion_1",
+                "Minions_4",
+                "Vampires_1",
+                "Vampires_3",
+                "Vampires_4",
+                "Rainbow",
+            };
+
+            foreach (var deck in jumpstartDecks)
+            {
+                deckTemplates.Add(GenerateJumpstartTemplate(deck));
+            }
+
+            return deckTemplates;
+        }
+
+        private static List<DeckImportTemplate> GetImports()
+        {
+            var deckTemplates = new List<DeckImportTemplate>();
+
+            //var jumpstartDecks = new List<string>()
+            //{
+            //    "AboveTheClouds_4",
+            //    "Archaeology_3",
+            //    "Devilish_2",
+            //    "Discarding_1",
+            //    "Goblins_2",
+            //    "HeavilyArmored_2",
+            //    "HeavilyArmored_3",
+            //    "Liliana",
+            //    "Minions_2",
+            //    "Minions_4",
+            //    "PlusOne_1",
+            //    "PlusOne_4",
+            //    "Spellcasting_1",
+            //    "Spirits_2",
+            //    "Spooky_2",
+            //    "Vampires_3",
+            //    "WellRead_2",
+            //    "WellRead_4",
+            //    "Witchcraft_2",
+            //    "Wizards_1",
+            //    "Wizards_2",
+            //};
+
+            //var commanderDecks = new List<string>()
+            //{
+            //    "C21_LoreholdLegacies",
+            //    "C21_QuantumQuandrix",
+            //    "KLD_ElvenEmpire",
+            //    "KLD_PhantomPremonition",
+            //};
+
+            //foreach(var deck in jumpstartDecks)
+            //{
+            //    deckTemplates.Add(GenerateJumpstartTemplate(deck));
+            //}
+
+            //foreach(var deck in commanderDecks)
+            //{
+            //    deckTemplates.Add(GenerateCommanderDeckTemplate(deck));
+            //}
+
+            return deckTemplates;
+        }
+
+        private static List<DeckImportTemplate> GetImports_Legacy()
+        {
             List<DeckImportTemplate> decksToImport = new List<DeckImportTemplate>()
             {
                 //new DeckImportTemplate()
@@ -278,7 +539,7 @@ namespace Carpentry.Tools.QuickImport
                 //},
 
 
-                
+
 
 
                 //4 JMP decks
@@ -337,165 +598,28 @@ namespace Carpentry.Tools.QuickImport
                 //},
             };
 
-            if (decksToImport.Count == 0)
-            {
-                logger.LogInformation($"No decks specified, will now exit");
-                return;
-            }
-
-            logger.LogInformation($"Will attempt to import {decksToImport.Count} decks");
-
-            foreach (var deck in decksToImport)
-            {
-                logger.LogInformation($"Attempting to import deck {deck.Name}");
-
-                //check if the deck already exists
-                var existingDeck = await deckRepo.GetDeckByName(deck.Name);
-                if(existingDeck != null)
-                {
-                    logger.LogInformation($"Deck {deck.Name} already exists in the database, skipping...");
-                    continue;
-                }
-
-
-                string fileContents = await GetRawListFromFile(deck.FilePath);
-
-                CardImportDto importPayload = new CardImportDto()
-                {
-                    ImportType = CardImportPayloadType.Arena,
-                    ImportPayload = fileContents,
-                };
-
-                var validatedPayload = await importService.ValidateDeckImport(importPayload);
-                validatedPayload.DeckProps.Name = deck.Name;
-                validatedPayload.DeckProps.Format = deck.FormatName;
-
-                if(validatedPayload.UntrackedSets.Count > 0)
-                {
-                    throw new Exception("Untracked set encountered (not automatically adding for now)");
-                }
-
-                if (!validatedPayload.IsValid)
-                {
-                    //throw new Exception("Invalid import, won't add");
-                    logger.LogInformation($"Invalid import, won't add {deck.Name}");
-                }
-
-                await importService.AddValidatedDeckImport(validatedPayload);
-
-                logger.LogInformation($"Successfully 'imported' deck {deck.Name}");
-            }
+            return decksToImport;
         }
 
-        private static ServiceProvider BuildServiceProvider()
+        private static DeckImportTemplate GenerateCommanderDeckTemplate(string fileName)
         {
-            //var appConfig = new BackupToolConfig(Configuration);
-
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .CreateLogger();
-
-            //string cardDatabaseLocation = $"Data Source={appConfig.DatabaseLocation}";
-
-            var serviceProvider = new ServiceCollection()
-                .AddSingleton(Configuration)
-                //.AddSingleton<IDataBackupConfig, BackupToolConfig>()
-
-                .AddLogging(config => config.AddSerilog())
-
-                ////DB context
-                .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
-                .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
-
-
-            ////data services
-            //.AddSingleton<ICardDataRepo, CardDataRepo>()
-            ////.AddSingleton<IDeckDataRepo, DeckDataRepo>()
-            ////.AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
-            ////.AddSingleton<IScryfallDataRepo, ScryfallRepo>()
-            ////.AddSingleton<IDataReferenceService, DataReferenceService>()
-            ////.AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
-
-            ////logic services
-            ////.AddScoped<IDataRestoreService, DataRestoreService>()
-            .AddSingleton<IDataUpdateService, DataUpdateService>()
-            //.AddSingleton<IDataImportService, DataImportService>()
-
-            //.AddScoped<IScryfallService, ScryfallService>()
-            //.AddHttpClient<IScryfallService, ScryfallService>().Services
-
-
-
-            ////private readonly IDataUpdateService _dataUpdateService;
-            ////.AddScoped<>
-            ////private readonly ICardDataRepo _cardDataRepo;
-            ////private readonly IDeckService _deckService;
-            ////private readonly IInventoryService _inventoryService;
-
-
-
-
-            .AddSingleton<IDataBackupConfig, FakeAppConfig>()
-
-            // v
-
-            //DB repos
-            .AddScoped<ICardDataRepo, CardDataRepo>()
-            .AddScoped<DeckDataRepo>()
-            .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
-            .AddScoped<IScryfallDataRepo, ScryfallRepo>()
-            .AddScoped<ICoreDataRepo, CoreDataRepo>()
-
-            //Logic services
-            //.AddScoped<ISearchService, SearchService>()
-            .AddScoped<IDeckService, DeckService>()
-            .AddScoped<IInventoryService, InventoryService>()
-
-            .AddScoped<IDataImportService, DataImportService>()
-            .AddScoped<IDataUpdateService, DataUpdateService>()
-                //.AddScoped<IDataExportService, DataExportService>()
-                //.AddScoped<IFilterService, FilterService>()
-
-                .AddScoped<IScryfallService, ScryfallService>()
-                .AddHttpClient<IScryfallService, ScryfallService>().Services
-
-                //.AddScoped<ICollectionBuilderService, CollectionBuilderService>()
-                //.AddScoped<ITrimmingTipsService, TrimmingTipsService>()
-
-                // ^
-
-
-                //Service-layer
-                //.AddScoped<ICarpentryCardSearchService, CarpentryCardSearchService>()
-                //.AddScoped<ICarpentryCoreService, CarpentryCoreService>()
-                //.AddScoped<ICarpentryDeckService, CarpentryDeckService>()
-                //.AddScoped<ICarpentryInventoryService, CarpentryInventoryService>()
-
-
-                .BuildServiceProvider();
-
-            return serviceProvider;
-        }
-
-        private static IConfiguration Configuration
-        {
-            get
+            string deckName = fileName.Split('_')[1];
+            return new DeckImportTemplate()
             {
-                return new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-            }
+                Name = deckName,
+                FormatName = "commander",
+                FilePath = $"C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\{fileName}.txt",
+            };
         }
 
-        private static async Task<string> GetRawListFromFile(string directory)
+        private static DeckImportTemplate GenerateJumpstartTemplate(string fileName)
         {
-            string fileContents = await File.ReadAllTextAsync(directory);
-            return fileContents;
+            return new DeckImportTemplate()
+            {
+                Name = fileName,
+                FormatName = "jumpstart",
+                FilePath = $"C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\{fileName}.txt",
+            };
         }
     }
 

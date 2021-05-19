@@ -128,6 +128,11 @@ namespace Carpentry.Logic.Implementations
                     ScryfallMagicCard cardToAdd = new ScryfallMagicCard();
                     cardToAdd.RefreshFromToken(card);
 
+                    if (cardToAdd.DoNotAdd)
+                    {
+                        continue;
+                    }
+
                     if (cardToAdd.IsPremium)
                     {
                         setData.PremiumCards.Add(cardToAdd);
@@ -307,7 +312,7 @@ namespace Carpentry.Logic.Implementations
             string[] excludedSetTypes = {
                 "token",
                 "funny",
-                "memorabilia",
+                //"memorabilia",//If I want to see the c21 display commanders I need to include this
                 "promo",
                 "box",
             };
