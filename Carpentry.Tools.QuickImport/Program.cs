@@ -37,9 +37,9 @@ namespace Carpentry.Tools.QuickImport
             logger.LogInformation("Beginning import tool");
 
             var importService = serviceProvider.GetService<IDataImportService>();
-            var deckRepo = serviceProvider.GetService<DeckDataRepo>();
+            //var deckRepo = serviceProvider.GetService<DeckDataRepo>();
 
-            var decksToImport = GetImports();
+            var decksToImport = Get2ndJmpBox();
 
             if (decksToImport.Count == 0)
             {
@@ -54,12 +54,12 @@ namespace Carpentry.Tools.QuickImport
                 logger.LogInformation($"Attempting to import deck {deck.Name}");
 
                 //check if the deck already exists
-                var existingDeck = await deckRepo.GetDeckByName(deck.Name);
-                if(existingDeck != null)
-                {
-                    logger.LogInformation($"Deck {deck.Name} already exists in the database, skipping...");
-                    continue;
-                }
+                //var existingDeck = await deckRepo.GetDeckByName(deck.Name);
+                //if(existingDeck != null)
+                //{
+                //    logger.LogInformation($"Deck {deck.Name} already exists in the database, skipping...");
+                //    continue;
+                //}
 
 
                 string fileContents = await GetRawListFromFile(deck.FilePath);
