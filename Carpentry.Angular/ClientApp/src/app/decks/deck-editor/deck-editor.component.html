@@ -19,6 +19,7 @@
             <app-grouped-deck-card-list *ngIf="viewMode==='grouped'"
                 [groupedCardOverviews]="groupedCardOverviews"
                 [cardOverviews]="newGroupingMethod"
+                (onCardSelected)="onCardSelected($event)"
             ></app-grouped-deck-card-list>
             <!-- 
                 {props.viewMode === "grid" && <DeckCardGrid cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
@@ -52,7 +53,10 @@
                     onCardTagsClick={props.onCardTagsClick} />
         -->
 
-            <app-deck-card-detail></app-deck-card-detail>
+            <app-deck-card-detail
+                [selectedCard]="selectedOverview"
+            
+            ></app-deck-card-detail>
         </div>
 
     </div>

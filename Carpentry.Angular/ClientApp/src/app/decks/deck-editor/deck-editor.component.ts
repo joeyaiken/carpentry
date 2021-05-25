@@ -62,6 +62,10 @@ export class DeckEditorComponent implements OnInit {
 
     newGroupingMethod: GroupedCardOverview[];
 
+    
+    // selectedOverviewCardId: number | null;
+    selectedOverview: DeckCardOverview | null;
+
     constructor(
         private decksService: DecksService,
         private route: ActivatedRoute,
@@ -252,7 +256,19 @@ export class DeckEditorComponent implements OnInit {
     }
 
     onCardSelected(card: DeckCardOverview): void {
+        // alert('ping')
         //TODO - implement from react app
+        // this.selectedOverviewCardId = card.cardId;
+        this.selectedOverview = card;
+
+        // const overview: DeckCardOverview = this.deckDetail.cards
+
+        // const selectedOverviewCardId = state.decks.deckEditor.selectedOverviewCardId;
+        // if(selectedOverviewCardId){
+        //     return state.decks.data.detail.cardOverviews.byId[selectedOverviewCardId];
+        // }
+        // return null;
+
     }
     
 }

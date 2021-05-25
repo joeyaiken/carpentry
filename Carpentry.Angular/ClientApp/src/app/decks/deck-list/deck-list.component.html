@@ -1,6 +1,44 @@
 <mat-card>
     <mat-card-header>
         <mat-card-title>Available Decks</mat-card-title>
+
+        <!-- <div class="flex-section side-padded">
+            <mat-form-field class="stretch">
+                <mat-label>Sort by</mat-label>
+                <mat-select [(ngModel)]="searchFilter.sortBy">
+                    <mat-option *ngFor="let item of filterOptions?.sortBy" [value]="item.value">{{item.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div> -->
+
+        <mat-form-field>
+            <mat-label>Format</mat-label>
+            <mat-select [(ngModel)]="formatFilter" (selectionChange)="onFormChange()">
+                <!-- TODO: should be loaded from a core service -->
+                <mat-option value="">Any</mat-option>
+                <mat-option value="commander">Commander</mat-option>
+                <mat-option value="modern">Modern</mat-option>
+                <mat-option value="Jumpstart">Jumpstart</mat-option>
+                <!-- <mat-option>(populated from core data)</mat-option> -->
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Sort</mat-label>
+            <mat-select [(ngModel)]="sortBy" (selectionChange)="onFormChange()">
+                <mat-option value="name">Name</mat-option>
+                <mat-option value="color">Color</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <!-- <td size="small"> -->
+            <!-- <a mat-icon-button (click)="menuClick()">more_vert</a> -->
+        <a mat-icon-button>
+            <mat-icon>add</mat-icon>
+        </a>
+            <!-- <IconButton size="small" onClick={props.onMenuClick} name={item.name} value="item.id">
+                <MoreVert />
+            </IconButton> -->
+        <!-- </td> -->
     </mat-card-header>
     <mat-card-content>
         <table mat-table [dataSource]="deckOverviews" class="mat-elevation-z8">

@@ -763,11 +763,16 @@ namespace Carpentry.Logic.Implementations
 
         #region Search
 
-        public async Task<List<DeckOverviewDto>> GetDeckOverviews()
+        public async Task<List<DeckOverviewDto>> GetDeckOverviews(string format = null, string sortBy = null)
         {
             var deckList = await _cardContext.Decks
                 .Include(x => x.Format)
                 .ToListAsync();
+
+            if(!string.IsNullOrEmpty(format))
+            {
+                deckList = deckList.Where(deck => deck.Format.Name.ToLower() == format.ToLower()).ToList();
+            }
 
             var parsedStats = new Dictionary<int, DeckStatsDto>();
 
@@ -837,6 +842,22 @@ namespace Carpentry.Logic.Implementations
             })
             .OrderBy(d => d.Name)
             .ToList();
+
+
+
+            if (!string.IsNullOrEmpty(sortBy) && sortBy.ToLower() != "name")
+            {
+                switch (sortBy)
+                {
+                    case "color":
+                        //not figured out yet...
+
+                        result = result.OrderBy(d => string.Join("", d.Colors)).ToList();
+
+                        break;
+                }
+            }
+
             return result;
         }
 

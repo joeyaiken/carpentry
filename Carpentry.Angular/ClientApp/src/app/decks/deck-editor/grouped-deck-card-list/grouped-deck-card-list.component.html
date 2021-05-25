@@ -46,7 +46,7 @@
             </td>
         </ng-container>
 
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"  (mouseover)="cardSelected(row)"></tr>
 
         <ng-container matColumnDef="groupHeader">
             <!-- <th size="medium" colspan="4">{{group.name}} ({{group.cardOverviews?.length}})</th> -->
@@ -54,7 +54,10 @@
             <!-- TODO: Count should be set when creating group record -->
             <td mat-cell colspan="999" *matCellDef="let group"><strong>{{group.name}} (#)</strong></td>
         </ng-container>
-        <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"
+        
+            ></tr>
     </table>
     <!-- <h1>SPLIT</h1> -->
     <!-- <table size="small">

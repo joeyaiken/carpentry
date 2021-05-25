@@ -31,6 +31,7 @@ export class GroupedDeckCardListComponent implements OnInit {
     ngOnInit(): void {}
 
     cardSelected(overview: DeckCardOverview): void {
+        // alert('ping1')
         this.onCardSelected.emit(overview);
     }
 

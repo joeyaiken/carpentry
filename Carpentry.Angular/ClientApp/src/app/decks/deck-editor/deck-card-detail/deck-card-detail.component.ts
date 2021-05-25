@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { DeckCardDetail, DeckCardOverview } from "../../models";
+import { ApiDeckCardOverview, DeckCardDetail, DeckCardOverview } from "../../models";
 
 @Component({
     selector: 'app-deck-card-detail',
@@ -8,8 +8,9 @@ import { DeckCardDetail, DeckCardOverview } from "../../models";
     
 })
 export class DeckCardDetailComponent implements OnInit {
-    @Input() selectedCard: DeckCardOverview | null;
-    @Input() inventoryCards: DeckCardDetail[];
+    // @Input() selectedCard: DeckCardOverview | null;
+    @Input() selectedCard: ApiDeckCardOverview | null;
+    // @Input() inventoryCards: DeckCardDetail[];
 
     @Output() onMenuClick = new EventEmitter<void>();
     // (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

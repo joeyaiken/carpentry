@@ -1,5 +1,5 @@
 <!-- (props.selectedCard === null) -->
-<div className="staticSection">
+<div className="staticSection" *ngIf="selectedCard===null">
     <mat-card>
         <mat-card-header>
             <!-- TODO - figure out to how to render as a body1 instead of [whatever the title is] -->
@@ -17,7 +17,7 @@
 <div className="staticSection">
                 
     <mat-card>
-        <img *ngIf="selectedCard" style="height:310px; width: 223px" src="selectedCard.img" />
+        <img *ngIf="selectedCard" style="height:310px; width: 223px" [src]="selectedCard.img" />
 
         <mat-card-content>
             <table size="small">
@@ -26,7 +26,7 @@
                     <th></th>
                 </tr>
             
-                <tr *ngFor="let item of inventoryCards">
+                <tr *ngFor="let item of selectedCard.details">
 
                     <td *ngIf="item.inventoryCardId" style="text-transform:uppercase">
                         {{item.set}} - {{item.collectorNumber}}{{item.isFoil && "(foil)"}}
@@ -36,19 +36,17 @@
                     </td>
                     
                     <td size="small">
-                        <a mat-icon-button (click)="menuClick()">more_vert</a>
-                        <!-- <IconButton size="small" onClick={props.onMenuClick} name={item.name} value="item.id">
-                            <MoreVert />
-                        </IconButton> -->
+                        <a mat-icon-button (click)="menuClick()"><mat-icon>more_vert</mat-icon></a>
+                        <!-- <IconButton size="small" onClick={props.onMenuClick} name={item.name} value="item.id"><MoreVert /></IconButton> -->
                     </td>
                 </tr>
             </table>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-button (click)="selectedCard && cardDetailClick(selectedCard.cardId)"
+            <!-- <button mat-button (click)="selectedCard && cardDetailClick(selectedCard.cardId)"
                 color="primary" variant="contained">Details</button>
             <button mat-button (click)="selectedCard && cardTagsClick(selectedCard.cardId)"
-                color="primary" variant="contained">Tags</button>
+                color="primary" variant="contained">Tags</button> -->
         </mat-card-actions>
     </mat-card>
 </div>
