@@ -55,8 +55,8 @@ export class DecksService extends HttpService
         return this.http.get<void>(url);
     };
 
-    getDeckOverviews(format: string, sort: string): Observable<DeckOverviewDto[]> {
-        const endpoint = `api/Decks/GetDeckOverviews?format=${format}&sortBy=${sort}`;
+    getDeckOverviews(format: string, sort: string, includeDissasembled: boolean): Observable<DeckOverviewDto[]> {
+        const endpoint = `api/Decks/GetDeckOverviews?format=${format}&sortBy=${sort}&includeDissasembled=${includeDissasembled}`;
         return this.http.get<DeckOverviewDto[]>(endpoint);
     }
 

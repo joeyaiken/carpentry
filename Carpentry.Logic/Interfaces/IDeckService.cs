@@ -25,7 +25,7 @@ namespace Carpentry.Logic.Interfaces
         Task AddCardTag(CardTagDto cardTag);
         Task RemoveCardTag(int cardTagId);
 
-        Task<List<DeckOverviewDto>> GetDeckOverviews(string format = null, string sortBy = null);
+        Task<List<DeckOverviewDto>> GetDeckOverviews(string format = null, string sortBy = null, bool includeDissasembled = false);
         Task<DeckDetailDto> GetDeckDetail(int deckId);
 
         Task<string> GetDeckListExport(int deckId, string exportType);

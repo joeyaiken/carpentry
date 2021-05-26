@@ -1,0 +1,56 @@
+<!-- For some reason it bothers me that this file doesn't have to be wrapped in a specific tag -->
+<h4 mat-dialog-title>Deck Properties</h4>
+<div mat-dialog-content>
+    <div>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput color="primary" [(ngModel)]="deckProps.name" />
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Format</mat-label>
+            <mat-select [(ngModel)]="deckProps.format">
+                <mat-option *ngFor="let filter of formatFilterOptions" [value]="filter.name">{{filter.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Notes</mat-label>
+            <input matInput color="primary" [(ngModel)]="deckProps.notes" />
+        </mat-form-field>
+    </div>
+    <div fxLayout="row" className="flex-row" *ngIf="deckProps.id > 0">
+        <mat-form-field fxFlex="20">
+            <input matInput color="primary" type="number" [(ngModel)]="deckProps.basicW" />
+            <span matPrefix>W&nbsp;</span>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+            <input matInput color="primary" type="number" [(ngModel)]="deckProps.basicU" />
+            <span matPrefix>U&nbsp;</span>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+            <input matInput color="primary" type="number" [(ngModel)]="deckProps.basicB" />
+            <span matPrefix>B&nbsp;</span>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+            <input matInput color="primary" type="number" [(ngModel)]="deckProps.basicR" />
+            <span matPrefix>R&nbsp;</span>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+            <input matInput color="primary" type="number" [(ngModel)]="deckProps.basicG" />
+            <span matPrefix>G&nbsp;</span>
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions fxLayout="column" fxLayoutAlign="none end" fxLayoutGap="10px">
+    <div>
+        <button mat-raised-button color="warn" (click)="onDisassembleClick()">Disassemble</button>
+        <button mat-raised-button color="warn" (click)="onDeleteClick()">Delete</button>
+    </div>
+    <div>
+        <button mat-raised-button (click)="onCancelClick()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSaveClick()">Save</button>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title>Available Decks</mat-card-title>
+        <mat-card-title>Available Decks ({{deckOverviews.length}})</mat-card-title>
 
         <!-- <div class="flex-section side-padded">
             <mat-form-field class="stretch">
@@ -30,6 +30,11 @@
                 <mat-option value="color">Color</mat-option>
             </mat-select>
         </mat-form-field>
+
+        <!-- <div class="flex-section side-padded"> -->
+            <mat-checkbox [(ngModel)]="includeDissasembled" color="primary" (change)="onFormChange()">Inc Empty</mat-checkbox>
+        <!-- </div> -->
+
         <!-- <td size="small"> -->
             <!-- <a mat-icon-button (click)="menuClick()">more_vert</a> -->
         <a mat-icon-button>
@@ -63,7 +68,8 @@
 
             <ng-container matColumnDef="validationIssues">
                 <th mat-header-cell *matHeaderCellDef>Validity</th>
-                <td mat-cell *matCellDef="let element">{{element.validationIssues}}</td>
+                <td mat-cell *matCellDef="let element"><p>{{element.validationIssues}}</p><p *ngIf="element.isDisassembled">Disassembled</p></td>
+                <!-- <td mat-cell *matCellDef="let element">{{element.isDisassembled}}</td> -->
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

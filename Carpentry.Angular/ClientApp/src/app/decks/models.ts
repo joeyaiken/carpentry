@@ -122,6 +122,7 @@ export class DeckOverviewDto {
     colors: string[];
     isValid: boolean;
     validationIssues: string;
+    isDisassembled: boolean;
 }
 
 export class DeckPropertiesDto {
@@ -145,6 +146,10 @@ export class DeckStats {
     tagCounts: {[tag: string]: number}
     totalCost: number;
     colorIdentity: string[];
+    
+    isDissasembled: boolean;
+    isValid: boolean;
+    
 }
 
 export class NamedCardGroup {

@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DecksService } from "../decks.service";
 import { CardOverviewGroup, DeckCardDetail, DeckCardOverview, DeckDetailDto, DeckPropertiesDto, GroupedCardOverview, NamedCardGroup } from "../models";
-
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog"
+import { DeckPropertiesComponentResult, DeckPropsDialogComponent } from "./deck-props-dialog/deck-props-dialog.component";
 //TODO - Consider finding a way to show basic lands in the traditional card list, instead of in an AppBar
 
 @Component({
@@ -25,8 +26,8 @@ export class DeckEditorComponent implements OnInit {
 
     // deckStats: DeckStats | null;
 
-
     // isPropsDialogOpen: boolean;
+
     // deckDialogProperties: DeckPropertiesDto | null;
 
     // groupedCardOverviews: CardOverviewGroup[];
@@ -65,10 +66,14 @@ export class DeckEditorComponent implements OnInit {
     
     // selectedOverviewCardId: number | null;
     selectedOverview: DeckCardOverview | null;
+    
+
+
 
     constructor(
         private decksService: DecksService,
         private route: ActivatedRoute,
+        public dialog: MatDialog,
         ) {
         
     }
@@ -77,6 +82,8 @@ export class DeckEditorComponent implements OnInit {
         // this.decksService
 
         this.viewMode = "grouped";
+
+        this.deckProperties = new DeckPropertiesDto();
         // this.viewMode = "list";
 
         this.loadDeckDetail();
@@ -87,6 +94,7 @@ export class DeckEditorComponent implements OnInit {
         // this.cardDetails = {
         //     byId: {}, allIds: []
         // }
+
     }
 
     loadDeckDetail(): void {
@@ -94,6 +102,8 @@ export class DeckEditorComponent implements OnInit {
 
         this.decksService.getDeckDetail(deckId).subscribe(result => {
             this.applyDeckDetail(result);
+            
+            // this.openPropsDialog();
         }, error => console.log(error));
     }
 
@@ -244,7 +254,52 @@ export class DeckEditorComponent implements OnInit {
     }
     
     onEditClick(): void {
-        
+        this.openPropsDialog();
+    }
+
+    private openPropsDialog(): void {
+        this.dialog.open(DeckPropsDialogComponent, {
+            width: '500px',
+            data: {
+                deck: this.deckProperties
+            },
+            disableClose: true,
+        })
+        .afterClosed().subscribe((result: DeckPropertiesComponentResult) => {
+            // alert(result.action)
+
+            switch(result.action){
+                case "save":
+                    this.saveDeckProps(result.props)
+                    break;
+                case "cancel":
+                    break;
+                case "disassemble":
+                    // alert('disassemble not implemented')
+                    this.disassembleDeck();
+                    break;
+                case "delete":
+                    alert('delete not implemented')
+                    break;
+                default: 
+                    console.log(`PropsDialog cannot recognize action ${result.action}`);
+                    alert(`PropsDialog cannot recognize action ${result.action}`)
+            }
+        });
+    }
+
+    private saveDeckProps(props: DeckPropertiesDto) {
+        this.decksService.updateDeck(props).subscribe(
+            () => this.loadDeckDetail(),
+            (error) => alert(`save error ${error}`),
+        )
+    }
+
+    private disassembleDeck() {
+        this.decksService.dissassembleDeck(this.deckProperties.id).subscribe(
+            () => this.loadDeckDetail()
+            ,(error) => console.log(`disassembleDeck error ${error}`)
+        );
     }
 
     onExportClick(): void {

@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
+import { tap } from "rxjs/operators";
 import { HttpService } from "../common/HttpService";
 import { FilterOption } from "../settings/models";
 
@@ -8,6 +9,11 @@ import { FilterOption } from "../settings/models";
     providedIn: 'root',
 })
 export class FilterService extends HttpService {
+
+    //Can I attempt to store cached values of commonly-used things?...
+    private formatFilters: FilterOption[] = [];
+
+    
     constructor(http: HttpClient) {
         super(http);
     }
@@ -23,8 +29,18 @@ export class FilterService extends HttpService {
     }
 
     getFormatFilters(): Observable<FilterOption[]> {
-        const endpoint = 'api/Core/GetFormatFilters';
-        return this.http.get<FilterOption[]>(endpoint);
+
+        if(this.formatFilters.length === 0){
+            const endpoint = 'api/Core/GetFormatFilters';
+            return this.http.get<FilterOption[]>(endpoint)
+                .pipe(tap(
+                    data => this.formatFilters = data,
+                    error => console.log(error),
+                ))
+        }
+        else {
+            return of(this.formatFilters)
+        }
     }
 
     getManaTypeFilters(): Observable<FilterOption[]> {

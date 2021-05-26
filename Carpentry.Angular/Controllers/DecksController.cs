@@ -208,11 +208,11 @@ namespace Carpentry.Angular.Controllers
         #region Search
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews(string format, string sortBy)
+        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews(string format, string sortBy, bool includeDissasembled)
         {
             try
             {
-                IEnumerable<DeckOverviewDto> results = await _deckService.GetDeckOverviews(format, sortBy);
+                IEnumerable<DeckOverviewDto> results = await _deckService.GetDeckOverviews(format, sortBy, includeDissasembled);
                 return Ok(results);
             }
             catch (Exception ex)

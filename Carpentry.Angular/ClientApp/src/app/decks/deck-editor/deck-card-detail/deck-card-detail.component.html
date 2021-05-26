@@ -12,9 +12,8 @@
         </mat-card-content>
     </mat-card>
 </div>
-
 <!-- else -->
-<div className="staticSection">
+<div className="staticSection" *ngIf="selectedCard!=null">
                 
     <mat-card>
         <img *ngIf="selectedCard" style="height:310px; width: 223px" [src]="selectedCard.img" />
@@ -29,7 +28,7 @@
                 <tr *ngFor="let item of selectedCard.details">
 
                     <td *ngIf="item.inventoryCardId" style="text-transform:uppercase">
-                        {{item.set}} - {{item.collectorNumber}}{{item.isFoil && "(foil)"}}
+                        {{item.set}} - {{item.collectorNumber}} <span *ngIf="item.isFoil">(foil)</span><span></span>
                     </td>
                     <td *ngIf="!item.inventoryCardId">
                         Empty

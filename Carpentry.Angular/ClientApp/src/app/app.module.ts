@@ -31,6 +31,7 @@ import { TextFilterComponent } from './common/text-filter/text-filter.component'
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { InventoryCardGridComponent } from './inventory/inventory-overview/inventory-card-grid/inventory-card-grid.component';
 import { InventoryCardComponent } from './inventory/inventory-overview/inventory-card/inventory-card.component';
+import { DeckPropsDialogComponent } from './decks/deck-editor/deck-props-dialog/deck-props-dialog.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { InventoryCardComponent } from './inventory/inventory-overview/inventory
     GroupedDeckCardListComponent,
     DeckCardDetailComponent,
     DeckCardGridComponent,
+    DeckPropsDialogComponent,
 
     InventoryOverviewComponent,
     InventoryFilterBarComponent,

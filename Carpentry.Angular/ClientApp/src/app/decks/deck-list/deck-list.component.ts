@@ -13,9 +13,11 @@ export class DeckListComponent implements OnInit {
     displayedColumns: string[] = ['name','format','color','validationIssues'];
 
     public deckOverviews: DeckOverviewDto[] = [];
+
     formatFilter: string;
     sortBy: string;
-    
+    includeDissasembled: boolean = false;
+
     private isLoading: boolean = false;
 
     constructor(
@@ -33,7 +35,7 @@ export class DeckListComponent implements OnInit {
         if(this.isLoading) return;
         this.isLoading = true;
         this.deckOverviews = [];
-        this.decksService.getDeckOverviews(this.formatFilter, this.sortBy).subscribe(result => {
+        this.decksService.getDeckOverviews(this.formatFilter, this.sortBy, this.includeDissasembled).subscribe(result => {
             this.isLoading = false;
             this.deckOverviews = result;
         }, err => {console.log(`getDeckOverviews error: ${err}`); this.isLoading = false;});

@@ -131,6 +131,9 @@ namespace Carpentry.Logic.Implementations
             var deckStats = new DeckStatsDto();
 
 
+            var dbDeck = _cardContext.Decks.Where(d => d.DeckId == deckId)
+                .Include(d => d.Cards)
+                .FirstOrDefault();
 
             //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
 
@@ -150,6 +153,9 @@ namespace Carpentry.Logic.Implementations
             {
                 deckStats.ValidationIssues = validationResults;
             }
+
+
+            deckStats.IsDisassembled = !dbDeck.Cards.Where(dc => dc.InventoryCardId != null).Any();
 
             //get deck cards
 
@@ -364,7 +370,6 @@ namespace Carpentry.Logic.Implementations
 
         private async Task<string> ValidateDeck(int deckId)
         {
-            string validationResult = "";
             List<string> validationErrors = new List<string>();
 
             //var deck = await _cardRepo.QueryDeckProperties().Where(x => x.Id == deckId).FirstOrDefaultAsync();
@@ -376,31 +381,40 @@ namespace Carpentry.Logic.Implementations
 
             int deckSize = await _deckRepo.GetDeckCardCount(deckId);
 
-            //what's the min deck count for this format?
-            if (deckFormat == "commander")
+            int deckMinimum = 60;
+            int? deckLimit = null;
+            
+            switch (deckFormat)
             {
-                //must be exactly 100 cards to be valid
-                if (deckSize < 100)
-                {
-                    validationErrors.Add($"Below size requirement: {deckSize}/100 cards");
-                }
+                case "commander":
+                    deckMinimum = 100;
+                    deckLimit = 100;
+                    break;
 
-                if (deckSize > 100)
-                {
-                    validationErrors.Add($"Above size limit: {deckSize}/100 cards");
-                }
+                case "jumpstart":
+                    deckMinimum = 20;
+                    deckLimit = 20;
+                    break;
+
+                case "oathbreaker":
+                    deckLimit = 60;
+                    break;
+
+                case "brawl":
+                    deckLimit = 60;
+                    break;
             }
-            else
-            {
-                if ((deckFormat == "brawl" || deckFormat == "oathbreaker") && deckSize > 60)
-                {
-                    validationErrors.Add($"Above size limit: {deckSize}/60 cards");
-                }
 
-                if (deckSize < 60)
-                {
-                    validationErrors.Add($"Below size requirement: {deckSize}/60 cards");
-                }
+            if(deckSize < deckMinimum)
+            {
+
+                validationErrors.Add($"Below size requirement: {deckSize}/{deckMinimum} cards");
+            }
+
+            if(deckLimit.HasValue && deckSize > deckLimit)
+            {
+                validationErrors.Add($"Above size limit: {deckSize}/{deckLimit} cards");
+
             }
 
             #endregion
@@ -423,8 +437,7 @@ namespace Carpentry.Logic.Implementations
 
             #endregion
 
-            validationResult = string.Join(" ", validationErrors);
-
+            var validationResult = string.Join(" ", validationErrors);
             return validationResult;
         }
 
@@ -539,6 +552,11 @@ namespace Carpentry.Logic.Implementations
             }
 
             await _deckRepo.UpdateDeckCardBatch(existingDeckCards);
+
+            var deck = await _cardContext.Decks.FirstOrDefaultAsync(d => d.DeckId == deckId);
+            deck.Stats = null;
+            _cardContext.Update(deck);
+            await _cardContext.SaveChangesAsync();
         }
         public async Task<int> CloneDeck(int deckId)
         {
@@ -763,7 +781,7 @@ namespace Carpentry.Logic.Implementations
 
         #region Search
 
-        public async Task<List<DeckOverviewDto>> GetDeckOverviews(string format = null, string sortBy = null)
+        public async Task<List<DeckOverviewDto>> GetDeckOverviews(string format = null, string sortBy = null, bool includeDissasembled = false)
         {
             var deckList = await _cardContext.Decks
                 .Include(x => x.Format)
@@ -833,7 +851,9 @@ namespace Carpentry.Logic.Implementations
 
                 Colors = parsedStats[dbDeck.DeckId].ColorIdentity,
                 ValidationIssues = parsedStats[dbDeck.DeckId].ValidationIssues,
-                IsValid = string.IsNullOrEmpty(parsedStats[dbDeck.DeckId].ValidationIssues),
+                IsValid = parsedStats[dbDeck.DeckId].IsValid,
+                IsDisassembled = parsedStats[dbDeck.DeckId].IsDisassembled,
+
 
                 //stats = ParseDeckStats(dbDeck.Stats);
 
@@ -843,7 +863,10 @@ namespace Carpentry.Logic.Implementations
             .OrderBy(d => d.Name)
             .ToList();
 
-
+            if (!includeDissasembled)
+            {
+                result = result.Where(d => !d.IsDisassembled).ToList();
+            }
 
             if (!string.IsNullOrEmpty(sortBy) && sortBy.ToLower() != "name")
             {

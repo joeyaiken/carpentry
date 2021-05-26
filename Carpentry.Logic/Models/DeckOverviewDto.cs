@@ -26,5 +26,17 @@ namespace Carpentry.Logic.Models
         public string ValidationIssues { get; set; }
 
         //public DeckStatsDto Stats { get; set; }
+
+        public bool IsDisassembled { get; set; }
+
+
+        /*
+         What info props would I want to put on here?
+            IsValid
+            IsAssembled
+            IsDisassembled
+         
+         
+         */
     }
 }

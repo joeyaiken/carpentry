@@ -27,5 +27,7 @@ namespace Carpentry.Logic.Models
         //[JsonProperty("ValidationIssues")]
         public string ValidationIssues { get; set; }
 
+        public bool IsDisassembled { get; set; }
+
     }
 }
