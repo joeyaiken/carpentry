@@ -26,8 +26,8 @@ export class DeckListComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.formatFilter = "";
-        this.sortBy = "name";
+        this.formatFilter = "jumpstart"; //"";
+        this.sortBy = "color"; //"name";
         this.getDeckOverviews();
     }
 
