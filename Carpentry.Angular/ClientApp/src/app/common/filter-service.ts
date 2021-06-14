@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { tap } from "rxjs/operators";
+import { forkJoin, Observable, of } from "rxjs";
+import { map, tap } from "rxjs/operators";
 import { HttpService } from "../common/HttpService";
-import { FilterOption } from "../settings/models";
+import { AppFiltersDto, FilterOption } from "../settings/models";
 
 @Injectable({
     providedIn: 'root',
@@ -71,5 +71,35 @@ export class FilterService extends HttpService {
     getInventoryGroupOptions(): Observable<FilterOption[]> {
         const endpoint = 'api/Core/GetInventoryGroupOptions';
         return this.http.get<FilterOption[]>(endpoint);
+    }
+
+    getAppFilterOptions(): Observable<AppFiltersDto> {
+        return forkJoin({
+            sets: this.getCardSetFilters(),
+            types: this.getCardTypeFilters(),
+            formats: this.getFormatFilters(),
+            colors: this.getManaTypeFilters(),
+            groupBy: this.getInventoryGroupOptions(),
+            rarities: this.getRarityFilters(),
+            searchGroups: this.getCardGroupFilters(),
+            sortBy: this.getInventorySortOptions(),
+            statuses: this.getStatusFilters(),
+        })
+        .pipe(
+            map(response => {
+                let filters: AppFiltersDto = {
+                    types: response.types,
+                    sets: response.sets,
+                    formats: response.formats,
+                    colors: response.colors,
+                    groupBy: response.groupBy,
+                    rarities: response.rarities,
+                    searchGroups: response.searchGroups,
+                    sortBy: response.sortBy,
+                    statuses: response.statuses,
+                };
+                return filters;
+            })
+        );
     }
 }

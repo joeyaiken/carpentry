@@ -1,0 +1,149 @@
+<!-- For some reason it bothers me that this file doesn't have to be wrapped in a specific tag -->
+<!-- <h4 mat-dialog-title>Deck Properties</h4>
+<div mat-dialog-content>
+    <div>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput color="primary" [(ngModel)]="deckProps.name" />
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Format</mat-label>
+            <mat-select [(ngModel)]="deckProps.format">
+                <mat-option *ngFor="let filter of formatFilterOptions" [value]="filter.name">{{filter.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Notes</mat-label>
+            <input matInput color="primary" [(ngModel)]="deckProps.notes" />
+        </mat-form-field>
+    </div>
+    <div fxLayout="row" class="flex-row" *ngIf="deckProps.id > 0">
+        <mat-form-field fxFlex="20">
+            <input matInput color="primary" type="number" [(ngModel)]="deckProps.basicW" />
+            <span matPrefix>W&nbsp;</span>
+        </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions fxLayout="column" fxLayoutAlign="none end" fxLayoutGap="10px">
+    <div>
+        <button mat-raised-button color="warn" (click)="onDisassembleClick()">Disassemble</button>
+        <button mat-raised-button color="warn" (click)="onDeleteClick()">Delete</button>
+    </div>
+    <div>
+        <button mat-raised-button (click)="onCancelClick()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSaveClick()">Save</button>
+    </div>
+</div> -->
+
+
+<!-- <h4 mat-dialog-title>{`Inventory Detail - ${cardName}`}</h4> -->
+<h4 mat-dialog-title>{{cardName}}</h4>
+        
+<div mat-dialog-content>
+<!-- <InventoryDetailLayout
+//  selectedDetailItem={this.props.selectedDetailItem}
+// selectedCardId={this.props.selectedCardId}
+cardGroups={this.props.cardGroups}
+cardsById={this.props.cardsById}
+allCardIds={this.props.allCardIds}
+inventoryCardsById={this.props.inventoryCardsById}
+    /> -->
+    <!-- <div>HalloModal</div> -->
+
+    <div class="flex-col flex-section">
+
+    <!-- {
+        props.allCardIds.map(cardId => {
+            let card = props.cardsById[cardId];
+            let inventoryCardIds = props.cardGroups[cardId];
+            let img = card.imageUrl;
+            let cardTitle = `${card.set} (${card.collectionNumber}) - $${card.price} | $${card.priceFoil}`;
+
+            return ( -->
+                <!-- <Card key={card.cardId} class={combineStyles(outlineSection, flexCol)}> -->
+                    <!-- <CardHeader titleTypographyProps={{variant:"body1"}} style={{textTransform:"uppercase"}} title={cardTitle} /> -->
+                    
+                    <div class="flex-row flex-section"> 
+                        <!-- <div class={staticSection}> -->
+                            <!-- <CardMedia 
+                                style={{height:"310px", width: "223px"}}
+                                // class={itemImage}
+                                image={img}
+                                /> -->
+                        <!-- </div> -->
+                        
+                        <div class="flex-col flex-section">
+                            <div class="scroll-section" style="overflow:auto">
+                            <table size="small" >
+                                <th>
+                                    <tr>
+                                        <td>Style</td>
+                                        <td>Status</td>
+                                    </tr>
+                                </th>
+                                <!-- <TableBody> -->
+                                    
+                                        <!-- inventoryCardIds.map(inventoryCardId => {
+                                            const item = props.inventoryCardsById[inventoryCardId];
+                                            return(
+                                            <TableRow key={item.id}>
+                                                <TableCell>
+                                                    <Typography>{(item.isFoil && " foil") || "normal"}</Typography>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography>
+                                                        { item.statusId === 1 && "Inventory/Deck" }
+                                                        { item.statusId === 2 && "Wish List" }
+                                                        { item.statusId === 3 && "Sell List" }
+                                                    </Typography>
+                                                    {/* {item.deckCards.length > 0 && "In a Deck"}
+                                                    {item.deckCards.length === 0 && item.statusId === 1 && "Inventory"}
+                                                    { item.statusId === 2 && "Buy List"}
+                                                    { item.statusId === 3 && "Sell List"} */}
+                                                </TableCell>
+
+                                                {/* <TableCell>
+                                                    {item.deckCards.length === 0 && item.statusId === 1 && 
+                                                        <Button size="small" variant="contained" onClick={() => props.handleUpdateCardClick && props.handleUpdateCardClick(item, 3)}>
+                                                            To Sell List
+                                                        </Button>
+                                                    }
+                                                    { item.statusId === 2 && 
+                                                        <Button size="small" variant="contained" onClick={() => props.handleUpdateCardClick && props.handleUpdateCardClick(item, 1)}>
+                                                            Mark as Arrived
+                                                        </Button>
+                                                    }
+                                                    { item.statusId === 3 && 
+                                                        <Button size="small" variant="contained" onClick={() => props.handleDeleteCardClick && props.handleDeleteCardClick(item.id)}>
+                                                            Delte
+                                                        </Button>
+                                                    }
+                                                </TableCell> */}
+                                            </TableRow>
+                                            )
+                                        })
+                                     -->
+                                <!-- </TableBody> -->
+                            </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                <!-- </Card>  -->
+            <!-- )
+        })
+    } -->
+    </div>
+
+
+</div>
+
+<div mat-dialog-actions fxLayout="column" fxLayoutAlign="none end" fxLayoutGap="10px">
+    <!-- <Button size="medium" onClick={() => this.handleCloseModalClick()}>Close</Button> -->
+    <!-- <button mat-raised-button (click)="handleCloseModalClick()">Close</button> -->
+    <!-- <button mat-raised-button (click)="onCancelClick()">Cancel</button> -->
+</div>

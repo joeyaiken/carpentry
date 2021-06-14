@@ -47,4 +47,15 @@ export class GroupedDeckCardListComponent implements OnInit {
     isGroup(index: number, item: GroupedCardOverview): boolean{
         return item.isGroup;
     }
+
+    public getAvailabilityColor(availabilityId: number): string {
+        console.log(`get availability ${availabilityId}`);
+        switch(availabilityId){
+            case 1: return "green";
+            case 2: return "yellow";
+            case 3: return "orange";
+            case 4: return "red";
+            default: return "blue";
+        }
+    }
 }

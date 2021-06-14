@@ -5,6 +5,9 @@ import { AppFiltersDto } from "src/app/settings/models";
 import { InventoryFilterProps, InventoryOverviewDto, InventoryQueryParameter } from "../models";
 import { tap } from 'rxjs/operators';
 import { InventoryService } from "../inventory.service";
+import { ActivatedRoute } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { InventoryDetailComponent } from "../inventory-detail/inventory-detail.component";
 
 @Component({
     selector: 'app-inventory-overview',
@@ -41,6 +44,8 @@ export class InventoryOverviewComponent implements OnInit {
     constructor(
         private filterService: FilterService,
         private inventoryService: InventoryService,
+        private route: ActivatedRoute,
+        public dialog: MatDialog,
     ) {
 
     }
@@ -49,9 +54,39 @@ export class InventoryOverviewComponent implements OnInit {
         this.loadFilterOptions();
         this.searchFilter = this.defaultFilterProps();
         this.getInventoryOverviews(this.searchFilter);
+
+        this.checkInventoryDetail();
+        // const deckId = +this.route.snapshot.paramMap.get('deckId');
+    }
+
+    checkInventoryDetail() {
+        const cardId = +this.route.snapshot.paramMap.get('cardId');
+        if(cardId && cardId > 0) {
+            this.dialog.open(
+                InventoryDetailComponent, {
+                    width: '500px',
+                    data: {
+
+                    },
+                    disableClose: false,
+                })
+
+
+        }
     }
 
     loadFilterOptions(): void {
+        this.isLoading = true;
+        this.filterService.getAppFilterOptions().subscribe(
+            data => {
+                this.filterOptions = data;
+                this.isLoading = false;
+            }
+
+        )
+    }
+
+    loadFilterOptionsLegacy(): void {
         let observables = [];
 
         this.isLoading = true;
@@ -192,20 +227,24 @@ export class InventoryOverviewComponent implements OnInit {
 
     defaultFilterProps(): InventoryFilterProps {
         return {
-            groupBy: "unique",
-            sortBy: "price",
+            // groupBy: "unique",
+            groupBy: "name",
+            // sortBy: "price",
+            sortBy: "count",
+            sortDescending: true,
+
             set: "",
             text: "",
             exclusiveColorFilters: false,
             multiColorOnly: false,
             skip: 0,
-            take: 25,
+            take: 10,
             type: "",
             colorIdentity: [],
             rarity: [],
             minCount: 0,
             maxCount: 0,
-            sortDescending: true,
+            
         }
     }
 
@@ -293,7 +332,8 @@ export class InventoryOverviewComponent implements OnInit {
 
     // <button mat-button (click)="handleAddCardsClick()">Add Cards</button>
     addCardsClick() {
-        alert('Not implemented yet!')
+        // this.props.dispatch(push('/inventory/addCards/')); //todo - this should be renamed to add-cards
+        // alert('Not implemented yet!')
     }
     // <button mat-button (click)="handleTrimmingToolClick()">Trimming Tool</button>
     trimmingToolClick() {

@@ -1,5 +1,8 @@
 C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\Carpentry.Angular.Views.dll
 C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\Carpentry.Angular.Views.pdb
+C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\Carpentry.Angular.deps.json
+C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\Carpentry.Angular.runtimeconfig.json
+C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\Carpentry.Angular.runtimeconfig.dev.json
 C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\Carpentry.Angular.exe
 C:\DotNet\Carpentry\Carpentry.Angular.Tests\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll

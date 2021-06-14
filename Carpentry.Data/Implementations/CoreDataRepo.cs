@@ -255,7 +255,7 @@ namespace Carpentry.Data.Implementations
                 var scriptContents = File.ReadAllText(baseDir);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                await _cardContext.Database.ExecuteSqlCommandAsync(scriptContents);
+                await _cardContext.Database.ExecuteSqlRawAsync(scriptContents);
 #pragma warning restore CS0618 // Type or member is obsolete
             }
             catch (Exception ex)

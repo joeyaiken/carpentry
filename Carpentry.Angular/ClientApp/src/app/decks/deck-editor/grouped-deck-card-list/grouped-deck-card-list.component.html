@@ -34,14 +34,7 @@
             <th mat-header-cell *matHeaderCellDef>Status</th>
             <td mat-cell *matCellDef="let cardItem">
                 <button mat-button color="inherit" (click)="cardDetailClick(cardItem.cardId)">
-                    <span *ngFor="let detail of cardItem.details">*</span>
-                    <!-- {
-                        cardItem.detailIds.map(id => {
-                            const cardDetail = props.cardDetailsById[id];
-                            let color = GetAvailabilityColor(cardDetail.availabilityId);
-                            return(<Star style={{color: color}} key={id} />);
-                        })
-                    } -->
+                    <mat-icon *ngFor="let detail of cardItem.details" class="availability-{{detail.availabilityId}}">star</mat-icon>
                 </button>
             </td>
         </ng-container>

@@ -34,9 +34,16 @@
             </div>
         </mat-card-content>
         <mat-card-actions class="flexSection">
-                <button mat-button color="primary" size="small" (click)="cardSelected(cardItem.cardId)">
-                    Details
-                </button>
+                
+            
+            
+            <!--  (click)="cardSelected(cardItem.cardId)" -->
+            <button mat-button color="primary" size="small" [routerLink]="['/inventory',cardItem.id]">
+                Details
+            </button>
+
+                <!-- <a [routerLink]="['/decks',element.id]">{{element.name}}</a> -->
+
                 <!-- <IconButton 
                     value={cardItem.id} 
                     color="primary" 

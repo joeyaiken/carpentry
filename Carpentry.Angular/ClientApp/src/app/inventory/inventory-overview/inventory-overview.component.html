@@ -7,7 +7,8 @@
         <button mat-stroked-button color="primary" (click)='quickFilterClick("Highest Count")'  >Highest Count</button>
         <button mat-stroked-button color="primary" (click)='quickFilterClick("Owned Cards")' >Owned Cards</button>
         <button mat-stroked-button color="accent" (click)='quickFilterClick("Clear Secondary")' >Clear Secondary</button>
-        <button mat-button (click)="addCardsClick()">Add Cards</button>
+        <!-- <button mat-button (click)="addCardsClick()">Add Cards</button> -->
+        <button mat-button [routerLink]="['/inventory/add-cards/']">Add Cards</button>
         <button mat-button (click)="trimmingToolClick()">Trimming Tool</button>
     </mat-toolbar>
     <div>

@@ -32,6 +32,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { InventoryCardGridComponent } from './inventory/inventory-overview/inventory-card-grid/inventory-card-grid.component';
 import { InventoryCardComponent } from './inventory/inventory-overview/inventory-card/inventory-card.component';
 import { DeckPropsDialogComponent } from './decks/deck-editor/deck-props-dialog/deck-props-dialog.component';
+import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
+import { InventoryAddCardsComponent } from './inventory/inventory-add-cards/inventory-add-cards.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { DeckPropsDialogComponent } from './decks/deck-editor/deck-props-dialog/
     InventoryFilterBarComponent,
     InventoryCardGridComponent,
     InventoryCardComponent,
+    InventoryDetailComponent,
+    InventoryAddCardsComponent,
     
     SettingsComponent,
     CollectionTotalsComponent,

@@ -1,0 +1,167 @@
+<div>
+    <!-- Toolbar -->
+    <mat-toolbar color="default" position="relative">
+        <h5>Card Search</h5>
+        <div>
+            <!-- TODO: Get this button floating right, or move to a different location -->
+            <button mat-raised-button (click)="onToggleView()" color="primary" variant="contained">
+                Toggle View
+            </button>
+        </div>
+    </mat-toolbar>
+
+    <!-- Filter bar -->
+    <div fxLayout="row" class="paper outline-section flex-row">
+        <div fxLayout="row" className="flex-section flex-row">
+            <!-- Text filter -->
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Text</mat-label>
+                    <input matInput [(ngModel)]="searchFilter.text" />
+                </mat-form-field>
+            </div>
+
+            <!-- SET filter -->
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Set filter</mat-label>
+                    <mat-select [(ngModel)]="searchFilter.rarity">
+                        <mat-option [value]=""></mat-option>
+                        <mat-option *ngFor="let item of filterOptions?.sets" [value]="item.value">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            
+            <!-- Group filter -->
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Group</mat-label>
+                    <mat-select [(ngModel)]="searchFilter.groupBy">
+                        <mat-option [value]=""></mat-option>
+                        <mat-option *ngFor="let item of filterOptions?.groupBy">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            
+            <!-- Type filter -->
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Type filter</mat-label>
+                    <mat-select [(ngModel)]="searchFilter.type">
+                        <mat-option [value]=""></mat-option>
+                        <mat-option *ngFor="let item of filterOptions?.types">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- Color Color Identity -->
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Color filter</mat-label>
+                    <mat-select [(ngModel)]="searchFilter.colorIdentity" multiple>
+                        <mat-option *ngFor="let item of  filterOptions?.colors">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- color booleans -->
+            <div class="flex-section side-padded">
+                <mat-checkbox [(ngModel)]="searchFilter.exclusiveColorFilters" color="primary">Exclusive</mat-checkbox>
+                <mat-checkbox [(ngModel)]="searchFilter.multiColorOnly" color="primary">Multi</mat-checkbox>
+            </div>
+
+            <!-- RARITY filter -->
+            <div class="flex-section side-padded">
+                <mat-form-field class="stretch">
+                    <mat-label>Rarity filter</mat-label>
+                    <mat-select [(ngModel)]="searchFilter.rarity">
+                        <mat-option *ngFor="let item of filterOptions.rarities">{{item.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <!-- Format -->
+            <!-- 
+            <div class="flex-section side-padded">
+                <TextField
+                    name="format"
+                    className={classes.stretch}
+                    select
+                    label="Format"
+                    value={props.searchFilter.format}
+                    onChange={props.handleFilterChange}
+                    SelectProps={{
+                        displayEmpty: true
+                    }}
+                    margin="normal" >
+                    <MenuItem key="none" value=""></MenuItem>
+                    <MenuItem key="Standard" value="standard">Standard</MenuItem>
+                    <MenuItem key="Modern" value="modern">Modern</MenuItem>
+                    <MenuItem key="Commander" value="commander">Commander</MenuItem>
+                    <MenuItem key="Pioneer" value="pioneer">Pioneer</MenuItem>
+                    <MenuItem key="Brawl" value="brawl">Brawl</MenuItem>
+                </TextField>
+            </div> -->
+    </div>
+        <!-- <SetSearchFilterBar 
+            filterOptions={props.filterOptions}
+            handleBoolFilterChange={props.handleBoolFilterChange}
+            handleFilterChange={props.handleFilterChange}
+            searchFilter={props.searchFilterProps} /> -->
+
+
+        <!-- <div className={combineStyles(staticSection, center, sidePadded)}>
+            <Button variant="contained" size="medium" color="primary" onClick={() => props.handleSearchButtonClick()}>
+                Search
+            </Button>
+        </div> -->
+
+    </div>
+
+    <!-- <FilterBar 
+        filterOptions={props.filterOptions}
+        handleBoolFilterChange={props.handleBoolFilterChange}
+        handleFilterChange={props.handleFilterChange}
+        searchFilterProps={props.searchFilterProps}
+        cardSearchMethod={props.cardSearchMethod}
+        handleSearchButtonClick={props.handleSearchButtonClick} /> -->
+
+    <div class="flex-row flex-section" style="overflow:'auto'; align-items:'stretch'">
+        <!-- <Paper style={{ overflow:'auto', flex:'1 1 70%' }} >
+        
+        <SearchResultTable  *ngIf="viewMode==='list'"
+            searchResults={props.searchResults}
+            handleAddPendingCard={props.handleAddPendingCard}
+            handleRemovePendingCard={props.handleRemovePendingCard}
+            onCardSelected={props.handleCardSelected}
+            />
+    
+    
+        <SearchResultGrid *ngIf="viewMode==='grid'"
+            searchResults={props.searchResults}
+            onCardSelected={props.handleCardSelected}
+            />
+        
+        </Paper> -->
+        <!-- <Paper style={{ overflow:'auto', flex:'1 1 30%' }} > 
+    
+        <SelectedCardSection *ngIf="selectedCard"
+            selectedCard={props.selectedCard}
+            pendingCards={props.pendingCards[props.selectedCard.name]}
+            handleAddPendingCard={props.handleAddPendingCard}
+            handleRemovePendingCard={props.handleRemovePendingCard}
+            selectedCardDetail={null} />
+        
+        </Paper>
+    </div> -->
+    <!-- <PendingCardsSection pendingCards={props.pendingCards} /> -->
+    <!-- <Paper className={combineStyles(outlineSection, flexRow)}>
+        <Button onClick={props.handleCancelClick}>
+            Cancel
+        </Button>
+        <Button color="primary" variant="contained" onClick={props.handleSaveClick}>
+            Save
+        </Button>
+    </Paper> -->
+</div>
+</div>

@@ -133,3 +133,25 @@ export class TrimmingToolRequest {
 export class ValidatedCarpentryImportDto {
     
 }
+
+export class CardSearchResultDto {
+    cardId: number;
+    cmc: number | null;
+    colorIdentity: string[];
+    colors: string[];
+    manaCost: string;
+    name: string;
+    type: string;
+    details: cardSearchResultDetail[];
+}
+
+export class cardSearchResultDetail {
+    cardId: number;
+    setCode: string;
+    name: string;
+    collectionNumber: number;
+    price: number | null;
+    priceFoil: number | null;
+    priceTix: number | null;
+    imageUrl: string;
+}

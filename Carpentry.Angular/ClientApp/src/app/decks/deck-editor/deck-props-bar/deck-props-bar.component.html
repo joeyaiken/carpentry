@@ -5,35 +5,28 @@
         &nbsp;
         <h5> {{deckProperties.name}} </h5>
 
-            <div>
-                <mat-chip-list>
-
-                
+        <div>
+            <mat-chip-list>
                 <mat-chip *ngIf="deckProperties.basicW">
                     <img width="20" height="20" src='/assets/W.svg' />
                     {{deckProperties.basicW}}
                 </mat-chip>
-
                 <mat-chip *ngIf="deckProperties.basicU">
                     <img width="20" height="20" src='/assets/U.svg' />
                     {{deckProperties.basicU}}
                 </mat-chip>
-
                 <mat-chip *ngIf="deckProperties.basicB">
                     <img width="20" height="20" src='/assets/B.svg' />
                     {{deckProperties.basicB}}
                 </mat-chip>
-
                 <mat-chip *ngIf="deckProperties.basicR">
                     <img width="20" height="20" src='/assets/R.svg' />
                     {{deckProperties.basicR}}
                 </mat-chip>
-
                 <mat-chip *ngIf="deckProperties.basicG">
                     <img width="20" height="20" src='/assets/G.svg' />
                     {{deckProperties.basicG}}
                 </mat-chip>
-
             </mat-chip-list>
                 <!-- <mat-chip-list>
                     <mat-chip  avatar=>
