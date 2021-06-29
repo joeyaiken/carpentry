@@ -1,25 +1,20 @@
-// import { 
-//     // Get, 
-//     // GetFile, 
-//     Post 
-// } from '../api/apiHandler'
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { CardSearchResultDto } from "../inventory/models";
+import { HttpService } from "./HttpService";
+import { CardSearchQueryParameter } from "./models";
 
-// export const cardSearchApi = {
-//     //This should be replaced with ... idk yet
+@Injectable({
+    providedIn: 'root',
+})
+export class CardSearchService extends HttpService {
+    constructor(http: HttpClient) {
+        super(http);
+    }
 
-//     async searchInventory(filters: CardSearchQueryParameter): Promise<CardSearchResultDto[]> {
-//         const endpoint = `api/CardSearch/SearchInventory`;
-//         const result = await Post(endpoint, filters);
-//         return result || [];
-//     },
-//     //I can't remove this until Inventory is updated like Decks
-//     async searchWeb(name: string, exclusive: boolean): Promise<CardSearchResultDto[]> {
-//         const endpoint = `api/CardSearch/SearchWeb`;
-//         const payload = {
-//             name: name,
-//             exclusive: exclusive
-//         }
-//         const result = await Post(endpoint, payload);
-//         return result || [];
-//     }
-// }
+    searchInventory(filters: CardSearchQueryParameter): Observable<CardSearchResultDto[]>{
+        const endpoint = `api/CardSearch/SearchInventory`;
+        return this.http.post<CardSearchResultDto[]>(endpoint, filters);
+    }
+}

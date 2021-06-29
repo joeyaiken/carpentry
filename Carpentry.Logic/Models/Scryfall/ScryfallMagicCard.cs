@@ -20,7 +20,16 @@ namespace Carpentry.Logic.Models.Scryfall
         {
             try
             {
-                return cardObject.SelectToken(tokenPath).ToObject<T>();
+
+                //if(cardObject.TryGetValue(tokenPath, out var parseResult))
+                //{
+                //    var mapped = parseResult.ToObject<T>();
+                //    int breakpoint = 1;
+                //    return mapped;
+                //}
+
+                var actual = cardObject.SelectToken(tokenPath).ToObject<T>();
+                return actual;
             }
             catch
             {

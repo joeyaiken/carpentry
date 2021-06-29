@@ -1,11 +1,11 @@
 
 
 <mat-card 
-    key={props.cardOverview.name} 
-    className={outlineSection}
-    onClick={props.onCardSelected}
+    class="outline-section"
+    (click)="cardSelected()"
     >
-    <mat-card-header titleTypographyProps="variant:body1" title={ `${props.cardOverview.name} - (${props.cardOverview.count})` } >
+    <!-- <mat-card-header titleTypographyProps="variant:body1" title=`${props.cardOverview.name} - (${props.cardOverview.count})` > -->
+    <mat-card-header titleTypographyProps="variant:body1" title="{{cardOverview.name}} - {{cardOverview.count}}">
         <mat-card-title>
             <!-- toto - ensure spaces appear around the rendered '-' -->
             {{cardOverview.name}} - {{cardOverview.count}}

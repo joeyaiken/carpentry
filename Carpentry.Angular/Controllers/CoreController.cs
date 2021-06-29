@@ -49,6 +49,8 @@ namespace Carpentry.Controllers
             try
             {
                 var result = await _filterService.GetCardSetFilters();
+
+
                 return Ok(result);
             }
             catch (Exception ex)

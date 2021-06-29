@@ -6,7 +6,7 @@ import { CounterComponent } from './counter/counter.component';
 import { DeckEditorComponent } from './decks/deck-editor/deck-editor.component';
 import { DeckListComponent } from './decks/deck-list/deck-list.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { HomeComponent } from './home/home.component';
+// import { HomeComponent } from './home/home.component';
 import { InventoryAddCardsComponent } from './inventory/inventory-add-cards/inventory-add-cards.component';
 import { InventoryOverviewComponent } from './inventory/inventory-overview/inventory-overview.component';
 import { LandingComponent } from './landing/landing.component';
@@ -15,7 +15,7 @@ import { SettingsComponent } from './settings/settings.component';
 const routes: Routes = [
   { 
     path: '', 
-    component: HomeComponent, 
+    // component: HomeComponent, 
     children: [
       { path: '', component: LandingComponent },
       { path: 'decks', component: DeckListComponent },

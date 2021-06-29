@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
+// import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,12 +34,13 @@ import { InventoryCardComponent } from './inventory/inventory-overview/inventory
 import { DeckPropsDialogComponent } from './decks/deck-editor/deck-props-dialog/deck-props-dialog.component';
 import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
 import { InventoryAddCardsComponent } from './inventory/inventory-add-cards/inventory-add-cards.component';
+import { CardImageComponent } from './common/card-image/card-image.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    HomeComponent,
+    // HomeComponent,
     CounterComponent,
     FetchDataComponent,
     LandingComponent,
@@ -47,6 +48,7 @@ import { InventoryAddCardsComponent } from './inventory/inventory-add-cards/inve
     ManaChipComponent,
     TextFilterComponent,
     VisualCardComponent,
+    CardImageComponent,
     
     
     DeckListComponent,

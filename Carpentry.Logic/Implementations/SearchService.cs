@@ -68,7 +68,8 @@ namespace Carpentry.Logic.Implementations
                 query = query.Where(x => x.Type.ToLower().Contains(filters.Type.ToLower()));
             }
 
-            if (filters.ColorIdentity.Any())
+            //if (filters.ColorIdentity.Any())
+            if (filters.ColorIdentity?.Count > 0)
             {
                 var excludedColors = _allColors.Where(x => !filters.ColorIdentity.Contains(x)).Select(x => x).ToList();
                 //query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
@@ -92,7 +93,9 @@ namespace Carpentry.Logic.Implementations
                 query = query.Where(x => x.ColorIdentity.Length > 1);
             }
 
-            if (filters.Rarity.DefaultIfEmpty().Any() && filters.Rarity.Count() > 0)
+            if (
+                //filters.Rarity.DefaultIfEmpty().Any() && 
+                filters.Rarity?.Count > 0)
             {
                 //rarity values coming in are char codes, not names
                 query = query.Where(x => filters.Rarity.Contains(x.RarityId.ToString()));

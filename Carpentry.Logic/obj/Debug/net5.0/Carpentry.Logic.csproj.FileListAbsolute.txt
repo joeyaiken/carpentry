@@ -14,7 +14,7 @@ C:\DotNet\Carpentry\Carpentry.Logic\bin\Debug\net5.0\ref\Carpentry.Logic.dll
 C:\DotNet\Carpentry\Carpentry.Logic\bin\Debug\net5.0\Carpentry.Logic.pdb
 C:\DotNet\Carpentry\Carpentry.Logic\bin\Debug\net5.0\Carpentry.Data.dll
 C:\DotNet\Carpentry\Carpentry.Logic\bin\Debug\net5.0\Carpentry.Data.pdb
-C:\DotNet\Carpentry\Carpentry.Logic\obj\Debug\net5.0\Carpentry.Logic.csprojAssemblyReference.cache
+C:\DotNet\Carpentry\Carpentry.Logic\obj\Debug\net5.0\Carpentry.Logic.csproj.AssemblyReference.cache
 C:\DotNet\Carpentry\Carpentry.Logic\obj\Debug\net5.0\Carpentry.Logic.GeneratedMSBuildEditorConfig.editorconfig
 C:\DotNet\Carpentry\Carpentry.Logic\obj\Debug\net5.0\Carpentry.Logic.AssemblyInfoInputs.cache
 C:\DotNet\Carpentry\Carpentry.Logic\obj\Debug\net5.0\Carpentry.Logic.AssemblyInfo.cs

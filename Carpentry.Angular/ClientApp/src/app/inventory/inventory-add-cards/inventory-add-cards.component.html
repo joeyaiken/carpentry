@@ -1,6 +1,5 @@
-<div>
-    <!-- Toolbar -->
-    <mat-toolbar color="default" position="relative">
+<div id="hey-its-a-div" fxLayout="column">
+    <mat-toolbar id="toolbar" fxFlex="none" color="default" position="relative">
         <h5>Card Search</h5>
         <div>
             <!-- TODO: Get this button floating right, or move to a different location -->
@@ -9,10 +8,8 @@
             </button>
         </div>
     </mat-toolbar>
-
-    <!-- Filter bar -->
-    <div fxLayout="row" class="paper outline-section flex-row">
-        <div fxLayout="row" className="flex-section flex-row">
+    <div id="filter-bar" fxLayout="column" fxLayoutAlign=" none" class="paper outline-section">
+        <div fxLayout="row" className="flex-section">
             <!-- Text filter -->
             <div class="flex-section side-padded">
                 <mat-form-field class="stretch">
@@ -25,7 +22,7 @@
             <div class="flex-section side-padded">
                 <mat-form-field class="stretch">
                     <mat-label>Set filter</mat-label>
-                    <mat-select [(ngModel)]="searchFilter.rarity">
+                    <mat-select [(ngModel)]="searchFilter.set">
                         <mat-option [value]=""></mat-option>
                         <mat-option *ngFor="let item of filterOptions?.sets" [value]="item.value">{{item.name}}</mat-option>
                     </mat-select>
@@ -38,7 +35,7 @@
                     <mat-label>Group</mat-label>
                     <mat-select [(ngModel)]="searchFilter.groupBy">
                         <mat-option [value]=""></mat-option>
-                        <mat-option *ngFor="let item of filterOptions?.groupBy">{{item.name}}</mat-option>
+                        <mat-option *ngFor="let item of filterOptions?.groupBy" [value]="item.value">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -49,7 +46,7 @@
                     <mat-label>Type filter</mat-label>
                     <mat-select [(ngModel)]="searchFilter.type">
                         <mat-option [value]=""></mat-option>
-                        <mat-option *ngFor="let item of filterOptions?.types">{{item.name}}</mat-option>
+                        <mat-option *ngFor="let item of filterOptions?.types" [value]="item.value">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -59,7 +56,7 @@
                 <mat-form-field class="stretch">
                     <mat-label>Color filter</mat-label>
                     <mat-select [(ngModel)]="searchFilter.colorIdentity" multiple>
-                        <mat-option *ngFor="let item of  filterOptions?.colors">{{item.name}}</mat-option>
+                        <mat-option *ngFor="let item of  filterOptions?.colors" [value]="item.value">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -75,14 +72,13 @@
                 <mat-form-field class="stretch">
                     <mat-label>Rarity filter</mat-label>
                     <mat-select [(ngModel)]="searchFilter.rarity">
-                        <mat-option *ngFor="let item of filterOptions.rarities">{{item.name}}</mat-option>
+                        <mat-option *ngFor="let item of filterOptions?.rarities" [value]="item.value">{{item.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
 
             <!-- Format -->
-            <!-- 
-            <div class="flex-section side-padded">
+            <!-- <div class="flex-section side-padded">
                 <TextField
                     name="format"
                     className={classes.stretch}
@@ -102,66 +98,157 @@
                     <MenuItem key="Brawl" value="brawl">Brawl</MenuItem>
                 </TextField>
             </div> -->
-    </div>
+        </div>
         <!-- <SetSearchFilterBar 
             filterOptions={props.filterOptions}
             handleBoolFilterChange={props.handleBoolFilterChange}
             handleFilterChange={props.handleFilterChange}
             searchFilter={props.searchFilterProps} /> -->
-
+        
+        <div fxLayout="row" class="static-section center side-padded">
+            <button mat-raised-button color="primary" (click)="onSearchClick()">Search</button>
+        </div>
 
         <!-- <div className={combineStyles(staticSection, center, sidePadded)}>
-            <Button variant="contained" size="medium" color="primary" onClick={() => props.handleSearchButtonClick()}>
+            <button variant="contained" size="medium" color="primary" onClick={() => props.handleSearchbuttonClick()}>
                 Search
-            </Button>
+            </button>
         </div> -->
 
     </div>
+    <div fxLayout="row" fxFlex class="scroll-section">
+        <div id="search-results" fxFlex="70" class="paper" class="scroll-section" >
+            <table id="search-result-table" fxFlex mat-table [dataSource]="searchResults" class="mat-elevation-z8 table-small" *ngIf="viewMode==='list'">
 
-    <!-- <FilterBar 
-        filterOptions={props.filterOptions}
-        handleBoolFilterChange={props.handleBoolFilterChange}
-        handleFilterChange={props.handleFilterChange}
-        searchFilterProps={props.searchFilterProps}
-        cardSearchMethod={props.cardSearchMethod}
-        handleSearchButtonClick={props.handleSearchButtonClick} /> -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let result">{{result.data.name}}</td>
+                </ng-container>
 
-    <div class="flex-row flex-section" style="overflow:'auto'; align-items:'stretch'">
-        <!-- <Paper style={{ overflow:'auto', flex:'1 1 70%' }} >
-        
-        <SearchResultTable  *ngIf="viewMode==='list'"
-            searchResults={props.searchResults}
-            handleAddPendingCard={props.handleAddPendingCard}
-            handleRemovePendingCard={props.handleRemovePendingCard}
-            onCardSelected={props.handleCardSelected}
-            />
-    
-    
-        <SearchResultGrid *ngIf="viewMode==='grid'"
-            searchResults={props.searchResults}
-            onCardSelected={props.handleCardSelected}
-            />
-        
-        </Paper> -->
-        <!-- <Paper style={{ overflow:'auto', flex:'1 1 30%' }} > 
-    
-        <SelectedCardSection *ngIf="selectedCard"
+                <ng-container matColumnDef="pending">
+                    <th mat-header-cell *matHeaderCellDef># Pending</th>
+                    <td mat-cell *matCellDef="let result">{{result.count}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let result">
+                        <div fxLayout="row">
+                            <button mat-raised-button size="small" (click)="removePendingCard(result.data.name, result.data.cardId, false)">-</button>
+                            <button mat-raised-button size="small" (click)="addPendingCard(result.data.name, result.data.cardId, false)">+</button>
+                        </div>
+                    </td>  
+                </ng-container>
+                <tr mat-row 
+                    *matRowDef="let row; 
+                    columns: ['name','pending','actions']"
+                    (click)="onCardSelected(row)"
+                ></tr>
+            </table>
+            <div id="search-result-grid" fxLayout="row wrap" *ngIf="viewMode==='grid'">
+                <mat-card *ngFor="let card of searchResults"
+                    key={card.data.name} 
+                    class="outline-section"
+                    (click)="onCardSelected(card)" >
+                    <app-card-image mat-card-image [imageUrl]="card.data.details[0].imageUrl" [cardName]="card.data.name">
+
+                    </app-card-image>
+                    <!-- <img mat-card-image 
+                        style="height:310px; width: 223px"
+                        [src]="card.data.details[0].imageUrl" 
+                        [title]="card.data.name" /> -->
+                </mat-card>
+            </div>
+        </div>
+        <div id="selected-card-section" fxFlex class="paper" class="scroll-section">
+        <!-- <SelectedCardSection *ngIf="selectedCard"
             selectedCard={props.selectedCard}
             pendingCards={props.pendingCards[props.selectedCard.name]}
             handleAddPendingCard={props.handleAddPendingCard}
             handleRemovePendingCard={props.handleRemovePendingCard}
-            selectedCardDetail={null} />
+            selectedCardDetail={null} /> -->
+            
+            <div fxLayout="column">
+
+                <!-- {   
+                
+                    // Object.keys(props.selectedCard.details).map((id) => {
         
-        </Paper>
-    </div> -->
-    <!-- <PendingCardsSection pendingCards={props.pendingCards} /> -->
-    <!-- <Paper className={combineStyles(outlineSection, flexRow)}>
-        <Button onClick={props.handleCancelClick}>
+                    props.selectedCard.details.map((detail) => {
+                        //for(i = 0; i < props.selectedCard.details.length(); i++){
+                        // props.selectedCard.details.forEach(card => {
+            
+                        // })
+        
+                    
+                    // console.log(`SELECTED CARD ID ${id}`)
+                       
+                    let countNormal = 0;
+                    let countFoil = 0;
+                    if(props.pendingCards)
+                    {
+                        //countNormal = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === false).length;
+                        countNormal = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil === false).length;
+                        //countFoil = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === true).length;
+                        countFoil = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil === true).length;
+                    }
+        
+                    //const thisPendingCard = (this.props.selectedCard) && this.props.pendingCards[this.props.selectedCard.multiverseId];
+                    return ( -->
+                    <!-- selectedCard -->
+                    <mat-card fxLayout="row" class="outline-section" *ngFor="let detail of selectedCard?.data?.details">
+                        <!-- <img mat-card-image fxFlex="nogrow" 
+                            style="height:310px; width: 223px"
+                            [src]="detail?.imageUrl"
+                            /> -->
+                        <app-card-image mat-card-image [imageUrl]="detail?.imageUrl" [cardName]="detail.cardName">
+
+                        </app-card-image>
+                        <mat-card-content fxFlex>
+                            <div fxLayout="column">
+                                <div fxLayout="column">
+                                    <div fxLayout="column">
+                                        <span>${{detail.price}} | ${{detail.priceFoil}}</span>
+                                    </div>
+                                    <div fxLayout="column">
+                                        <span>Normal ({{countNormal}})</span>
+                                        <div fxLayout="row">
+                                            <button mat-stroked-button variant="outlined" (click)="onRemovePendingCard(detail.name, detail.cardId, false)">-</button>
+                                            <button mat-stroked-button variant="outlined" (click)="onAddPendingCard(detail.name, detail.cardId, false)">+</button>
+                                        </div>
+                                    </div>
+                                    <div fxLayout="column">
+                                        <span>Foil ({{countFoil}})</span>
+                                        <div fxLayout="row">
+                                            <button mat-stroked-button variant="outlined" (click)="onRemovePendingCard(detail.name, detail.cardId, true)">-</button>
+                                            <button mat-stroked-button variant="outlined" (click)="onAddPendingCard(detail.name, detail.cardId, true)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                    <!-- )})
+                
+                } -->
+            </div>
+        
+        </div>
+    </div>
+
+    <div id="pending-cards-section" fxLayout="row" class="outline-section paper">
+        <div class="pending-card outline-section paper" *ngFor="let thisCard of pendingCards | keyvalue" >
+            <h5>{{thisCard.key}}</h5>
+            <h6>{{thisCard.value.cards?.length}}</h6>
+        </div>
+    </div>
+    
+    <div fxLayout="row" class="paper outline-section">
+        <button mat-button [routerLink]="['/inventory']">
             Cancel
-        </Button>
-        <Button color="primary" variant="contained" onClick={props.handleSaveClick}>
+        </button>
+        <button mat-raised-button color="primary" (click)="onSaveClick()">
             Save
-        </Button>
-    </Paper> -->
-</div>
+        </button>
+    </div>
 </div>

@@ -155,3 +155,20 @@ export class cardSearchResultDetail {
     priceTix: number | null;
     imageUrl: string;
 }
+
+export class CardListItem {
+    data: CardSearchResultDto;
+    count?: number;
+}
+// export class CardListItem extends CardSearchResultDto {
+//     count?: number;
+// }
+
+export class PendingCardsDto {
+    // data: MagicCard;
+    // multiverseId: number;
+    // cardId: number;
+    name: string;
+    // count: number; //because for some reason I think this would be better than the screen calling .length all the time
+    cards: InventoryCard[]; //this might need to be something else
+}

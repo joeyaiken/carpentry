@@ -12,7 +12,7 @@ C:\DotNet\Carpentry\Carpentry.Data\bin\Debug\net5.0\Carpentry.Data.deps.json
 C:\DotNet\Carpentry\Carpentry.Data\bin\Debug\net5.0\Carpentry.Data.dll
 C:\DotNet\Carpentry\Carpentry.Data\bin\Debug\net5.0\ref\Carpentry.Data.dll
 C:\DotNet\Carpentry\Carpentry.Data\bin\Debug\net5.0\Carpentry.Data.pdb
-C:\DotNet\Carpentry\Carpentry.Data\obj\Debug\net5.0\Carpentry.Data.csprojAssemblyReference.cache
+C:\DotNet\Carpentry\Carpentry.Data\obj\Debug\net5.0\Carpentry.Data.csproj.AssemblyReference.cache
 C:\DotNet\Carpentry\Carpentry.Data\obj\Debug\net5.0\Carpentry.Data.GeneratedMSBuildEditorConfig.editorconfig
 C:\DotNet\Carpentry\Carpentry.Data\obj\Debug\net5.0\Carpentry.Data.AssemblyInfoInputs.cache
 C:\DotNet\Carpentry\Carpentry.Data\obj\Debug\net5.0\Carpentry.Data.AssemblyInfo.cs

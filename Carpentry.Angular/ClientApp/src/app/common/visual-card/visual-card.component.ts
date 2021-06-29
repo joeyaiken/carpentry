@@ -17,4 +17,8 @@ export class VisualCardComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {}
+
+    cardSelected(){
+        alert('cardSelected() not implemented')
+    }
 }
