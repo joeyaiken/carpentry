@@ -9,6 +9,8 @@ namespace Carpentry.Logic.Models.Scryfall
 {
     public class ScryfallMagicCard
     {
+        //What if...the ScryfallMagicCard just set the JObject on construction, then Getters parsed properties on-demand
+
         public ScryfallMagicCard()
         {
             //Prices = new Dictionary<string, decimal?>();
