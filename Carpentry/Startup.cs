@@ -1,67 +1,26 @@
-using Carpentry.Data.DataContext;
-using Carpentry.Data.Implementations;
-using Carpentry.Data.Interfaces;
-using Carpentry.Logic.Implementations;
-using Carpentry.Logic.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Carpentry.Core;
 
 namespace Carpentry
 {
-    public class Startup
+    public class Startup : CarpentryStartupBase
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration) : base(configuration) { }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public override void ConfigureServices(IServiceCollection services)
         {
             //Going to actually pull the fill filepaths from app settings now
             //TODO Eventually I could make a static config class and just read from that class
-            //TODO Everything else still needs this DB pattern
-            //string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-            //string scryDatabaseFilepath = Configuration.GetValue<string>("AppSettings:ScryDatabaseFilepath");
+            ConfigureSqlServerDatabase(services);
+            ConfigureCarpentryServices(services);
 
-            //TODO - should this be scopped instead of singleton?
-            ////DBs
-            //services.AddDbContext<ScryfallDataContext>(options => options.UseSqlite($"Data Source={scryDatabaseFilepath}"));
-            services.AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")));
-
-            //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
-            services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
-
-            services.AddSingleton<IDataBackupConfig, CarpentryAppConfig>();
-
-            //DB repos
-            services.AddScoped<ICardDataRepo, CardDataRepo>();
-            services.AddScoped<DeckDataRepo>();
-            services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
-            services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
-            services.AddScoped<ICoreDataRepo, CoreDataRepo>();
-
-            //Logic services
-            services.AddScoped<ISearchService, SearchService>();
-            services.AddScoped<IDeckService, DeckService>();
-            services.AddScoped<IInventoryService, InventoryService>();
-
-            services.AddScoped<IDataImportService, DataImportService>();
-            services.AddScoped<IDataUpdateService, DataUpdateService>();
-            services.AddScoped<IDataExportService, DataExportService>();
-            services.AddScoped<IFilterService, FilterService>();
-
-            services.AddScoped<IScryfallService, ScryfallService>();
-            services.AddHttpClient<IScryfallService, ScryfallService>();
-            
             services.AddControllersWithViews();
 
             services.AddSpaStaticFiles(configuration =>
@@ -71,7 +30,7 @@ namespace Carpentry
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -94,8 +53,6 @@ namespace Carpentry
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
-
-            //app.UseCors();
 
             app.UseSpa(spa =>
             {
