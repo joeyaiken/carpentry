@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="LegacyTests\UnitTests\CardSearchControllerTests.cs" />
-    <Compile Remove="LegacyTests\UnitTests\CoreControllerTests.cs" />
-    <Compile Remove="LegacyTests\UnitTests\DecksControllerTests.cs" />
-    <Compile Remove="LegacyTests\UnitTests\InventoryControllerTests.cs" />
+    <Compile Remove="LegacyTests\**" />
+    <Content Remove="LegacyTests\**" />
+    <EmbeddedResource Remove="LegacyTests\**" />
+    <None Remove="LegacyTests\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +30,6 @@
     <ProjectReference Include="..\Carpentry.Angular\Carpentry.Angular.csproj" />
     <ProjectReference Include="..\Carpentry.Legacy\Carpentry.Legacy.csproj" />
     <ProjectReference Include="..\Carpentry\Carpentry.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="LegacyTests\UnitTests\" />
   </ItemGroup>
 
 </Project>

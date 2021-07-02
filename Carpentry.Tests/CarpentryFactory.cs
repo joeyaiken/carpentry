@@ -7,7 +7,6 @@ using Carpentry.Core;
 
 namespace Carpentry.Tests
 {
-
     public class CarpentryFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : CarpentryStartupBase
     {
         private static IConfiguration Configuration
@@ -15,20 +14,16 @@ namespace Carpentry.Tests
             get
             {
                 return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                //.AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile("appsettings.Development.json", false, true)
-                //.AddUserSecrets<CarpentryFactory>()
-                .AddEnvironmentVariables()
-                .Build();
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddEnvironmentVariables()
+                    .Build();
             }
         }
 
         protected override IWebHostBuilder CreateWebHostBuilder()
         {
             return WebHost.CreateDefaultBuilder()
-                .UseConfiguration(Configuration) // Necessary for properly loading service endpoints
-                                                 //.UseSerilog()
+                .UseConfiguration(Configuration)
                 .UseStartup<TStartup>();
         }
 
