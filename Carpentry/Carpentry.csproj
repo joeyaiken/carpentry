@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <TypeScriptToolsVersion>3.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
@@ -26,35 +26,9 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
-    <Compile Remove="ClientApp_Legacy\**" />
-    <Compile Remove="Tasks\**" />
     <Content Remove="$(SpaRoot)**" />
-    <Content Remove="ClientApp_Legacy\**" />
-    <Content Remove="Tasks\**" />
-    <EmbeddedResource Remove="ClientApp_Legacy\**" />
-    <EmbeddedResource Remove="Tasks\**" />
     <None Remove="$(SpaRoot)**" />
-    <None Remove="ClientApp_Legacy\**" />
-    <None Remove="Tasks\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Controllers\LegacyCardsController.cs" />
-    <Compile Remove="Controllers\LegacyCoreController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="CardBackups.txt" />
-    <None Remove="DeckBackups.txt" />
-    <None Remove="Inventory.db" />
-    <None Remove="InventoryBackup.txt" />
-    <None Remove="InventoryData.db" />
-    <None Remove="InventoryDbBackup.txt" />
-    <None Remove="Old_Inventory.db" />
-    <None Remove="RefactorDev.db" />
-    <None Remove="S9Data.db" />
-    <None Remove="ScryfallData.db" />
   </ItemGroup>
 
   <ItemGroup>

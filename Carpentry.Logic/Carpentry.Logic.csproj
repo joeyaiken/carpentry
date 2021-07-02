@@ -11,7 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Carpentry.Data\Carpentry.Data.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Carpentry.CarpentryData\Carpentry.CarpentryData.csproj" />
+    <ProjectReference Include="..\Carpentry.DataLogic\Carpentry.DataLogic.csproj" />
+    <ProjectReference Include="..\Carpentry.ScryfallData\Carpentry.ScryfallData.csproj" />
   </ItemGroup>
 
 </Project>

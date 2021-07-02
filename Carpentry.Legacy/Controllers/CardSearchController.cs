@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Data.QueryParameters;
 using Carpentry.Legacy.Models;
 using Carpentry.Logic.Search;
 using Microsoft.AspNetCore.Mvc;

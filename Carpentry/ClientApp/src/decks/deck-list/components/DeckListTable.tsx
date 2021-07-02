@@ -45,7 +45,7 @@ export default function DeckListTable(props: ComponentProps): JSX.Element {
                     </TableHead>
                     <TableBody>
                     {
-                        props.decks.map(deck => 
+                        props.decks?.map(deck => 
                             <TableRow key={deck.id}>
                                 <TableCell onClick={() => {props.onDeckClick(deck.id)}}>
                                     <Link to={`/decks/${deck.id}`}>{deck.name}</Link> 

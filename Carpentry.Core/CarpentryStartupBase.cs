@@ -1,17 +1,14 @@
-﻿using Carpentry.Data.DataContext;
-using Carpentry.Data.Implementations;
-using Carpentry.Data.Interfaces;
-using Carpentry.Logic.Implementations;
+﻿using Carpentry.Logic.Implementations;
 using Carpentry.Logic.Interfaces;
-//using Microsoft.AspNetCore.Builder;
-//using Microsoft.AspNetCore.Hosting;
-//using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Carpentry.ScryfallData;
+using Carpentry.CarpentryData;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic.Implementations;
 
 namespace Carpentry.Core
 {

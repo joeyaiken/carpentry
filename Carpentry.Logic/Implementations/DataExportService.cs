@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.DataContext;
+﻿using Carpentry.CarpentryData;
 //using Carpentry.Data.LegacyDataContext;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
@@ -30,7 +30,7 @@ namespace Carpentry.Logic.Implementations
     public class DataExportService : IDataExportService
     {
         private readonly ILogger<DataExportService> _logger;
-        private readonly CarpentryDataContext _cardContext; //TODO - Data context needs to be replaced a Repo class
+        private readonly CarpentryDataContext _cardContext;
         private readonly CompressionLevel _exportCompressionLevel;
         private readonly IDataBackupConfig _config;
 

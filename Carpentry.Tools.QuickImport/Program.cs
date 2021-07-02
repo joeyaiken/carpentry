@@ -10,10 +10,11 @@ using Carpentry.Logic.Models;
 using System.Collections.Generic;
 using Serilog;
 using Serilog.Events;
-using Carpentry.Data.DataContext;
-using Carpentry.Data.Interfaces;
-using Carpentry.Data.Implementations;
 using Microsoft.EntityFrameworkCore;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic.Implementations;
+using Carpentry.ScryfallData;
+using Carpentry.CarpentryData;
 
 namespace Carpentry.Tools.QuickImport
 {

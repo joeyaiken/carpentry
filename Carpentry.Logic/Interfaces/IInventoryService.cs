@@ -1,5 +1,5 @@
-﻿using Carpentry.Data.DataModels.QueryResults;
-using Carpentry.Data.QueryResults;
+﻿using Carpentry.CarpentryData.Models.QueryResults;
+using Carpentry.DataLogic.QueryResults;
 using Carpentry.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;

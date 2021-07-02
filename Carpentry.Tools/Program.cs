@@ -1,5 +1,4 @@
-﻿using Carpentry.Data.DataContext;
-using Carpentry.Logic.Implementations;
+﻿using Carpentry.Logic.Implementations;
 using Carpentry.Logic.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,9 +10,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using Carpentry.Data.Interfaces;
-using Carpentry.Data.Implementations;
 using Carpentry.Logic.Models;
+using Carpentry.CarpentryData;
+using Carpentry.ScryfallData;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic.Implementations;
 
 namespace Carpentry.Tools
 {

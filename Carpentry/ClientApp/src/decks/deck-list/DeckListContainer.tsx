@@ -118,7 +118,7 @@ function selectDeckList(state: AppState): DeckOverviewDto[] {
     //state.data.
     //const someting = state.
     const { deckIds, decksById } = state.decks.data.overviews;
-    const result: DeckOverviewDto[] = deckIds.map( id => decksById[id]);
+    const result: DeckOverviewDto[] = deckIds?.map( id => decksById[id]);
     return result;
 }
 

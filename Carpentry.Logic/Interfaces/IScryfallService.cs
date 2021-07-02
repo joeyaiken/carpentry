@@ -21,8 +21,6 @@ namespace Carpentry.Logic.Interfaces
 
         Task<ScryfallMagicCard> GetCardByMid(int multiverseId);
 
-        Task<List<MagicCardDto>> SearchScryfallByName(string name, bool exclusive);
-
         Task<List<ScryfallSetOverviewDto>> GetAllSets();
 
         //search by name

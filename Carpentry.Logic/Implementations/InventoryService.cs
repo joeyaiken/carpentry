@@ -3,13 +3,13 @@ using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Data.Interfaces;
-using Carpentry.Data.DataModels;
 using System.Linq;
-using Carpentry.Data.QueryResults;
-using Carpentry.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
-using Carpentry.Data.DataModels.QueryResults;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.CarpentryData;
+using Carpentry.CarpentryData.Models.QueryResults;
+using Carpentry.DataLogic.QueryResults;
+using Carpentry.CarpentryData.Models;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -35,7 +35,7 @@ namespace Carpentry.Logic.Implementations
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
         {
             //TODO - validate card ID, instead of blindly trusting it if > 0
-            var newInventoryCard = new Data.DataModels.InventoryCardData()
+            var newInventoryCard = new InventoryCardData()
             {
                 IsFoil = dto.IsFoil,
                 InventoryCardStatusId = dto.StatusId,
@@ -102,7 +102,7 @@ namespace Carpentry.Logic.Implementations
 
             //var variantTypes = await _coreDataRepo.GetAllCardVariantTypes();
 
-            var newCards = cards.Select(x => new Data.DataModels.InventoryCardData()
+            var newCards = cards.Select(x => new InventoryCardData()
             {
                 IsFoil = x.IsFoil,
                 InventoryCardStatusId = x.StatusId,
@@ -132,7 +132,7 @@ namespace Carpentry.Logic.Implementations
             //Whatever, the Logic layer doesn't care what the UI layer is doing
             //It still needs to just map to something the DB can consume, the DB doesn't need a unique layer of mappings
 
-            Carpentry.Data.DataModels.InventoryCardData dbCard = await _inventoryRepo.GetInventoryCard(dto.Id);
+            InventoryCardData dbCard = await _inventoryRepo.GetInventoryCard(dto.Id);
 
             //currently only expecting to change the status with this method
             dbCard.InventoryCardStatusId = dto.StatusId;

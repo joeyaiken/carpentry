@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
-using Carpentry.Data.DataModels.QueryResults;
+using Carpentry.CarpentryData.Models.QueryResults;
 
 namespace Carpentry.Controllers
 {

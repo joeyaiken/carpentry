@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Carpentry.Data.DataContext;
 using Carpentry.Logic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,9 +8,11 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Carpentry.Logic.Implementations;
-using Carpentry.Data.Implementations;
-using Carpentry.Data.Interfaces;
 using Carpentry.Logic.Models;
+using Carpentry.ScryfallData;
+using Carpentry.CarpentryData;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic.Implementations;
 
 namespace Carpentry.Tools.QuickRestore
 {

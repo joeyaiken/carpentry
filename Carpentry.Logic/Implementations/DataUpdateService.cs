@@ -1,7 +1,4 @@
-﻿using Carpentry.Data.DataContext;
-using Carpentry.Data.Interfaces;
-using Carpentry.Data.DataModels;
-using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -11,7 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carpentry.Data.Models;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.CarpentryData.Models;
+using Carpentry.DataLogic.Models;
+using Carpentry.ScryfallData.Models;
 
 namespace Carpentry.Logic.Implementations
 {

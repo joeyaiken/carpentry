@@ -1,6 +1,6 @@
-﻿using Carpentry.Data.Interfaces;
-using Carpentry.Data.QueryParameters;
-using Carpentry.Data.QueryResults;
+﻿using Carpentry.CarpentryData.Models.QueryResults;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Search;

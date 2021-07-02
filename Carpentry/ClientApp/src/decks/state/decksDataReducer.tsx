@@ -119,14 +119,14 @@ const deckOverviewsReceived = (state: State, action: ReduxAction): State => {
 
     let decksById: { [key:number]: DeckOverviewDto } = {};
 
-    apiDecks.forEach(deck => {
+    apiDecks?.forEach(deck => {
         decksById[deck.id] = deck;
     });
 
     const newState: State = {
         ...state,
         overviews: {
-            deckIds: apiDecks.map(deck => deck.id),
+            deckIds: apiDecks?.map(deck => deck.id),
             decksById: decksById,
             isLoading: false,
             isInitialized: true,

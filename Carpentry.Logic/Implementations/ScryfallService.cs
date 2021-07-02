@@ -233,35 +233,6 @@ namespace Carpentry.Logic.Implementations
             }
         }
 
-        public async Task<List<MagicCardDto>> SearchScryfallByName(string name, bool exclusive)
-        {
-            //What does SET SEARCH return?
-            string endpoint;
-
-            string nameParam = name.Replace(' ', '+');
-
-            if (exclusive)
-            {
-                endpoint = $"https://api.scryfall.com/cards/search?q=!%22{nameParam}%22&unique=prints";
-            }
-            else
-            {
-                endpoint = $"https://api.scryfall.com/cards/search?q={nameParam}";
-            }
-
-            var responseString = await _client.GetStringAsync(endpoint);
-
-            JObject responseObject = JObject.Parse(responseString);
-            var cardResultData = responseObject.Value<JArray>("data").ToList();
-
-            List<ScryfallMagicCard> mappedCards = MapScryfallDataToCards(cardResultData);
-
-            var result = mappedCards.Select(c => c.ToMagicCard()).ToList();
-
-            return result;
-        }
-
-
         //This will return the (filtered) list of sets from scryfall
         //It won't include, for example, anything online-only
         //Maybe in the future, include a param to include promos/whatnot

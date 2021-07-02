@@ -1,4 +1,4 @@
-﻿using Carpentry.Data.QueryParameters;
+﻿using Carpentry.DataLogic.QueryParameters;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Search;
 using System.Collections.Generic;

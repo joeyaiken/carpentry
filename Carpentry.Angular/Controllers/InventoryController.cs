@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Data.QueryParameters;
+using Carpentry.DataLogic.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Microsoft.AspNetCore.Mvc;

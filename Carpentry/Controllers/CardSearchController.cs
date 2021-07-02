@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Data.QueryParameters;
 using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Search;
@@ -61,27 +60,6 @@ namespace Carpentry.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, FormatExceptionMessage("SearchInventory", ex));
-            }
-        }
-
-        /// <summary>
-        /// Will call the scryfall API to get cards by name, returning mapped results
-        /// ! Pretty sure this is obsolete
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<MagicCardDto>>> SearchWeb([FromBody] NameSearchQueryParameter param)
-        {
-            //TODO - swap return object for CardSearchResultDto
-            try
-            {
-                var result = await _scryService.SearchScryfallByName(param.Name, param.Exclusive);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("SearchWeb", ex));
             }
         }
 

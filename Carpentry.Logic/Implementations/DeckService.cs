@@ -1,19 +1,18 @@
-﻿using Carpentry.Data.Interfaces;
-using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Carpentry.Data.DataModels;
 using System.Linq;
-using Carpentry.Data.QueryResults;
-using Carpentry.Data.Implementations;
 using System.Net;
-using Carpentry.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Carpentry.CarpentryData;
+using Carpentry.DataLogic.Implementations;
+using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic.QueryResults;
+using Carpentry.CarpentryData.Models;
 //using Carpentry.Data.DataContext;
 //using Carpentry.Data.DataModels;
 
