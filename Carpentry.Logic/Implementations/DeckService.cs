@@ -27,6 +27,13 @@ namespace Carpentry.Logic.Implementations
 
     public class DeckService : IDeckService
     {
+        //Previous line of thinking was that this should never see base database classes
+        //That idea was dumb, and just overly-complicated things
+
+
+        //-----------
+
+
         //Question: Why shouldn't this have access to a repo?
         //  Abstracting this away just makes things more confusing, really
         //  I can still have things that make life easier in the data-layer
@@ -718,7 +725,8 @@ namespace Carpentry.Logic.Implementations
             var result = new CardTagDetailDto() { CardId = cardId };
 
             //get name by ID
-            var matchingCard = await _cardDataRepo.GetCardData(cardId);
+            //var matchingCard = await _cardDataRepo.GetCardData(cardId);
+            var matchingCard = await _cardContext.Cards.FirstOrDefaultAsync(c => c.CardId == cardId);
 
             if (matchingCard == null)
             {

@@ -10,7 +10,7 @@ namespace Carpentry.Logic.Models.Scryfall
     public class ScryfallMagicCard
     {
         //What if...the ScryfallMagicCard just set the JObject on construction, then Getters parsed properties on-demand
-
+        //The scryfall repo could store the TRUE representation of a card.  Scryfall wouldn't have to be re-queried if I updated fields 
         public ScryfallMagicCard()
         {
             //Prices = new Dictionary<string, decimal?>();

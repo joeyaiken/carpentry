@@ -5,6 +5,7 @@ namespace Carpentry.ScryfallData
 {
     /// <summary>
     /// The Scryfall repo is just a simple repository of entire Scryfall sets, and an unconnected audit table
+    /// The repo exists so scryfall definitions can be stored locally, preventing the API from being called too frequently
     /// </summary>
     public class ScryfallDataContext : DbContext
     {

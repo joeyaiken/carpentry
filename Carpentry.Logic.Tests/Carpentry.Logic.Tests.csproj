@@ -7,16 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UnitTests\DataExportServiceTests.cs" />
+    <Compile Remove="UnitTests\DataImportServiceTests.cs" />
     <Compile Remove="UnitTests\DataRestoreServiceTests.cs" />
+    <Compile Remove="UnitTests\DataUpdateServiceTests.cs" />
+    <Compile Remove="UnitTests\DeckServiceTests.cs" />
     <Compile Remove="UnitTests\DeckServiceTests\DeckServiceDeckCardTests.cs" />
     <Compile Remove="UnitTests\DeckServiceTests\DeckServiceDeckTests.cs" />
     <Compile Remove="UnitTests\DeckServiceTests\DeckServiceImportExportTests.cs" />
     <Compile Remove="UnitTests\DeckServiceTests\DeckServiceSearchTests.cs" />
+    <Compile Remove="UnitTests\FilterServiceTests.cs" />
+    <Compile Remove="UnitTests\InventoryServiceTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\CollectionBuilderTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\ImportExportTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\InventoryCardTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\InventorySearchTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\TrimmingTipsTests.cs" />
+    <Compile Remove="UnitTests\ScryfallServiceTests.cs" />
+    <Compile Remove="UnitTests\SearchServiceTests.cs" />
+    <Compile Remove="UnitTests\TrimmingTipsServiceTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

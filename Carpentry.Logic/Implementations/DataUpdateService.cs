@@ -211,7 +211,7 @@ namespace Carpentry.Logic.Implementations
             //If stale enough, get an updated set from the Scryfall API
             if (scryDataLastUpdated == null || scryDataLastUpdated.Value.AddDays(_dbRefreshIntervalDays) < DateTime.Today.Date)
             {
-                var scryfallPayload = await _scryService.GetFullMappedSet(setCode);
+                var scryfallPayload = await _scryService.GetSetCards(setCode);
 
                 var mappedSetCards = scryfallPayload.SetCards.Select(unmappedCard => unmappedCard.ToMagicCard()).ToList();
 
@@ -441,7 +441,7 @@ namespace Carpentry.Logic.Implementations
             if (auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
             {
                 //get the list of sets from the scryfall service
-                var allSetsResult = await _scryService.GetAllSets();
+                var allSetsResult = await _scryService.GetAvailableSets();
 
                 //update scry data
                 foreach (var setResult in allSetsResult)
