@@ -23,7 +23,6 @@
     <Compile Remove="UnitTests\InventoryServiceTests\InventoryCardTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\InventorySearchTests.cs" />
     <Compile Remove="UnitTests\InventoryServiceTests\TrimmingTipsTests.cs" />
-    <Compile Remove="UnitTests\ScryfallServiceTests.cs" />
     <Compile Remove="UnitTests\SearchServiceTests.cs" />
     <Compile Remove="UnitTests\TrimmingTipsServiceTests.cs" />
   </ItemGroup>

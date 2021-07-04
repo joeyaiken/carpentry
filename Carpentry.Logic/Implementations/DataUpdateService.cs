@@ -12,6 +12,7 @@ using Carpentry.DataLogic.Interfaces;
 using Carpentry.CarpentryData.Models;
 using Carpentry.DataLogic.Models;
 using Carpentry.ScryfallData.Models;
+using Carpentry.CarpentryData;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -28,6 +29,8 @@ namespace Carpentry.Logic.Implementations
     public class DataUpdateService : IDataUpdateService
     {
         private readonly ILogger<DataExportService> _logger;
+
+        private readonly CarpentryDataContext _carpentryContext;
 
         private readonly IScryfallService _scryService;
 
@@ -472,7 +475,7 @@ namespace Carpentry.Logic.Implementations
             }
 
             //get the set definition overviews from the scry DB
-            var scrySets = await _scryfallRepo.GetAvailableSetOverviews();
+            var scrySets = await _scryfallRepo.GetAvailableSetOverviews(); //TODO - This should be '_scryService.GetAvailableSets()'
 
             var existingCardSets = await _cardRepo.GetAllCardSets();
 

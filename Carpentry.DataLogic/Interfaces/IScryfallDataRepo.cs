@@ -10,15 +10,24 @@ namespace Carpentry.DataLogic.Interfaces
     /// A scryfall repo should be a repository for data retrieved from scryfall
     /// It stores both raw set data, as well as data mapped to relevant classes
     /// </summary>
+    [Obsolete]
     public interface IScryfallDataRepo
     {
+        [Obsolete]
         Task<DateTime?> GetSetDataLastUpdated(string setCode);
+        [Obsolete]
         Task AddOrUpdateSet(ScryfallSetData setData, bool applyData);
+        [Obsolete]
         Task<ScryfallSetData> GetSetByCode(string setCode, bool includeData);
-        Task<List<ScryfallSetOverview>> GetAvailableSetOverviews(); 
+        [Obsolete]
+        Task<List<ScryfallSetOverview>> GetAvailableSetOverviews();
+        [Obsolete]
         Task EnsureDatabaseExists();
+        [Obsolete]
         Task<ScryfallAuditData> GetAuditData();
+        [Obsolete]
         Task SetAuditData();
-        Task DeleteSet(int setId);
+        //[Obsolete]
+        //Task DeleteSet(int setId);
     }
 }

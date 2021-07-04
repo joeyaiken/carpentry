@@ -9,9 +9,18 @@ namespace Carpentry.ScryfallData
     /// </summary>
     public class ScryfallDataContext : DbContext
     {
+
+
         public DbSet<ScryfallAuditData> ScryfallAuditData { get; set; }
         public DbSet<ScryfallSetData> Sets { get; set; }
 
+        //"A cached list of set definitions"
+        //"A cached list of all cards in a specific set"
+
+        //SetDetail
+        //SetDefinitions
+        
+        
         //DB should be set on the configuration page
         public ScryfallDataContext(DbContextOptions<ScryfallDataContext> options) : base(options) { }
 

@@ -1,6 +1,7 @@
 ﻿using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Scryfall;
+using Carpentry.ScryfallData;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
@@ -20,15 +21,18 @@ namespace Carpentry.Logic.Implementations
     /// </summary>
     public class ScryfallService : IScryfallService
     {
+        //private readonly ScryfallDataContext _scryContext;
         private readonly ILogger<ScryfallService> _logger;
         private readonly HttpClient _client;
         private readonly int _scryfallApiDelay;
 
         public ScryfallService(
+            //ScryfallDataContext scryContext,
             ILogger<ScryfallService> logger,
             HttpClient client
         )
         {
+            //_scryContext = scryContext;
             _logger = logger;
             _client = client;
 
@@ -45,25 +49,20 @@ namespace Carpentry.Logic.Implementations
         /// Get a list of available sets
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ScryfallSetOverviewDto>> GetAvailableSets()
+        public async Task<List<ScryfallSetOverviewDto>> GetAvailableSets(bool filter = true)
         {
-            var endpoint = $"https://api.scryfall.com/sets";
-            var responseString = await _client.GetStringAsync(endpoint);
+            //get context lastUpdated
+            //if(old): query api, save results
+            //Return mapped sets
 
-            JObject setResponseObject = JObject.Parse(responseString);
+            //v1: Always query Scryfall api
 
-            JArray responseData = setResponseObject.Value<JArray>("data");
+            var responseData = await ApiGetAvailableSets();
 
             List<ScryfallSetOverviewDto> result = new List<ScryfallSetOverviewDto>();
 
             foreach (var scrySet in responseData)
             {
-                //need JObject not JToken
-
-
-
-                //result.Code = setResponseObject.Value<string>("code");
-
                 var newDto = new ScryfallSetOverviewDto()
                 {
                     //"object": "set",
@@ -88,28 +87,42 @@ namespace Carpentry.Logic.Implementations
                 result.Add(newDto);
             }
 
-            //funny
-            string[] excludedSetTypes = {
-                "token",
-                "funny",
-                //"memorabilia",//If I want to see the c21 display commanders I need to include this
-                "promo",
-                "box",
-            };
+            if(filter)
+            {
+                string[] excludedSetTypes = {
+                    "token",
+                    "funny",
+                    //"memorabilia",//If I want to see the c21 display commanders I need to include this
+                    "promo",
+                    "box",
+                };
 
-            result = result
-                .Where(s =>
-                    s.Digital == false
-                        &&
-                    !excludedSetTypes.Contains(s.SetType)
-                        &&
-                    !s.Name.Contains("Judge ")
-                )
-                .ToList();
-            //This should be filtered
+                result = result
+                    .Where(s =>
+                        s.Digital == false
+                            &&
+                        !excludedSetTypes.Contains(s.SetType)
+                            &&
+                        !s.Name.Contains("Judge ")
+                    )
+                    .ToList();
+            }
 
             return result;
         }
+
+        private async Task<JArray> ApiGetAvailableSets()
+        {
+            var endpoint = $"https://api.scryfall.com/sets";
+            var responseString = await _client.GetStringAsync(endpoint);
+
+            var setResponseObject = JObject.Parse(responseString);
+
+            var responseData = setResponseObject.Value<JArray>("data");
+
+            return responseData;
+        }
+
 
         /// <summary>
         /// Gets all cards in a specific set
@@ -124,6 +137,15 @@ namespace Carpentry.Logic.Implementations
             var mappedSet = MapScryfallSetData(rawSet);
 
             return mappedSet;
+        }
+
+        /// <summary>
+        /// Takes a list of set codes and ensures the sets are updated locally
+        /// </summary>
+        /// <returns></returns>
+        public async Task EnsureSetsUpdated(List<string> setCodes)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

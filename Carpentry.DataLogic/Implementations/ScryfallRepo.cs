@@ -95,16 +95,16 @@ namespace Carpentry.DataLogic.Implementations
             
         }
 
-        public async Task DeleteSet(int setId)
-        {
-            var setToDelete = _scryContext.Sets.FirstOrDefault(x => x.Id == setId);
+        //public async Task DeleteSet(int setId)
+        //{
+        //    var setToDelete = _scryContext.Sets.FirstOrDefault(x => x.Id == setId);
             
-            if(setToDelete != null)
-            {
-                _scryContext.Sets.Remove(setToDelete);
-            }
-            await _scryContext.SaveChangesAsync();
-        }
+        //    if(setToDelete != null)
+        //    {
+        //        _scryContext.Sets.Remove(setToDelete);
+        //    }
+        //    await _scryContext.SaveChangesAsync();
+        //}
         
         public async Task EnsureDatabaseExists()
         {

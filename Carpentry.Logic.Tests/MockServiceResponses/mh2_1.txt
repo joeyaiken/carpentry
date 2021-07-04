@@ -1,0 +1,20 @@
+﻿{
+  "object": "set",
+  "id": "c1c7eb8c-f205-40ab-a609-767cb296544e",
+  "code": "mh2",
+  "mtgo_code": "mh2",
+  "arena_code": "mh2",
+  "tcgplayer_id": 2809,
+  "name": "Modern Horizons 2",
+  "uri": "https://api.scryfall.com/sets/c1c7eb8c-f205-40ab-a609-767cb296544e",
+  "scryfall_uri": "https://scryfall.com/sets/mh2",
+  "search_uri": "https://api.scryfall.com/cards/search?order=set\u0026q=e%3Amh2\u0026unique=prints",
+  "released_at": "2021-06-18",
+  "set_type": "draft_innovation",
+  "card_count": 492,
+  "printed_size": 303,
+  "digital": false,
+  "nonfoil_only": false,
+  "foil_only": false,
+  "icon_svg_uri": "https://c2.scryfall.com/file/scryfall-symbols/sets/mh2.svg?1624852800"
+}
