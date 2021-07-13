@@ -16,6 +16,7 @@ using Carpentry.DataLogic.Implementations;
 using Carpentry.ScryfallData;
 using Carpentry.CarpentryData;
 using Carpentry.Logic;
+using Carpentry.DataLogic;
 
 namespace Carpentry.Tools.QuickImport
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Carpentry.Logic.Models
 {
+    //What the fuck even is this useless class?
     public class MagicCardDto
     {
         [JsonProperty("cardId")]

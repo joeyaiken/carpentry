@@ -3,21 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Carpentry.ScryfallData.Models
 {
+    //DATABASE object representing a scryfall set
+    //Should contain a string of the set detail, along with a string of all cards in the set
     public class ScryfallSetData
     {
         [Key]
         public int Id { get; set; }
         public string Code { get; set; }
-        public string Name { get; set; }
-        public DateTime ReleasedAt { get; set; }
+        public string SetTokenString { get; set; }
+        public string CardTokensString { get; set; }
         public DateTime? LastUpdated { get; set; }
-        public string SetType { get; set; }
-        public int? CardCount { get; set; }
-        public bool? Digital { get; set; }
-        public bool? NonfoilOnly { get; set; }
-        public bool? FoilOnly { get; set; }
-        public string CardTokens { get; set; }
-        public string SetCards { get; set; }
-        public string PremiumCards { get; set; }
     }
 }

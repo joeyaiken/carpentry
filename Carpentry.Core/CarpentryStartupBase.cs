@@ -10,6 +10,7 @@ using Carpentry.CarpentryData;
 using Carpentry.DataLogic.Interfaces;
 using Carpentry.DataLogic.Implementations;
 using Carpentry.Logic;
+using Carpentry.DataLogic;
 
 namespace Carpentry.Core
 {

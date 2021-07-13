@@ -13,6 +13,7 @@ using Carpentry.CarpentryData.Models;
 using Carpentry.DataLogic.Models;
 using Carpentry.ScryfallData.Models;
 using Carpentry.CarpentryData;
+using Carpentry.DataLogic;
 
 namespace Carpentry.Logic.Implementations
 {
@@ -198,53 +199,17 @@ namespace Carpentry.Logic.Implementations
         #region Get an up-to-date scryfall set
 
         /// <summary>
-        /// This gets an up-to-date list of card definitions from scryfall (or cached in the local DB)
+        /// This gets a list of card definitions from scryfall, mapped to a different class type
         /// </summary>
         /// <param name="setId"></param>
         /// <param name="setCode"></param>
         /// <returns></returns>
         private async Task<List<CardDataDto>> GetUpdatedScrySet(/*int setId,*/ string setCode)
         {
-            //check if the scry set is up to date
-            DateTime? scryDataLastUpdated = await _scryfallRepo.GetSetDataLastUpdated(setCode);
+            //This should probably just be _scryService.GetSetDetail | GetSetCards | ??? (aka just a call to the normal service method)
+            var scryPayload = await _scryService.GetSetDetail(setCode);
 
-            ScryfallSetData scryData = null;
-            List<MagicCardDto> cardsToUpdate = null;
-
-            //If stale enough, get an updated set from the Scryfall API
-            if (scryDataLastUpdated == null || scryDataLastUpdated.Value.AddDays(_dbRefreshIntervalDays) < DateTime.Today.Date)
-            {
-                var scryfallPayload = await _scryService.GetSetCards(setCode);
-
-                var mappedSetCards = scryfallPayload.SetCards.Select(unmappedCard => unmappedCard.ToMagicCard()).ToList();
-
-                var mappedPremiumCards = scryfallPayload.PremiumCards.Select(unmappedCard => unmappedCard.ToMagicCard()).ToList();
-
-                scryData = new ScryfallSetData
-                {
-                    Code = scryfallPayload.Code,
-                    Name = scryfallPayload.Name,
-                    //DataIsParsed = false,
-                    LastUpdated = DateTime.Now,
-                    ReleasedAt = DateTime.Parse(scryfallPayload.ReleaseDate),
-                    //CardData = JsonConvert.SerializeObject(scryfallPayload.CardTokens)
-                    CardTokens = JsonConvert.SerializeObject(scryfallPayload.CardTokens),
-                    SetCards = JsonConvert.SerializeObject(mappedSetCards),
-                    PremiumCards = JsonConvert.SerializeObject(mappedPremiumCards),
-                };
-
-                cardsToUpdate = mappedSetCards;
-
-                await _scryfallRepo.AddOrUpdateSet(scryData, true);
-            }
-            else
-            {
-                scryData = await _scryfallRepo.GetSetByCode(setCode, true);
-
-                cardsToUpdate = JsonConvert.DeserializeObject<List<MagicCardDto>>(scryData.SetCards);
-            }
-
-            List<CardDataDto> mappedCards = cardsToUpdate.Select(card => new CardDataDto()
+            var mappedCards = scryPayload.Cards.Select(card => new CardDataDto()
             {
                 Cmc = card.Cmc,
                 ColorIdentity = card.ColorIdentity,
@@ -439,43 +404,8 @@ namespace Carpentry.Logic.Implementations
         /// <returns></returns>
         public async Task TryUpdateAvailableSets()
         {
-            //Update scry data, if not updated today
-            var auditData = await _scryfallRepo.GetAuditData();
-            if (auditData == null || auditData.DefinitionsLastUpdated == null || auditData.DefinitionsLastUpdated.Value.Date < DateTime.Today)
-            {
-                //get the list of sets from the scryfall service
-                var allSetsResult = await _scryService.GetAvailableSets();
-
-                //update scry data
-                foreach (var setResult in allSetsResult)
-                {
-                    var scryRepoSet = await _scryfallRepo.GetSetByCode(setResult.Code, false);
-
-                    if (scryRepoSet == null)
-                    {
-                        scryRepoSet = new ScryfallSetData();
-                    }
-
-                    scryRepoSet.Code = setResult.Code;
-                    scryRepoSet.Name = setResult.Name;
-                    scryRepoSet.ReleasedAt = DateTime.Parse(setResult.ReleasedAtString);
-                    scryRepoSet.SetType = setResult.SetType;
-                    scryRepoSet.CardCount = setResult.CardCount;
-                    scryRepoSet.Digital = setResult.Digital;
-                    scryRepoSet.NonfoilOnly = setResult.NonfoilOnly;
-                    scryRepoSet.FoilOnly = setResult.FoilOnly;
-
-                    //Why is this calling  with FALSE?
-                    //  Because when updating the list of available sets, I don't want to overwrite card definitions
-                    await _scryfallRepo.AddOrUpdateSet(scryRepoSet, false);
-
-                }
-
-                await _scryfallRepo.SetAuditData();
-            }
-
             //get the set definition overviews from the scry DB
-            var scrySets = await _scryfallRepo.GetAvailableSetOverviews(); //TODO - This should be '_scryService.GetAvailableSets()'
+            var scrySets = await _scryService.GetSetOverviews();
 
             var existingCardSets = await _cardRepo.GetAllCardSets();
 

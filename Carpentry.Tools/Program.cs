@@ -16,6 +16,7 @@ using Carpentry.ScryfallData;
 using Carpentry.DataLogic.Interfaces;
 using Carpentry.DataLogic.Implementations;
 using Carpentry.Logic;
+using Carpentry.DataLogic;
 
 namespace Carpentry.Tools
 {
