@@ -13,6 +13,7 @@ using Carpentry.ScryfallData;
 using Carpentry.CarpentryData;
 using Carpentry.DataLogic.Interfaces;
 using Carpentry.DataLogic.Implementations;
+using Carpentry.Logic;
 
 namespace Carpentry.Tools.QuickRestore
 {

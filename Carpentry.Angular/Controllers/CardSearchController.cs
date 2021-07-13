@@ -18,12 +18,10 @@ namespace Carpentry.Angular.Controllers
         }
 
         private readonly ISearchService _searchService;
-        private readonly IScryfallService _scryService;
 
-        public CardSearchController(ISearchService searchService, IScryfallService scryService)
+        public CardSearchController(ISearchService searchService)
         {
             _searchService = searchService;
-            _scryService = scryService;
         }
 
         /// <summary>
