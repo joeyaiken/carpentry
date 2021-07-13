@@ -1,0 +1,19 @@
+﻿{
+    "object": "set",
+    "id": "a90a7b2f-9dd8-4fc7-9f7d-8ea2797ec782",
+    "code": "eld",
+    "mtgo_code": "eld",
+    "arena_code": "eld",
+    "tcgplayer_id": 2494,
+    "name": "Throne of Eldraine",
+    "uri": "https://api.scryfall.com/sets/a90a7b2f-9dd8-4fc7-9f7d-8ea2797ec782",
+    "scryfall_uri": "https://scryfall.com/sets/eld",
+    "search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Aeld&unique=prints",
+    "released_at": "2019-10-04",
+    "set_type": "expansion",
+    "card_count": 397,
+    "digital": false,
+    "nonfoil_only": false,
+    "foil_only": false,
+    "icon_svg_uri": "https://c2.scryfall.com/file/scryfall-symbols/sets/eld.svg?1626062400"
+}

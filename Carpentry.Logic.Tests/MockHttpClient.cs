@@ -35,6 +35,16 @@ namespace Carpentry.Logic.Tests
                     return LoadMockResponse("mh2_3");
                 case "https://api.scryfall.com/cards/search?format=json&include_extras=false&include_multilingual=false&order=set&page=3&q=e%3Amh2&unique=prints":
                     return LoadMockResponse("mh2_4");
+
+                case "https://api.scryfall.com/sets/ELD":
+                    return LoadMockResponse("eld_1");
+                case "https://api.scryfall.com/cards/search?order=set&q=e%3Aeld&unique=prints":
+                    return LoadMockResponse("eld_2");
+                case "https://api.scryfall.com/cards/search?format=json&include_extras=false&include_multilingual=false&order=set&page=2&q=e%3Aeld&unique=prints":
+                    return LoadMockResponse("eld_3");
+                case "https://api.scryfall.com/cards/search?format=json&include_extras=false&include_multilingual=false&order=set&page=3&q=e%3Aeld&unique=prints":
+                    return LoadMockResponse("eld_4");
+
                 default:
                     throw new Exception("Unexpected request string");
             }
