@@ -1,4 +1,4 @@
-﻿namespace Carpentry.DataLogic.QueryResults
+﻿namespace Carpentry.Logic.Models
 {
     public class TrimmingToolResult
     {

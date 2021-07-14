@@ -1,11 +1,8 @@
 ﻿using Carpentry.CarpentryData;
 using Carpentry.CarpentryData.Models.QueryResults;
-using Carpentry.DataLogic;
-using Carpentry.DataLogic.QueryParameters;
 using Carpentry.Logic.Models;
-using Carpentry.Logic.Search;
+using Carpentry.Logic.Models.Search;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

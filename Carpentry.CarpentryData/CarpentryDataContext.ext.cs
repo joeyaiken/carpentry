@@ -2,6 +2,7 @@
 using Carpentry.CarpentryData.Models.QueryResults;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -279,6 +280,20 @@ namespace Carpentry.CarpentryData
 			//return inventoryCardsByName;
 
 			return InventoryCardByName.AsQueryable();
+		}
+
+		//I want to submit a list of card names, and get a collection of inventory cards for each name
+		public async Task<Dictionary<string, List<InventoryCardData>>> GetInventoryCardsByName(IEnumerable<string> cardNames)
+		{
+			var result = (await InventoryCards
+				.Where(ic => cardNames.Contains(ic.Card.Name))
+				.Include(ic => ic.Card).ThenInclude(c => c.Set)
+				.Include(ic => ic.DeckCards).ThenInclude(dc => dc.Deck)
+				.ToListAsync())
+				.GroupBy(ic => ic.Card.Name)
+				.ToDictionary(g => g.Key, g => g.ToList());
+
+			return result;
 		}
 
 	}

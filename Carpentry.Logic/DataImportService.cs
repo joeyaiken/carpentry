@@ -1,6 +1,5 @@
 ﻿using Carpentry.CarpentryData;
 using Carpentry.CarpentryData.Models;
-using Carpentry.DataLogic;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Backups;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic
@@ -48,7 +46,6 @@ namespace Carpentry.Logic
         private readonly IDataUpdateService _dataUpdateService;
         private readonly IDeckService _deckService;
         private readonly IInventoryService _inventoryService;
-        private readonly InventoryDataRepo _inventoryRepo;
         private readonly int _cardStatus_InInventory = 1;
         private readonly IDataBackupConfig _config;
 
@@ -59,7 +56,6 @@ namespace Carpentry.Logic
             IDataUpdateService dataUpdateService,
             IDeckService deckService,
             IInventoryService inventoryService,
-            InventoryDataRepo inventoryRepo,
             IDataBackupConfig config,
             CarpentryDataContext cardContext
             )
@@ -67,7 +63,6 @@ namespace Carpentry.Logic
             _dataUpdateService = dataUpdateService;
             _deckService = deckService;
             _inventoryService = inventoryService;
-            _inventoryRepo = inventoryRepo;
             _config = config;
             _cardContext = cardContext;
         }
@@ -400,7 +395,7 @@ namespace Carpentry.Logic
             var allCardNames = parsedBackupDecks.SelectMany(d => d.Cards.Select(c => c.Name)).Distinct();
 
 
-            var unusedCards = await _inventoryRepo.GetUnusedInventoryCards(allCardNames);
+            var unusedCards = await _cardContext.GetInventoryCardsByName(allCardNames);
 
             //running off the assumption that, since this is only used by import atm, I can assume no cards are in a deck
 

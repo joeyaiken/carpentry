@@ -31,11 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Angular", "Carpen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.Core", "Carpentry.Core\Carpentry.Core.csproj", "{A513DB9E-2C36-4A44-9AE4-D489F8562F62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.CarpentryData", "Carpentry.CarpentryData\Carpentry.CarpentryData.csproj", "{59CD1F7C-E200-4DFC-9D2F-8B68F3B44007}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.CarpentryData", "Carpentry.CarpentryData\Carpentry.CarpentryData.csproj", "{59CD1F7C-E200-4DFC-9D2F-8B68F3B44007}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.ScryfallData", "Carpentry.ScryfallData\Carpentry.ScryfallData.csproj", "{9DB4AFEE-EE63-4357-BED0-769D242869C2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpentry.DataLogic", "Carpentry.DataLogic\Carpentry.DataLogic.csproj", "{57437F2C-45B8-4866-840B-DCC69A0D642B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carpentry.ScryfallData", "Carpentry.ScryfallData\Carpentry.ScryfallData.csproj", "{9DB4AFEE-EE63-4357-BED0-769D242869C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -191,18 +189,6 @@ Global
 		{9DB4AFEE-EE63-4357-BED0-769D242869C2}.Release|x64.Build.0 = Release|Any CPU
 		{9DB4AFEE-EE63-4357-BED0-769D242869C2}.Release|x86.ActiveCfg = Release|Any CPU
 		{9DB4AFEE-EE63-4357-BED0-769D242869C2}.Release|x86.Build.0 = Release|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Debug|x64.Build.0 = Debug|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Debug|x86.Build.0 = Debug|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Release|x64.ActiveCfg = Release|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Release|x64.Build.0 = Release|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Release|x86.ActiveCfg = Release|Any CPU
-		{57437F2C-45B8-4866-840B-DCC69A0D642B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -220,7 +206,6 @@ Global
 		{A513DB9E-2C36-4A44-9AE4-D489F8562F62} = {835F1B1F-8469-483A-BE6C-3F802F0C02E7}
 		{59CD1F7C-E200-4DFC-9D2F-8B68F3B44007} = {65A09C82-4A2A-4B80-A7C2-EE2E73192E92}
 		{9DB4AFEE-EE63-4357-BED0-769D242869C2} = {65A09C82-4A2A-4B80-A7C2-EE2E73192E92}
-		{57437F2C-45B8-4866-840B-DCC69A0D642B} = {543A3EEF-B569-4B90-A98E-59E5460A1383}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A3A1F5C-248B-461E-8852-2541452139E8}

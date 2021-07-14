@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.DataLogic.QueryParameters;
 using Carpentry.Logic;
 using Carpentry.Logic.Models;
+using Carpentry.Logic.Models.Search;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.Angular.Controllers

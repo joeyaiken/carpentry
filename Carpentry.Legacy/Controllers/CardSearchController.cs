@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Legacy.Models;
-using Carpentry.Logic.Search;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.Legacy.Controllers

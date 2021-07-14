@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Carpentry.ScryfallData;
 using Carpentry.CarpentryData;
 using Carpentry.Logic;
-using Carpentry.DataLogic;
 
 namespace Carpentry.Tools.QuickImport
 {
@@ -146,12 +145,6 @@ namespace Carpentry.Tools.QuickImport
 
 
             .AddSingleton<IDataBackupConfig, FakeAppConfig>()
-
-            // v
-
-            //DB repos
-            .AddScoped<DeckDataRepo>()
-            .AddScoped<InventoryDataRepo>()
 
             //Logic services
             //.AddScoped<ISearchService, SearchService>()

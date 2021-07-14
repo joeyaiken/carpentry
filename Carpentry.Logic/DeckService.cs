@@ -8,8 +8,6 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Carpentry.CarpentryData;
-using Carpentry.DataLogic;
-using Carpentry.DataLogic.QueryResults;
 using Carpentry.CarpentryData.Models;
 
 namespace Carpentry.Logic
@@ -77,8 +75,6 @@ namespace Carpentry.Logic
 
         private readonly CarpentryDataContext _cardContext;
 
-        private readonly DeckDataRepo _deckRepo;
-        private readonly InventoryDataRepo _inventoryRepo;
         private readonly IInventoryService _inventoryService;
 
         private static string _sideboardCategory = "Sideboard";
@@ -91,15 +87,11 @@ namespace Carpentry.Logic
         //public ICardImportService _cardImportService;
 
         public DeckService(
-            DeckDataRepo deckRepo,
-            InventoryDataRepo inventoryRepo,
             IInventoryService inventoryService,
             ILogger<DeckService> logger,
             CarpentryDataContext cardContext
             )
         {
-            _deckRepo = deckRepo;
-            _inventoryRepo = inventoryRepo;
             _inventoryService = inventoryService;
             _logger = logger;
             _cardContext = cardContext;
@@ -469,9 +461,10 @@ namespace Carpentry.Logic
                 BasicG = props.BasicG,
             };
 
-            int newId = await _deckRepo.AddDeck(newDeck);
+            _cardContext.Decks.Add(newDeck);
+            await _cardContext.SaveChangesAsync();
 
-            return newId;
+            return newDeck.DeckId;
         }
 
         /// <summary>
@@ -498,7 +491,18 @@ namespace Carpentry.Logic
                 BasicG = props.BasicG,
             }).ToList();
 
-            await _deckRepo.AddImportedDeckBatch(newDecks);
+            //using (var transaction = _cardContext.Database.BeginTransaction())
+            //{
+            //_cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] ON");
+
+            _cardContext.Decks.AddRange(newDecks);
+
+            await _cardContext.SaveChangesAsync();
+
+            //_cardContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Decks] OFF");
+
+            //    transaction.Commit();
+            //}
         }
 
         public async Task UpdateDeck(DeckPropertiesDto deckDto)
@@ -553,46 +557,39 @@ namespace Carpentry.Logic
 
             await _cardContext.SaveChangesAsync();
         }
+
         public async Task<int> CloneDeck(int deckId)
         {
-            //get deck detail
-            var existingDeck = await _deckRepo.GetDeckById(deckId);
-            //copy deck props
-
-            var newDeck = new DeckData()
-            {
-                Name = $"Clone of {existingDeck.Name}",
-                MagicFormatId = existingDeck.MagicFormatId,
-                Notes = existingDeck.Notes,
-                BasicW = existingDeck.BasicW,
-                BasicU = existingDeck.BasicU,
-                BasicB = existingDeck.BasicB,
-                BasicR = existingDeck.BasicR,
-                BasicG = existingDeck.BasicG,
-                Tags = existingDeck.Tags?.Select(tag => new DeckCardTagData
+            //Copy existing deck into new record
+            var newDeck = await _cardContext.Decks
+                .Where(d => d.DeckId == deckId)
+                .Select(existingDeck => new DeckData()
                 {
-                    CardName = tag.CardName,
-                    Description = tag.Description,
-                }).ToList(),
-                Cards = existingDeck.Cards.Select(card => new DeckCardData
-                {
-                    CardName = card.CardName,
-                    CategoryId = card.CategoryId,
-                    InventoryCardId = null,
-                }).ToList(),
-            };
+                    Name = $"Clone of {existingDeck.Name}",
+                    MagicFormatId = existingDeck.MagicFormatId,
+                    Notes = existingDeck.Notes,
+                    BasicW = existingDeck.BasicW,
+                    BasicU = existingDeck.BasicU,
+                    BasicB = existingDeck.BasicB,
+                    BasicR = existingDeck.BasicR,
+                    BasicG = existingDeck.BasicG,
+                    Tags = existingDeck.Tags.Select(tag => new DeckCardTagData
+                    {
+                        CardName = tag.CardName,
+                        Description = tag.Description,
+                    }).ToList(),
+                    Cards = existingDeck.Cards.Select(card => new DeckCardData
+                    {
+                        CardName = card.CardName,
+                        CategoryId = card.CategoryId,
+                        InventoryCardId = null,
+                    }).ToList(),
+                }).SingleAsync(); //Should error if deck id doesn't exist
 
-            //copy deck cards
-            //add deck
-            var newId = await _deckRepo.AddDeck(newDeck);
-            //add cards in bulk
-
-            return newId;
-
-            //throw new NotImplementedException();
-
-
-
+            _cardContext.Decks.Add(newDeck);
+            await _cardContext.SaveChangesAsync();
+            
+            return newDeck.DeckId;
         }
 
         #endregion Deck Props
@@ -744,10 +741,17 @@ namespace Carpentry.Logic
 
             //get tag suggestions (strings)
             //  get all from this deck
-            var deckTags = await _deckRepo.GetAllDeckCardTags(deckId);
+            var deckTags = await _cardContext.CardTags
+                .Where(t => t.DeckId == deckId)
+                .Select(t => t.Description)
+                .Distinct()
+                .ToListAsync();
 
             //  get all from anywhere
-            var allTags = await _deckRepo.GetAllDeckCardTags(null);
+            var allTags = await _cardContext.CardTags
+                .Select(t => t.Description)
+                .Distinct()
+                .ToListAsync();
 
             //  remove any existing tags
             //  sort accordingly
@@ -899,14 +903,9 @@ namespace Carpentry.Logic
 
         public async Task<DeckDetailDto> GetDeckDetail(int deckId)
         {
-            var dbDeck = await _deckRepo.GetDeckById(deckId);
-
-            DeckDetailDto result = new DeckDetailDto
-            {
-                //CardOverviews = new List<DeckCardOverview>(),
-                //Cards = new List<DeckCardDetail>(),
-
-                Props = new DeckPropertiesDto()
+            var deckProps = await _cardContext.Decks
+                .Where(d => d.DeckId == deckId)
+                .Select(dbDeck => new DeckPropertiesDto()
                 {
                     Id = dbDeck.DeckId,
                     BasicB = dbDeck.BasicB,
@@ -917,7 +916,14 @@ namespace Carpentry.Logic
                     Format = dbDeck.Format.Name,
                     Name = dbDeck.Name,
                     Notes = dbDeck.Notes,
-                },
+                }).SingleAsync();
+
+            DeckDetailDto result = new DeckDetailDto
+            {
+                //CardOverviews = new List<DeckCardOverview>(),
+                //Cards = new List<DeckCardDetail>(),
+
+                Props = deckProps,
                 Cards = new List<DeckCardOverview>(),
                 Stats = new DeckStatsDto(),
             };
@@ -937,7 +943,7 @@ namespace Carpentry.Logic
 
             var emptyCardNames = deckCardData.Where(dc => dc.InventoryCardId == null).Select(dc => dc.Name).Distinct();
 
-            var inventoryCardsByName = await _inventoryRepo.GetUnusedInventoryCards(emptyCardNames);
+            var inventoryCardsByName = await _cardContext.GetInventoryCardsByName(emptyCardNames);
             //GetUnusedInventoryCards
 
 
@@ -1214,7 +1220,7 @@ namespace Carpentry.Logic
             if (exportType == "suggestions") return await FormatExportCardSuggestions(deckCardData);
 
             //add basic lands for default format
-            var deckData = await _deckRepo.GetDeckById(deckId);
+            var deckData = await _cardContext.Decks.SingleAsync(d => d.DeckId == deckId);
 
             if (deckData.BasicW > 0)
                 for(var i = 0; i < deckData.BasicW; i++)
@@ -1325,7 +1331,7 @@ namespace Carpentry.Logic
 
             var emptyCardNames = deckCardData.Select(dc => dc.Name).Distinct();
 
-            var availableInventoryCards = await _inventoryRepo.GetUnusedInventoryCards(emptyCardNames);
+            var availableInventoryCards = await _cardContext.GetInventoryCardsByName(emptyCardNames);
 
             //current plan won't involve grouping things by category, just by name
             //Will only list cards needed by name (including # needed), then list available cards

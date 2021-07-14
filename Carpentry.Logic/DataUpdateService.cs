@@ -1,16 +1,10 @@
 ﻿using Carpentry.Logic.Models;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Carpentry.DataLogic;
 using Carpentry.CarpentryData.Models;
-using Carpentry.DataLogic.Models;
-using Carpentry.ScryfallData.Models;
 using Carpentry.CarpentryData;
 using Microsoft.EntityFrameworkCore;
 

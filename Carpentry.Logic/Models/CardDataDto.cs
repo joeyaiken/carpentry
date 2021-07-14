@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Carpentry.DataLogic.Models
+namespace Carpentry.Logic.Models
 {
     //TODO - Determine if this should be kept or trashed
     public class CardDataDto

@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carpentry.CarpentryData\Carpentry.CarpentryData.csproj" />
-    <ProjectReference Include="..\Carpentry.DataLogic\Carpentry.DataLogic.csproj" />
     <ProjectReference Include="..\Carpentry.ScryfallData\Carpentry.ScryfallData.csproj" />
   </ItemGroup>
 

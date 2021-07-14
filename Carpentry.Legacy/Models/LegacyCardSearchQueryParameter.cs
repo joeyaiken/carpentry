@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Carpentry.Logic.Models.Search
+namespace Carpentry.Legacy.Models
 {
     public class CardSearchQueryParameter
     {

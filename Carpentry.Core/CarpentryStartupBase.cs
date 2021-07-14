@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Carpentry.ScryfallData;
 using Carpentry.CarpentryData;
 using Carpentry.Logic;
-using Carpentry.DataLogic;
 
 namespace Carpentry.Core
 {
@@ -41,10 +40,6 @@ namespace Carpentry.Core
         protected void ConfigureCarpentryServices(IServiceCollection services)
         {
             services.AddSingleton<IDataBackupConfig, CarpentryAppConfig>();
-
-            //DB repos
-            services.AddScoped<DeckDataRepo>();
-            services.AddScoped<InventoryDataRepo>();
 
             //Logic services
             services.AddScoped<ISearchService, SearchService>();

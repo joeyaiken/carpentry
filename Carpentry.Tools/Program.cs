@@ -12,7 +12,6 @@ using Carpentry.Logic.Models;
 using Carpentry.CarpentryData;
 using Carpentry.ScryfallData;
 using Carpentry.Logic;
-using Carpentry.DataLogic;
 
 namespace Carpentry.Tools
 {

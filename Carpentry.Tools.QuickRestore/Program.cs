@@ -10,7 +10,6 @@ using Carpentry.Logic.Models;
 using Carpentry.ScryfallData;
 using Carpentry.CarpentryData;
 using Carpentry.Logic;
-using Carpentry.DataLogic;
 
 namespace Carpentry.Tools.QuickRestore
 {
@@ -120,10 +119,6 @@ namespace Carpentry.Tools.QuickRestore
 
 
                 //.AddSingleton<IDataBackupConfig, CarpentryAppConfig>()
-
-                ////DB repos
-                .AddScoped<DeckDataRepo>()
-                .AddScoped<InventoryDataRepo>()
 
                 //Logic
                 .AddScoped<ISearchService, SearchService>()

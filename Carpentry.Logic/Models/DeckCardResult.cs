@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Carpentry.DataLogic.QueryResults
+namespace Carpentry.Logic.Models
 {
     //This is just a DTO used to get detailed data about the cards in a deck
     //When a card is empty, this should be populated with the most recent info

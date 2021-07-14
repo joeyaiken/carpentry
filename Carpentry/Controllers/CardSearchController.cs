@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Carpentry.Logic;
 using Carpentry.Logic.Models;
-using Carpentry.Logic.Search;
+using Carpentry.Logic.Models.Search;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carpentry.Controllers

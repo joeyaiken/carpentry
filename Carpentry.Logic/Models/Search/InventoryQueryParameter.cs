@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Carpentry.DataLogic.QueryParameters
+namespace Carpentry.Logic.Models.Search
 {
     public class InventoryQueryParameter
     {
