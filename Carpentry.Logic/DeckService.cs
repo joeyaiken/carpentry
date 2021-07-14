@@ -78,9 +78,8 @@ namespace Carpentry.Logic
         private readonly CarpentryDataContext _cardContext;
 
         private readonly DeckDataRepo _deckRepo;
-        private readonly IInventoryDataRepo _inventoryRepo;
+        private readonly InventoryDataRepo _inventoryRepo;
         private readonly IInventoryService _inventoryService;
-        public readonly ICoreDataRepo _coreDataRepo;
 
         private static string _sideboardCategory = "Sideboard";
 
@@ -93,10 +92,9 @@ namespace Carpentry.Logic
 
         public DeckService(
             DeckDataRepo deckRepo,
-            IInventoryDataRepo inventoryRepo,
+            InventoryDataRepo inventoryRepo,
             IInventoryService inventoryService,
             ILogger<DeckService> logger,
-            ICoreDataRepo coreDataRepo,
             CarpentryDataContext cardContext
             )
         {
@@ -104,7 +102,6 @@ namespace Carpentry.Logic
             _inventoryRepo = inventoryRepo;
             _inventoryService = inventoryService;
             _logger = logger;
-            _coreDataRepo = coreDataRepo;
             _cardContext = cardContext;
         }
 
@@ -142,7 +139,7 @@ namespace Carpentry.Logic
 
             //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
 
-            var colorChars = await _deckRepo.GetDeckColorIdentity(deckId);
+            var colorChars = await GetDeckColorIdentity(deckId);
 
             deckStats.ColorIdentity = colorChars.Select(x => x.ToString()).ToList();
 
@@ -217,69 +214,18 @@ namespace Carpentry.Logic
             }
         }
 
-        //        public async Task EnsureCardDefinitionExists(int multiverseId)
-        //        {
-        //            var dbCard = await _cardRepo.QueryCardDefinitions().FirstOrDefaultAsync(x => x.Id == multiverseId);
-
-        //            if (dbCard != null)
-        //            {
-        //                return;
-        //            }
-
-        //            var scryfallCard = await _scryRepo.GetCardById(multiverseId);
-
-        //            await _cardRepo.AddCardDefinition(scryfallCard);
-        //            //_logger.LogWarning($"EnsureCardDefinitionExists added {multiverseId} - {scryfallCard.Name}");
-        //        }
-
-        //        private static IQueryable<ScryfallMagicCard> MapInventoryQueryToScryfallDto(IQueryable<Data.DataContext.Card> query)
-        //        {
-        //            IQueryable<ScryfallMagicCard> result = query.Select(card => new ScryfallMagicCard()
-        //            {
-        //                Cmc = card.Cmc,
-        //                ManaCost = card.ManaCost,
-        //                MultiverseId = card.Id,
-        //                Name = card.Name,
-
-        //                //Prices = card.Variants.ToDictionary(v => (v.)  )
-
-        //                Prices = card.Variants.SelectMany(x => new[]
-        //                {
-        //                    new {
-        //                        Name = x.Type.Name,
-        //                        Price = x.Price,
-        //                    },
-        //                    new {
-        //                        Name = $"{x.Type.Name}_foil",
-        //                        Price = x.PriceFoil,
-        //                    }
-        //                }).ToDictionary(v => v.Name, v => v.Price),
-
-        //                //Variants = card.Variants.ToDictionary(v => v.Type.Name, v => v.ImageUrl),
-        //                Variants = card.Variants.Select(v => new { v.Type.Name, v.ImageUrl }).ToDictionary(v => v.Name, v => v.ImageUrl),
-        //                Colors = card.CardColors.Select(c => c.ManaType.Name).ToList(),
-        //                Rarity = card.Rarity.Name,
-        //                Set = card.Set.Code,
-        //                Text = card.Text,
-        //                Type = card.Type,
-        //                ColorIdentity = card.CardColorIdentities.Select(i => i.ManaType.Name).ToList(),
-        //                Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
-        //            });
-        //            return result;
-        //        }
-
         private async Task<string> ValidateDeck(int deckId)
         {
             List<string> validationErrors = new List<string>();
 
-            //var deck = await _cardRepo.QueryDeckProperties().Where(x => x.Id == deckId).FirstOrDefaultAsync();
-            var deck = await _deckRepo.GetDeckById(deckId);
-
-            string deckFormat = deck.Format.Name.ToLower();
+            var deckFormat = await _cardContext.Decks
+                .Where(d => d.DeckId == deckId)
+                .Select(d => d.Format.Name.ToLower())
+                .FirstOrDefaultAsync();
 
             #region Validate deck size
 
-            int deckSize = await _deckRepo.GetDeckCardCount(deckId);
+            int deckSize = await GetDeckCardCount(deckId);
 
             int deckMinimum = 60;
             int? deckLimit = null;
@@ -341,21 +287,164 @@ namespace Carpentry.Logic
             return validationResult;
         }
 
-        //private static DeckPropertiesDto MapDeckDataToProperties(DeckData dbDeck)
-        //{
-        //    DeckPropertiesDto mappedDeck = new DeckPropertiesDto()
-        //    {
-        //        Id = dbDeck.Id,
-        //        BasicB = dbDeck.BasicB,
-        //        BasicG = dbDeck.BasicG,
-        //        BasicR = dbDeck.BasicR,
-        //        BasicU = dbDeck.BasicU,
-        //        BasicW = dbDeck.BasicW,
-        //        FormatId = dbDeck.Format.Id
-        //    };
-        //    return mappedDeck;
-        //}
+        private async Task<List<char>> GetDeckColorIdentity(int deckId)
+        {
 
+            //For deck cards w/o an inventory card, need to get the most recent card by name
+            //Maybe I just do this in a view...
+
+
+            //first, get all cards in the deck (for empty deck cards, get the most recent print)
+
+            var cards = await GetDeckCards(deckId);
+
+            var deckColorStrings = cards.Select(c => c.ColorIdentity).ToList();
+
+
+
+            //var deckColorStrings = await _cardContext.DeckCards
+            //    .Where(x => x.DeckId == deckId)
+            //    .Select(x => x.InventoryCard.Card.ColorIdentity)
+            //    .ToListAsync();
+
+            if (deckColorStrings == null)
+            {
+                return new List<char>();
+            }
+
+            var deckCardColors = deckColorStrings
+                .SelectMany(x => x.ToCharArray())
+                .Distinct()
+                .ToList();
+
+            var dbDeck = _cardContext.Decks.Where(x => x.DeckId == deckId).FirstOrDefault();
+
+            if (dbDeck.BasicW > 0 && !deckCardColors.Contains('W'))
+            {
+                deckCardColors.Add('W');
+            }
+
+            if (dbDeck.BasicU > 0 && !deckCardColors.Contains('U'))
+            {
+                deckCardColors.Add('U');
+            }
+
+            if (dbDeck.BasicB > 0 && !deckCardColors.Contains('B'))
+            {
+                deckCardColors.Add('B');
+            }
+
+            if (dbDeck.BasicR > 0 && !deckCardColors.Contains('R'))
+            {
+                deckCardColors.Add('R');
+            }
+
+            if (dbDeck.BasicG > 0 && !deckCardColors.Contains('G'))
+            {
+                deckCardColors.Add('G');
+            }
+
+            return deckCardColors;
+        }
+
+        private async Task<int> GetDeckCardCount(int deckId)
+        {
+            int basicLandCount = await _cardContext.Decks.Where(x => x.DeckId == deckId).Select(deck => deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG).FirstOrDefaultAsync();
+            int cardCount = await _cardContext.DeckCards.Where(x => x.DeckId == deckId).CountAsync();
+            return basicLandCount + cardCount;
+        }
+
+        //Note: this is only ever used by by [Get Deck Detail], the DTO could / should be used to get the desired info for a deck card
+        //The same info in [ThatDevQuery(int deckId)]
+        private async Task<List<DeckCardResult>> GetDeckCards(int deckId)
+        {
+            var deckCards = await _cardContext.DeckCards.Where(dc => dc.DeckId == deckId)
+                .Select(x => new DeckCardResult()
+                {
+                    DeckCardId = x.DeckCardId,
+                    DeckId = x.DeckId,
+                    Name = x.CardName,
+
+                    Category = x.CategoryId == null ? null : x.Category.Name,
+                    InventoryCardId = x.InventoryCardId,
+
+                    Cmc = x.InventoryCard.Card.Cmc,
+                    Cost = x.InventoryCard.Card.ManaCost,
+                    Img = x.InventoryCard.Card.ImageUrl,
+                    IsFoil = x.InventoryCard.IsFoil,
+                    CollectorNumber = x.InventoryCard.Card.CollectorNumber,
+                    CardId = x.InventoryCard.CardId,
+                    //Set = x.InventoryCard.Card.Set.Code,
+                    //SetId = x.InventoryCard.Card.SetId,
+                    SetCode = x.InventoryCard.Card.Set.Code,
+                    Type = x.InventoryCard.Card.Type,
+                    ColorIdentity = x.InventoryCard.Card.ColorIdentity,
+                    Price = x.InventoryCard.Card.Price,
+                    PriceFoil = x.InventoryCard.Card.PriceFoil,
+                    Tags = x.Deck.Tags.Where(t => t.CardName == x.CardName).Select(t => t.Description).ToList(),
+                }).ToListAsync();
+
+            //get all names with null inventory cards
+            var cardNames = deckCards.Where(dc => dc.InventoryCardId == null).Select(dc => dc.Name).Distinct().ToList();
+
+            var relevantCardsByName = (await _cardContext.InventoryCardByName
+                .Where(c => cardNames.Contains(c.Name))
+                .ToListAsync())
+                //.Select(c => new CardData()
+                //{
+                //    CardId = c.CardId,
+                //    Cmc = c.Cmc,
+                //    ManaCost = c.ManaCost,
+                //    Name = c.Name,
+                //    RarityId = c.RarityId,
+                //    SetId = c.SetId,
+                //    Text = c.Text,
+                //    Type = c.Type,
+                //    MultiverseId = c.MultiverseId,
+                //    Price = c.Price,
+                //    PriceFoil = c.PriceFoil,
+                //    ImageUrl = c.ImageUrl,
+                //    CollectorNumber = c.CollectorNumber,
+                //    TixPrice = c.TixPrice,
+                //    Color = c.Color,
+                //    ColorIdentity = c.ColorIdentity,
+                //})
+                .ToDictionary(c => c.Name, c => c);
+
+            //match everything!
+            //(alternatively, get this all from a view)
+
+            //var result = new List<CardData>();
+
+            foreach (var dc in deckCards)
+            {
+                //var matchingCard =
+                if (dc.InventoryCardId == null)
+                {
+                    //card by id
+                    var match = relevantCardsByName[dc.Name];
+                    dc.Cmc = match.Cmc;
+                    dc.Cost = match.ManaCost;
+                    dc.Img = match.ImageUrl;
+                    //dc.IsFoil = false;
+                    dc.CollectorNumber = match.CollectorNumber;
+                    dc.CardId = match.CardId;
+                    dc.Name = match.Name;
+                    //dc.Set = match.Set;
+                    //dc.SetId = match.SetId;
+                    dc.SetCode = match.SetCode;
+                    dc.Type = match.Type;
+                    dc.ColorIdentity = match.ColorIdentity;
+                    dc.Price = match.Price;
+                    dc.PriceFoil = match.PriceFoil;
+                    //result.Add(relevantCardsByName[dc.CardName]);
+                }
+            }
+
+
+
+            return deckCards;
+        }
 
         #endregion
 
@@ -365,12 +454,12 @@ namespace Carpentry.Logic
 
         public async Task<int> AddDeck(DeckPropertiesDto props)
         {
-            DataReferenceValue<int> deckFormat = await _coreDataRepo.GetMagicFormat(props.Format);
+            var deckFormat = await _cardContext.MagicFormats.SingleAsync(f => f.Name.ToLower() == props.Format.ToLower());
 
             var newDeck = new DeckData()
             {
                 Name = props.Name,
-                MagicFormatId = deckFormat.Id,
+                MagicFormatId = deckFormat.FormatId,
                 Notes = props.Notes,
 
                 BasicW = props.BasicW,
@@ -392,13 +481,14 @@ namespace Carpentry.Logic
         /// <returns></returns>
         public async Task AddImportedDeckBatch(List<DeckPropertiesDto> decks)
         {
-            var allFormats = await _coreDataRepo.GetAllMagicFormats();
+            //TODO: Maybe use a dict instead to avoid the search in the next Select?
+            var allFormats = await _cardContext.MagicFormats.ToListAsync();
 
             var newDecks = decks.Select(props => new DeckData()
             {
                 DeckId = props.Id,
                 Name = props.Name,
-                MagicFormatId = allFormats.Where(f => f.Name.ToLower() == props.Format.ToLower()).FirstOrDefault().Id,
+                MagicFormatId = allFormats.Where(f => f.Name.ToLower() == props.Format.ToLower()).FirstOrDefault().FormatId,
                 Notes = props.Notes,
 
                 BasicW = props.BasicW,
@@ -413,17 +503,11 @@ namespace Carpentry.Logic
 
         public async Task UpdateDeck(DeckPropertiesDto deckDto)
         {
-            DeckData existingDeck = await _deckRepo.GetDeckById(deckDto.Id);
-
-            if (existingDeck == null)
-            {
-                throw new Exception("No deck found matching the specified ID");
-            }
-
-            DataReferenceValue<int> deckFormat = await _coreDataRepo.GetMagicFormat(deckDto.Format);
+            var existingDeck = await _cardContext.Decks.SingleAsync(d => d.DeckId == deckDto.Id);
+            var deckFormat = await _cardContext.MagicFormats.SingleAsync(f => f.Name.ToLower() == deckDto.Format.ToLower());
 
             existingDeck.Name = deckDto.Name;
-            existingDeck.MagicFormatId = deckFormat.Id;
+            existingDeck.MagicFormatId = deckFormat.FormatId;
             existingDeck.Notes = deckDto.Notes;
             existingDeck.BasicW = deckDto.BasicW;
             existingDeck.BasicU = deckDto.BasicU;
@@ -431,31 +515,42 @@ namespace Carpentry.Logic
             existingDeck.BasicR = deckDto.BasicR;
             existingDeck.BasicG = deckDto.BasicG;
 
-            await _deckRepo.UpdateDeck(existingDeck);
+            _cardContext.Decks.Update(existingDeck);
+            await _cardContext.SaveChangesAsync();
         }
 
         public async Task DeleteDeck(int deckId)
         {
-            await _deckRepo.DeleteDeck(deckId);
+            var deckCardsToDelete = _cardContext.DeckCards.Where(x => x.DeckId == deckId).ToList();
+            if (deckCardsToDelete.Any())
+            {
+                _cardContext.DeckCards.RemoveRange(deckCardsToDelete);
+            }
+
+            var deckToDelete = _cardContext.Decks.Where(x => x.DeckId == deckId).FirstOrDefault();
+            _cardContext.Decks.Remove(deckToDelete);
+
+            await _cardContext.SaveChangesAsync();
         }
 
 
         public async Task DissassembleDeck(int deckId)
         {
             //get all cards in the deck
-            var existingDeckCards = await _deckRepo.GetDeckCardsByDeckId(deckId);
+            var existingDeckCards = await _cardContext.DeckCards.Where(deck => deck.DeckId == deckId).ToListAsync();
 
             //itterate over each deck card, clearing inventoryCardId
-            foreach(var deckCard in existingDeckCards)
+            foreach (var deckCard in existingDeckCards)
             {
                 deckCard.InventoryCardId = null;
             }
 
-            await _deckRepo.UpdateDeckCardBatch(existingDeckCards);
+            _cardContext.DeckCards.UpdateRange(existingDeckCards);
 
             var deck = await _cardContext.Decks.FirstOrDefaultAsync(d => d.DeckId == deckId);
             deck.Stats = null;
             _cardContext.Update(deck);
+
             await _cardContext.SaveChangesAsync();
         }
         public async Task<int> CloneDeck(int deckId)
@@ -520,14 +615,16 @@ namespace Carpentry.Logic
             if (dto.InventoryCardId != null && dto.InventoryCardId > 0)
             {
                 //if a card already exists in a deck it is "moved" to this deck
-                var existingDeckCard = await _deckRepo.GetDeckCardByInventoryId(dto.InventoryCardId.Value);
+                var existingDeckCard = await _cardContext.DeckCards
+                    .FirstOrDefaultAsync(x => x.InventoryCardId == dto.InventoryCardId.Value);
 
                 if (existingDeckCard != null)
                 {
                     existingDeckCard.DeckId = dto.DeckId;
                     existingDeckCard.CategoryId = null;
 
-                    await _deckRepo.UpdateDeckCard(existingDeckCard);
+                    _cardContext.DeckCards.Update(existingDeckCard);
+                    await _cardContext.SaveChangesAsync();
                     return;
                 }
 
@@ -572,8 +669,8 @@ namespace Carpentry.Logic
                 InventoryCardId = dto.InventoryCardId,
             };
 
-            await _deckRepo.AddDeckCard(cardToAdd);
-            //await _cardRepo.AddDeckCard(dto);
+            _cardContext.DeckCards.Add(cardToAdd);
+            await _cardContext.SaveChangesAsync();
         }
 
         //I think I only end up adding NEW deck cards with a batch
@@ -596,18 +693,30 @@ namespace Carpentry.Logic
 
         public async Task UpdateDeckCard(DeckCardDto card)
         {
-            DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
+            //DeckCardData dbCard = await _deckRepo.GetDeckCardById(card.Id);
+            var dbCard = await _cardContext.DeckCards.Where(x => x.DeckCardId == card.Id).FirstOrDefaultAsync();
 
             dbCard.DeckId = card.DeckId;
             dbCard.CategoryId = card.CategoryId;
             dbCard.InventoryCardId = card.InventoryCardId;
 
-            await _deckRepo.UpdateDeckCard(dbCard);
+            _cardContext.DeckCards.Update(dbCard);
+            await _cardContext.SaveChangesAsync();
         }
 
+        //Deletes a deck card, does not delete the associated inventory card
         public async Task DeleteDeckCard(int deckCardId)
         {
-            await _deckRepo.DeleteDeckCard(deckCardId);
+            var cardToRemove = _cardContext.DeckCards.Where(x => x.DeckCardId == deckCardId).FirstOrDefault();
+            if (cardToRemove != null)
+            {
+                _cardContext.DeckCards.Remove(cardToRemove);
+                await _cardContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception($"Could not find deck card with ID {deckCardId}");
+            }
         }
 
         #endregion Deck Cards
@@ -631,7 +740,7 @@ namespace Carpentry.Logic
 
             //get existing tags
             //  (this name, this deck, as dto)
-            var existingTags = await _deckRepo.GetDeckCardTags(deckId, matchingCard.Name);
+            var existingTags = await _cardContext.CardTags.Where(t => t.CardName == matchingCard.Name && t.DeckId == deckId).ToListAsync();
 
             //get tag suggestions (strings)
             //  get all from this deck
@@ -670,12 +779,15 @@ namespace Carpentry.Logic
                 Description = cardTag.Tag,
             };
 
-            await _deckRepo.AddDeckCardTag(tagToAdd);
+            _cardContext.CardTags.Add(tagToAdd);
+            await _cardContext.SaveChangesAsync();
         }
 
         public async Task RemoveCardTag(int cardTagId)
         {
-            await _deckRepo.RemoveDeckCardTag(cardTagId);
+            var tag = await _cardContext.CardTags.SingleAsync(t => t.DeckCardTagId == cardTagId);
+            _cardContext.Remove(tag);
+            await _cardContext.SaveChangesAsync();
         }
 
         #endregion Card Tags
@@ -810,7 +922,7 @@ namespace Carpentry.Logic
                 Stats = new DeckStatsDto(),
             };
 
-            var deckCardData = await _deckRepo.GetDeckCards(deckId);
+            var deckCardData = await GetDeckCards(deckId);
 
 
 
@@ -1095,7 +1207,7 @@ namespace Carpentry.Logic
 
         public async Task<string> GetDeckListExport(int deckId, string exportType)
         {
-            var deckCardData = await _deckRepo.GetDeckCards(deckId);
+            var deckCardData = await GetDeckCards(deckId);
 
             if (exportType == "empty") return FormatExportEmptyCards(deckCardData);
 

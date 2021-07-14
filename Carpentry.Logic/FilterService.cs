@@ -1,5 +1,6 @@
-﻿using Carpentry.DataLogic;
+﻿using Carpentry.CarpentryData;
 using Carpentry.Logic.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,11 +23,11 @@ namespace Carpentry.Logic
 
     public class FilterService : IFilterService
     {
-        private readonly ICoreDataRepo _coreDataRepo;
+        private readonly CarpentryDataContext _cardContext;
 
-        public FilterService(ICoreDataRepo coreDataRepo)
+        public FilterService(CarpentryDataContext cardContext)
         {
-            _coreDataRepo = coreDataRepo;
+            _cardContext = cardContext;
         }
 
         public async Task<AppFiltersDto> GetAppCoreData()
@@ -49,42 +50,44 @@ namespace Carpentry.Logic
 
         public async Task<List<FilterOption>> GetFormatFilters()
         {
-            return (await _coreDataRepo.GetAllMagicFormats())
+            return await _cardContext.MagicFormats
                 .Select(x => new FilterOption()
                 {
-                    Value = x.Id.ToString(),
+                    Value = x.FormatId.ToString(),
                     Name = x.Name
-                }).ToList();
+                }).ToListAsync();
         }
 
         public async Task<List<FilterOption>> GetRarityFilters()
         {
-            return (await _coreDataRepo.GetAllRarities())
+            return await _cardContext.Rarities
                 .Select(x => new FilterOption()
                 {
-                    Value = x.Id.ToString(),
+                    Value = x.RarityId.ToString(),
                     Name = x.Name
-                }).ToList();
+                }).ToListAsync();
         }
     
         public async Task<List<FilterOption>> GetCardSetFilters()
         {
-            return (await _coreDataRepo.GetAllSets())
+            return await _cardContext.Sets
+                .Where(s => s.IsTracked)
+                .OrderByDescending(s => s.ReleaseDate)
                 .Select(x => new FilterOption()
                 {
-                    Value = x.Id.ToString(),
+                    Value = x.Code.ToString(),
                     Name = x.Name
-                }).ToList();
+                }).ToListAsync();
         }
 
         public async Task<List<FilterOption>> GetStatusFilters()
         {
-            return (await _coreDataRepo.GetAllStatuses())
-                .Select(x => new FilterOption()
+            return await _cardContext.CardStatuses
+                .Select(s => new FilterOption()
                 {
-                    Value = x.Id.ToString(),
-                    Name = x.Name
-                }).ToList();
+                    Value = s.CardStatusId.ToString(),
+                    Name = s.Name
+                }).ToListAsync();
         }
 
         public List<FilterOption> GetCardTypeFilters()

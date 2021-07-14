@@ -1,8 +1,10 @@
-﻿using Carpentry.CarpentryData.Models.QueryResults;
+﻿using Carpentry.CarpentryData;
+using Carpentry.CarpentryData.Models.QueryResults;
 using Carpentry.DataLogic;
 using Carpentry.DataLogic.QueryParameters;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Search;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +20,12 @@ namespace Carpentry.Logic
 
     public class SearchService : ISearchService
     {
-        private readonly IInventoryDataRepo _inventoryRepo;
         private readonly string[] _allColors;
+        private readonly CarpentryDataContext _cardContext;
 
-        public SearchService(IInventoryDataRepo inventoryRepo)
+        public SearchService(CarpentryDataContext cardContext)
         {
-            _inventoryRepo = inventoryRepo;
+            _cardContext = cardContext;
             _allColors = new string[] { "W", "U", "B", "R", "G" };
         }
 
@@ -57,7 +59,7 @@ namespace Carpentry.Logic
             //  Want only owned cards
             //  
 
-            var query = _inventoryRepo.QueryCardsByPrint();
+            var query = _cardContext.InventoryCardByPrint.AsQueryable();
 
             //map first or filters first?
 
@@ -158,7 +160,7 @@ namespace Carpentry.Logic
 
             #endregion
 
-            var filteredResults = query.ToList();
+            var filteredResults = await query.ToListAsync();
 
 
             //Is this a dumb approach?  Trying to get the "first" record now?
@@ -229,17 +231,17 @@ namespace Carpentry.Logic
             switch (param.GroupBy)
             {
                 case "name":
-                    query = _inventoryRepo.QueryCardsByName().AsEnumerable(); //remember this executes the query
+                    query = await _cardContext.InventoryCardByName.ToListAsync(); //remember this executes the query
                     break;
 
                 case "unique":
-                    query = _inventoryRepo.QueryCardsByUnique().AsEnumerable(); //remember this executes the query
+                    query = await _cardContext.InventoryCardByUnique.ToListAsync(); //remember this executes the query
                     break;
 
                 //case "print":
                 default: //assuming group by print for default
 
-                    query = _inventoryRepo.QueryCardsByPrint().AsEnumerable(); //remember this executes the query;
+                    query = await _cardContext.InventoryCardByPrint.ToListAsync(); //remember this executes the query;
                     break;
             }
 

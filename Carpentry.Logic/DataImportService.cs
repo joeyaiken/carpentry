@@ -48,7 +48,7 @@ namespace Carpentry.Logic
         private readonly IDataUpdateService _dataUpdateService;
         private readonly IDeckService _deckService;
         private readonly IInventoryService _inventoryService;
-        private readonly IInventoryDataRepo _inventoryRepo;
+        private readonly InventoryDataRepo _inventoryRepo;
         private readonly int _cardStatus_InInventory = 1;
         private readonly IDataBackupConfig _config;
 
@@ -59,7 +59,7 @@ namespace Carpentry.Logic
             IDataUpdateService dataUpdateService,
             IDeckService deckService,
             IInventoryService inventoryService,
-            IInventoryDataRepo inventoryRepo,
+            InventoryDataRepo inventoryRepo,
             IDataBackupConfig config,
             CarpentryDataContext cardContext
             )

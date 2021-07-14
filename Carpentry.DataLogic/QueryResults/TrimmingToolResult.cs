@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Carpentry.DataLogic.QueryResults
+﻿namespace Carpentry.DataLogic.QueryResults
 {
     public class TrimmingToolResult
     {

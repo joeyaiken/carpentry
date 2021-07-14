@@ -33,9 +33,7 @@ namespace Carpentry.Tools.QuickRestore
 
             logger.LogInformation("Checking for default records");
 
-            await updateService.EnsureDatabasesCreated();
-
-            await updateService.EnsureDefaultRecordsExist();
+            await updateService.ValidateDatabase();
 
             logger.LogInformation("Updating set definitions");
 
@@ -124,13 +122,10 @@ namespace Carpentry.Tools.QuickRestore
                 //.AddSingleton<IDataBackupConfig, CarpentryAppConfig>()
 
                 ////DB repos
-                .AddScoped<ICardDataRepo, CardDataRepo>()
                 .AddScoped<DeckDataRepo>()
-                .AddScoped<IInventoryDataRepo, InventoryDataRepo>()
-                .AddScoped<IScryfallDataRepo, ScryfallRepo>()
-                .AddScoped<ICoreDataRepo, CoreDataRepo>()
+                .AddScoped<InventoryDataRepo>()
 
-                //Logic 6
+                //Logic
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IDeckService, DeckService>()
                 .AddScoped<IInventoryService, InventoryService>()
@@ -139,6 +134,7 @@ namespace Carpentry.Tools.QuickRestore
                 .AddScoped<IDataUpdateService, DataUpdateService>()
                 .AddScoped<IDataExportService, DataExportService>()
                 .AddScoped<IFilterService, FilterService>()
+                .AddScoped<IDataIntegrityService, DataIntegrityService>()
 
                 .AddScoped<IScryfallService, ScryfallService>()
                 .AddHttpClient<IScryfallService, ScryfallService>().Services

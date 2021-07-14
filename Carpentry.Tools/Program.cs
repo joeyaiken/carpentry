@@ -76,9 +76,7 @@ namespace Carpentry.Tools
 
             logger.LogInformation("Checking for default records");
 
-            await updateService.EnsureDatabasesCreated();
-
-            await updateService.EnsureDefaultRecordsExist();
+            await updateService.ValidateDatabase();
 
             logger.LogInformation("Updating set definitions");
 
@@ -117,9 +115,7 @@ namespace Carpentry.Tools
 
             logger.LogInformation("Getting list of tracked set");
 
-            await updateService.EnsureDatabasesCreated();
-
-            await updateService.EnsureDefaultRecordsExist();
+            await updateService.ValidateDatabase();
 
             var trackedSets = await updateService.GetTrackedSets(false, true);
 
@@ -162,16 +158,11 @@ namespace Carpentry.Tools
                 .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
-                //data services
-                .AddSingleton<ICardDataRepo, CardDataRepo>()
-                .AddSingleton<IScryfallDataRepo, ScryfallRepo>()
-                .AddScoped<ICoreDataRepo, CoreDataRepo>()
-
                 //logic services
                 .AddScoped<IDataExportService, DataExportService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
                 .AddScoped<IScryfallService, ScryfallService>().AddHttpClient<IScryfallService, ScryfallService>().Services
-
+                .AddScoped<IDataIntegrityService, DataIntegrityService>()
                 .BuildServiceProvider();
 
             return serviceProvider;

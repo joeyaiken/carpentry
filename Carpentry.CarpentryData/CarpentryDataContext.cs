@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Carpentry.CarpentryData
 {
 
-    public class CarpentryDataContext : DbContext
+    public partial class CarpentryDataContext : DbContext
     {
         #region DbSets
 

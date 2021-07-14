@@ -9,6 +9,7 @@ using Carpentry.CarpentryData;
 using Carpentry.CarpentryData.Models.QueryResults;
 using Carpentry.DataLogic.QueryResults;
 using Carpentry.CarpentryData.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Carpentry.Logic
 {
@@ -34,21 +35,13 @@ namespace Carpentry.Logic
 
     public class InventoryService : IInventoryService
     {
-        private readonly IInventoryDataRepo _inventoryRepo;
-        private readonly ICardDataRepo _cardDataRepo;
         private readonly CarpentryDataContext _cardContext;
+        private readonly ILogger<InventoryService> _logger;
 
-        public InventoryService(
-            IInventoryDataRepo inventoryRepo,
-            ICardDataRepo cardDataRepo
-            //fuck it, adding DB context directly because 
-            ,CarpentryDataContext cardContext
-        )
+        public InventoryService(CarpentryDataContext cardContext, ILogger<InventoryService> logger)
         {
-            _inventoryRepo = inventoryRepo;
-            _cardDataRepo = cardDataRepo;
-            //repos are making querying too challenging
             _cardContext = cardContext;
+            _logger = logger;
         }
 
         public async Task<int> AddInventoryCard(InventoryCardDto dto)
@@ -153,12 +146,22 @@ namespace Carpentry.Logic
             //Whatever, the Logic layer doesn't care what the UI layer is doing
             //It still needs to just map to something the DB can consume, the DB doesn't need a unique layer of mappings
 
-            InventoryCardData dbCard = await _inventoryRepo.GetInventoryCard(dto.Id);
+            var dbCard = await _cardContext.InventoryCards.Where(x => x.InventoryCardId == dto.Id).FirstOrDefaultAsync();
 
             //currently only expecting to change the status with this method
             dbCard.InventoryCardStatusId = dto.StatusId;
 
-            await _inventoryRepo.UpdateInventoryCard(dbCard);
+            //await _inventoryRepo.UpdateInventoryCard(dbCard);
+            //todo - actually check if exists? I could just let it error
+            var existingCard = await _cardContext.InventoryCards.FirstOrDefaultAsync(c => c.InventoryCardId == dbCard.InventoryCardId);
+
+            if (existingCard == null)
+            {
+                throw new Exception("Could not find a matching inventory card to update");
+            }
+
+            _cardContext.InventoryCards.Update(dbCard);
+            await _cardContext.SaveChangesAsync();
         }
 
         public async Task UpdateInventoryCardBatch(IEnumerable<InventoryCardDto> batch)
@@ -171,7 +174,18 @@ namespace Carpentry.Logic
 
         public async Task DeleteInventoryCard(int id)
         {
-            await _inventoryRepo.DeleteInventoryCard(id);
+            var deckCardsReferencingThisCard = _cardContext.DeckCards.Where(x => x.DeckId == id).Count();
+
+            if (deckCardsReferencingThisCard > 0)
+            {
+                throw new Exception("Cannot delete a card that's currently in a deck");
+            }
+
+            var cardToRemove = _cardContext.InventoryCards.First(x => x.InventoryCardId == id);
+
+            _cardContext.InventoryCards.Remove(cardToRemove);
+
+            await _cardContext.SaveChangesAsync();
         }
 
         public async Task DeleteInventoryCardBatch(IEnumerable<int> batch)
@@ -205,7 +219,7 @@ namespace Carpentry.Logic
 
             //GetInventoryCardsByName -> InventoryCardResult
 
-            List<InventoryCardDto> inventoryCards = (await _inventoryRepo.GetInventoryCardsByName(matchingCard.Name))
+            List<InventoryCardDto> inventoryCards = (await GetInventoryCardsByName(matchingCard.Name))
                 .Select(x => new InventoryCardDto()
                 {
                     Id = x.Id,
@@ -441,5 +455,53 @@ namespace Carpentry.Logic
             //Should really return a DTO instead but whatever
             return result;
         }
+
+        /// <summary>
+        /// This loads cards for "Get Inventory Detail" 
+        /// </summary>
+        /// <param name="cardName"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName)
+        {
+            List<InventoryCardResult> inventoryCards = await _cardContext.Cards.Where(x => x.Name == cardName)
+                .SelectMany(x => x.InventoryCards)
+                .Select(x => new InventoryCardResult()
+                {
+                    Id = x.InventoryCardId,
+                    IsFoil = x.IsFoil,
+                    InventoryCardStatusId = x.InventoryCardStatusId,
+
+                    CardId = x.CardId,
+                    Name = x.Card.Name,
+                    Type = x.Card.Type,
+                    Set = x.Card.Set.Code,
+                    CollectorNumber = x.Card.CollectorNumber,
+
+                    DeckId = x.DeckCards.SingleOrDefault().DeckId,
+                    DeckName = x.DeckCards.SingleOrDefault().Deck.Name, //this probs causes an exception
+                    DeckCardId = x.DeckCards.SingleOrDefault().DeckCardId,
+                    DeckCardCategory = x.DeckCards.SingleOrDefault().CategoryId,
+
+
+                    //MultiverseId = x.MultiverseId,
+                    //VariantType = x.VariantType.Name,
+
+
+                    //DeckCards = x.DeckCards.Select(c => new DeckCardResult()
+                    //{
+                    //    Id = c.Id,
+                    //    DeckId = c.DeckId,
+                    //    InventoryCardId = c.InventoryCardId,
+                    //    DeckName = c.Deck.Name,
+                    //}).ToList()
+                })
+                .OrderBy(x => x.Id)
+                .ToListAsync();
+
+            return inventoryCards;
+
+        }
+
+
     }
 }

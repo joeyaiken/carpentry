@@ -43,16 +43,14 @@ namespace Carpentry.Core
             services.AddSingleton<IDataBackupConfig, CarpentryAppConfig>();
 
             //DB repos
-            services.AddScoped<ICardDataRepo, CardDataRepo>();
             services.AddScoped<DeckDataRepo>();
-            services.AddScoped<IInventoryDataRepo, InventoryDataRepo>();
-            services.AddScoped<IScryfallDataRepo, ScryfallRepo>();
-            services.AddScoped<ICoreDataRepo, CoreDataRepo>();
+            services.AddScoped<InventoryDataRepo>();
 
             //Logic services
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<IDeckService, DeckService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IDataIntegrityService, DataIntegrityService>();
 
             services.AddScoped<IDataImportService, DataImportService>();
             services.AddScoped<IDataUpdateService, DataUpdateService>();
