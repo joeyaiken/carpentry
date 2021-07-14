@@ -512,7 +512,7 @@ namespace Carpentry.DataLogic
 
 
             //This query breaks with empty deck cards
-            var query = _cardContext.DeckCards.Where(x => x.DeckId == deckId)
+            var query = await _cardContext.DeckCards.Where(x => x.DeckId == deckId)
                 .Select(x => new
                 {
                     Card = x.InventoryCard.Card,
@@ -524,7 +524,7 @@ namespace Carpentry.DataLogic
                     IsFoil = x.InventoryCard.IsFoil,
                     //ColorIdentity = x.InventoryCard.Card.CardColorIdentities.SelectMany<char>(ci => ci.ManaTypeId)
                     ColorIdentity = x.InventoryCard.Card.ColorIdentity.ToCharArray(),
-                }).ToList();
+                }).ToListAsync();
 
             List<DeckCardStatResult> results = query.Select(x => new DeckCardStatResult()
             {

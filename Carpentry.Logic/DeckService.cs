@@ -81,7 +81,6 @@ namespace Carpentry.Logic
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly IInventoryService _inventoryService;
         public readonly ICoreDataRepo _coreDataRepo;
-        private readonly ICardDataRepo _cardDataRepo;
 
         private static string _sideboardCategory = "Sideboard";
 
@@ -98,12 +97,7 @@ namespace Carpentry.Logic
             IInventoryService inventoryService,
             ILogger<DeckService> logger,
             ICoreDataRepo coreDataRepo,
-            ICardDataRepo cardDataRepo
-
-            //fuck it, adding DB context directly
-            , CarpentryDataContext cardContext
-
-            //ICardImportService cardImportService
+            CarpentryDataContext cardContext
             )
         {
             _deckRepo = deckRepo;
@@ -111,30 +105,10 @@ namespace Carpentry.Logic
             _inventoryService = inventoryService;
             _logger = logger;
             _coreDataRepo = coreDataRepo;
-            _cardDataRepo = cardDataRepo;
-            //_cardImportService = cardImportService;
             _cardContext = cardContext;
         }
 
         #region private methods
-
-        //        private async Task<decimal?> CalculateInventoryTotalPrice()
-        //        {
-        //            //Should this refresh scryfall prices?
-        //            //TODO - refresh scryfall prices when querying this
-
-
-        //            var priceQuery = _cardRepo.QueryInventoryCards() //_cardContext.DeckCards
-        //                .Select(x => new
-        //                {
-        //                    x.Id,
-        //                    x.Card.Variants.Where(cardVariant => cardVariant.CardVariantTypeId == x.VariantTypeId).FirstOrDefault().Price,
-        //                });
-
-        //            var totalPrice = await priceQuery.SumAsync(x => x.Price);
-
-        //            return totalPrice;
-        //        }
 
 
         /*
@@ -201,111 +175,6 @@ namespace Carpentry.Logic
             //Price (should this include sideboard?)
 
             return deckStats;
-        }
-
-        private async Task<DeckStatsDto> GetDeckStats_legacy(int deckId)
-        {
-            DeckStatsDto result = new DeckStatsDto();
-
-            //total Count
-            result.TotalCount = await _deckRepo.GetDeckCardCount(deckId);
-
-            var statData = await _deckRepo.GetDeckCardStats(deckId);
-
-            //total price
-            decimal? totalPrice = statData.Sum(x => x.Price);
-            result.TotalCost = totalPrice ?? 0;
-
-            //
-            //var priceQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-            //    .Where(x => x.DeckId == deckId && x.CategoryId != 's')
-            //    .Select(x => new
-            //    {
-            //        CardName = x.InventoryCard.Card.Name,
-            //        //CardVariantName = x.InventoryCard.VariantType.Name,
-            //        //VariantTypeId = x.InventoryCard.VariantTypeId,
-            //        ////price
-            //        Price = x.InventoryCard.Card.Variants.Where(cardVariant => cardVariant.CardVariantTypeId == x.InventoryCard.VariantTypeId).FirstOrDefault().Price,
-
-            //    });
-
-            //var totalPrice = await priceQuery.SumAsync(x => x.Price);
-
-
-
-            //type-breakdown
-
-            List<string> cardTypes = statData
-                .Select(x => GetCardTypeGroup(x.Type))
-                .ToList();
-
-
-            //var cardTypes = _cardRepo.QueryDeckCards()
-            //    .Where(x => x.DeckId == deckId && x.CategoryId != 's')
-            //    .Select(x => x.InventoryCard.Card.Type)
-            //    .Select(x => GetCardTypeGroup(x))
-            //    .ToList();
-
-            var deck = await _deckRepo.GetDeckById(deckId);
-            int basicLandCount = deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG;
-
-
-            var typeCountsDict = cardTypes
-                .GroupBy(x => x)
-                .Select(x => new
-                {
-                    Name = x.Key,
-                    Count = x.Count()
-                })
-                .AsEnumerable()
-                .ToDictionary(x => x.Name, x => x.Count);
-
-            if (typeCountsDict.Keys.Contains("Lands"))
-            {
-                typeCountsDict["Lands"] = typeCountsDict["Lands"] + basicLandCount;
-            }
-            else
-            {
-                typeCountsDict["Lands"] = basicLandCount;
-            }
-
-            result.TypeCounts = typeCountsDict;
-
-            //this is for the CMC breakdown
-            Dictionary<string, int> deckCardCostsDict = statData
-                .Where(x => x.CategoryId != 's' && !x.Type.Contains("Land"))
-                .Select(x => x.Cmc)
-                .GroupBy(x => x)
-                .Select(x => new
-                {
-                    Cmc = x.Key,
-                    Count = x.Count(),
-                })
-                .OrderBy(x => x.Cmc)
-                .ToDictionary(x => x.Cmc.ToString(), x => x.Count);
-
-            result.CostCounts = deckCardCostsDict;
-
-
-            //deck color identity
-            //all of the basic lands 
-            //+ every card's color identity
-            //TODO - This doesn't actually include basic lands, should it?
-
-            var deckColorIdentity = statData
-                .SelectMany(card => card.ColorIdentity)
-                .Distinct().ToList();
-
-
-            //var cardCIQuery = _cardRepo.QueryDeckCards() //_cardContext.DeckCards
-            //    .Where(x => x.DeckId == deckId)
-            //    .Select(x => x.InventoryCard.Card)
-            //    .SelectMany(card => card.CardColorIdentities.Select(ci => ci.ManaTypeId))
-            //    .Distinct();
-
-            result.ColorIdentity = deckColorIdentity;
-
-            return result;
         }
 
         private static string GetCardTypeGroup(string cardType)
@@ -1223,20 +1092,6 @@ namespace Carpentry.Logic
         #endregion Search
 
         #region Import / Export
-
-
-
-        //public async Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto dto)
-        //{
-        //    var validatedResult = await _cardImportService.ValidateDeckImport(dto);
-
-        //    return validatedResult;
-        //}
-
-        //public async Task AddValidatedDeckImport(ValidatedDeckImportDto validatedDto)
-        //{
-        //    await _cardImportService.AddValidatedDeckImport(validatedDto);
-        //}
 
         public async Task<string> GetDeckListExport(int deckId, string exportType)
         {

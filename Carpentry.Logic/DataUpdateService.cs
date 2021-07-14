@@ -12,6 +12,7 @@ using Carpentry.CarpentryData.Models;
 using Carpentry.DataLogic.Models;
 using Carpentry.ScryfallData.Models;
 using Carpentry.CarpentryData;
+using Microsoft.EntityFrameworkCore;
 
 namespace Carpentry.Logic
 {
@@ -43,19 +44,13 @@ namespace Carpentry.Logic
     public class DataUpdateService : IDataUpdateService
     {
         private readonly ILogger<DataExportService> _logger;
-
-        private readonly CarpentryDataContext _carpentryContext;
-
         private readonly IScryfallService _scryService;
-
-        private readonly ICardDataRepo _cardRepo;
-
-        private readonly IScryfallDataRepo _scryfallRepo;
-
+        private readonly CarpentryDataContext _cardContext;
         private readonly int _dbRefreshIntervalDays;
 
+        private readonly ICardDataRepo _cardRepo;
+        private readonly IScryfallDataRepo _scryfallRepo;
         private readonly ICoreDataRepo _coreDataRepo;
-
 
         public DataUpdateService(
             ILogger<DataExportService> logger,
@@ -64,6 +59,7 @@ namespace Carpentry.Logic
             IScryfallDataRepo scryfallRepo,
             ICoreDataRepo coreDataRepo
             //IDataQueryService dataQueryService
+            , CarpentryDataContext cardContext
             )
         {
             _logger = logger;
@@ -73,6 +69,7 @@ namespace Carpentry.Logic
             _coreDataRepo = coreDataRepo;
             _dbRefreshIntervalDays = 0; //TODO - move to a config
             //_dataQueryService = dataQueryService;
+            _cardContext = cardContext;
         }
 
         #region Private Methods - Default Records
@@ -407,7 +404,6 @@ namespace Carpentry.Logic
             dbSet.LastUpdated = null;
             dbSet.IsTracked = false;
             await _cardRepo.AddOrUpdateCardSet(dbSet);
-            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -420,7 +416,7 @@ namespace Carpentry.Logic
             //get the set definition overviews from the scry DB
             var scrySets = await _scryService.GetSetOverviews();
 
-            var existingCardSets = await _cardRepo.GetAllCardSets();
+            var existingCardSets = await _cardContext.Sets.ToListAsync();
 
             foreach (var scrySet in scrySets)
             {

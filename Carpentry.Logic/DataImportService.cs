@@ -1,7 +1,9 @@
-﻿using Carpentry.CarpentryData.Models;
+﻿using Carpentry.CarpentryData;
+using Carpentry.CarpentryData.Models;
 using Carpentry.DataLogic;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Backups;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json.Linq;
 using System;
@@ -44,32 +46,30 @@ namespace Carpentry.Logic
     public class DataImportService : IDataImportService
     {
         private readonly IDataUpdateService _dataUpdateService;
-        private readonly ICardDataRepo _cardDataRepo;
         private readonly IDeckService _deckService;
-        private readonly DeckDataRepo _deckDataRepo;
         private readonly IInventoryService _inventoryService;
         private readonly IInventoryDataRepo _inventoryRepo;
         private readonly int _cardStatus_InInventory = 1;
         private readonly IDataBackupConfig _config;
 
+        private readonly CarpentryDataContext _cardContext;
+
         private static List<string> BasicLands = new List<string>() { "Plains", "Island", "Swamp", "Mountain", "Forest" };
         public DataImportService(
             IDataUpdateService dataUpdateService,
-            ICardDataRepo cardDataRepo,
             IDeckService deckService,
-            DeckDataRepo deckDataRepo,
             IInventoryService inventoryService,
             IInventoryDataRepo inventoryRepo,
-            IDataBackupConfig config
+            IDataBackupConfig config,
+            CarpentryDataContext cardContext
             )
         {
             _dataUpdateService = dataUpdateService;
-            _cardDataRepo = cardDataRepo;
             _deckService = deckService;
-            _deckDataRepo = deckDataRepo;
             _inventoryService = inventoryService;
             _inventoryRepo = inventoryRepo;
             _config = config;
+            _cardContext = cardContext;
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Carpentry.Logic
             foreach (var code in distinctSetCodes)
             {
                 //will just return silently if the set is already tracked
-                var set = await _cardDataRepo.GetCardSetByCode(code);
+                var set = await _cardContext.Sets.FirstOrDefaultAsync(s => s.Code == code.ToLower());
                 if (!set.IsTracked)
                 {
                     result.UntrackedSets.Add(new ValidatedDtoUntrackedSet() { SetId = set.SetId, SetCode = set.Code });
@@ -159,8 +159,8 @@ namespace Carpentry.Logic
                 if (card.IsEmpty)
                 {
                     //For each valid, EMPTY card, I need to ensure there's at least 1 card with the same name in the db
-                    var namedCardCount = (await _cardDataRepo.GetCardsByName(card.Name)).Count;
-                    if(namedCardCount == 0) card.IsValid = false;
+                    var namedCardCount = await _cardContext.Cards.Where(x => x.Name == card.Name).CountAsync();
+                    if (namedCardCount == 0) card.IsValid = false;
                 }
                 else
                 {
@@ -178,18 +178,18 @@ namespace Carpentry.Logic
                     //I feel like this could be cleaner...
                     try
                     {
-                        var matchingCard = await _cardDataRepo.GetCardData(card.Name, card.SetCode); //throws an exception if no match (dumb)
+                        var newCard = await _cardContext.Cards
+                           .Where(x => x.Set.Code.ToLower() == card.SetCode.ToLower() && x.Name.ToLower() == card.Name.ToLower())
+                           .Select(matchingCard => new ValidatedCardDto()
+                           {
+                               CardId = matchingCard.CardId,
+                               Name = matchingCard.Name,
+                               SetCode = matchingCard.Set.Code,
+                               CollectorNumber = matchingCard.CollectorNumber,
+                               IsFoil = card.IsFoil,
+                           })
+                           .FirstOrDefaultAsync();
 
-                        //if (matchingCard == null) continue;
-
-                        ValidatedCardDto newCard = new ValidatedCardDto()
-                        {
-                            CardId = matchingCard.CardId,
-                            Name = matchingCard.Name,
-                            SetCode = matchingCard.Set.Code,
-                            CollectorNumber = matchingCard.CollectorNumber,
-                            IsFoil = card.IsFoil,
-                        };
 
                         for (int i = 0; i < card.Count; i++)
                         {
@@ -381,7 +381,7 @@ namespace Carpentry.Logic
 
             //_logger.LogWarning("LoadDeckBackups - Loading parsed decks");
 
-            var formats = await _cardDataRepo.GetAllFormatsByName();
+            var formats = await _cardContext.MagicFormats.ToDictionaryAsync(f => f.Name, f => f);
 
             string deckBackupsDataString = await System.IO.File.ReadAllTextAsync(directory);
             List<BackupDeck> parsedBackupDecks = JArray.Parse(deckBackupsDataString).ToObject<List<BackupDeck>>();
@@ -468,7 +468,9 @@ namespace Carpentry.Logic
                 newDeckList.Add(newDeck);
             }
 
-            await _deckDataRepo.AddImportedDeckBatch(newDeckList);
+            _cardContext.Decks.AddRange(newDeckList);
+            await _cardContext.SaveChangesAsync();
+
 
             //var newerDecks = parsedBackupDecks.Select(x => new DeckData
             //{
@@ -484,7 +486,7 @@ namespace Carpentry.Logic
             //    {
             //        CardName = dc.Name,
             //        CategoryId = dc.Category,
-                    
+
             //    }).ToList(),
             //}).ToList();
 
@@ -502,7 +504,7 @@ namespace Carpentry.Logic
             //    Name = x.Name,
             //    Notes = x.Notes,
             //    Format = x.Format,
-                
+
             //    //Id = x.ExportId
             //}).ToList();
             //throw new NotImplementedException("that shouldn't be used anymore");
@@ -541,7 +543,7 @@ namespace Carpentry.Logic
             //List<DataReferenceValue<int>> allVariants = await _coreDataRepo.GetAllCardVariantTypes();
 
             var mappedInventoryCards = parseCardsBackups
-                .Join(_cardDataRepo.QueryCardDefinitions(),
+                .Join(_cardContext.Cards.AsQueryable(),
                     backup => new { CollectorNumber = backup.CollectorNumber, SetCode = backup.SetCode},
                     card => new { CollectorNumber = card.CollectorNumber, SetCode = card.Set.Code},
                     (backup, card) => new 
@@ -565,8 +567,8 @@ namespace Carpentry.Logic
                 //    }).ToList(),
             }).ToList();
 
-            //await _inventoryDataRepo.AddInventoryCardBatch(mappedInventoryCards);
-            await _inventoryRepo.AddInventoryCardBatch(mappedInventoryCards);
+            _cardContext.InventoryCards.AddRange(mappedInventoryCards);
+            await _cardContext.SaveChangesAsync();
 
             //_logger.LogWarning("RestoreDb - LoadCardBackups...COMPLETE!");
         }

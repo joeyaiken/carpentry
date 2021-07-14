@@ -71,7 +71,10 @@ namespace Carpentry.Logic
                 //    throw new Exception("Cannot add inventory card, not a valid tracked set");
                 //}
 
-                var cardData = await _cardDataRepo.GetCardData(dto.Set, dto.CollectorNumber);
+                var cardId = await _cardContext.Cards
+                    .Where(x => x.Set.Code.ToLower() == dto.Set.ToLower() && x.CollectorNumber == dto.CollectorNumber)
+                    .Select(c => c.CardId)
+                    .SingleOrDefaultAsync();
 
                 //if (string.IsNullOrEmpty(dto.Set) || dto.CollectorNumber == 0)
                 //{
@@ -82,7 +85,7 @@ namespace Carpentry.Logic
                 //var cardData = await _cardDataRepo.GetCardData(dto.Set, dto.CollectorNumber);
 
 
-                newInventoryCard.CardId = cardData.CardId;
+                newInventoryCard.CardId = cardId;
 
 
             }
@@ -98,10 +101,8 @@ namespace Carpentry.Logic
             //await _dataUpdateService.EnsureCardDefinitionExists(dto.MultiverseId);
             //DataReferenceValue<int> cardVariant = await _coreDataRepo.GetCardVariantTypeByName(dto.VariantName);
 
-
-
-
-            newInventoryCard.InventoryCardId = await _inventoryRepo.AddInventoryCard(newInventoryCard);
+            _cardContext.InventoryCards.Add(newInventoryCard);
+            await _cardContext.SaveChangesAsync();
 
             return newInventoryCard.InventoryCardId;
         }
@@ -131,7 +132,8 @@ namespace Carpentry.Logic
 
             }).ToList();
 
-            await _inventoryRepo.AddInventoryCardBatch(newCards);
+            _cardContext.InventoryCards.AddRange(newCards);
+            await _cardContext.SaveChangesAsync();
         }
 
         public async Task UpdateInventoryCard(InventoryCardDto dto)
@@ -183,7 +185,7 @@ namespace Carpentry.Logic
         public async Task<InventoryDetailDto> GetInventoryDetail(int cardId)
         {
 
-            var matchingCard = await _cardDataRepo.GetCardData(cardId);
+            var matchingCard = await _cardContext.Cards.FirstOrDefaultAsync(x => x.CardId == cardId);
 
             if (matchingCard == null)
             {
@@ -259,28 +261,30 @@ namespace Carpentry.Logic
             //GetCardsByName | GetCardDefinitionsByName | GetCardDataByName -> CardData
             //Should this be from the query service or cardDataRepo?
             //var cardDefinitionsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name);
-            var cardDefinitions = await _cardDataRepo.GetCardsByName(matchingCard.Name);
 
-            result.Cards = cardDefinitions.Select(card => new MagicCardDto()
-            {
-                CardId = card.CardId,
-                Cmc = card.Cmc,
-                ManaCost = card.ManaCost,
-                MultiverseId = card.MultiverseId,
-                Name = card.Name,
-                CollectionNumber = card.CollectorNumber,
-                ImageUrl = card.ImageUrl,
-                Price = card.Price,
-                PriceFoil = card.PriceFoil,
-                PriceTix = card.TixPrice,
-                Colors = card.Color?.Split().ToList(),
-                Rarity = card.Rarity.Name,
-                Set = card.Set.Code,
-                Text = card.Text,
-                Type = card.Type,
-                ColorIdentity = card.ColorIdentity.Split().ToList(),
-                Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
-            }).ToList();
+            result.Cards = await _cardContext.Cards
+                .Where(x => x.Name == matchingCard.Name)
+                .Select(card => new MagicCardDto()
+                {
+                    CardId = card.CardId,
+                    Cmc = card.Cmc,
+                    ManaCost = card.ManaCost,
+                    MultiverseId = card.MultiverseId,
+                    Name = card.Name,
+                    CollectionNumber = card.CollectorNumber,
+                    ImageUrl = card.ImageUrl,
+                    Price = card.Price,
+                    PriceFoil = card.PriceFoil,
+                    PriceTix = card.TixPrice,
+                    Colors = card.Color.Split().ToList(),//might run into errors if card is colorless
+                    Rarity = card.Rarity.Name,
+                    Set = card.Set.Code,
+                    Text = card.Text,
+                    Type = card.Type,
+                    ColorIdentity = card.ColorIdentity.Split().ToList(),
+                    Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
+                })
+                .ToListAsync();
 
             return result;
         }
