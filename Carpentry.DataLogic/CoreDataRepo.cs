@@ -1,6 +1,5 @@
 ﻿using Carpentry.CarpentryData;
 using Carpentry.CarpentryData.Models;
-using Carpentry.DataLogic.Interfaces;
 using Carpentry.DataLogic.QueryResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -9,11 +8,49 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.DataLogic.Implementations
+namespace Carpentry.DataLogic
 {
+    //All about data-objects that shouldn't need day-to-day modification
+    [Obsolete]
+    public interface ICoreDataRepo
+    {
+        //TryAdd
+        [Obsolete]
+        Task TryAddCardRarity(CardRarityData data);
+        [Obsolete]
+        Task TryAddDeckCardCategory(DeckCardCategoryData data);
+        [Obsolete]
+        Task TryAddInventoryCardStatus(InventoryCardStatusData data);
+        [Obsolete]
+        Task TryAddMagicFormat(MagicFormatData data);
+
+        //Reference Values
+        //Task<List<DataReferenceValue<int>>> GetAllCardVariantTypes();
+        //Task<DataReferenceValue<int>> GetCardVariantTypeByName(string name);
+        [Obsolete]
+        Task<IEnumerable<DataReferenceValue<int>>> GetAllMagicFormats();
+        [Obsolete]
+        Task<DataReferenceValue<int>> GetMagicFormat(string formatName);
+        [Obsolete]
+        Task<DataReferenceValue<int>> GetMagicFormat(int formatId);
+        //Task<IEnumerable<DataReferenceValue<char>>> GetAllManaColors();
+        [Obsolete]
+        Task<IEnumerable<DataReferenceValue<char>>> GetAllRarities();
+        [Obsolete]
+        Task<IEnumerable<DataReferenceValue<string>>> GetAllSets();
+        [Obsolete]
+        Task<IEnumerable<DataReferenceValue<int>>> GetAllStatuses();
+        //List<DataReferenceValue<string>> GetAllTypes();
+
+
+        //DB check
+        [Obsolete]
+        Task EnsureDatabaseExists();
+    }
+
+    [Obsolete]
     public class CoreDataRepo : ICoreDataRepo
     {
         private readonly ILogger<CoreDataRepo> _logger;

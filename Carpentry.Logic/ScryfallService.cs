@@ -1,5 +1,4 @@
-﻿using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Models;
+﻿using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Scryfall;
 using Carpentry.ScryfallData;
 using Carpentry.ScryfallData.Models;

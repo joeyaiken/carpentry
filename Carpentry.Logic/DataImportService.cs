@@ -1,12 +1,5 @@
-﻿//using Carpentry.Data.DataModels;
-//using Carpentry.Data.Implementations;
-//using Carpentry.Data.Interfaces;
-//using Carpentry.Data.QueryResults;
-using Carpentry.CarpentryData;
-using Carpentry.CarpentryData.Models;
-using Carpentry.DataLogic.Implementations;
-using Carpentry.DataLogic.Interfaces;
-using Carpentry.Logic.Interfaces;
+﻿using Carpentry.CarpentryData.Models;
+using Carpentry.DataLogic;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Backups;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -18,8 +11,22 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Implementations
+namespace Carpentry.Logic
 {
+    public interface IDataImportService
+    {
+        //public async ValidatedCardImportDto ValidateImport([Raw]CardImportDto)
+        //public async void AddValidatedImport(ValidatedCardImportDto)
+
+        //deck import
+        Task<ValidatedDeckImportDto> ValidateDeckImport(CardImportDto payload);
+        Task<int> AddValidatedDeckImport(ValidatedDeckImportDto validatedPayload);
+
+        //inventory import
+        Task<ValidatedCarpentryImportDto> ValidateCarpentryImport(CardImportDto payload);
+        Task AddValidatedCarpentryImport(ValidatedCarpentryImportDto payload);
+    }
+
     public class LandType
     {
         private LandType(string value) { Value = value; }

@@ -12,8 +12,13 @@ using System.Linq;
 using Carpentry.Data.Interfaces;
 using Carpentry.Data.QueryResults;
 
-namespace Carpentry.Logic.Implementations
+namespace Carpentry.Logic
 {
+    public interface IDataRestoreService
+    {
+        //Task RestoreDatabase();
+    }
+
     public class DataRestoreService : IDataRestoreService
     {
         private readonly ILogger<DataRestoreService> _logger;

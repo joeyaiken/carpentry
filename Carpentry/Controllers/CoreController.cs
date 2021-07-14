@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.Logic.Interfaces;
+using Carpentry.Logic;
 using Carpentry.Logic.Models;
 using Carpentry.CarpentryData.Models.QueryResults;
 

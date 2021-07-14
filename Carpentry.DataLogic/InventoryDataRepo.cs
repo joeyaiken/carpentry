@@ -1,16 +1,7 @@
-﻿//using Carpentry.Data.DataContext;
-//using Carpentry.Data.DataModels;
-//using Carpentry.Data.DataModels.QueryResults;
-//using Carpentry.Data.Exceptions;
-//using Carpentry.Data.Interfaces;
-//using Carpentry.Data.Models;
-//using Carpentry.Data.QueryParameters;
-//using Carpentry.Data.QueryResults;
-using Carpentry.CarpentryData;
+﻿using Carpentry.CarpentryData;
 using Carpentry.CarpentryData.Models;
 using Carpentry.CarpentryData.Models.QueryResults;
 using Carpentry.DataLogic.Exceptions;
-using Carpentry.DataLogic.Interfaces;
 using Carpentry.DataLogic.Models;
 using Carpentry.DataLogic.QueryParameters;
 using Carpentry.DataLogic.QueryResults;
@@ -20,8 +11,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Carpentry.DataLogic.Implementations
+namespace Carpentry.DataLogic
 {
+	[Obsolete]
+	public interface IInventoryDataRepo
+	{
+		[Obsolete]
+		Task<int> AddInventoryCard(InventoryCardData card);
+		[Obsolete]
+		Task AddInventoryCardBatch(List<InventoryCardData> cardBatch);
+		[Obsolete]
+		Task UpdateInventoryCard(InventoryCardData card);
+		[Obsolete]
+		Task DeleteInventoryCard(int inventoryCardId);
+		[Obsolete]
+		Task<InventoryCardData> GetInventoryCard(int inventoryCardId);
+		[Obsolete]
+		Task<IEnumerable<InventoryCardResult>> GetInventoryCardsByName(string cardName); //Used for "Get Inventory Detail"
+
+		//CardOverviewResult | InventoryOverviewResult
+		[Obsolete]
+		IQueryable<CardOverviewResult> QueryCardsByName();
+		[Obsolete]
+		IQueryable<CardOverviewResult> QueryCardsByPrint();
+		[Obsolete]
+		IQueryable<CardOverviewResult> QueryCardsByUnique();
+
+		//Task<List<TrimmingTipsResult>> GetTrimmingTips(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null);
+		//Task<int> GetTotalTrimCount(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null);
+		[Obsolete]
+		Task<Dictionary<string, List<InventoryCardData>>> GetUnusedInventoryCards(IEnumerable<string> cardNames);
+
+	}
+
+	[Obsolete]
 	public class InventoryDataRepo : IInventoryDataRepo
 	{
 		private readonly CarpentryDataContext _cardContext;
@@ -266,7 +289,7 @@ namespace Carpentry.DataLogic.Implementations
 
 		public IQueryable<CardOverviewResult> QueryCardsByName()
 		{
-            /*
+			/*
 			SELECT	RecentCard.CardId
 			,RecentCard.Name
 			,RecentCard.Type
@@ -311,108 +334,108 @@ namespace Carpentry.DataLogic.Implementations
 			 */
 
 
-            //var mostRecentPrintByName =
-            //    from c in _cardContext.Cards
-            //    orderby c.Set.ReleaseDate descending, c.CollectorNumber
-            //    group c by c.Name into g
-            //    select g.First();
-                
+			//var mostRecentPrintByName =
+			//    from c in _cardContext.Cards
+			//    orderby c.Set.ReleaseDate descending, c.CollectorNumber
+			//    group c by c.Name into g
+			//    select g.First();
+				
 
-            //var countsByName = (
-            //    from c in _cardContext.Cards
+			//var countsByName = (
+			//    from c in _cardContext.Cards
 
-            //    join ic in _cardContext.InventoryCards
-            //    on c.CardId equals ic.CardId into cic
+			//    join ic in _cardContext.InventoryCards
+			//    on c.CardId equals ic.CardId into cic
  
-            //    from ic in cic.DefaultIfEmpty()
+			//    from ic in cic.DefaultIfEmpty()
 
-            //    join dc in _cardContext.DeckCards
-            //    on ic.InventoryCardId equals dc.InventoryCardId into dcg
-            //    from dc in dcg.DefaultIfEmpty()
-            //    group new
-            //    {
-            //        Name = c.Name,
-            //        InventoryCardId = ic.InventoryCardId,
-            //        DeckCardId = dc.DeckCardId,
-            //    } by c.Name into aGroup
-            //    select new
-            //    {
-            //        Name = aGroup.Key,
-            //        OwnedCount = aGroup.Count(),
-            //        DeckCount = aGroup.Where(abc => abc.DeckCardId != 0).Count()
-            //    });
-
-
-            //var inventoryCardsByName =
-            //    from counts in countsByName
-            //    join print in mostRecentPrintByName
-            //    on counts.Name equals print.Name
-            //    select new InventoryCardByNameResult()
-            //    {
-            //        Name = print.Name,
-            //        CardId = print.CardId,
-            //        Cmc = print.Cmc,
-            //        Color = print.Color,
-            //        ColorIdentity = print.ColorIdentity,
-            //        DeckCount = counts.DeckCount,
-            //        ImageUrl = print.ImageUrl,
-            //        ManaCost = print.ManaCost,
-            //        OwnedCount = counts.OwnedCount,
-            //        Type = print.Type,
-            //    };
-
-            //from ic in cic.DefaultIfEmpty()
-
-            ////join dc in _cardContext.DeckCards
-            ////on ic.InventoryCardId equals dc.InventoryCardId into dcg
-            ////from icd in cic.DefaultIfEmpty()
-
-            //select new
-            //{
-            //    c.Name,
-            //    ic.InventoryCardId,
-            //    dc.
-            //};
-
-            ////group c by c.Name into g
-            //select new
-            //{
-            //    //c.Name
-            //    Name = g.Key,
-            //    //,
-            //    //COUNT(ic.InventoryCardId) AS OwnedCount
-            //    OwnedCount = g.Count(),
-            //    //,
-            //    //SUM(CASE WHEN dc.DeckCardId IS NULL THEN 0 ELSE 1 END) AS DeckCount
-            //    //DeckCount = g.Select(x => x.dc)
-            //};
+			//    join dc in _cardContext.DeckCards
+			//    on ic.InventoryCardId equals dc.InventoryCardId into dcg
+			//    from dc in dcg.DefaultIfEmpty()
+			//    group new
+			//    {
+			//        Name = c.Name,
+			//        InventoryCardId = ic.InventoryCardId,
+			//        DeckCardId = dc.DeckCardId,
+			//    } by c.Name into aGroup
+			//    select new
+			//    {
+			//        Name = aGroup.Key,
+			//        OwnedCount = aGroup.Count(),
+			//        DeckCount = aGroup.Where(abc => abc.DeckCardId != 0).Count()
+			//    });
 
 
-            //select new
-            //{
-            //	MostRecentId = g.Select(c => c.CardId).Max(),
-            //	g.Key,
-            //	OwnedCount = g.Count(),
-            //};
+			//var inventoryCardsByName =
+			//    from counts in countsByName
+			//    join print in mostRecentPrintByName
+			//    on counts.Name equals print.Name
+			//    select new InventoryCardByNameResult()
+			//    {
+			//        Name = print.Name,
+			//        CardId = print.CardId,
+			//        Cmc = print.Cmc,
+			//        Color = print.Color,
+			//        ColorIdentity = print.ColorIdentity,
+			//        DeckCount = counts.DeckCount,
+			//        ImageUrl = print.ImageUrl,
+			//        ManaCost = print.ManaCost,
+			//        OwnedCount = counts.OwnedCount,
+			//        Type = print.Type,
+			//    };
+
+			//from ic in cic.DefaultIfEmpty()
+
+			////join dc in _cardContext.DeckCards
+			////on ic.InventoryCardId equals dc.InventoryCardId into dcg
+			////from icd in cic.DefaultIfEmpty()
+
+			//select new
+			//{
+			//    c.Name,
+			//    ic.InventoryCardId,
+			//    dc.
+			//};
+
+			////group c by c.Name into g
+			//select new
+			//{
+			//    //c.Name
+			//    Name = g.Key,
+			//    //,
+			//    //COUNT(ic.InventoryCardId) AS OwnedCount
+			//    OwnedCount = g.Count(),
+			//    //,
+			//    //SUM(CASE WHEN dc.DeckCardId IS NULL THEN 0 ELSE 1 END) AS DeckCount
+			//    //DeckCount = g.Select(x => x.dc)
+			//};
 
 
+			//select new
+			//{
+			//	MostRecentId = g.Select(c => c.CardId).Max(),
+			//	g.Key,
+			//	OwnedCount = g.Count(),
+			//};
 
 
 
 
 
 
-            //var inventoryCardsByName = 
-            //    from count in countsByName
-            //    join c in _cardContext.Cards
-            //    on count.MostRecentId equals c.CardId
-            //    join cv in _cardContext.
 
 
-            //return inventoryCardsByName;
+			//var inventoryCardsByName = 
+			//    from count in countsByName
+			//    join c in _cardContext.Cards
+			//    on count.MostRecentId equals c.CardId
+			//    join cv in _cardContext.
 
-            return _cardContext.InventoryCardByName.AsQueryable();
-        }
+
+			//return inventoryCardsByName;
+
+			return _cardContext.InventoryCardByName.AsQueryable();
+		}
 
 		public IQueryable<CardOverviewResult> QueryCardsByPrint()
 		{
@@ -421,8 +444,8 @@ namespace Carpentry.DataLogic.Implementations
 
 		public IQueryable<CardOverviewResult> QueryCardsByUnique()
 		{
-            /*
-             SELECT	c.CardId
+			/*
+			 SELECT	c.CardId
 			,s.Code AS SetCode
 			,c.Name
 			,c.Type
@@ -457,65 +480,65 @@ namespace Carpentry.DataLogic.Implementations
 		ON		c.RarityId = r.RarityId
 	JOIN		Sets s
 		ON		c.SetId = s.SetId
-             
-             */
+			 
+			 */
 
 
-            //var totals =
-            //    from ic in _cardContext.InventoryCards
-            //    join dc in _cardContext.DeckCards
-            //    on ic.InventoryCardId equals dc.DeckCardId into icdc
-            //    from dc in icdc.DefaultIfEmpty()
-            //    group new
-            //    {
-            //        ic.CardId,
-            //        ic.IsFoil,
-            //        ic.InventoryCardId,
-            //        dc.DeckCardId,
-            //    }
-            //    by new { ic.CardId, ic.IsFoil } into countGroup
-            //    select new
-            //    {
-            //        countGroup.Key.CardId,
-            //        countGroup.Key.IsFoil,
-            //        CardCount = countGroup.Count(),
-            //        DeckCount = countGroup.Where(g => g.DeckCardId != 0).Count(),
-            //    };
+			//var totals =
+			//    from ic in _cardContext.InventoryCards
+			//    join dc in _cardContext.DeckCards
+			//    on ic.InventoryCardId equals dc.DeckCardId into icdc
+			//    from dc in icdc.DefaultIfEmpty()
+			//    group new
+			//    {
+			//        ic.CardId,
+			//        ic.IsFoil,
+			//        ic.InventoryCardId,
+			//        dc.DeckCardId,
+			//    }
+			//    by new { ic.CardId, ic.IsFoil } into countGroup
+			//    select new
+			//    {
+			//        countGroup.Key.CardId,
+			//        countGroup.Key.IsFoil,
+			//        CardCount = countGroup.Count(),
+			//        DeckCount = countGroup.Where(g => g.DeckCardId != 0).Count(),
+			//    };
 
-            //var query =
-            //    from t in totals
+			//var query =
+			//    from t in totals
 
-            //    join c in _cardContext.Cards
-            //    on t.CardId equals c.CardId
+			//    join c in _cardContext.Cards
+			//    on t.CardId equals c.CardId
 
-            //    join s in _cardContext.Sets
-            //    on c.SetId equals s.SetId
+			//    join s in _cardContext.Sets
+			//    on c.SetId equals s.SetId
 
-            //    select new InventoryCardByUniqueResult()
-            //    {
-            //        CardId = c.CardId,
-            //        SetCode = s.Code,
-            //        Name = c.Name,
-            //        Type = c.Type,
-            //        ManaCost = c.ManaCost,
-            //        Cmc = c.Cmc,
-            //        RarityId = c.RarityId,
-            //        CollectorNumber = c.CollectorNumber,
-            //        Color = c.Color,
-            //        ColorIdentity = c.ColorIdentity,
-            //        IsFoil = t.IsFoil,
-            //        Price = (t.IsFoil ? c.PriceFoil : c.Price),
-            //        OwnedCount = t.CardCount,
-            //        DeckCount = t.DeckCount,
-            //        ImageUrl = c.ImageUrl,
-            //    };
+			//    select new InventoryCardByUniqueResult()
+			//    {
+			//        CardId = c.CardId,
+			//        SetCode = s.Code,
+			//        Name = c.Name,
+			//        Type = c.Type,
+			//        ManaCost = c.ManaCost,
+			//        Cmc = c.Cmc,
+			//        RarityId = c.RarityId,
+			//        CollectorNumber = c.CollectorNumber,
+			//        Color = c.Color,
+			//        ColorIdentity = c.ColorIdentity,
+			//        IsFoil = t.IsFoil,
+			//        Price = (t.IsFoil ? c.PriceFoil : c.Price),
+			//        OwnedCount = t.CardCount,
+			//        DeckCount = t.DeckCount,
+			//        ImageUrl = c.ImageUrl,
+			//    };
 
-            //var res = query.Take(100).ToList();
+			//var res = query.Take(100).ToList();
 
-            //return query;
+			//return query;
 
-            return _cardContext.InventoryCardByUnique.AsQueryable();
-        }
+			return _cardContext.InventoryCardByUnique.AsQueryable();
+		}
 
 		/// <summary>
 		/// This loads cards for "Get Inventory Detail" 
@@ -528,20 +551,20 @@ namespace Carpentry.DataLogic.Implementations
 				.SelectMany(x => x.InventoryCards)
 				.Select(x => new InventoryCardResult()
 				{
-                    Id = x.InventoryCardId,
-                    IsFoil = x.IsFoil,
-                    InventoryCardStatusId = x.InventoryCardStatusId,
+					Id = x.InventoryCardId,
+					IsFoil = x.IsFoil,
+					InventoryCardStatusId = x.InventoryCardStatusId,
 
-                    CardId = x.CardId,
-                    Name = x.Card.Name,
-                    Type = x.Card.Type,
-                    Set = x.Card.Set.Code,
-                    CollectorNumber = x.Card.CollectorNumber,
-                    
+					CardId = x.CardId,
+					Name = x.Card.Name,
+					Type = x.Card.Type,
+					Set = x.Card.Set.Code,
+					CollectorNumber = x.Card.CollectorNumber,
+					
 					DeckId = x.DeckCards.SingleOrDefault().DeckId,
-                    DeckName = x.DeckCards.SingleOrDefault().Deck.Name, //this probs causes an exception
-                    DeckCardId = x.DeckCards.SingleOrDefault().DeckCardId,
-                    DeckCardCategory = x.DeckCards.SingleOrDefault().CategoryId,
+					DeckName = x.DeckCards.SingleOrDefault().Deck.Name, //this probs causes an exception
+					DeckCardId = x.DeckCards.SingleOrDefault().DeckCardId,
+					DeckCardCategory = x.DeckCards.SingleOrDefault().CategoryId,
 					
 					
 					//MultiverseId = x.MultiverseId,
@@ -563,46 +586,46 @@ namespace Carpentry.DataLogic.Implementations
 
 		}
 	
-    
+	
 
-        //public async Task<List<TrimmingTipsResult>> GetTrimmingTips(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null)
-        //{
+		//public async Task<List<TrimmingTipsResult>> GetTrimmingTips(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null)
+		//{
 
-        //    var query = _cardContext.Set<TrimmingTipsResult>()
-        //        .FromSqlInterpolated($"dbo.spGetTrimmingTips @UsedCardsToKeep = {usedCardsToKeep}, @UnusedCardsToKeeep = {unusedCardsToKeeep}, @Set = {setCode}");
-        //    var result = await query.ToListAsync();
-        //    return result;
-        //}
-
-
-        //public async Task<int> GetTotalTrimCount(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null)
-        //{
-        //    var query = _cardContext.Set<TrimmingTipsCountResult>()
-        //        .FromSqlInterpolated($"dbo.spGetTotalTrimCount @UsedCardsToKeep = {usedCardsToKeep}, @UnusedCardsToKeeep = {unusedCardsToKeeep}, @Set = {setCode}");
-        //    var result = await query.ToListAsync();
-        //    return result.Single().TotalRecomendedTrimming;
-        //}
+		//    var query = _cardContext.Set<TrimmingTipsResult>()
+		//        .FromSqlInterpolated($"dbo.spGetTrimmingTips @UsedCardsToKeep = {usedCardsToKeep}, @UnusedCardsToKeeep = {unusedCardsToKeeep}, @Set = {setCode}");
+		//    var result = await query.ToListAsync();
+		//    return result;
+		//}
 
 
-        //I want to submit a list of card names, and get a collection of inventory cards for each name
-        //TODO - Consider renaming to 'GetInventoryCardsByName'
-        public async Task<Dictionary<string, List<InventoryCardData>>> GetUnusedInventoryCards(IEnumerable<string> cardNames)
-        {
-            //TODO - consider filtering out inventory cards that are already in a deck
-            //  I don't want to do that, but DO want details on deck cards
-
-            var result = (await _cardContext.InventoryCards
-                .Where(ic => cardNames.Contains(ic.Card.Name))
-                .Include(ic => ic.Card).ThenInclude(c => c.Set)
-                .Include(ic => ic.DeckCards).ThenInclude(dc => dc.Deck)
-                .ToListAsync())
-                .GroupBy(ic => ic.Card.Name)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            return result;
-        }
+		//public async Task<int> GetTotalTrimCount(int usedCardsToKeep = 10, int unusedCardsToKeeep = 6, string setCode = null)
+		//{
+		//    var query = _cardContext.Set<TrimmingTipsCountResult>()
+		//        .FromSqlInterpolated($"dbo.spGetTotalTrimCount @UsedCardsToKeep = {usedCardsToKeep}, @UnusedCardsToKeeep = {unusedCardsToKeeep}, @Set = {setCode}");
+		//    var result = await query.ToListAsync();
+		//    return result.Single().TotalRecomendedTrimming;
+		//}
 
 
-    }
+		//I want to submit a list of card names, and get a collection of inventory cards for each name
+		//TODO - Consider renaming to 'GetInventoryCardsByName'
+		public async Task<Dictionary<string, List<InventoryCardData>>> GetUnusedInventoryCards(IEnumerable<string> cardNames)
+		{
+			//TODO - consider filtering out inventory cards that are already in a deck
+			//  I don't want to do that, but DO want details on deck cards
+
+			var result = (await _cardContext.InventoryCards
+				.Where(ic => cardNames.Contains(ic.Card.Name))
+				.Include(ic => ic.Card).ThenInclude(c => c.Set)
+				.Include(ic => ic.DeckCards).ThenInclude(dc => dc.Deck)
+				.ToListAsync())
+				.GroupBy(ic => ic.Card.Name)
+				.ToDictionary(g => g.Key, g => g.ToList());
+
+			return result;
+		}
+
+
+	}
 
 }

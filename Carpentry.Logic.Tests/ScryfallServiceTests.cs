@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Carpentry.Logic.Implementations;
-using Carpentry.Logic.Models;
 using System.Net.Http;
 using Moq;
 using Moq.Protected;

@@ -1,12 +1,25 @@
-﻿using Carpentry.DataLogic.Interfaces;
-using Carpentry.Logic.Interfaces;
+﻿using Carpentry.DataLogic;
 using Carpentry.Logic.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Implementations
+namespace Carpentry.Logic
 {
+    public interface IFilterService
+    {
+        Task<AppFiltersDto> GetAppCoreData();
+        Task<List<FilterOption>> GetFormatFilters();
+        Task<List<FilterOption>> GetRarityFilters();
+        Task<List<FilterOption>> GetCardSetFilters();
+        Task<List<FilterOption>> GetStatusFilters();
+        List<FilterOption> GetCardTypeFilters();
+        List<FilterOption> GetManaTypeFilters();
+        List<FilterOption> GetCardGroupFilters();
+        List<FilterOption> GetInventoryGroupOptions();
+        List<FilterOption> GetInventorySortOptions();
+    }
+
     public class FilterService : IFilterService
     {
         private readonly ICoreDataRepo _coreDataRepo;

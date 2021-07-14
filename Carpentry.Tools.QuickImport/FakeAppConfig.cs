@@ -1,4 +1,4 @@
-﻿using Carpentry.Logic.Interfaces;
+﻿using Carpentry.Logic;
 
 namespace Carpentry
 {

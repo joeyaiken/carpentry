@@ -1,5 +1,4 @@
-﻿using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Models;
+﻿using Carpentry.Logic.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,15 +7,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic;
 using Carpentry.CarpentryData.Models;
 using Carpentry.DataLogic.Models;
 using Carpentry.ScryfallData.Models;
 using Carpentry.CarpentryData;
-using Carpentry.DataLogic;
 
-namespace Carpentry.Logic.Implementations
+namespace Carpentry.Logic
 {
+    public interface IDataUpdateService
+    {
+        Task ValidateDatabase();
+        Task EnsureDatabasesCreated(); //Currently only used by QuickRestore, I don't know where these would otherwise get called (validateDB)
+        Task EnsureDefaultRecordsExist();
+
+        Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update);
+        Task AddTrackedSet(int setId);
+        Task RemoveTrackedSet(int setId);
+        Task UpdateTrackedSet(int setId);
+
+        Task TryUpdateAvailableSets();
+
+    }
+
     //TODO - consider renaming this to "DataMaintenanceService" or "DataIntegrityService"
     //Idea being this checks if sets / cards exist, and can check if DB defaults
     // Maybe just CardDataService?

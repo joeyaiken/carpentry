@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Implementations\DataRestoreService.cs" />
-    <Compile Remove="Interfaces\IDataRestoreService.cs" />
+    <Compile Remove="DataRestoreService.cs" />
     <Compile Remove="Models\_MagicCardDto.cs" />
   </ItemGroup>
 

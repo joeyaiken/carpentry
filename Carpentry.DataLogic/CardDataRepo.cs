@@ -1,25 +1,57 @@
-﻿//using Carpentry.Data.DataModels;
-//using Carpentry.Data.DataContext;
-//using Carpentry.Data.Interfaces;
-using Carpentry.CarpentryData;
+﻿using Carpentry.CarpentryData;
 using Carpentry.CarpentryData.Models;
 using Carpentry.CarpentryData.Models.QueryResults;
 using Carpentry.DataLogic.Exceptions;
-using Carpentry.DataLogic.Interfaces;
 using Carpentry.DataLogic.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-//using Carpentry.Data.Models;
-//using Carpentry.Data.DataModels.QueryResults;
-//using Carpentry.Data.Exceptions;
 
-namespace Carpentry.DataLogic.Implementations
+namespace Carpentry.DataLogic
 {
+    [Obsolete]
+    public interface ICardDataRepo
+    {
+        //Sets
+        [Obsolete]
+        Task<DateTime?> GetCardSetLastUpdated(string setCode); //why isn't this a GetSetByCode ?
+        [Obsolete]
+        Task<CardSetData> GetCardSetById(int setId);
+        [Obsolete]
+        Task<CardSetData> GetCardSetByCode(string setCode);
+        [Obsolete]
+        Task<int> AddOrUpdateCardSet(CardSetData setData); //This probably doesn't actually have to return an ID
+        [Obsolete]
+        Task<List<CardSetData>> GetAllCardSets();
+        [Obsolete]
+        IQueryable<SetTotalsResult> QuerySetTotals();
+
+        //Cards
+        [Obsolete]
+        Task AddCardDataBatch(List<CardDataDto> cards);
+        [Obsolete]
+        Task UpdateCardDataBatch(List<CardDataDto> cards);
+        [Obsolete]
+        Task<List<CardData>> GetCardsByName(string cardName);
+        [Obsolete]
+        Task<CardData> GetCardData(int cardId);
+        [Obsolete]
+        Task<CardData> GetCardData(string name, string code);
+        [Obsolete]
+        Task<CardData> GetCardData(string setCode, int collectorNumber);
+        [Obsolete]
+        Task RemoveAllCardDefinitionsForSetId(int setId);
+        [Obsolete]
+        IQueryable<CardData> QueryCardDefinitions();
+
+        [Obsolete]
+        Task<Dictionary<string, MagicFormatData>> GetAllFormatsByName();
+    }
+
+    [Obsolete]
     public class CardDataRepo : ICardDataRepo
     {
         private readonly CarpentryDataContext _cardContext;

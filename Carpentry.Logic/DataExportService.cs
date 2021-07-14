@@ -1,7 +1,5 @@
 ﻿using Carpentry.CarpentryData;
 //using Carpentry.Data.LegacyDataContext;
-using Carpentry.Logic.Interfaces;
-using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Backups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -15,8 +13,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Implementations
+namespace Carpentry.Logic
 {
+    //I really don't like "Data Backup Service"
+    //It's an Inventory Export Service
+    public interface IDataExportService
+    {
+        Task BackupCollectionToDirectory(string directory);
+        Task<byte[]> GenerateZipBackup();
+
+        //Task<string> GetDeckListExport(int deckId);
+    }
+
     /*
     I need to redesign the card backup process to account for Deck Cards potentially being empty (not having a designated Inventory Card)
     Deck Cards will now need to be a child of the deck backup itself, inventory card backups won't have info about if they belong to a deck

@@ -1,6 +1,4 @@
-﻿using Carpentry.Logic.Implementations;
-using Carpentry.Logic.Interfaces;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
@@ -13,8 +11,6 @@ using System.Linq;
 using Carpentry.Logic.Models;
 using Carpentry.CarpentryData;
 using Carpentry.ScryfallData;
-using Carpentry.DataLogic.Interfaces;
-using Carpentry.DataLogic.Implementations;
 using Carpentry.Logic;
 using Carpentry.DataLogic;
 

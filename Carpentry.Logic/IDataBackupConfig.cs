@@ -1,4 +1,4 @@
-﻿namespace Carpentry.Logic.Interfaces
+﻿namespace Carpentry.Logic
 {
     /// <summary>
     /// Contains config values required for the DataExport and DataImport services

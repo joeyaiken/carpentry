@@ -1,14 +1,10 @@
-﻿using Carpentry.Logic.Implementations;
-using Carpentry.Logic.Interfaces;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Carpentry.ScryfallData;
 using Carpentry.CarpentryData;
-using Carpentry.DataLogic.Interfaces;
-using Carpentry.DataLogic.Implementations;
 using Carpentry.Logic;
 using Carpentry.DataLogic;
 

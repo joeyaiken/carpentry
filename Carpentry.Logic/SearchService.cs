@@ -1,7 +1,6 @@
 ﻿using Carpentry.CarpentryData.Models.QueryResults;
-using Carpentry.DataLogic.Interfaces;
+using Carpentry.DataLogic;
 using Carpentry.DataLogic.QueryParameters;
-using Carpentry.Logic.Interfaces;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Search;
 using System;
@@ -9,8 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Carpentry.Logic.Implementations
+namespace Carpentry.Logic
 {
+    public interface ISearchService
+    {
+        Task<List<InventoryOverviewDto>> SearchInventoryCards(InventoryQueryParameter param);
+        Task<List<CardSearchResultDto>> SearchCardDefinitions(CardSearchQueryParameter filters);
+    }
+
     public class SearchService : ISearchService
     {
         private readonly IInventoryDataRepo _inventoryRepo;
