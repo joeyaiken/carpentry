@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Carpentry.CarpentryData.Models.QueryResults
+namespace Carpentry.CarpentryData.Models
 {
     //result of CarpentryData.dbo.vwSetTotals
     public class SetTotalsResult

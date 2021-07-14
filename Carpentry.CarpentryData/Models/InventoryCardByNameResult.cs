@@ -1,4 +1,4 @@
-﻿namespace Carpentry.CarpentryData.Models.QueryResults
+﻿namespace Carpentry.CarpentryData.Models
 {
     public class InventoryCardByNameResult : CardOverviewResult { }
 }
