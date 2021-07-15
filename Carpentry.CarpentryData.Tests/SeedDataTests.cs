@@ -2,12 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Carpentry.CarpentryData;
-using Carpentry.CarpentryData.Models;
 
 namespace Carpentry.CarpentryData.Tests
 {
@@ -51,8 +46,6 @@ namespace Carpentry.CarpentryData.Tests
         }
 
 
-
-
-
+        //TODO - Add tests that cover view logic (or add them in a 2nd test class)
     }
 }

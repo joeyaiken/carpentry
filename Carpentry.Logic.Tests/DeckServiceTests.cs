@@ -122,5 +122,10 @@ namespace Carpentry.Logic.Tests
 
         #endregion Import / Export
 
+        [TestMethod]
+        public void AllTestsAreImplemented()
+        {
+            Assert.Fail("Not all tests are implemented");
+        }
     }
 }
