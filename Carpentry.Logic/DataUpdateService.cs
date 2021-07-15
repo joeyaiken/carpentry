@@ -13,7 +13,6 @@ namespace Carpentry.Logic
     public interface IDataUpdateService
     {
         Task ValidateDatabase();
-        Task EnsureDefaultRecordsExist();
 
         Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update);
         Task AddTrackedSet(int setId);
@@ -60,170 +59,6 @@ namespace Carpentry.Logic
         }
 
         #region Private Methods
-
-        private async Task EnsureDbCardStatusesExist()
-        {
-            /*
-             Statuses:
-             1 - Inventory/Owned
-             2 - Buylist
-             3 - SellList
-             */
-
-            List<InventoryCardStatusData> allStatuses = new List<InventoryCardStatusData>()
-            {
-                new InventoryCardStatusData { CardStatusId = 1, Name = "Inventory" },
-                new InventoryCardStatusData { CardStatusId = 2, Name = "Buy List" },
-                new InventoryCardStatusData { CardStatusId = 3, Name = "Sell List" },
-            };
-
-            for (int i = 0; i < allStatuses.Count(); i++)
-            {
-                var status = allStatuses[i];
-
-                var existingRecord = _cardContext.CardStatuses.FirstOrDefault(x => x.Name == status.Name);
-                if (existingRecord == null)
-                {
-                    _logger.LogWarning($"Adding card status {status.Name}");
-                    _cardContext.CardStatuses.Add(status);
-                }
-            }
-            await _cardContext.SaveChangesAsync();
-
-            //var statusTasks = allStatuses.Select(s => _coreDataRepo.TryAddInventoryCardStatus(s));
-
-            //await Task.WhenAll(statusTasks);
-
-            _logger.LogInformation("Finished adding card statuses");
-        }
-
-        private async Task EnsureDbRaritiesExist()
-        {
-            List<CardRarityData> allRarities = new List<CardRarityData>()
-            {
-                new CardRarityData
-                {
-                    RarityId = 'M',
-                    Name = "mythic",
-                },
-                new CardRarityData
-                {
-                    RarityId = 'R',
-                    Name = "rare",
-                },
-                new CardRarityData
-                {
-                    RarityId = 'U',
-                    Name = "uncommon",
-                },
-                new CardRarityData
-                {
-                    RarityId = 'C',
-                    Name = "common",
-                },
-                new CardRarityData
-                {
-                    RarityId = 'S',
-                    Name = "special",
-                },
-            };
-
-            for (int i = 0; i < allRarities.Count(); i++)
-            {
-                var rarity = allRarities[i];
-
-                var existingRecord = _cardContext.Rarities.FirstOrDefault(x => x.RarityId == rarity.RarityId);
-                if (existingRecord == null)
-                {
-                    _logger.LogWarning($"Adding card rarity {rarity.Name}");
-                    _cardContext.Rarities.Add(rarity);
-                }
-            }
-            await _cardContext.SaveChangesAsync();
-
-            //var tasks = allRarities.Select(r => _coreDataRepo.TryAddCardRarity(r));
-
-            //await Task.WhenAll(tasks);
-
-            _logger.LogInformation("Finished adding card rarities");
-        }
-
-        private async Task EnsureDbMagicFormatsExist()
-        {
-            //Should I just comment out formats I don't care about?
-            List<MagicFormatData> allFormats = new List<MagicFormatData>()
-            {
-                new MagicFormatData { Name = "standard" },
-                //new MagicFormat { Name = "future" },
-                //new MagicFormat { Name = "historic" },
-                new MagicFormatData { Name = "pioneer" },
-                new MagicFormatData { Name = "modern" },
-                //new MagicFormat { Name = "legacy" },
-                new MagicFormatData { Name = "pauper" },
-                //new MagicFormat { Name = "vintage" },
-                //new MagicFormat { Name = "penny" },
-                new MagicFormatData { Name = "commander" },
-                new MagicFormatData { Name = "brawl" },
-                new MagicFormatData { Name = "jumpstart" },
-                new MagicFormatData { Name = "sealed" },
-                //new MagicFormat { Name = "duel" },
-                //new MagicFormat { Name = "oldschool" },
-            };
-
-            for (int i = 0; i < allFormats.Count(); i++)
-            {
-                var format = allFormats[i];
-
-                var existingRecord = _cardContext.MagicFormats.FirstOrDefault(x => x.Name == format.Name);
-                if (existingRecord == null)
-                {
-                    _cardContext.MagicFormats.Add(format);
-                    _logger.LogWarning($"Adding format {format.Name}");
-                }
-            }
-            await _cardContext.SaveChangesAsync();
-
-            //var tasks = allFormats.Select(x => _coreDataRepo.TryAddMagicFormat(x));
-
-            //await Task.WhenAll(tasks);
-
-            _logger.LogInformation("Finished adding formats");
-        }
-
-        private async Task EnsureDbDeckCardCategoriesExist()
-        {
-            List<DeckCardCategoryData> allCategories = new List<DeckCardCategoryData>()
-            {
-                //null == mainboard new DeckCardCategory { Id = '', Name = "" },
-                new DeckCardCategoryData { DeckCardCategoryId = 'c', Name = "Commander" },
-                new DeckCardCategoryData { DeckCardCategoryId = 's', Name = "Sideboard" },
-                //Companion
-
-                //new DeckCardCategory { Id = '', Name = "" },
-                //new DeckCardCategory { Id = '', Name = "" },
-            };
-            
-            //Try Add DeckCardCategories
-            for (int i = 0; i < allCategories.Count(); i++)
-            {
-                var category = allCategories[i];
-
-                var existingRecord = _cardContext.DeckCardCategories.FirstOrDefault(x => x.DeckCardCategoryId == category.DeckCardCategoryId);
-                if (existingRecord == null)
-                {
-                    _cardContext.DeckCardCategories.Add(category);
-                    _logger.LogWarning($"Adding category {category.Name}");
-                }
-                
-            }
-            await _cardContext.SaveChangesAsync();
-
-            //var tasks = allCategories.Select(x => _coreDataRepo.TryAddDeckCardCategory(x));
-
-            //await Task.WhenAll(tasks);
-
-            _logger.LogInformation("Finished adding card categories");
-        }
 
         /// <summary>
         /// This gets a list of card definitions from scryfall, mapped to a different class type
@@ -553,19 +388,6 @@ namespace Carpentry.Logic
         public async Task ValidateDatabase()
         {
             await _dataIntegrityService.EnsureDatabasesCreated();
-            await EnsureDefaultRecordsExist();
-        }
-
-        public async Task EnsureDefaultRecordsExist()
-        {
-            _logger.LogWarning("Adding default records");
-
-            await EnsureDbCardStatusesExist();
-            await EnsureDbRaritiesExist();
-            await EnsureDbMagicFormatsExist();
-            await EnsureDbDeckCardCategoriesExist();
-
-            _logger.LogInformation("Finished adding default records");
         }
 
         //reset database?(SomeConfirmationClass dto){ ; }

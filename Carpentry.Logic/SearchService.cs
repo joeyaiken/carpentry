@@ -1,5 +1,5 @@
 ﻿using Carpentry.CarpentryData;
-using Carpentry.CarpentryData.Models.QueryResults;
+using Carpentry.CarpentryData.Models;
 using Carpentry.Logic.Models;
 using Carpentry.Logic.Models.Search;
 using Microsoft.EntityFrameworkCore;

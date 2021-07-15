@@ -1,161 +1,163 @@
 ﻿using Carpentry.CarpentryData.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Carpentry.CarpentryData
 {
 
-    public partial class CarpentryDataContext : DbContext
-    {
-        #region DbSets
+	public partial class CarpentryDataContext : DbContext
+	{
+		#region DbSets
 
-        //Tables
-        public DbSet<CardLegalityData> CardLegalities { get; set; }
-        public DbSet<CardData> Cards { get; set; }
-        public DbSet<InventoryCardStatusData> CardStatuses { get; set; }
-        public DbSet<DeckCardCategoryData> DeckCardCategories { get; set; }
-        public DbSet<DeckCardData> DeckCards { get; set; }
-        public DbSet<DeckData> Decks { get; set; }
-        public DbSet<InventoryCardData> InventoryCards { get; set; }
-        public DbSet<MagicFormatData> MagicFormats { get; set; }
-        public DbSet<CardRarityData> Rarities { get; set; }
-        public DbSet<CardSetData> Sets { get; set; }
-        public DbSet<DeckCardTagData> CardTags { get; set; }
+		//Tables
+		public DbSet<CardLegalityData> CardLegalities { get; set; }
+		public DbSet<CardData> Cards { get; set; }
+		public DbSet<InventoryCardStatusData> CardStatuses { get; set; }
+		public DbSet<DeckCardCategoryData> DeckCardCategories { get; set; }
+		public DbSet<DeckCardData> DeckCards { get; set; }
+		public DbSet<DeckData> Decks { get; set; }
+		public DbSet<InventoryCardData> InventoryCards { get; set; }
+		public DbSet<MagicFormatData> MagicFormats { get; set; }
+		public DbSet<CardRarityData> Rarities { get; set; }
+		public DbSet<CardSetData> Sets { get; set; }
+		public DbSet<DeckCardTagData> CardTags { get; set; }
 
-        //Views
-        public DbSet<Models.QueryResults.InventoryCardByNameResult> InventoryCardByName { get; set; }
-        public DbSet<Models.QueryResults.InventoryCardByPrintResult> InventoryCardByPrint { get; set; }
-        public DbSet<Models.QueryResults.InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
-        public DbSet<Models.QueryResults.SetTotalsResult> SetTotals { get; set; }
-        //public DbSet<DataModels.QueryResults.TrimmingTipsResult> TrimmingTips { get; set; }
-        //public DbSet<DataModels.QueryResults.TrimmingTipsCountResult> TrimmingTipsTotalCount { get; set; }
-        public DbSet<Models.QueryResults.InventoryTotalsByStatusResult> InventoryTotalsByStatus { get; set; }
+		//Views
+		public DbSet<InventoryCardByNameResult> InventoryCardByName { get; set; }
+		public DbSet<InventoryCardByPrintResult> InventoryCardByPrint { get; set; }
+		public DbSet<InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
+		public DbSet<SetTotalsResult> SetTotals { get; set; }
+		public DbSet<InventoryTotalsByStatusResult> InventoryTotalsByStatus { get; set; }
 
-        #endregion
+		#endregion
 
-        public CarpentryDataContext(DbContextOptions<CarpentryDataContext> options) : base(options)
-        {
-            //DB should be set on the configuration page
-        }
+		protected readonly ILogger<CarpentryDataContext> _logger;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            #region Associations
+		public CarpentryDataContext(DbContextOptions<CarpentryDataContext> options, ILogger<CarpentryDataContext> logger) : base(options)
+		{
+			_logger = logger;
+			//DB should be set on the configuration page
+		}
 
-            //Deck -- DeckCard
-            modelBuilder.Entity<DeckData>()
-                .HasMany(x => x.Cards)
-                .WithOne(x => x.Deck)
-                .HasForeignKey(x => x.DeckId);
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			#region Associations
 
-            //DeckCard -- InventoryCard
-            modelBuilder.Entity<DeckCardData>()
-                .HasOne(x => x.InventoryCard)
-                .WithMany(x => x.DeckCards)
-                .HasForeignKey(x => x.InventoryCardId);
+			//Deck -- DeckCard
+			modelBuilder.Entity<DeckData>()
+				.HasMany(x => x.Cards)
+				.WithOne(x => x.Deck)
+				.HasForeignKey(x => x.DeckId);
 
-            //InventoryCard -- Card
-            modelBuilder.Entity<InventoryCardData>()
-                .HasOne(x => x.Card)
-                .WithMany(x => x.InventoryCards)
-                .HasForeignKey(x => x.CardId);
+			//DeckCard -- InventoryCard
+			modelBuilder.Entity<DeckCardData>()
+				.HasOne(x => x.InventoryCard)
+				.WithMany(x => x.DeckCards)
+				.HasForeignKey(x => x.InventoryCardId);
 
-            //InventoryCard -- Status
-            modelBuilder.Entity<InventoryCardData>()
-                .HasOne(x => x.Status)
-                .WithMany(x => x.Cards)
-                .HasForeignKey(x => x.InventoryCardStatusId);
+			//InventoryCard -- Card
+			modelBuilder.Entity<InventoryCardData>()
+				.HasOne(x => x.Card)
+				.WithMany(x => x.InventoryCards)
+				.HasForeignKey(x => x.CardId);
 
-            //Card -- Set
-            modelBuilder.Entity<CardData>()
-                .HasOne(x => x.Set)
-                .WithMany(x => x.Cards)
-                .HasForeignKey(x => x.SetId);
+			//InventoryCard -- Status
+			modelBuilder.Entity<InventoryCardData>()
+				.HasOne(x => x.Status)
+				.WithMany(x => x.Cards)
+				.HasForeignKey(x => x.InventoryCardStatusId);
 
-            //Card -- Rarity
-            modelBuilder.Entity<CardData>()
-                .HasOne(x => x.Rarity)
-                .WithMany(x => x.Cards)
-                .HasForeignKey(x => x.RarityId);
+			//Card -- Set
+			modelBuilder.Entity<CardData>()
+				.HasOne(x => x.Set)
+				.WithMany(x => x.Cards)
+				.HasForeignKey(x => x.SetId);
 
-            //magic format -- card legality
-            modelBuilder.Entity<CardLegalityData>()
-                .HasOne(x => x.Format)
-                .WithMany(x => x.LegalCards)
-                .HasForeignKey(x => x.FormatId);
+			//Card -- Rarity
+			modelBuilder.Entity<CardData>()
+				.HasOne(x => x.Rarity)
+				.WithMany(x => x.Cards)
+				.HasForeignKey(x => x.RarityId);
 
-            //card -- card legality
-            modelBuilder.Entity<CardLegalityData>()
-                .HasOne(x => x.Card)
-                .WithMany(x => x.Legalities)
-                .HasForeignKey(x => x.CardId);
+			//magic format -- card legality
+			modelBuilder.Entity<CardLegalityData>()
+				.HasOne(x => x.Format)
+				.WithMany(x => x.LegalCards)
+				.HasForeignKey(x => x.FormatId);
 
-            //deck card -- category
-            modelBuilder.Entity<DeckCardData>()
-                .HasOne(x => x.Category)
-                .WithMany(x => x.Cards)
-                .HasForeignKey(x => x.CategoryId);
+			//card -- card legality
+			modelBuilder.Entity<CardLegalityData>()
+				.HasOne(x => x.Card)
+				.WithMany(x => x.Legalities)
+				.HasForeignKey(x => x.CardId);
 
-            //Deck -- MagicFormat
-            modelBuilder.Entity<DeckData>()
-                .HasOne(x => x.Format)
-                .WithMany(x => x.Decks)
-                .HasForeignKey(x => x.MagicFormatId);
+			//deck card -- category
+			modelBuilder.Entity<DeckCardData>()
+				.HasOne(x => x.Category)
+				.WithMany(x => x.Cards)
+				.HasForeignKey(x => x.CategoryId);
 
-            modelBuilder.Entity<DeckCardTagData>()
-                .HasOne(x => x.Deck)
-                .WithMany(x => x.Tags)
-                .HasForeignKey(x => x.DeckId);
+			//Deck -- MagicFormat
+			modelBuilder.Entity<DeckData>()
+				.HasOne(x => x.Format)
+				.WithMany(x => x.Decks)
+				.HasForeignKey(x => x.MagicFormatId);
 
-            modelBuilder.Entity<DeckCardData>()
-                .HasIndex(dc => dc.InventoryCardId)
-                .IsUnique();
+			modelBuilder.Entity<DeckCardTagData>()
+				.HasOne(x => x.Deck)
+				.WithMany(x => x.Tags)
+				.HasForeignKey(x => x.DeckId);
 
-            #endregion
+			modelBuilder.Entity<DeckCardData>()
+				.HasIndex(dc => dc.InventoryCardId)
+				.IsUnique();
 
-            #region Views
+			#endregion
 
-            modelBuilder.Entity<Models.QueryResults.InventoryCardByNameResult>(eb =>
-            {
-                eb.HasNoKey();
-                eb.ToView("vwInventoryCardsByName");
-            });
+			#region Views
 
-            modelBuilder.Entity<Models.QueryResults.InventoryCardByPrintResult>(eb =>
-            {
-                eb.HasNoKey();
-                eb.ToView("vwInventoryCardsByPrint");
-            });
-            modelBuilder.Entity<Models.QueryResults.InventoryCardByUniqueResult>(eb =>
-            {
-                eb.HasNoKey();
-                eb.ToView("vwInventoryCardsByUnique");
-            });
-            //modelBuilder.Entity<Models.QueryResults.InventoryTotalsByStatusResult>(eb =>
-            //{
-            //    eb.HasNoKey();
-            //    eb.ToView("vwInventoryTotalsByStatus");
-            //});
+			modelBuilder.Entity<InventoryCardByNameResult>(eb =>
+			{
+				eb.HasNoKey();
+				eb.ToView("vwInventoryCardsByName");
+			});
 
-            modelBuilder.Entity<Models.QueryResults.SetTotalsResult>(eb =>
-            {
-                eb.HasNoKey();
-                eb.ToView("vwSetTotals");
-            });
+			modelBuilder.Entity<InventoryCardByPrintResult>(eb =>
+			{
+				eb.HasNoKey();
+				eb.ToView("vwInventoryCardsByPrint");
+			});
+			modelBuilder.Entity<InventoryCardByUniqueResult>(eb =>
+			{
+				eb.HasNoKey();
+				eb.ToView("vwInventoryCardsByUnique");
+			});
+			//modelBuilder.Entity<InventoryTotalsByStatusResult>(eb =>
+			//{
+			//    eb.HasNoKey();
+			//    eb.ToView("vwInventoryTotalsByStatus");
+			//});
 
-            modelBuilder.Entity<Models.QueryResults.InventoryTotalsByStatusResult>(eb =>
-            {
-                eb.HasNoKey();
-                eb.ToView("vwInventoryTotalsByStatus");
-            });
+			modelBuilder.Entity<SetTotalsResult>(eb =>
+			{
+				eb.HasNoKey();
+				eb.ToView("vwSetTotals");
+			});
 
-            #endregion
+			modelBuilder.Entity<InventoryTotalsByStatusResult>(eb =>
+			{
+				eb.HasNoKey();
+				eb.ToView("vwInventoryTotalsByStatus");
+			});
 
-            #region procs?
+			#endregion
 
-            //modelBuilder.Entity<DataModels.QueryResults.TrimmingTipsResult>(eb => eb.HasNoKey());
-            //modelBuilder.Entity<DataModels.QueryResults.TrimmingTipsCountResult>(eb => eb.HasNoKey());
+			#region procs?
 
-            #endregion
-        }
-    }
+			//modelBuilder.Entity<DataTrimmingTipsResult>(eb => eb.HasNoKey());
+			//modelBuilder.Entity<DataTrimmingTipsCountResult>(eb => eb.HasNoKey());
+
+			#endregion
+		}
+	}
 }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Carpentry.CarpentryData;
-using Carpentry.CarpentryData.Models.QueryResults;
 using Carpentry.CarpentryData.Models;
 using Microsoft.Extensions.Logging;
 

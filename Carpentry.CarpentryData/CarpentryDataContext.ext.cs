@@ -1,6 +1,6 @@
 ﻿using Carpentry.CarpentryData.Models;
-using Carpentry.CarpentryData.Models.QueryResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,27 +10,13 @@ using System.Threading.Tasks;
 
 namespace Carpentry.CarpentryData
 {
-    /// <summary>
-    /// Common queries for the Carpentry database
-    /// </summary>
-    public partial class CarpentryDataContext
-    {
+	/// <summary>
+	/// Common queries for the Carpentry database
+	/// </summary>
+	public partial class CarpentryDataContext
+	{
 
-        public IQueryable<DeckData> ExampleDeckQuery() => Decks.Where(d => d.Format.Name == "commander");
-
-        public async Task ExecuteSqlScript(string scriptName)
-        {
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            var baseDir = Path.GetDirectoryName(path) + $"\\DataScripts\\{scriptName}.sql";
-            var scriptContents = File.ReadAllText(baseDir);
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            await Database.ExecuteSqlRawAsync(scriptContents);
-#pragma warning restore CS0618 // Type or member is obsolete
-        }
+		public IQueryable<DeckData> ExampleDeckQuery() => Decks.Where(d => d.Format.Name == "commander");
 
 		//Attempt at replacing a view with linq query
 		public IQueryable<CardOverviewResult> QueryCardsByUnique()
@@ -294,6 +280,224 @@ namespace Carpentry.CarpentryData
 				.ToDictionary(g => g.Key, g => g.ToList());
 
 			return result;
+		}
+
+		public async Task EnsureDatabaseCreated(bool includeViews = true)
+		{
+			await Database.EnsureCreatedAsync();
+
+			if (includeViews)
+			{
+				await ExecuteSqlScript("vwAllInventoryCards");
+				await ExecuteSqlScript("vwCardTotals");
+				await ExecuteSqlScript("vwInventoryCardsByName");
+				await ExecuteSqlScript("vwInventoryCardsByPrint");
+				await ExecuteSqlScript("vwInventoryCardsByUnique");
+				await ExecuteSqlScript("vwInventoryTotalsByStatus");
+				await ExecuteSqlScript("vwSetTotals");
+				await ExecuteSqlScript("spGetInventoryTotals");
+			}
+			
+			//Create default records
+			await EnsureDefaultRecordsExist();
+		}
+
+		private async Task EnsureDefaultRecordsExist()
+		{
+			_logger.LogWarning("Adding default records");
+
+			await EnsureDbCardStatusesExist();
+			await EnsureDbRaritiesExist();
+			await EnsureDbMagicFormatsExist();
+			await EnsureDbDeckCardCategoriesExist();
+
+			_logger.LogInformation("Finished adding default records");
+		}
+
+		private async Task EnsureDbCardStatusesExist()
+		{
+			/*
+			 Statuses:
+			 1 - Inventory/Owned
+			 2 - Buylist
+			 3 - SellList
+			 */
+
+			List<InventoryCardStatusData> allStatuses = new List<InventoryCardStatusData>()
+			{
+				new InventoryCardStatusData { CardStatusId = 1, Name = "Inventory" },
+				new InventoryCardStatusData { CardStatusId = 2, Name = "Buy List" },
+				new InventoryCardStatusData { CardStatusId = 3, Name = "Sell List" },
+			};
+
+			for (int i = 0; i < allStatuses.Count(); i++)
+			{
+				var status = allStatuses[i];
+
+				var existingRecord = CardStatuses.FirstOrDefault(x => x.Name == status.Name);
+				if (existingRecord == null)
+				{
+					_logger.LogWarning($"Adding card status {status.Name}");
+					CardStatuses.Add(status);
+				}
+			}
+			await SaveChangesAsync();
+
+			//var statusTasks = allStatuses.Select(s => _coreDataRepo.TryAddInventoryCardStatus(s));
+
+			//await Task.WhenAll(statusTasks);
+
+			_logger.LogInformation("Finished adding card statuses");
+		}
+
+		private async Task EnsureDbRaritiesExist()
+		{
+			List<CardRarityData> allRarities = new List<CardRarityData>()
+			{
+				new CardRarityData
+				{
+					RarityId = 'M',
+					Name = "mythic",
+				},
+				new CardRarityData
+				{
+					RarityId = 'R',
+					Name = "rare",
+				},
+				new CardRarityData
+				{
+					RarityId = 'U',
+					Name = "uncommon",
+				},
+				new CardRarityData
+				{
+					RarityId = 'C',
+					Name = "common",
+				},
+				new CardRarityData
+				{
+					RarityId = 'S',
+					Name = "special",
+				},
+			};
+
+			for (int i = 0; i < allRarities.Count(); i++)
+			{
+				var rarity = allRarities[i];
+
+				var existingRecord = Rarities.FirstOrDefault(x => x.RarityId == rarity.RarityId);
+				if (existingRecord == null)
+				{
+					_logger.LogWarning($"Adding card rarity {rarity.Name}");
+					Rarities.Add(rarity);
+				}
+			}
+			await SaveChangesAsync();
+
+			//var tasks = allRarities.Select(r => _coreDataRepo.TryAddCardRarity(r));
+
+			//await Task.WhenAll(tasks);
+
+			_logger.LogInformation("Finished adding card rarities");
+		}
+
+		private async Task EnsureDbMagicFormatsExist()
+		{
+			//Should I just comment out formats I don't care about?
+			List<MagicFormatData> allFormats = new List<MagicFormatData>()
+			{
+				new MagicFormatData { Name = "standard" },
+				//new MagicFormat { Name = "future" },
+				//new MagicFormat { Name = "historic" },
+				new MagicFormatData { Name = "pioneer" },
+				new MagicFormatData { Name = "modern" },
+				//new MagicFormat { Name = "legacy" },
+				new MagicFormatData { Name = "pauper" },
+				//new MagicFormat { Name = "vintage" },
+				//new MagicFormat { Name = "penny" },
+				new MagicFormatData { Name = "commander" },
+				new MagicFormatData { Name = "brawl" },
+				new MagicFormatData { Name = "jumpstart" },
+				new MagicFormatData { Name = "sealed" },
+				//new MagicFormat { Name = "duel" },
+				//new MagicFormat { Name = "oldschool" },
+			};
+
+			for (int i = 0; i < allFormats.Count(); i++)
+			{
+				var format = allFormats[i];
+
+				var existingRecord = MagicFormats.FirstOrDefault(x => x.Name == format.Name);
+				if (existingRecord == null)
+				{
+					MagicFormats.Add(format);
+					_logger.LogWarning($"Adding format {format.Name}");
+				}
+			}
+			await SaveChangesAsync();
+
+			//var tasks = allFormats.Select(x => _coreDataRepo.TryAddMagicFormat(x));
+
+			//await Task.WhenAll(tasks);
+
+			_logger.LogInformation("Finished adding formats");
+		}
+
+		private async Task EnsureDbDeckCardCategoriesExist()
+		{
+			List<DeckCardCategoryData> allCategories = new List<DeckCardCategoryData>()
+			{
+				//null == mainboard new DeckCardCategory { Id = '', Name = "" },
+				new DeckCardCategoryData { DeckCardCategoryId = 'c', Name = "Commander" },
+				new DeckCardCategoryData { DeckCardCategoryId = 's', Name = "Sideboard" },
+				//Companion
+
+				//new DeckCardCategory { Id = '', Name = "" },
+				//new DeckCardCategory { Id = '', Name = "" },
+			};
+
+			//Try Add DeckCardCategories
+			for (int i = 0; i < allCategories.Count(); i++)
+			{
+				var category = allCategories[i];
+
+				var existingRecord = DeckCardCategories.FirstOrDefault(x => x.DeckCardCategoryId == category.DeckCardCategoryId);
+				if (existingRecord == null)
+				{
+					DeckCardCategories.Add(category);
+					_logger.LogWarning($"Adding category {category.Name}");
+				}
+
+			}
+			await SaveChangesAsync();
+
+			//var tasks = allCategories.Select(x => _coreDataRepo.TryAddDeckCardCategory(x));
+
+			//await Task.WhenAll(tasks);
+
+			_logger.LogInformation("Finished adding card categories");
+		}
+
+		private async Task ExecuteSqlScript(string scriptName)
+		{
+			try
+			{
+				string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+
+				UriBuilder uri = new UriBuilder(codeBase);
+				string path = Uri.UnescapeDataString(uri.Path);
+				var baseDir = Path.GetDirectoryName(path) + $"\\DataScripts\\{scriptName}.sql";
+				var scriptContents = File.ReadAllText(baseDir);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+				await Database.ExecuteSqlRawAsync(scriptContents);
+#pragma warning restore CS0618 // Type or member is obsolete
+			}
+			catch (Exception ex)
+			{
+				_logger.LogInformation($"Error attempting to add DB object {scriptName}", ex);
+				throw ex;
+			}
 		}
 
 	}

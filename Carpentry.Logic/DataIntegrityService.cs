@@ -26,31 +26,8 @@ namespace Carpentry.Logic
 
         public async Task EnsureDatabasesCreated()
         {
-            await _cardContext.Database.EnsureCreatedAsync();
+            await _cardContext.EnsureDatabaseCreated();
             await _scryContext.Database.EnsureCreatedAsync();
-
-            await ExecuteSqlScript("vwAllInventoryCards");
-            await ExecuteSqlScript("vwCardTotals");
-            await ExecuteSqlScript("vwInventoryCardsByName");
-            await ExecuteSqlScript("vwInventoryCardsByPrint");
-            await ExecuteSqlScript("vwInventoryCardsByUnique");
-            await ExecuteSqlScript("vwInventoryTotalsByStatus");
-            await ExecuteSqlScript("vwSetTotals");
-            await ExecuteSqlScript("spGetInventoryTotals");
-            //await ExecuteSqlScript("spGetTotalTrimCount");
-            //await ExecuteSqlScript("spGetTrimmingTips");
-        }
-
-        private async Task ExecuteSqlScript(string scriptName)
-        {
-            try
-            {
-                await _cardContext.ExecuteSqlScript(scriptName);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation($"Error attempting to add DB object {scriptName}", ex);
-            }
         }
     }
 }

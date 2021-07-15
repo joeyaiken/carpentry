@@ -17,13 +17,13 @@ using Carpentry.ScryfallData.Models;
 namespace Carpentry.Logic.Tests
 {
     [TestClass]
-    public class ScryfallServiceTests
+    public class ScryfallServiceTests : CarpentryServiceTestBase
     {
         private ScryfallService _scryService;
         private ScryfallDataContext _scryContext;
         private DbContextOptions<ScryfallDataContext> _contextOptions;
 
-        private void ResetContext()
+        protected override void ResetContextChild()
         {
             _scryContext = new ScryfallDataContext(_contextOptions);
 
@@ -55,8 +55,7 @@ namespace Carpentry.Logic.Tests
             _scryService = new ScryfallService(_scryContext, mockLogger.Object, httpClient);
         }
 
-        [TestInitialize]
-        public async Task BeforeEach()
+        protected override async Task BeforeEachChild()
         {
             _contextOptions = new DbContextOptionsBuilder<ScryfallDataContext>().UseSqlite("Filename=ScryData.db").Options;
             ResetContext();
@@ -64,8 +63,7 @@ namespace Carpentry.Logic.Tests
             ResetContext();
         }
 
-        [TestCleanup]
-        public async Task AfterEach()
+        protected override async Task AfterEachChild()
         {
             await _scryContext.Database.EnsureDeletedAsync();
             await _scryContext.DisposeAsync();
