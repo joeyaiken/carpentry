@@ -19,10 +19,6 @@ namespace Carpentry.Logic.Tests
         private CarpentryDataContext _cardContext;
         private DbContextOptions<CarpentryDataContext> _cardContextOptions;
 
-        //private ScryfallService _scryService;
-        //private ScryfallDataContext _scryContext;
-        //private DbContextOptions<ScryfallDataContext> _scryContextOptions;
-
         protected override void ResetContextChild()
         {
             var mockDbLogger = new Mock<ILogger<CarpentryDataContext>>();
@@ -49,11 +45,8 @@ namespace Carpentry.Logic.Tests
             await _cardContext.DisposeAsync();
         }
 
-        //[TestMethod]
-
         #region Deck Props
 
-        //public async Task<int> AddDeck(DeckPropertiesDto props)
         [TestMethod]
         public async Task AddDeck_Works_Test()
         {
@@ -74,58 +67,127 @@ namespace Carpentry.Logic.Tests
             Assert.AreEqual(expectedDeckId, newDeck.Id);
         }
 
-        //public async Task AddImportedDeckBatch(List<DeckPropertiesDto> decks)
+        [TestMethod]
+        public async Task AddImportedDeckBatch_Works_Test()
+        {
+            //public async Task AddImportedDeckBatch(List<DeckPropertiesDto> decks)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task UpdateDeck(DeckPropertiesDto deckDto)
+        [TestMethod]
+        public async Task UpdateDeck_Works_Test()
+        {
+            //public async Task UpdateDeck(DeckPropertiesDto deckDto)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task DeleteDeck(int deckId)
+        [TestMethod]
+        public async Task DeleteDeck_Works_Test()
+        {
+            //public async Task DeleteDeck(int deckId)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task DissassembleDeck(int deckId)
+        [TestMethod]
+        public async Task DissassembleDeck_Works_Test()
+        {
+            //public async Task DissassembleDeck(int deckId)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task<int> CloneDeck(int deckId)
+        [TestMethod]
+        public async Task CloneDeck_Works_Test()
+        {
+            //public async Task<int> CloneDeck(int deckId)
+            Assert.Fail("Test not implemented");
+        }
 
         #endregion Deck Props
 
         #region Deck Cards
 
-        //public async Task AddDeckCard(DeckCardDto dto)
+        [TestMethod]
+        public async Task AddDeckCard_Works_Test()
+        {
+            //public async Task AddDeckCard(DeckCardDto dto)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dtoBatch)
+        [TestMethod]
+        public async Task AddDeckCardBatch_Works_Test()
+        {
+            //public async Task AddDeckCardBatch(IEnumerable<DeckCardDto> dtoBatch)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task UpdateDeckCard(DeckCardDto card)
+        [TestMethod]
+        public async Task UpdateDeckCard_Works_Test()
+        {
+            //public async Task UpdateDeckCard(DeckCardDto card)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task DeleteDeckCard(int deckCardId)
+        [TestMethod]
+        public async Task DeleteDeckCard_Works_Test()
+        {
+            //public async Task DeleteDeckCard(int deckCardId)
+            Assert.Fail("Test not implemented");
+        }
 
         #endregion Deck Cards
 
         #region Card Tags
 
-        //public async Task<CardTagDetailDto> GetCardTagDetails(int deckId, int cardId)
+        [TestMethod]
+        public async Task GetCardTagDetails_Works_Test()
+        {
+            //public async Task<CardTagDetailDto> GetCardTagDetails(int deckId, int cardId)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task AddCardTag(CardTagDto cardTag)
+        [TestMethod]
+        public async Task AddCardTag_Works_Test()
+        {
+            //public async Task AddCardTag(CardTagDto cardTag)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task RemoveCardTag(int cardTagId)
+        [TestMethod]
+        public async Task RemoveCardTag_Works_Test()
+        {
+            //public async Task RemoveCardTag(int cardTagId)
+            Assert.Fail("Test not implemented");
+        }
 
         #endregion Card Tags
 
         #region Search
 
-        //public async Task<List<DeckOverviewDto>> GetDeckOverviews(string format = null, string sortBy = null, bool includeDissasembled = false)
+        [TestMethod]
+        public async Task GetDeckOverviews_Works_Test()
+        {
+            //public async Task<List<DeckOverviewDto>> GetDeckOverviews(string format = null, string sortBy = null, bool includeDissasembled = false)
+            Assert.Fail("Test not implemented");
+        }
 
-        //public async Task<DeckDetailDto> GetDeckDetail(int deckId)
+        [TestMethod]
+        public async Task GetDeckDetail_Works_Test()
+        {
+            //public async Task<DeckDetailDto> GetDeckDetail(int deckId)
+            Assert.Fail("Test not implemented");
+        }
 
         #endregion Search
 
         #region Import / Export
 
-        //public async Task<string> GetDeckListExport(int deckId, string exportType)
+        [TestMethod]
+        public async Task GetDeckListExport_Works_Test()
+        {
+            //public async Task<string> GetDeckListExport(int deckId, string exportType)
+            Assert.Fail("Test not implemented");
+        }
 
         #endregion Import / Export
-
-        [TestMethod]
-        public void AllTestsAreImplemented()
-        {
-            Assert.Fail("Not all tests are implemented");
-        }
     }
 }
