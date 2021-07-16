@@ -77,7 +77,7 @@ namespace Carpentry.Logic
 
         private readonly IInventoryService _inventoryService;
 
-        private static string _sideboardCategory = "Sideboard";
+        private static readonly string _sideboardCategory = "Sideboard";
 
         private static readonly int _availability_InDeck = 1;
         private static readonly int _availability_InInventory = 2;
@@ -520,6 +520,7 @@ namespace Carpentry.Logic
             existingDeck.BasicG = deckDto.BasicG;
 
             _cardContext.Decks.Update(existingDeck);
+
             await _cardContext.SaveChangesAsync();
         }
 
@@ -531,12 +532,11 @@ namespace Carpentry.Logic
                 _cardContext.DeckCards.RemoveRange(deckCardsToDelete);
             }
 
-            var deckToDelete = _cardContext.Decks.Where(x => x.DeckId == deckId).FirstOrDefault();
+            var deckToDelete = _cardContext.Decks.Single(x => x.DeckId == deckId);
             _cardContext.Decks.Remove(deckToDelete);
 
             await _cardContext.SaveChangesAsync();
         }
-
 
         public async Task DissassembleDeck(int deckId)
         {
@@ -550,7 +550,8 @@ namespace Carpentry.Logic
             }
 
             _cardContext.DeckCards.UpdateRange(existingDeckCards);
-
+            
+            //Clear stats
             var deck = await _cardContext.Decks.FirstOrDefaultAsync(d => d.DeckId == deckId);
             deck.Stats = null;
             _cardContext.Update(deck);
@@ -558,6 +559,11 @@ namespace Carpentry.Logic
             await _cardContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Creates an empty copy of an existing deck
+        /// </summary>
+        /// <param name="deckId"></param>
+        /// <returns></returns>
         public async Task<int> CloneDeck(int deckId)
         {
             //Copy existing deck into new record
@@ -687,6 +693,7 @@ namespace Carpentry.Logic
                 await AddDeckCard(dto);
             }
         }
+
 
         public async Task UpdateDeckCard(DeckCardDto card)
         {

@@ -16,34 +16,58 @@ namespace Carpentry.Logic.Tests
     public class DeckServiceTests : CarpentryServiceTestBase
     {
         private DeckService _deckService;
-        private CarpentryDataContext _cardContext;
-        private DbContextOptions<CarpentryDataContext> _cardContextOptions;
+
+
+        //private CarpentryDataContext CardContext;
+        //private DbContextOptions<CarpentryDataContext> CardContextOptions;
+
+        public static class SeedData
+        {
+            public static DeckData Deck1 = new DeckData()
+            {
+                BasicW = 5,
+                BasicR = 5,
+                Name = "testDeck",
+                Cards = new List<DeckCardData>()
+                {
+                    new DeckCardData()
+                    {
+                        
+                        InventoryCard = new InventoryCardData()
+                        {
+
+                        },
+                    },
+                    new DeckCardData(){ },
+                    new DeckCardData(){ },
+                },
+
+            };
+        }
 
         protected override void ResetContextChild()
         {
-            var mockDbLogger = new Mock<ILogger<CarpentryDataContext>>();
-            _cardContext = new CarpentryDataContext(_cardContextOptions, mockDbLogger.Object);
-
+            //Should mocks be BeforeEach instead of ResetContext?
             var mockInventoryService = new Mock<IInventoryService>();
             var mockLogger = new Mock<ILogger<DeckService>>();
             
-            _deckService = new DeckService(mockInventoryService.Object, mockLogger.Object, _cardContext);
+            _deckService = new DeckService(mockInventoryService.Object, mockLogger.Object, CardContext);
         }
 
-        protected override async Task BeforeEachChild()
-        {
-            _cardContextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
-                .UseSqlite("Filename=CarpentryData.db").Options;
-            ResetContext();
-            await _cardContext.EnsureDatabaseCreated(false);
-            ResetContext();
-        }
+        protected override Task BeforeEachChild() => Task.CompletedTask;
+        //{
+        //    //CardContextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
+        //    //    .UseSqlite("Filename=CarpentryData.db").Options;
+        //    //ResetContext();
+        //    //await CardContext.EnsureDatabaseCreated(false);
+        //    //ResetContext();
+        //}
 
-        protected override async Task AfterEachChild()
-        {
-            await _cardContext.Database.EnsureDeletedAsync();
-            await _cardContext.DisposeAsync();
-        }
+        //protected override async Task AfterEachChild()
+        //{
+
+        //}
+        protected override Task AfterEachChild() => Task.CompletedTask;
 
         #region Deck Props
 
@@ -60,7 +84,7 @@ namespace Carpentry.Logic.Tests
 
             ResetContext();
 
-            var newDeck = _cardContext.Decks.SingleAsync();
+            var newDeck = CardContext.Decks.SingleAsync();
 
             Assert.AreEqual(expectedDeckId, response);
             Assert.IsNotNull(newDeck);
@@ -77,8 +101,26 @@ namespace Carpentry.Logic.Tests
         [TestMethod]
         public async Task UpdateDeck_Works_Test()
         {
-            //public async Task UpdateDeck(DeckPropertiesDto deckDto)
-            Assert.Fail("Test not implemented");
+            CardContext.Add(SeedData.Deck1);
+            await CardContext.SaveChangesAsync();
+            ResetContext();
+
+            var updatePayload = new DeckPropertiesDto()
+            {
+                Id = 1,
+                BasicW = 4,
+                BasicR = 6,
+                Format = "modern",
+                Name = "testDeck",
+            };
+
+            await _deckService.UpdateDeck(updatePayload);
+            ResetContext();
+
+            var updatedDeck = await CardContext.Decks.SingleAsync();
+
+            Assert.AreEqual(updatePayload.BasicW, updatedDeck.BasicW);
+            Assert.AreEqual(updatePayload.BasicR, updatedDeck.BasicR);
         }
 
         [TestMethod]

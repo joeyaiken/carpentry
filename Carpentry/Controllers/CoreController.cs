@@ -53,8 +53,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                //ummm does this call a single 'core service' or does it
-                await _dataUpdateService.ValidateDatabase();
+                await _dataUpdateService.ValidateDatabase();//Should this be called somewhere else?...
                 AppFiltersDto result = await _filterService.GetAppCoreData();
                 return Ok(result);
             }
@@ -84,9 +83,6 @@ namespace Carpentry.Controllers
             }
         }
 
-
-        //_inventoryService
-        //public async Task<IEnumerable<InventoryTotalsByStatusResult>> GetCollectionTotals()
         [HttpGet("[action]")]
         public async Task<ActionResult<InventoryTotalsByStatusResult>> GetCollectionTotals()
         {
@@ -116,7 +112,7 @@ namespace Carpentry.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("GetTrackedSets", ex));
+                return StatusCode(500, FormatExceptionMessage(nameof(GetTrackedSets), ex));
             }
         }
 
@@ -130,7 +126,7 @@ namespace Carpentry.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("AddTrackedSet", ex));
+                return StatusCode(500, FormatExceptionMessage(nameof(AddTrackedSet), ex));
             }
         }
 
@@ -144,7 +140,7 @@ namespace Carpentry.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("UpdateTrackedSet", ex));
+                return StatusCode(500, FormatExceptionMessage(nameof(UpdateTrackedSet), ex));
             }
         }
 
@@ -158,7 +154,7 @@ namespace Carpentry.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
+                return StatusCode(500, FormatExceptionMessage(nameof(RemoveTrackedSet), ex));
             }
         }
 
