@@ -12,6 +12,7 @@ namespace Carpentry.Logic.Tests
     [TestClass]
     public class InventoryServiceTests : CarpentryServiceTestBase
     {
+        protected override bool SeedViews => false;
         private InventoryService _inventoryService = null!;
         private Mock<ILogger<InventoryService>> _mockLogger = null!;
 

@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataScripts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="DataScripts\spGetInventoryTotals.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

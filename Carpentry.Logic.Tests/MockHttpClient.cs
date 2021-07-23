@@ -1,13 +1,45 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Moq;
+using Moq.Protected;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Tests
 {
-    public class MockHttpClient
+    public class MockHttpClient : Mock<HttpMessageHandler>
     {
-        public static string HandleMockClientRequest(string requestString)
+        public readonly HttpClient HttpClient;
+
+        public MockHttpClient() : base(MockBehavior.Strict)
+        {
+            //Got this approach from the following article:
+            //https://gingter.org/2018/07/26/how-to-mock-httpclient-in-your-net-c-unit-tests/
+            
+            this.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync((HttpRequestMessage r, CancellationToken c) => new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(HandleMockClientRequest(r.RequestUri.ToString())),
+                })
+                .Verifiable();
+
+            HttpClient = new HttpClient(Object)
+            {
+
+                BaseAddress = new Uri("http://test.com/"),
+            };
+        }
+        private static string HandleMockClientRequest(string requestString)
         {
             switch (requestString)
             {
@@ -50,7 +82,7 @@ namespace Carpentry.Logic.Tests
             }
         }
 
-        public static string LoadMockResponse(string fileName)
+        private static string LoadMockResponse(string fileName)
         {
             string filepath = $"C:\\DotNet\\Carpentry\\Carpentry.Logic.Tests\\MockServiceResponses\\{fileName}.txt";
             string dataString = System.IO.File.ReadAllText(filepath);

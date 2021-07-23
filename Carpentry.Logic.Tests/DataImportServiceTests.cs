@@ -11,6 +11,7 @@ namespace Carpentry.Logic.Tests
     {
         protected override Task BeforeEachChild() => Task.CompletedTask;
         protected override Task AfterEachChild() => Task.CompletedTask;
+        protected override bool SeedViews => false;
 
         protected override void ResetContextChild()
         {

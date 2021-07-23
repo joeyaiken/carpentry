@@ -35,7 +35,7 @@ namespace Carpentry.Logic
     //  A premium card is an card with a collector_number that includes a star/★
     public class DataUpdateService : IDataUpdateService
     {
-        private readonly ILogger<DataExportService> _logger;
+        private readonly ILogger<DataUpdateService> _logger;
         private readonly IScryfallService _scryService;
         private readonly IDataIntegrityService _dataIntegrityService;
         private readonly CarpentryDataContext _cardContext;
@@ -43,7 +43,7 @@ namespace Carpentry.Logic
 
 
         public DataUpdateService(
-            ILogger<DataExportService> logger,
+            ILogger<DataUpdateService> logger,
             IScryfallService scryService,
             IDataIntegrityService dataIntegrityService,
             //IDataQueryService dataQueryService
@@ -289,6 +289,7 @@ namespace Carpentry.Logic
         private async Task<int> AddOrUpdateCardSet(CardSetData setData)
         {
             //TODO Actually map between DTOs instead of blindly taking the obj
+            //  Followup: Why?
             var existingSet = _cardContext.Sets.Where(x => x.Code.ToLower() == setData.Code.ToLower()).FirstOrDefault();
             if (existingSet != null)
             {
@@ -390,20 +391,157 @@ namespace Carpentry.Logic
             await _dataIntegrityService.EnsureDatabasesCreated();
         }
 
-        //reset database?(SomeConfirmationClass dto){ ; }
-
         public async Task<List<SetDetailDto>> GetTrackedSets(bool showUntracked, bool update)
         {
-            //update first?
-            if (update)
-            {
-                await TryUpdateAvailableSets();
-            }
+            if (update) await TryUpdateAvailableSets();
 
+
+            //var query = from set in _cardContext.Sets
+
+
+
+            //var inventoryCountPerSet =
+            //    from inventoryCard in _cardContext.InventoryCards
+            //    join card in _cardContext.Cards on inventoryCard.CardId equals card.CardId
+            //    group card by card.SetId into cardGroup
+            //    select new
+            //    {
+            //        SetId = cardGroup.Key,
+            //        InventoryCount = cardGroup.Count(),
+            //    };
+
+            //This query should be moved to CarpentryDataContext.ext.cs
+
+            //var query = _cardContext.Sets
+            //    .Select(set => new SetTotalsResult
+            //    {
+            //        SetId = set.SetId,
+            //        Code = set.Code,
+            //        Name = set.Name,
+            //        ReleaseDate = set.ReleaseDate,
+            //        LastUpdated = set.LastUpdated,
+            //        IsTracked = set.IsTracked,
+            //        //InventoryCount = ic.InventoryCount,
+            //        InventoryCount = set.Cards.SelectMany(c => c.InventoryCards).Count(),
+            //        CollectedCount = set.Cards.Where(c => c.InventoryCards.Count() > 0).Count(),
+            //        TotalCount = set.Cards.Count(),
+            //    });
+
+            //var query = from set in _cardContext.Sets
+            //            //join icps in inventoryCountPerSet on set.SetId equals icps.SetId into groupJoin
+            //            //from ic in groupJoin.DefaultIfEmpty()
+            //            select new SetTotalsResult
+            //            {
+            //                SetId = set.SetId,
+            //                Code = set.Code,
+            //                Name = set.Name,
+            //                ReleaseDate = set.ReleaseDate,
+            //                LastUpdated = set.LastUpdated,
+            //                IsTracked = set.IsTracked,
+            //                //InventoryCount = ic.InventoryCount,
+            //                InventoryCount = set.Cards.SelectMany(c => c.InventoryCards).Count(),
+            //                CollectedCount = set.Cards.Where(c => c.InventoryCards.Count() > 0).Count(),
+            //                TotalCount = set.Cards.Count(),
+            //            };
+
+
+            //var qResult = await query
+            //    .Where(s => s.IsTracked == true)
+            //    .OrderBy(s => s.Code)
+            //    .ToListAsync();
+
+            /*
+             
+             SELECT	Sets.SetId AS SetId
+                    ,Sets.Code
+                    ,Sets.Name
+                    ,Sets.ReleaseDate
+                    ,Sets.LastUpdated
+                    ,Sets.IsTracked
+                    ,InventoryCounts.InventoryCount
+                    ,CollectedBySet.CollectedCount
+                    ,CollectedBySet.TotalCount
+            FROM	Sets
+            --collected per-set
+            LEFT JOIN ( 
+                SELECT	SetId
+                        ,SUM(IsCollected) AS CollectedCount
+                        ,COUNT(CardId) AS TotalCount
+
+                FROM (
+                    SELECT		Cards.CardId
+                                ,Cards.SetId
+                                ,CASE	WHEN COUNT(InventoryCards.InventoryCardId) > 0 
+                                        THEN 1 
+                                        ELSE 0
+                                END AS IsCollected
+                    FROM		Cards
+                    LEFT JOIN	InventoryCards
+                        ON		Cards.CardId = InventoryCards.CardId
+                    GROUP BY	Cards.CardId, Cards.SetId
+
+                ) AS CollectedCards
+
+                GROUP BY SetId
+
+            ) AS CollectedBySet
+                ON	Sets.SetId = CollectedBySet.SetId
+
+            --inventory count per-set
+            LEFT JOIN (
+
+                SELECT		Cards.SetId
+                            ,COUNT(InventoryCards.InventoryCardId) AS InventoryCount
+
+                FROM		InventoryCards
+                INNER JOIN	Cards
+                    ON		InventoryCards.CardId = Cards.CardId
+
+                GROUP BY	SetId
+
+            ) AS InventoryCounts
+                ON	InventoryCounts.SetId = Sets.SetId
+             
+             */
+
+
+
+
+
+
+
+            ///////////////
+            ////This is what I need to replace with a linq query
+            ///////////////
             //Get list of sets from vwSetTotals, filtering if requested
-            var dbSetTotals = _cardContext.SetTotals
+            var dbSetTotals = _cardContext.GetSetTotals()
                 .Where(s => showUntracked || s.IsTracked == true)
+                //.OrderBy(s => s.Code)
                 .ToList();
+            ///////////////
+
+
+            //This COULD be a test, but instead I'm going to unprofessionally compare things here
+
+
+
+            //if (dbSetTotals.Count != qResult.Count) throw new Exception("Counts differ!");
+
+            //for(int i = 0; i < dbSetTotals.Count; i++)
+            //{
+            //    if (dbSetTotals[i].SetId != qResult[i].SetId) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].Code != qResult[i].Code) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].Name != qResult[i].Name) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].ReleaseDate != qResult[i].ReleaseDate) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].LastUpdated != qResult[i].LastUpdated) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].IsTracked != qResult[i].IsTracked) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].InventoryCount != qResult[i].InventoryCount) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].InventoryCount != qResult[i].InventoryCount) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].CollectedCount != qResult[i].CollectedCount) throw new Exception("Does not match");
+            //    if (dbSetTotals[i].TotalCount != qResult[i].TotalCount) throw new Exception("Does not match");
+            //}
+
+
 
             var result = dbSetTotals.Select(s => new SetDetailDto()
             {
@@ -414,21 +552,16 @@ namespace Carpentry.Logic
                 CollectedCount = s.CollectedCount ?? 0,
                 InventoryCount = s.InventoryCount ?? 0,
                 IsTracked = s.IsTracked,
-                //ScryLastUpdated = null,
                 TotalCount = s.TotalCount,
                 ReleaseDate = s.ReleaseDate,
             })
             .OrderByDescending(s => s.ReleaseDate)
             .ToList();
 
-            //foreach(var dto in result)
-            //{
-            //    dto.ScryLastUpdated = await _scryfallRepo.GetSetDataLastUpdated(dto.Code);
-            //}
-
             return result;
         }
 
+      
         public async Task AddTrackedSet(int setId)
         {
             //get the set for this ID
@@ -452,7 +585,6 @@ namespace Carpentry.Logic
             dbSet.IsTracked = true;
             dbSet.LastUpdated = DateTime.Now;
             await AddOrUpdateCardSet(dbSet);
-            //throw new NotImplementedException();
         }
 
         /// <summary>

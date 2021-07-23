@@ -16,6 +16,24 @@ namespace Carpentry.CarpentryData
 	public partial class CarpentryDataContext
 	{
 
+		public IQueryable<SetTotalsResult> GetSetTotals()
+        {
+			return Sets.Select(set => new SetTotalsResult
+			{
+				SetId = set.SetId,
+				Code = set.Code,
+				Name = set.Name,
+				ReleaseDate = set.ReleaseDate,
+				LastUpdated = set.LastUpdated,
+				IsTracked = set.IsTracked,
+				//InventoryCount = ic.InventoryCount,
+				InventoryCount = set.Cards.SelectMany(c => c.InventoryCards).Count(),
+				CollectedCount = set.Cards.Where(c => c.InventoryCards.Count() > 0).Count(),
+				TotalCount = set.Cards.Count(),
+			});
+		}
+
+
 		public IQueryable<DeckData> ExampleDeckQuery() => Decks.Where(d => d.Format.Name == "commander");
 
 		//Attempt at replacing a view with linq query
@@ -499,6 +517,10 @@ namespace Carpentry.CarpentryData
 				throw ex;
 			}
 		}
+
+
+
+
 
 	}
 }

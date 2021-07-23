@@ -9,6 +9,7 @@ namespace Carpentry.Logic.Tests
     [TestClass]
     public class FilterServiceTests : CarpentryServiceTestBase
     {
+        protected override bool SeedViews => false;
         protected override Task BeforeEachChild() => Task.CompletedTask;
         protected override Task AfterEachChild() => Task.CompletedTask;
 

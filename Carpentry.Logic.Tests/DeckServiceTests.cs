@@ -15,36 +15,14 @@ namespace Carpentry.Logic.Tests
     [TestClass]
     public class DeckServiceTests : CarpentryServiceTestBase
     {
+        protected override bool SeedViews => false;
         private DeckService _deckService;
 
 
         //private CarpentryDataContext CardContext;
         //private DbContextOptions<CarpentryDataContext> CardContextOptions;
 
-        public static class SeedData
-        {
-            public static DeckData Deck1 = new DeckData()
-            {
-                BasicW = 5,
-                BasicR = 5,
-                Name = "testDeck",
-                Cards = new List<DeckCardData>()
-                {
-                    new DeckCardData()
-                    {
-                        
-                        InventoryCard = new InventoryCardData()
-                        {
-
-                        },
-                    },
-                    new DeckCardData(){ },
-                    new DeckCardData(){ },
-                },
-
-            };
-        }
-
+        
         protected override void ResetContextChild()
         {
             //Should mocks be BeforeEach instead of ResetContext?

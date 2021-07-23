@@ -27,32 +27,11 @@ namespace Carpentry.Logic.Tests
         {
             _scryContext = new ScryfallDataContext(_contextOptions);
 
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict); //MockBehavior.Strict
-
-            //Got this approach from the following article:
-            //https://gingter.org/2018/07/26/how-to-mock-httpclient-in-your-net-c-unit-tests/
-            handlerMock
-                .Protected()
-               .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>()
-               )
-               .ReturnsAsync((HttpRequestMessage r, CancellationToken c) => new HttpResponseMessage()
-               {
-                   StatusCode = HttpStatusCode.OK,
-                   Content = new StringContent(MockHttpClient.HandleMockClientRequest(r.RequestUri.ToString())),
-               })
-               .Verifiable();
-
-            var httpClient = new HttpClient(handlerMock.Object)
-            {
-                BaseAddress = new Uri("http://test.com/"),
-            };
+            var handlerMock = new MockHttpClient();
 
             var mockLogger = new Mock<ILogger<ScryfallService>>();
 
-            _scryService = new ScryfallService(_scryContext, mockLogger.Object, httpClient);
+            _scryService = new ScryfallService(_scryContext, mockLogger.Object, handlerMock.HttpClient);
         }
 
         [TestInitialize]
