@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Carpentry.CarpentryData;
+using Carpentry.ScryfallData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -19,27 +21,50 @@ namespace Carpentry.Logic.Tests
     /// Tests the ability of the DataUpdateService and ScryfallService 
     /// </summary>HeyAw
     [TestClass]
-    public class ScryfallUpdateIntegrationTests : CarpentryServiceTestBase
+    public class ScryfallUpdateIntegrationTests// : CarpentryServiceTestBase
     {
         private DataUpdateService _updateService = null!;
         private ScryfallService _scryService = null!;
 
-        protected override bool SeedViews => true;
+        private CarpentryDataContext CardContext = null!;
+        private ScryfallDataContext ScryContext = null!;
 
-        protected override Task BeforeEachChild()
+        private DbContextOptions<CarpentryDataContext> _cardContextOptions = null!;
+        private DbContextOptions<ScryfallDataContext> _scryContextOptions = null!;
+
+
+        [TestInitialize]
+        public async Task BeforeEach()
         {
-            //throw new NotImplementedException();
-            return Task.CompletedTask;
+            _cardContextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
+                .UseSqlite("Filename=CarpentryData.db").Options;
+            _scryContextOptions = new DbContextOptionsBuilder<ScryfallDataContext>()
+                .UseSqlite("Filename=ScryData.db").Options;
+
+            ResetContext();
+
+            await CardContext.EnsureDatabaseCreated(false);
+            await ScryContext.Database.EnsureCreatedAsync();
+
+            ResetContext();
         }
 
-        protected override Task AfterEachChild()
+        [TestCleanup]
+        public async Task AfterEach()
         {
-            //throw new NotImplementedException();
-            return Task.CompletedTask;
+            //await CardContext.Database.EnsureDeletedAsync();
+            await CardContext.DisposeAsync();
+
+            //await ScryContext.Database.EnsureDeletedAsync();
+            await ScryContext.DisposeAsync();
         }
 
-        protected override void ResetContextChild()
+        private void ResetContext()
         {
+            var mockDbLogger = new Mock<ILogger<CarpentryDataContext>>();
+            CardContext = new CarpentryDataContext(_cardContextOptions, mockDbLogger.Object);
+            ScryContext = new ScryfallDataContext(_scryContextOptions);
+
             var handlerMock = new MockHttpClient();
             var mockScryLogger = new Mock<ILogger<ScryfallService>>();
             _scryService = new ScryfallService(ScryContext, mockScryLogger.Object, handlerMock.HttpClient);
@@ -65,22 +90,35 @@ namespace Carpentry.Logic.Tests
         [TestMethod]
         public async Task UpdateService_HandlesRealSets_Workflow_Test()
         {
-            await _updateService.TryUpdateAvailableSets();
+            //If nothing is tracked, add sets to track
+            var actualSetCount = await CardContext.Sets.CountAsync();
+            if(actualSetCount == 0) await _updateService.TryUpdateAvailableSets();
 
-            var allSets = await _updateService.GetTrackedSets(false, true);
+            var allSets = await _updateService.GetTrackedSets(true, false);
 
-            var setCodesById = allSets.ToDictionary(s => s.Code.ToLower(), s => s.SetId);
+            var setCodesById = allSets.ToDictionary(s => s.Code.ToLower(), s => s);
 
             var setCodesToAdd = new List<string>() { "war", "eld", "thb", "mh2" };
 
             foreach(var setCode in setCodesToAdd)
-                await _updateService.AddTrackedSet(setCodesById[setCode]);
-
+                //if(!(setCodesById.TryGetValue(setCode, out var match) && match.IsTracked))
+                if(!setCodesById[setCode].IsTracked)
+                    await _updateService.AddTrackedSet(setCodesById[setCode].SetId);
+            
             //query for sets
             var trackedSets = await CardContext.Sets
                 .Where(s => s.IsTracked == true)
                 //.Include(s => s.Cards)
                 .ToListAsync();
+
+            var counts = await CardContext.Sets
+                .Where(s => s.IsTracked == true)
+                .Select(s => new
+                {
+                    SetCode = s.Code,
+                    CardCount = s.Cards.Count()
+                })
+                .ToDictionaryAsync(s => s.SetCode, s => s.CardCount);
 
             Assert.AreEqual(setCodesToAdd.Count, trackedSets.Count);
         }

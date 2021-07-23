@@ -13,7 +13,7 @@ namespace Carpentry.Logic.Models.Scryfall
     //Instead, this should hold the parsed token representing the card object (NOT the raw string, that's for the DB)
     public class ScryfallMagicCard
     {
-        private readonly JToken _cardToken;
+        private readonly JToken _cardToken; //Should this be a JObject instead of JToken?
 
         public ScryfallMagicCard(JToken token)
         {
@@ -21,25 +21,58 @@ namespace Carpentry.Logic.Models.Scryfall
             _cardToken = token;
         }
 
-        private T TryParseToken<T>(string tokenPath, T defaultValue)
+        private T TryParseToken<T>(string tokenPath)
         {
-            try
-            {
+            //try
+            //{
 
-                //if(cardObject.TryGetValue(tokenPath, out var parseResult))
+                ////if(cardObject.TryGetValue(tokenPath, out var parseResult))
+                ////{
+                ////    var mapped = parseResult.ToObject<T>();
+                ////    int breakpoint = 1;
+                ////    return mapped;
+                ////}
+
+                //JObject test = _cardToken.ToObject<JObject>();
+
+                //if (test.TryGetValue(tokenPath, out var parsedToken))
                 //{
-                //    var mapped = parseResult.ToObject<T>();
-                //    int breakpoint = 1;
-                //    return mapped;
+                //    return parsedToken.ToObject<T>();
                 //}
+                //else
+                //{
+
+                //    if (test.TryGetValue("multiverse_ids", out var parsedToken2))
+                //    {
+
+                //        if (parsedToken2 is JArray)
+                //        {
+                //            var v1 = parsedToken2[0].ToObject<T>();
+                //            int breakpoint2 = 1;
+                //        }
+                //        else
+                //        {
+                //            var v2 = parsedToken2.ToObject<T>();
+                //            int breakpoint3 = 1;
+                //        }
+
+
+
+                //        int breakpoint = 1;
+                //    }
+
+                //    return defaultValue;
+                //}
+
+                //JToken
 
                 var actual = _cardToken.SelectToken(tokenPath).ToObject<T>();
                 return actual;
-            }
-            catch
-            {
-                return defaultValue;
-            }
+            //}
+            //catch
+            //{
+            //    return defaultValue;
+            //}
         }
 
 
@@ -53,7 +86,7 @@ namespace Carpentry.Logic.Models.Scryfall
                 //var collNum = TryParseToken<string>(parsedProps, "collector_number", null);
                 //if(collNum == "12")
                 //{
-                   
+
                 //}
 
                 var cardLayout = parsedProps.Value<string>("layout");
@@ -96,11 +129,11 @@ namespace Carpentry.Logic.Models.Scryfall
 
                 #region try/catch straight assignments that I should probably refactor
 
-                string collectorNumberStr = TryParseToken<string>("collector_number", null);
+                string collectorNumberStr = TryParseToken<string>("collector_number");
 
-                if(collectorNumberStr != null)
+                if (collectorNumberStr != null)
                 {
-                
+
                     if (collectorNumberStr.EndsWith('★'))
                     {
 
@@ -109,7 +142,7 @@ namespace Carpentry.Logic.Models.Scryfall
                         IsPremium = true;
 
                     }
-                    else if(collectorNumberStr.EndsWith('a'))
+                    else if (collectorNumberStr.EndsWith('a'))
                     {
                         //main-face of a double-faced card.  Trim the A and add to Cards
                         var trimmedNumber = collectorNumberStr.Trim('a');
@@ -122,25 +155,25 @@ namespace Carpentry.Logic.Models.Scryfall
                         CollectionNumber = int.Parse(trimmedNumber);
 
                         //Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
-                        IsPremium = true; 
+                        IsPremium = true;
                     }
                     else if (collectorNumberStr.EndsWith('e'))
                     {
-                            DoNotAdd = true;
-                            //throw new NotImplementedException("I don't know what this means yet");
+                        DoNotAdd = true;
+                        //throw new NotImplementedException("I don't know what this means yet");
 
-                            //This means many things.
-                            //In Strixhaven Mystical Archives, this means 'etched'
+                        //This means many things.
+                        //In Strixhaven Mystical Archives, this means 'etched'
 
 
-                            //I don't know what this represents yet
-                            ////main-face of a double-faced card.  Trim the A and add to Cards
-                            //var trimmedNumber = collectorNumberStr.Trim('e');
-                            //CollectionNumber = int.Parse(trimmedNumber);
+                        //I don't know what this represents yet
+                        ////main-face of a double-faced card.  Trim the A and add to Cards
+                        //var trimmedNumber = collectorNumberStr.Trim('e');
+                        //CollectionNumber = int.Parse(trimmedNumber);
 
-                            ////Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
-                            //IsPremium = true; 
-                        }
+                        ////Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
+                        //IsPremium = true; 
+                    }
                     else
                     {
                         CollectionNumber = int.Parse(collectorNumberStr);
@@ -166,31 +199,31 @@ namespace Carpentry.Logic.Models.Scryfall
             return JsonConvert.SerializeObject(this, Formatting.None);
         }
 
-        public MagicCardDto ToMagicCard()
-        {
-            MagicCardDto result = new MagicCardDto()
-            {
-                Cmc = Cmc,
-                ColorIdentity = ColorIdentity,
-                Colors = Colors,
-                Legalities = Legalities,
-                ManaCost = ManaCost,
-                MultiverseId = MultiverseId,
-                Name = Name,
-                //Prices = Prices,
-                Rarity = Rarity,
-                Set = Set,
-                Text = Text,
-                Type = Type,
-                //Variants = Variants,
-                CollectionNumber = CollectionNumber,
-                ImageUrl = ImageUrl,
-                Price = Price,
-                PriceFoil = PriceFoil,
-                PriceTix = PriceTix,
-            };
-            return result;
-        }
+        //public MagicCardDto ToMagicCard()
+        //{
+        //    MagicCardDto result = new MagicCardDto()
+        //    {
+        //        Cmc = Cmc,
+        //        ColorIdentity = ColorIdentity,
+        //        Colors = Colors,
+        //        Legalities = Legalities,
+        //        ManaCost = ManaCost,
+        //        MultiverseId = MultiverseId,
+        //        Name = Name,
+        //        //Prices = Prices,
+        //        Rarity = Rarity,
+        //        Set = Set,
+        //        Text = Text,
+        //        Type = Type,
+        //        //Variants = Variants,
+        //        CollectionNumber = CollectionNumber,
+        //        ImageUrl = ImageUrl,
+        //        Price = Price,
+        //        PriceFoil = PriceFoil,
+        //        PriceTix = PriceTix,
+        //    };
+        //    return result;
+        //}
 
         #region Public fields
 
@@ -199,36 +232,55 @@ namespace Carpentry.Logic.Models.Scryfall
 
 
 
-        public int? Cmc => TryParseToken("cmc", 100);
+        public int? Cmc => TryParseToken<int?>("cmc");
 
-        public List<string> ColorIdentity => TryParseToken<List<string>>("color_identity", null);
+        public List<string> ColorIdentity => _cardToken.SelectToken("color_identity").ToObject<List<string>>();
 
-        public List<string> Colors => TryParseToken<List<string>>("colors", null);
+        public List<string> Colors => TryParseToken<List<string>>("colors");
 
-        public string ManaCost => TryParseToken("mana_cost", "");
+        public string ManaCost => TryParseToken<string>("mana_cost");
 
-        public int? MultiverseId => TryParseToken<int?>("multiverse_ids[0]", null);
+        public int? MultiverseId
+        {
+            get
+            {
+                var ids = TryParseToken<int[]>("multiverse_ids");
+                if (ids == null || ids.Length == 0) return null;
+                return ids[0];
+            }
+        }
 
-        public string Name => TryParseToken<string>("name", null);
+        public string Name => TryParseToken<string>("name");
 
         public List<string> Legalities { get; set; }
 
-        public string Rarity => TryParseToken<string>("rarity", null);
+        public string Rarity => TryParseToken<string>("rarity");
 
-        public string Set => TryParseToken<string>("set", null);
+        public string Set => TryParseToken<string>("set");
 
         //TODO - Figure out how to handle oracle text for adventure cards
         public string Text 
         { 
             get 
             {
-                //Double-faced / adventure cards will have multiple card faces with multiple oracle texts
-                //Other cards will have a normal oracle_text property
-                return TryParseToken<string>("oracle_text", null); 
+                var cardFaceTokens =_cardToken["card_faces"];
+
+                if(cardFaceTokens == null)
+                {
+                    return _cardToken["oracle_text"].Value<string>();
+                }
+                else if(cardFaceTokens is JArray)
+                {
+                    return string.Join(" ", cardFaceTokens.Select(t => t["oracle_text"].Value<string>()));
+                }
+                else
+                {
+                    throw new Exception("Unsure of how to parse oracle text");
+                }
             } 
         }
 
-        public string Type => TryParseToken<string>("type_line", null);
+        public string Type => TryParseToken<string>("type_line");
 
         public int CollectionNumber { get; set; }
 

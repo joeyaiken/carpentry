@@ -26,7 +26,6 @@ namespace Carpentry.CarpentryData
 		public DbSet<InventoryCardByNameResult> InventoryCardByName { get; set; }
 		public DbSet<InventoryCardByPrintResult> InventoryCardByPrint { get; set; }
 		public DbSet<InventoryCardByUniqueResult> InventoryCardByUnique { get; set; }
-		public DbSet<SetTotalsResult> SetTotals { get; set; }
 		public DbSet<InventoryTotalsByStatusResult> InventoryTotalsByStatus { get; set; }
 
 		#endregion
@@ -137,12 +136,6 @@ namespace Carpentry.CarpentryData
 			//    eb.HasNoKey();
 			//    eb.ToView("vwInventoryTotalsByStatus");
 			//});
-
-			modelBuilder.Entity<SetTotalsResult>(eb =>
-			{
-				eb.HasNoKey();
-				eb.ToView("vwSetTotals");
-			});
 
 			modelBuilder.Entity<InventoryTotalsByStatusResult>(eb =>
 			{

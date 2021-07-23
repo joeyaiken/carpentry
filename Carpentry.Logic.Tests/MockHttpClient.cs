@@ -43,7 +43,7 @@ namespace Carpentry.Logic.Tests
         {
             switch (requestString)
             {
-                case "https://api.scryfall.com/sets/THB":
+                case "https://api.scryfall.com/sets/thb":
                     return LoadMockResponse("THB1");
                 case "https://api.scryfall.com/cards/search?order=set&q=e%3Athb&unique=prints":
                     return LoadMockResponse("THB2");
@@ -53,13 +53,13 @@ namespace Carpentry.Logic.Tests
                     return LoadMockResponse("THB4");
                 case "https://api.scryfall.com/sets":
                     return LoadMockResponse("SETS");
-                case "https://api.scryfall.com/sets/WAR":
+                case "https://api.scryfall.com/sets/war":
                     return LoadMockResponse("WAR1");
                 case "https://api.scryfall.com/cards/search?order=set&q=e%3Awar&unique=prints":
                     return LoadMockResponse("WAR2");
                 case "https://api.scryfall.com/cards/search?format=json&include_extras=false&include_multilingual=false&order=set&page=2&q=e%3Awar&unique=prints":
                     return LoadMockResponse("WAR3");
-                case "https://api.scryfall.com/sets/MH2":
+                case "https://api.scryfall.com/sets/mh2":
                     return LoadMockResponse("mh2_1");
                 case "https://api.scryfall.com/cards/search?order=set&q=e%3Amh2&unique=prints":
                     return LoadMockResponse("mh2_2");
@@ -68,7 +68,7 @@ namespace Carpentry.Logic.Tests
                 case "https://api.scryfall.com/cards/search?format=json&include_extras=false&include_multilingual=false&order=set&page=3&q=e%3Amh2&unique=prints":
                     return LoadMockResponse("mh2_4");
 
-                case "https://api.scryfall.com/sets/ELD":
+                case "https://api.scryfall.com/sets/eld":
                     return LoadMockResponse("eld_1");
                 case "https://api.scryfall.com/cards/search?order=set&q=e%3Aeld&unique=prints":
                     return LoadMockResponse("eld_2");

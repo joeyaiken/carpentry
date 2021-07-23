@@ -16,6 +16,7 @@ namespace Carpentry.CarpentryData
 	public partial class CarpentryDataContext
 	{
 
+		//Replaces vwGetSetTotals
 		public IQueryable<SetTotalsResult> GetSetTotals()
         {
 			return Sets.Select(set => new SetTotalsResult
@@ -26,7 +27,6 @@ namespace Carpentry.CarpentryData
 				ReleaseDate = set.ReleaseDate,
 				LastUpdated = set.LastUpdated,
 				IsTracked = set.IsTracked,
-				//InventoryCount = ic.InventoryCount,
 				InventoryCount = set.Cards.SelectMany(c => c.InventoryCards).Count(),
 				CollectedCount = set.Cards.Where(c => c.InventoryCards.Count() > 0).Count(),
 				TotalCount = set.Cards.Count(),
