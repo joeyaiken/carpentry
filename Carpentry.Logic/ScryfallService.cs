@@ -185,7 +185,7 @@ namespace Carpentry.Logic
                     .Select(token => new ScryfallMagicCard(token)).ToList()
             };
 
-            result.Cards.ForEach(card => card.RefreshFromToken()); //This is required until I finish refactoring
+            //result.Cards.ForEach(card => card.RefreshFromToken()); //This is required until I finish refactoring
 
             return result;
         }

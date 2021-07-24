@@ -71,7 +71,7 @@ namespace Carpentry.Logic
             var scryPayload = await _scryService.GetSetDetail(setCode);
 
             var mappedCards = scryPayload.Cards
-                .Where(card => !card.IsPremium) //DODO - stop filtering out premium cards (premium cards include a character in collector#)
+                //.Where(card => !card.IsPremium) //DODO - stop filtering out premium cards (premium cards include a character in collector#)
                 .Select(card => new CardDataDto()
             {
                 Cmc = card.Cmc,
@@ -90,6 +90,7 @@ namespace Carpentry.Logic
                 Price = card.Price,
                 PriceFoil = card.PriceFoil,
                 TixPrice = card.PriceTix,
+
             }).ToList();
 
             return mappedCards;
@@ -426,28 +427,91 @@ namespace Carpentry.Logic
         public async Task AddTrackedSet(int setId)
         {
             //get the set for this ID
-            var dbSet = await _cardContext.Sets.FirstOrDefaultAsync(s => s.SetId == setId);
+            var dbSet = await _cardContext.Sets
+                .Include(s => s.Cards)
+                .FirstOrDefaultAsync(s => s.SetId == setId);
 
-            if (dbSet == null)
-            {
-                throw new ArgumentException($"No set matching provided set ID of {setId}");
-            }
+            if (dbSet == null) throw new ArgumentException($"No set matching provided set ID of {setId}");
+            
+            if (dbSet.IsTracked) return;
 
-            if (dbSet.IsTracked)
-            {
-                return;
-            }
+            if (dbSet.Cards.Any()) throw new ArgumentException($"Set {dbSet.Name} is supposed to be untracked but already contains cards");
+
+
+
+
+
+            //In order to add this set we...
+            //Get a scry set
+            //map the scry set to [some dto record]
+            //Get the DB set
+            //Add all cards individually after re-querying the set (and ALL sets, wow this was dumb)
+            //  Including mapping to a 3rd record (the actual DB record)
+
+
+
+
 
             //get current scry data
-            var scryData = await GetUpdatedScrySet(dbSet.Code);
+            //var scryData = await GetUpdatedScrySet(dbSet.Code);
+            var scryData = await _scryService.GetSetDetail(dbSet.Code);
+
+
+            //var formatIdsByName = await _cardContext.MagicFormats
+            //    .ToDictionaryAsync(f => f.Name, f => f.FormatId);
+            List<MagicFormatData> allFormats = _cardContext.MagicFormats.ToList();
+
+            var newCards = scryData.Cards.Select(dto => new CardData
+            {
+                //Id = dto.CardId,
+                MultiverseId = dto.MultiverseId,
+                Cmc = dto.Cmc,
+                ManaCost = dto.ManaCost,
+                Name = dto.Name,
+                Text = dto.Text,
+                Type = dto.Type,
+                //SetId = allSets.Where(s => s.Code == dto.Set).FirstOrDefault().SetId,
+                SetId = dbSet.SetId,
+                RarityId = GetRarityId(dto.Rarity),
+                CollectorNumber = dto.CollectionNumber,
+                ImageUrl = dto.ImageUrl,
+                Price = dto.Price,
+                PriceFoil = dto.PriceFoil,
+                TixPrice = dto.PriceTix,
+                Color = dto.Colors == null ? null : string.Join("", dto.Colors),
+                ColorIdentity = string.Join("", dto.ColorIdentity),
+                CollectorNumberStr = "",
+                CollectorNumberSuffix = null,
+
+                //This may seem weird, but I'm not tracking all the formats listed in scryfall
+                Legalities = allFormats
+                    .Where(format => dto.Legalities.Contains(format.Name))
+                    .Select(format => new CardLegalityData
+                    {
+                        FormatId = format.FormatId,
+                    }).ToList(),
+                //Legalities = dto.Legalities.Select(formatName => new CardLegalityData
+                //{
+                //    FormatId = formatIdsByName[formatName],
+                //}).ToList(),
+            });
+
+            //dbSet.Cards.AddRange()
+
+            _cardContext.Cards.AddRange(newCards);
+
+
 
             //var premiumCards = scryData.Where(c => c.)
 
-            await AddCardDataBatch(scryData);
+//            await AddCardDataBatch(scryData);
 
             dbSet.IsTracked = true;
             dbSet.LastUpdated = DateTime.Now;
-            await AddOrUpdateCardSet(dbSet);
+
+            _cardContext.Sets.Update(dbSet);
+
+            await _cardContext.SaveChangesAsync();
         }
 
         /// <summary>

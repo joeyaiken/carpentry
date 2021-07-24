@@ -13,191 +13,135 @@ namespace Carpentry.Logic.Models.Scryfall
     //Instead, this should hold the parsed token representing the card object (NOT the raw string, that's for the DB)
     public class ScryfallMagicCard
     {
-        private readonly JToken _cardToken; //Should this be a JObject instead of JToken?
+        private readonly JToken _cardToken;
 
         public ScryfallMagicCard(JToken token)
         {
-            Legalities = new List<string>();
             _cardToken = token;
         }
 
-        private T TryParseToken<T>(string tokenPath)
-        {
-            //try
-            //{
+        //public void RefreshFromToken()
+        //{
+        //    //JObject parsedProps = tokenProps.ToObject<JObject>();
+        //    JObject parsedProps = _cardToken.ToObject<JObject>();
 
-                ////if(cardObject.TryGetValue(tokenPath, out var parseResult))
-                ////{
-                ////    var mapped = parseResult.ToObject<T>();
-                ////    int breakpoint = 1;
-                ////    return mapped;
-                ////}
+        //    try
+        //    {
+        //        //var collNum = TryParseToken<string>(parsedProps, "collector_number", null);
+        //        //if(collNum == "12")
+        //        //{
 
-                //JObject test = _cardToken.ToObject<JObject>();
+        //        //}
 
-                //if (test.TryGetValue(tokenPath, out var parsedToken))
-                //{
-                //    return parsedToken.ToObject<T>();
-                //}
-                //else
-                //{
-
-                //    if (test.TryGetValue("multiverse_ids", out var parsedToken2))
-                //    {
-
-                //        if (parsedToken2 is JArray)
-                //        {
-                //            var v1 = parsedToken2[0].ToObject<T>();
-                //            int breakpoint2 = 1;
-                //        }
-                //        else
-                //        {
-                //            var v2 = parsedToken2.ToObject<T>();
-                //            int breakpoint3 = 1;
-                //        }
+        //        //var cardLayout = parsedProps.Value<string>("layout");
 
 
 
-                //        int breakpoint = 1;
-                //    }
+        //        //if (cardLayout == "transform" || cardLayout == "modal_dfc")
+        //        //{
+        //        //    var normalFace = parsedProps.SelectToken("card_faces")[0];
+        //        //    //Variants["normal"] = normalFace.SelectToken("image_uris.normal").ToObject<string>();
+        //        //    ImageUrl = normalFace.SelectToken("image_uris.normal").ToObject<string>();
+        //        //}
+        //        ////else if (cardLayout == "modal_dfc")
+        //        ////{
+        //        ////    int breakpoint = 1;
+        //        ////}
+        //        //else
+        //        //{
+        //        //    //Variants["normal"] = parsedProps.SelectToken("image_uris.normal").ToObject<string>();
+        //        //    ImageUrl = parsedProps.SelectToken("image_uris.normal").ToObject<string>();
+        //        //}
 
-                //    return defaultValue;
-                //}
-
-                //JToken
-
-                var actual = _cardToken.SelectToken(tokenPath).ToObject<T>();
-                return actual;
-            //}
-            //catch
-            //{
-            //    return defaultValue;
-            //}
-        }
-
-
-        public void RefreshFromToken()
-        {
-            //JObject parsedProps = tokenProps.ToObject<JObject>();
-            JObject parsedProps = _cardToken.ToObject<JObject>();
-
-            try
-            {
-                //var collNum = TryParseToken<string>(parsedProps, "collector_number", null);
-                //if(collNum == "12")
-                //{
-
-                //}
-
-                var cardLayout = parsedProps.Value<string>("layout");
+        //        //Price = (decimal?)parsedProps.SelectToken("prices.usd");
+        //        //PriceFoil = parsedProps.SelectToken("prices.usd_foil").ToObject<decimal?>();
+        //        //PriceTix = parsedProps.SelectToken("prices.tix").ToObject<decimal?>();
 
 
-
-                if (cardLayout == "transform" || cardLayout == "modal_dfc")
-                {
-                    var normalFace = parsedProps.SelectToken("card_faces")[0];
-                    //Variants["normal"] = normalFace.SelectToken("image_uris.normal").ToObject<string>();
-                    ImageUrl = normalFace.SelectToken("image_uris.normal").ToObject<string>();
-                }
-                //else if (cardLayout == "modal_dfc")
-                //{
-                //    int breakpoint = 1;
-                //}
-                else
-                {
-                    //Variants["normal"] = parsedProps.SelectToken("image_uris.normal").ToObject<string>();
-                    ImageUrl = parsedProps.SelectToken("image_uris.normal").ToObject<string>();
-                }
-
-                Price = (decimal?)parsedProps.SelectToken("prices.usd");
-                PriceFoil = parsedProps.SelectToken("prices.usd_foil").ToObject<decimal?>();
-                PriceTix = parsedProps.SelectToken("prices.tix").ToObject<decimal?>();
+        //        //Prices["normal"] = price;
+        //        //Prices["normal_foil"] = priceFoil;
 
 
-                //Prices["normal"] = price;
-                //Prices["normal_foil"] = priceFoil;
+        //        ////need the string list of legalities
+        //        //var legalitiesObj = parsedProps.SelectToken("legalities");
+
+        //        //var legalitiesDictionary = legalitiesObj.ToObject<Dictionary<string, string>>();
+
+        //        //var legalFormatList = legalitiesDictionary.Where(x => x.Value == "legal").Select(x => x.Key).ToList();
+
+        //        //Legalities = legalFormatList;
+
+        //        #region try/catch straight assignments that I should probably refactor
+
+        //        //string collectorNumberStr = TryParseToken<string>("collector_number");
+
+        //        //if (collectorNumberStr != null)
+        //        //{
+
+        //        //    if (collectorNumberStr.EndsWith('★'))
+        //        //    {
+
+        //        //        var trimmedNumber = collectorNumberStr.Trim('★');
+        //        //        CollectionNumber = int.Parse(trimmedNumber);
+        //        //        IsPremium = true;
+
+        //        //    }
+        //        //    else if (collectorNumberStr.EndsWith('a'))
+        //        //    {
+        //        //        //main-face of a double-faced card.  Trim the A and add to Cards
+        //        //        var trimmedNumber = collectorNumberStr.Trim('a');
+        //        //        CollectionNumber = int.Parse(trimmedNumber);
+        //        //    }
+        //        //    else if (collectorNumberStr.EndsWith('b'))
+        //        //    {
+        //        //        //main-face of a double-faced card.  Trim the A and add to Cards
+        //        //        var trimmedNumber = collectorNumberStr.Trim('b');
+        //        //        CollectionNumber = int.Parse(trimmedNumber);
+
+        //        //        //Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
+        //        //        IsPremium = true;
+        //        //    }
+        //        //    else if (collectorNumberStr.EndsWith('e'))
+        //        //    {
+        //        //        DoNotAdd = true;
+        //        //        //throw new NotImplementedException("I don't know what this means yet");
+
+        //        //        //This means many things.
+        //        //        //In Strixhaven Mystical Archives, this means 'etched'
 
 
-                //need the string list of legalities
-                var legalitiesObj = parsedProps.SelectToken("legalities");
+        //        //        //I don't know what this represents yet
+        //        //        ////main-face of a double-faced card.  Trim the A and add to Cards
+        //        //        //var trimmedNumber = collectorNumberStr.Trim('e');
+        //        //        //CollectionNumber = int.Parse(trimmedNumber);
 
-                var legalitiesDictionary = legalitiesObj.ToObject<Dictionary<string, string>>();
-
-                var legalFormatList = legalitiesDictionary.Where(x => x.Value == "legal").Select(x => x.Key).ToList();
-
-                Legalities = legalFormatList;
-
-                #region try/catch straight assignments that I should probably refactor
-
-                string collectorNumberStr = TryParseToken<string>("collector_number");
-
-                if (collectorNumberStr != null)
-                {
-
-                    if (collectorNumberStr.EndsWith('★'))
-                    {
-
-                        var trimmedNumber = collectorNumberStr.Trim('★');
-                        CollectionNumber = int.Parse(trimmedNumber);
-                        IsPremium = true;
-
-                    }
-                    else if (collectorNumberStr.EndsWith('a'))
-                    {
-                        //main-face of a double-faced card.  Trim the A and add to Cards
-                        var trimmedNumber = collectorNumberStr.Trim('a');
-                        CollectionNumber = int.Parse(trimmedNumber);
-                    }
-                    else if (collectorNumberStr.EndsWith('b'))
-                    {
-                        //main-face of a double-faced card.  Trim the A and add to Cards
-                        var trimmedNumber = collectorNumberStr.Trim('b');
-                        CollectionNumber = int.Parse(trimmedNumber);
-
-                        //Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
-                        IsPremium = true;
-                    }
-                    else if (collectorNumberStr.EndsWith('e'))
-                    {
-                        DoNotAdd = true;
-                        //throw new NotImplementedException("I don't know what this means yet");
-
-                        //This means many things.
-                        //In Strixhaven Mystical Archives, this means 'etched'
+        //        //        ////Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
+        //        //        //IsPremium = true; 
+        //        //    }
+        //        //    else
+        //        //    {
+        //        //        CollectionNumber = int.Parse(collectorNumberStr);
+        //        //    }
+        //        //}
+        //        //else
+        //        //{
+        //        //    CollectionNumber = 0; //TODO - Should this default to NULL instead?
+        //        //}
 
 
-                        //I don't know what this represents yet
-                        ////main-face of a double-faced card.  Trim the A and add to Cards
-                        //var trimmedNumber = collectorNumberStr.Trim('e');
-                        //CollectionNumber = int.Parse(trimmedNumber);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
 
-                        ////Technically it's the back of a card, not premium.  But I'm not tracking those in the DB anyways
-                        //IsPremium = true; 
-                    }
-                    else
-                    {
-                        CollectionNumber = int.Parse(collectorNumberStr);
-                    }
-                }
-                else
-                {
-                    CollectionNumber = 0; //TODO - Should this default to NULL instead?
-                }
+        //    #endregion
+        //}
 
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            #endregion
-        }
-
-        public string Serialize()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.None);
-        }
+        //public string Serialize()
+        //{
+        //    return JsonConvert.SerializeObject(this, Formatting.None);
+        //}
 
         //public MagicCardDto ToMagicCard()
         //{
@@ -225,40 +169,40 @@ namespace Carpentry.Logic.Models.Scryfall
         //    return result;
         //}
 
-        #region Public fields
-
-        //TODO - remove this field/hack to allow STX mystical Archive etched foils
-        public bool DoNotAdd { get; set; }
-
-
-
-        public int? Cmc => TryParseToken<int?>("cmc");
+        public int? Cmc => _cardToken.SelectToken("cmc").ToObject<int?>();
 
         public List<string> ColorIdentity => _cardToken.SelectToken("color_identity").ToObject<List<string>>();
 
-        public List<string> Colors => TryParseToken<List<string>>("colors");
+        public List<string> Colors => _cardToken.SelectToken("colors").ToObject<List<string>>();
 
-        public string ManaCost => TryParseToken<string>("mana_cost");
+        public string ManaCost => _cardToken.SelectToken("mana_cost").ToObject<string>();
 
         public int? MultiverseId
         {
             get
             {
-                var ids = TryParseToken<int[]>("multiverse_ids");
+                var ids = _cardToken.SelectToken("multiverse_ids").ToObject<int[]>();
                 if (ids == null || ids.Length == 0) return null;
                 return ids[0];
             }
         }
 
-        public string Name => TryParseToken<string>("name");
+        public string Name => _cardToken.SelectToken("name").ToObject<string>();
 
-        public List<string> Legalities { get; set; }
+        public List<string> Legalities
+        {
+            get
+            {
+                var legalitiesObj = _cardToken.SelectToken("legalities");
+                var legalitiesDictionary = legalitiesObj.ToObject<Dictionary<string, string>>();
+                return legalitiesDictionary.Where(x => x.Value == "legal").Select(x => x.Key).ToList();
+            }
+        }
 
-        public string Rarity => TryParseToken<string>("rarity");
+        public string Rarity => _cardToken.SelectToken("rarity").ToObject<string>();
 
-        public string Set => TryParseToken<string>("set");
+        public string Set => _cardToken.SelectToken("set").ToObject<string>();
 
-        //TODO - Figure out how to handle oracle text for adventure cards
         public string Text 
         { 
             get 
@@ -280,23 +224,65 @@ namespace Carpentry.Logic.Models.Scryfall
             } 
         }
 
-        public string Type => TryParseToken<string>("type_line");
+        public string Type => _cardToken.SelectToken("type_line").ToObject<string>();
 
-        public int CollectionNumber { get; set; }
+        public int CollectionNumber
+        {
+            get
+            {
+                if (int.TryParse(CollectionNumberStr, out var parsedInt))
+                {
+                    return parsedInt;
+                }
+                else
+                {
+                    var substring = CollectionNumberStr[0..^1];
+                    return int.Parse(substring);
+                }
+            }
+        }
 
-        public decimal? Price { get; set; }
+        public char? CollectionNumberSuffix
+        {
+            get
+            {
+                if (int.TryParse(CollectionNumberStr, out var parsedInt))
+                {
+                    return null;
+                }
+                else
+                {
+                    return CollectionNumberStr.Last();
+                }
+            }
+        }
 
-        public decimal? PriceFoil { get; set; }
+        public string CollectionNumberStr => _cardToken.SelectToken("collector_number").ToObject<string>();
 
-        public decimal? PriceTix { get; set; }
+        public decimal? Price => _cardToken.SelectToken("prices.usd").ToObject<decimal?>();
 
-        public bool IsPremium { get; set; }
+        public decimal? PriceFoil => _cardToken.SelectToken("prices.usd_foil").ToObject<decimal?>();
 
-        public string ImageUrl { get; set; }
+        public decimal? PriceTix => _cardToken.SelectToken("prices.tix").ToObject<decimal?>();
 
-        //public bool IsPremium
+        public string ImageUrl
+        {
+            get
+            {
+                var cardLayout = _cardToken.Value<string>("layout");
 
-        #endregion
+                if (cardLayout == "transform" || cardLayout == "modal_dfc")
+                {
+                    var normalFace = _cardToken.SelectToken("card_faces")[0];
+                    return normalFace.SelectToken("image_uris.normal").ToObject<string>();
+                }
+                else
+                {
+                    return _cardToken.SelectToken("image_uris.normal").ToObject<string>();
+                }
+
+            }
+        }
 
     }
 

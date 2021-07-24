@@ -52,8 +52,8 @@ namespace Carpentry.Logic.Tests
         [TestCleanup]
         public async Task AfterEach()
         {
-            //await CardContext.Database.EnsureDeletedAsync();
-            await CardContext.DisposeAsync();
+            await CardContext.Database.EnsureDeletedAsync();
+            //await CardContext.DisposeAsync();
 
             //await ScryContext.Database.EnsureDeletedAsync();
             await ScryContext.DisposeAsync();
