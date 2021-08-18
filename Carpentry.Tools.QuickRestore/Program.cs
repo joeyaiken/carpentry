@@ -89,50 +89,18 @@ namespace Carpentry.Tools.QuickRestore
 
                 .AddLogging(config => config.AddSerilog())
 
-                //.AddDbContext<CarpentryDataContext>(options => options.UseSqlite(cardDatabaseLocation))
-                //.AddDbContext<ScryfallDataContext>(options => options.UseSqlite(scryDatabaseLocation))
-
-                //.AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
-                //.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
-
-                ////data services
-                //.AddSingleton<ICardDataRepo, CardDataRepo>()
-                //.AddSingleton<IDeckDataRepo, DeckDataRepo>()
-                //.AddSingleton<IInventoryDataRepo, InventoryDataRepo>()
-                //.AddSingleton<IScryfallDataRepo, ScryfallRepo>()
-                //.AddSingleton<IDataReferenceService, DataReferenceService>()
-                //.AddSingleton<IDataReferenceRepo, DataReferenceRepo>()
-
-                ////logic services
-                //.AddScoped<IDataRestoreService, DataRestoreService>()
-                //.AddScoped<IDataUpdateService, DataUpdateService>()
-
-                //.AddScoped<IScryfallService, ScryfallService>()
-                //.AddHttpClient<IScryfallService, ScryfallService>().Services
-
-
-
                 .AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")))
-
-                //.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"))
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
-
-                //.AddSingleton<IDataBackupConfig, CarpentryAppConfig>()
-
-                //Logic
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IDeckService, DeckService>()
                 .AddScoped<IInventoryService, InventoryService>()
-
                 .AddScoped<IDataImportService, DataImportService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
                 .AddScoped<IDataExportService, DataExportService>()
                 .AddScoped<IFilterService, FilterService>()
                 .AddScoped<IDataIntegrityService, DataIntegrityService>()
-
-                .AddScoped<IScryfallService, ScryfallService>()
-                .AddHttpClient<IScryfallService, ScryfallService>().Services
+                .AddScoped<IScryfallService, ScryfallService>().AddHttpClient<IScryfallService, ScryfallService>().Services
 
                 .BuildServiceProvider();
 

@@ -21,19 +21,6 @@ namespace Carpentry.CarpentryData.Models
         public int CollectorNumber { get; set; }
         public char? CollectorNumberSuffix { get; set; }
         public string CollectorNumberStr { get; set; }
-        //The pure scryfall collector_number is actually a string
-        //  It may be useful to store the regular string number, AND an INT version
-
-        /*
-         
-            int CollectorNumber
-            char? CollectorNumberCode[Suffix]
-            string CollectorNumberRaw
-         
-         
-         */
-
-
         public decimal? TixPrice { get; set; }
         public string Color { get; set; }
         public string ColorIdentity { get; set; }
