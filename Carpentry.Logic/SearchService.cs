@@ -159,7 +159,6 @@ namespace Carpentry.Logic
 
             var filteredResults = await query.ToListAsync();
 
-
             //Is this a dumb approach?  Trying to get the "first" record now?
             var groupedQuery = filteredResults
                 .GroupBy(c => c.Name)
@@ -179,18 +178,6 @@ namespace Carpentry.Logic
                         SetCode = c.SetCode,
                     }).OrderBy(c => c.CollectionNumber).ToList(),
                 }).ToList();
-
-            //var newQ = groupedQuery.Select(x => new
-            //{
-            //    Name = x.Name,
-            //    Cmc = x.First.Cmc,
-            //    ColorIdentity = x.First.ColorIdentity.Split().ToList(),
-            //    Colors = x.First.Color.Split().ToList(),
-            //    ManaCost = x.First.ManaCost,
-            //    Type = x.First.Type,
-            //    Details = x.Details,
-            //}).ToList();
-
 
             var results = groupedQuery.Select(x => new CardSearchResultDto()
             {

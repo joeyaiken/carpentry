@@ -120,34 +120,26 @@ namespace Carpentry.Logic
         */
         private async Task<DeckStatsDto> GetDeckStats(int deckId)
         {
-            //DeckStatsDto result = new DeckStatsDto();
-
             var deckStats = new DeckStatsDto();
-
 
             var dbDeck = _cardContext.Decks.Where(d => d.DeckId == deckId)
                 .Include(d => d.Cards)
                 .FirstOrDefault();
 
-            //deckList[i].Colors = await _queryService.GetDeckColorIdentity(deckList[i].Id);
-
             var colorChars = await GetDeckColorIdentity(deckId);
 
             deckStats.ColorIdentity = colorChars.Select(x => x.ToString()).ToList();
 
-            //string validationResults = await ValidateDeck(deckList[i].Id);
             string validationResults = await ValidateDeck(deckId);
 
             if (string.IsNullOrEmpty(validationResults))
             {
-                //deckList[i].IsValid = true;
                 deckStats.IsValid = true;
             }
             else
             {
                 deckStats.ValidationIssues = validationResults;
             }
-
 
             deckStats.IsDisassembled = !dbDeck.Cards.Where(dc => dc.InventoryCardId != null).Any();
 
