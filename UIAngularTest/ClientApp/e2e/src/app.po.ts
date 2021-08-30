@@ -15,14 +15,17 @@ export class AppPage {
 
   }
 
-  // navigateTo() {
-  //   return browser.get('/');
-  // }
+  navigateTo() {
+    return browser.get('/');
+  }
 
   // getMainHeadingText() {
   //   return this.mainHedding.getText();
   // }
-
+  
+  getMainHeading() {
+    return element(by.css('app-root h1')).getText();
+  }
 
 
 }

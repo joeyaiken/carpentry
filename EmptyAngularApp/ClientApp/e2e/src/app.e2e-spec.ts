@@ -9,16 +9,6 @@ describe('App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    // expect(page.mainHedding.getText()).toEqual('Hello, world!');
     expect(page.getMainHeading()).toEqual('Hello, world!');
-
-
-
-    //wait for the controller to load
-
-    //expect status results
-
-    // expect(1).toBe(0);
-
   });
 });
