@@ -10,7 +10,7 @@ namespace Carpentry
 {
     public class Startup : CarpentryStartupBase
     {
-        public Startup(IConfiguration configuration) : base(configuration) { }
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) : base(configuration, env) { }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -18,9 +18,7 @@ namespace Carpentry
         {
             //Going to actually pull the fill filepaths from app settings now
             //TODO Eventually I could make a static config class and just read from that class
-            ConfigureSqlServerDatabase(services);
-            ConfigureCarpentryServices(services);
-
+            ConfigureBase(services);
             services.AddControllersWithViews();
 
             services.AddSpaStaticFiles(configuration =>

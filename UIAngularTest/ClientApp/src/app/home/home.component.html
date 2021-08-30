@@ -1,0 +1,10 @@
+<div>
+  <h1>Hello, world!</h1>
+  <p>This is a simple example app written with Angular!</p>
+</div>
+<div>
+  <h4>App Config: <span id="app-config-status">{{appConfigStatus}}</span></h4>
+  <h4 *ngIf="!isLoading && appConfig">Configured Value: <span id="config-string">{{appConfig.configString}}</span></h4>
+  <h4 *ngIf="!isLoading && appConfig">Last Updated: <span id="config-last-updated">{{appConfig.lastUpdated | date:'short'}}</span></h4>
+  <button id="refresh-button" (click)="onRefreshClick()" [disabled]="isLoading">Refresh</button>
+</div>

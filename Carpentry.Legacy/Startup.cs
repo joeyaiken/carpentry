@@ -10,7 +10,7 @@ namespace Carpentry.Legacy
 {
     public class Startup : CarpentryStartupBase
     {
-        public Startup(IConfiguration configuration) : base(configuration) { }
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) : base(configuration, env) { }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public override void ConfigureServices(IServiceCollection services)
