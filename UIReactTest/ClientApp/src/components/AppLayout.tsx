@@ -1,5 +1,6 @@
+import { AppBar, Button, LinearProgress, Toolbar, Typography, Container } from '@material-ui/core';
 import React from 'react';
-import { Container } from 'reactstrap';
+// import { Container } from 'reactstrap';
 import { AppConfigResult } from '../state/AppReducer';
 import NavMenu from './NavMenu';
 
@@ -12,7 +13,17 @@ export interface ComponentProps {
 
 export default (props: ComponentProps): JSX.Element => (
   <React.Fragment>
-    <NavMenu/>
+    <AppBar position="static">
+      <Toolbar>
+        <Container>
+          <Typography variant="h5">
+            Test App - React
+          </Typography>
+        </Container>
+      </Toolbar>
+    </AppBar>
+    { props.isLoading && <LinearProgress/> }
+    {/* <NavMenu/> */}
     <Container>
       <div>
         <h1>Hello, world!</h1>
@@ -27,9 +38,9 @@ export default (props: ComponentProps): JSX.Element => (
           !props.isLoading && props.appConfig &&
           <h4>Last Updated: <span id="config-last-updated">{props.appConfig.lastUpdated}</span></h4>
         }
-        <button id="refresh-button" onClick={() => { props.onRefreshClick() }} disabled={props.isLoading}>
+        <Button variant="contained" color="primary" id="refresh-button" onClick={() => { props.onRefreshClick() }} disabled={props.isLoading}>
           Refresh
-        </button>
+        </Button>
       </div>
     </Container>
   </React.Fragment>
