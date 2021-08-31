@@ -8,7 +8,7 @@ import { AppConfigResult } from './models';
 })
 export class AppComponent implements OnInit {
   isLoading: boolean;
-  appConfigStatus: 'Not Loaded'|'Loading...'|'Loaded'; //string;
+  appConfigStatus: 'Not Loaded'|'Loading...'|'Loaded';
   appConfig: AppConfigResult;
 
   constructor(private appConfigService: AppConfigService) { }  
@@ -31,5 +31,4 @@ export class AppComponent implements OnInit {
       this.isLoading = false;
     });
   }
-
 }
