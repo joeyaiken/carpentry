@@ -11,6 +11,11 @@ using System;
 
 namespace Carpentry.Core
 {
+    public enum AppEnvEnum
+    {
+        Dev,
+        Test
+    }
     public abstract class CarpentryStartupBase
     {
         //public IConfiguration Configuration { get; }
@@ -30,19 +35,43 @@ namespace Carpentry.Core
         protected void ConfigureBase(IServiceCollection services)
         {
 
-            if (Env.IsDevelopment())
+            var appEnvValue = Configuration.GetValue<string>("AppEnv");
+
+            switch (appEnvValue)
             {
-                string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
-                services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+                case nameof(AppEnvEnum.Dev):
+                    //Regular dev uses a sql database
+                    services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
+                    break;
+
+                case nameof(AppEnvEnum.Test):
+                    //Testing uses a local sqlite database
+                    string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:SqliteDatabaseFilepath");
+                    services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+                    break;
+
+                default: //throw new Exception("Unexpected environment value");
+
+                    //Defaulting to Dev for now (for integration tests that I don't want to refactor yet)
+                    services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
+                    break;
             }
-            else if (Env.IsProduction())
-            {
-                services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
-            }
-            else
-            {
-                throw new Exception("Unexpected environment configuration");
-            }
+
+
+
+            //if (Env.IsDevelopment())
+            //{
+            //    string cardDatabaseFilepath = Configuration.GetValue<string>("AppSettings:CardDatabaseFilepath");
+            //    services.AddDbContext<CarpentryDataContext>(options => options.UseSqlite($"Data Source={cardDatabaseFilepath}"));
+            //}
+            //else if (Env.IsProduction())
+            //{
+            //services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
+            //}
+            //else
+            //{
+            //    throw new Exception("Unexpected environment configuration");
+            //}
 
             //Both use a scryfall DB
             services.AddDbContext<ScryfallDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ScryfallDataContext")));

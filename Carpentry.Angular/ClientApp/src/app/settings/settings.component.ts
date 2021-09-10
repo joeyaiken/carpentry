@@ -8,6 +8,12 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ['settings.component.less'],
 })
 export class SettingsComponent implements OnInit {
-    constructor() { }
-    ngOnInit(): void { }
+  isBusy: boolean;
+  constructor() {
+    this.isBusy = false;
+  }
+  ngOnInit(): void { }
+
+  //TODO - This component should be handling the actual data calls
+  //   The Collection Totals and trackedSets UI components should be purly functional
 }

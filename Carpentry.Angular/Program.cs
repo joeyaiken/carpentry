@@ -1,6 +1,8 @@
+using Carpentry.CarpentryData;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,9 +14,11 @@ namespace Carpentry.Angular
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var webHost = CreateWebHostBuilder(args).Build();
+            await webHost.InitializeCarpentryDatabase();
+            webHost.Run();
         }
 
         //public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -27,5 +31,30 @@ namespace Carpentry.Angular
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
            WebHost.CreateDefaultBuilder(args)
             .UseStartup<Startup>();
+    }
+
+    public static class WebHostExtensions
+    {
+        public static async Task InitializeCarpentryDatabase(this IWebHost webHost)
+        {
+            //await Task.CompletedTask;
+
+            var serviceScopeFactory = (IServiceScopeFactory)webHost.Services.GetService(typeof(IServiceScopeFactory));
+            using (var scope = serviceScopeFactory.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var dbContext = services.GetRequiredService<CarpentryDataContext>();
+
+
+                await dbContext.EnsureDatabaseCreated(false);
+
+            }
+
+
+
+            //var dbContext = webHost.Services.GetService<CarpentryDataContext>();
+
+            //return webHost;
+        }
     }
 }

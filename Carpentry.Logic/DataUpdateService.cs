@@ -96,9 +96,9 @@ namespace Carpentry.Logic
                 RarityId = GetRarityId(scryCard.Rarity),
                 CollectorNumber = scryCard.CollectionNumber,
                 ImageUrl = scryCard.ImageUrl,
-                Price = scryCard.Price,
-                PriceFoil = scryCard.PriceFoil,
-                TixPrice = scryCard.PriceTix,
+                Price = (double?)scryCard.Price,
+                PriceFoil = (double?)scryCard.PriceFoil,
+                TixPrice = (double?)scryCard.PriceTix,
                 Color = scryCard.Colors == null ? null : string.Join("", scryCard.Colors),
                 ColorIdentity = string.Join("", scryCard.ColorIdentity),
                 CollectorNumberStr = scryCard.CollectionNumberStr,
@@ -228,9 +228,9 @@ namespace Carpentry.Logic
                     continue;
                 }
 
-                existingCard.Price = scryCard.Price;
-                existingCard.PriceFoil = scryCard.PriceFoil;
-                existingCard.TixPrice = scryCard.PriceTix;
+                existingCard.Price = (double?)scryCard.Price;
+                existingCard.PriceFoil = (double?)scryCard.PriceFoil;
+                existingCard.TixPrice = (double?)scryCard.PriceTix;
 
                 var cardLegalitiesToDelete = existingCard.Legalities.Where(cl => !scryCard.Legalities.Contains(cl.Format.Name));
 

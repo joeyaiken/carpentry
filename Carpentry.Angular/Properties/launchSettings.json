@@ -9,20 +9,23 @@
   },
   "profiles": {
 
-    "IIS Express - Prod": {
+    "IIS Express - Dev": {
       "commandName": "IISExpress",
+      //"commandLineArgs": "-Env DEV",
       "launchBrowser": true,
       "environmentVariables": {
-        //"ASPNETCORE_ENVIRONMENT": "Development"
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppEnv": "Dev"
       }
     },
 
     "IIS Express - Test": {
+      //"commandLineArgs": "Env=TEST",
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppEnv": "Test"
       }
     },
 
@@ -31,7 +34,8 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppEnv": "Dev"
       }
     }
   }

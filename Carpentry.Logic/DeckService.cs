@@ -363,8 +363,8 @@ namespace Carpentry.Logic
                     SetCode = x.InventoryCard.Card.Set.Code,
                     Type = x.InventoryCard.Card.Type,
                     ColorIdentity = x.InventoryCard.Card.ColorIdentity,
-                    Price = x.InventoryCard.Card.Price,
-                    PriceFoil = x.InventoryCard.Card.PriceFoil,
+                    Price = (decimal?)x.InventoryCard.Card.Price,
+                    PriceFoil = (decimal?)x.InventoryCard.Card.PriceFoil,
                     Tags = x.Deck.Tags.Where(t => t.CardName == x.CardName).Select(t => t.Description).ToList(),
                 }).ToListAsync();
 

@@ -41,6 +41,138 @@ namespace Carpentry.Core.Controllers
             return Ok("Online");
         }
 
+        #region Filter Values (should this be a unique controller?)
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetCardSetFilters()
+        {
+            try
+            {
+                var result = await _filterService.GetCardSetFilters();
+
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetCardSetFilters", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public ActionResult GetCardTypeFilters()
+        {
+            try
+            {
+                var result = _filterService.GetCardTypeFilters();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetCardTypeFilters", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetFormatFilters()
+        {
+            try
+            {
+                var result = await _filterService.GetFormatFilters();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetFormatFilters", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public ActionResult GetManaTypeFilters()
+        {
+            try
+            {
+                var result = _filterService.GetManaTypeFilters();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetManaTypeFilters", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetRarityFilters()
+        {
+            try
+            {
+                var result = await _filterService.GetRarityFilters();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetRarityFilters", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetStatusFilters()
+        {
+            try
+            {
+                var result = await _filterService.GetStatusFilters();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetStatusFilters", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public ActionResult GetCardGroupFilters()
+        {
+            try
+            {
+                var result = _filterService.GetCardGroupFilters();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetCardGroupFilters", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public ActionResult GetInventorySortOptions()
+        {
+            try
+            {
+                var result = _filterService.GetInventorySortOptions();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetInventorySortOptions", ex));
+            }
+        }
+
+        [HttpGet("[action]")]
+        public ActionResult GetInventoryGroupOptions()
+        {
+            try
+            {
+                var result = _filterService.GetInventoryGroupOptions();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, FormatExceptionMessage("GetInventoryGroupOptions", ex));
+            }
+        }
+
+        #endregion
+
         #region Other
 
         /// <summary>
@@ -53,7 +185,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _dataUpdateService.ValidateDatabase();//Should this be called somewhere else?...
+                await _dataUpdateService.ValidateDatabase();
                 AppFiltersDto result = await _filterService.GetAppCoreData();
                 return Ok(result);
             }
@@ -88,7 +220,6 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                //ummm does this call a single 'core service' or does it
                 var result = await _inventoryService.GetCollectionTotals();
                 return Ok(result);
             }
@@ -112,7 +243,7 @@ namespace Carpentry.Core.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage(nameof(GetTrackedSets), ex));
+                return StatusCode(500, FormatExceptionMessage("GetTrackedSets", ex));
             }
         }
 
@@ -126,7 +257,7 @@ namespace Carpentry.Core.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage(nameof(AddTrackedSet), ex));
+                return StatusCode(500, FormatExceptionMessage("AddTrackedSet", ex));
             }
         }
 
@@ -140,7 +271,7 @@ namespace Carpentry.Core.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage(nameof(UpdateTrackedSet), ex));
+                return StatusCode(500, FormatExceptionMessage("UpdateTrackedSet", ex));
             }
         }
 
@@ -154,7 +285,7 @@ namespace Carpentry.Core.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, FormatExceptionMessage(nameof(RemoveTrackedSet), ex));
+                return StatusCode(500, FormatExceptionMessage("RemoveTrackedSet", ex));
             }
         }
 

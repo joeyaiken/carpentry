@@ -53,7 +53,7 @@ namespace Carpentry.Core.Controllers
         [HttpPost("[action]")]
         public async Task<ActionResult> UpdateDeck([FromBody] DeckPropertiesDto deckProps)
         {
-            if(deckProps == null)
+            if (deckProps == null)
             {
                 return StatusCode(500, "Deck Properties null, cannot update deck");
             }
@@ -208,11 +208,11 @@ namespace Carpentry.Core.Controllers
         #region Search
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews()
+        public async Task<ActionResult<IEnumerable<DeckOverviewDto>>> GetDeckOverviews(string format, string sortBy, bool includeDissasembled)
         {
             try
             {
-                IEnumerable<DeckOverviewDto> results = await _deckService.GetDeckOverviews();
+                IEnumerable<DeckOverviewDto> results = await _deckService.GetDeckOverviews(format, sortBy, includeDissasembled);
                 return Ok(results);
             }
             catch (Exception ex)

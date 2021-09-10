@@ -18,7 +18,7 @@ namespace Carpentry.Core.Controllers
         }
 
         private readonly ISearchService _searchService;
-        
+
         public CardSearchController(ISearchService searchService)
         {
             _searchService = searchService;

@@ -1,4 +1,5 @@
-﻿using Carpentry.Logic.Models;
+﻿using Carpentry.CarpentryData.Models;
+using Carpentry.Logic.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
@@ -30,7 +31,21 @@ namespace Carpentry.Tests
         }
 
 
+        [TestMethod]
+        public async Task GetCollectionTotals_Query_Works()
+        {
+            var factory = new CarpentryFactory();
 
+            var client = factory.CreateClient();
+
+            var response = await client.GetAsync("api/core/GetCollectionTotals");
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var searchResult = JsonConvert.DeserializeObject<List<InventoryTotalsByStatusResult>>(responseContent);
+
+            Assert.IsNotNull(searchResult);
+        }
 
 
     }

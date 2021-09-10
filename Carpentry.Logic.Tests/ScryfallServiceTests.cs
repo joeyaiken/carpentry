@@ -89,9 +89,9 @@ namespace Carpentry.Logic.Tests
         }
 
         //Test: Task<ScryfallSetDataDto> GetSetCards(string setCode);
-        [DataRow("MH2", 492)]
-        [DataRow("THB", 358)]
-        [DataRow("WAR", 311)]
+        [DataRow("mh2", 492)]
+        [DataRow("thb", 358)]
+        [DataRow("war", 311)]
         [DataTestMethod]
         public async Task GetSetDetail_Works_Test(string setCode, int expectedCount)
         {
@@ -112,7 +112,7 @@ namespace Carpentry.Logic.Tests
         [TestMethod]
         public async Task GetSetDetail_HandlesAdventureCardOracleText_Test()
         {
-            var result = await _scryService.GetSetDetail("ELD");
+            var result = await _scryService.GetSetDetail("eld");
             var firstAdventureCard = result.Cards.First(card => card.Name.Contains("//"));
             Assert.IsNotNull(firstAdventureCard.Text);
         }

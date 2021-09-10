@@ -1,5 +1,8 @@
 ﻿using Carpentry.CarpentryData.Models;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -33,6 +36,18 @@ namespace Carpentry.CarpentryData
 			});
 		}
 
+		//TODO - consider moving directly to a service class
+		//Replaces vwInventoryTotalsByStatus
+		public IQueryable<InventoryTotalsByStatusResult> GetInventoryTotalsByStatus()
+        {
+			return CardStatuses.Select(cs => new InventoryTotalsByStatusResult
+			{
+				StatusId = cs.CardStatusId,
+				StatusName = cs.Name,
+				TotalCount = cs.Cards.Count(),
+				TotalPrice = cs.Cards.Sum(ic => ic.IsFoil ? ic.Card.PriceFoil : ic.Card.Price) ?? 0,
+			});
+		}
 
 		public IQueryable<DeckData> ExampleDeckQuery() => Decks.Where(d => d.Format.Name == "commander");
 
@@ -302,7 +317,10 @@ namespace Carpentry.CarpentryData
 
 		public async Task EnsureDatabaseCreated(bool includeViews = true)
 		{
-			await Database.EnsureCreatedAsync();
+			//Returns true if the DB was just created, false if the DB already existed
+			var wasFreshlyCreated = await Database.EnsureCreatedAsync();
+			//Only need to seed reference values if the DB was just created
+			if (!wasFreshlyCreated) return;
 
 			if (includeViews)
 			{

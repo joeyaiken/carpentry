@@ -27,7 +27,7 @@ namespace Carpentry.Logic
         Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null);
         Task TrimCards(List<TrimmedCardDto> cardsToTrim);
 
-        Task<IEnumerable<InventoryTotalsByStatusResult>> GetCollectionTotals();
+        Task<List<InventoryTotalsByStatusResult>> GetCollectionTotals();
     }
 
     public class InventoryService : IInventoryService
@@ -284,9 +284,9 @@ namespace Carpentry.Logic
                     Name = card.Name,
                     CollectionNumber = card.CollectorNumber,
                     ImageUrl = card.ImageUrl,
-                    Price = card.Price,
-                    PriceFoil = card.PriceFoil,
-                    PriceTix = card.TixPrice,
+                    Price = (decimal?)card.Price,
+                    PriceFoil = (decimal?)card.PriceFoil,
+                    PriceTix = (decimal?)card.TixPrice,
                     Colors = card.Color.Split().ToList(),//might run into errors if card is colorless
                     Rarity = card.Rarity.Name,
                     Set = card.Set.Code,
@@ -446,9 +446,16 @@ namespace Carpentry.Logic
 
         //get collection/inventory totals by status
         // GetTotalsByStatus | GetCollectionTotals | GetInventoryTotals
-        public async Task<IEnumerable<InventoryTotalsByStatusResult>> GetCollectionTotals()
+        public async Task<List<InventoryTotalsByStatusResult>> GetCollectionTotals()
         {
-            var result = await _cardContext.InventoryTotalsByStatus.ToListAsync();
+            //Should attempt to replicate this view with an EF query instead
+            //This just gets the total price and total count of all cards in the 3 statuses (Inventory, BuyList, SellList)
+            
+
+            //var legacyResult = await _cardContext.InventoryTotalsByStatus.ToListAsync();
+
+            var result = await _cardContext.GetInventoryTotalsByStatus().ToListAsync();
+
             //Should really return a DTO instead but whatever
             return result;
         }

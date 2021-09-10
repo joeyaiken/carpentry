@@ -1,9 +1,11 @@
 ﻿using Carpentry.CarpentryData;
+using Carpentry.CarpentryData.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +32,88 @@ namespace Carpentry.Logic.Tests
         public void InventoryServiceTests_AreImplemented_Test()
         {
             Assert.Fail("Not implemented");
+        }
+
+
+
+
+        [TestMethod]
+        public async Task GetCollectionTotals_WorksWithNoCards()
+        {
+            //don't want any data seeded
+            var totals = await _inventoryService.GetCollectionTotals();
+
+            Assert.AreEqual(3, totals.Count);
+        }
+
+
+        [TestMethod]
+        public async Task GetCollectionTotals_AnotherOne()
+        {
+
+            var cardSet = new CardSetData()
+            {
+                Name = "ASet",
+                Code = "SET",
+                IsTracked = true,
+                LastUpdated = DateTime.Now,
+                ReleaseDate = DateTime.Now,
+                Cards = new List<CardData>()
+                {
+                    new CardData()
+                    {
+                        RarityId = 'R',
+                        Name = "ACardName",
+                        Price = 1,
+                        PriceFoil = 100,
+                        InventoryCards = new List<InventoryCardData>()
+                        {
+                            new InventoryCardData()
+                            {
+                                InventoryCardStatusId = 1,
+                                IsFoil = false,
+                            },
+                            new InventoryCardData()
+                            {
+                                InventoryCardStatusId = 1,
+                                IsFoil = true,
+                            },
+
+                            new InventoryCardData()
+                            {
+                                InventoryCardStatusId = 2,
+                                IsFoil = false,
+                            },
+                            new InventoryCardData()
+                            {
+                                InventoryCardStatusId = 2,
+                                IsFoil = true,
+                            },
+                            
+                            new InventoryCardData()
+                            {
+                                InventoryCardStatusId = 3,
+                                IsFoil = false,
+                            },
+                            new InventoryCardData()
+                            {
+                                InventoryCardStatusId = 3,
+                                IsFoil = true,
+                            }
+                        }
+                    }
+                },
+            };
+
+            CardContext.Add(cardSet);
+            await CardContext.SaveChangesAsync();
+            ResetContext();
+
+
+            //don't want any data seeded
+            var totals = await _inventoryService.GetCollectionTotals();
+
+            Assert.AreEqual(3, totals.Count);
         }
 
     }

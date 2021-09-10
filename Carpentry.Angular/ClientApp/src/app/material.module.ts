@@ -11,6 +11,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatProgressBarModule } from "@angular/material/progress-bar"
 
 @NgModule({
     imports: [
@@ -26,6 +27,7 @@ import { MatDialogModule } from "@angular/material/dialog";
         MatSelectModule,
         MatCheckboxModule,
         MatDialogModule,
+        MatProgressBarModule,
     ],
     exports: [
         MatToolbarModule,
@@ -40,6 +42,7 @@ import { MatDialogModule } from "@angular/material/dialog";
         MatSelectModule,
         MatCheckboxModule,
         MatDialogModule,
+        MatProgressBarModule,
     ],
     providers: [
 
