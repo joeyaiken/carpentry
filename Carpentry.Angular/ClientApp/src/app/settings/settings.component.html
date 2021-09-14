@@ -2,6 +2,14 @@
 <mat-progress-bar *ngIf="isBusy" mode="indeterminate"></mat-progress-bar>
 <div>
     <h3>Settings</h3>
-    <app-collection-totals></app-collection-totals>
-    <app-tracked-sets></app-tracked-sets>
+    <app-collection-totals [inventoryStatusTotals]="inventoryStatusTotals" ></app-collection-totals>
+    <app-tracked-sets 
+        [setDetails]="setDetails"
+        [showUntracked]="showUntrackedSets"
+        (onShowUntrackedToggleChange)="showUntrackedToggleChange($event)"
+        (onRefreshClick)="trackedSetsRefreshClick()"
+        (onAddTrackedSetClick)="addTrackedSetClick($event)"
+        (onUpdateTrackedSetClick)="updateTrackedSetClick($event)"
+        (onRemoveTrackedSetClick)="removeTrackedSetClick($event)">
+    </app-tracked-sets>
 </div>

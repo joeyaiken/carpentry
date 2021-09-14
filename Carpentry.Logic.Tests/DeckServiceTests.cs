@@ -32,20 +32,17 @@ namespace Carpentry.Logic.Tests
             _deckService = new DeckService(mockInventoryService.Object, mockLogger.Object, CardContext);
         }
 
-        protected override Task BeforeEachChild() => Task.CompletedTask;
-        //{
-        //    //CardContextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
-        //    //    .UseSqlite("Filename=CarpentryData.db").Options;
-        //    //ResetContext();
-        //    //await CardContext.EnsureDatabaseCreated(false);
-        //    //ResetContext();
-        //}
+        [TestInitialize]
+        public async Task BeforeEach()
+        {
+            await BeforeEachBase();
+        }
 
-        //protected override async Task AfterEachChild()
-        //{
-
-        //}
-        protected override Task AfterEachChild() => Task.CompletedTask;
+        [TestCleanup]
+        public async Task AfterEach()
+        {
+            await AfterEachBase();
+        }
 
         #region Deck Props
 

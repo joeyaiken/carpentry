@@ -12,24 +12,18 @@ namespace Carpentry.Logic.Tests
     public class DataUpdateServiceTests : CarpentryServiceTestBase
     {
         protected override bool SeedViews => false;
-        protected override Task BeforeEachChild() 
+
+        [TestInitialize]
+        public async Task BeforeEach()
         {
-            var mockLogger = new Mock<ILogger<DataUpdateService>>();
-            var mockScryService = new Mock<IScryfallService>();
-            var mockIntegrityService = new Mock<IDataIntegrityService>();
-
-            _updateService = new DataUpdateService(
-                mockLogger.Object,
-                mockScryService.Object,
-                mockIntegrityService.Object,
-                CardContext);
-
-            return Task.CompletedTask;
+            await BeforeEachBase();
         }
 
-
-        protected override Task AfterEachChild() => Task.CompletedTask;
-
+        [TestCleanup]
+        public async Task AfterEach()
+        {
+            await AfterEachBase();
+        }
 
         private DataUpdateService _updateService = null!;
 

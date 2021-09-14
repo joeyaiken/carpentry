@@ -9,19 +9,39 @@ namespace Carpentry.Logic.Tests
     [TestClass]
     public class SearchServiceTests : CarpentryServiceTestBase
     {
-        protected override Task BeforeEachChild() => Task.CompletedTask;
-        protected override Task AfterEachChild() => Task.CompletedTask;
+        [ClassInitialize]
+        public async Task BeforeStart()
+        {
+            //All tests are read-only so the same DB can be used without resetting between tests
+            await BeforeEachBase();
+        }
+
+        [ClassCleanup]
+        public async Task AfterComplete()
+        {
+            await AfterEachBase();
+        }
+
         protected override bool SeedViews => false;
 
         protected override void ResetContextChild()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         [TestMethod]
-        public void DataImportServiceTests_AreImplemented_Test()
+        public void SearchServiceTests_AreImplemented_Test()
         {
             Assert.Fail("Not implemented");
         }
+
+        [TestMethod]
+        public void SearchInventoryCards_SetFilter_Works()
+        {
+
+        }
+
+
+
     }
 }

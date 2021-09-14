@@ -196,8 +196,25 @@ namespace Carpentry.Logic.Tests
 
         protected abstract bool SeedViews { get; }
 
-        [TestInitialize]
-        public async Task BeforeEach()
+        //[TestInitialize]
+        //public async Task BeforeEach()
+        //{
+        //    _cardContextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
+        //        .UseSqlite("Filename=CarpentryData.db").Options;
+        //    _scryContextOptions = new DbContextOptionsBuilder<ScryfallDataContext>()
+        //        .UseSqlite("Filename=ScryData.db").Options;
+
+        //    ResetContext();
+            
+        //    await CardContext.EnsureDatabaseCreated(false);
+        //    await ScryContext.Database.EnsureCreatedAsync();
+
+        //    ResetContext();
+
+        //    await BeforeEachChild();
+        //}
+
+        protected async Task BeforeEachBase()
         {
             _cardContextOptions = new DbContextOptionsBuilder<CarpentryDataContext>()
                 .UseSqlite("Filename=CarpentryData.db").Options;
@@ -205,30 +222,37 @@ namespace Carpentry.Logic.Tests
                 .UseSqlite("Filename=ScryData.db").Options;
 
             ResetContext();
-            
+
             await CardContext.EnsureDatabaseCreated(false);
             await ScryContext.Database.EnsureCreatedAsync();
 
             ResetContext();
-
-            await BeforeEachChild();
         }
 
-        protected abstract Task BeforeEachChild();
+        //protected abstract Task BeforeEachChild();
 
-        [TestCleanup]
-        public async Task AfterEach()
+        //[TestCleanup]
+        //public async Task AfterEach()
+        //{
+        //    await CardContext.Database.EnsureDeletedAsync();
+        //    await CardContext.DisposeAsync();
+
+        //    await ScryContext.Database.EnsureDeletedAsync();
+        //    await ScryContext.DisposeAsync();
+
+        //    await AfterEachChild();
+        //}
+
+        protected async Task AfterEachBase()
         {
             await CardContext.Database.EnsureDeletedAsync();
             await CardContext.DisposeAsync();
 
             await ScryContext.Database.EnsureDeletedAsync();
             await ScryContext.DisposeAsync();
-
-            await AfterEachChild();
         }
 
-        protected abstract Task AfterEachChild();
+        //protected abstract Task AfterEachChild();
 
         protected void ResetContext()
         {

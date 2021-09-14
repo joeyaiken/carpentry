@@ -1,31 +1,15 @@
-import { Component, OnInit } from "@angular/core";
-import { CoreService } from "../core.service";
+import { Component, Input, OnInit } from "@angular/core";
 import { InventoryTotalsByStatusResult } from "../models";
 
+//TODO - Does this NEED to implement OnInit? Would anything break if it didn't?
 @Component({
     selector: 'app-collection-totals',
     templateUrl: 'collection-totals.component.html',
     styleUrls: ['collection-totals.component.less']
 })
 export class CollectionTotalsComponent implements OnInit {
+    @Input() inventoryStatusTotals: InventoryTotalsByStatusResult[] = [];
     displayedColumns: string[] = ['statusName','totalCount','totalPrice'];
-    deckOverviews: InventoryTotalsByStatusResult[] = [];
-    totalCount: number = 0;
-    totalPrice: number = 0;
-
-    constructor(
-        private coreService: CoreService,
-    ) { }
-
-    ngOnInit(): void {
-        this.getCollectionTotals();
-    }
-
-    getCollectionTotals(): void {
-        this.coreService.getCollectionTotals().subscribe(result => {
-            this.deckOverviews = result;
-            this.totalCount = result.reduce((accum, curr) => accum + curr.totalCount, 0);
-            this.totalPrice = result.reduce((accum, curr) => accum + curr.totalPrice, 0);
-        }, err => console.log(`getCollectionTotals error: ${err}`));
-    }
+    constructor() { }
+    ngOnInit(): void { }
 }

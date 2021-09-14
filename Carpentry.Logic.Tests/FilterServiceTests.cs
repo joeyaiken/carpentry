@@ -10,8 +10,18 @@ namespace Carpentry.Logic.Tests
     public class FilterServiceTests : CarpentryServiceTestBase
     {
         protected override bool SeedViews => false;
-        protected override Task BeforeEachChild() => Task.CompletedTask;
-        protected override Task AfterEachChild() => Task.CompletedTask;
+        
+        [TestInitialize]
+        public async Task BeforeEach()
+        {
+            await BeforeEachBase();
+        }
+
+        [TestCleanup]
+        public async Task AfterEach()
+        {
+            await AfterEachBase();
+        }
 
         protected override void ResetContextChild()
         {

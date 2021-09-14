@@ -298,6 +298,182 @@ namespace Carpentry.CarpentryData
 
 			//return inventoryCardsByName;
 
+
+
+
+
+			//Lets try this again...
+
+			//The goal is to get information about card definitions, grouped by name, and inventory information about those cards
+			//Note that it should end up including unowned cards, not just owned ones
+
+			//One approach: For eac inv card, group by name, then select info to a CardOverviewResult
+			//	This won't catch unowned cards
+
+			//var query = Cards.Select(c => new
+			//         {
+			//	Card = c,
+			//         })
+
+
+			//need each card
+			//need all inventory cards
+
+			/*
+			 How does the view work again?...
+				Selects every card (all 31k), and left joins on vwCardTotals
+					vwCardTotals 
+					
+				Selects the most recent card (All cards joined by name, ranked by Set.ReleaseDate>CollectorNumber )
+					Get the most recent print of every named card
+
+			 vwCardTotals...
+				Oh fuck it uses a pivot table
+				And pivots on the result of a case statement
+				(was this a dumb idea?...)
+				
+				So, this view gets the 
+			 */
+
+
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			//Start with all cards
+			//Get the inventory counts for each card, the rest can be manipulated later
+			var totalsByCard = Cards.Select(c => new
+			{
+				//No, what do I REALLY need?
+
+				c.CardId,
+				c.Name,
+				//DeckCount
+				DeckCount = c.InventoryCards.Where(ic => ic.DeckCards.Count != 0).Count(),
+
+				//InventoryCount
+				InventoryCount = c.InventoryCards
+					.Where(ic => ic.InventoryCardStatusId == 1 && ic.DeckCards.Count == 0)
+					.Count(),
+
+				BuyCount = c.InventoryCards
+					.Where(ic => ic.InventoryCardStatusId == 2 && ic.DeckCards.Count == 0)
+					.Count(),
+
+				//SellCount
+				SellCount = c.InventoryCards
+					.Where(ic => ic.InventoryCardStatusId == 3 && ic.DeckCards.Count == 0)
+					.Count(),
+
+				//TotalCount
+				TotalCount = c.InventoryCards.Count(),
+
+
+				//Card = c,
+				//InventoryCards = c.InventoryCards,//What do I actually need from invCards?
+			});
+
+			var test = totalsByCard.ToList();
+
+			var totalsByName = totalsByCard
+				.GroupBy(c => c.Name, c => c).ToList()
+				.Select(g => new
+				{
+					Name = g.Key,
+					DeckCount = g.Sum(c => c.DeckCount),
+					InventoryCount = g.Sum(c => c.InventoryCount),
+					BuyCount = g.Sum(c => c.BuyCount),
+					SellCount = g.Sum(c => c.SellCount),
+					TotalCount = g.Sum(c => c.TotalCount),
+				}).ToList();
+
+			//var hmm = test.Where(c => c.DeckCount != 0).ToList();
+
+			var resTestBp = 1;
+
+
+
+			var qyery = Cards
+				.GroupBy(c => c.Name, c => c)
+				//So the issue is with this...
+				.Select(g => new
+				{
+					Name = g.Key,
+                    NewestPrint = g.OrderByDescending(c => c.Set.ReleaseDate).First(),
+                    //InventoryCards = g.SelectMany(c => c.InventoryCards),
+                })//.Include(c => c.NewestPrint.Set)
+				.ToList();
+			
+			var p1 = 1;
+
+			//var queryResult = qyery
+			//	.Select(c => new CardOverviewResult()
+			//	{
+			//		//public int Id { get; set; }
+
+			//		////card definition properties
+			//		//public int CardId { get; set; }
+			//		CardId = c.NewestPrint.CardId,
+			//		//public string SetCode { get; set; }
+			//		SetCode = c.NewestPrint.Set.Code,
+			//		Name = c.Name,
+			//		Type = c.NewestPrint.Type,
+			//		Text = c.NewestPrint.Text,
+			//		ManaCost = c.NewestPrint.ManaCost,
+			//		Cmc = c.NewestPrint.Cmc,
+			//		RarityId = c.NewestPrint.RarityId,
+			//		ImageUrl = c.NewestPrint.ImageUrl,
+			//		CollectorNumber = c.NewestPrint.CollectorNumber,
+			//		Color = c.NewestPrint.Color,
+			//		ColorIdentity = c.NewestPrint.ColorIdentity,
+			//		////prices
+			//		//public decimal? Price { get; set; }
+			//		//public decimal? PriceFoil { get; set; }
+			//		//public decimal? TixPrice { get; set; }
+			//		////counts
+			//		//public int TotalCount { get; set; }
+			//		//public int DeckCount { get; set; }
+			//		//public int InventoryCount { get; set; }
+			//		//public int SellCount { get; set; }
+			//		////(I can add more when I actually need them)        
+			//		////wishlist count
+
+			//		//public bool? IsFoil { get; set; } //only populated for ByUnique, otherwise NULL
+
+
+
+
+
+			//	}).ToList();
+
+
+			int breakPoint = 1;
+
+
+			//InventoryCards.GroupBy(c => c.Card.Name)
+
+
+
+
+
+
+
+
 			return InventoryCardByName.AsQueryable();
 		}
 

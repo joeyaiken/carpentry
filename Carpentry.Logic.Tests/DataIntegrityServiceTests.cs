@@ -9,8 +9,18 @@ namespace Carpentry.Logic.Tests
     [TestClass]
     public class DataIntegrityServiceTests : CarpentryServiceTestBase
     {
-        protected override Task BeforeEachChild() => Task.CompletedTask;
-        protected override Task AfterEachChild() => Task.CompletedTask;
+        [TestInitialize]
+        public async Task BeforeEach()
+        {
+            await BeforeEachBase();
+        }
+
+        [TestCleanup]
+        public async Task AfterEach()
+        {
+            await AfterEachBase();
+        }
+
         protected override bool SeedViews => false;
 
         protected override void ResetContextChild()

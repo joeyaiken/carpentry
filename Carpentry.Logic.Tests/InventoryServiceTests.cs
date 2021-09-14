@@ -18,9 +18,17 @@ namespace Carpentry.Logic.Tests
         private InventoryService _inventoryService = null!;
         private Mock<ILogger<InventoryService>> _mockLogger = null!;
 
-        protected override Task BeforeEachChild() => Task.CompletedTask;
+        [TestInitialize]
+        public async Task BeforeEach()
+        {
+            await BeforeEachBase();
+        }
 
-        protected override Task AfterEachChild() => Task.CompletedTask;
+        [TestCleanup]
+        public async Task AfterEach()
+        {
+            await AfterEachBase();
+        }
 
         protected override void ResetContextChild()
         {

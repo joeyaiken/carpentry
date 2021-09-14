@@ -28,8 +28,7 @@
         public int SellCount { get; set; }
         //(I can add more when I actually need them)        
         //wishlist count
-
-
+        
         public bool? IsFoil { get; set; } //only populated for ByUnique, otherwise NULL
     }
 }

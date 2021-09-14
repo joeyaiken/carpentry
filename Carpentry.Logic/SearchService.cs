@@ -200,12 +200,71 @@ namespace Carpentry.Logic
             return results;
         }
 
+        public async Task<List<InventoryOverviewDto>> SearchInventoryCards(InventoryQueryParameter param)
+        {
+            //I need to rethink how I'm querying this data entirely
+            //The subject of the search is Inventory Cards (at 31k at time of writing)
+            //Those records could be filtered before they are grouped, instead of grouped from the start
+
+
+
+            var query = _cardContext.InventoryCards.AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(param.Set))
+            {
+                query = query.Where(ic => ic.Card.Set.Code == param.Set.ToLower());
+            }
+
+
+
+
+
+            query = query.Take(1000);
+            var queryResult = await query.ToListAsync();
+
+
+            //TODO - add remaining filters, grouping, and sorting
+
+            //var result = await query.Select(ic => new InventoryOverviewDto()
+            //{
+            //    //CardId = x.CardId,
+            //    //Cmc = x.Cmc,
+            //    //CollectorNumber = x.CollectorNumber,
+            //    //Color = x.Color,
+            //    //ColorIdentity = x.ColorIdentity,
+            //    //DeckCount = x.DeckCount,
+            //    //Id = x.Id,
+            //    //ImageUrl = x.ImageUrl,
+            //    //InventoryCount = x.InventoryCount,
+            //    //SellCount = x.SellCount,
+            //    //TotalCount = x.TotalCount,
+            //    //TixPrice = x.TixPrice,
+            //    //PriceFoil = x.PriceFoil,
+            //    //Price = x.Price,
+            //    //Name = x.Name,
+            //    //ManaCost = x.ManaCost,
+            //    //IsFoil = x.IsFoil,
+            //    //RarityId = x.RarityId,
+            //    //SetCode = x.SetCode,
+            //    //Text = x.Text,
+            //    //Type = x.Type,
+            //}).ToListAsync();
+
+
+
+
+            return new List<InventoryOverviewDto>();
+            //return result;
+        }
+
         /// <summary>
         /// Searches inventory cards for the Inventory container
         /// </summary>
         /// <returns></returns>
-        public async Task<List<InventoryOverviewDto>> SearchInventoryCards(InventoryQueryParameter param)
+        public async Task<List<InventoryOverviewDto>> SearchInventoryCards_Legacy(InventoryQueryParameter param)
         {
+            
 
             //TODO - Work on this, it seems like I'm pulling in the whole view
             //Consider updating all views to return the same columns/model
@@ -215,6 +274,7 @@ namespace Carpentry.Logic
             switch (param.GroupBy)
             {
                 case "name":
+                    var altQuery = _cardContext.QueryCardsByName().ToListAsync();
                     query = await _cardContext.InventoryCardByName.ToListAsync(); //remember this executes the query
                     break;
 

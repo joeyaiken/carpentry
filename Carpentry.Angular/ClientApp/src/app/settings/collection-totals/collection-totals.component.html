@@ -3,28 +3,24 @@
         <mat-card-title>Collection Totals</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <table mat-table [dataSource]="deckOverviews" class="mat-elevation-z8 table-small" size="small">
+        <table mat-table [dataSource]="inventoryStatusTotals" class="mat-elevation-z8 table-small" size="small">
             <ng-container matColumnDef="statusName">
                 <th mat-header-cell *matHeaderCellDef>Status</th>
                 <td mat-cell *matCellDef="let element"> {{element.statusName}} </td>
-                <td mat-footer-cell *matFooterCellDef>Total</td>
             </ng-container>
             
             <ng-container matColumnDef="totalCount">
                 <th mat-header-cell *matHeaderCellDef>Count</th>
                 <td mat-cell *matCellDef="let element">&nbsp;{{element.totalCount}}&nbsp;</td>
-                <td mat-footer-cell *matFooterCellDef>{{totalCount}}</td>
             </ng-container>
 
             <ng-container matColumnDef="totalPrice">
                 <th mat-header-cell *matHeaderCellDef>Price</th>
                 <td mat-cell *matCellDef="let element">&nbsp;{{element.totalPrice | currency}}&nbsp;</td>
-                <td mat-footer-cell *matFooterCellDef>{{totalPrice | currency}}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
         </table>
     </mat-card-content>
 </mat-card>

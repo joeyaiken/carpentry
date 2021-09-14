@@ -1,15 +1,17 @@
 <div>
     <mat-card>
         <div fxLayout="row">
-            <div fxFill>
+            <!-- <div fxFill> -->
+            <div>
                 <h4>Tracked Sets</h4>
             </div>
 
             <mat-slide-toggle [checked]="showUntracked" (change)="showUntrackedToggleChange($event)" color="primary" >Show Untracked</mat-slide-toggle>
 
-            <button mat-button disabled color="primary" variant="contained" >Update All</button>
+            <!-- <button mat-button disabled color="primary" variant="contained" >Update All</button> -->
 
-            <a mat-icon-button (click)="loadTrackedSets(true)">
+            <!-- <a mat-icon-button (click)="loadTrackedSets(true)"> -->
+            <a mat-icon-button (click)="refreshClicked()">
                 <mat-icon>refresh</mat-icon>
             </a>
         </div>

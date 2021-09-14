@@ -1,10 +1,13 @@
 ﻿using Carpentry.CarpentryData.Models;
+using Carpentry.Legacy.Models;
 using Carpentry.Logic.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Tests
@@ -47,6 +50,50 @@ namespace Carpentry.Tests
             Assert.IsNotNull(searchResult);
         }
 
+        [DataRow("name")]
+        //[DataRow("print")]
+        //[DataRow("unique")]
+        [DataTestMethod]
+        public async Task SearchInventoryCards_Queries_Work(string groupBy)
+        {
+            var queryParam = new InventoryQueryParameter()
+            {
+                GroupBy = groupBy,
+            };
 
+            var queryParamStringBody = JsonConvert.SerializeObject(queryParam, Formatting.None);
+
+            var queryParamStringContent = new StringContent(queryParamStringBody, Encoding.UTF8, "application/json");
+
+            var factory = new CarpentryFactory();
+
+            var client = factory.CreateClient();
+            
+            var response = await client.PostAsync("api/Inventory/SearchCards", queryParamStringContent);
+            
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var searchResult = JsonConvert.DeserializeObject<List<InventoryOverviewDto>>(responseContent);
+
+            Assert.IsNotNull(searchResult);
+
+            //var byNameQueryParam = new InventoryQueryParameter()
+            //{
+            //    GroupBy = "name"
+            //};
+
+            //var byNameResult = 
+
+            //var byPrintQueryParam = new InventoryQueryParameter()
+            //{
+            //    GroupBy = "unique"
+            //};
+
+            //var byUniqueQueryParam = new InventoryQueryParameter()
+            //{
+            //    GroupBy = "print"
+            //};
+
+        }
     }
 }

@@ -2,6 +2,13 @@
 
 namespace Carpentry.Logic.Models.Search
 {
+    //public enum InventoryQueryGroupByOption
+    //{
+    //    name,
+    //    unique,
+    //    print,
+    //}
+
     public class InventoryQueryParameter
     {
         public string GroupBy { get; set; } //options: name | print | unique

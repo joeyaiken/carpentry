@@ -12,8 +12,8 @@
 	FROM (
 		SELECT		ic.InventoryCardId
 					,ic.CardId
-					,ic.IsFoil			
-					,CASE WHEN dc.DeckCardId IS NULL THEN s.Name ELSE 'Deck' END AS Location
+					,ic.IsFoil
+					,CASE WHEN dc.DeckCardId IS NULL THEN s.[Name] ELSE 'Deck' END AS [Location]
 		FROM		InventoryCards ic
 		LEFT JOIN	DeckCards dc
 				ON	ic.InventoryCardId = dc.InventoryCardId
@@ -23,5 +23,5 @@
 	PIVOT
 	(
 		COUNT(InventoryCardId)
-		FOR Location IN ([Inventory],[Buy List],[Sell List],[Deck])
+		FOR [Location] IN ([Inventory],[Buy List],[Sell List],[Deck])
 	) AS PivotTable
