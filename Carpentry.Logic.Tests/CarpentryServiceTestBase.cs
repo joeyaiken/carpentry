@@ -222,7 +222,8 @@ namespace Carpentry.Logic.Tests
                 .UseSqlite("Filename=ScryData.db").Options;
 
             ResetContext();
-
+            //await CardContext.Database.EnsureDeletedAsync();
+            //await ScryContext.Database.EnsureDeletedAsync();
             await CardContext.EnsureDatabaseCreated(false);
             await ScryContext.Database.EnsureCreatedAsync();
 

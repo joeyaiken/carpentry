@@ -59,6 +59,7 @@ namespace Carpentry.Tests
             var queryParam = new InventoryQueryParameter()
             {
                 GroupBy = groupBy,
+                //Set = "kld"
             };
 
             var queryParamStringBody = JsonConvert.SerializeObject(queryParam, Formatting.None);

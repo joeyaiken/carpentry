@@ -1,5 +1,13 @@
-﻿namespace Carpentry.CarpentryData.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace Carpentry.CarpentryData.Models
 {
+    //public class InventoryCardOverview
+    //{
+
+    //}
+
     public class CardOverviewResult
     {
         public int Id { get; set; }
@@ -29,6 +37,13 @@
         //(I can add more when I actually need them)        
         //wishlist count
         
+        //Misc
         public bool? IsFoil { get; set; } //only populated for ByUnique, otherwise NULL
+        public DateTime SetReleaseDate { get; set; }
+
+
+
+        //public List<InventoryCardOverview> InventoryCards { get; set; }
+
     }
 }

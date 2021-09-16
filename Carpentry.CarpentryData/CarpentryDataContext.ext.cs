@@ -336,25 +336,6 @@ namespace Carpentry.CarpentryData
 			 */
 
 
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			//Start with all cards
 			//Get the inventory counts for each card, the rest can be manipulated later
 			var totalsByCard = Cards.Select(c => new
