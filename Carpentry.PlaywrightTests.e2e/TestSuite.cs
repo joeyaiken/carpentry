@@ -1,11 +1,11 @@
-﻿using Carpentry.PlaywrightTests.e2e.Pages;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Carpentry.PlaywrightTests.e2e.Pages;
 
 namespace Carpentry.PlaywrightTests.e2e
 {
@@ -48,37 +48,30 @@ namespace Carpentry.PlaywrightTests.e2e
 
             //Test that the home page loads properly
 
+            //Build the 'Simic Snow Stompy' deck by adding tracked sets, adding new inventory cards, then building a deck from those cards
 
+            //Build John Snow by importing a deck list
 
+            //Build [Some other new deck] by creating new cards directly into to a deck
+
+            //[find some way to get bulk cards], then use Trimming Tool to trim cards
+
+            //TODO : Ensure all features are covered by e2e tests
 
             //await DemoTest();
             //return;
 
             var page = await browser.NewPageAsync();
 
-            Console.WriteLine("Going to page");
-
-            //await page.GotoAsync(APP_URL);
-
             await WaitForApp(page);
-
-            Console.WriteLine($"starting {nameof(TestHomePageLoads)}");
 
             await TestHomePageLoads(page);
 
-            //navigate to settings
-            //add desired tracked sets (the 3 needed for SimicSnowStompy)
+            // //navigate to settings, add desired tracked sets (the 3 needed for SimicSnowStompy)
+            // await TestSettingsTrackSnowSets(page);
 
-            await TestSettingsLoads(page);
-
-            //navigate to Inventory
-
-            //click Add Cards
-
-            //add cards by set
-            //MH1
-            //Kaldheim
-            //Coldsnap
+            //Add the cards required to populate the snow deck
+            await TestInventoryAddSnowCards(page);
 
         }
 
@@ -86,6 +79,8 @@ namespace Carpentry.PlaywrightTests.e2e
 
         private async Task TestHomePageLoads(IPage page)
         {
+            Console.WriteLine($"starting {nameof(TestHomePageLoads)}");
+
             var homePage = new HomePage(_appSettings.AppUrl, page);
 
             await homePage.NavigateTo();
@@ -98,15 +93,56 @@ namespace Carpentry.PlaywrightTests.e2e
             Console.WriteLine($"{nameof(TestHomePageLoads)} completed successfully");
         }
 
-        private async Task TestSettingsLoads(IPage page)
+        private async Task TestSettingsTrackSnowSets(IPage page)
         {
             var settingsPage = new SettingsPage(_appSettings.AppUrl, page);
             await settingsPage.NavigateTo();
+            await settingsPage.WaitForBusy();
+            
+            //Assert no tracked sets
+            var trackedSets = await settingsPage.GetTrackedSetRows();
+            Assert.AreEqual(0, trackedSets.Count);
+            
+            //show untracked sets
+            await settingsPage.ClickShowUntrackedToggle();
+            
+            //refresh list
+            await settingsPage.ClickRefreshButton();
+
+            //add Kaldheim, MH1, and Coldsnap
+            await settingsPage.AddTrackedSet("khm"); //TODO - replace set code strings with seed data
+            await settingsPage.AddTrackedSet("mh1");
+            await settingsPage.AddTrackedSet("csp");
+
+            //Hide untracked sets
+            await settingsPage.ClickShowUntrackedToggle();
+
+            //Assert 3 tracked sets (& details ?)
+            var updatedTrackedSets = await settingsPage.GetTrackedSetRows();
+            Assert.AreEqual(3, updatedTrackedSets.Count);
+
+            Assert.IsNotNull(await settingsPage.GetRowByCode("khm"));
+            Assert.IsNotNull(await settingsPage.GetRowByCode("mh1"));
+            Assert.IsNotNull(await settingsPage.GetRowByCode("csp"));
+        }
+
+        private async Task TestInventoryAddSnowCards(IPage page)
+        {
+            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AppUrl, page);
+            
+            //navigate to Inventory
+            //click Add Cards
+            await inventoryAddCardsPage.NavigateTo();
+            
+            //add cards by set
+            //MH1
+            //Kaldheim
+            //Coldsnap
 
             int breakpoint = 1;
         }
-
-        private async Task DemoTest()
+        
+        private async Task DemoTest() 
         {
             Console.WriteLine("Beginning Playwright e2e test for Carpentry app");
 
@@ -131,9 +167,30 @@ namespace Carpentry.PlaywrightTests.e2e
 
         private async Task WaitForApp(IPage page)
         {
+            Console.WriteLine($"Beginning {nameof(WaitForApp)}");
             //bool pageIsLoaded = await TryLoadPage(page);
             bool pageIsLoaded = false;
-            while (!pageIsLoaded) pageIsLoaded = await TryLoadPage(page);
+            while (!pageIsLoaded)
+            {
+                // pageIsLoaded = await TryLoadPage(page);
+                //TODO - implement some limit/timeout
+                //Either this properly awaits the page, or fails and should delay
+                try //TODO - catch specific errors, don't catch blindly
+                {
+                    Console.WriteLine("TryLoadPage");
+                    await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
+                    Console.WriteLine("Page Loaded");
+                    //return true;
+                    pageIsLoaded = true;
+                }
+                catch //(PlaywrightException ex)
+                {
+                    //Console.WriteLine($"Page Not loaded: {ex.Message}");
+                    Console.WriteLine($"Error loading page, delaying before retrying...");
+                    await Task.Delay(APP_INIT_DELAY);
+                    //return false;
+                }
+            }
 
             //bool appIsLoaded = await TryLoadApp(page);
             //bool appIsLoaded = !pageIsLoaded ? false : await TryLoadApp(page);
@@ -147,54 +204,107 @@ namespace Carpentry.PlaywrightTests.e2e
             //    await Task.Delay(5000);
             //}
 
-            while (!appIsLoaded) appIsLoaded = await TryLoadApp(page);
+            while (!appIsLoaded)
+            {
+                //appIsLoaded = await TryLoadApp(page);
+                try //TODO - catch specific errors, don't catch blindly
+                {
+                    Console.WriteLine("Checking app status (TryLoadApp)");
+                    //await page.GotoAsync(APP_URL);
+                    var appText = await page.TextContentAsync("app-root");
+                    if (appText != "Loading...")
+                    {
+                        Console.WriteLine("App loaded!");
+                        appIsLoaded = true;
+                        continue;
+                    };
+                }
+                catch
+                {
+                    Console.WriteLine("Error loading app");
+                }
+
+                Console.WriteLine("App not loaded, delaying before retrying...");
+                await Task.Delay(APP_INIT_DELAY);
+                //return false;
+            }
             Console.WriteLine($"{nameof(WaitForApp)} completed");
         }
 
-        private async Task<bool> TryLoadPage(IPage page)
-        {
-            //TODO - implement some limit/timeout
-            //Either this properly awaits the page, or fails and should delay
-            try //TODO - catch specific errors, don't catch blindly
-            {
-                Console.WriteLine("TryLoadPage");
-                await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
-                Console.WriteLine("Page Loaded");
-                return true;
-            }
-            catch //(PlaywrightException ex)
-            {
-                //Console.WriteLine($"Page Not loaded: {ex.Message}");
-                Console.WriteLine($"Error loading page, delaying before retrying...");
-                await Task.Delay(APP_INIT_DELAY);
-                return false;
-            }
-        }
+        //private async Task<bool> TryLoadPage(IPage page)
+        //{
+        //    //TODO - implement some limit/timeout
+        //    //Either this properly awaits the page, or fails and should delay
+        //    try //TODO - catch specific errors, don't catch blindly
+        //    {
+        //        Console.WriteLine("TryLoadPage");
+        //        await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
+        //        Console.WriteLine("Page Loaded");
+        //        return true;
+        //    }
+        //    catch //(PlaywrightException ex)
+        //    {
+        //        //Console.WriteLine($"Page Not loaded: {ex.Message}");
+        //        Console.WriteLine($"Error loading page, delaying before retrying...");
+        //        await Task.Delay(APP_INIT_DELAY);
+        //        return false;
+        //    }
+        //}
 
-        private async Task<bool> TryLoadApp(IPage page)
-        {
-            try //TODO - catch specific errors, don't catch blindly
-            {
-                Console.WriteLine("Checking app status (TryLoadApp)");
-                //await page.GotoAsync(APP_URL);
-                var appText = await page.TextContentAsync("app-root");
-                if (appText != "Loading...")
-                {
-                    Console.WriteLine("App loaded!");
-                    return true;
-                };
-            }
-            catch
-            {
-                Console.WriteLine("Error loading app");
-            }
+        //private async Task<bool> TryLoadApp(IPage page)
+        //{
+        //    try //TODO - catch specific errors, don't catch blindly
+        //    {
+        //        Console.WriteLine("Checking app status (TryLoadApp)");
+        //        //await page.GotoAsync(APP_URL);
+        //        var appText = await page.TextContentAsync("app-root");
+        //        if (appText != "Loading...")
+        //        {
+        //            Console.WriteLine("App loaded!");
+        //            return true;
+        //        };
+        //    }
+        //    catch
+        //    {
+        //        Console.WriteLine("Error loading app");
+        //    }
 
-            Console.WriteLine("App not loaded, delaying before retrying...");
-            await Task.Delay(APP_INIT_DELAY);
-            return false;
+        //    Console.WriteLine("App not loaded, delaying before retrying...");
+        //    await Task.Delay(APP_INIT_DELAY);
+        //    return false;
 
-        }
+        //}
 
     }
 
+    public class SeedData
+    {
+        public SeedData()
+        {
+            KaldheimSet = new SeedSet("khm");
+            ModernHorizonsSet = new SeedSet("mh1");
+            ColdsnapSet = new SeedSet("csp");
+        }
+
+        public SeedSet ColdsnapSet { get; set; }
+
+        public SeedSet ModernHorizonsSet { get; set; }
+
+        private SeedSet KaldheimSet { get; set;  }
+        
+        public List<SeedSet> SeedSets => new List<SeedSet>()
+        {
+            KaldheimSet, ModernHorizonsSet, ColdsnapSet
+        };
+    }
+
+    public class SeedSet
+    {
+        public SeedSet(string setCode)
+        {
+            SetCode = setCode;
+        }
+        
+        public string SetCode { get; set; }
+    }
 }

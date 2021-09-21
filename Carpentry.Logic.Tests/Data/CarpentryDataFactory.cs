@@ -19,7 +19,7 @@ namespace Carpentry.Logic.Tests.Data
             };
         }
 
-        public CardData Card(string name, char rarityId = 'R')
+        public CardData Card(string name, char color, char rarityId = 'R')
         {
             return new CardData()
             {

@@ -369,10 +369,38 @@ namespace Carpentry.Logic
                 }).ToListAsync();
 
             //get all names with null inventory cards
-            var cardNames = deckCards.Where(dc => dc.InventoryCardId == null).Select(dc => dc.Name).Distinct().ToList();
+            var cardNames = deckCards
+                .Where(dc => dc.InventoryCardId == null)
+                .Select(dc => dc.Name)
+                .Distinct().ToList();
 
             var relevantCardsByName = (await _cardContext.InventoryCardByName
                 .Where(c => cardNames.Contains(c.Name))
+                .Select(c => new InventoryCardByNameResult()
+                {
+                    CardId = c.CardId,
+                    Cmc = c.Cmc,
+                    CollectorNumber = c.CollectorNumber,
+                    Color = c.Color,
+                    ColorIdentity = c.ColorIdentity,
+                    DeckCount = c.DeckCount,
+                    Id = c.Id,
+                    ImageUrl = c.ImageUrl,
+                    InventoryCount = c.InventoryCount,
+                    SellCount = c.SellCount,
+                    TotalCount = c.TotalCount,
+                    // TixPrice = c.TixPrice,
+                    // PriceFoil = c.PriceFoil,
+                    // Price = c.Price,
+                    Name = c.Name,
+                    ManaCost = c.ManaCost,
+                    IsFoil = c.IsFoil,
+                    RarityId = c.RarityId,
+                    SetCode = c.SetCode,
+                    Text = c.Text,
+                    Type = c.Type,
+                })
+                
                 .ToListAsync())
                 //.Select(c => new CardData()
                 //{

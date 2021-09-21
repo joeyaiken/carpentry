@@ -99,22 +99,19 @@ namespace Carpentry.Logic.Tests
 
         }
 
-
-
-
         [TestMethod]
         public async Task SearchInventoryCards_SetFilter_Works()
         {
             //seed DB, 2 records from different sets
             var factory = new CarpentryDataFactory();
 
-            var expectedResultCard = factory.Card("Card A");
+            var expectedResultCard = factory.Card("Card A", 'R');
 
             var seedSet1 = factory.CardSet("Set A", "A", DateTime.Now.AddMonths(-3),
                 expectedResultCard);
 
             var seedSet2 = factory.CardSet("Set B", "B", DateTime.Now,
-                factory.Card("Card B"));
+                factory.Card("Card B", 'U'));
 
             CardContext.AddRange(seedSet1, seedSet2);
             await CardContext.SaveChangesAsync();
@@ -134,8 +131,34 @@ namespace Carpentry.Logic.Tests
             Assert.AreEqual(expectedResultCard.Name, searchResult.Single().Name);
         }
 
+        /// <summary>
+        /// A test that checks if the SearchCardDefinitions method generally works, filtering for Set and SearchGroup
+        /// </summary>
+        [TestMethod]
+        public async Task SearchCardDefinitions_Works()
+        {
+            var factory = new CarpentryDataFactory();
 
+            var redCard = factory.Card("A red one", 'R');
+            var blueCard = factory.Card("A blue one", 'U');
+            var greenCard = factory.Card("A green one", 'G');
 
+            var expectedSet = factory.CardSet("Set A", "S_A", DateTime.Now, redCard, blueCard);
+            var otherSet = factory.CardSet("Set B", "S_B", DateTime.Now.AddMonths(-3), greenCard);
+            
+            CardContext.AddRange(expectedSet, otherSet);
+            await CardContext.SaveChangesAsync();
+            ResetContext();
+            
+            var queryParam = new CardSearchQueryParameter()
+            {
+                Set = "TODO - reference seed data",
+                SearchGroup = "Red"
+            };
 
+            var searchResults = await _searchService.SearchCardDefinitions(queryParam);
+
+            Assert.AreEqual(1, searchResults.Count);
+        }
     }
 }

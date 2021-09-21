@@ -39,7 +39,7 @@ namespace Carpentry.CarpentryData.Models
         
         //Misc
         public bool? IsFoil { get; set; } //only populated for ByUnique, otherwise NULL
-        public DateTime SetReleaseDate { get; set; }
+        // public DateTime SetReleaseDate { get; set; }
 
 
 

@@ -25,7 +25,6 @@ namespace Carpentry.Core.Controllers
         /// <summary>
         /// Constructor, uses DI to get a card repo
         /// </summary>
-        /// <param name="repo"></param>
         public InventoryController(
             IInventoryService inventoryService,
             IDataExportService dataExportService,
@@ -164,7 +163,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                InventoryDetailDto result = await _inventoryService.GetInventoryDetail(cardId);
+                var result = await _inventoryService.GetInventoryDetail(cardId);
                 return Ok(result);
             }
             catch (Exception ex)

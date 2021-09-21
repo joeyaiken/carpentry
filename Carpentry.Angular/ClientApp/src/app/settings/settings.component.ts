@@ -30,41 +30,20 @@ export class SettingsComponent implements OnInit {
     this.showUntrackedSets = false;
   }
   ngOnInit(): void {
-    //set busy
-    //Chain together the 2 API calls
-    //When all resolved: Clear busy
     this.loadData();
   }
 
 
   loadData(): void {
     this.isBusy = true;
-
-    this.waitForEverythingToLoad().subscribe(() => {
-      this.isBusy = false;
-    }, err => console.log(`waitForEverythingToLoad error: ${err}`))
-
-    // forkJoin({
-    //   //totals: this.
-    // })
-
-    // this.getCollectionTotals();
-    // this.loadTrackedSets();
-
-    // (  
-
-
-    // )
-    // this.isBusy = false;
-  }
-
-  waitForEverythingToLoad(): Observable<any> {
-    return forkJoin([
+    forkJoin([
       this.getCollectionTotalsObservable(),
       this.loadTrackedSetsObseervable(),
-    ]);
+    ]).subscribe(() => {
+      this.isBusy = false;
+    }/* err => console.log(`loadData error: ${err}`) */);
   }
-
+  
   getCollectionTotalsObservable(): Observable<InventoryTotalsByStatusResult[]> {
     return this.coreService.getCollectionTotals().pipe(tap<InventoryTotalsByStatusResult[]>(
       result => {

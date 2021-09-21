@@ -9,16 +9,9 @@ namespace Carpentry.Logic.Models.Search
     //    print,
     //}
 
-    public class InventoryQueryParameter
+    public class InventoryQueryParameter : CardSearchQueryParameterBase
     {
         public string GroupBy { get; set; } //options: name | print | unique
-        public List<string> Colors { get; set; }
-        public string Type { get; set; }
-        public List<string> Rarity { get; set; }
-        public bool ExclusiveColorFilters { get; set; }
-        public bool MultiColorOnly { get; set; }
-        public string Set { get; set; }
-        public string Text { get; set; }
         public int Skip { get; set; }
         public int Take { get; set; }
         public string Sort { get; set; }

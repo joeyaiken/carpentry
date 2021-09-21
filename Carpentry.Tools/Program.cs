@@ -158,6 +158,7 @@ namespace Carpentry.Tools
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
                 //logic services
+                .AddScoped<IDataImportService, DataImportService>()
                 .AddScoped<IDataExportService, DataExportService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()
                 .AddScoped<IScryfallService, ScryfallService>().AddHttpClient<IScryfallService, ScryfallService>().Services

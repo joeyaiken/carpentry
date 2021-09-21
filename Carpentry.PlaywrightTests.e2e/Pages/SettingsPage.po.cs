@@ -1,8 +1,10 @@
-﻿using Microsoft.Playwright;
+﻿#nullable enable
+using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Carpentry.PlaywrightTests.e2e.Pages
 {
@@ -19,16 +21,61 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         public async Task NavigateTo()
         {
             if (_pageUrl == _page.Url) return;
-
-            //Click Settings nav button
-            //app-nav-menu button:text(""
-            //wait for the page to load
             await _page.ClickAsync("app-nav-menu a:has-text(\"Settings\")");
-
-            //await _page.GotoAsync(_pageUrl);
         }
 
-        //public string? TitleText => _page.TextContentAsync("app-landing h2").Result; //TODO - this selector may not work in react
-        //public string? SubtitleText => _page.TextContentAsync("app-landing h3").Result; //TODO - this selector may not work in react
+        public async Task WaitForBusy()
+        {
+            await _page.WaitForSelectorAsync("mat-progress-bar", new PageWaitForSelectorOptions()
+            {
+                State = WaitForSelectorState.Hidden
+            });
+        }
+
+        public async Task ClickShowUntrackedToggle()
+        {
+            await _page.ClickAsync("mat-slide-toggle");
+            await WaitForBusy();
+        }
+
+        public async Task ClickRefreshButton()
+        {
+            await _page.ClickAsync("a:has-text(\"refresh\")");
+            await WaitForBusy();
+        }
+
+        public async Task<IReadOnlyList<IElementHandle>> GetTrackedSetRows()
+        {
+            return await _page.QuerySelectorAllAsync("app-tracked-sets tbody tr");
+        }
+
+        public async Task<TrackedSetRow?> GetRowByCode(string setCode)
+        {
+            var element = await _page.QuerySelectorAsync($"app-tracked-sets tbody tr:has(td:text-is(\"{setCode}\"))");
+            return element == null ? null : new TrackedSetRow(element);
+        }
+
+        public async Task AddTrackedSet(string setCode)
+        {
+            var row = await GetRowByCode(setCode);
+            Assert.IsNotNull(row);
+            await row!.ClickAddButton();
+            await WaitForBusy();
+        }
+    }
+
+    public class TrackedSetRow
+    {
+        private readonly IElementHandle _element;
+        public TrackedSetRow(IElementHandle element)
+        {
+            _element = element;
+        }
+
+        public async Task ClickAddButton()
+        {
+            var addButton = await _element.QuerySelectorAsync("a:has-text(\"add\")");
+            await addButton!.ClickAsync();
+        }
     }
 }
