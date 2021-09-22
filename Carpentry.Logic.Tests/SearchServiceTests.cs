@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Carpentry.Logic.Tests
 {
@@ -105,13 +106,13 @@ namespace Carpentry.Logic.Tests
             //seed DB, 2 records from different sets
             var factory = new CarpentryDataFactory();
 
-            var expectedResultCard = factory.Card("Card A", 'R');
+            var expectedResultCard = factory.Card("Card A", "R");
 
             var seedSet1 = factory.CardSet("Set A", "A", DateTime.Now.AddMonths(-3),
                 expectedResultCard);
 
             var seedSet2 = factory.CardSet("Set B", "B", DateTime.Now,
-                factory.Card("Card B", 'U'));
+                factory.Card("Card B", "U"));
 
             CardContext.AddRange(seedSet1, seedSet2);
             await CardContext.SaveChangesAsync();
@@ -139,20 +140,23 @@ namespace Carpentry.Logic.Tests
         {
             var factory = new CarpentryDataFactory();
 
-            var redCard = factory.Card("A red one", 'R');
-            var blueCard = factory.Card("A blue one", 'U');
-            var greenCard = factory.Card("A green one", 'G');
+            var redCard = factory.Card("A red one", "R", 'C');
+            var blueCard = factory.Card("A blue one", "U", 'C');
+            var greenCard = factory.Card("A green one", "G", 'C');
 
             var expectedSet = factory.CardSet("Set A", "S_A", DateTime.Now, redCard, blueCard);
             var otherSet = factory.CardSet("Set B", "S_B", DateTime.Now.AddMonths(-3), greenCard);
             
             CardContext.AddRange(expectedSet, otherSet);
+
             await CardContext.SaveChangesAsync();
             ResetContext();
             
+            // var cardQuery = await CardContext.Cards.ToListAsync();
+                
             var queryParam = new CardSearchQueryParameter()
             {
-                Set = "TODO - reference seed data",
+                Set = expectedSet.Code,
                 SearchGroup = "Red"
             };
 

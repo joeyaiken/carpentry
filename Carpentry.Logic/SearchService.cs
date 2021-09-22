@@ -30,7 +30,8 @@ namespace Carpentry.Logic
         public int? Cmc { get; set; }
         public char RarityId { get; set; }
         public string ImageUrl { get; set; }
-        public int? CollectorNumber { get; set; }
+        //public int? CollectorNumber { get; set; }
+        public int CollectorNumber { get; set; }
         public string Color { get; set; }
         public string ColorIdentity { get; set; }
         //prices
@@ -83,250 +84,47 @@ namespace Carpentry.Logic
             _allColors = new string[] {"W", "U", "B", "R", "G"};
         }
 
-        //This is the one used by inventory-add-cards
-        public async Task<List<CardSearchResultDto>> SearchCardDefinitions(CardSearchQueryParameter filters)
-        {
-            //var query = 
-            //start with card definitions
-
-            //apply filters
-
-            //to list
-
-            //group by name
-
-            
-            //////////////////////////
-
-            var newQuery = GetFilteredCardQuery(filters);
-
-            var query = _cardContext.InventoryCardByPrint.AsQueryable();
-
-            if (filters.ExcludeUnowned)
-            {
-                query = query.Where(x => x.TotalCount > 0);
-
-            }
-
-            var filteredResults = await query.ToListAsync();
-
-            //Is this a dumb approach?  Trying to get the "first" record now?
-            var groupedQuery = filteredResults
-                .GroupBy(c => c.Name)
-                .Select(g => new
-                {
-                    Name = g.Key,
-                    First = g.First(),
-                    Details = g.Select(c => new CardSearchResultDetail()
-                    {
-                        CardId = c.CardId,
-                        Name = c.Name,
-                        CollectionNumber = c.CollectorNumber ?? 0,
-                        ImageUrl = c.ImageUrl,
-                        Price = c.Price,
-                        PriceFoil = c.PriceFoil,
-                        PriceTix = c.PriceFoil,
-                        SetCode = c.SetCode,
-                    }).OrderBy(c => c.CollectionNumber).ToList(),
-                }).ToList();
-
-            var results = groupedQuery.Select(x => new CardSearchResultDto()
-                {
-                    //Id = 0, // want to start at 1
-                    CardId = x.Details.OrderBy(d => d.CollectionNumber).First().CardId,
-                    Name = x.Name,
-                    Cmc = x.First.Cmc,
-                    //ColorIdentity = x.First.ColorIdentity.ToCharArray().Select(c => c.ToString()).ToList(),
-                    ColorIdentity = x.First.ColorIdentity?.ToCharArray(),
-                    //Colors = x.First.Color.ToCharArray().Select(c => c.ToString()).ToList(),
-                    Colors = x.First.Color?.ToCharArray(),
-                    ManaCost = x.First.ManaCost,
-                    Type = x.First.Type,
-                    Details = x.Details,
-                })
-                .OrderBy(x => x.Name)
-                .Take(500)
-                .ToList(); //Don't want to ever return more than 500, should add actual pagination
-
-            return results;
-        }
-
         /// <summary>
         /// Searches card definitions for the Card Search section
+        /// Currently used by the 2 card-search implementations
         /// </summary>
         /// <param name="filters"></param>
         /// <returns></returns>
-        public async Task<List<CardSearchResultDto>> SearchCardDefinitions_Legacy(CardSearchQueryParameter filters)
+        public async Task<List<CardSearchResultDto>> SearchCardDefinitions(CardSearchQueryParameter filters)
         {
-            //Thoughts on result object
-            //  When searching for cards, I want to see cards listed BY NAME
-            //      Scenario 1: adding new cards to inventory.  I'll be filtering by set, so this works great
-            //          I'm also grouping my collection by NAME, not by CollectorNumber
-            //  When searching for a deck, I'd ALSO like to see things grouped by name, then see what varieties of that card-name I could add
-
-            //  So, do I look at the ByName view, or do I group ByPrint?
-            //  Also, how do I fitler on legality?
-
-            //  When searching for cards for a deck, do I load inventory cards with the full list?
-            //      I could keep doing my current plan of making an API call for that
-
-
-
-
-            //Scenario 1: searching cards (filtered by set) to add to inventory
-            //  Want both owned and unowned cards
-            //  Want all possible variations of the card
-
-            //Scenario 2: searching cards to add to deck
-            //  Want only owned cards
-            //  
-
-            var query = _cardContext.InventoryCardByPrint.AsQueryable();
-
-            //map first or filters first?
-
-            #region Filters
-
-            if (!string.IsNullOrEmpty(filters.Set))
-            {
-                query = query.Where(x => x.SetCode == filters.Set);
-            }
-
-            if (!string.IsNullOrEmpty(filters.Type))
-            {
-                query = query.Where(x => x.Type.ToLower().Contains(filters.Type.ToLower()));
-            }
-
-            //if (filters.ColorIdentity.Any())
-            if (filters.Colors?.Count > 0)
-            {
-                var excludedColors = _allColors.Where(x => !filters.Colors.Contains(x)).Select(x => x).ToList();
-                //query = query.Where(x => x.ColorIdentity.Split().ToList().Any(color => excludedColors.Contains(color)));
-                //query = query.Where(x => x.ColorIdentity.ToCharArray().Any(color => excludedColors.Contains(color.ToString())));
-                //query = query.Where(x => !excludedColors.Any(color => x.ColorIdentity.Contains(color)));
-
-                foreach (var color in excludedColors)
-                {
-                    query = query.Where(x => !x.ColorIdentity.Contains(color));
-                }
-
-            }
-
-            if (filters.ExclusiveColorFilters)
-            {
-                query = query.Where(x => x.ColorIdentity.Length == filters.Colors.Count());
-            }
-
-            if (filters.MultiColorOnly)
-            {
-                query = query.Where(x => x.ColorIdentity.Length > 1);
-            }
-
-            if (
-                //filters.Rarity.DefaultIfEmpty().Any() && 
-                filters.Rarity?.Count > 0)
-            {
-                //rarity values coming in are char codes, not names
-                query = query.Where(x => filters.Rarity.Contains(x.RarityId.ToString()));
-            }
+            var newQuery = GetFilteredCardQuery(filters);
 
             if (filters.ExcludeUnowned)
-            {
-                query = query.Where(x => x.TotalCount > 0);
-            }
+                newQuery = newQuery.Where(c => c.InventoryCards.Count > 0);
 
-            if (!string.IsNullOrEmpty(filters.Text))
-            {
-                var textFilter = filters.Text.ToLower();
-                query = query.Where(x =>
-                    x.Name.ToLower().Contains(textFilter)
-                    || x.Type.ToLower().Contains(textFilter)
-                    || x.Text.ToLower().Contains(textFilter)
-                );
-            }
-
-            if (!string.IsNullOrEmpty(filters.SearchGroup))
-            {
-                switch (filters.SearchGroup)
-                {
-                    case "Red":
-                        query = query.Where(x => x.ColorIdentity == "R" && (x.RarityId == 'C' || x.RarityId == 'U'));
-                        break;
-                    case "Blue":
-                        query = query.Where(x => x.ColorIdentity == "U" && (x.RarityId == 'C' || x.RarityId == 'U'));
-                        break;
-                    case "Green":
-                        query = query.Where(x => x.ColorIdentity == "G" && (x.RarityId == 'C' || x.RarityId == 'U'));
-                        break;
-                    case "White":
-                        query = query.Where(x => x.ColorIdentity == "W" && (x.RarityId == 'C' || x.RarityId == 'U'));
-                        break;
-                    case "Black":
-                        query = query.Where(x => x.ColorIdentity == "B" && (x.RarityId == 'C' || x.RarityId == 'U'));
-                        break;
-                    case "Multicolored":
-                        query = query.Where(x =>
-                            x.ColorIdentity.Length > 1 && (x.RarityId == 'C' || x.RarityId == 'U'));
-                        break;
-                    case "Colorless":
-                        query = query.Where(
-                            x => x.ColorIdentity.Length == 0 && (x.RarityId == 'C' || x.RarityId == 'U'));
-                        break;
-                    case "Lands":
-                        query = query.Where(x =>
-                            x.Type.Contains("Land") &&
-                            (x.RarityId == 'C' || x.RarityId == 'U')); // && !x.Type.Contains()
-                        break;
-                    case "RareMythic":
-                        query = query.Where(x => x.RarityId == 'R' || x.RarityId == 'M');
-                        break;
-                }
-            }
-
-
-            #endregion
-
-            var filteredResults = await query.ToListAsync();
-
-            //Is this a dumb approach?  Trying to get the "first" record now?
-            var groupedQuery = filteredResults
+            var queryResult = (await GetMappedQueryResult(newQuery))
                 .GroupBy(c => c.Name)
-                .Select(g => new
+                .Select(g => new CardSearchResultDto()
                 {
+                    CardId = g.OrderBy(d => d.SetCode).ThenBy(d => d.CollectorNumber).First().CardId,
                     Name = g.Key,
-                    First = g.First(),
+                    Cmc = g.First().Cmc,
+                    Colors = g.First().Color.ToCharArray(),
+                    Type = g.First().Type,
+                    ColorIdentity = g.First().ColorIdentity.ToCharArray(),
+                    ManaCost = g.First().ManaCost,
                     Details = g.Select(c => new CardSearchResultDetail()
                     {
                         CardId = c.CardId,
                         Name = c.Name,
-                        CollectionNumber = c.CollectorNumber ?? 0,
+                        CollectionNumber = c.CollectorNumber,
                         ImageUrl = c.ImageUrl,
                         Price = c.Price,
                         PriceFoil = c.PriceFoil,
                         PriceTix = c.PriceFoil,
                         SetCode = c.SetCode,
                     }).OrderBy(c => c.CollectionNumber).ToList(),
-                }).ToList();
-
-            var results = groupedQuery.Select(x => new CardSearchResultDto()
-                {
-                    //Id = 0, // want to start at 1
-                    CardId = x.Details.OrderBy(d => d.CollectionNumber).First().CardId,
-                    Name = x.Name,
-                    Cmc = x.First.Cmc,
-                    //ColorIdentity = x.First.ColorIdentity.ToCharArray().Select(c => c.ToString()).ToList(),
-                    ColorIdentity = x.First.ColorIdentity?.ToCharArray(),
-                    //Colors = x.First.Color.ToCharArray().Select(c => c.ToString()).ToList(),
-                    Colors = x.First.Color?.ToCharArray(),
-                    ManaCost = x.First.ManaCost,
-                    Type = x.First.Type,
-                    Details = x.Details,
                 })
                 .OrderBy(x => x.Name)
                 .Take(500)
                 .ToList(); //Don't want to ever return more than 500, should add actual pagination
-
-            return results;
+            
+            return queryResult;
         }
 
         //This is the one used by the inventory page
@@ -342,56 +140,11 @@ namespace Carpentry.Logic
             var cardQuery = GetFilteredCardQuery(param);
 
             //So, I have a query of all cards relevant to these filters
-
-            //
-            var queryResult = await cardQuery
-                .Select(c => new CardOverview
-                {
-                    //Id = ic.InventoryCardId,
-                    //card definition props
-                    CardId = c.CardId,
-                    SetCode = c.Set.Code,
-                    Name = c.Name,
-                    Type = c.Type,
-                    Text = c.Text,
-                    ManaCost = c.ManaCost,
-                    Cmc = c.Cmc,
-                    RarityId = c.RarityId,
-                    ImageUrl = c.ImageUrl,
-                    CollectorNumber = c.CollectorNumber,
-                    Color = c.Color,
-                    ColorIdentity = c.ColorIdentity,
-
-                    //prices
-                    Price = (decimal?) c.Price,
-                    PriceFoil = (decimal?) c.PriceFoil,
-                    TixPrice = (decimal?) c.TixPrice,
-
-                    InventoryCards = c.InventoryCards.Select(ic => new InventoryCardOverview()
-                    {
-                        InventoryCardId = ic.InventoryCardId,
-                        IsFoil = ic.IsFoil,
-                        //status (in a deck/inventory/buy/sell)
-                        //Status = (ic.DeckCards.Count != 0) ? "Deck" : ic.Status.Name,
-                        Status = (ic.DeckCards.Count != 0) ? (int) InventoryCardStatus.Deck : ic.InventoryCardStatusId
-                    }).ToList(),
-
-                    //counts
-                    //TotalCount = 1,
-                    //DeckCount = (c.DeckCards.Count == 0) ? 0 : 1,
-                    //InventoryCount = (c.DeckCards.Count == 0 && c.InventoryCardStatusId == 1) ? 1 : 0,
-                    //SellCount = (c.DeckCards.Count == 0 && c.InventoryCardStatusId == 3) ? 1 : 0,
-
-                    //misc
-                    //IsFoil = c.IsFoil,
-                    SetReleaseDate = c.Set.ReleaseDate,
-                })
-                .ToListAsync();
-
+            var queryResult = await GetMappedQueryResult(cardQuery);
+            
             var groupedResult = GetGroupedCards(queryResult, param.GroupBy);
 
             //order/skip/take
-
 
             switch (param.Sort)
             {
@@ -438,12 +191,12 @@ namespace Carpentry.Logic
         private IQueryable<CardData> GetFilteredCardQuery(CardSearchQueryParameterBase param)
         {
             var cardQuery = _cardContext.Cards.AsQueryable();
-
+            // List<CardData> TestResults = null;
             if (!string.IsNullOrEmpty(param.Set))
             {
                 cardQuery = cardQuery.Where(ic => ic.Set.Code.ToLower() == param.Set.ToLower());
             }
-
+            // TestResults = cardQuery.ToList();
             if (param.Colors != null && param.Colors.Any())
             {
                 //atm I'm trying to be strict in my matching.  If a color isn't in the list, I'll exclude any card containing that color
@@ -456,27 +209,27 @@ namespace Carpentry.Logic
                 //     query = query.Where(x => !x.ColorIdentity.Contains(color));
                 // }
             }
-
+            // TestResults = cardQuery.ToList();
             if (param.ExclusiveColorFilters)
             {
                 cardQuery = cardQuery.Where(c => c.ColorIdentity.Length == param.Colors.Count());
             }
-
+            // TestResults = cardQuery.ToList();
             if (param.MultiColorOnly)
             {
                 cardQuery = cardQuery.Where(c => c.ColorIdentity.Length > 1);
             }
-
+            // TestResults = cardQuery.ToList();
             if (!string.IsNullOrEmpty(param.Type))
             {
                 cardQuery = cardQuery.Where(c => c.Type.ToLower().Contains(param.Type.ToLower()));
             }
-
+            // TestResults = cardQuery.ToList();
             if (param.Rarity != null && param.Rarity.Any())
             {
                 cardQuery = cardQuery.Where(c => param.Rarity.Contains(c.RarityId.ToString()));
             }
-
+            // TestResults = cardQuery.ToList();
             if (!string.IsNullOrEmpty(param.Text))
             {
                 cardQuery = cardQuery.Where(c =>
@@ -485,7 +238,7 @@ namespace Carpentry.Logic
                     || c.Type.ToLower().Contains(param.Text.ToLower())
                 );
             }
-            
+            // var testResults = cardQuery.ToList();
             if (!string.IsNullOrEmpty(param.SearchGroup))
             {
                 switch (param.SearchGroup)
@@ -523,10 +276,59 @@ namespace Carpentry.Logic
                         break;
                 }
             }
-
+            // TestResults = cardQuery.ToList();
             return cardQuery;
         }
 
+        private async Task<List<CardOverview>> GetMappedQueryResult(IQueryable<CardData> cardQuery)
+        {
+            var queryResult = await cardQuery
+                .Select(c => new CardOverview
+                {
+                    //Id = ic.InventoryCardId,
+                    //card definition props
+                    CardId = c.CardId,
+                    SetCode = c.Set.Code,
+                    Name = c.Name,
+                    Type = c.Type,
+                    Text = c.Text,
+                    ManaCost = c.ManaCost,
+                    Cmc = c.Cmc,
+                    RarityId = c.RarityId,
+                    ImageUrl = c.ImageUrl,
+                    CollectorNumber = c.CollectorNumber,
+                    Color = c.Color,
+                    ColorIdentity = c.ColorIdentity,
+
+                    //prices
+                    Price = (decimal?) c.Price,
+                    PriceFoil = (decimal?) c.PriceFoil,
+                    TixPrice = (decimal?) c.TixPrice,
+
+                    InventoryCards = c.InventoryCards.Select(ic => new InventoryCardOverview()
+                    {
+                        InventoryCardId = ic.InventoryCardId,
+                        IsFoil = ic.IsFoil,
+                        //status (in a deck/inventory/buy/sell)
+                        //Status = (ic.DeckCards.Count != 0) ? "Deck" : ic.Status.Name,
+                        Status = (ic.DeckCards.Count != 0) ? (int) InventoryCardStatus.Deck : ic.InventoryCardStatusId
+                    }).ToList(),
+
+                    //counts
+                    //TotalCount = 1,
+                    //DeckCount = (c.DeckCards.Count == 0) ? 0 : 1,
+                    //InventoryCount = (c.DeckCards.Count == 0 && c.InventoryCardStatusId == 1) ? 1 : 0,
+                    //SellCount = (c.DeckCards.Count == 0 && c.InventoryCardStatusId == 3) ? 1 : 0,
+
+                    //misc
+                    //IsFoil = c.IsFoil,
+                    SetReleaseDate = c.Set.ReleaseDate,
+                })
+                .ToListAsync();
+
+            return queryResult;
+        }
+        
         private IQueryable<CardData> GetFilteredCardQuery_legacy(InventoryQueryParameter param)
         {
             var cardQuery = _cardContext.Cards.AsQueryable();
