@@ -13,14 +13,14 @@ export class InventoryCard {
     name: string;
     set: string;
     collectorNumber: number;
-    
+
     deckCardId: number | null;
     deckId: number | null;
     deckName: string | null;
     deckCardCategory: string | null;
 
     // variantName: string;
-    
+
     //deckCards: InventoryDeckCardDto[];
 }
 
@@ -115,6 +115,22 @@ export class MagicCard {
     imageUrl: string;
 }
 
+export class NewInventoryCard {
+  cardId: number;
+  isFoil: boolean;
+  statusId: number;
+}
+
+export class PendingCardsDto {
+  // data: MagicCard;
+  // multiverseId: number;
+  // cardId: number;
+  name: string;
+  // count: number; //because for some reason I think this would be better than the screen calling .length all the time
+  // cards: InventoryCard[]; //this might need to be something else
+  cards: NewInventoryCard[];
+}
+
 export class TrimmedCardDto {
     cardName: string;
     cardId: number;
@@ -131,8 +147,11 @@ export class TrimmingToolRequest {
 }
 
 export class ValidatedCarpentryImportDto {
-    
+
 }
+
+
+
 
 export class CardSearchResultDto {
     cardId: number;
@@ -164,11 +183,3 @@ export class CardListItem {
 //     count?: number;
 // }
 
-export class PendingCardsDto {
-    // data: MagicCard;
-    // multiverseId: number;
-    // cardId: number;
-    name: string;
-    // count: number; //because for some reason I think this would be better than the screen calling .length all the time
-    cards: InventoryCard[]; //this might need to be something else
-}

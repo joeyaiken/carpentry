@@ -243,35 +243,35 @@ namespace Carpentry.Logic
             {
                 switch (param.SearchGroup)
                 {
-                    case "Red":
+                    case nameof(CardSearchGroup.Red):
                         cardQuery = cardQuery.Where(x => x.ColorIdentity == "R" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
-                    case "Blue":
+                    case nameof(CardSearchGroup.Blue):
                         cardQuery = cardQuery.Where(x => x.ColorIdentity == "U" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
-                    case "Green":
+                    case nameof(CardSearchGroup.Green):
                         cardQuery = cardQuery.Where(x => x.ColorIdentity == "G" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
-                    case "White":
+                    case nameof(CardSearchGroup.White):
                         cardQuery = cardQuery.Where(x => x.ColorIdentity == "W" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
-                    case "Black":
+                    case nameof(CardSearchGroup.Black):
                         cardQuery = cardQuery.Where(x => x.ColorIdentity == "B" && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
-                    case "Multicolored":
+                    case nameof(CardSearchGroup.Multicolored):
                         cardQuery = cardQuery.Where(x =>
                             x.ColorIdentity.Length > 1 && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
-                    case "Colorless":
+                    case nameof(CardSearchGroup.Colorless):
                         cardQuery = cardQuery.Where(
                             x => x.ColorIdentity.Length == 0 && (x.RarityId == 'C' || x.RarityId == 'U'));
                         break;
-                    case "Lands":
+                    case nameof(CardSearchGroup.Lands):
                         cardQuery = cardQuery.Where(x =>
                             x.Type.Contains("Land") &&
                             (x.RarityId == 'C' || x.RarityId == 'U')); // && !x.Type.Contains()
                         break;
-                    case "RareMythic":
+                    case nameof(CardSearchGroup.RareMythic):
                         cardQuery = cardQuery.Where(x => x.RarityId == 'R' || x.RarityId == 'M');
                         break;
                 }

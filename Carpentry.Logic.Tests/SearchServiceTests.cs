@@ -157,7 +157,7 @@ namespace Carpentry.Logic.Tests
             var queryParam = new CardSearchQueryParameter()
             {
                 Set = expectedSet.Code,
-                SearchGroup = "Red"
+                SearchGroup = nameof(CardSearchGroup.Red),
             };
 
             var searchResults = await _searchService.SearchCardDefinitions(queryParam);

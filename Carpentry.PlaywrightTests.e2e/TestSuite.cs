@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Carpentry.Logic.Models;
 using Carpentry.PlaywrightTests.e2e.Pages;
 
 namespace Carpentry.PlaywrightTests.e2e
@@ -18,12 +19,14 @@ namespace Carpentry.PlaywrightTests.e2e
     {
         private readonly AppSettings _appSettings;
         private static int APP_INIT_DELAY = 5000;
+        private readonly SeedData _seedData;
 
         public TestSuite(
             IOptions<AppSettings> appSettings
             )
         {
             _appSettings = appSettings.Value;
+            _seedData = new SeedData();
         }
 
         public async Task RunTestSuite()
@@ -65,7 +68,7 @@ namespace Carpentry.PlaywrightTests.e2e
 
             await WaitForApp(page);
 
-            await TestHomePageLoads(page);
+            //await TestHomePageLoads(page);
 
             // //navigate to settings, add desired tracked sets (the 3 needed for SimicSnowStompy)
             // await TestSettingsTrackSnowSets(page);
@@ -110,9 +113,9 @@ namespace Carpentry.PlaywrightTests.e2e
             await settingsPage.ClickRefreshButton();
 
             //add Kaldheim, MH1, and Coldsnap
-            await settingsPage.AddTrackedSet("khm"); //TODO - replace set code strings with seed data
-            await settingsPage.AddTrackedSet("mh1");
-            await settingsPage.AddTrackedSet("csp");
+            await settingsPage.AddTrackedSet(nameof(SetCodes.khm));
+            await settingsPage.AddTrackedSet(nameof(SetCodes.mh1));
+            await settingsPage.AddTrackedSet(nameof(SetCodes.csp));
 
             //Hide untracked sets
             await settingsPage.ClickShowUntrackedToggle();
@@ -121,9 +124,9 @@ namespace Carpentry.PlaywrightTests.e2e
             var updatedTrackedSets = await settingsPage.GetTrackedSetRows();
             Assert.AreEqual(3, updatedTrackedSets.Count);
 
-            Assert.IsNotNull(await settingsPage.GetRowByCode("khm"));
-            Assert.IsNotNull(await settingsPage.GetRowByCode("mh1"));
-            Assert.IsNotNull(await settingsPage.GetRowByCode("csp"));
+            Assert.IsNotNull(await settingsPage.GetRowByCode(nameof(SetCodes.khm)));
+            Assert.IsNotNull(await settingsPage.GetRowByCode(nameof(SetCodes.mh1)));
+            Assert.IsNotNull(await settingsPage.GetRowByCode(nameof(SetCodes.csp)));
         }
 
         private async Task TestInventoryAddSnowCards(IPage page)
@@ -133,6 +136,18 @@ namespace Carpentry.PlaywrightTests.e2e
             //navigate to Inventory
             //click Add Cards
             await inventoryAddCardsPage.NavigateTo();
+            
+            //for each set
+            //  Search for a color group
+            //  add all cards
+            //  repeat for all color groups, and all 3 sets
+            
+            //POC - search for KHM, Blue
+            
+            
+            //POC - Click 1 card once, cick another card twice
+            //POC - Confirm pending cards
+            
             
             //add cards by set
             //MH1
@@ -284,18 +299,46 @@ namespace Carpentry.PlaywrightTests.e2e
             KaldheimSet = new SeedSet("khm");
             ModernHorizonsSet = new SeedSet("mh1");
             ColdsnapSet = new SeedSet("csp");
+
+            SeedCards = new List<SeedCard>()
+            {
+                new SeedCard("Ascendant Spirit", KaldheimSet.SetCode, nameof(CardSearchGroup.RareMythic), 4),
+                new SeedCard("Frost Auger", KaldheimSet.SetCode, nameof(CardSearchGroup.Blue), 4),
+                
+                new SeedCard("Blizzard Brawl", KaldheimSet.SetCode, nameof(CardSearchGroup.Green), 4),
+                
+                new SeedCard("The Three Seasons", KaldheimSet.SetCode, nameof(CardSearchGroup.Multicolored), 2),
+                
+                new SeedCard("Faceless Haven", KaldheimSet.SetCode, nameof(CardSearchGroup.RareMythic), 2),
+                new SeedCard("Rimewood Falls", KaldheimSet.SetCode, nameof(CardSearchGroup.Lands), 4),
+
+                new SeedCard("Marit Lage's Slumber", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.RareMythic), 4),
+                
+                new SeedCard("Conifer Wurm", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Green), 4),
+                new SeedCard("Glacial Revelation", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Green), 4),
+                
+                new SeedCard("Ice-Fang Coatl", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.RareMythic), 4),
+                new SeedCard("Abominable Treefolk", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Multicolored), 4),
+                
+                new SeedCard("Snow-Covered Forest", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Lands), 8),
+                new SeedCard("Snow-Covered Island", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Lands), 8),
+
+                new SeedCard("Boreal Druid", ColdsnapSet.SetCode, nameof(CardSearchGroup.Green), 4),
+            };
         }
 
-        public SeedSet ColdsnapSet { get; set; }
-
-        public SeedSet ModernHorizonsSet { get; set; }
-
+        private SeedSet ColdsnapSet { get; set; }
+        private SeedSet ModernHorizonsSet { get; set; }
         private SeedSet KaldheimSet { get; set;  }
+        
+        private List<SeedCard> SeedCards { get; }
         
         public List<SeedSet> SeedSets => new List<SeedSet>()
         {
             KaldheimSet, ModernHorizonsSet, ColdsnapSet
         };
+        
+        public List<string> SeedSetCodes { get; }
     }
 
     public class SeedSet
@@ -306,5 +349,35 @@ namespace Carpentry.PlaywrightTests.e2e
         }
         
         public string SetCode { get; set; }
+    }
+
+    public class SeedCard
+    {
+        public SeedCard(string cardName, string setCode, string group, int count)
+        {
+            SetCode = setCode;
+            Group = group;
+            CardName = cardName;
+            Count = count;
+        }
+        public string SetCode { get; }
+        public string Group { get; }
+        public string CardName { get; }
+        public int Count { get; }
+    }
+
+    // public enum CardGroup
+    // {
+    //     U,
+    //     G,
+    //     Multi,
+    //     Land,
+    // }
+
+    public enum SetCodes
+    {
+        khm,
+        mh1,
+        csp
     }
 }

@@ -14,4 +14,17 @@
         SellList = 3,
         Deck = 4,
     }
+    
+    public enum CardSearchGroup
+    {
+        Red,
+        Blue,
+        Green,
+        White,
+        Black,
+        Multicolored,
+        Colorless,
+        Lands,
+        RareMythic,
+    }
 }

@@ -101,6 +101,7 @@ namespace Carpentry.Logic
         {
 
             //TODO - Ensure all cards exist in the repo
+            //(OR, just things fail.  Both are equal to the client app.  The controller will log anything that happens)
 
 
             //var distinctIDs = cards.Select(x => x.MultiverseId).Distinct().ToList();

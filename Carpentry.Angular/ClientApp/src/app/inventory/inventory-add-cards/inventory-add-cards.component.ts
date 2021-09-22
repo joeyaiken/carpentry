@@ -4,7 +4,15 @@ import { FilterService } from "src/app/common/filter-service";
 import { CardSearchQueryParameter } from "src/app/common/models";
 import { AppFiltersDto } from "src/app/settings/models";
 import { InventoryService } from "../inventory.service";
-import { CardListItem, cardSearchResultDetail, CardSearchResultDto, InventoryCard, InventoryFilterProps, InventoryQueryParameter, PendingCardsDto } from "../models";
+import {
+  CardListItem,
+  cardSearchResultDetail,
+  CardSearchResultDto,
+  InventoryFilterProps,
+  InventoryQueryParameter,
+  NewInventoryCard,
+  PendingCardsDto
+} from "../models";
 
 
 export class SelectedCardDetail {
@@ -20,51 +28,51 @@ export class SelectedCardDetail {
     styleUrls: ['inventory-add-cards.component.less'],
 })
 export class InventoryAddCardsComponent implements OnInit {
-    // @Input() cardItem: InventoryOverviewDto;
+  // @Input() cardItem: InventoryOverviewDto;
 
-    // @Output() onCardSelected = new EventEmitter<number>(); //: (cardId: number) => void;
-    // @Output() onToggleViewClick = new EventEmitter<void>();
-
-
-    isLoading: boolean = false;
-    apiSearchResults: CardSearchResultDto[] = [];
-
-    
+  // @Output() onCardSelected = new EventEmitter<number>(); //: (cardId: number) => void;
+  // @Output() onToggleViewClick = new EventEmitter<void>();
 
 
-    
-    // selectedCard: CardSearchResultDto | null;
-    selectedCard: CardListItem | null = null;
-    // selectedCardDetails: SelectedCardDetail[];
+  isLoading: boolean = false;
+  apiSearchResults: CardSearchResultDto[] = [];
+
+  // selectedCard: CardSearchResultDto | null;
+  selectedCard: CardListItem | null = null;
+  // selectedCardDetails: SelectedCardDetail[];
 
 
 
-    viewMode: string;
-    searchFilter: InventoryFilterProps;
-    filterOptions: AppFiltersDto;
+  viewMode: string;
+  // searchFilter: InventoryFilterProps; //CardSearchQueryParameter is what's expected by the API
+  //Should just store something that can be send straight to the api
+  // (or at least not use something with tons of unused fields)
+  searchFilter: CardSearchQueryParameter; //CardSearchQueryParameter is what's expected by the API
 
-    searchResults: CardListItem[];
-    // pendingCards: PendingCardsDto[];
-    pendingCards: { [name: string]: PendingCardsDto }
-    
-    constructor(
-        private filterService: FilterService,
-        // private inventoryService: InventoryService,
-        private cardSearchService: CardSearchService,
-    ) {
+  filterOptions: AppFiltersDto;
 
-    }
+  searchResults: CardListItem[];
+  // pendingCards: PendingCardsDto[];
+  pendingCards: { [name: string]: PendingCardsDto }
+
+  constructor(
+      private filterService: FilterService,
+      // private inventoryService: InventoryService,
+      private cardSearchService: CardSearchService,
+  ) {
+
+  }
 
     ngOnInit(): void {
-        this.searchFilter = new InventoryFilterProps();
+        this.searchFilter = new CardSearchQueryParameter();
         this.searchResults = [];
         this.pendingCards = {};
         this.viewMode = 'list';
         this.loadFilterOptions();
 
-        this.test_setInitialVals();
-        this.trySearchCards();
-        
+        this.runTestSearch();
+        // this.trySearchCards();
+
     }
 
 
@@ -87,7 +95,7 @@ export class InventoryAddCardsComponent implements OnInit {
     onToggleView(): void {
         this.viewMode = (this.viewMode === "list") ? "grid" : "list";
     }
-    
+
     onSearchClick(): void {
         this.trySearchCards();
     }
@@ -95,7 +103,7 @@ export class InventoryAddCardsComponent implements OnInit {
     loadFilterOptions(): void {
         // this.isLoading = true;
         this.filterService.getAppFilterOptions().subscribe(
-            data => {
+          (data) => {
                 this.filterOptions = data;
                 // this.isLoading = false;
             }
@@ -129,7 +137,7 @@ export class InventoryAddCardsComponent implements OnInit {
             cardId: cardId,
             isFoil: isFoil,
             statusId: 1,
-        } as InventoryCard);
+        } as NewInventoryCard);
 
         this.pendingCards[name] = cardToAdd;
         this.updateCounts();
@@ -141,8 +149,8 @@ export class InventoryAddCardsComponent implements OnInit {
             let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.cardId === cardId && x.isFoil === isFoil);
             if(thisInvCard >= 0){
                 objToRemoveFrom.cards.splice(thisInvCard,1);
-            } 
-    
+            }
+
             //if this pending cards object has 0 items, it should be deleted from the dictionary
             if(objToRemoveFrom.cards.length === 0){
                 delete this.pendingCards[name];
@@ -174,20 +182,20 @@ export class InventoryAddCardsComponent implements OnInit {
         }
         this.isLoading = true;
 
-        const currentFilterProps = this.searchFilter;
-        const param: CardSearchQueryParameter = {
-            text: currentFilterProps.text,
-            colorIdentity: currentFilterProps.colorIdentity ?? [],
-            exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
-            multiColorOnly: currentFilterProps.multiColorOnly,
-            rarity: currentFilterProps.rarity,
-            set: currentFilterProps.set,
-            type: currentFilterProps.type,
-            searchGroup: currentFilterProps.groupBy,
-            excludeUnowned: false,
-        }
-        
-        this.cardSearchService.searchInventory(param).subscribe((results) => {
+        // const currentFilterProps = this.searchFilter;
+        // const param: CardSearchQueryParameter = {
+        //     text: currentFilterProps.text,
+        //     colorIdentity: currentFilterProps.colorIdentity ?? [],
+        //     exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
+        //     multiColorOnly: currentFilterProps.multiColorOnly,
+        //     rarity: currentFilterProps.rarity,
+        //     set: currentFilterProps.set,
+        //     type: currentFilterProps.type,
+        //     searchGroup: currentFilterProps.searchGroup,
+        //     excludeUnowned: false,
+        // }
+
+        this.cardSearchService.searchInventory(this.searchFilter).subscribe((results) => {
             this.isLoading = false;
             this.apiSearchResults = results;
 
@@ -219,8 +227,9 @@ export class InventoryAddCardsComponent implements OnInit {
         }
     }
 
-    private test_setInitialVals() {
-        // this.searchFilter.text = "Exploration";
-        this.searchFilter.set = 'sta';
+    private runTestSearch() {
+      this.searchFilter.set = 'khm';
+      this.searchFilter.searchGroup = 'Blue';
+      this.trySearchCards();
     }
 }
