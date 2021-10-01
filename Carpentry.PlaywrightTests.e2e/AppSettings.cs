@@ -7,5 +7,6 @@ namespace Carpentry.PlaywrightTests.e2e
     public class AppSettings
     {
         public string AppUrl { get; set; }
+        public string ReactUrl { get; set; }
     }
 }

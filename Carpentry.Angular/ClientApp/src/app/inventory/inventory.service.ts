@@ -2,12 +2,22 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpService } from "../common/HttpService";
-import { CardImportDto, InventoryCard, InventoryDetailDto, InventoryOverviewDto, InventoryQueryParameter, TrimmedCardDto, TrimmingToolRequest, ValidatedCarpentryImportDto } from "./models";
+import {
+  CardImportDto,
+  InventoryCard,
+  InventoryDetailDto,
+  InventoryOverviewDto,
+  InventoryQueryParameter,
+  NewInventoryCard,
+  TrimmedCardDto,
+  TrimmingToolRequest,
+  ValidatedCarpentryImportDto
+} from "./models";
 
 @Injectable({
     providedIn: 'root',
 })
-export class InventoryService extends HttpService 
+export class InventoryService extends HttpService
 {
     constructor(
         http: HttpClient
@@ -19,8 +29,8 @@ export class InventoryService extends HttpService
         const url = `api/Inventory/AddInventoryCard`;
         return this.http.post<void>(url, dto);
     }
-    
-    addInventoryCardBatch(dto: InventoryCard[]): Observable<void> {
+
+    addInventoryCardBatch(dto: NewInventoryCard[]): Observable<void> {
         const url = `api/Inventory/AddInventoryCardBatch`;
         return this.http.post<void>(url, dto);
     }

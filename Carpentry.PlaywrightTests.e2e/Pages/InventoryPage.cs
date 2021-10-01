@@ -24,6 +24,36 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             // await _page.GotoAsync(_pageUrl);
             await _page.ClickAsync("app-nav-menu a:has-text(\"Settings\")");
         }
+
+        public async Task SetGroupBy(string value)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public async Task SetSortBy(string value)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public async Task SetMinValue(int value)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public async Task SetTakeValue(int value)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public async Task ClickSearch()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<InventorySearchResult>> GetSearchResults()
+        {
+            throw new NotImplementedException();
+        }
         
         //TODO - Consider refactoring to using properties that are <IElementHandle?> ?
         // public string? TitleText => _page.TextContentAsync("app-landing h2").Result; //TODO - this selector may not work in react
@@ -50,5 +80,18 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         //{
         //    return await _page.TextContentAsync("app-landing h3"); //TODO - this selector may not work in react
         //}
+    }
+
+    public class InventorySearchResult
+    {
+        private readonly IElementHandle _element;
+        public InventorySearchResult(IElementHandle element)
+        {
+            _element = element;
+        }
+
+
+        public string Name { get; set; }
+        public int Count { get; set; }
     }
 }

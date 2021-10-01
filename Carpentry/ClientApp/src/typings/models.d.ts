@@ -422,3 +422,9 @@ declare interface TrimmedCardDto {
     isFoil: boolean;
     numberToTrim: number;
 }
+
+declare interface NewInventoryCard {
+    cardId: number;
+    isFoil: boolean;
+    statusId: number;
+}

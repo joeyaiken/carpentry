@@ -1,3 +1,4 @@
+<mat-progress-bar *ngIf="isBusy" mode="indeterminate"></mat-progress-bar>
 <div id="hey-its-a-div" fxLayout="column">
   <!-- position="relative" -->
   <mat-toolbar id="toolbar" fxFlex="none" color="default" >
@@ -24,7 +25,7 @@
       <div class="flex-section side-padded">
         <mat-form-field class="stretch">
           <mat-label>Set filter</mat-label>
-          <mat-select [(ngModel)]="searchFilter.set">
+          <mat-select id="set-select" [(ngModel)]="searchFilter.set">
             <mat-option [value]=""></mat-option>
             <mat-option *ngFor="let item of filterOptions?.sets" [value]="item.value">{{item.name}}</mat-option>
           </mat-select>
@@ -35,7 +36,7 @@
       <div class="flex-section side-padded">
         <mat-form-field class="stretch">
           <mat-label>Search Group</mat-label>
-          <mat-select [(ngModel)]="searchFilter.searchGroup">
+          <mat-select id="search-group-select" [(ngModel)]="searchFilter.searchGroup">
             <mat-option [value]=""></mat-option>
             <mat-option *ngFor="let item of filterOptions?.searchGroups" [value]="item.value">{{item.name}}</mat-option>
           </mat-select>

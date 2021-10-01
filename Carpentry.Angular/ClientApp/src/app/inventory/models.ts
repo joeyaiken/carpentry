@@ -132,10 +132,10 @@ export class PendingCardsDto {
 }
 
 export class TrimmedCardDto {
-    cardName: string;
-    cardId: number;
-    isFoil: boolean;
-    numberToTrim: number;
+  cardName: string;
+  cardId: number;
+  isFoil: boolean;
+  numberToTrim: number;
 }
 
 export class TrimmingToolRequest {
@@ -154,14 +154,14 @@ export class ValidatedCarpentryImportDto {
 
 
 export class CardSearchResultDto {
-    cardId: number;
-    cmc: number | null;
-    colorIdentity: string[];
-    colors: string[];
-    manaCost: string;
-    name: string;
-    type: string;
-    details: cardSearchResultDetail[];
+  cardId: number;
+  cmc: number | null;
+  colorIdentity: string[];
+  colors: string[];
+  manaCost: string;
+  name: string;
+  type: string;
+  details: cardSearchResultDetail[];
 }
 
 export class cardSearchResultDetail {

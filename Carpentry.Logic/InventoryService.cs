@@ -10,11 +10,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Carpentry.Logic
 {
+    public class NewInventoryCard
+    {
+        public int CardId { get; set; }
+        public int StatusId { get; set; }
+        public bool IsFoil { get; set; }
+    }
+    
     public interface IInventoryService
     {
         //Inventory Card add/update/delete
         Task<int> AddInventoryCard(InventoryCardDto dto);
-        Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards);
+        Task AddInventoryCardBatch(IEnumerable<NewInventoryCard> cards);
         Task UpdateInventoryCard(InventoryCardDto dto);
         Task UpdateInventoryCardBatch(IEnumerable<InventoryCardDto> batch);
         Task DeleteInventoryCard(int id);
@@ -97,7 +104,7 @@ namespace Carpentry.Logic
             return newInventoryCard.InventoryCardId;
         }
         //TODO - Use some smaller DTO that only has the 3 fields actually used
-        public async Task AddInventoryCardBatch(IEnumerable<InventoryCardDto> cards)
+        public async Task AddInventoryCardBatch(IEnumerable<NewInventoryCard> cards)
         {
 
             //TODO - Ensure all cards exist in the repo

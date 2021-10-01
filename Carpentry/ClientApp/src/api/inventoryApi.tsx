@@ -3,6 +3,7 @@ import {
     // GetFile, 
     Post 
 } from '../api/apiHandler'
+// import {NewInventoryCard} from "../../../../Carpentry.Angular/ClientApp/src/app/inventory/models";
 
 export const inventoryApi = {
     async addInventoryCard(dto: InventoryCard): Promise<void> {
@@ -11,7 +12,7 @@ export const inventoryApi = {
         return;
     },
     //TODO - whatever calls this needs to not clear pending cards when an error occurrs
-    async addInventoryCardBatch(dto: InventoryCard[]): Promise<void> {
+    async addInventoryCardBatch(dto: NewInventoryCard[]): Promise<void> {
         const url = `api/Inventory/AddInventoryCardBatch`;
         await Post(url, dto);
         return;

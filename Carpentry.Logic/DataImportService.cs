@@ -225,7 +225,7 @@ namespace Carpentry.Logic
             {
                 //just create a list of inventory cards to add
                 var cardBatch = validatedPayload.ValidatedCards
-                    .Select(x => new InventoryCardDto()
+                    .Select(x => new NewInventoryCard()
                     {
                         //MultiverseId = x.MultiverseId,
                         StatusId = _cardStatus_InInventory,

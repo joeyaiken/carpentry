@@ -1,5 +1,8 @@
+using Carpentry.CarpentryData;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 //I'm just going to use this as a general task section because it gets picked up by VS
 //TODO - Add a list/table view to the card search (and others) to help streamline adding cards without a ton of scrolling
@@ -34,10 +37,12 @@ namespace Carpentry
         //    }
         //}
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             //CreateHostBuilder(args).Build().Run();
-            CreateWebHostBuilder(args).Build().Run();
+            var webHost = CreateWebHostBuilder(args).Build();
+            await webHost.InitializeCarpentryDatabase();
+            webHost.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
@@ -57,5 +62,17 @@ namespace Carpentry
         //        {
         //            webBuilder.UseStartup<Startup>();
         //        });
+    }
+
+    public static class WebHostExtensions
+    {
+        public static async Task InitializeCarpentryDatabase(this IWebHost webHost)
+        {
+            var serviceScopeFactory = (IServiceScopeFactory)webHost.Services.GetService(typeof(IServiceScopeFactory));
+            using var scope = serviceScopeFactory.CreateScope();
+            var services = scope.ServiceProvider;
+            var dbContext = services.GetRequiredService<CarpentryDataContext>();
+            await dbContext.EnsureDatabaseCreated(false);
+        }
     }
 }

@@ -3,13 +3,17 @@ using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Carpentry.Logic.Models;
 using Carpentry.PlaywrightTests.e2e.Pages;
+using Carpentry.PlaywrightTests.e2e.Tests;
+using Serilog;
 
 namespace Carpentry.PlaywrightTests.e2e
 {
+    
+    
     /// <summary>
     /// An end-to-end test suite.  Runs the full carpentry e2e test suite that should be run against both apps
     /// Eventually test-logic will be refactored out to a location where it can also be called by unit tests
@@ -17,21 +21,29 @@ namespace Carpentry.PlaywrightTests.e2e
     /// </summary>
     public class TestSuite
     {
-        private readonly AppSettings _appSettings;
+        // private readonly AppSettings _appSettings;
+        private readonly IOptions<AppSettings> _appSettingsRaw;
         private static int APP_INIT_DELAY = 5000;
         private readonly SeedData _seedData;
+        private readonly ILogger _logger;
+        private readonly string APP_URL;
+        
 
         public TestSuite(
-            IOptions<AppSettings> appSettings
+            IOptions<AppSettings> appSettings,
+            ILogger logger
             )
         {
-            _appSettings = appSettings.Value;
+            // _appSettings = appSettings.Value;
+            _appSettingsRaw = appSettings;
             _seedData = new SeedData();
+            _logger = logger;
+            APP_URL = appSettings.Value.ReactUrl;
         }
 
         public async Task RunTestSuite()
         {
-            Console.WriteLine("Beginning Playwright e2e test for Carpentry app");
+            _logger.Information("Beginning Playwright e2e test for Carpentry app");
 
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
@@ -39,7 +51,6 @@ namespace Carpentry.PlaywrightTests.e2e
                 Headless = false,
                 //SlowMo = 50,
             });
-
 
             //Wait for the app to load
 
@@ -68,98 +79,115 @@ namespace Carpentry.PlaywrightTests.e2e
 
             await WaitForApp(page);
 
-            //await TestHomePageLoads(page);
+            //TODO - Find an appropriate way to load these with DI instead of constructing them manually (or something more graceful)
+            var synchronousRunnables = new List<IRunnableTest>()
+            {
+                new Test00HomePageLoads(page, _appSettingsRaw, _logger),
+                new Test01SettingsTrackSnowSets(page, _appSettingsRaw, _logger),
+                new Test02InventoryAddSnowCards(page, _appSettingsRaw, _seedData, _logger),
+                new Test03ConfirmInventoryCards(page, _appSettingsRaw, _seedData),
+            };
 
-            // //navigate to settings, add desired tracked sets (the 3 needed for SimicSnowStompy)
-            // await TestSettingsTrackSnowSets(page);
-
+            foreach (var runnable in synchronousRunnables)
+            {
+                await runnable.Run();
+            }
+            
             //Add the cards required to populate the snow deck
-            await TestInventoryAddSnowCards(page);
+            // await TestInventoryAddSnowCards(page);
 
-        }
-
-
-
-        private async Task TestHomePageLoads(IPage page)
-        {
-            Console.WriteLine($"starting {nameof(TestHomePageLoads)}");
-
-            var homePage = new HomePage(_appSettings.AppUrl, page);
-
-            await homePage.NavigateTo();
-
-            Assert.AreEqual("Carpentry", homePage.TitleText);
-
-            Assert.AreEqual("A deck & inventory management tool for Magic the Gathering", homePage.SubtitleText);
-
-            //TODO - Make assertions about the deck list
-            Console.WriteLine($"{nameof(TestHomePageLoads)} completed successfully");
-        }
-
-        private async Task TestSettingsTrackSnowSets(IPage page)
-        {
-            var settingsPage = new SettingsPage(_appSettings.AppUrl, page);
-            await settingsPage.NavigateTo();
-            await settingsPage.WaitForBusy();
-            
-            //Assert no tracked sets
-            var trackedSets = await settingsPage.GetTrackedSetRows();
-            Assert.AreEqual(0, trackedSets.Count);
-            
-            //show untracked sets
-            await settingsPage.ClickShowUntrackedToggle();
-            
-            //refresh list
-            await settingsPage.ClickRefreshButton();
-
-            //add Kaldheim, MH1, and Coldsnap
-            await settingsPage.AddTrackedSet(nameof(SetCodes.khm));
-            await settingsPage.AddTrackedSet(nameof(SetCodes.mh1));
-            await settingsPage.AddTrackedSet(nameof(SetCodes.csp));
-
-            //Hide untracked sets
-            await settingsPage.ClickShowUntrackedToggle();
-
-            //Assert 3 tracked sets (& details ?)
-            var updatedTrackedSets = await settingsPage.GetTrackedSetRows();
-            Assert.AreEqual(3, updatedTrackedSets.Count);
-
-            Assert.IsNotNull(await settingsPage.GetRowByCode(nameof(SetCodes.khm)));
-            Assert.IsNotNull(await settingsPage.GetRowByCode(nameof(SetCodes.mh1)));
-            Assert.IsNotNull(await settingsPage.GetRowByCode(nameof(SetCodes.csp)));
+            _logger.Information("Finished running test suite");
         }
 
         private async Task TestInventoryAddSnowCards(IPage page)
         {
-            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AppUrl, page);
+            var inventoryAddCardsPage = new InventoryAddCardsPage(APP_URL, page);
             
-            //navigate to Inventory
-            //click Add Cards
             await inventoryAddCardsPage.NavigateTo();
             
-            //for each set
-            //  Search for a color group
-            //  add all cards
-            //  repeat for all color groups, and all 3 sets
-            
-            //POC - search for KHM, Blue
-            
-            
-            //POC - Click 1 card once, cick another card twice
-            //POC - Confirm pending cards
-            
-            
-            //add cards by set
-            //MH1
-            //Kaldheim
-            //Coldsnap
+            foreach (var set in _seedData.SeedSets)
+            {
+                await inventoryAddCardsPage.ApplySetFilter(set.SetName);
 
-            int breakpoint = 1;
+                foreach (var searchGroup in _seedData.GroupSearchOrder)
+                {
+                    var searchGroupString = GetSearchGroupString(searchGroup);
+                    var cardsInGroup =
+                        _seedData.SeedCards.Where(c => c.SetCode == set.SetCode && c.Group == searchGroupString).ToList();
+                    if (cardsInGroup.Any())
+                    {
+                        _logger.Information($"Searching for cards in set: {set.SetName}, group: {searchGroupString}");
+                        
+                        await inventoryAddCardsPage.ApplySearchGroupFilter(searchGroupString);
+                        await inventoryAddCardsPage.ClickSearch();
+                        foreach (var card in cardsInGroup)
+                        {
+                            var cardRow = await inventoryAddCardsPage.GetSearchResultByName(card.CardName);
+                            
+                            for (var i = 0; i < card.Count; i++)
+                                await cardRow.ClickAddButton();
+                        }
+                    }
+                }
+            }
+            
+            //Make assertions about pending cards
+            foreach (var card in _seedData.SeedCards)
+            {
+                var pendingCardCount = await inventoryAddCardsPage.GetPendingCardCount(card.CardName);
+                Assert.AreEqual(card.Count, pendingCardCount);
+            }
+            
+            //click save
+            await inventoryAddCardsPage.ClickSave();
+            
+            Assert.AreEqual($"{APP_URL}inventory", page.Url);
+
+            var inventoryPage = new InventoryPage(APP_URL, page);
+            
+            //update filters as desired
+            await inventoryPage.SetGroupBy("Name");
+            await inventoryPage.SetSortBy("Name");
+            await inventoryPage.SetMinValue(1);
+            await inventoryPage.SetTakeValue(100);
+            //search
+            await inventoryPage.ClickSearch();
+
+            //get all card overview objects
+            var searchResults = await inventoryPage.GetSearchResults();
+            
+            //for each seed card, assert it's in the array, then pull from the array
+            foreach (var seedCard in _seedData.SeedCards)
+            {
+                var matchingResult = searchResults.FirstOrDefault(result => result.Name == seedCard.CardName);
+                Assert.IsNotNull(matchingResult);
+                Assert.AreEqual(seedCard.Count, matchingResult.Count);
+                searchResults.Remove(matchingResult);
+            }
+            
+            Assert.AreEqual(0, searchResults.Count);
+        }
+
+        private static string GetSearchGroupString(CardSearchGroup groupEnum)
+        {
+            return groupEnum switch
+            {
+                CardSearchGroup.Red => nameof(CardSearchGroup.Red),
+                CardSearchGroup.Blue => nameof(CardSearchGroup.Blue),
+                CardSearchGroup.Green => nameof(CardSearchGroup.Green),
+                CardSearchGroup.White => nameof(CardSearchGroup.White),
+                CardSearchGroup.Black => nameof(CardSearchGroup.Black),
+                CardSearchGroup.Multicolored => nameof(CardSearchGroup.Multicolored),
+                CardSearchGroup.Colorless => nameof(CardSearchGroup.Colorless),
+                CardSearchGroup.Lands => nameof(CardSearchGroup.Lands),
+                CardSearchGroup.RareMythic => nameof(CardSearchGroup.RareMythic),
+                _ => ""
+            };
         }
         
         private async Task DemoTest() 
         {
-            Console.WriteLine("Beginning Playwright e2e test for Carpentry app");
+            _logger.Information("Beginning Playwright e2e test for Carpentry app");
 
             using var playwright = await Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
@@ -177,12 +205,12 @@ namespace Carpentry.PlaywrightTests.e2e
 
             Assert.AreEqual("Playwright enables reliable end-to-end testing for modern web apps.", headerText);
 
-            Console.WriteLine("Test executed successfully");
+            _logger.Information("Test executed successfully");
         }
 
         private async Task WaitForApp(IPage page)
         {
-            Console.WriteLine($"Beginning {nameof(WaitForApp)}");
+            _logger.Information($"Beginning {nameof(WaitForApp)}");
             //bool pageIsLoaded = await TryLoadPage(page);
             bool pageIsLoaded = false;
             while (!pageIsLoaded)
@@ -192,16 +220,16 @@ namespace Carpentry.PlaywrightTests.e2e
                 //Either this properly awaits the page, or fails and should delay
                 try //TODO - catch specific errors, don't catch blindly
                 {
-                    Console.WriteLine("TryLoadPage");
-                    await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
-                    Console.WriteLine("Page Loaded");
+                    _logger.Information("TryLoadPage");
+                    await page.GotoAsync(APP_URL, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
+                    _logger.Information("Page Loaded");
                     //return true;
                     pageIsLoaded = true;
                 }
                 catch //(PlaywrightException ex)
                 {
-                    //Console.WriteLine($"Page Not loaded: {ex.Message}");
-                    Console.WriteLine($"Error loading page, delaying before retrying...");
+                    //_logger.Information($"Page Not loaded: {ex.Message}");
+                    _logger.Information($"Error loading page, delaying before retrying...");
                     await Task.Delay(APP_INIT_DELAY);
                     //return false;
                 }
@@ -215,7 +243,7 @@ namespace Carpentry.PlaywrightTests.e2e
             //{
             //    if (!pageIsLoaded) pageIsLoaded = await TryLoadPage(page);
             //    if (pageIsLoaded) appIsLoaded = await TryLoadApp(page);
-            //    Console.WriteLine("App not loaded, retrying soon...");
+            //    _logger.Information("App not loaded, retrying soon...");
             //    await Task.Delay(5000);
             //}
 
@@ -224,26 +252,27 @@ namespace Carpentry.PlaywrightTests.e2e
                 //appIsLoaded = await TryLoadApp(page);
                 try //TODO - catch specific errors, don't catch blindly
                 {
-                    Console.WriteLine("Checking app status (TryLoadApp)");
+                    _logger.Information("Checking app status (TryLoadApp)");
                     //await page.GotoAsync(APP_URL);
-                    var appText = await page.TextContentAsync("app-root");
+                    //TODO - add a 'root' id to the angular app & reference that instead of the app-root tag
+                    var appText = await page.TextContentAsync("app-root"); //TODO - This doesn't work in react
                     if (appText != "Loading...")
                     {
-                        Console.WriteLine("App loaded!");
+                        _logger.Information("App loaded!");
                         appIsLoaded = true;
                         continue;
                     };
                 }
                 catch
                 {
-                    Console.WriteLine("Error loading app");
+                    _logger.Information("Error loading app");
                 }
 
-                Console.WriteLine("App not loaded, delaying before retrying...");
+                _logger.Information("App not loaded, delaying before retrying...");
                 await Task.Delay(APP_INIT_DELAY);
                 //return false;
             }
-            Console.WriteLine($"{nameof(WaitForApp)} completed");
+            _logger.Information($"{nameof(WaitForApp)} completed");
         }
 
         //private async Task<bool> TryLoadPage(IPage page)
@@ -252,15 +281,15 @@ namespace Carpentry.PlaywrightTests.e2e
         //    //Either this properly awaits the page, or fails and should delay
         //    try //TODO - catch specific errors, don't catch blindly
         //    {
-        //        Console.WriteLine("TryLoadPage");
+        //        _logger.Information("TryLoadPage");
         //        await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
-        //        Console.WriteLine("Page Loaded");
+        //        _logger.Information("Page Loaded");
         //        return true;
         //    }
         //    catch //(PlaywrightException ex)
         //    {
-        //        //Console.WriteLine($"Page Not loaded: {ex.Message}");
-        //        Console.WriteLine($"Error loading page, delaying before retrying...");
+        //        //_logger.Information($"Page Not loaded: {ex.Message}");
+        //        _logger.Information($"Error loading page, delaying before retrying...");
         //        await Task.Delay(APP_INIT_DELAY);
         //        return false;
         //    }
@@ -270,21 +299,21 @@ namespace Carpentry.PlaywrightTests.e2e
         //{
         //    try //TODO - catch specific errors, don't catch blindly
         //    {
-        //        Console.WriteLine("Checking app status (TryLoadApp)");
+        //        _logger.Information("Checking app status (TryLoadApp)");
         //        //await page.GotoAsync(APP_URL);
         //        var appText = await page.TextContentAsync("app-root");
         //        if (appText != "Loading...")
         //        {
-        //            Console.WriteLine("App loaded!");
+        //            _logger.Information("App loaded!");
         //            return true;
         //        };
         //    }
         //    catch
         //    {
-        //        Console.WriteLine("Error loading app");
+        //        _logger.Information("Error loading app");
         //    }
 
-        //    Console.WriteLine("App not loaded, delaying before retrying...");
+        //    _logger.Information("App not loaded, delaying before retrying...");
         //    await Task.Delay(APP_INIT_DELAY);
         //    return false;
 
@@ -296,14 +325,14 @@ namespace Carpentry.PlaywrightTests.e2e
     {
         public SeedData()
         {
-            KaldheimSet = new SeedSet("khm");
-            ModernHorizonsSet = new SeedSet("mh1");
-            ColdsnapSet = new SeedSet("csp");
+            KaldheimSet = new SeedSet("khm", "Kaldheim");
+            ModernHorizonsSet = new SeedSet("mh1", "Modern Horizons");
+            ColdsnapSet = new SeedSet("csp", "Coldsnap");
 
             SeedCards = new List<SeedCard>()
             {
                 new SeedCard("Ascendant Spirit", KaldheimSet.SetCode, nameof(CardSearchGroup.RareMythic), 4),
-                new SeedCard("Frost Auger", KaldheimSet.SetCode, nameof(CardSearchGroup.Blue), 4),
+                new SeedCard("Frost Augur", KaldheimSet.SetCode, nameof(CardSearchGroup.Blue), 4),
                 
                 new SeedCard("Blizzard Brawl", KaldheimSet.SetCode, nameof(CardSearchGroup.Green), 4),
                 
@@ -325,14 +354,25 @@ namespace Carpentry.PlaywrightTests.e2e
 
                 new SeedCard("Boreal Druid", ColdsnapSet.SetCode, nameof(CardSearchGroup.Green), 4),
             };
+
+            GroupSearchOrder = new List<CardSearchGroup>()
+            {
+                CardSearchGroup.Blue,
+                CardSearchGroup.Green,
+                CardSearchGroup.Multicolored,
+                CardSearchGroup.Lands,
+                CardSearchGroup.RareMythic,
+            };
         }
 
-        private SeedSet ColdsnapSet { get; set; }
-        private SeedSet ModernHorizonsSet { get; set; }
-        private SeedSet KaldheimSet { get; set;  }
+        public SeedSet ColdsnapSet { get; set; }
+        public SeedSet ModernHorizonsSet { get; set; }
+        public SeedSet KaldheimSet { get; set;  }
         
-        private List<SeedCard> SeedCards { get; }
+        public List<SeedCard> SeedCards { get; }
         
+        public List<CardSearchGroup> GroupSearchOrder { get; }
+
         public List<SeedSet> SeedSets => new List<SeedSet>()
         {
             KaldheimSet, ModernHorizonsSet, ColdsnapSet
@@ -343,12 +383,14 @@ namespace Carpentry.PlaywrightTests.e2e
 
     public class SeedSet
     {
-        public SeedSet(string setCode)
+        public SeedSet(string setCode, string setName)
         {
             SetCode = setCode;
+            SetName = setName;
         }
         
         public string SetCode { get; set; }
+        public string SetName { get; set; }
     }
 
     public class SeedCard

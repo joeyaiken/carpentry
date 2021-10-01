@@ -34,7 +34,7 @@ export class InventoryAddCardsComponent implements OnInit {
   // @Output() onToggleViewClick = new EventEmitter<void>();
 
 
-  isLoading: boolean = false;
+  isBusy: boolean = false;
   apiSearchResults: CardSearchResultDto[] = [];
 
   // selectedCard: CardSearchResultDto | null;
@@ -70,9 +70,7 @@ export class InventoryAddCardsComponent implements OnInit {
         this.viewMode = 'list';
         this.loadFilterOptions();
 
-        this.runTestSearch();
-        // this.trySearchCards();
-
+        // this.runTestSearch();
     }
 
 
@@ -101,11 +99,11 @@ export class InventoryAddCardsComponent implements OnInit {
     }
 
     loadFilterOptions(): void {
-        // this.isLoading = true;
+        // this.isBusy = true;
         this.filterService.getAppFilterOptions().subscribe(
           (data) => {
                 this.filterOptions = data;
-                // this.isLoading = false;
+                // this.isBusy = false;
             }
 
         )
@@ -177,10 +175,10 @@ export class InventoryAddCardsComponent implements OnInit {
     // }
 
     private trySearchCards(): any{
-        if(this.isLoading){
+        if(this.isBusy){
             return;
         }
-        this.isLoading = true;
+        this.isBusy = true;
 
         // const currentFilterProps = this.searchFilter;
         // const param: CardSearchQueryParameter = {
@@ -196,7 +194,7 @@ export class InventoryAddCardsComponent implements OnInit {
         // }
 
         this.cardSearchService.searchInventory(this.searchFilter).subscribe((results) => {
-            this.isLoading = false;
+            this.isBusy = false;
             this.apiSearchResults = results;
 
             //a 'card list item' represents a search result, & the number of pending cards [with that same name?]
@@ -205,7 +203,7 @@ export class InventoryAddCardsComponent implements OnInit {
                 count: this.pendingCards[card.name]?.cards?.length,
             } as CardListItem));
 
-            this.test_selectFirstCard();
+            // this.test_selectFirstCard();
         });
     }
 

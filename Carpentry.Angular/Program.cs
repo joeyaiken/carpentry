@@ -37,24 +37,11 @@ namespace Carpentry.Angular
     {
         public static async Task InitializeCarpentryDatabase(this IWebHost webHost)
         {
-            //await Task.CompletedTask;
-
             var serviceScopeFactory = (IServiceScopeFactory)webHost.Services.GetService(typeof(IServiceScopeFactory));
-            using (var scope = serviceScopeFactory.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var dbContext = services.GetRequiredService<CarpentryDataContext>();
-
-
-                await dbContext.EnsureDatabaseCreated(false);
-
-            }
-
-
-
-            //var dbContext = webHost.Services.GetService<CarpentryDataContext>();
-
-            //return webHost;
+            using var scope = serviceScopeFactory.CreateScope();
+            var services = scope.ServiceProvider;
+            var dbContext = services.GetRequiredService<CarpentryDataContext>();
+            await dbContext.EnsureDatabaseCreated(false);
         }
     }
 }

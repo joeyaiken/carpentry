@@ -65,7 +65,7 @@ namespace Carpentry.Core.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> AddInventoryCardBatch([FromBody] List<InventoryCardDto> dto)
+        public async Task<ActionResult> AddInventoryCardBatch([FromBody] List<NewInventoryCard> dto)
         {
             try
             {

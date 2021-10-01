@@ -129,7 +129,7 @@ namespace Carpentry.Logic
                 new FilterOption() { Value = "Multicolored", Name = "Multicolored" },
                 new FilterOption() { Value = "Colorless", Name = "Colorless" },
                 new FilterOption() { Value = "Lands", Name = "Lands" },
-                new FilterOption() { Value = "RareMythic", Name = "Rare/Mythic" },
+                new FilterOption() { Value = "RareMythic", Name = "RareMythic" },
             };
         }
 

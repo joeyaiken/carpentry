@@ -55,10 +55,15 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             return element == null ? null : new TrackedSetRow(element);
         }
 
-        public async Task AddTrackedSet(string setCode)
+        public async Task TryAddTrackedSet(string setCode)
         {
             var row = await GetRowByCode(setCode);
             Assert.IsNotNull(row);
+            
+            //TODO - Determine if the set is tracked or not
+            //If not, add it
+            //(don't worry about updating the set if it's already tracked)
+            
             await row!.ClickAddButton();
             await WaitForBusy();
         }
