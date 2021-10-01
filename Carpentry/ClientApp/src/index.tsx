@@ -1,5 +1,3 @@
-
-
 import App from './App';
 import configureStore from './configureStore';
 import { ConnectedRouter } from 'connected-react-router';

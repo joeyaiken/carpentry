@@ -24,7 +24,7 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         {
             _logger.Information($"starting {nameof(Test00HomePageLoads)}");
 
-            var homePage = new HomePage(_appSettings.AppUrl, _page);
+            var homePage = new HomePage(_appSettings.AngularUrl, _page);
 
             await homePage.NavigateTo();
 

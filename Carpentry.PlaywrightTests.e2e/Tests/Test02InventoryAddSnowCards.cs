@@ -26,7 +26,7 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         
         public async Task Run()
         {
-            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AppUrl, _page);
+            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AngularUrl, _page);
             
             await inventoryAddCardsPage.NavigateTo();
             
@@ -66,9 +66,9 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
             //click save
             await inventoryAddCardsPage.ClickSave();
             
-            Assert.AreEqual($"{_appSettings.AppUrl}inventory", _page.Url);
+            Assert.AreEqual($"{_appSettings.AngularUrl}inventory", _page.Url);
 
-            var inventoryPage = new InventoryPage(_appSettings.AppUrl, _page);
+            var inventoryPage = new InventoryPage(_appSettings.AngularUrl, _page);
             
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");

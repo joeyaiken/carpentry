@@ -21,8 +21,7 @@ namespace Carpentry.PlaywrightTests.e2e
     /// </summary>
     public class TestSuite
     {
-        // private readonly AppSettings _appSettings;
-        private readonly IOptions<AppSettings> _appSettingsRaw;
+        private readonly IOptions<AppSettings> _appSettings;
         private static int APP_INIT_DELAY = 5000;
         private readonly SeedData _seedData;
         private readonly ILogger _logger;
@@ -34,11 +33,11 @@ namespace Carpentry.PlaywrightTests.e2e
             ILogger logger
             )
         {
-            // _appSettings = appSettings.Value;
-            _appSettingsRaw = appSettings;
+            _appSettings = appSettings;
             _seedData = new SeedData();
             _logger = logger;
             APP_URL = appSettings.Value.ReactUrl;
+            // APP_URL = appSettings.Value.AngularUrl;
         }
 
         public async Task RunTestSuite()
@@ -82,10 +81,10 @@ namespace Carpentry.PlaywrightTests.e2e
             //TODO - Find an appropriate way to load these with DI instead of constructing them manually (or something more graceful)
             var synchronousRunnables = new List<IRunnableTest>()
             {
-                new Test00HomePageLoads(page, _appSettingsRaw, _logger),
-                new Test01SettingsTrackSnowSets(page, _appSettingsRaw, _logger),
-                new Test02InventoryAddSnowCards(page, _appSettingsRaw, _seedData, _logger),
-                new Test03ConfirmInventoryCards(page, _appSettingsRaw, _seedData),
+                new Test00HomePageLoads(page, _appSettings, _logger),
+                new Test01SettingsTrackSnowSets(page, _appSettings, _logger),
+                new Test02InventoryAddSnowCards(page, _appSettings, _seedData, _logger),
+                new Test03ConfirmInventoryCards(page, _appSettings, _seedData),
             };
 
             foreach (var runnable in synchronousRunnables)
@@ -253,9 +252,7 @@ namespace Carpentry.PlaywrightTests.e2e
                 try //TODO - catch specific errors, don't catch blindly
                 {
                     _logger.Information("Checking app status (TryLoadApp)");
-                    //await page.GotoAsync(APP_URL);
-                    //TODO - add a 'root' id to the angular app & reference that instead of the app-root tag
-                    var appText = await page.TextContentAsync("app-root"); //TODO - This doesn't work in react
+                    var appText = await page.TextContentAsync("#root");
                     if (appText != "Loading...")
                     {
                         _logger.Information("App loaded!");
@@ -270,7 +267,6 @@ namespace Carpentry.PlaywrightTests.e2e
 
                 _logger.Information("App not loaded, delaying before retrying...");
                 await Task.Delay(APP_INIT_DELAY);
-                //return false;
             }
             _logger.Information($"{nameof(WaitForApp)} completed");
         }

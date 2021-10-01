@@ -21,7 +21,7 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         
         public async Task Run()
         {
-            var inventoryPage = new InventoryPage(_appSettings.AppUrl, _page);
+            var inventoryPage = new InventoryPage(_appSettings.AngularUrl, _page);
             
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");

@@ -22,7 +22,7 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         
         public async Task Run()
         {
-            var settingsPage = new SettingsPage(_appSettings.AppUrl, _page);
+            var settingsPage = new SettingsPage(_appSettings.AngularUrl, _page);
             await settingsPage.NavigateTo();
             await settingsPage.WaitForBusy();
             
