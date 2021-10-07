@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 
 import {
-  AppBar,
-  Typography,
-  Toolbar,
-  IconButton,
-  Container,
-  Button,
+    AppBar,
+    Typography,
+    Toolbar,
+    IconButton,
+    Container,
+    Button, LinearProgress,
 } from '@material-ui/core';
 
 import { 
@@ -19,6 +19,8 @@ interface LayoutProps {
     children: ReactNode;
 
     title: string;
+    
+    isLoading?: boolean;
 
     // routes: {
     //     path: string,
@@ -112,6 +114,7 @@ export default function AppLayout(props: LayoutProps): JSX.Element {
             } */}
           </Toolbar>
         </AppBar>
+        {props.isLoading && <LinearProgress id='progress-bar' />}
         <Container maxWidth="xl" className={combineStyles(flexSection, flexCol)} style={{overflow:'auto'}}>
             {props.children}
         </Container>

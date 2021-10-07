@@ -26,7 +26,8 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 
         public async Task WaitForBusy()
         {
-            await _page.WaitForSelectorAsync("mat-progress-bar", new PageWaitForSelectorOptions()
+            //await _page.WaitForSelectorAsync("mat-progress-bar", new PageWaitForSelectorOptions()
+            await _page.WaitForSelectorAsync("#progress-bar", new PageWaitForSelectorOptions()
             {
                 State = WaitForSelectorState.Hidden
             });
@@ -79,7 +80,8 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 
         public async Task ClickAddButton()
         {
-            var addButton = await _element.QuerySelectorAsync("a:has-text(\"add\")");
+            // var addButton = await _element.QuerySelectorAsync("a:has-text(\"add\")");
+            var addButton = await _element.QuerySelectorAsync(".add-button");
             await addButton!.ClickAsync();
         }
     }

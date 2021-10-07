@@ -21,22 +21,24 @@ namespace Carpentry.PlaywrightTests.e2e
     /// </summary>
     public class TestSuite
     {
-        private readonly IOptions<AppSettings> _appSettings;
+        // private readonly IOptions<AppSettings> _appSettings;
+        private readonly AppSettings _appSettings;
         private static int APP_INIT_DELAY = 5000;
         private readonly SeedData _seedData;
         private readonly ILogger _logger;
-        private readonly string APP_URL;
+        // private readonly string APP_URL;
         
 
         public TestSuite(
-            IOptions<AppSettings> appSettings,
+            // IOptions<AppSettings> appSettings,
+            AppSettings appSettings,
             ILogger logger
             )
         {
             _appSettings = appSettings;
             _seedData = new SeedData();
             _logger = logger;
-            APP_URL = appSettings.Value.ReactUrl;
+            // APP_URL = appSettings.Value.ReactUrl;
             // APP_URL = appSettings.Value.AngularUrl;
         }
 
@@ -81,10 +83,10 @@ namespace Carpentry.PlaywrightTests.e2e
             //TODO - Find an appropriate way to load these with DI instead of constructing them manually (or something more graceful)
             var synchronousRunnables = new List<IRunnableTest>()
             {
-                new Test00HomePageLoads(page, _appSettings, _logger),
-                new Test01SettingsTrackSnowSets(page, _appSettings, _logger),
-                new Test02InventoryAddSnowCards(page, _appSettings, _seedData, _logger),
-                new Test03ConfirmInventoryCards(page, _appSettings, _seedData),
+                new Test00HomePageLoads(page, _appSettings.AppUrl, _logger),
+                new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger),
+                new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger),
+                new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData),
             };
 
             foreach (var runnable in synchronousRunnables)
@@ -100,7 +102,7 @@ namespace Carpentry.PlaywrightTests.e2e
 
         private async Task TestInventoryAddSnowCards(IPage page)
         {
-            var inventoryAddCardsPage = new InventoryAddCardsPage(APP_URL, page);
+            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AppUrl, page);
             
             await inventoryAddCardsPage.NavigateTo();
             
@@ -140,9 +142,9 @@ namespace Carpentry.PlaywrightTests.e2e
             //click save
             await inventoryAddCardsPage.ClickSave();
             
-            Assert.AreEqual($"{APP_URL}inventory", page.Url);
+            Assert.AreEqual($"{_appSettings.AppUrl}inventory", page.Url);
 
-            var inventoryPage = new InventoryPage(APP_URL, page);
+            var inventoryPage = new InventoryPage(_appSettings.AppUrl, page);
             
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");
@@ -220,7 +222,7 @@ namespace Carpentry.PlaywrightTests.e2e
                 try //TODO - catch specific errors, don't catch blindly
                 {
                     _logger.Information("TryLoadPage");
-                    await page.GotoAsync(APP_URL, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
+                    await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
                     _logger.Information("Page Loaded");
                     //return true;
                     pageIsLoaded = true;

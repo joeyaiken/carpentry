@@ -8,5 +8,6 @@ namespace Carpentry.PlaywrightTests.e2e
     {
         public string AngularUrl { get; set; }
         public string ReactUrl { get; set; }
+        public string AppUrl { get; set; }
     }
 }

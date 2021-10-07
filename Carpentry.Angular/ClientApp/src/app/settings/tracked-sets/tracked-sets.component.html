@@ -6,7 +6,11 @@
                 <h4>Tracked Sets</h4>
             </div>
 
-            <mat-slide-toggle [checked]="showUntracked" (change)="showUntrackedToggleChange($event)" color="primary" >Show Untracked</mat-slide-toggle>
+            <mat-slide-toggle
+              id='show-untracked-toggle'
+              [checked]="showUntracked"
+              (change)="showUntrackedToggleChange($event)"
+              color="primary">Show Untracked</mat-slide-toggle>
 
             <!-- <button mat-button disabled color="primary" variant="contained" >Update All</button> -->
 
@@ -44,7 +48,7 @@
                     {{setDetail.inventoryCount}}
                 </td>
             </ng-container>
-            
+
             <ng-container matColumnDef="collected">
                 <th mat-header-cell *matHeaderCellDef>
                     Collected
@@ -62,7 +66,7 @@
                     {{setDetail.dataLastUpdated}}
                 </td>
             </ng-container>
-            
+
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>
                     Actions

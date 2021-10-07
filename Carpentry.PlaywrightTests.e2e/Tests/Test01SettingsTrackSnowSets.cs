@@ -11,18 +11,18 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
     public class Test01SettingsTrackSnowSets : IRunnableTest
     {
         private readonly IPage _page;
-        private readonly AppSettings _appSettings;
+        private readonly string _appUrl;
         private readonly ILogger _logger;
-        public Test01SettingsTrackSnowSets(IPage page, IOptions<AppSettings> appSettings, ILogger logger)
+        public Test01SettingsTrackSnowSets(IPage page, string appUrl, ILogger logger)
         {
             _page = page;
-            _appSettings = appSettings.Value;
+            _appUrl = appUrl;
             _logger = logger;
         }
         
         public async Task Run()
         {
-            var settingsPage = new SettingsPage(_appSettings.AngularUrl, _page);
+            var settingsPage = new SettingsPage(_appUrl, _page);
             await settingsPage.NavigateTo();
             await settingsPage.WaitForBusy();
             

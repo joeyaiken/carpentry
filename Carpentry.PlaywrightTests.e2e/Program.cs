@@ -11,6 +11,12 @@ using Serilog.AspNetCore;
 
 namespace Carpentry.PlaywrightTests.e2e
 {
+    public enum AppType
+    {
+        Angular,
+        React
+    }
+    
     /// <summary>
     /// TODO: Add a [better] general description for what this does (since it's the launching point for the app)
     /// Seeds a local sqlite DB with initial data (Might just be reference values, not other fake data)
@@ -21,6 +27,8 @@ namespace Carpentry.PlaywrightTests.e2e
     {
         static async Task Main(string[] args)
         {
+            if (args.Length == 0) throw new Exception("App Mode Expected");
+            
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
@@ -33,13 +41,22 @@ namespace Carpentry.PlaywrightTests.e2e
                 .WriteTo.Console()
                 .CreateLogger();
 
+            var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
+            
             var services = new ServiceCollection();
             services.AddOptions();
-            services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
             services.AddLogging(config => config.AddSerilog());
             services.AddSingleton<TestSuite>();
             services.AddSingleton(Log.Logger);
 
+            // services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
+            
+            if (args[0] == nameof(AppType.Angular)) appSettings.AppUrl = appSettings.AngularUrl;
+            else if (args[0] == nameof(AppType.React)) appSettings.AppUrl = appSettings.ReactUrl;
+            else throw new Exception("Unexpected app type encountered");
+            services.AddSingleton(appSettings);
+            // services.Configure(appSettings);
+            
             var provider = services.BuildServiceProvider();
             var logger = provider.GetService<ILogger>();
             var testSuite = provider.GetService<TestSuite>();

@@ -12,21 +12,21 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
     public class Test02InventoryAddSnowCards : IRunnableTest
     {
         private readonly IPage _page;
-        private readonly AppSettings _appSettings;
+        private readonly string _appUrl;
         private readonly SeedData _seedData;
         private readonly ILogger _logger;
 
-        public Test02InventoryAddSnowCards(IPage page, IOptions<AppSettings> appSettings, SeedData seedData, ILogger logger)
+        public Test02InventoryAddSnowCards(IPage page, string appUrl, SeedData seedData, ILogger logger)
         {
             _page = page;
-            _appSettings = appSettings.Value;
+            _appUrl = appUrl;
             _seedData = seedData;
             _logger = logger;
         }
         
         public async Task Run()
         {
-            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AngularUrl, _page);
+            var inventoryAddCardsPage = new InventoryAddCardsPage(_appUrl, _page);
             
             await inventoryAddCardsPage.NavigateTo();
             
@@ -66,9 +66,9 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
             //click save
             await inventoryAddCardsPage.ClickSave();
             
-            Assert.AreEqual($"{_appSettings.AngularUrl}inventory", _page.Url);
+            Assert.AreEqual($"{_appUrl}inventory", _page.Url);
 
-            var inventoryPage = new InventoryPage(_appSettings.AngularUrl, _page);
+            var inventoryPage = new InventoryPage(_appUrl, _page);
             
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");

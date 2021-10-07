@@ -10,18 +10,18 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
     public class Test03ConfirmInventoryCards : IRunnableTest
     {
         private readonly IPage _page;
-        private readonly AppSettings _appSettings;
+        private readonly string _appUrl;
         private readonly SeedData _seedData;
-        public Test03ConfirmInventoryCards(IPage page, IOptions<AppSettings> appSettings, SeedData seedData)
+        public Test03ConfirmInventoryCards(IPage page, string appUrl, SeedData seedData)
         {
             _page = page;
-            _appSettings = appSettings.Value;
+            _appUrl = appUrl;
             _seedData = seedData;
         }
         
         public async Task Run()
         {
-            var inventoryPage = new InventoryPage(_appSettings.AngularUrl, _page);
+            var inventoryPage = new InventoryPage(_appUrl, _page);
             
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");

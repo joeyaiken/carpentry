@@ -1,0 +1,12 @@
+﻿{
+  "profiles":{
+    "Angular": {
+      "commandName": "Project",
+      "commandLineArgs": "Angular"
+    },
+    "React": {
+      "commandName": "Project",
+      "commandLineArgs": "React"
+    }
+  }
+}

@@ -11,12 +11,12 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
     public class Test00HomePageLoads : IRunnableTest
     {
         private readonly IPage _page;
-        private readonly AppSettings _appSettings;
+        private readonly string _appUrl;
         private readonly ILogger _logger;
-        public Test00HomePageLoads(IPage page, IOptions<AppSettings> appSettings, ILogger logger)
+        public Test00HomePageLoads(IPage page, string appUrl, ILogger logger)
         {
             _page = page;
-            _appSettings = appSettings.Value;
+            _appUrl = appUrl;
             _logger = logger;
         }
 
@@ -24,7 +24,7 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         {
             _logger.Information($"starting {nameof(Test00HomePageLoads)}");
 
-            var homePage = new HomePage(_appSettings.AngularUrl, _page);
+            var homePage = new HomePage(_appUrl, _page);
 
             await homePage.NavigateTo();
 
