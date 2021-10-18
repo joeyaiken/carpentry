@@ -86,7 +86,7 @@ namespace Carpentry.PlaywrightTests.e2e
                 new Test00HomePageLoads(page, _appSettings.AppUrl, _logger),
                 // new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger),
                 // new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger, _appSettings.AppEnvironment),
-                new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData),
+                new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData, _appSettings.AppEnvironment),
             };
 
             foreach (var runnable in synchronousRunnables)
@@ -98,117 +98,6 @@ namespace Carpentry.PlaywrightTests.e2e
             // await TestInventoryAddSnowCards(page);
 
             _logger.Information("Finished running test suite");
-        }
-
-        private async Task TestInventoryAddSnowCards(IPage page)
-        {
-            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AppUrl, page, _appSettings.AppEnvironment);
-            
-            await inventoryAddCardsPage.NavigateTo();
-            
-            foreach (var set in _seedData.SeedSets)
-            {
-                await inventoryAddCardsPage.ApplySetFilter(set.SetName);
-
-                foreach (var searchGroup in _seedData.GroupSearchOrder)
-                {
-                    var searchGroupString = GetSearchGroupString(searchGroup);
-                    var cardsInGroup =
-                        _seedData.SeedCards.Where(c => c.SetCode == set.SetCode && c.Group == searchGroupString).ToList();
-                    if (cardsInGroup.Any())
-                    {
-                        _logger.Information($"Searching for cards in set: {set.SetName}, group: {searchGroupString}");
-                        
-                        await inventoryAddCardsPage.ApplySearchGroupFilter(searchGroupString);
-                        await inventoryAddCardsPage.ClickSearch();
-                        foreach (var card in cardsInGroup)
-                        {
-                            var cardRow = await inventoryAddCardsPage.GetSearchResultByName(card.CardName);
-                            
-                            for (var i = 0; i < card.Count; i++)
-                                await cardRow.ClickAddButton();
-                        }
-                    }
-                }
-            }
-            
-            //Make assertions about pending cards
-            foreach (var card in _seedData.SeedCards)
-            {
-                // var pendingCardCount = await inventoryAddCardsPage.GetPendingCardCount(card.CardName);
-                var pendingCard = await inventoryAddCardsPage.GetPendingCard(card.CardName);
-                Assert.IsNotNull(pendingCard);
-                Assert.AreEqual(card.Count, await pendingCard.GetPendingCount());
-            }
-            
-            //click save
-            await inventoryAddCardsPage.ClickSave();
-            
-            Assert.AreEqual($"{_appSettings.AppUrl}inventory", page.Url);
-
-            var inventoryPage = new InventoryPage(_appSettings.AppUrl, page);
-            
-            //update filters as desired
-            await inventoryPage.SetGroupBy("Name");
-            await inventoryPage.SetSortBy("Name");
-            await inventoryPage.SetMinValue(1);
-            await inventoryPage.SetTakeValue(100);
-            //search
-            await inventoryPage.ClickSearch();
-
-            //get all card overview objects
-            var searchResults = await inventoryPage.GetSearchResults();
-            
-            //for each seed card, assert it's in the array, then pull from the array
-            foreach (var seedCard in _seedData.SeedCards)
-            {
-                var matchingResult = searchResults.FirstOrDefault(result => result.Name == seedCard.CardName);
-                Assert.IsNotNull(matchingResult);
-                Assert.AreEqual(seedCard.Count, matchingResult.Count);
-                searchResults.Remove(matchingResult);
-            }
-            
-            Assert.AreEqual(0, searchResults.Count);
-        }
-
-        private static string GetSearchGroupString(CardSearchGroup groupEnum)
-        {
-            return groupEnum switch
-            {
-                CardSearchGroup.Red => nameof(CardSearchGroup.Red),
-                CardSearchGroup.Blue => nameof(CardSearchGroup.Blue),
-                CardSearchGroup.Green => nameof(CardSearchGroup.Green),
-                CardSearchGroup.White => nameof(CardSearchGroup.White),
-                CardSearchGroup.Black => nameof(CardSearchGroup.Black),
-                CardSearchGroup.Multicolored => nameof(CardSearchGroup.Multicolored),
-                CardSearchGroup.Colorless => nameof(CardSearchGroup.Colorless),
-                CardSearchGroup.Lands => nameof(CardSearchGroup.Lands),
-                CardSearchGroup.RareMythic => nameof(CardSearchGroup.RareMythic),
-                _ => ""
-            };
-        }
-        
-        private async Task DemoTest() 
-        {
-            _logger.Information("Beginning Playwright e2e test for Carpentry app");
-
-            using var playwright = await Playwright.CreateAsync();
-            await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
-            {
-                Headless = false,
-                SlowMo = 500,
-            });
-            var page = await browser.NewPageAsync();
-
-
-            await page.GotoAsync("https://playwright.dev/dotnet");
-
-            //await page.TextContentAsync(".header > .h1")
-            var headerText = await page.TextContentAsync("header h1");
-
-            Assert.AreEqual("Playwright enables reliable end-to-end testing for modern web apps.", headerText);
-
-            _logger.Information("Test executed successfully");
         }
 
         private async Task WaitForApp(IPage page)
@@ -274,51 +163,6 @@ namespace Carpentry.PlaywrightTests.e2e
             }
             _logger.Information($"{nameof(WaitForApp)} completed");
         }
-
-        //private async Task<bool> TryLoadPage(IPage page)
-        //{
-        //    //TODO - implement some limit/timeout
-        //    //Either this properly awaits the page, or fails and should delay
-        //    try //TODO - catch specific errors, don't catch blindly
-        //    {
-        //        _logger.Information("TryLoadPage");
-        //        await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
-        //        _logger.Information("Page Loaded");
-        //        return true;
-        //    }
-        //    catch //(PlaywrightException ex)
-        //    {
-        //        //_logger.Information($"Page Not loaded: {ex.Message}");
-        //        _logger.Information($"Error loading page, delaying before retrying...");
-        //        await Task.Delay(APP_INIT_DELAY);
-        //        return false;
-        //    }
-        //}
-
-        //private async Task<bool> TryLoadApp(IPage page)
-        //{
-        //    try //TODO - catch specific errors, don't catch blindly
-        //    {
-        //        _logger.Information("Checking app status (TryLoadApp)");
-        //        //await page.GotoAsync(APP_URL);
-        //        var appText = await page.TextContentAsync("app-root");
-        //        if (appText != "Loading...")
-        //        {
-        //            _logger.Information("App loaded!");
-        //            return true;
-        //        };
-        //    }
-        //    catch
-        //    {
-        //        _logger.Information("Error loading app");
-        //    }
-
-        //    _logger.Information("App not loaded, delaying before retrying...");
-        //    await Task.Delay(APP_INIT_DELAY);
-        //    return false;
-
-        //}
-
     }
 
     public class SeedData
@@ -378,7 +222,7 @@ namespace Carpentry.PlaywrightTests.e2e
             KaldheimSet, ModernHorizonsSet, ColdsnapSet
         };
         
-        public List<string> SeedSetCodes { get; }
+        // public List<string> SeedSetCodes { get; }
     }
 
     public class SeedSet

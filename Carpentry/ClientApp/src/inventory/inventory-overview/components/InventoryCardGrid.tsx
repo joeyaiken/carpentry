@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, CardContent, Typography, CardMedia, CardActions, Button, Card, IconButton, TableRow, Table, TableCell, TableBody } from '@material-ui/core';
 import CardGridContainer from './CardGridContainer';
-import { appStyles } from '../../../styles/appStyles';
+import {appStyles, combineStyles} from '../../../styles/appStyles';
 import { InfoOutlined } from '@material-ui/icons';
 
 interface ComponentProps{
@@ -20,11 +20,11 @@ export default function InventoryCardGrid(props: ComponentProps): JSX.Element {
                 { props.cardOverviewIds.map(overviewId => {
                     const cardItem = props.cardOverviewsById[overviewId];
                     return(
-                        <Card 
-                            
+                        <Card
                         key={cardItem.id} 
-                        className={classes.outlineSection}>
-                            <CardMedia 
+                        className={combineStyles(classes.outlineSection, "card-result")}>
+                            <CardMedia
+                                className="card-result-image"
                                 style={{height:"310px", width: "223px"}}
                                 //image={`https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=${props.card.}&type=card`}
                                 image={cardItem.imageUrl}

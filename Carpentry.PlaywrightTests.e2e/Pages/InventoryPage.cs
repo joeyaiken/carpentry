@@ -1,10 +1,11 @@
 ﻿#nullable enable
-
 using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace Carpentry.PlaywrightTests.e2e.Pages
 {
@@ -12,47 +13,74 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
     {
         // private readonly string _pageUrl;
         private readonly IPage _page;
-        public InventoryPage(string appUrl, IPage page) : base(page, $"{appUrl}inventory", "Inventory")
+        private readonly AppType _appEnvironment;
+
+        public InventoryPage(string appUrl, IPage page, AppType appEnvironment) : base(page, $"{appUrl}inventory", "Inventory")
         {
             // _pageUrl = $"{appUrl}inventory";
             _page = page;
+            _appEnvironment = appEnvironment;
         }
 
-        // public async Task NavigateTo()
-        // {
-        //     if (_pageUrl == _page.Url) return;
-        //     // await _page.GotoAsync(_pageUrl);
-        //     await _page.ClickAsync("app-nav-menu a:has-text(\"Settings\")");
-        // }
-
+        private async Task WaitForBusy()
+        {
+            await _page.WaitForSelectorAsync("#progress-bar", new PageWaitForSelectorOptions()
+            {
+                State = WaitForSelectorState.Hidden
+            });
+        }
+        
         public async Task SetGroupBy(string value)
         {
-            throw new NotImplementedException();
+            await SelectOption("group-by-filter", value);
         }
         
         public async Task SetSortBy(string value)
         {
-            throw new NotImplementedException();
+            await SelectOption("sort-by-filter", value);
         }
         
         public async Task SetMinValue(int value)
         {
-            throw new NotImplementedException();
+            await SetInputValue("min-count-filter", value.ToString());
         }
         
         public async Task SetTakeValue(int value)
         {
-            throw new NotImplementedException();
+            await SetInputValue("take-filter", value.ToString());
+        }
+
+        private async Task SetInputValue(string elementId, string value)
+        {
+            await _page.FillAsync($"#{elementId} input", value);
         }
         
+        private async Task SelectOption(string elementId, string value)
+        {
+            await _page.ClickAsync($"#{elementId}");
+            
+            if (_appEnvironment == AppType.Angular)
+            {
+                var selector = await _page.WaitForSelectorAsync($"mat-option:has(span:text-is(\"{value}\"))");
+                await selector!.ClickAsync();
+            }
+            else
+            {
+                var selector = await _page.WaitForSelectorAsync($"li:text-is(\"{value}\")");
+                await selector!.ClickAsync();
+            }
+        }
+
         public async Task ClickSearch()
         {
-            throw new NotImplementedException();
+            await _page.ClickAsync("button:has-text(\"Search\")");
+            await WaitForBusy();
         }
 
         public async Task<List<InventorySearchResult>> GetSearchResults()
         {
-            throw new NotImplementedException();
+            var elements = await _page.QuerySelectorAllAsync(".card-result");
+            return elements.Select(e => new InventorySearchResult(e)).ToList();
         }
         
         //TODO - Consider refactoring to using properties that are <IElementHandle?> ?
@@ -88,10 +116,29 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         public InventorySearchResult(IElementHandle element)
         {
             _element = element;
+            // Name = GetName().Result;
+        }
+        //card-result-image
+        // public string? Name { get; set; }
+
+        public async Task<string?> GetName()
+        {
+            var element = await _element.QuerySelectorAsync(".card-result-image");
+            var title = await element!.GetAttributeAsync("title");
+            return title;
         }
 
-
-        public string Name { get; set; }
-        public int Count { get; set; }
+        public async Task<int?> GetTotal()
+        {
+            var row = await _element.QuerySelectorAsync("tr:has(td:text-is(\"Total\"))");
+            var totalStr = await (await row!.QuerySelectorAllAsync("td")).Last().TextContentAsync();
+            if (totalStr != null && int.TryParse(totalStr, out var parsedInt))
+            {
+                return parsedInt;
+            }
+            return null;
+        }
+        
+        // public int? Count { get; set; }
     }
 }

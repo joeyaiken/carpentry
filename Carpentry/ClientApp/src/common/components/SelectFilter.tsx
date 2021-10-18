@@ -3,6 +3,7 @@ import React from 'react';
 import { appStyles } from '../../styles/appStyles';
 
 interface SelectFilterProps {
+    id: string;
     name: string;
     options: FilterOption[];
     value: string | string[];
@@ -13,7 +14,7 @@ interface SelectFilterProps {
 export default function SelectFilter(props: SelectFilterProps): JSX.Element {
     const { flexSection, sidePadded, stretch } = appStyles();
     return(
-        <Box className={`${flexSection} ${sidePadded}`}>
+        <Box id={props.id} className={`${flexSection} ${sidePadded}`}>
                 <TextField
                     name={props.name}
                     className={stretch}

@@ -32,22 +32,22 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                     options={[{name: "grid", value: "grid"},{name: "table", value: "table"}]}
                     handleFilterChange={props.handleFilterChange} /> */}
 
-                <SelectFilter name="groupBy" value={props.searchFilter.groupBy} selectMultiple={false} 
+                <SelectFilter id="group-by-filter" name="groupBy" value={props.searchFilter.groupBy} selectMultiple={false} 
                     options={props.filterOptions.groupBy} handleFilterChange={props.handleFilterChange} />
 
-                <SelectFilter name="sortBy" value={props.searchFilter.sortBy} selectMultiple={false}
+                <SelectFilter id="sort-by-filter" name="sortBy" value={props.searchFilter.sortBy} selectMultiple={false}
                     options={props.filterOptions.sortBy} handleFilterChange={props.handleFilterChange} />
 
                 <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
                     options={[{name: "Desc", value: "sortDescending", checked: props.searchFilter.sortDescending}]} />
 
-                <SelectFilter name="set" value={props.searchFilter.set} selectMultiple={false}
+                <SelectFilter id="set-filter" name="set" value={props.searchFilter.set} selectMultiple={false}
                     options={props.filterOptions.sets} handleFilterChange={props.handleFilterChange} />
 
-                <SelectFilter name="type" value={props.searchFilter.type} selectMultiple={false}
+                <SelectFilter id="type-filter" name="type" value={props.searchFilter.type} selectMultiple={false}
                     options={props.filterOptions.types} handleFilterChange={props.handleFilterChange} />
 
-                <SelectFilter name="colorIdentity" selectMultiple={true} value={props.searchFilter.colorIdentity}
+                <SelectFilter id="color-identity-filter" name="colorIdentity" selectMultiple={true} value={props.searchFilter.colorIdentity}
                     options={props.filterOptions.colors} handleFilterChange={props.handleFilterChange} />
     
                 <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
@@ -64,19 +64,19 @@ export default function InventoryFilterBar(props: InventoryFilterBarProps): JSX.
                     {/* <SelectFilter name="format" value={props.searchFilter.format} selectMultiple={false} options={props.filterOptions.formats}
                         handleFilterChange={props.handleFilterChange} /> */}
 
-                    <SelectFilter name="rarity" value={props.searchFilter.rarity} selectMultiple={true}
+                    <SelectFilter id="rarity-filter" name="rarity" value={props.searchFilter.rarity} selectMultiple={true}
                         options={props.filterOptions.rarities} handleFilterChange={props.handleFilterChange} />
 
-                    <NumericFilter name="minCount" value={props.searchFilter.minCount}
+                    <NumericFilter id="min-count-filter" name="minCount" value={props.searchFilter.minCount}
                         handleFilterChange={props.handleFilterChange} />
 
-                    <NumericFilter name="maxCount" value={props.searchFilter.maxCount}
+                    <NumericFilter id="max-count-filter" name="maxCount" value={props.searchFilter.maxCount}
                         handleFilterChange={props.handleFilterChange} />
 
-                    <NumericFilter name="skip" value={props.searchFilter.skip}
+                    <NumericFilter id="skip-filter" name="skip" value={props.searchFilter.skip}
                         handleFilterChange={props.handleFilterChange} />
 
-                    <NumericFilter name="take" value={props.searchFilter.take}
+                    <NumericFilter id="take-filter" name="take" value={props.searchFilter.take}
                         handleFilterChange={props.handleFilterChange} />
 
                 </Box>

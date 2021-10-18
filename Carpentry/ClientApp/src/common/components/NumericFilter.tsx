@@ -3,6 +3,7 @@ import React from 'react';
 import { appStyles } from '../../styles/appStyles';
 
 interface NumericFilterProps {
+    id: string;
     name: string;
     value: number;
     handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -11,7 +12,7 @@ interface NumericFilterProps {
 export default function NumericFilter(props: NumericFilterProps): JSX.Element {
     const { flexSection, sidePadded, stretch } = appStyles();
     return(
-        <Box className={`${flexSection} ${sidePadded}`}>
+        <Box id={props.id} className={`${flexSection} ${sidePadded}`}>
             <TextField
                 name={props.name}
                 className={stretch}

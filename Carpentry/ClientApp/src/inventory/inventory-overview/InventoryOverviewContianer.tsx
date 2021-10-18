@@ -154,7 +154,7 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
   render() {
     // const {  flexCol } = appStyles();
     return (
-      <AppLayout title="Inventory">
+      <AppLayout title="Inventory" isLoading={this.props.isLoading}>
         {/*<React.Fragment>*/}
         {/* <InventoryDetailModal /> */}
         {/* <Box className={flexCol}> */}

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Carpentry.Logic
 {
@@ -139,13 +140,19 @@ namespace Carpentry.Logic
 
             var cardQuery = GetFilteredCardQuery(param);
 
+            
             //So, I have a query of all cards relevant to these filters
             var queryResult = await GetMappedQueryResult(cardQuery);
-            
+
             var groupedResult = GetGroupedCards(queryResult, param.GroupBy);
 
+            if (param.MinCount > 0)
+                groupedResult = groupedResult.Where(c => c.TotalCount >= param.MinCount);
+            
+            if (param.MaxCount > 0)
+                groupedResult = groupedResult.Where(c => c.TotalCount <= param.MaxCount);
+            
             //order/skip/take
-
             switch (param.Sort)
             {
                 case "count":
@@ -276,6 +283,9 @@ namespace Carpentry.Logic
                         break;
                 }
             }
+            
+            
+            
             // TestResults = cardQuery.ToList();
             return cardQuery;
         }

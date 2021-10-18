@@ -12,16 +12,19 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         private readonly IPage _page;
         private readonly string _appUrl;
         private readonly SeedData _seedData;
-        public Test03ConfirmInventoryCards(IPage page, string appUrl, SeedData seedData)
+        private readonly AppType _appEnvironment;
+
+        public Test03ConfirmInventoryCards(IPage page, string appUrl, SeedData seedData, AppType appEnvironment)
         {
             _page = page;
             _appUrl = appUrl;
             _seedData = seedData;
+            _appEnvironment = appEnvironment;
         }
         
         public async Task Run()
         {
-            var inventoryPage = new InventoryPage(_appUrl, _page);
+            var inventoryPage = new InventoryPage(_appUrl, _page, _appEnvironment);
             await inventoryPage.NavigateTo();
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");
@@ -37,9 +40,9 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
             //for each seed card, assert it's in the array, then pull from the array
             foreach (var seedCard in _seedData.SeedCards)
             {
-                var matchingResult = searchResults.FirstOrDefault(result => result.Name == seedCard.CardName);
+                var matchingResult = searchResults.FirstOrDefault(result => result.GetName().Result == seedCard.CardName);
                 Assert.IsNotNull(matchingResult);
-                Assert.AreEqual(seedCard.Count, matchingResult.Count);
+                Assert.AreEqual(seedCard.Count, matchingResult.GetTotal().Result);
                 searchResults.Remove(matchingResult);
             }
             
