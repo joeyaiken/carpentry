@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
-import TrackedSetsContainerLayout from './components/TrackedSetsContainerLayout';
+import TrackedSetsContainerLayout from './TrackedSetsContainerLayout';
 import { AppState } from '../../configureStore';
 import { requestAddTrackedSet, requestRemoveTrackedSet, requestTrackedSets, requestUpdateTrackedSet } from './state/TrackedSetsActions';
 

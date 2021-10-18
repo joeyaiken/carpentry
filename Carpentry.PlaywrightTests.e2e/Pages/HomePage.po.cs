@@ -1,9 +1,9 @@
-﻿
-#nullable enable
+﻿#nullable enable
 
 using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,29 +26,24 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         }
 
         //TODO - Consider refactoring to using properties that are <IElementHandle?> ?
-        public string? TitleText => _page.TextContentAsync("app-landing h2").Result; //TODO - this selector may not work in react
-        public string? SubtitleText => _page.TextContentAsync("app-landing h3").Result; //TODO - this selector may not work in react
+        // public string? TitleText => _page.TextContentAsync("app-landing h2").Result; //TODO - this selector may not work in react
+        // public string? SubtitleText => _page.TextContentAsync("app-landing h3").Result; //TODO - this selector may not work in react
 
-        //public Task<IElementHandle?> Test()
-        public async Task Test()
+        public async Task<string?> GetTitleText()
         {
-            //var test = await _page.QuerySelectorAsync("app-landing h2");
-            //return await _page.QuerySelectorAsync("app-landing h2");
-            var element = await _page.QuerySelectorAsync("app-landing h2");
-
-            var test = await element.TextContentAsync();
-
-
+            return await GetElementText("#home-container #title");
         }
-        
-        //public async Task<string?> TitleText()
-        //{
-        //    return await _page.TextContentAsync("app-landing h2"); //TODO - this selector may not work in react
-        //}
 
-        //public async Task<string?> SubtitleText()
-        //{
-        //    return await _page.TextContentAsync("app-landing h3"); //TODO - this selector may not work in react
-        //}
+        public async Task<string?> GetSubtitleText()
+        {
+            return await GetElementText("#home-container #subtitle");
+        }
+
+        private async Task<string?> GetElementText(string selector)
+        {
+            var element = await _page.QuerySelectorAsync(selector);
+            if (element == null) return null;
+            return await element.TextContentAsync();
+        }
     }
 }

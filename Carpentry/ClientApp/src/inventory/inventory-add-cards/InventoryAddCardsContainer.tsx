@@ -25,6 +25,7 @@ interface PropsFromState {
     filterOptions: AppFiltersDto;
     searchFilterProps: CardFilterProps;
     visibleFilters: CardFilterVisibilities;
+    isLoading: boolean;
 }
 
 interface OwnProps {
@@ -111,7 +112,8 @@ class InventoryAddCardsContainer extends React.Component<ContainerProps>{
                 searchFilterProps={this.props.searchFilterProps}
                 searchResults={this.props.searchResults}
                 selectedCard={this.props.selectedCard}
-                viewMode={this.props.viewMode}/>
+                viewMode={this.props.viewMode}
+                isLoading={this.props.isLoading} />
             );
     }
 }
@@ -184,6 +186,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         filterOptions: state.core.data.filterOptions,
         searchFilterProps: containerState.searchFilter,
         visibleFilters: visibleFilters,
+        isLoading: containerState.searchResults.isLoading,
     }
 
     return result;

@@ -32,22 +32,24 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
              */}
             {/* //SET filter */}
             <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
-                <TextField
-                    name="set"
-                    className={classes.stretch}
-                    select
-                    label="Set filter"
-                    value={props.searchFilter.set}
-                    onChange={props.handleFilterChange}
-                    margin="normal" >
-                        <MenuItem key="null" value=""></MenuItem>
-                        { props.filterOptions.sets.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
-                    </TextField>
+              <TextField
+                id="set-select"
+                name="set"
+                className={classes.stretch}
+                select
+                label="Set filter"
+                value={props.searchFilter.set}
+                onChange={props.handleFilterChange}
+                margin="normal" >
+                    <MenuItem key="null" value=""></MenuItem>
+                    { props.filterOptions.sets.map((item) => (<MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>)) }
+                </TextField>
             </Box>
             {/*  */}
             {/* //Group filter */}
             <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
                 <TextField
+                    id="search-group-select"
                     name="group"
                     className={classes.stretch}
                     select

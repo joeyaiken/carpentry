@@ -17,7 +17,7 @@ export default function PendingCardsSection(props: CardSearchPendingCardsProps):
             Object.keys(props.pendingCards).map((id: string) => {
                 let thisCard: PendingCardsDto = props.pendingCards[id];
                 return(
-                <Paper key={id}>
+                <Paper className="pending-card" key={id}>
                     <Typography variant="h5">{ thisCard.name }</Typography>
                     <Typography variant="h6">{ thisCard.cards.length }</Typography>
                     {/* <Typography variant="h6">{ thisCard.countFoil }</Typography> */}

@@ -37,10 +37,10 @@ export default function SearchResultTable(props: SearchResultTableProps): JSX.El
                         <TableCell>
                             <Box className={flexRow}>
                                 {/* <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.cardId, false, "normal")} } >-</Button> */}
-                                <Button variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.name, result.data.cardId, false)} } >-</Button>
+                                <Button className="quick-remove-button" variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.name, result.data.cardId, false)} } >-</Button>
                                 {/* <Typography>({result.count})</Typography> */}
                                 {/* <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data, false, "normal")} } >+</Button> */}
-                                <Button variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data.name, result.data.cardId, false)} } >+</Button>
+                                <Button className="quick-add-button" variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data.name, result.data.cardId, false)} } >+</Button>
                             </Box>
                         </TableCell>                                                
                     </TableRow>

@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace Carpentry.PlaywrightTests.e2e.Pages
 {
-    public class InventoryPage
+    public class InventoryPage : NavigationPage
     {
-        private readonly string _pageUrl;
+        // private readonly string _pageUrl;
         private readonly IPage _page;
-        public InventoryPage(string appUrl, IPage page)
+        public InventoryPage(string appUrl, IPage page) : base(page, $"{appUrl}inventory", "Inventory")
         {
-            _pageUrl = $"{appUrl}inventory";
+            // _pageUrl = $"{appUrl}inventory";
             _page = page;
         }
 
-        public async Task NavigateTo()
-        {
-            if (_pageUrl == _page.Url) return;
-            // await _page.GotoAsync(_pageUrl);
-            await _page.ClickAsync("app-nav-menu a:has-text(\"Settings\")");
-        }
+        // public async Task NavigateTo()
+        // {
+        //     if (_pageUrl == _page.Url) return;
+        //     // await _page.GotoAsync(_pageUrl);
+        //     await _page.ClickAsync("app-nav-menu a:has-text(\"Settings\")");
+        // }
 
         public async Task SetGroupBy(string value)
         {

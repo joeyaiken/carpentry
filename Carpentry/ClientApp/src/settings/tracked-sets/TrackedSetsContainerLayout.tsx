@@ -14,8 +14,8 @@ import {
   TableBody,
 } from '@material-ui/core';
 import { Refresh, Add, Delete } from '@material-ui/icons';
-import { appStyles } from '../../../styles/appStyles';
-import AppLayout from '../../../common/components/AppLayout';
+import { appStyles } from '../../styles/appStyles';
+import AppLayout from '../../common/components/AppLayout';
 
 declare interface ComponentProps {
   onRefreshClick: () => void;
@@ -56,7 +56,7 @@ export default function TrackedSetsContainerLayout(props: ComponentProps): JSX.E
             label="Show Untracked"
           />
           <Button disabled={true} color="primary" variant="contained" >Update All</Button>
-          <IconButton color="inherit" onClick={props.onRefreshClick}>
+          <IconButton color="inherit" onClick={props.onRefreshClick} id="refresh-button" >
             <Refresh />
           </IconButton>
         </Box>
@@ -74,7 +74,7 @@ export default function TrackedSetsContainerLayout(props: ComponentProps): JSX.E
             </TableHead>
             <TableBody>
               { props.trackedSetDetails.map(setDetail =>
-                <TableRow key={setDetail.code}>
+                <TableRow key={setDetail.code} className="set-row">
                   <TableCell>{setDetail.code}</TableCell>
                   <TableCell>{setDetail.name}</TableCell>
                   <TableCell>{setDetail.inventoryCount}</TableCell>

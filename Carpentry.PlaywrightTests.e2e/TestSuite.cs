@@ -84,8 +84,8 @@ namespace Carpentry.PlaywrightTests.e2e
             var synchronousRunnables = new List<IRunnableTest>()
             {
                 new Test00HomePageLoads(page, _appSettings.AppUrl, _logger),
-                new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger),
-                new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger),
+                // new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger),
+                // new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger, _appSettings.AppEnvironment),
                 new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData),
             };
 
@@ -102,7 +102,7 @@ namespace Carpentry.PlaywrightTests.e2e
 
         private async Task TestInventoryAddSnowCards(IPage page)
         {
-            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AppUrl, page);
+            var inventoryAddCardsPage = new InventoryAddCardsPage(_appSettings.AppUrl, page, _appSettings.AppEnvironment);
             
             await inventoryAddCardsPage.NavigateTo();
             
@@ -135,8 +135,10 @@ namespace Carpentry.PlaywrightTests.e2e
             //Make assertions about pending cards
             foreach (var card in _seedData.SeedCards)
             {
-                var pendingCardCount = await inventoryAddCardsPage.GetPendingCardCount(card.CardName);
-                Assert.AreEqual(card.Count, pendingCardCount);
+                // var pendingCardCount = await inventoryAddCardsPage.GetPendingCardCount(card.CardName);
+                var pendingCard = await inventoryAddCardsPage.GetPendingCard(card.CardName);
+                Assert.IsNotNull(pendingCard);
+                Assert.AreEqual(card.Count, await pendingCard.GetPendingCount());
             }
             
             //click save

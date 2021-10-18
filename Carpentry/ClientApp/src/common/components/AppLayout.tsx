@@ -1,123 +1,23 @@
 import React, { ReactNode } from 'react';
-
-import {
-    AppBar,
-    Typography,
-    Toolbar,
-    IconButton,
-    Container,
-    Button, LinearProgress,
-} from '@material-ui/core';
-
-import { 
-    Menu,
-} from '@material-ui/icons';
-import { Link, NavLink } from 'react-router-dom';
+import { Container, LinearProgress } from '@material-ui/core';
 import { appStyles, combineStyles } from '../../styles/appStyles';
+import NavigationContainer from "../../navigation/NavigationContainer";
 
 interface LayoutProps {
     children: ReactNode;
-
     title: string;
-    
     isLoading?: boolean;
-
-    // routes: {
-    //     path: string,
-    //     component: ConnectedComponent<any, any>,
-    //     name: string;
-    // }[];
-    // isAddSelected: boolean;
-    // showAddButton: boolean;
-    // showFilterButton: boolean;
-
-    // onAddToggle: any;
-    // handleMenuClick: any;
-    // onButtonClick: (type: AppBarButtonType) => void;
 }
-// const appHeader: JSX.Element = (
-//   <div className= "app-header app-bar bar-dark">
-//       <div className= "header-section">
-//           {/* <MaterialButton value="" isSelected={this.props.isNavOpen} onClick={this.handleNavClick} icon="menu"  />
-//           <AppIcon /> */}
-//       </div>
-//       <div className= "header-section pull-right">
-//           {/* <MaterialButton value="data" icon="save" onClick={this.handleSheetToggle} />
-//           <MaterialButton value="detail" icon="list" onClick={this.handleSheetToggle} />
-//           <MaterialButton value="search" icon="search" onClick={this.handleSheetToggle} />
-//           <MaterialButton value="rare" icon="grade" onClick={this.handleSheetToggle} /> */}
-//       </div>
-//   </div>
-// );
+
 export default function AppLayout(props: LayoutProps): JSX.Element {
-    const { stretch, flexCol, flexSection } = appStyles();
-  //flex-col flex-section 
+  const { stretch, flexCol, flexSection } = appStyles();
   return(
   <div className={combineStyles(stretch, flexCol)}>
-      <AppBar position="static">
-          <Toolbar>
-            <IconButton color="inherit" component={Link} to={'/'} >
-                <Menu />
-            </IconButton>
-            
-            <Typography variant="h5" className={flexSection}>
-                Carpentry
-                {/* {<Switch>{
-                        props.routes.map(route => <Route key={route.path} path={route.path}>{route.name}</Route>)
-                }</Switch>} */}
-            </Typography>
-
-            <Link to="/decks" component={Button}>Decks</Link>
-        
-            <Link to="/inventory" component={Button}>Inventory</Link>
-
-            <Link to="/settings/sets" component={Button}>Settings</Link>
-
-            {/* <Route
-                path='/'
-                render={
-                    ({location}) => (
-                        <Fragment>
-                            <Tabs value={location.pathname}>
-                                <Tab value='/inventory' label='Inventory' component={Link} to={'/inventory'} />
-                                <Tab value='/decks' label='Decks' component={Link} to={'/decks'} />
-                                <Tab value='/decks/1' label='Active Deck' component={Link} to={'/decks/1'} />
-                            </Tabs>
-                        </Fragment>
-                    )
-                }
-            /> */}
-
-            {/* {
-            <Typography variant="h5" className= "flex-section">
-                Inventory
-            </Typography>
-            
-            <Typography variant="h5" className= "flex-section">
-                Decks
-            </Typography>
-
-            <Typography variant="h6" className= "flex-section">
-                A Deck Name
-            </Typography>
-            
-                props.showFilterButton &&
-                <IconButton color="inherit" onClick={() => {props.onButtonClick("filter")}} >
-                    {props.isAddSelected ? (<FilterList />) : (<FilterList />)}
-                </IconButton>
-            }
-            {
-                props.showAddButton &&
-                <IconButton color="inherit" onClick={() => {props.onButtonClick("add")}} >
-                    {props.isAddSelected ? (<AddBox />) : (<Add />)}
-                </IconButton>
-            } */}
-          </Toolbar>
-        </AppBar>
-        {props.isLoading && <LinearProgress id='progress-bar' />}
-        <Container maxWidth="xl" className={combineStyles(flexSection, flexCol)} style={{overflow:'auto'}}>
-            {props.children}
-        </Container>
-    </div>
+    <NavigationContainer />
+    {props.isLoading && <LinearProgress id='progress-bar' />}
+    <Container maxWidth="xl" className={combineStyles(flexSection, flexCol)} style={{overflow:'auto'}}>
+      {props.children}
+    </Container>
+  </div>
   );
 }

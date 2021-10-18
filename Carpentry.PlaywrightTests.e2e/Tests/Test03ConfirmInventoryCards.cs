@@ -22,7 +22,7 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         public async Task Run()
         {
             var inventoryPage = new InventoryPage(_appUrl, _page);
-            
+            await inventoryPage.NavigateTo();
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");
             await inventoryPage.SetSortBy("Name");

@@ -40,12 +40,12 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
 
     return (
         <AppLayout title="Carpentry">
-            <Box className={localStyles.containerLayout}>
+            <Box id="home-container" className={localStyles.containerLayout}>
                 <Box className={localStyles.titleContainer}>
-                    <Typography variant="h4">
+                    <Typography variant="h4" id="title">
                         Carpentry
                     </Typography>
-                    <Typography variant="h6">
+                    <Typography variant="h6" id="subtitle">
                         A deck & inventory management tool for Magic the Gathering
                     </Typography>
                 </Box>

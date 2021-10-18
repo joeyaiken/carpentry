@@ -28,9 +28,9 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
 
             await homePage.NavigateTo();
 
-            Assert.AreEqual("Carpentry", homePage.TitleText);
+            Assert.AreEqual("Carpentry", await homePage.GetTitleText());
 
-            Assert.AreEqual("A deck & inventory management tool for Magic the Gathering", homePage.SubtitleText);
+            Assert.AreEqual("A deck & inventory management tool for Magic the Gathering", await homePage.GetSubtitleText());
 
             _logger.Information($"{nameof(Test00HomePageLoads)} completed successfully");
         }

@@ -40,7 +40,7 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
 
             //const thisPendingCard = (this.props.selectedCard) && this.props.pendingCards[this.props.selectedCard.multiverseId];
             return (
-                <Card key={detail.cardId} className={combineStyles(outlineSection, flexRow)}>
+                <Card key={detail.cardId} className={combineStyles(outlineSection, flexRow, 'search-result-card')}>
                     {/* <Box>
 
                     </Box> */}
@@ -64,15 +64,15 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
                                 <Box className={flexCol}>
                                     <Typography>Normal ({countNormal})</Typography>
                                     <Box className={flexRow}>
-                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, false)} } >-</Button>
-                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, false)} } >+</Button>
+                                        <Button variant="outlined" className="remove-button-normal" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, false)} } >-</Button>
+                                        <Button variant="outlined" className="add-button-normal" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, false)} } >+</Button>
                                     </Box>
                                 </Box>
                                 <Box className={flexCol}>
                                     <Typography>Foil ({countFoil})</Typography>
                                     <Box className={flexRow}>
-                                        <Button variant="outlined" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, true)} } >-</Button>
-                                        <Button variant="outlined" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, true)} } >+</Button>
+                                        <Button variant="outlined" className="remove-button-foil" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, true)} } >-</Button>
+                                        <Button variant="outlined" className="add-button-foil" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, true)} } >+</Button>
                                     </Box>
                                 </Box>
                             </Box>

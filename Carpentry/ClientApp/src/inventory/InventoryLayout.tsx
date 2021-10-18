@@ -15,7 +15,8 @@ interface LayoutProps {
 
 export default function InventoryLayout(props: LayoutProps): JSX.Element {
     return (
-        <AppLayout title="Inventory">
+      <React.Fragment>
+        {/* <AppLayout title="Inventory">*/}
             <Switch>
                 <Route path="/inventory/addCards" />
                 <Route path="/inventory/trimming-tool" component={TrimmingToolContainer}/>
@@ -28,6 +29,7 @@ export default function InventoryLayout(props: LayoutProps): JSX.Element {
                 {/* <Route path="/inventory/trimming-tips" render={(props) => <TrimmingToolContainer {...props}  />} /> */}
                 <Route path="/inventory" component={InventoryOverviewContianer} />
             </Switch>
-        </AppLayout>
+        {/*</AppLayout>*/}
+      </React.Fragment>
     );
 }

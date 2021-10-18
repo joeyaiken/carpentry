@@ -8,21 +8,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Carpentry.PlaywrightTests.e2e.Pages
 {
-    public class SettingsPage
+    public class SettingsPage : NavigationPage
     {
-        private readonly string _pageUrl;
+        // private readonly string _pageUrl;
         private readonly IPage _page;
-        public SettingsPage(string appUrl, IPage page)
+        public SettingsPage(string appUrl, IPage page) : base(page, $"{appUrl}settings/", "Settings")
         {
-            _pageUrl = $"{appUrl}settings/";
+            // _pageUrl = $"{appUrl}settings/";
             _page = page;
         }
 
-        public async Task NavigateTo()
-        {
-            if (_pageUrl == _page.Url) return;
-            await _page.ClickAsync("app-nav-menu a:has-text(\"Settings\")");
-        }
+        // public async Task NavigateTo()
+        // {
+        //     if (_pageUrl == _page.Url) return;
+        //     await _page.ClickAsync("#app-nav-menu a:has-text(\"Settings\")");
+        // }
 
         public async Task WaitForBusy()
         {
@@ -35,24 +35,24 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 
         public async Task ClickShowUntrackedToggle()
         {
-            await _page.ClickAsync("mat-slide-toggle");
+            await _page.ClickAsync("#show-untracked-toggle");
             await WaitForBusy();
         }
 
         public async Task ClickRefreshButton()
         {
-            await _page.ClickAsync("a:has-text(\"refresh\")");
+            await _page.ClickAsync("#refresh-button");
             await WaitForBusy();
         }
 
         public async Task<IReadOnlyList<IElementHandle>> GetTrackedSetRows()
         {
-            return await _page.QuerySelectorAllAsync("app-tracked-sets tbody tr");
+            return await _page.QuerySelectorAllAsync(".set-row");
         }
 
         public async Task<TrackedSetRow?> GetRowByCode(string setCode)
         {
-            var element = await _page.QuerySelectorAsync($"app-tracked-sets tbody tr:has(td:text-is(\"{setCode}\"))");
+            var element = await _page.QuerySelectorAsync($".set-row:has(td:text-is(\"{setCode}\"))");
             return element == null ? null : new TrackedSetRow(element);
         }
 

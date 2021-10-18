@@ -15,7 +15,7 @@
             <!-- <button mat-button disabled color="primary" variant="contained" >Update All</button> -->
 
             <!-- <a mat-icon-button (click)="loadTrackedSets(true)"> -->
-            <a mat-icon-button (click)="refreshClicked()">
+            <a mat-icon-button (click)="refreshClicked()" id="refresh-button">
                 <mat-icon>refresh</mat-icon>
             </a>
         </div>
@@ -88,7 +88,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="set-row"></tr>
         </table>
     </mat-card>
 </div>

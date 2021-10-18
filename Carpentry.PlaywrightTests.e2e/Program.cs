@@ -49,13 +49,21 @@ namespace Carpentry.PlaywrightTests.e2e
             services.AddSingleton<TestSuite>();
             services.AddSingleton(Log.Logger);
 
-            // services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
+            switch (args[0])
+            {
+                case nameof(AppType.Angular):
+                    appSettings.AppUrl = appSettings.AngularUrl;
+                    appSettings.AppEnvironment = AppType.Angular;
+                    break;
+                case nameof(AppType.React):
+                    appSettings.AppUrl = appSettings.ReactUrl;
+                    appSettings.AppEnvironment = AppType.React;
+                    break;
+                default:
+                    throw new Exception("Unexpected app type encountered");
+            }
             
-            if (args[0] == nameof(AppType.Angular)) appSettings.AppUrl = appSettings.AngularUrl;
-            else if (args[0] == nameof(AppType.React)) appSettings.AppUrl = appSettings.ReactUrl;
-            else throw new Exception("Unexpected app type encountered");
             services.AddSingleton(appSettings);
-            // services.Configure(appSettings);
             
             var provider = services.BuildServiceProvider();
             var logger = provider.GetService<ILogger>();
