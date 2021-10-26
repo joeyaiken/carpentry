@@ -129,6 +129,17 @@ export class PendingCardsDto {
   // count: number; //because for some reason I think this would be better than the screen calling .length all the time
   // cards: InventoryCard[]; //this might need to be something else
   cards: NewInventoryCard[];
+
+
+
+
+	// newInventoryCards (by [some grouping])
+
+	// Relevant card definitions (by card number)
+
+  
+
+
 }
 
 export class TrimmedCardDto {

@@ -55,6 +55,8 @@ export class InventoryAddCardsComponent implements OnInit {
   // pendingCards: PendingCardsDto[];
   pendingCards: { [name: string]: PendingCardsDto }
 
+  private testSearch: boolean = true;
+
   constructor(
       private filterService: FilterService,
       // private inventoryService: InventoryService,
@@ -70,7 +72,8 @@ export class InventoryAddCardsComponent implements OnInit {
         this.viewMode = 'list';
         this.loadFilterOptions();
 
-        // this.runTestSearch();
+        if(this.testSearch) this.runTestSearch();
+        
     }
 
 
@@ -113,13 +116,33 @@ export class InventoryAddCardsComponent implements OnInit {
         // this.props.dispatch(requestSavePendingCards());
     }
 
-    // handleSearchMethodTabClick(name: string): void {
-    //     this.props.dispatch(cardSearchSearchMethodChanged(name));
-    // }
+    test(){ 
+        this.getPendingCardCount("test");
+        this.getPendingCardCount("test", 1, true);
+    }
 
-    // handleToggleViewClick(): void {
-    //     this.props.dispatch(toggleCardSearchViewMode());
-    // }
+
+    getPendingCardCount(cardName: string, cardId: number = null, isFoil: boolean = null): string {
+        var pendingCard = this.pendingCards[cardName];
+        if(!pendingCard) return "";
+        if(cardId && isFoil != null) {
+            //not implemented, get this pending card
+            //  if doesn't exist, should return 0, not emptystring
+            //  If exists, should get count of all pending cards matching isFoil
+        }
+
+        //not implemented, should return count of all new cards
+        //Note that if there are 0 pending cards, a null should have been returned earlier
+        //But, as a failsafe, I'll return an emptystring
+
+
+        //get all card IDs matching this card name
+        //sum count of pending cards for all card IDs
+
+
+
+        return "";
+    }
 
     addPendingCard(name: string, cardId: number, isFoil: boolean){
         let cardToAdd: PendingCardsDto = this.pendingCards[name];
@@ -203,19 +226,50 @@ export class InventoryAddCardsComponent implements OnInit {
                 count: this.pendingCards[card.name]?.cards?.length,
             } as CardListItem));
 
-            // this.test_selectFirstCard();
+            if(this.testSearch) this.test_selectFirstCard();
         });
     }
+
+
+    //I may need to rethink this general component state
+    //  I need to hold a local collection of pending cards
+    //  For each search result, I need to know the total pending cards for that name
+    //      I also need to know that # for displaying pending cards
+    //  For each unique card, I need to know # of pending normal cards, and # of pending foil cards
+
+
+    //I could: store things in a list that I search through
+    //  Either unique cardsToAdd, or grouped by unique print (card number)
+
+    //  This would make adding cards easy, but UI updates slower
+
+    //Or I could have some nested classes that I can dig into
+    //  Search Result would just know names, which is all it needs
+    //  Same logic for pending cards
+    //  Details would know 
+    
+    //  This would require aggregating for saving, but could make navigation easier
+    //      Details could even just pull data with a function taking name & card number or something
+    //      I could use this as a chance to save local data too (to click a pending card & see the details)
 
     private updateCounts(){
         this.searchResults.forEach(result => {
             if(this.pendingCards[result.data.name]){
+                var pendingCards = this.pendingCards[result.data.name].cards;
+                
+
+
+
                 result.count = this.pendingCards[result.data.name].cards.length;
             } else if(result.count) {
                 result.count = null;
             }
         })
     }
+
+
+
+
 
     private test_selectFirstCard() {
         if(this.searchResults?.length){
@@ -227,7 +281,7 @@ export class InventoryAddCardsComponent implements OnInit {
 
     private runTestSearch() {
       this.searchFilter.set = 'khm';
-      this.searchFilter.searchGroup = 'Blue';
+      this.searchFilter.searchGroup = 'RareMythic';
       this.trySearchCards();
     }
 }
