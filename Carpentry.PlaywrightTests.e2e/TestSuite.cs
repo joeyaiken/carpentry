@@ -135,18 +135,7 @@ namespace Carpentry.PlaywrightTests.e2e
                 }
             }
 
-            //bool appIsLoaded = await TryLoadApp(page);
-            //bool appIsLoaded = !pageIsLoaded ? false : await TryLoadApp(page);
             bool appIsLoaded = false;
-            //while (!(await AppIsLoaded(page)))
-            //while (!appIsLoaded)
-            //{
-            //    if (!pageIsLoaded) pageIsLoaded = await TryLoadPage(page);
-            //    if (pageIsLoaded) appIsLoaded = await TryLoadApp(page);
-            //    _logger.Information("App not loaded, retrying soon...");
-            //    await Task.Delay(5000);
-            //}
-
             while (!appIsLoaded)
             {
                 //appIsLoaded = await TryLoadApp(page);

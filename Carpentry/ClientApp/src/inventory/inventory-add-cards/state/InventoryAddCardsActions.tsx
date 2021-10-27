@@ -28,29 +28,22 @@ function trySearchCards(dispatch: Dispatch, state: AppState): any{
         return;
     }
     dispatch(searchRequested());
-    const containerState = state.inventory.inventoryAddCards;
-    if(containerState.cardSearchMethod === "web"){
-        const { cardName, exclusiveName } = containerState.searchFilter;
-        cardSearchApi.searchWeb(cardName, exclusiveName).then((results) =>{
-            dispatch(searchReceived(results));
-        });
-    } else {
-        const currentFilterProps = containerState.searchFilter;
-        const param: CardSearchQueryParameter = {
-            text: currentFilterProps.text,
-            colorIdentity: currentFilterProps.colorIdentity,
-            exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
-            multiColorOnly: currentFilterProps.multiColorOnly,
-            rarity: currentFilterProps.rarity,
-            set: currentFilterProps.set,
-            type: currentFilterProps.type,
-            searchGroup: currentFilterProps.group,
-            excludeUnowned: false,
-        }
-        cardSearchApi.searchInventory(param).then((results) => {
-            dispatch(searchReceived(results));
-        });
+    
+    const currentFilterProps = state.inventory.inventoryAddCards.searchFilter;
+    const param: CardSearchQueryParameter = {
+        text: currentFilterProps.text,
+        colorIdentity: currentFilterProps.colorIdentity,
+        exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
+        multiColorOnly: currentFilterProps.multiColorOnly,
+        rarity: currentFilterProps.rarity,
+        set: currentFilterProps.set,
+        type: currentFilterProps.type,
+        searchGroup: currentFilterProps.group,
+        excludeUnowned: false,
     }
+    cardSearchApi.searchInventory(param).then((results) => {
+        dispatch(searchReceived(results));
+    });
 }
 
 export const ADD_PENDING_CARD = 'INVENTORY_ADD_CARDS.ADD_PENDING_CARD';
@@ -88,19 +81,12 @@ export const toggleCardSearchViewMode = (): ReduxAction => ({
     type: TOGGLE_CARD_SEARCH_VIEW_MODE
 });
 
-
-export const CARD_SEARCH_SEARCH_METHOD_CHANGED = 'INVENTORY_ADD_CARDS.CARD_SEARCH_SEARCH_METHOD_CHANGED';
-export const cardSearchSearchMethodChanged = (method: string): ReduxAction => ({
-    type: CARD_SEARCH_SEARCH_METHOD_CHANGED,
-    payload: method
-});
-
 export const CARD_SEARCH_CLEAR_PENDING_CARDS = 'INVENTORY_ADD_CARDS.CARD_SEARCH_CLEAR_PENDING_CARDS'
 export const cardSearchClearPendingCards = () =>({
     type: CARD_SEARCH_CLEAR_PENDING_CARDS
 });
 
-export const CARD_SEARCH_SELECT_CARD = 'INVENTORY_ADD_CARDS.CARD_SEARCH_SELECT_CARD'; //Select search result (to see variant / foil options)
+export const CARD_SEARCH_SELECT_CARD = 'INVENTORY_ADD_CARDS.CARD_SEARCH_SELECT_CARD';
 export const cardSearchSelectCard = (card: CardSearchResultDto): ReduxAction => ({
     type: CARD_SEARCH_SELECT_CARD,
     payload: card

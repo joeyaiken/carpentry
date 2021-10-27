@@ -5,7 +5,6 @@ import {
     REMOVE_PENDING_CARD,
     FILTER_VALUE_CHANGED,
     TOGGLE_CARD_SEARCH_VIEW_MODE,
-    CARD_SEARCH_SEARCH_METHOD_CHANGED,
     CARD_SEARCH_CLEAR_PENDING_CARDS,
     CARD_SEARCH_SELECT_CARD,
     SAVE_REQUESTED,
@@ -27,7 +26,6 @@ export interface State {
     pendingCards: { [name: string]: PendingCardsDto } //key === name, should this also have a list to track all keys?
     //
 
-    cardSearchMethod: "set" | "web" | "inventory";
     selectedCard: CardSearchResultDto | null; //should probably be an AppState ID
     
 }
@@ -40,7 +38,6 @@ export const inventoryAddCardsReducer = (state = initialState, action: ReduxActi
         case ADD_PENDING_CARD: return cardSearchAddPendingCard(state, action);
         case REMOVE_PENDING_CARD: return cardSearchRemovePendingCard(state, action);
         case TOGGLE_CARD_SEARCH_VIEW_MODE: return toggleSearchViewMode(state, action);
-        case CARD_SEARCH_SEARCH_METHOD_CHANGED: return resetCardSearchFilterProps(state, action);
         case CARD_SEARCH_CLEAR_PENDING_CARDS: return {...state, pendingCards: {}}
         case CARD_SEARCH_SELECT_CARD:
             const selectedCard: CardSearchResultDto = action.payload;
@@ -64,7 +61,6 @@ const initialState: State = {
     searchFilter: defaultSearchFilterProps(),
     viewMode: "list",
     pendingCardsSaving: false,
-    cardSearchMethod: "set",
     selectedCard:  null, //should probably be an AppState ID
     pendingCards: {},
 };
@@ -73,9 +69,8 @@ function defaultSearchFilterProps(): CardFilterProps {
     return {
         set: '',
         colorIdentity: [],
-        //rarity: ['mythic','rare','uncommon','common'], //
-        rarity: [], //
-        type: '',//'Creature',
+        rarity: [],
+        type: '',
         exclusiveColorFilters: false,
         multiColorOnly: false,
         cardName: '',
@@ -118,18 +113,10 @@ function searchReceived(state: State, action: ReduxAction): State {
 const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): State => {
     //'pending cards' is now a dictionary of 'pending card dto's
     const {
-        // data, //0
         name,
         cardId,
-        isFoil, //false
-        // variant, //"normal"
-
-        //need
-        //cardId (for inv card)
-        //cardName (for display, and grouping?)
+        isFoil,
     } = action.payload;
-    
-    // const magicCardToAdd: MagicCard = data;
     
     let cardToAdd: PendingCardsDto = state.pendingCards[name];
     
@@ -138,19 +125,6 @@ const cardSearchAddPendingCard = (state = initialState, action: ReduxAction): St
             name: name,
             cards: [],
         };
-
-        //OK - So I need to either pass the name, or the whole card
-        
-        
-        // const magicCardToAdd = state.
-        // if we can't find a matching card, nothing gets added and this just continues silently (I guess)
-    //     if(magicCardToAdd){
-    //         cardToAdd = {
-    //             multiverseId: multiverseId,
-    //             cards: [],
-    //             // data: magicCardToAdd,
-    //         };
-    //     }                    
     }
 
     //These are the only 3 fields used by the api bulkAdd
@@ -177,17 +151,10 @@ const cardSearchRemovePendingCard = (state = initialState, action: ReduxAction):
         isFoil,
     } = action.payload;
 
-    // const midToRemove = action.payload.multiverseId;
-    // const removeFoilCard = action.payload.isFoil;
-    // const variantToRemove: string = action.payload.variant;
-
     let objToRemoveFrom = state.pendingCards[name];
 
     if(objToRemoveFrom){
-
-        //let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.variantName === variantToRemove && x.isFoil === removeFoilCard);
         let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.cardId === cardId && x.isFoil === isFoil);
-
         if(thisInvCard >= 0){
             objToRemoveFrom.cards.splice(thisInvCard,1);
         }
@@ -233,9 +200,7 @@ function toggleSearchViewMode(state: State, action: ReduxAction): State {
 }
 
 const filterValueChanged = (state: State, action: ReduxAction): State => {
-    //const { type, filter, value } = action.payload;
     const { type, filter, value } = action.payload;
-
     const existingFilter = state.searchFilter;
     const newState: State = {
         ...state,
@@ -243,14 +208,6 @@ const filterValueChanged = (state: State, action: ReduxAction): State => {
             ...existingFilter, 
             [filter]: value,
         }
-    }
-    return newState;
-}
-
-const resetCardSearchFilterProps = (state: State, action: ReduxAction): State => {
-    const newState: State = {
-        ...state,
-        searchFilter: defaultSearchFilterProps(),
     }
     return newState;
 }

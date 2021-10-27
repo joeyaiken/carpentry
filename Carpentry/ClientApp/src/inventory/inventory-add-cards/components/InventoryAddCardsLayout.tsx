@@ -10,7 +10,6 @@ import AppLayout from "../../../common/components/AppLayout";
 
 interface ComponentProps {
   filterOptions: AppFiltersDto;
-  cardSearchMethod: "set" | "web" | "inventory"; //TODO - make / use enum
   searchFilterProps: CardFilterProps;
   viewMode: CardSearchViewMode;
   selectedCard: CardSearchResultDto | null;
@@ -21,7 +20,6 @@ interface ComponentProps {
 
   handleCancelClick: () => void;
   handleSaveClick: () => void;
-  handleSearchMethodTabClick: (name: string) => void;
   handleToggleViewClick: () => void;
   handleBoolFilterChange: (filter: string, value: boolean) => void;
   handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -31,62 +29,78 @@ interface ComponentProps {
   handleCardSelected: (item: CardListItem) => void;
 }
 
+//TODO - Refactor out those single-use components, they should either actually be reused or merged into this file
 export default function InventoryAddCardsLayout(props: ComponentProps): JSX.Element {
   const {  flexRow, outlineSection, flexSection } = appStyles();
+
+  function renderAppBar(): JSX.Element {
+    return (
+      <AppBar color="default" position="relative">
+        <Toolbar>
+          <Typography variant="h6">
+            Card Search
+          </Typography>
+          <Button onClick={props.handleToggleViewClick} color="primary" variant="contained">
+            Toggle View
+          </Button>
+        </Toolbar>
+      </AppBar>
+    );
+  }
+  
+  function renderFilterBar(): JSX.Element {
+    return (<FilterBar
+      filterOptions={props.filterOptions}
+      handleBoolFilterChange={props.handleBoolFilterChange}
+      handleFilterChange={props.handleFilterChange}
+      searchFilterProps={props.searchFilterProps}
+      handleSearchButtonClick={props.handleSearchButtonClick} />);
+  }
+  
+  function renderSearchResultsTable(): JSX.Element {
+    return (
+      <SearchResultTable
+        searchResults={props.searchResults}
+        handleAddPendingCard={props.handleAddPendingCard}
+        handleRemovePendingCard={props.handleRemovePendingCard}
+        onCardSelected={props.handleCardSelected}
+      />
+    );
+  }
+
+  function renderSearchResultsGrid(): JSX.Element {
+    return (
+      <SearchResultGrid
+        searchResults={props.searchResults}
+        onCardSelected={props.handleCardSelected}
+      />
+    );
+  }
+
+
+  function renderSelectedCardSection(): JSX.Element {
+    return (
+      <SelectedCardSection
+        selectedCard={props.selectedCard!}
+        pendingCards={props.pendingCards[props.selectedCard!.name]}
+        handleAddPendingCard={props.handleAddPendingCard}
+        handleRemovePendingCard={props.handleRemovePendingCard}
+        selectedCardDetail={null} />
+    );
+  }
+
   return(
     <React.Fragment>
       <AppLayout title="Inventory" isLoading={props.isLoading}>
-        {/*Loading bar can go here...*/}
-        {/*See how settings is handling isLoading*/}
-        <AppBar color="default" position="relative">
-          <Toolbar>
-            <Typography variant="h6">
-              Card Search
-            </Typography>
-            <Tabs value={props.cardSearchMethod} onChange={(e, value) => {props.handleSearchMethodTabClick(value)}} >
-              <Tab value="set" label="Set" />
-              <Tab value="web" label="Web" />
-              <Tab value="inventory" label="Inventory" />
-            </Tabs>
-            <Button onClick={props.handleToggleViewClick} color="primary" variant="contained">
-              Toggle View
-            </Button>
-          </Toolbar>
-        </AppBar>
-        {/*Or maybe the loading bar should go here*/}
-        <FilterBar
-          filterOptions={props.filterOptions}
-          handleBoolFilterChange={props.handleBoolFilterChange}
-          handleFilterChange={props.handleFilterChange}
-          searchFilterProps={props.searchFilterProps}
-          cardSearchMethod={props.cardSearchMethod}
-          handleSearchButtonClick={props.handleSearchButtonClick} />
+        { renderAppBar() }
+        { renderFilterBar() }
         <Box className={combineStyles(flexRow,flexSection)} style={{ overflow:'auto', alignItems:'stretch' }}>
           <Paper id="search-results" style={{ overflow:'auto', flex:'1 1 70%' }} >
-            { props.viewMode === "list" &&
-            <SearchResultTable
-                searchResults={props.searchResults}
-                handleAddPendingCard={props.handleAddPendingCard}
-                handleRemovePendingCard={props.handleRemovePendingCard}
-                onCardSelected={props.handleCardSelected}
-            />
-            }
-            { props.viewMode === "grid" &&
-            <SearchResultGrid
-                searchResults={props.searchResults}
-                onCardSelected={props.handleCardSelected}
-            />
-            }
+            { props.viewMode === "list" && renderSearchResultsTable() }
+            { props.viewMode === "grid" && renderSearchResultsGrid() }
           </Paper>
           <Paper style={{ overflow:'auto', flex:'1 1 30%' }} >
-            { props.selectedCard &&
-            <SelectedCardSection
-                selectedCard={props.selectedCard}
-                pendingCards={props.pendingCards[props.selectedCard.name]}
-                handleAddPendingCard={props.handleAddPendingCard}
-                handleRemovePendingCard={props.handleRemovePendingCard}
-                selectedCardDetail={null} />
-            }
+            { props.selectedCard && renderSelectedCardSection() }
           </Paper>
         </Box>
         <PendingCardsSection pendingCards={props.pendingCards} />
