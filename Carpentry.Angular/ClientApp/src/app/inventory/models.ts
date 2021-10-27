@@ -116,30 +116,40 @@ export class MagicCard {
 }
 
 export class NewInventoryCard {
-  cardId: number;
-  isFoil: boolean;
-  statusId: number;
+    constructor(
+        cardId: number,
+        isFoil: boolean,
+        statusId: number
+    ){
+        this.cardId = cardId;
+        this.isFoil = isFoil;
+        this.statusId = statusId;
+    }
+    cardId: number;
+    isFoil: boolean;
+    statusId: number;
 }
 
 export class PendingCardsDto {
-  // data: MagicCard;
-  // multiverseId: number;
-  // cardId: number;
-  name: string;
-  // count: number; //because for some reason I think this would be better than the screen calling .length all the time
-  // cards: InventoryCard[]; //this might need to be something else
-  cards: NewInventoryCard[];
+    constructor(cardName: string) {
+        this.name = cardName;
+        this.cardsById = {};
+    }
+    name: string;
+    cardsById: { [cardId: number]: PendingPrintedCard; }
+    //TODO - This should store card definitions (so one could click a pending card and see details)
+}
 
-
-
-
-	// newInventoryCards (by [some grouping])
-
-	// Relevant card definitions (by card number)
-
-  
-
-
+export class PendingPrintedCard {
+    constructor(){
+        this.newCards = [];
+        this.countNormal = 0;
+        this.countFoil = 0;
+    }
+    data: CardSearchResultDto;
+    newCards: NewInventoryCard[];
+    countNormal: number;
+    countFoil: number;
 }
 
 export class TrimmedCardDto {
@@ -150,11 +160,11 @@ export class TrimmedCardDto {
 }
 
 export class TrimmingToolRequest {
-    setCode: string;
-    searchGroup: string;
-    minCount: number;
-    // minBy: string;
-    filterBy: string;
+  setCode: string;
+  searchGroup: string;
+  minCount: number;
+  // minBy: string;
+  filterBy: string;
 }
 
 export class ValidatedCarpentryImportDto {
@@ -186,10 +196,10 @@ export class cardSearchResultDetail {
     imageUrl: string;
 }
 
-export class CardListItem {
-    data: CardSearchResultDto;
-    count?: number;
-}
+// export class CardListItem {
+//     data: CardSearchResultDto;
+//     count?: number;
+// }
 // export class CardListItem extends CardSearchResultDto {
 //     count?: number;
 // }

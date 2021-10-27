@@ -1,10 +1,8 @@
 <mat-progress-bar *ngIf="isBusy" mode="indeterminate"></mat-progress-bar>
 <div id="hey-its-a-div" fxLayout="column">
-  <!-- position="relative" -->
   <mat-toolbar id="toolbar" fxFlex="none" color="default" >
     <h5>Card Search</h5>
     <div>
-      <!-- TODO: Get this button floating right, or move to a different location -->
       <button mat-raised-button (click)="onToggleView()" color="primary">
         Toggle View
       </button>
@@ -12,7 +10,6 @@
   </mat-toolbar>
 
   <div id="filter-bar" fxLayout="column" fxLayoutAlign=" none" class="paper outline-section">
-    <!--className="flex-section"-->
     <div fxLayout="row" >
       <!-- Text filter -->
       <div class="flex-section side-padded">
@@ -92,86 +89,43 @@
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let result">{{result.data.name}}</td>
-          <!-- <td mat-cell *matCellDef="let result">{{getPendingCardCount(result.data.name)}}</td> -->
+          <td mat-cell *matCellDef="let result">{{result.name}}</td>
         </ng-container>
 
         <ng-container matColumnDef="pending">
           <th mat-header-cell *matHeaderCellDef># Pending</th>
-          <!-- <td mat-cell *matCellDef="let result">{{result.count}}</td> -->
-          <td mat-cell *matCellDef="let result">{{getPendingCardCount(result.data.name)}}</td>
+          <td mat-cell *matCellDef="let result">{{getPendingCardCount(result.name)}}</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let result">
             <div fxLayout="row">
-              <button mat-raised-button size="small" (click)="removePendingCard(result.data.name, result.data.cardId, false)">-</button>
-              <button mat-raised-button size="small" (click)="addPendingCard(result.data.name, result.data.cardId, false)">+</button>
+              <button mat-raised-button size="small" (click)="removePendingCard(result.name, result.cardId, false)">-</button>
+              <button mat-raised-button size="small" (click)="addPendingCard(result.name, result.cardId, false)">+</button>
             </div>
           </td>
         </ng-container>
+
         <tr mat-row
           *matRowDef="let row;
           columns: ['name','pending','actions']"
-          (click)="onCardSelected(row)"
-        ></tr>
+          (click)="onCardSelected(row)">
+        </tr>
+
       </table>
       <div id="search-result-grid" fxLayout="row wrap" *ngIf="viewMode==='grid'">
         <mat-card *ngFor="let card of searchResults"
           class="outline-section"
           (click)="onCardSelected(card)">
-          <app-card-image mat-card-image [imageUrl]="card.data.details[0].imageUrl" [cardName]="card.data.name">
-
-          </app-card-image>
-          <!-- <img mat-card-image
-            style="height:310px; width: 223px"
-            [src]="card.data.details[0].imageUrl"
-            [title]="card.data.name" /> -->
+          <app-card-image mat-card-image [imageUrl]="card.details[0].imageUrl" [cardName]="card.name"></app-card-image>
         </mat-card>
       </div>
     </div>
+
     <div id="selected-card-section" fxFlex class="paper scroll-section">
-        <!-- <SelectedCardSection *ngIf="selectedCard"
-            selectedCard={props.selectedCard}
-            pendingCards={props.pendingCards[props.selectedCard.name]}
-            handleAddPendingCard={props.handleAddPendingCard}
-            handleRemovePendingCard={props.handleRemovePendingCard}
-            selectedCardDetail={null} /> -->
-
       <div fxLayout="column">
-
-                <!-- {
-
-                    // Object.keys(props.selectedCard.details).map((id) => {
-
-                    props.selectedCard.details.map((detail) => {
-                        //for(i = 0; i < props.selectedCard.details.length(); i++){
-                        // props.selectedCard.details.forEach(card => {
-
-                        // })
-
-
-                    // console.log(`SELECTED CARD ID ${id}`)
-
-                    let countNormal = 0;
-                    let countFoil = 0;
-                    if(props.pendingCards)
-                    {
-                        //countNormal = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === false).length;
-                        countNormal = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil === false).length;
-                        //countFoil = props.pendingCards.cards.filter(c => c.variantName === id && c.isFoil === true).length;
-                        countFoil = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil === true).length;
-                    }
-
-                    //const thisPendingCard = (this.props.selectedCard) && this.props.pendingCards[this.props.selectedCard.multiverseId];
-                    return ( -->
-                    <!-- selectedCard -->
-        <mat-card fxLayout="row" class="outline-section" *ngFor="let detail of selectedCard?.data?.details">
-          <!-- <img mat-card-image fxFlex="nogrow"
-            style="height:310px; width: 223px"
-            [src]="detail?.imageUrl"
-            /> -->
+        <mat-card fxLayout="row" class="outline-section" *ngFor="let detail of selectedCard?.details">
           <app-card-image mat-card-image [imageUrl]="detail?.imageUrl" [cardName]="detail?.name"> </app-card-image>
           <mat-card-content fxFlex>
             <div fxLayout="column">
@@ -180,19 +134,13 @@
                   <span>${{detail.price}} | ${{detail.priceFoil}}</span>
                 </div>
                 <div fxLayout="column">
-                  <!-- getPendingCardCount(result.data.name) -->
-                  <!-- <span>Normal ({{countNormal}})</span> -->
                   <span>Normal ({{getPendingCardCount(detail.name, detail.cardId, false)}})</span>
                   <div fxLayout="row">
-                    <!-- <button mat-raised-button size="small" (click)="removePendingCard(result.data.name, result.data.cardId, false)">-</button>
-                    <button mat-raised-button size="small" (click)="addPendingCard(result.data.name, result.data.cardId, false)">+</button> -->
-
                     <button mat-stroked-button (click)="removePendingCard(detail.name, detail.cardId, false)">-</button>
                     <button mat-stroked-button (click)="addPendingCard(detail.name, detail.cardId, false)">+</button>
                   </div>
                 </div>
                 <div fxLayout="column">
-                  <!-- <span>Foil ({{countFoil}})</span> -->
                   <span>Foil ({{getPendingCardCount(detail.name, detail.cardId, true)}})</span>
                   <div fxLayout="row">
                     <button mat-stroked-button (click)="removePendingCard(detail.name, detail.cardId, true)">-</button>
@@ -203,19 +151,14 @@
             </div>
           </mat-card-content>
         </mat-card>
-                    <!-- )})
-
-                } -->
       </div>
     </div>
   </div>
 
   <div id="pending-cards-section" fxLayout="row" class="outline-section paper">
-<!--    <div class="pending-card outline-section paper" *ngFor="let thisCard of pendingCards | keyvalue" >-->
-
     <div class="pending-card outline-section paper" *ngFor="let thisCard of pendingCards | keyvalue" >
       <h5>{{thisCard.key}}</h5>
-      <h6>{{thisCard.value.cards?.length}}</h6>
+      <h6>{{getPendingCardCount(thisCard.key)}}</h6>
     </div>
   </div>
 

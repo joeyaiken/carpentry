@@ -1,26 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { CardSearchService } from "src/app/common/card-search.service";
 import { FilterService } from "src/app/common/filter-service";
 import { CardSearchQueryParameter } from "src/app/common/models";
 import { AppFiltersDto } from "src/app/settings/models";
 import { InventoryService } from "../inventory.service";
 import {
-  CardListItem,
-  cardSearchResultDetail,
   CardSearchResultDto,
-  InventoryFilterProps,
-  InventoryQueryParameter,
   NewInventoryCard,
-  PendingCardsDto
+  PendingCardsDto,
+  PendingPrintedCard
 } from "../models";
-
-
-export class SelectedCardDetail {
-    imageUrl: string;
-    // cardName: string;
-    name: string;
-    cardId: number;
-}
 
 @Component({
     selector: 'app-inventory-add-cards',
@@ -28,42 +18,22 @@ export class SelectedCardDetail {
     styleUrls: ['inventory-add-cards.component.less'],
 })
 export class InventoryAddCardsComponent implements OnInit {
-  // @Input() cardItem: InventoryOverviewDto;
-
-  // @Output() onCardSelected = new EventEmitter<number>(); //: (cardId: number) => void;
-  // @Output() onToggleViewClick = new EventEmitter<void>();
-
-
+  
   isBusy: boolean = false;
-  apiSearchResults: CardSearchResultDto[] = [];
-
-  // selectedCard: CardSearchResultDto | null;
-  selectedCard: CardListItem | null = null;
-  // selectedCardDetails: SelectedCardDetail[];
-
-
-
   viewMode: string;
-  // searchFilter: InventoryFilterProps; //CardSearchQueryParameter is what's expected by the API
-  //Should just store something that can be send straight to the api
-  // (or at least not use something with tons of unused fields)
-  searchFilter: CardSearchQueryParameter; //CardSearchQueryParameter is what's expected by the API
-
+  searchFilter: CardSearchQueryParameter;
   filterOptions: AppFiltersDto;
 
-  searchResults: CardListItem[];
-  // pendingCards: PendingCardsDto[];
+  searchResults: CardSearchResultDto[] = [];
+  selectedCard: CardSearchResultDto | null = null;
   pendingCards: { [name: string]: PendingCardsDto }
-
-  private testSearch: boolean = true;
 
   constructor(
       private filterService: FilterService,
-      // private inventoryService: InventoryService,
+      private inventoryService: InventoryService,
       private cardSearchService: CardSearchService,
-  ) {
-
-  }
+      private router: Router,
+  ) { }
 
     ngOnInit(): void {
         this.searchFilter = new CardSearchQueryParameter();
@@ -71,26 +41,6 @@ export class InventoryAddCardsComponent implements OnInit {
         this.pendingCards = {};
         this.viewMode = 'list';
         this.loadFilterOptions();
-
-        if(this.testSearch) this.runTestSearch();
-        
-    }
-
-
-    // mapCardDetails(searchResult: CardSearchResultDto): SelectedCardDetail[] {
-    //     return searchResult.details.map(card => ({
-    //         cardId: card.cardId,
-    //         imageUrl: card.imageUrl,
-    //         name: card.name,
-    //     } as SelectedCardDetail))
-    // }
-
-    mapCardDetail(card: cardSearchResultDetail): SelectedCardDetail {
-        return {
-            cardId: card.cardId,
-            imageUrl: card.imageUrl,
-            name: card.name,
-        } as SelectedCardDetail;
     }
 
     onToggleView(): void {
@@ -101,187 +51,101 @@ export class InventoryAddCardsComponent implements OnInit {
         this.trySearchCards();
     }
 
-    loadFilterOptions(): void {
-        // this.isBusy = true;
-        this.filterService.getAppFilterOptions().subscribe(
-          (data) => {
-                this.filterOptions = data;
-                // this.isBusy = false;
-            }
-
-        )
-    }
     onSaveClick(){
-        alert('not implemented yet')
-        // this.props.dispatch(requestSavePendingCards());
-    }
+        if(this.isBusy) return;
 
-    test(){ 
-        this.getPendingCardCount("test");
-        this.getPendingCardCount("test", 1, true);
-    }
+        let newCards: NewInventoryCard[] = [];
+        Object.keys(this.pendingCards).forEach(cardName => {
+            const pendingCard: PendingCardsDto = this.pendingCards[cardName];
+            Object.keys(pendingCard.cardsById).forEach(cardId => {
+                const cardPrint: PendingPrintedCard = pendingCard.cardsById[cardId];
+                newCards = newCards.concat(cardPrint.newCards);
+            });
+        });
 
+        this.isBusy = true;
+        this.inventoryService.addInventoryCardBatch(newCards).subscribe(result => {
+            this.pendingCards = {};
+            this.isBusy = false;
+            this.router.navigate(['/inventory/']);
+        })
+    }
 
     getPendingCardCount(cardName: string, cardId: number = null, isFoil: boolean = null): string {
         var pendingCard = this.pendingCards[cardName];
         if(!pendingCard) return "";
+
         if(cardId && isFoil != null) {
-            //not implemented, get this pending card
-            //  if doesn't exist, should return 0, not emptystring
-            //  If exists, should get count of all pending cards matching isFoil
+            let cardPrint = pendingCard.cardsById[cardId];
+            if(cardPrint) return (isFoil ? cardPrint.countFoil : cardPrint.countNormal).toString();
+            return "0";
         }
 
-        //not implemented, should return count of all new cards
-        //Note that if there are 0 pending cards, a null should have been returned earlier
-        //But, as a failsafe, I'll return an emptystring
+        let cardCount = 0;
+        Object.keys(pendingCard.cardsById).forEach(key => {
+            cardCount += pendingCard.cardsById[key].newCards.length;
+        });
 
-
-        //get all card IDs matching this card name
-        //sum count of pending cards for all card IDs
-
-
-
+        if(cardCount > 0) return cardCount.toString();
         return "";
     }
 
     addPendingCard(name: string, cardId: number, isFoil: boolean){
-        let cardToAdd: PendingCardsDto = this.pendingCards[name];
-        if(!cardToAdd){
-            cardToAdd = {
-                name: name,
-                cards: [],
-            };
+        let pendingCard: PendingCardsDto = this.pendingCards[name];
+        if(!pendingCard) {
+            pendingCard = new PendingCardsDto(name); //TODO - Get relevant card datas & add to this pending card, maybe through the constructor
+            console.log("pending card created", pendingCard);
+            this.pendingCards[name] = pendingCard;
         }
 
-        //These are the only 3 fields used by the api bulkAdd
-        cardToAdd.cards.push({
-            cardId: cardId,
-            isFoil: isFoil,
-            statusId: 1,
-        } as NewInventoryCard);
+        var cardPrint = pendingCard.cardsById[cardId];
+        if(!cardPrint) {
+            cardPrint = new PendingPrintedCard();
+            pendingCard.cardsById[cardId] = cardPrint;
+        }
+        
+        cardPrint.newCards.push(new NewInventoryCard(cardId, isFoil, 1));
 
-        this.pendingCards[name] = cardToAdd;
-        this.updateCounts();
+        isFoil ? cardPrint.countFoil++ : cardPrint.countNormal++;
     }
 
-    removePendingCard(name: string, cardId: number, isFoil: boolean){
-        let objToRemoveFrom = this.pendingCards[name];
-        if(objToRemoveFrom) {
-            let thisInvCard = objToRemoveFrom.cards.findIndex(x => x.cardId === cardId && x.isFoil === isFoil);
-            if(thisInvCard >= 0){
-                objToRemoveFrom.cards.splice(thisInvCard,1);
+    removePendingCard(name: string, cardId: number, isFoil: boolean) {
+        let pendingCard = this.pendingCards[name];
+        if(pendingCard) {
+            var cardPrint = pendingCard.cardsById[cardId];
+
+            var invCardIndex = cardPrint.newCards.findIndex(c => c.isFoil === isFoil);
+
+            if(invCardIndex >= 0) {
+                cardPrint.newCards.splice(invCardIndex, 1);
+                isFoil ? cardPrint.countFoil-- : cardPrint.countNormal--;
             }
 
-            //if this pending cards object has 0 items, it should be deleted from the dictionary
-            if(objToRemoveFrom.cards.length === 0){
-                delete this.pendingCards[name];
-            }
+            let cardCount = 0;
+            Object.keys(pendingCard.cardsById).forEach(key => {
+                cardCount += pendingCard.cardsById[key].newCards.length;
+            });
 
-            this.updateCounts();
+            if(cardCount == 0) delete this.pendingCards[name];
         }
     }
 
-    onCardSelected(item: CardListItem){
+    onCardSelected(item: CardSearchResultDto){
         this.selectedCard = item;
     }
 
-    // handleSearchButtonClick(){
-    //     this.props.dispatch(requestSearch())
-    // }
-
-    // handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    //     this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", event.target.name, event.target.value));
-    // }
-
-    // handleBoolFilterChange(filter: string, value: boolean): void {
-    //     this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", filter, value));
-    // }
+    private loadFilterOptions(): void {
+        this.filterService.getAppFilterOptions().subscribe((data) => { this.filterOptions = data; });
+    }
 
     private trySearchCards(): any{
         if(this.isBusy){
             return;
         }
         this.isBusy = true;
-
-        // const currentFilterProps = this.searchFilter;
-        // const param: CardSearchQueryParameter = {
-        //     text: currentFilterProps.text,
-        //     colorIdentity: currentFilterProps.colorIdentity ?? [],
-        //     exclusiveColorFilters: currentFilterProps.exclusiveColorFilters,
-        //     multiColorOnly: currentFilterProps.multiColorOnly,
-        //     rarity: currentFilterProps.rarity,
-        //     set: currentFilterProps.set,
-        //     type: currentFilterProps.type,
-        //     searchGroup: currentFilterProps.searchGroup,
-        //     excludeUnowned: false,
-        // }
-
         this.cardSearchService.searchInventory(this.searchFilter).subscribe((results) => {
+            this.searchResults = results;
             this.isBusy = false;
-            this.apiSearchResults = results;
-
-            //a 'card list item' represents a search result, & the number of pending cards [with that same name?]
-            this.searchResults = results.map(card => ({
-                data: card,
-                count: this.pendingCards[card.name]?.cards?.length,
-            } as CardListItem));
-
-            if(this.testSearch) this.test_selectFirstCard();
         });
-    }
-
-
-    //I may need to rethink this general component state
-    //  I need to hold a local collection of pending cards
-    //  For each search result, I need to know the total pending cards for that name
-    //      I also need to know that # for displaying pending cards
-    //  For each unique card, I need to know # of pending normal cards, and # of pending foil cards
-
-
-    //I could: store things in a list that I search through
-    //  Either unique cardsToAdd, or grouped by unique print (card number)
-
-    //  This would make adding cards easy, but UI updates slower
-
-    //Or I could have some nested classes that I can dig into
-    //  Search Result would just know names, which is all it needs
-    //  Same logic for pending cards
-    //  Details would know 
-    
-    //  This would require aggregating for saving, but could make navigation easier
-    //      Details could even just pull data with a function taking name & card number or something
-    //      I could use this as a chance to save local data too (to click a pending card & see the details)
-
-    private updateCounts(){
-        this.searchResults.forEach(result => {
-            if(this.pendingCards[result.data.name]){
-                var pendingCards = this.pendingCards[result.data.name].cards;
-                
-
-
-
-                result.count = this.pendingCards[result.data.name].cards.length;
-            } else if(result.count) {
-                result.count = null;
-            }
-        })
-    }
-
-
-
-
-
-    private test_selectFirstCard() {
-        if(this.searchResults?.length){
-            const firstResult = this.searchResults[0];
-            this.onCardSelected(firstResult);
-            this.addPendingCard(firstResult.data.name, firstResult.data.cardId, false);
-        }
-    }
-
-    private runTestSearch() {
-      this.searchFilter.set = 'khm';
-      this.searchFilter.searchGroup = 'RareMythic';
-      this.trySearchCards();
     }
 }
