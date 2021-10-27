@@ -119,21 +119,21 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         
         public async Task ClickAddButton()
         {
-            IElementHandle? addButton;
-            if (_appEnvironment == AppType.Angular)
-                addButton = await _element.QuerySelectorAsync("a:has-text(\"add\")");
-            else
-                addButton = await _element.QuerySelectorAsync("button.quick-add-button");
+            // IElementHandle? addButton;
+            // if (_appEnvironment == AppType.Angular)
+            var addButton = await _element.QuerySelectorAsync(".quick-add-button");
+            // else
+                // addButton = await _element.QuerySelectorAsync("button.quick-add-button");
             await addButton!.ClickAsync();
         }
 
         public async Task ClickRemoveButton()
         {
-            IElementHandle? addButton;
-            if (_appEnvironment == AppType.Angular)
-                addButton = await _element.QuerySelectorAsync("a:has-text(\"remove\")");
-            else
-                addButton = await _element.QuerySelectorAsync("button.quick-remove-button");
+            // IElementHandle? addButton;
+            // if (_appEnvironment == AppType.Angular)
+            //     addButton = await _element.QuerySelectorAsync("a:has-text(\"remove\")");
+            // else
+            var addButton = await _element.QuerySelectorAsync(".quick-remove-button");
             await addButton!.ClickAsync();
         }
     }

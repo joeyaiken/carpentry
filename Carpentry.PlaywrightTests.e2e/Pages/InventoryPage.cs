@@ -52,7 +52,7 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 
         private async Task SetInputValue(string elementId, string value)
         {
-            await _page.FillAsync($"#{elementId} input", value);
+            await _page.FillAsync($"#{elementId}", value);
         }
         
         private async Task SelectOption(string elementId, string value)
@@ -61,6 +61,7 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             
             if (_appEnvironment == AppType.Angular)
             {
+                await Task.Delay(100);
                 var selector = await _page.WaitForSelectorAsync($"mat-option:has(span:text-is(\"{value}\"))");
                 await selector!.ClickAsync();
             }
@@ -80,7 +81,7 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         public async Task<List<InventorySearchResult>> GetSearchResults()
         {
             var elements = await _page.QuerySelectorAllAsync(".card-result");
-            return elements.Select(e => new InventorySearchResult(e)).ToList();
+            return elements.Select(e => new InventorySearchResult(e, _appEnvironment)).ToList();
         }
         
         //TODO - Consider refactoring to using properties that are <IElementHandle?> ?
@@ -113,9 +114,12 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
     public class InventorySearchResult
     {
         private readonly IElementHandle _element;
-        public InventorySearchResult(IElementHandle element)
+        private readonly AppType _appEnvironment;
+
+        public InventorySearchResult(IElementHandle element, AppType appEnvironment)
         {
             _element = element;
+            _appEnvironment = appEnvironment;
             // Name = GetName().Result;
         }
         //card-result-image
@@ -130,8 +134,18 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 
         public async Task<int?> GetTotal()
         {
-            var row = await _element.QuerySelectorAsync("tr:has(td:text-is(\"Total\"))");
-            var totalStr = await (await row!.QuerySelectorAllAsync("td")).Last().TextContentAsync();
+
+            var totalStr = "";
+            if (_appEnvironment == AppType.Angular)
+            {
+                var total = await _element.QuerySelectorAsync(".card-total");
+                totalStr = await total.TextContentAsync();
+            }
+            else
+            {
+                var row = await _element.QuerySelectorAsync("tr:has(td:text-is(\"Total\"))");
+                totalStr = await (await row!.QuerySelectorAllAsync("td")).Last().TextContentAsync();
+            }
             if (totalStr != null && int.TryParse(totalStr, out var parsedInt))
             {
                 return parsedInt;

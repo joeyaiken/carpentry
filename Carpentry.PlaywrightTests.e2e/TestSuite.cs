@@ -73,27 +73,35 @@ namespace Carpentry.PlaywrightTests.e2e
 
             //TODO : Ensure all features are covered by e2e tests
 
-            //await DemoTest();
-            //return;
-
             var page = await browser.NewPageAsync();
 
             await WaitForApp(page);
 
             //TODO - Find an appropriate way to load these with DI instead of constructing them manually (or something more graceful)
-            var synchronousRunnables = new List<IRunnableTest>()
-            {
-                new Test00HomePageLoads(page, _appSettings.AppUrl, _logger),
-                // new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger),
-                // new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger, _appSettings.AppEnvironment),
-                new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData, _appSettings.AppEnvironment),
-            };
 
-            foreach (var runnable in synchronousRunnables)
-            {
-                await runnable.Run();
-            }
-            
+
+            // var test0 = new Test00HomePageLoads(page, _appSettings.AppUrl, _logger);
+            // await test0.Run();
+
+            await new Test00HomePageLoads(page, _appSettings.AppUrl, _logger).Run();
+            // await new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger).Run();
+            // await new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger, _appSettings.AppEnvironment).Run();
+            await new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData, _appSettings.AppEnvironment).Run();
+
+            //
+            // var synchronousRunnables = new List<IRunnableTest>()
+            // {
+            //     new Test00HomePageLoads(page, _appSettings.AppUrl, _logger),
+            //     new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger),
+            //     new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger, _appSettings.AppEnvironment),
+            //     new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData, _appSettings.AppEnvironment),
+            // };
+            //
+            // foreach (var runnable in synchronousRunnables)
+            // {
+            //     await runnable.Run();
+            // }
+            //
             //Add the cards required to populate the snow deck
             // await TestInventoryAddSnowCards(page);
 

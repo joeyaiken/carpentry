@@ -1,3 +1,4 @@
+<mat-progress-bar id="progress-bar" *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 <div>
     <mat-toolbar color="default" position="relative">
         <h6>
@@ -17,7 +18,7 @@
             [filterOptions]="filterOptions"
             (onSearchButtonClick)="onSearchClick()">
         </app-inventory-filter-bar>
-        <!-- <InventoryFilterBar 
+        <!-- <InventoryFilterBar
                 viewMethod={this.props.viewMethod}
                 filterOptions={this.props.filterOptions}
                 handleBoolFilterChange={this.handleBoolFilterChange}
@@ -27,7 +28,7 @@
                 /> -->
 
                 <div>
-                    <!-- <CardImagePopper 
+                    <!-- <CardImagePopper
                         menuAnchor={this.props.cardImageMenuAnchor}
                         onClose={this.handleCardDetailMenuClose}
                         image={selectedOverview?.imageUrl}
@@ -35,7 +36,7 @@
                     <!-- <LoadingBox *ngIf="isLoading" /> -->
                     <app-inventory-card-grid *ngIf="!isLoading"
                         [cardOverviews]="searchResults"
-                        (onCardSelected)="cardDetailSelected($event)" 
+                        (onCardSelected)="cardDetailSelected($event)"
                         (onInfoButtonEnter)="cardDetailButtonClick($event)"
                         (onInfoButtonLeave)="cardDetailMenuClose()" >
                     </app-inventory-card-grid>
@@ -55,5 +56,5 @@
         <p>text: {{searchFilter?.text}}</p>
         <p>minCount: {{searchFilter?.minCount}}</p>
     </div> -->
-    
+
 </div>

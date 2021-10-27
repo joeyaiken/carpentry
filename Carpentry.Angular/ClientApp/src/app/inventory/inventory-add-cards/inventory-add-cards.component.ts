@@ -18,7 +18,7 @@ import {
     styleUrls: ['inventory-add-cards.component.less'],
 })
 export class InventoryAddCardsComponent implements OnInit {
-  
+
   isBusy: boolean = false;
   viewMode: string;
   searchFilter: CardSearchQueryParameter;
@@ -103,7 +103,7 @@ export class InventoryAddCardsComponent implements OnInit {
             cardPrint = new PendingPrintedCard();
             pendingCard.cardsById[cardId] = cardPrint;
         }
-        
+
         cardPrint.newCards.push(new NewInventoryCard(cardId, isFoil, 1));
 
         isFoil ? cardPrint.countFoil++ : cardPrint.countNormal++;
@@ -112,9 +112,9 @@ export class InventoryAddCardsComponent implements OnInit {
     removePendingCard(name: string, cardId: number, isFoil: boolean) {
         let pendingCard = this.pendingCards[name];
         if(pendingCard) {
-            var cardPrint = pendingCard.cardsById[cardId];
+            let cardPrint = pendingCard.cardsById[cardId];
 
-            var invCardIndex = cardPrint.newCards.findIndex(c => c.isFoil === isFoil);
+            let invCardIndex = cardPrint.newCards.findIndex(c => c.isFoil === isFoil);
 
             if(invCardIndex >= 0) {
                 cardPrint.newCards.splice(invCardIndex, 1);

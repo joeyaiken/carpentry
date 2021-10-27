@@ -162,11 +162,20 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
             // var sortedCardNames = cardsToAdd.OrderBy(c => c).ToList();
             var pendingCards = await _inventoryAddCardsPage.GetAllPendingCards();
             Assert.AreEqual(5, pendingCards.Count);
-            for (var i = 0; i < 5; i++)
+
+            foreach (var pendingCard in pendingCards)
             {
-                Assert.AreEqual(cardsToAdd[i], await pendingCards[i].GetCardName());
-                Assert.AreEqual(1, await pendingCards[i].GetPendingCount());
+                var cardName = await pendingCard.GetCardName();
+                var matchingExpectedCard = cardsToAdd.SingleOrDefault(name => name == cardName);
+                Assert.IsNotNull(matchingExpectedCard);
             }
+            
+            // for (var i = 0; i < 5; i++)
+            // {
+            //     Assert.AreEqual(cardsToAdd[i], await pendingCards[i].GetCardName());
+            //     Assert.AreEqual(1, await pendingCards[i].GetPendingCount());
+            // }
+            
             //click cancel
             await _inventoryAddCardsPage.ClickCancel();
             //navigate to the page

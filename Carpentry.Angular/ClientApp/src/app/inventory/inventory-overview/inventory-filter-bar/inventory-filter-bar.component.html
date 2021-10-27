@@ -4,18 +4,18 @@
         <div class="flex-section side-padded">
             <mat-form-field class="stretch">
                 <mat-label>Group by</mat-label>
-                <mat-select [(ngModel)]="searchFilter.groupBy">
+                <mat-select id="group-by-filter" [(ngModel)]="searchFilter.groupBy">
                     <mat-option *ngFor="let item of filterOptions?.groupBy" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
-        <!-- <SelectFilter name="groupBy" value={props.searchFilter.groupBy} selectMultiple={false} 
+        <!-- <SelectFilter name="groupBy" value={props.searchFilter.groupBy} selectMultiple={false}
             options={props.filterOptions.groupBy} handleFilterChange={props.handleFilterChange} /> -->
 
         <div class="flex-section side-padded">
             <mat-form-field class="stretch">
                 <mat-label>Sort by</mat-label>
-                <mat-select [(ngModel)]="searchFilter.sortBy">
+                <mat-select id="sort-by-filter" [(ngModel)]="searchFilter.sortBy">
                     <mat-option *ngFor="let item of filterOptions?.sortBy" [value]="item.value">{{item.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
@@ -72,7 +72,7 @@
         <!-- <BooleanCheckboxGroup handleBoolFilterChange={props.handleBoolFilterChange}
             options={[{name: "Exclusive", value: "exclusiveColorFilters", checked: props.searchFilter.exclusiveColorFilters},
             {name: "Multi", value: "multiColorOnly", checked: props.searchFilter.multiColorOnly}]} /> -->
-        
+
 
     </div>
 
@@ -106,7 +106,7 @@
             <div class="flex-section side-padded">
                 <mat-form-field class="stretch">
                     <mat-label>Min Count</mat-label>
-                    <input matInput type="number" [(ngModel)]="searchFilter.minCount" />
+                    <input id="min-count-filter" matInput type="number" [(ngModel)]="searchFilter.minCount" />
                 </mat-form-field>
             </div>
             <!-- <NumericFilter name="minCount" value={props.searchFilter.minCount}
@@ -133,7 +133,7 @@
             <div class="flex-section side-padded">
                 <mat-form-field class="stretch">
                     <mat-label>Take</mat-label>
-                    <input matInput type="number" [(ngModel)]="searchFilter.take" />
+                    <input id="take-filter" matInput type="number" [(ngModel)]="searchFilter.take" />
                 </mat-form-field>
             </div>
             <!-- <NumericFilter name="take" value={props.searchFilter.take}

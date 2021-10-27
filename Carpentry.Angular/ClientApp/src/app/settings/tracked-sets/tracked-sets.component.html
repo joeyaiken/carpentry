@@ -73,7 +73,7 @@
                 </th>
                 <!-- TODO - get these icons to render on the same line, instead of stacked -->
                 <td mat-cell *matCellDef="let setDetail">
-                    <a mat-icon-button *ngIf="!setDetail.isTracked" (click)="addTrackedSetClick(setDetail.setId)">
+                    <a class="add-button" mat-icon-button *ngIf="!setDetail.isTracked" (click)="addTrackedSetClick(setDetail.setId)">
                         <mat-icon>add</mat-icon>
                     </a>
 

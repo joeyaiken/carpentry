@@ -19,7 +19,7 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         public async Task NavigateTo()
         {
             if (_pageUrl == _page.Url) return;
-            await _page.ClickAsync($"#app-nav-menu button:has-text(\"{_heading}\")");
+            await _page.ClickAsync($"#app-nav-menu .nav-button:has-text(\"{_heading}\")");
         }
     }
 }

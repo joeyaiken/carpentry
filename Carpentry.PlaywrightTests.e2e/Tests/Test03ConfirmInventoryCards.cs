@@ -4,6 +4,7 @@ using Carpentry.PlaywrightTests.e2e.Pages;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Serilog;
 
 namespace Carpentry.PlaywrightTests.e2e.Tests
 {
@@ -26,6 +27,11 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         {
             var inventoryPage = new InventoryPage(_appUrl, _page, _appEnvironment);
             await inventoryPage.NavigateTo();
+            
+            Log.Information("Navigated to inventory page");
+
+            await Task.Delay(100);
+            
             //update filters as desired
             await inventoryPage.SetGroupBy("Name");
             await inventoryPage.SetSortBy("Name");
@@ -34,12 +40,16 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
             //search
             await inventoryPage.ClickSearch();
 
+            Log.Information("Clicked search");
+            
             //get all card overview objects
             var searchResults = await inventoryPage.GetSearchResults();
             
             //for each seed card, assert it's in the array, then pull from the array
             foreach (var seedCard in _seedData.SeedCards)
             {
+                Log.Information($"Checking for card {seedCard}");
+                
                 var matchingResult = searchResults.FirstOrDefault(result => result.GetName().Result == seedCard.CardName);
                 Assert.IsNotNull(matchingResult);
                 Assert.AreEqual(seedCard.Count, matchingResult.GetTotal().Result);
