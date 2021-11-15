@@ -11,13 +11,11 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 {
     public class InventoryPage : NavigationPage
     {
-        // private readonly string _pageUrl;
         private readonly IPage _page;
         private readonly AppType _appEnvironment;
 
         public InventoryPage(string appUrl, IPage page, AppType appEnvironment) : base(page, $"{appUrl}inventory", "Inventory")
         {
-            // _pageUrl = $"{appUrl}inventory";
             _page = page;
             _appEnvironment = appEnvironment;
         }
@@ -83,32 +81,6 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             var elements = await _page.QuerySelectorAllAsync(".card-result");
             return elements.Select(e => new InventorySearchResult(e, _appEnvironment)).ToList();
         }
-        
-        //TODO - Consider refactoring to using properties that are <IElementHandle?> ?
-        // public string? TitleText => _page.TextContentAsync("app-landing h2").Result; //TODO - this selector may not work in react
-        // public string? SubtitleText => _page.TextContentAsync("app-landing h3").Result; //TODO - this selector may not work in react
-
-        //public Task<IElementHandle?> Test()
-        // public async Task Test()
-        // {
-        //     //var test = await _page.QuerySelectorAsync("app-landing h2");
-        //     //return await _page.QuerySelectorAsync("app-landing h2");
-        //     var element = await _page.QuerySelectorAsync("app-landing h2");
-        //
-        //     var test = await element.TextContentAsync();
-        //
-        //
-        // }
-        //
-        //public async Task<string?> TitleText()
-        //{
-        //    return await _page.TextContentAsync("app-landing h2"); //TODO - this selector may not work in react
-        //}
-
-        //public async Task<string?> SubtitleText()
-        //{
-        //    return await _page.TextContentAsync("app-landing h3"); //TODO - this selector may not work in react
-        //}
     }
 
     public class InventorySearchResult
@@ -120,10 +92,7 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         {
             _element = element;
             _appEnvironment = appEnvironment;
-            // Name = GetName().Result;
         }
-        //card-result-image
-        // public string? Name { get; set; }
 
         public async Task<string?> GetName()
         {
@@ -152,7 +121,5 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             }
             return null;
         }
-        
-        // public int? Count { get; set; }
     }
 }

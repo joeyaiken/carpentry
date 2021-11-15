@@ -7,13 +7,79 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Carpentry.Logic.Tests
 {
-    public static class SeedData
+    public class SeedData
     {
+        public readonly ReferenceValues ReferenceValues;
+
+        public SeedData(ReferenceValues referenceValues)
+        {
+            ReferenceValues = referenceValues;
+            
+            TripleThreatDeck = new DeckData()
+            {
+                Name = "Triple Threat",
+                BasicU = 7,
+                // MagicFormatId = referenceValues.Formats.First().FormatId,
+                // Format = referenceValues.Formats.First(),
+                // Format = referenceValues.StandardFormat,
+                MagicFormatId = 1,
+                Cards = new List<DeckCardData>()
+                {
+                    new DeckCardData()
+                    {
+                        CardName = "Storm Crow"
+                    },
+                    new DeckCardData()
+                    {
+                        CardName = "Storm Crow"
+                    },
+                    new DeckCardData()
+                    {
+                        CardName = "Storm Crow"
+                    },
+                }
+            };
+            
+            StormCrowSet = new CardSetData()
+            {
+                Name = "Storm's Crow",
+                Code = "STC",
+                Cards = new List<CardData>()
+                {
+                    //Storm Crow
+                    new CardData()
+                    {
+                        Name = "Storm Crow",
+                        RarityId = 'U',
+                        ImageUrl = "https://c1.scryfall.com/file/scryfall-cards/normal/front/1/3/13f6106d-6822-47b5-956e-20e17143a818.jpg?1562898988",
+                        Type = "Creature",
+                        ColorIdentity = "U",
+                    },
+                    // //Not Storm Crow
+                    // new CardData(){ },
+                    // //
+                    // new CardData(){ },
+                }
+            };
+            
+            
+        }
+        
+        public DeckData TripleThreatDeck { get; }
+        public CardSetData StormCrowSet { get; }
+    }
+    
+    public static class StaticSeedData
+    {
+        
+        //A test deck with multiple named cards
+        //Those deck cards won't need an inventory card, but they'll need card definitions with the same name
         public static DeckData Deck1 = new DeckData()
         {
             BasicW = 5,
@@ -23,11 +89,12 @@ namespace Carpentry.Logic.Tests
                 {
                     new DeckCardData()
                     {
-
-                        InventoryCard = new InventoryCardData()
-                        {
-
-                        },
+                        CardName = "Storm Crow"
+                        
+                        // InventoryCard = new InventoryCardData()
+                        // {
+                        //
+                        // },
                     },
                     new DeckCardData(){ },
                     new DeckCardData(){ },
@@ -35,6 +102,47 @@ namespace Carpentry.Logic.Tests
 
         };
 
+        // public static DeckData TripleThreatDeck = new DeckData()
+        // {
+        //     Name = "Triple Threat",
+        //     BasicU = 7,
+        //     // Cards = new List<DeckCardData>()
+        //     // {
+        //     //     new DeckCardData()
+        //     //     {
+        //     //         CardName = "Storm Crow"
+        //     //     },
+        //     //     new DeckCardData()
+        //     //     {
+        //     //         CardName = "Storm Crow"
+        //     //     },
+        //     //     new DeckCardData()
+        //     //     {
+        //     //         CardName = "Storm Crow"
+        //     //     },
+        //     // }
+        // };
+        //
+        // public static CardSetData StormCrowSet = new CardSetData()
+        // {
+        //     Name = "Storm's Crow",
+        //     Code = "STC",
+        //     Cards = new List<CardData>()
+        //     {
+        //         //Storm Crow
+        //         new CardData()
+        //         {
+        //             Name = "Storm Crow",
+        //             RarityId = 'U',
+        //             ImageUrl = "https://c1.scryfall.com/file/scryfall-cards/normal/front/1/3/13f6106d-6822-47b5-956e-20e17143a818.jpg?1562898988"
+        //         },
+        //         // //Not Storm Crow
+        //         // new CardData(){ },
+        //         // //
+        //         // new CardData(){ },
+        //     }
+        // };
+        //
 
 
         public static CardSetData TestSet = new CardSetData()
@@ -191,6 +299,9 @@ namespace Carpentry.Logic.Tests
         protected CarpentryDataContext CardContext = null!;
         protected ScryfallDataContext ScryContext = null!;
 
+        // protected ReferenceValues ReferenceValues;
+        protected SeedData SeedData;
+
         private DbContextOptions<CarpentryDataContext> _cardContextOptions = null!;
         private DbContextOptions<ScryfallDataContext> _scryContextOptions = null!;
 
@@ -222,11 +333,21 @@ namespace Carpentry.Logic.Tests
                 .UseSqlite("Filename=ScryData.db").Options;
 
             ResetContext();
-            //await CardContext.Database.EnsureDeletedAsync();
-            //await ScryContext.Database.EnsureDeletedAsync();
-            await CardContext.EnsureDatabaseCreated(false);
+            //Yeah I shouldn't NEED this, but I first need to make these tests better
+            await CardContext.Database.EnsureDeletedAsync();
+            await ScryContext.Database.EnsureDeletedAsync();
+            // await CardContext.EnsureDatabaseCreated(false);
+            await CardContext.Database.EnsureCreatedAsync();
             await ScryContext.Database.EnsureCreatedAsync();
 
+            var referenceValues = new ReferenceValues();
+            CardContext.AddRange(referenceValues.AllEntities());
+            
+            SeedData = new SeedData(referenceValues);
+            
+            // ReferenceValues = new ReferenceValues();
+            // ReSharper disable once MethodHasAsyncOverload
+            await CardContext.SaveChangesAsync();
             ResetContext();
         }
 

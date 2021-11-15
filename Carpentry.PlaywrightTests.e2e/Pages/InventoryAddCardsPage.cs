@@ -51,11 +51,13 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             if (_appEnvironment == AppType.Angular)
             {
                 var selector = await _page.WaitForSelectorAsync($"mat-option:has(span:text-is(\"{value}\"))");
+                Assert.IsNotNull(selector);
                 await selector.ClickAsync();
             }
             else
             {
                 var selector = await _page.WaitForSelectorAsync($"li:text-is(\"{value}\")");
+                Assert.IsNotNull(selector);
                 await selector.ClickAsync();
             }
         }
@@ -119,20 +121,12 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         
         public async Task ClickAddButton()
         {
-            // IElementHandle? addButton;
-            // if (_appEnvironment == AppType.Angular)
             var addButton = await _element.QuerySelectorAsync(".quick-add-button");
-            // else
-                // addButton = await _element.QuerySelectorAsync("button.quick-add-button");
             await addButton!.ClickAsync();
         }
 
         public async Task ClickRemoveButton()
         {
-            // IElementHandle? addButton;
-            // if (_appEnvironment == AppType.Angular)
-            //     addButton = await _element.QuerySelectorAsync("a:has-text(\"remove\")");
-            // else
             var addButton = await _element.QuerySelectorAsync(".quick-remove-button");
             await addButton!.ClickAsync();
         }

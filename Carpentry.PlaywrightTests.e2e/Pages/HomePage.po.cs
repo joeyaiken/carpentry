@@ -25,10 +25,6 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             await _page.GotoAsync(_pageUrl);
         }
 
-        //TODO - Consider refactoring to using properties that are <IElementHandle?> ?
-        // public string? TitleText => _page.TextContentAsync("app-landing h2").Result; //TODO - this selector may not work in react
-        // public string? SubtitleText => _page.TextContentAsync("app-landing h3").Result; //TODO - this selector may not work in react
-
         public async Task<string?> GetTitleText()
         {
             return await GetElementText("#home-container #title");

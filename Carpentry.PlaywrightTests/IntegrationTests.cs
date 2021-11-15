@@ -4,15 +4,35 @@ using Carpentry.PlaywrightTests.e2e.Tests;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Serilog;
 
 namespace Carpentry.PlaywrightTests
 {
     [TestClass]
-    public class SeedTests
+    public class Integration
     {
 
 
-        // //Assumes an app is actively running (dumb i know)
+        [TestMethod]
+        public async Task TestSuite_Angular_Works()
+        {
+            var angularUrl = "https://localhost:44335/";
+            var appSettings = new AppSettings()
+            {
+                AngularUrl = angularUrl, 
+                AppEnvironment = AppType.Angular,
+                AppUrl = angularUrl
+            };
+            var mockLogger = new Mock<ILogger>();
+
+            var testSuite = new TestSuite(appSettings, mockLogger.Object);
+
+            await testSuite.RunTestSuite();
+        }
+        
+
+        // //Assumes an app is actively running
         // [TestMethod]
         // public async Task Test02InventoryAddSnowCards_Works()
         // {

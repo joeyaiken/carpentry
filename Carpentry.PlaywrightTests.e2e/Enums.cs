@@ -13,5 +13,11 @@
         RareMythic,
     }
     
+    public enum SetCodes
+    {
+        khm,
+        mh1,
+        csp
+    }
     
 }

@@ -216,12 +216,13 @@ namespace Carpentry.Logic
 
             var allFormats = await _cardContext.MagicFormats.ToListAsync();
             var formatsDict = allFormats.ToDictionary(f => f.Name, f => f);
+            var trackedFormatStrings = allFormats.Select(f => f.Name);
 
             var unmatchedCards = new List<ScryfallMagicCard>();
 
+            //For each card, query & potentially update card legalities
             foreach(var scryCard in scryData.Cards)
             {
-
                 if (!setCards.TryGetValue(scryCard.CollectionNumberStr, out CardData existingCard))
                 {
                     unmatchedCards.Add(scryCard);
@@ -232,13 +233,15 @@ namespace Carpentry.Logic
                 existingCard.PriceFoil = (double?)scryCard.PriceFoil;
                 existingCard.TixPrice = (double?)scryCard.PriceTix;
 
-                var cardLegalitiesToDelete = existingCard.Legalities.Where(cl => !scryCard.Legalities.Contains(cl.Format.Name));
+                var cardLegalities = scryCard.Legalities.Where(l => trackedFormatStrings.Contains(l));
+
+                var cardLegalitiesToDelete = existingCard.Legalities.Where(cl => !cardLegalities.Contains(cl.Format.Name));
 
                 var legalityStringsToKeep = existingCard.Legalities
-                    .Where(cl => scryCard.Legalities.Contains(cl.Format.Name))
+                    .Where(cl => cardLegalities.Contains(cl.Format.Name))
                     .Select(cl => cl.Format.Name);
 
-                var legalitiesToAdd = scryCard.Legalities
+                var legalitiesToAdd = cardLegalities
                     .Where(sc => !legalityStringsToKeep.Contains(sc))
                     .Select(l => new CardLegalityData()
                     {

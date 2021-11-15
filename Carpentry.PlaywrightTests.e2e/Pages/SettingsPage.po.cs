@@ -1,8 +1,6 @@
 ﻿#nullable enable
 using Microsoft.Playwright;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,23 +8,14 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 {
     public class SettingsPage : NavigationPage
     {
-        // private readonly string _pageUrl;
         private readonly IPage _page;
         public SettingsPage(string appUrl, IPage page) : base(page, $"{appUrl}settings/", "Settings")
         {
-            // _pageUrl = $"{appUrl}settings/";
             _page = page;
         }
 
-        // public async Task NavigateTo()
-        // {
-        //     if (_pageUrl == _page.Url) return;
-        //     await _page.ClickAsync("#app-nav-menu a:has-text(\"Settings\")");
-        // }
-
         public async Task WaitForBusy()
         {
-            //await _page.WaitForSelectorAsync("mat-progress-bar", new PageWaitForSelectorOptions()
             await _page.WaitForSelectorAsync("#progress-bar", new PageWaitForSelectorOptions()
             {
                 State = WaitForSelectorState.Hidden
@@ -80,7 +69,6 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
 
         public async Task ClickAddButton()
         {
-            // var addButton = await _element.QuerySelectorAsync("a:has-text(\"add\")");
             var addButton = await _element.QuerySelectorAsync(".add-button");
             await addButton!.ClickAsync();
         }

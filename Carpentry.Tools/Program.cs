@@ -25,43 +25,41 @@ namespace Carpentry.Tools
             Console.WriteLine("Carpentry Quick Tools - Initializing");
 
             if (args.Length == 0) throw new NotImplementedException();
-            
-            else
+        
+            var serviceProvider = BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
+            var appConfig = new AppConfig(Configuration);
+
+            var backupService = serviceProvider.GetService<IDataExportService>();
+            var updateService = serviceProvider.GetService<IDataUpdateService>();
+            var importService = serviceProvider.GetService<IDataImportService>();
+
+            logger.LogInformation("Carpentry Quick Tools - Initialized Successfully");
+
+            switch (args[0])
             {
-                var serviceProvider = BuildServiceProvider();
-                var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
-                var appConfig = new AppConfig(Configuration);
+                case nameof(QuickToolEnum.QuickBackup):
+                    logger.LogInformation("----------Carpentry Quick Backup Tool----------");
+                    await backupService.BackupCollectionToDirectory(appConfig.BackupDirectory);
+                    break;
 
-                var backupService = serviceProvider.GetService<IDataExportService>();
-                var updateService = serviceProvider.GetService<IDataUpdateService>();
-                var importService = serviceProvider.GetService<IDataImportService>();
+                case nameof(QuickToolEnum.QuickImport):
+                    throw new NotImplementedException();
 
-                logger.LogInformation("Carpentry Quick Tools - Initialized Successfully");
+                case nameof(QuickToolEnum.QuickRestore):
+                    logger.LogInformation("Carpentry QuickRestore - Initializing...");
+                    await QuickRestore(logger, appConfig, updateService, importService);
+                    break;
 
-                switch (args[0])
-                {
-                    case nameof(QuickToolEnum.QuickBackup):
-                        logger.LogInformation("----------Carpentry Quick Backup Tool----------");
-                        await backupService.BackupCollectionToDirectory(appConfig.BackupDirectory);
-                        break;
+                case nameof(QuickToolEnum.QuickUpdate):
+                    logger.LogInformation("Carpentry QuickUpdate - Initializing...");
+                    await QuickUpdate(updateService, logger);
+                    break;
 
-                    case nameof(QuickToolEnum.QuickImport):
-                        throw new NotImplementedException();
-
-                    case nameof(QuickToolEnum.QuickRestore):
-                        logger.LogInformation("Carpentry QuickRestore - Initializing...");
-                        await QuickRestore(logger, appConfig, updateService, importService);
-                        break;
-
-                    case nameof(QuickToolEnum.QuickUpdate):
-                        logger.LogInformation("Carpentry QuickUpdate - Initializing...");
-                        await QuickUpdate(updateService, logger);
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
+                default:
+                    throw new NotImplementedException();
             }
+            
         }
 
         private static async Task QuickRestore(ILogger<Program> logger, AppConfig appConfig, 
@@ -158,6 +156,9 @@ namespace Carpentry.Tools
                 .AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")))
 
                 //logic services
+                .AddScoped<IDeckService, DeckService>()
+                .AddScoped<IInventoryService, InventoryService>()
+                
                 .AddScoped<IDataImportService, DataImportService>()
                 .AddScoped<IDataExportService, DataExportService>()
                 .AddScoped<IDataUpdateService, DataUpdateService>()

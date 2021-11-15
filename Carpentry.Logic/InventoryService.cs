@@ -68,6 +68,8 @@ namespace Carpentry.Logic
                 //    throw new Exception("Cannot add inventory card, not a valid tracked set");
                 //}
 
+                
+                /// :(
                 var cardId = await _cardContext.Cards
                     .Where(x => x.Set.Code.ToLower() == dto.Set.ToLower() && x.CollectorNumber == dto.CollectorNumber)
                     .Select(c => c.CardId)
@@ -281,30 +283,36 @@ namespace Carpentry.Logic
             //Should this be from the query service or cardDataRepo?
             //var cardDefinitionsQuery = _inventoryRepo.QueryCardDefinitions().Where(x => x.Name == name);
 
-            result.Cards = await _cardContext.Cards
+            var aQuery = await _cardContext.Cards
                 .Where(x => x.Name == matchingCard.Name)
-                .Select(card => new MagicCardDto()
-                {
-                    CardId = card.CardId,
-                    Cmc = card.Cmc,
-                    ManaCost = card.ManaCost,
-                    MultiverseId = card.MultiverseId,
-                    Name = card.Name,
-                    CollectionNumber = card.CollectorNumber,
-                    ImageUrl = card.ImageUrl,
-                    Price = (decimal?)card.Price,
-                    PriceFoil = (decimal?)card.PriceFoil,
-                    PriceTix = (decimal?)card.TixPrice,
-                    Colors = card.Color.Split().ToList(),//might run into errors if card is colorless
-                    Rarity = card.Rarity.Name,
-                    Set = card.Set.Code,
-                    Text = card.Text,
-                    Type = card.Type,
-                    ColorIdentity = card.ColorIdentity.Split().ToList(),
-                    Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
-                })
+                .Include(c => c.Set)
+                .Include(c => c.Legalities).ThenInclude(l => l.Format)
+                .Include(c => c.Rarity)
                 .ToListAsync();
 
+            var mappedQuery = aQuery.Select(card => new MagicCardDto()
+            {
+                CardId = card.CardId,
+                Cmc = card.Cmc,
+                ManaCost = card.ManaCost,
+                MultiverseId = card.MultiverseId,
+                Name = card.Name,
+                CollectionNumber = card.CollectorNumber,
+                ImageUrl = card.ImageUrl,
+                Price = (decimal?)card.Price,
+                PriceFoil = (decimal?)card.PriceFoil,
+                PriceTix = (decimal?)card.TixPrice,
+                Colors = card.Color.Split().ToList(),//might run into errors if card is colorless
+                Rarity = card.Rarity.Name,
+                Set = card.Set.Code,
+                Text = card.Text,
+                Type = card.Type,
+                ColorIdentity = card.ColorIdentity.Split().ToList(),
+                Legalities = card.Legalities.Select(l => l.Format.Name).ToList(),
+            }).ToList();
+
+            result.Cards = mappedQuery;
+            
             return result;
         }
 

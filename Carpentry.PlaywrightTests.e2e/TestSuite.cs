@@ -1,19 +1,11 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.Playwright;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using Microsoft.Playwright;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Carpentry.PlaywrightTests.e2e.Pages;
 using Carpentry.PlaywrightTests.e2e.Tests;
 using Serilog;
 
 namespace Carpentry.PlaywrightTests.e2e
 {
-    
-    
     /// <summary>
     /// An end-to-end test suite.  Runs the full carpentry e2e test suite that should be run against both apps
     /// Eventually test-logic will be refactored out to a location where it can also be called by unit tests
@@ -21,16 +13,12 @@ namespace Carpentry.PlaywrightTests.e2e
     /// </summary>
     public class TestSuite
     {
-        // private readonly IOptions<AppSettings> _appSettings;
         private readonly AppSettings _appSettings;
         private static int APP_INIT_DELAY = 5000;
         private readonly SeedData _seedData;
         private readonly ILogger _logger;
-        // private readonly string APP_URL;
         
-
         public TestSuite(
-            // IOptions<AppSettings> appSettings,
             AppSettings appSettings,
             ILogger logger
             )
@@ -38,8 +26,6 @@ namespace Carpentry.PlaywrightTests.e2e
             _appSettings = appSettings;
             _seedData = new SeedData();
             _logger = logger;
-            // APP_URL = appSettings.Value.ReactUrl;
-            // APP_URL = appSettings.Value.AngularUrl;
         }
 
         public async Task RunTestSuite()
@@ -84,38 +70,24 @@ namespace Carpentry.PlaywrightTests.e2e
             // await test0.Run();
 
             await new Test00HomePageLoads(page, _appSettings.AppUrl, _logger).Run();
+            
             // await new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger).Run();
+            
             // await new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger, _appSettings.AppEnvironment).Run();
+            
             await new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData, _appSettings.AppEnvironment).Run();
 
-            //
-            // var synchronousRunnables = new List<IRunnableTest>()
-            // {
-            //     new Test00HomePageLoads(page, _appSettings.AppUrl, _logger),
-            //     new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger),
-            //     new Test02InventoryAddSnowCards(page, _appSettings.AppUrl, _seedData, _logger, _appSettings.AppEnvironment),
-            //     new Test03ConfirmInventoryCards(page, _appSettings.AppUrl, _seedData, _appSettings.AppEnvironment),
-            // };
-            //
-            // foreach (var runnable in synchronousRunnables)
-            // {
-            //     await runnable.Run();
-            // }
-            //
-            //Add the cards required to populate the snow deck
-            // await TestInventoryAddSnowCards(page);
-
+            
             _logger.Information("Finished running test suite");
         }
 
         private async Task WaitForApp(IPage page)
         {
             _logger.Information($"Beginning {nameof(WaitForApp)}");
-            //bool pageIsLoaded = await TryLoadPage(page);
+
             bool pageIsLoaded = false;
             while (!pageIsLoaded)
             {
-                // pageIsLoaded = await TryLoadPage(page);
                 //TODO - implement some limit/timeout
                 //Either this properly awaits the page, or fails and should delay
                 try //TODO - catch specific errors, don't catch blindly
@@ -123,22 +95,18 @@ namespace Carpentry.PlaywrightTests.e2e
                     _logger.Information("TryLoadPage");
                     await page.GotoAsync(_appSettings.AppUrl, new PageGotoOptions() { Timeout = 0 }); //TODO add a natural timeout instead of handling an exception
                     _logger.Information("Page Loaded");
-                    //return true;
                     pageIsLoaded = true;
                 }
-                catch //(PlaywrightException ex)
+                catch
                 {
-                    //_logger.Information($"Page Not loaded: {ex.Message}");
                     _logger.Information($"Error loading page, delaying before retrying...");
                     await Task.Delay(APP_INIT_DELAY);
-                    //return false;
                 }
             }
 
             bool appIsLoaded = false;
             while (!appIsLoaded)
             {
-                //appIsLoaded = await TryLoadApp(page);
                 try //TODO - catch specific errors, don't catch blindly
                 {
                     _logger.Information("Checking app status (TryLoadApp)");
@@ -219,7 +187,6 @@ namespace Carpentry.PlaywrightTests.e2e
             KaldheimSet, ModernHorizonsSet, ColdsnapSet
         };
         
-        // public List<string> SeedSetCodes { get; }
     }
 
     public class SeedSet
@@ -249,18 +216,5 @@ namespace Carpentry.PlaywrightTests.e2e
         public int Count { get; }
     }
 
-    // public enum CardGroup
-    // {
-    //     U,
-    //     G,
-    //     Multi,
-    //     Land,
-    // }
-
-    public enum SetCodes
-    {
-        khm,
-        mh1,
-        csp
-    }
+    
 }

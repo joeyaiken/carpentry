@@ -52,7 +52,11 @@ export const decksApi = {
     },
 
     async getDeckOverviews(): Promise<DeckOverviewDto[]> {
-        const endpoint = `api/Decks/GetDeckOverviews`;
+        const format = "";
+        const sort = "";
+        const includeDissasembled = true;
+        const endpoint = `api/Decks/GetDeckOverviews?format=${format}&sortBy=${sort}&includeDissasembled=${includeDissasembled}`;
+        //const endpoint = `api/Decks/GetDeckOverviews`;
         const result = await Get(endpoint);
         return result;
     },

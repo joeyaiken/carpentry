@@ -1,10 +1,43 @@
-I need to actually udpate this...
+## Carpentry
+Carpentry is an application developed to track collections of Magic cards & managing deck lists
 
+## Development Roadmap
+
+- MVP Feature Complete
+  - Current task priority
+    - Create a playwright end-to-end test that builds the 'simic snow stompy' deck
+      - Create test that builds a new deck from the cards added in previous tests
+        - Need to design the test against React, then run against Angular
+        - BLOCKED: DeckService.GetDeckCards uses a view.  All views must be replaced for Sqlite tests
+      - Create an integration test for DeckService.GetDeckDetail
+        - Currently creating seed data before refactoring
+    - Document next task to complete
+  - React and Angular apps contain all MVP features
+    - Deck import
+    - Collection import/export UI
+  - Code is all cleaned up as-if I were to submit it for a PR
+  - Playwrite tests used to test app functionality
+  - Still need to figure out how far to implement the Trimming Tool
+  - This documentation page is actually properly updated
+    - Read & delete original README
+    - Properly document app functionality & purpose
+- Post-MVP features
+  - UI redesign
+  - Refactoring to either use Electron or support multi users
+
+.............................................
+
+(old notes about adding electron)
 Next goal, after UI changes are done, should be to implement Electron for a launcher.
 https://www.electronjs.org/
 
+
 Will use this blog to get started:
 https://itnext.io/create-desktop-with-electron-react-and-c-86f9765809b7
+
+.............................................
+
+(original README)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

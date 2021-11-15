@@ -180,7 +180,7 @@ namespace Carpentry.Logic
                                CardId = matchingCard.CardId,
                                Name = matchingCard.Name,
                                SetCode = matchingCard.Set.Code,
-                               CollectorNumber = matchingCard.CollectorNumber,
+                               CollectorNumber = matchingCard.CollectorNumber, //
                                IsFoil = card.IsFoil,
                            })
                            .FirstOrDefaultAsync();
@@ -338,10 +338,11 @@ namespace Carpentry.Logic
 
             //_logger.LogWarning("RestoreDb - LoadCardBackups...definitions exist, mapping & saving");
 
+            //I think this JOIN is the source of my current bug, it broke from CollectionNumber refactoring
             var mappedInventoryCards = parseCardsBackups
                 .Join(_cardContext.Cards.AsQueryable(),
-                    backup => new { CollectorNumber = backup.CollectorNumber, SetCode = backup.SetCode },
-                    card => new { CollectorNumber = card.CollectorNumber, SetCode = card.Set.Code },
+                    backup => new { CollectorNumberStr = backup.CollectorNumberStr, SetCode = backup.SetCode },
+                    card => new { CollectorNumberStr = card.CollectorNumberStr, SetCode = card.Set.Code },
                     (backup, card) => new
                     {
                         Backup = backup,
@@ -424,7 +425,7 @@ namespace Carpentry.Logic
                         var matchingUnusedCard = localUnusedCards.First(ic =>
                             ic.Card.Set.Code == parsedDeckCard.InventoryCard.SetCode
                             && ic.IsFoil == parsedDeckCard.InventoryCard.IsFoil
-                            && ic.Card.CollectorNumber == parsedDeckCard.InventoryCard.CollectorNumber
+                            && ic.Card.CollectorNumberStr == parsedDeckCard.InventoryCard.CollectorNumberStr
                             && ic.InventoryCardStatusId == parsedDeckCard.InventoryCard.InventoryCardStatusId
                         );
 

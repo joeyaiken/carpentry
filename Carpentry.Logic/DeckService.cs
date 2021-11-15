@@ -273,7 +273,13 @@ namespace Carpentry.Logic
 
         private async Task<List<char>> GetDeckColorIdentity(int deckId)
         {
-
+            //Possible alternate approach
+            //  
+            
+            
+            
+            
+            
             //For deck cards w/o an inventory card, need to get the most recent card by name
             //Maybe I just do this in a view...
 
@@ -342,6 +348,7 @@ namespace Carpentry.Logic
         //The same info in [ThatDevQuery(int deckId)]
         private async Task<List<DeckCardResult>> GetDeckCards(int deckId)
         {
+            
             var deckCards = await _cardContext.DeckCards.Where(dc => dc.DeckId == deckId)
                 .Select(x => new DeckCardResult()
                 {
@@ -369,60 +376,19 @@ namespace Carpentry.Logic
                 }).ToListAsync();
 
             //get all names with null inventory cards
-            var cardNames = deckCards
+            var unmatchedCardNames = deckCards
                 .Where(dc => dc.InventoryCardId == null)
                 .Select(dc => dc.Name)
                 .Distinct().ToList();
 
-            var relevantCardsByName = (await _cardContext.InventoryCardByName
-                .Where(c => cardNames.Contains(c.Name))
-                .Select(c => new InventoryCardByNameResult()
-                {
-                    CardId = c.CardId,
-                    Cmc = c.Cmc,
-                    CollectorNumber = c.CollectorNumber,
-                    Color = c.Color,
-                    ColorIdentity = c.ColorIdentity,
-                    DeckCount = c.DeckCount,
-                    Id = c.Id,
-                    ImageUrl = c.ImageUrl,
-                    InventoryCount = c.InventoryCount,
-                    SellCount = c.SellCount,
-                    TotalCount = c.TotalCount,
-                    // TixPrice = c.TixPrice,
-                    // PriceFoil = c.PriceFoil,
-                    // Price = c.Price,
-                    Name = c.Name,
-                    ManaCost = c.ManaCost,
-                    IsFoil = c.IsFoil,
-                    RarityId = c.RarityId,
-                    SetCode = c.SetCode,
-                    Text = c.Text,
-                    Type = c.Type,
-                })
+            var mostRecentCardByName = (await _cardContext.Cards
+                    .Where(c => unmatchedCardNames.Contains(c.Name))
+                    .Include(c => c.Set)
+                    .ToListAsync())
+                .GroupBy(c => c.Name)
+                .Select(g => g.OrderByDescending(c => c.Set.ReleaseDate).ThenBy(c => c.CollectorNumber).First())
+                .ToDictionary(c => c.Name);
                 
-                .ToListAsync())
-                //.Select(c => new CardData()
-                //{
-                //    CardId = c.CardId,
-                //    Cmc = c.Cmc,
-                //    ManaCost = c.ManaCost,
-                //    Name = c.Name,
-                //    RarityId = c.RarityId,
-                //    SetId = c.SetId,
-                //    Text = c.Text,
-                //    Type = c.Type,
-                //    MultiverseId = c.MultiverseId,
-                //    Price = c.Price,
-                //    PriceFoil = c.PriceFoil,
-                //    ImageUrl = c.ImageUrl,
-                //    CollectorNumber = c.CollectorNumber,
-                //    TixPrice = c.TixPrice,
-                //    Color = c.Color,
-                //    ColorIdentity = c.ColorIdentity,
-                //})
-                .ToDictionary(c => c.Name, c => c);
-
             //match everything!
             //(alternatively, get this all from a view)
 
@@ -434,7 +400,9 @@ namespace Carpentry.Logic
                 if (dc.InventoryCardId == null)
                 {
                     //card by id
-                    var match = relevantCardsByName[dc.Name];
+                    // var match = relevantCardsByName[dc.Name];
+                    var match = mostRecentCardByName[dc.Name];
+                    
                     dc.Cmc = match.Cmc;
                     dc.Cost = match.ManaCost;
                     dc.Img = match.ImageUrl;
@@ -444,11 +412,11 @@ namespace Carpentry.Logic
                     dc.Name = match.Name;
                     //dc.Set = match.Set;
                     //dc.SetId = match.SetId;
-                    dc.SetCode = match.SetCode;
+                    dc.SetCode = match.Set.Code;
                     dc.Type = match.Type;
                     dc.ColorIdentity = match.ColorIdentity;
-                    dc.Price = match.Price;
-                    dc.PriceFoil = match.PriceFoil;
+                    dc.Price = (decimal?)match.Price;
+                    dc.PriceFoil = (decimal?)match.PriceFoil;
                     //result.Add(relevantCardsByName[dc.CardName]);
                 }
             }

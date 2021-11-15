@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Carpentry.PlaywrightTests.e2e.Pages;
-using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog;
@@ -32,10 +30,8 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
             //(for now, just assume if any sets exist, then all expected sets should exist)
             //Assert no tracked sets
             var trackedSets = await settingsPage.GetTrackedSetRows();
-            // Assert.AreEqual(0, trackedSets.Count);
             if(trackedSets.Count > 0) return;
             
-
             //show untracked sets
             await settingsPage.ClickShowUntrackedToggle();
             

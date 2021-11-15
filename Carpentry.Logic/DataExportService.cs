@@ -123,7 +123,7 @@ namespace Carpentry.Logic
                     InventoryCard = dc.InventoryCardId == null ? null : new BackupInventoryCard()
                     {
                         SetCode = dc.InventoryCard.Card.Set.Code,
-                        CollectorNumber = dc.InventoryCard.Card.CollectorNumber,
+                        CollectorNumberStr = dc.InventoryCard.Card.CollectorNumberStr,
                         InventoryCardStatusId = dc.InventoryCard.InventoryCardStatusId,
                         IsFoil = dc.InventoryCard.IsFoil,
                     },
@@ -149,15 +149,20 @@ namespace Carpentry.Logic
         private async Task<JArray> GetCardBackups()
         {
             var cardExports = await _cardContext.InventoryCards
+                .OrderBy(c => c.Card.Set.Code)
+                .ThenBy(c => c.Card.CollectorNumber)
+                .ThenBy(c => c.Card.CollectorNumberStr)
+                .ThenBy(ic => ic.IsFoil)
                 .Select(x => new BackupInventoryCard
                 {
                     SetCode = x.Card.Set.Code,
-                    CollectorNumber = x.Card.CollectorNumber,
+                    CollectorNumberStr = x.Card.CollectorNumberStr,
                     InventoryCardStatusId = x.InventoryCardStatusId,
                     IsFoil = x.IsFoil,
                 })
-                .OrderBy(x => x.SetCode)
-                .ThenBy(x => x.CollectorNumber)
+                // .OrderBy(x => x.SetCode)
+                //.ThenBy(x => x.)
+                // .ThenBy(x => x.CollectorNumberStr)
                 .ToListAsync();
 
             return JArray.FromObject(cardExports);

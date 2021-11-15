@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,7 +77,7 @@ namespace Carpentry.Logic.Tests
         [TestMethod]
         public async Task UpdateDeck_Works_Test()
         {
-            CardContext.Add(SeedData.Deck1);
+            CardContext.Add(StaticSeedData.Deck1);
             await CardContext.SaveChangesAsync();
             ResetContext();
 
@@ -190,8 +191,17 @@ namespace Carpentry.Logic.Tests
         [TestMethod]
         public async Task GetDeckDetail_Works_Test()
         {
-            //public async Task<DeckDetailDto> GetDeckDetail(int deckId)
-            Assert.Fail("Test not implemented");
+            CardContext.Add(SeedData.StormCrowSet);
+            CardContext.Add(SeedData.TripleThreatDeck);
+            await CardContext.SaveChangesAsync();
+            
+            //TODO - get references to seed data IDs working
+            var result = await _deckService.GetDeckDetail(1); //TODO - remove hardcoded int
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Cards.Count);
+            Assert.AreEqual(3, result.Cards.Single().Count);
+            //TODO - Remove hardcoded string
+            Assert.AreEqual("Storm Crow", result.Cards.Single().Name);
         }
 
         #endregion Search
