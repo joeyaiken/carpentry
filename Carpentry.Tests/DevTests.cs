@@ -96,5 +96,15 @@ namespace Carpentry.Tests
             //};
 
         }
+        
+        //add tracked set 294
+        [TestMethod]
+        public async Task AddTrackedSet_SLD_Works()
+        {
+            var setId = 294;
+            var factory = new CarpentryFactory();
+            var client = factory.CreateClient();
+            await client.GetAsync($"api/core/AddTrackedSet?setId={setId}");
+        }
     }
 }

@@ -25,9 +25,6 @@ namespace Carpentry.Tools.QuickImport
     {
         static async Task Main(string[] args)
         {
-            //var SAVE_DECKS = false;
-
-
             var serviceProvider = BuildServiceProvider();
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
@@ -37,8 +34,9 @@ namespace Carpentry.Tools.QuickImport
             var importService = serviceProvider.GetService<IDataImportService>();
             //var deckRepo = serviceProvider.GetService<DeckDataRepo>();
 
-            var decksToImport = Get2ndJmpBox();
-
+            // var decksToImport = Get2ndJmpBox();
+            var decksToImport = GetImports();
+            
             if (decksToImport.Count == 0)
             {
                 logger.LogInformation($"No decks specified, will now exit");
@@ -83,10 +81,8 @@ namespace Carpentry.Tools.QuickImport
                     logger.LogInformation($"Invalid import, won't add {deck.Name}");
                 }
 
-                //if (SAVE_DECKS)
-                //{
-                //await importService.AddValidatedDeckImport(validatedPayload);
-                //}
+                //Un-comment to actually save validated deck
+                await importService.AddValidatedDeckImport(validatedPayload);
 
                 logger.LogInformation($"Successfully 'imported' deck {deck.Name}");
             }
@@ -264,24 +260,29 @@ namespace Carpentry.Tools.QuickImport
             //    "Wizards_2",
             //};
 
-            //var commanderDecks = new List<string>()
-            //{
-            //    "C21_LoreholdLegacies",
-            //    "C21_QuantumQuandrix",
-            //    "KLD_ElvenEmpire",
-            //    "KLD_PhantomPremonition",
-            //};
+            // var commanderDecks = new List<string>()
+            // {
+            //     // "C21_LoreholdLegacies",
+            //     // "C21_QuantumQuandrix",
+            //     // "KLD_ElvenEmpire",
+            //     // "KLD_PhantomPremonition",
+            // };
 
             //foreach(var deck in jumpstartDecks)
             //{
             //    deckTemplates.Add(GenerateJumpstartTemplate(deck));
             //}
 
-            //foreach(var deck in commanderDecks)
-            //{
-            //    deckTemplates.Add(GenerateCommanderDeckTemplate(deck));
-            //}
-
+            // foreach(var deck in commanderDecks)
+            // {
+            //     deckTemplates.Add(GenerateDeckTemplate(deck));
+            // }
+            
+            // deckTemplates.Add(GenerateDeckTemplate("AFC_DraconicRage"));
+            // deckTemplates.Add(GenerateDeckTemplate("MIC_CovenCounters"));
+            
+            // deckTemplates.Add(GenerateDeckTemplate("Pioneer_MonoRedBurn", "pioneer"));
+            
             return deckTemplates;
         }
 
@@ -591,16 +592,27 @@ namespace Carpentry.Tools.QuickImport
             return decksToImport;
         }
 
-        private static DeckImportTemplate GenerateCommanderDeckTemplate(string fileName)
+        private static DeckImportTemplate GenerateDeckTemplate(string fileName, string format = "commander")
         {
             string deckName = fileName.Split('_')[1];
             return new DeckImportTemplate()
             {
                 Name = deckName,
-                FormatName = "commander",
+                FormatName = format,
                 FilePath = $"C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\{fileName}.txt",
             };
         }
+        
+        // private static DeckImportTemplate GenerateCommanderDeckTemplate(string fileName)
+        // {
+        //     string deckName = fileName.Split('_')[1];
+        //     return new DeckImportTemplate()
+        //     {
+        //         Name = deckName,
+        //         FormatName = "commander",
+        //         FilePath = $"C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\Imports\\{fileName}.txt",
+        //     };
+        // }
 
         private static DeckImportTemplate GenerateJumpstartTemplate(string fileName)
         {

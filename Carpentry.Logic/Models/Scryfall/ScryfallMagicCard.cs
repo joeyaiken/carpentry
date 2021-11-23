@@ -35,7 +35,7 @@ namespace Carpentry.Logic.Models.Scryfall
             return cardFaces[0].SelectToken(token).ToObject<T>();
         }
 
-        public int? Cmc => _cardToken.SelectToken("cmc").ToObject<int?>();
+        public int? Cmc => GetFaceValue<int>("cmc");
 
         public List<string> ColorIdentity => _cardToken.SelectToken("color_identity").ToObject<List<string>>();
 
@@ -90,21 +90,22 @@ namespace Carpentry.Logic.Models.Scryfall
             } 
         }
 
-        public string Type => _cardToken.SelectToken("type_line").ToObject<string>();
+        public string Type => GetFaceValue<string>("type_line");
 
         public int CollectionNumber
         {
             get
             {
                 if (int.TryParse(CollectionNumberStr, out var parsedInt))
-                {
                     return parsedInt;
-                }
-                else
-                {
-                    var substring = CollectionNumberStr[0..^1];
-                    return int.Parse(substring);
-                }
+                
+                var substring = CollectionNumberStr[0..^1];
+                if (int.TryParse(substring, out parsedInt))
+                    return parsedInt;
+                
+                //else, it's a prefix
+                substring = substring.Remove(0, 1);
+                return int.Parse(substring);
             }
         }
 
@@ -131,13 +132,13 @@ namespace Carpentry.Logic.Models.Scryfall
 
         public decimal? PriceTix => _cardToken.SelectToken("prices.tix").ToObject<decimal?>();
 
-        public string ImageUrl// => GetFaceValue<string>("image_uris.normal");
+        public string ImageUrl
         {
             get
             {
                 var cardLayout = _cardToken.Value<string>("layout");
 
-                if (cardLayout == "transform" || cardLayout == "modal_dfc")
+                if (cardLayout == "transform" || cardLayout == "modal_dfc" || cardLayout == "reversible_card")
                 {
                     var normalFace = _cardToken.SelectToken("card_faces")[0];
                     return normalFace.SelectToken("image_uris.normal").ToObject<string>();

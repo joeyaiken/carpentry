@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Carpentry.Logic
 {
@@ -185,8 +186,13 @@ namespace Carpentry.Logic
                            })
                            .FirstOrDefaultAsync();
 
-
-                        for (int i = 0; i < card.Count; i++)
+                        if (newCard == null)
+                        {
+                            card.IsValid = false;
+                            continue;
+                        }
+                        
+                        for (var i = 0; i < card.Count; i++)
                         {
                             result.ValidatedCards.Add(newCard);
                         }

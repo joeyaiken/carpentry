@@ -131,10 +131,10 @@ namespace Carpentry.Logic
             {
                 string[] excludedSetTypes = {
                     "token",
-                    "funny",
+                    // "funny", //need to include this to see mystery booster playtest cards
                     //"memorabilia",//If I want to see the c21 display commanders I need to include this
                     "promo",
-                    "box",
+                    // "box", // This apparently omits secret lair
                 };
 
                 result = result
@@ -185,8 +185,12 @@ namespace Carpentry.Logic
                     .Select(token => new ScryfallMagicCard(token)).ToList()
             };
 
-            //result.Cards.ForEach(card => card.RefreshFromToken()); //This is required until I finish refactoring
+            if (setCode != "sld") return result;
 
+            //The Secret Lair (SLD) set contains a mirrored 'Viscera Seer' with only 100 copies printed
+            //I will NEVER own one of these 100, so I'm going to actively filter it from the scryfall results
+            var cardToRemove = result.Cards.Single(c => c.CollectionNumberStr == "M11");
+            result.Cards.Remove(cardToRemove);
             return result;
         }
 
