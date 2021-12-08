@@ -399,9 +399,9 @@ namespace Carpentry.Logic
 
                 IsFoil = c.ByUnique.IsFoil,
 
-                Price = c.ByUnique.Price,
-                PriceFoil = c.ByUnique.PriceFoil,
-                TixPrice = c.ByUnique.TixPrice,
+                Price = (decimal?)c.ByUnique.Price,
+                PriceFoil = (decimal?)c.ByUnique.PriceFoil,
+                TixPrice = (decimal?)c.ByUnique.TixPrice,
 
                 PrintTotalCount = c.ByUnique.TotalCount,
                 PrintDeckCount = c.ByUnique.DeckCount,

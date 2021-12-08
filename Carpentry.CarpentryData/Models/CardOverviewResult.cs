@@ -27,9 +27,9 @@ namespace Carpentry.CarpentryData.Models
         public string Color { get; set; }
         public string ColorIdentity { get; set; }
         //prices
-        public decimal? Price { get; set; }
-        public decimal? PriceFoil { get; set; }
-        public decimal? TixPrice { get; set; }
+        public double? Price { get; set; }
+        public double? PriceFoil { get; set; }
+        public double? TixPrice { get; set; }
         //counts
         public int TotalCount { get; set; }
         public int DeckCount { get; set; }
