@@ -848,6 +848,7 @@ namespace Carpentry.Logic
                 CardId = x.CardId,
                 Cmc = x.Cmc,
                 CollectorNumber = x.CollectorNumber,
+                CollectorNumberStr = x.CollectorNumberStr,
                 Color = x.Color,
                 ColorIdentity = x.ColorIdentity,
                 DeckCount = x.DeckCount,

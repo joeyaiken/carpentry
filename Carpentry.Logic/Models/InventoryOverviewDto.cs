@@ -20,6 +20,7 @@ namespace Carpentry.Logic.Models
         public char RarityId { get; set; }
         public string ImageUrl { get; set; }
         public int? CollectorNumber { get; set; }
+        public string CollectorNumberStr { get; set; }
         public string Color { get; set; }
         public string ColorIdentity { get; set; }
         //prices

@@ -16,6 +16,7 @@
 			,c.RarityId
 			,c.ImageUrl
 			,c.CollectorNumber
+            ,c.CollectorNumberStr
 			,c.Color
 			,c.ColorIdentity
 			--prices

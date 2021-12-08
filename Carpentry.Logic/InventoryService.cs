@@ -391,7 +391,8 @@ namespace Carpentry.Logic
                 SetCode = c.ByUnique.SetCode,
                 Name = c.ByUnique.Name,
                 ImageUrl = c.ByUnique.ImageUrl,
-                CollectorNumber = c.ByUnique.CollectorNumber,
+                CollectorNumber =  c.ByUnique.CollectorNumber,
+                CollectorNumberStr = c.ByUnique.CollectorNumberStr,
 
                 Type = c.ByUnique.Type,
                 ColorIdentity = c.ByUnique.ColorIdentity,

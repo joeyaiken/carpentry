@@ -10,7 +10,7 @@
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         public int? CollectorNumber { get; set; }
-
+        public string CollectorNumberStr { get; set; }
         public string Type { get; set; }
         public string ColorIdentity { get; set; }
 

@@ -19,6 +19,7 @@ AS
 			,RecentCard.RarityId
 			,RecentCard.ImageUrl
 			,RecentCard.CollectorNumber
+			,RecentCard.CollectorNumberStr
 			,RecentCard.Color
 			,RecentCard.ColorIdentity
 			--prices
@@ -60,6 +61,7 @@ AS
 				,c.Text
 				,c.RarityId
 				,c.CollectorNumber
+                ,c.CollectorNumberStr
 				,c.SetId
 				,c.MultiverseId
 				,c.Price
