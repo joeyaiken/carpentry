@@ -9,6 +9,11 @@ interface ComponentProps{
 
 export default function DeckStatsBar(props: ComponentProps): JSX.Element {
     const { outlineSection, flexCol, flexRow, } = appStyles();
+    
+    
+    // TODO - NEXT : In order to get e2e tests working, I need to add classes/some identifying info to the tables below
+    
+    
     return (
         <Paper className={combineStyles(flexRow, outlineSection)}>
             <Box className={outlineSection}>

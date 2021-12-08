@@ -13,99 +13,101 @@ export interface ComponentProps {
 }
 
 export default function DeckPropertiesLayout(props: ComponentProps): JSX.Element {
-    return(
-        <React.Fragment>
-            <Box>
-                <TextField 
-                    label="Name"
-                    color="primary"
-                    name="name"
-                    value={props.deck.name} 
-                    onChange={props.onChange} />
-            </Box>
+  return(
+    <React.Fragment>
+      <Box>
+        <TextField
+          id="deck-name-input"
+          label="Name"
+          color="primary"
+          name="name"
+          value={props.deck.name} 
+          onChange={props.onChange} />
+      </Box>
 
-            <Box>
-                <TextField 
-                    select
-                    label="Format"
-                    color="primary"
-                    name="format"
-                    value={props.deck.format} 
-                    onChange={props.onChange}>
-                        {
-                            props.formatFilters.map(option => 
-                                <MenuItem key={option.value} value={option.name} style={{textTransform:"capitalize"}}>
-                                    {option.name}
-                                </MenuItem>
-                            )
-                        }
-                        {/* <MenuItem key="Standard" value="standard">Standard</MenuItem>
-                        <MenuItem key="Modern" value="modern">Modern</MenuItem>
-                        <MenuItem key="Commander" value="commander">Commander</MenuItem>
-                        <MenuItem key="Pioneer" value="pioneer">Pioneer</MenuItem>
-                        <MenuItem key="Brawl" value="brawl">Brawl</MenuItem> */}
-                    </TextField>
-            </Box>
-
-            <Box>
-                <TextField 
-                    label="Notes"
-                    color="primary"
-                    name="notes"
-                    value={props.deck.notes} 
-                    onChange={props.onChange} />
-            </Box>
-            { //TODO - maybe swap this logic for a "show lands" bool prop
-                props.deck.id > 0 &&
-                <Box className="flex-row">
-                    <TextField
-                            name="basicW"
-                            type="number"
-                            value={props.deck.basicW}
-                            InputProps={{
-                                startAdornment: <InputAdornment position="start">W</InputAdornment>,
-                            }} 
-                            onChange={props.onChange} 
-                    />
-                    <TextField
-                        name="basicU"
-                        type="number"
-                        value={props.deck.basicU}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">U</InputAdornment>,
-                        }} 
-                        onChange={props.onChange} 
-                    />
-                    <TextField
-                        name="basicB"
-                        type="number"
-                        value={props.deck.basicB}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">B</InputAdornment>,
-                        }} 
-                        onChange={props.onChange} 
-                    />
-                    <TextField
-                        name="basicR"
-                        type="number"
-                        value={props.deck.basicR}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">R</InputAdornment>,
-                        }} 
-                        onChange={props.onChange} 
-                    />
-                    <TextField
-                        name="basicG"
-                        type="number"
-                        value={props.deck.basicG}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">G</InputAdornment>,
-                        }} 
-                        onChange={props.onChange} 
-                    />
-                </Box>
+      <Box>
+        <TextField
+          id="deck-format-select"
+          select
+          label="Format"
+          color="primary"
+          name="format"
+          value={props.deck.format} 
+          onChange={props.onChange}>
+            {
+              props.formatFilters.map(option => 
+                <MenuItem key={option.value} value={option.name} style={{textTransform:"capitalize"}}>
+                  {option.name}
+                </MenuItem>
+              )
             }
-            
-        </React.Fragment>
-    )
+            {/* <MenuItem key="Standard" value="standard">Standard</MenuItem>
+            <MenuItem key="Modern" value="modern">Modern</MenuItem>
+            <MenuItem key="Commander" value="commander">Commander</MenuItem>
+            <MenuItem key="Pioneer" value="pioneer">Pioneer</MenuItem>
+            <MenuItem key="Brawl" value="brawl">Brawl</MenuItem> */}
+          </TextField>
+      </Box>
+
+      <Box>
+        <TextField
+          id="deck-notes-input"
+          label="Notes"
+          color="primary"
+          name="notes"
+          value={props.deck.notes} 
+          onChange={props.onChange} />
+      </Box>
+      { //TODO - maybe swap this logic for a "show lands" bool prop
+        props.deck.id > 0 &&
+        <Box className="flex-row">
+          <TextField
+            name="basicW"
+            type="number"
+            value={props.deck.basicW}
+            InputProps={{
+              startAdornment: <InputAdornment position="start">W</InputAdornment>,
+            }} 
+            onChange={props.onChange} 
+          />
+          <TextField
+            name="basicU"
+            type="number"
+            value={props.deck.basicU}
+            InputProps={{
+              startAdornment: <InputAdornment position="start">U</InputAdornment>,
+            }} 
+            onChange={props.onChange} 
+          />
+          <TextField
+            name="basicB"
+            type="number"
+            value={props.deck.basicB}
+            InputProps={{
+              startAdornment: <InputAdornment position="start">B</InputAdornment>,
+            }} 
+            onChange={props.onChange} 
+          />
+          <TextField
+            name="basicR"
+            type="number"
+            value={props.deck.basicR}
+            InputProps={{
+              startAdornment: <InputAdornment position="start">R</InputAdornment>,
+            }} 
+            onChange={props.onChange} 
+          />
+          <TextField
+            name="basicG"
+            type="number"
+            value={props.deck.basicG}
+            InputProps={{
+              startAdornment: <InputAdornment position="start">G</InputAdornment>,
+            }} 
+            onChange={props.onChange} 
+          />
+        </Box>
+      }
+    </React.Fragment>
+  )
 }

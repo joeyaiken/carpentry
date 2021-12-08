@@ -1,4 +1,4 @@
-import { 
+import {
     CARD_SEARCH_FILTER_VALUE_CHANGED,
     TOGGLE_CARD_SEARCH_VIEW_MODE,
     // CARD_SEARCH_SEARCH_METHOD_CHANGED,
@@ -7,8 +7,8 @@ import {
     CARD_SEARCH_REQUESTED,
     CARD_SEARCH_RECEIVED,
     CARD_SEARCH_INVENTORY_REQUESTED,
-    CARD_SEARCH_INVENTORY_RECEIVED,
- } from "./DeckAddCardsActions";
+    CARD_SEARCH_INVENTORY_RECEIVED, CARD_SEARCH_DECK_CARD_ADDED,
+} from "./DeckAddCardsActions";
 
 export interface State {
     // cardSearchMethod: "set" | "web" | "inventory";
@@ -29,7 +29,7 @@ export interface State {
         isLoading: boolean;
         //inventory cards
         inventoryCardsById: { [id: number]: InventoryCard };
-        inventoryCardAllIds: number[];
+        inventoryCardsAllIds: number[];
 
 
         //--First step in showing an inventory detail is to itterate over MagicCard (or even card variant)
@@ -40,6 +40,7 @@ export interface State {
         cardsById: { [multiverseId: number]: MagicCard };
         allCardIds: number[];
     };
+    addCardIsSaving: boolean;
 }
 
 export const deckAddCardsReducer = (state = initialState, action: ReduxAction): State => {
@@ -61,7 +62,18 @@ export const deckAddCardsReducer = (state = initialState, action: ReduxAction): 
                 selectedCard: selectedCard,
             };
         
-        case CARD_SEARCH_ADDING_DECK_CARD: return (state);
+        case CARD_SEARCH_ADDING_DECK_CARD:
+            return {
+                ...state,
+                addCardIsSaving: true,
+            };
+        
+        case CARD_SEARCH_DECK_CARD_ADDED: 
+            return {
+                ...state,
+                addCardIsSaving: false,
+            };
+            
         
         default: return(state);
     }
@@ -80,10 +92,11 @@ const initialState: State = {
     inventoryDetail: {
         isLoading: false,
         inventoryCardsById: {},
-        inventoryCardAllIds: [],
+        inventoryCardsAllIds: [],
         cardsById: {},
         allCardIds: [],
     },
+    addCardIsSaving: false,
 }
 
 function defaultSearchFilterProps(): CardFilterProps {
@@ -160,7 +173,7 @@ function cardSearchInventoryReceived(state: State, action: ReduxAction): State {
             ...state.inventoryDetail,
             isLoading: false,
             inventoryCardsById: inventoryCardsById,
-            inventoryCardAllIds: detailResult.inventoryCards.map(card => card.id),
+            inventoryCardsAllIds: detailResult.inventoryCards.map(card => card.id),
             cardsById: cardsById,
             allCardIds: detailResult.cards.map(card => card.multiverseId),
         },

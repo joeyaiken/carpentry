@@ -25,9 +25,9 @@ export default function NavigationLayout(props: LayoutProps): JSX.Element {
         <Typography variant="h5" className={flexSection}>
           Carpentry
         </Typography>
-        <Button onClick={() => props.onNavClick("/decks")}>Decks</Button>
-        <Button onClick={() => props.onNavClick("/inventory")}>Inventory</Button>
-        <Button onClick={() => props.onNavClick("/settings/sets")}>Settings</Button>
+        <Button className="nav-button" onClick={() => props.onNavClick("/decks")}>Decks</Button>
+        <Button className="nav-button" onClick={() => props.onNavClick("/inventory")}>Inventory</Button>
+        <Button className="nav-button" onClick={() => props.onNavClick("/settings/sets")}>Settings</Button>
       </Toolbar>
     </AppBar>
   );

@@ -42,6 +42,9 @@
     <None Update="DataScripts\vwSetTotals.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="DataScripts\vwSetTotalsDetailed.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

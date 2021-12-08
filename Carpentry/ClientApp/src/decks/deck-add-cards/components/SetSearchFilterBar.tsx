@@ -144,7 +144,7 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
             {/* Bool: Include Unowned */}
             {/* DDL:  */}
             {/* Fuck it, just adding Min Count for now... */}
-            <NumericFilter name="minCount" value={props.searchFilter.minCount}
+            <NumericFilter id="min-count-filter" name="minCount" value={props.searchFilter.minCount}
                 handleFilterChange={props.handleFilterChange} />
 
             {/* //Format */}
@@ -201,22 +201,24 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
 
 
 interface NumericFilterProps {
-    name: string;
-    value: number|null;
-    handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  id: string;
+  name: string;
+  value: number|null;
+  handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 function NumericFilter(props: NumericFilterProps): JSX.Element {
 const { flexSection, sidePadded, stretch } = appStyles();
-    return(
-        <Box className={`${flexSection} ${sidePadded}`}>
-            <TextField
-                name={props.name}
-                className={stretch}
-                label={props.name}
-                value={props.value}
-                onChange={props.handleFilterChange}
-                style={{textTransform: "capitalize"}}
-                margin="normal"/>
-        </Box>
-    )
+  return(
+    <Box className={`${flexSection} ${sidePadded}`}>
+      <TextField
+        id={props.id}
+        name={props.name}
+        className={stretch}
+        label={props.name}
+        value={props.value}
+        onChange={props.handleFilterChange}
+        style={{textTransform: "capitalize"}}
+        margin="normal"/>
+    </Box>
+  )
 }

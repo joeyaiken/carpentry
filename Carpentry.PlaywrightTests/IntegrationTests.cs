@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Carpentry.PlaywrightTests.Common;
 using Carpentry.PlaywrightTests.e2e;
-using Carpentry.PlaywrightTests.e2e.Tests;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

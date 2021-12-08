@@ -1,5 +1,11 @@
-﻿namespace Carpentry.PlaywrightTests.e2e
+﻿namespace Carpentry.PlaywrightTests.Common
 {
+    public enum AppType
+    {
+        Angular,
+        React
+    }
+    
     public enum CardSearchGroup
     {
         Red,
@@ -19,5 +25,4 @@
         mh1,
         csp
     }
-    
 }

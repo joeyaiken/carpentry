@@ -1,6 +1,6 @@
 ﻿using Carpentry.Logic;
 
-namespace Carpentry
+namespace Carpentry.Tools.QuickImport
 {
     class FakeAppConfig : IDataBackupConfig
     {

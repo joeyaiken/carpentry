@@ -1,15 +1,15 @@
 ﻿#nullable enable
-using Microsoft.Playwright;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Carpentry.PlaywrightTests.e2e.Pages
+namespace Carpentry.PlaywrightTests.Common.Pages
 {
     public class SettingsPage : NavigationPage
     {
         private readonly IPage _page;
-        public SettingsPage(string appUrl, IPage page) : base(page, $"{appUrl}settings/", "Settings")
+        public SettingsPage(string appUrl, IPage page, AppType appType) : base(page, appType, $"{appUrl}settings/", "Settings")
         {
             _page = page;
         }

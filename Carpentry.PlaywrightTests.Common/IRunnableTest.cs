@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Carpentry.PlaywrightTests.e2e
+namespace Carpentry.PlaywrightTests.Common
 {
     public interface IRunnableTest
     {

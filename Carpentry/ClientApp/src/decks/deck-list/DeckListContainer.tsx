@@ -18,6 +18,7 @@ import React from 'react'
 import DeckListTable from './components/DeckListTable';
 import { AppState } from '../../configureStore';
 import { ensureDeckOverviewsLoaded } from '../state/decksDataActions';
+import AppLayout from "../../common/components/AppLayout";
 
 // import DeckListLayout from '../components/DeckListLayout';
 // // import { deckList } from '../reducers/deckList.reducer';
@@ -95,7 +96,7 @@ class DeckList extends React.Component<DeckListProps> {
     // onMenuSelect: (option: string) => void;
     render() {
         return (
-            <React.Fragment>
+          <React.Fragment>
             {/* <Menu open={Boolean(props.deckMenuAnchor)} onClose={props.onMenuClose} anchorEl={props.deckMenuAnchor} >
                 <MenuItem onClick={() => {props.onMenuSelect("edit")}} value="inventory">Edit</MenuItem>
                 <MenuItem onClick={() => {props.onMenuSelect("delete")}} value="delete">Delte</MenuItem>

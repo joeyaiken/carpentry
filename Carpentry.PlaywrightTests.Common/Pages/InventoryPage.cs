@@ -1,23 +1,20 @@
 ﻿#nullable enable
-using Microsoft.Playwright;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
+using Microsoft.Playwright;
 
-namespace Carpentry.PlaywrightTests.e2e.Pages
+namespace Carpentry.PlaywrightTests.Common.Pages
 {
     public class InventoryPage : NavigationPage
     {
         private readonly IPage _page;
-        private readonly AppType _appEnvironment;
+        private readonly AppType _appType;
 
-        public InventoryPage(string appUrl, IPage page, AppType appEnvironment) : base(page, $"{appUrl}inventory", "Inventory")
+        public InventoryPage(string appUrl, IPage page, AppType appType) : base(page, appType, $"{appUrl}inventory", "Inventory")
         {
             _page = page;
-            _appEnvironment = appEnvironment;
+            _appType = appType;
         }
 
         private async Task WaitForBusy()
@@ -48,28 +45,6 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             await SetInputValue("take-filter", value.ToString());
         }
 
-        private async Task SetInputValue(string elementId, string value)
-        {
-            await _page.FillAsync($"#{elementId}", value);
-        }
-        
-        private async Task SelectOption(string elementId, string value)
-        {
-            await _page.ClickAsync($"#{elementId}");
-            
-            if (_appEnvironment == AppType.Angular)
-            {
-                await Task.Delay(100);
-                var selector = await _page.WaitForSelectorAsync($"mat-option:has(span:text-is(\"{value}\"))");
-                await selector!.ClickAsync();
-            }
-            else
-            {
-                var selector = await _page.WaitForSelectorAsync($"li:text-is(\"{value}\")");
-                await selector!.ClickAsync();
-            }
-        }
-
         public async Task ClickSearch()
         {
             await _page.ClickAsync("button:has-text(\"Search\")");
@@ -79,7 +54,7 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
         public async Task<List<InventorySearchResult>> GetSearchResults()
         {
             var elements = await _page.QuerySelectorAllAsync(".card-result");
-            return elements.Select(e => new InventorySearchResult(e, _appEnvironment)).ToList();
+            return elements.Select(e => new InventorySearchResult(e, _appType)).ToList();
         }
     }
 

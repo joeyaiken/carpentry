@@ -31,7 +31,7 @@ export default function SearchResultTable(props: SearchResultTableProps): JSX.El
             <TableBody>
             {
                 props.searchResults.map(result => (
-                    <TableRow onClick={() => { props.onCardSelected(result) }} key={result.data.cardId}>
+                    <TableRow className="search-result-row" onClick={() => { props.onCardSelected(result) }} key={result.data.cardId}>
                         <TableCell>{result.data.name}</TableCell>
                         {/* <TableCell>{result.data.set}</TableCell> */}
                         <TableCell>{result.data.type}</TableCell>

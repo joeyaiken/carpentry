@@ -1,5 +1,5 @@
 import React from 'react';
-import { Add, ArrowForward } from '@material-ui/icons';
+import { Add, ArrowForward, SaveAlt } from '@material-ui/icons';
 import DeckListContainer from '../decks/deck-list/DeckListContainer';
 import AppLayout from '../common/components/AppLayout';
 import {
@@ -13,6 +13,7 @@ import {
 
 interface LayoutProps {
     onAddClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onImportClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     onSettingsClick: () => void;
     onInventoryClick: () => void;
 }
@@ -50,13 +51,16 @@ export default function HomeLayout(props: LayoutProps): JSX.Element {
                     </Typography>
                 </Box>
 
-                <Box  className={localStyles.availableDecks}>
+                <Box className={localStyles.availableDecks}>
                     <Card>
                         <CardHeader
                             titleTypographyProps={{variant:"h5"}}
                             title={"Available Decks"} 
                             action={
-                                <IconButton size="medium" onClick={props.onAddClick}><Add /></IconButton>
+                                <>
+                                    <IconButton className="add-deck-button" size="medium" onClick={props.onAddClick}><Add /></IconButton>
+                                    <IconButton className="import-deck-button" size="medium" onClick={props.onImportClick}><SaveAlt /></IconButton>
+                                </>
                             } />
                         <DeckListContainer />
                     </Card>

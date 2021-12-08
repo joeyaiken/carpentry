@@ -1,7 +1,7 @@
 ﻿using Microsoft.Playwright;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Carpentry.PlaywrightTests.e2e.Tests;
+using Carpentry.PlaywrightTests.Common;
+using Carpentry.PlaywrightTests.Common.Tests;
 using Serilog;
 
 namespace Carpentry.PlaywrightTests.e2e
@@ -69,7 +69,7 @@ namespace Carpentry.PlaywrightTests.e2e
             // var test0 = new Test00HomePageLoads(page, _appSettings.AppUrl, _logger);
             // await test0.Run();
 
-            await new Test00HomePageLoads(page, _appSettings.AppUrl, _logger).Run();
+            await new Test00HomePageLoads(page, _appSettings.AppEnvironment, _appSettings.AppUrl, _logger).Run();
             
             // await new Test01SettingsTrackSnowSets(page, _appSettings.AppUrl, _logger).Run();
             
@@ -81,6 +81,8 @@ namespace Carpentry.PlaywrightTests.e2e
             _logger.Information("Finished running test suite");
         }
 
+        //Current TODO - just get the first test suite working before refining this
+        
         private async Task WaitForApp(IPage page)
         {
             _logger.Information($"Beginning {nameof(WaitForApp)}");
@@ -129,92 +131,4 @@ namespace Carpentry.PlaywrightTests.e2e
             _logger.Information($"{nameof(WaitForApp)} completed");
         }
     }
-
-    public class SeedData
-    {
-        public SeedData()
-        {
-            KaldheimSet = new SeedSet("khm", "Kaldheim");
-            ModernHorizonsSet = new SeedSet("mh1", "Modern Horizons");
-            ColdsnapSet = new SeedSet("csp", "Coldsnap");
-
-            SeedCards = new List<SeedCard>()
-            {
-                new SeedCard("Ascendant Spirit", KaldheimSet.SetCode, nameof(CardSearchGroup.RareMythic), 4),
-                new SeedCard("Frost Augur", KaldheimSet.SetCode, nameof(CardSearchGroup.Blue), 4),
-                
-                new SeedCard("Blizzard Brawl", KaldheimSet.SetCode, nameof(CardSearchGroup.Green), 4),
-                
-                new SeedCard("The Three Seasons", KaldheimSet.SetCode, nameof(CardSearchGroup.Multicolored), 2),
-                
-                new SeedCard("Faceless Haven", KaldheimSet.SetCode, nameof(CardSearchGroup.RareMythic), 2),
-                new SeedCard("Rimewood Falls", KaldheimSet.SetCode, nameof(CardSearchGroup.Lands), 4),
-
-                new SeedCard("Marit Lage's Slumber", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.RareMythic), 4),
-                
-                new SeedCard("Conifer Wurm", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Green), 4),
-                new SeedCard("Glacial Revelation", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Green), 4),
-                
-                new SeedCard("Ice-Fang Coatl", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.RareMythic), 4),
-                new SeedCard("Abominable Treefolk", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Multicolored), 4),
-                
-                new SeedCard("Snow-Covered Forest", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Lands), 8),
-                new SeedCard("Snow-Covered Island", ModernHorizonsSet.SetCode, nameof(CardSearchGroup.Lands), 8),
-
-                new SeedCard("Boreal Druid", ColdsnapSet.SetCode, nameof(CardSearchGroup.Green), 4),
-            };
-
-            GroupSearchOrder = new List<CardSearchGroup>()
-            {
-                CardSearchGroup.Blue,
-                CardSearchGroup.Green,
-                CardSearchGroup.Multicolored,
-                CardSearchGroup.Lands,
-                CardSearchGroup.RareMythic,
-            };
-        }
-
-        public SeedSet ColdsnapSet { get; set; }
-        public SeedSet ModernHorizonsSet { get; set; }
-        public SeedSet KaldheimSet { get; set;  }
-        
-        public List<SeedCard> SeedCards { get; }
-        
-        public List<CardSearchGroup> GroupSearchOrder { get; }
-
-        public List<SeedSet> SeedSets => new List<SeedSet>()
-        {
-            KaldheimSet, ModernHorizonsSet, ColdsnapSet
-        };
-        
-    }
-
-    public class SeedSet
-    {
-        public SeedSet(string setCode, string setName)
-        {
-            SetCode = setCode;
-            SetName = setName;
-        }
-        
-        public string SetCode { get; set; }
-        public string SetName { get; set; }
-    }
-
-    public class SeedCard
-    {
-        public SeedCard(string cardName, string setCode, string group, int count)
-        {
-            SetCode = setCode;
-            Group = group;
-            CardName = cardName;
-            Count = count;
-        }
-        public string SetCode { get; }
-        public string Group { get; }
-        public string CardName { get; }
-        public int Count { get; }
-    }
-
-    
 }

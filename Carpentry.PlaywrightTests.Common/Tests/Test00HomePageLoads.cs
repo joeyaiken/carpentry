@@ -1,19 +1,22 @@
 ﻿using System.Threading.Tasks;
-using Carpentry.PlaywrightTests.e2e.Pages;
+using Carpentry.PlaywrightTests.Common.Pages;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog;
 
-namespace Carpentry.PlaywrightTests.e2e.Tests
+namespace Carpentry.PlaywrightTests.Common.Tests
 {
     public class Test00HomePageLoads : IRunnableTest
     {
         private readonly IPage _page;
+        private readonly AppType _appType;
         private readonly string _appUrl;
         private readonly ILogger _logger;
-        public Test00HomePageLoads(IPage page, string appUrl, ILogger logger)
+
+        public Test00HomePageLoads(IPage page, AppType appType, string appUrl, ILogger logger)
         {
             _page = page;
+            _appType = appType;
             _appUrl = appUrl;
             _logger = logger;
         }
@@ -22,7 +25,7 @@ namespace Carpentry.PlaywrightTests.e2e.Tests
         {
             _logger.Information($"starting {nameof(Test00HomePageLoads)}");
 
-            var homePage = new HomePage(_appUrl, _page);
+            var homePage = new HomePage(_appUrl, _page, _appType);
 
             await homePage.NavigateTo();
 

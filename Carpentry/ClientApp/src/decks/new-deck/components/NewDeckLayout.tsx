@@ -21,7 +21,7 @@ export default function NewDeckLayout(props: ComponentProps): JSX.Element {
                 </DialogContent>
                 <DialogActions>
                     <Button size="medium" onClick={props.onCloseClick}>Cancel</Button>
-                    <Button size="medium" variant="contained" color="primary" onClick={props.onSaveClick}>Save</Button>
+                    <Button id="save-new-deck-button" size="medium" variant="contained" color="primary" onClick={props.onSaveClick}>Save</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

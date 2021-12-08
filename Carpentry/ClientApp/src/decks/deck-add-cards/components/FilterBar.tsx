@@ -32,7 +32,7 @@ export default function FilterBar(props: FilterBarProps): JSX.Element{
                         searchFilter={props.searchFilterProps} />
             } */}
             <Box className={combineStyles(staticSection, center, sidePadded)}>
-                <Button variant="contained" size="medium" color="primary" onClick={() => props.handleSearchButtonClick()}>
+                <Button id="search-button" variant="contained" size="medium" color="primary" onClick={() => props.handleSearchButtonClick()}>
                     Search
                 </Button>
             </Box>

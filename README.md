@@ -26,9 +26,8 @@ Carpentry is an application developed to track collections of Magic cards & mana
   - Refactoring to either use Electron or support multi users
 
 ## Some Current Bugs
-  Angular: Inventory Add Cards: Color filter doesn't work
-
-
+- Angular: Inventory Add Cards: Color filter doesn't work
+- Angular: Inventory: Many filters don't work
 
 .............................................
 

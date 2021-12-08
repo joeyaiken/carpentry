@@ -52,7 +52,7 @@ export default function DeckPropsBar(props: ComponentProps): JSX.Element {
                     <Button onClick={props.onExportClick} color="primary" variant="contained">
                         Export
                     </Button>
-                    <Button onClick={props.onAddCardsClick} color="primary" variant="contained">
+                    <Button onClick={props.onAddCardsClick} color="primary" variant="contained" className="add-cards-button">
                         Add Cards
                     </Button>
                     {/* <Link to={`/decks/${props.deckProperties.id}/addCards/`}>

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.PlaywrightTests.e2e.Pages;
+using Carpentry.PlaywrightTests.Common.Pages;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog;
 
-namespace Carpentry.PlaywrightTests.e2e.Tests
+namespace Carpentry.PlaywrightTests.Common.Tests
 {
     public class Test02InventoryAddSnowCards : IRunnableTest
     {

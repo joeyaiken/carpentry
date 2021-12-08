@@ -5,6 +5,7 @@ interface InventoryDetailTableProps {
     detail: InventoryDetailDto
     handleAddCardClick?: (inventoryCard: InventoryCard) => void;
 }
+// TODO - Consider deleting this component as it's only used once
 
 export default function InventoryDetailTable(props: InventoryDetailTableProps): JSX.Element {
     return(
@@ -22,6 +23,10 @@ export default function InventoryDetailTable(props: InventoryDetailTableProps): 
                     props.detail.inventoryCards.map(item => {
                         //TODO - replace FIND with something that uses a dictionary
                         const thisCard = props.detail.cards.find(x => x.cardId === item.cardId);
+                        
+                      //Need to get the quick-add working again
+                    
+                      
 
                         return(
                         <TableRow key={item.id}>

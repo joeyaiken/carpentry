@@ -5,30 +5,27 @@ using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Carpentry.PlaywrightTests.e2e.Pages
+namespace Carpentry.PlaywrightTests.Common.Pages
 {
-    public class InventoryAddCardsPage
+    public class InventoryAddCardsPage : PageBase
     {
         private readonly string _pageUrl;
-        private readonly IPage _page;
-        private readonly AppType _appEnvironment;
-        public InventoryAddCardsPage(string appUrl, IPage page, AppType appEnvironment)
+        
+        public InventoryAddCardsPage(string appUrl, IPage page, AppType appEnvironment) : base(page, appEnvironment)
         {
             _pageUrl = $"{appUrl}inventory/add-cards";
-            _page = page;
-            _appEnvironment = appEnvironment;
         }
 
         public async Task NavigateTo()
         {
-            if (_pageUrl == _page.Url) return;
-            await _page.ClickAsync("#app-nav-menu button:has-text(\"Inventory\")");
-            await _page.ClickAsync("button:has-text(\"Add Cards\")");
+            if (_pageUrl == Page.Url) return;
+            await Page.ClickAsync("#app-nav-menu button:has-text(\"Inventory\")");
+            await Page.ClickAsync("button:has-text(\"Add Cards\")");
         }
         
         private async Task WaitForBusy()
         {
-            await _page.WaitForSelectorAsync("#progress-bar", new PageWaitForSelectorOptions()
+            await Page.WaitForSelectorAsync("#progress-bar", new PageWaitForSelectorOptions()
             {
                 State = WaitForSelectorState.Hidden
             });
@@ -44,61 +41,43 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
             await SelectOption("search-group-select", searchGroup);
         }
 
-        private async Task SelectOption(string elementId, string value)
-        {
-            await _page.ClickAsync($"#{elementId}");
-            
-            if (_appEnvironment == AppType.Angular)
-            {
-                var selector = await _page.WaitForSelectorAsync($"mat-option:has(span:text-is(\"{value}\"))");
-                Assert.IsNotNull(selector);
-                await selector.ClickAsync();
-            }
-            else
-            {
-                var selector = await _page.WaitForSelectorAsync($"li:text-is(\"{value}\")");
-                Assert.IsNotNull(selector);
-                await selector.ClickAsync();
-            }
-        }
-        
         public async Task ClickSearch()
         {
-            await _page.ClickAsync("button:has-text(\"Search\")");
+            await Page.ClickAsync("button:has-text(\"Search\")");
             await WaitForBusy();
         }
 
         public async Task<SearchResultRow?> GetSearchResultByName(string cardName)
         {
-            var element = await _page.QuerySelectorAsync($"div#search-results tr:has(td:text-is(\"{cardName}\"))");
-            return element == null ? null : new SearchResultRow(cardName, element, _appEnvironment);
+            var element = await Page.QuerySelectorAsync($"div#search-results tr:has(td:text-is(\"{cardName}\"))");
+            return element == null ? null : new SearchResultRow(cardName, element);
         }
         
         public async Task<List<SearchResultCardDetail>> GetCardDetails()
         {
-            var elements = await _page.QuerySelectorAllAsync(".search-result-card");
-            return elements.Select(e => new SearchResultCardDetail(e, _appEnvironment)).ToList();
+            var elements = await Page.QuerySelectorAllAsync(".search-result-card");
+            return elements.Select(e => new SearchResultCardDetail(e)).ToList();
         }
 
         public async Task<PendingCard?> GetPendingCard(string cardName)
         {
-            var element = await _page.QuerySelectorAsync($".pending-card:has(h5:text-is(\"{cardName}\"))");
+            var element = await Page.QuerySelectorAsync($".pending-card:has(h5:text-is(\"{cardName}\"))");
             return element == null ? null : new PendingCard(element);
         }
         
         public async Task<List<PendingCard>> GetAllPendingCards()
         {
-            var elements = await _page.QuerySelectorAllAsync(".pending-card");
+            var elements = await Page.QuerySelectorAllAsync(".pending-card");
             return elements.Select(e => new PendingCard(e)).ToList();
         }
         
         public async Task ClickSave()
         {
-            await _page.ClickAsync("button:has-text(\"Save\")");
+            await Page.ClickAsync("button:has-text(\"Save\")");
         }
         public async Task ClickCancel()
         {
-            await _page.ClickAsync("button:has-text(\"Cancel\")");
+            await Page.ClickAsync("button:has-text(\"Cancel\")");
         }
     }
 
@@ -106,12 +85,11 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
     {
         private readonly string _cardName;
         private readonly IElementHandle _element;
-        private readonly AppType _appEnvironment;
-        public SearchResultRow(string cardName, IElementHandle element, AppType appEnvironment)
+        
+        public SearchResultRow(string cardName, IElementHandle element)
         {
             _cardName = cardName;
             _element = element;
-            _appEnvironment = appEnvironment;
         }
 
         public async Task Click()
@@ -135,12 +113,10 @@ namespace Carpentry.PlaywrightTests.e2e.Pages
     public class SearchResultCardDetail
     {
         private readonly IElementHandle _element;
-        private readonly AppType _appEnvironment;
 
-        public SearchResultCardDetail(IElementHandle element, AppType appEnvironment)
+        public SearchResultCardDetail(IElementHandle element)
         {
             _element = element;
-            _appEnvironment = appEnvironment;
         }
 
         public async Task ClickAddNormal()

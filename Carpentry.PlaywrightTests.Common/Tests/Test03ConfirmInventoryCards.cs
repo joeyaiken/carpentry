@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Carpentry.PlaywrightTests.e2e.Pages;
+using Carpentry.PlaywrightTests.Common.Pages;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Carpentry.PlaywrightTests.e2e.Tests
+namespace Carpentry.PlaywrightTests.Common.Tests
 {
     public class Test03ConfirmInventoryCards : IRunnableTest
     {

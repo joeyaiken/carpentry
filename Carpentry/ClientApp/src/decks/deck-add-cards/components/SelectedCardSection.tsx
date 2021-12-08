@@ -1,91 +1,116 @@
 import React from 'react';
-import { Box, Card, CardHeader, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
-import InventoryDetailTable from './InventoryDetailTable';
+import {
+  Box,
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  TableHead,
+  TableRow, TableCell, TableBody, Table
+} from '@material-ui/core';
 import { appStyles, combineStyles } from '../../../styles/appStyles';
 
 interface ComponentProps {
-    selectedCard: CardSearchResultDto;
-    selectedCardDetail: InventoryDetailDto | null;
-    handleAddInventoryCard: (inventoryCard: InventoryCard) => void;
-    handleAddNewCard: (cardName: string, cardId: number, isFoil: boolean) => void;
-    handleAddEmptyCard: (cardName: string) => void;
-    // handleMoveCard?: (inventoryCard: InventoryCard) => void;
+  selectedCard: CardSearchResultDto;
+  inventoryCardsById: { [id: number]: InventoryCard };
+  inventoryCardsAllIds: number[];
+  
+  handleAddInventoryCard: (inventoryCard: InventoryCard) => void;
+  handleAddNewCard: (cardName: string, cardId: number, isFoil: boolean) => void;
+  handleAddEmptyCard: (cardName: string) => void;
+  // handleMoveCard?: (inventoryCard: InventoryCard) => void;
 }
 
 export default function SelectedCardSection(props: ComponentProps): JSX.Element {
-    const { outlineSection, flexCol, flexRow, } = appStyles();
-    
-    return(
-    // <Paper className={staticSection}>
+  const { outlineSection, flexCol, flexRow, } = appStyles();
+  return(
     <Box className={flexCol}>
-        <Card className={combineStyles(outlineSection, flexCol)}>
-            <CardHeader titleTypographyProps={{variant:"body1"}} title="Inventory"/>
-            {
-                //What if this just itterated over the collection of inventory items, and displayed card data?
-                //At the end of the day, I shouldn't have a ton of each card, including variants
-                //Should this be Card components, or a table?
-                //What if I don't allow cards that are already in a deck?
-
-                // Inventory detail info will go here
-                // How many exist of each variant?
-                // How many foil / non foil?
-                // How many in existing decks?
-                props.selectedCardDetail && //props.selectedCardDetail.inventoryCards &&
-                <InventoryDetailTable detail={props.selectedCardDetail} handleAddCardClick={props.handleAddInventoryCard} />
-                
-            }
-            {/* Each inventory card should have a label for (in # decks) */}
-        </Card>
-{/* 
-        <Card className={outlineSection}>
-            <CardHeader titleTypographyProps={{variant:"body1"}} title="Add Empty"/>
-        </Card> */}
-
-        <Card className={combineStyles(outlineSection, flexCol)}>
-            <CardHeader 
-                titleTypographyProps={{variant:"body1"}} 
-                title="Add New"
-                action={
-                    <Button variant="outlined" onClick={() => props.handleAddEmptyCard(props.selectedCard.name)}>
-                        Add Empty
-                    </Button>
-                }/>
-            
-            
-
-            {   
-                //Object.keys(props.selectedCard.variants).map((variant: string) => {
-                props.selectedCard.details.map(detail => {
-                return (
-                    // <Card key={id} className= "outline-section flex-col">
-                        // <CardHeader titleTypographyProps={{variant:"body1"}} title="Add New"/>
-                        <Card key={detail.cardId} className={combineStyles(outlineSection, flexRow)}>
-                            <CardHeader titleTypographyProps={{variant:"body1"}} title={`${detail.setCode}-${detail.collectionNumber}`} />
-                            <CardMedia 
-                                style={{height:"310px", width: "223px"}}
-                                // className={itemImage}
-                                image={detail.imageUrl || undefined} />
-                            <CardContent>
-                                <Box className={flexCol}>
-                                    <Box className={flexCol}>
-                                        <Typography>{`${detail.price} | ${detail.priceFoil}`}</Typography>
-                                    </Box>
-                                    <Box className={flexCol}>
-                                        <Button variant="outlined" onClick={() => props.handleAddNewCard(detail.name, detail.cardId, false)}>
-                                            Add Normal
-                                        </Button>
-                                        <Button variant="outlined" onClick={() => props.handleAddNewCard(detail.name, detail.cardId, true)}>
-                                            Add Foil
-                                        </Button>
-                                    </Box>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    // </Card>
-                )})
-            }
-        </Card>
+      <Card className={combineStyles(outlineSection, flexCol)}>
+        <CardHeader titleTypographyProps={{variant:"body1"}} title="Inventory"/>
+        {
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Set</TableCell>
+                <TableCell>Style</TableCell>
+                <TableCell colSpan={2}>Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                props.inventoryCardsAllIds.map(id => {
+                  const inventoryCard = props.inventoryCardsById[id];
+                  return(
+                    <TableRow key={inventoryCard.id}>
+                      {/* TODO - Include the card image in an on-hover style (like I kinda implemented in inventory overview)*/}
+                      <TableCell>{inventoryCard.set}</TableCell>
+                      <TableCell>{inventoryCard.collectorNumber}{inventoryCard.isFoil &&" foil"}</TableCell>
+                      <TableCell>
+                        { inventoryCard.deckId && inventoryCard.deckName }
+                        { !inventoryCard.deckId && "Inventory" }
+                      </TableCell>
+                      <TableCell>
+                        { !inventoryCard.deckId && inventoryCard.statusId === 1 &&
+                          <Button size="small" 
+                                  variant="contained"
+                                  onClick={()=> props.handleAddInventoryCard(inventoryCard)}
+                                  className="add-inventory-card-button"
+                          >Add</Button>
+                        }
+                        {/*{*/}
+                        {/*  inventoryCard.deckId &&*/}
+                        {/*  <Button size="small" variant="contained"*/}
+                        {/*    // onClick={() => props.handleAddCardClick && props.handleAddCardClick(item)}*/}
+                        {/*  >Move</Button>*/}
+                        {/*}*/}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
+        }
+      </Card>
+      <Card className={combineStyles(outlineSection, flexCol)}>
+        <CardHeader
+          titleTypographyProps={{variant:"body1"}}
+          title="Add New"
+          action={
+            <Button variant="outlined" onClick={() => props.handleAddEmptyCard(props.selectedCard.name)}>
+              Add Empty
+            </Button>
+          }/>
+        {
+          props.selectedCard.details.map(detail => {
+            return (
+              <Card key={detail.cardId} className={combineStyles(outlineSection, flexRow)}>
+                <CardHeader titleTypographyProps={{variant:"body1"}} title={`${detail.setCode}-${detail.collectionNumber}`} />
+                <CardMedia
+                  style={{height:"310px", width: "223px"}}
+                  image={detail.imageUrl || undefined} />
+                <CardContent>
+                  <Box className={flexCol}>
+                    <Box className={flexCol}>
+                      <Typography>{`${detail.price} | ${detail.priceFoil}`}</Typography>
+                    </Box>
+                    <Box className={flexCol}>
+                      <Button variant="outlined" onClick={() => props.handleAddNewCard(detail.name, detail.cardId, false)}>
+                        Add Normal
+                      </Button>
+                      <Button variant="outlined" onClick={() => props.handleAddNewCard(detail.name, detail.cardId, true)}>
+                        Add Foil
+                      </Button>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            )}
+          )
+        }
+      </Card>
     </Box>
-// </Paper>
-);
+  );
 }

@@ -1,4 +1,6 @@
-﻿namespace Carpentry.PlaywrightTests.e2e
+﻿using Carpentry.PlaywrightTests.Common;
+
+namespace Carpentry.PlaywrightTests.e2e
 {
     public class AppSettings
     {
