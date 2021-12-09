@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Carpentry.Logic.Models
+﻿namespace Carpentry.Logic.Models
 {
     public class TrimmingToolRequest
     {
@@ -11,8 +7,9 @@ namespace Carpentry.Logic.Models
         public string SearchGroup { get; set; }
 
         public int MinCount { get; set; }
+        
+        public decimal MaxPrice { get; set; }
 
-        //public string MinBy { get; set; }
         public string FilterBy { get; set; }
     }
 }

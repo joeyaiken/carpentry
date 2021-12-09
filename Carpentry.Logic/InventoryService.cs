@@ -31,7 +31,8 @@ namespace Carpentry.Logic
         //Task<List<InventoryOverviewDto>> GetInventoryOverviews(InventoryQueryParameter param);
         Task<InventoryDetailDto> GetInventoryDetail(int cardId);
 
-        Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null);
+        // Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null);
+        Task<List<TrimmingToolResult>> GetTrimmingToolCards(TrimmingToolRequest request);
         Task TrimCards(List<TrimmedCardDto> cardsToTrim);
 
         Task<List<InventoryTotalsByStatusResult>> GetCollectionTotals();
@@ -320,7 +321,8 @@ namespace Carpentry.Logic
         //Consider moving this region to a unique service
         #region Trimming Tool
 
-        public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null)
+        // public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null)
+        public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(TrimmingToolRequest request)
         {
             //need:
             //  inventory cards by print
@@ -330,14 +332,14 @@ namespace Carpentry.Logic
             var query = from uniqueCard in _cardContext.InventoryCardByUnique
                         join namedCard in _cardContext.InventoryCardByName
                         on uniqueCard.Name equals namedCard.Name
-                        where uniqueCard.SetCode == setCode
+                        where uniqueCard.SetCode == request.SetCode
                         //&& uniqueCard.TotalCount >= minCount
                         //&& (uniqueCard.InventoryCount + uniqueCard.DeckCount) >= minCount
                         select new { ByUnique = uniqueCard, ByName = namedCard };
 
-            if (!string.IsNullOrEmpty(searchGroup))
+            if (!string.IsNullOrEmpty(request.SearchGroup))
             {
-                switch (searchGroup)
+                switch (request.SearchGroup)
                 {
                     case "Red":
                         query = query.Where(x => x.ByUnique.ColorIdentity == "R" && (x.ByUnique.RarityId == 'C' || x.ByUnique.RarityId == 'U'));
@@ -369,18 +371,25 @@ namespace Carpentry.Logic
                 }
             }
 
-            switch (filterBy)
+            if (request.MaxPrice > 0)
+            {
+                //May be an issue if price manages to still be null
+                //  might need (decimal?)c.ByUnique.Price ?? 0 <= request.MaxPrice
+                query = query.Where(c => (decimal)c.ByUnique.Price <= request.MaxPrice);
+            }
+            
+            switch (request.FilterBy)
             {
                 case "inventory":
-                    query = query.Where(c => c.ByUnique.InventoryCount >= minCount);
+                    query = query.Where(c => c.ByUnique.InventoryCount >= request.MinCount);
                     break;
 
                 case "owned":
-                    query = query.Where(c => (c.ByUnique.InventoryCount + c.ByUnique.DeckCount) >= minCount);
+                    query = query.Where(c => (c.ByUnique.InventoryCount + c.ByUnique.DeckCount) >= request.MinCount);
                     break;
 
                 case "total":
-                    query = query.Where(c => (c.ByName.InventoryCount + c.ByName.DeckCount) >= minCount);
+                    query = query.Where(c => (c.ByName.InventoryCount + c.ByName.DeckCount) >= request.MinCount);
                     break;
             }
 

@@ -56,6 +56,7 @@ const initialState: State = {
         setCode: 'znr',
         searchGroup: 'Red',
         minCount: 8,
+        maxPrice: 0.1,
         // minBy: '',
         filterBy: 'owned',
     },

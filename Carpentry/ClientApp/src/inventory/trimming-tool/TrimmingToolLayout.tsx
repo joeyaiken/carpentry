@@ -105,12 +105,23 @@ function FilterBar(props: FilterBarProps): JSX.Element{
 
                 {/* Min # */}
 
-                <NumericFilter name="minCount" 
+                <NumericFilter
+                    id="min-count"
+                    name="minCount" 
                     // value={props.searchFilter.minCount}
                     value={props.searchFilters.minCount}
                     handleFilterChange={props.onFilterChange} 
                     />                
 
+                {/* Max Price */}
+                <NumericFilter
+                  id="max-price"
+                  name="maxPrice"
+                  // value={props.searchFilter.minCount}
+                  value={props.searchFilters.maxPrice}
+                  handleFilterChange={props.onFilterChange}
+                />
+                
                 {/* Filter By */}
                 <Box className={`${flexSection} ${sidePadded}`}>
                     <TextField
@@ -120,7 +131,7 @@ function FilterBar(props: FilterBarProps): JSX.Element{
                         SelectProps={{
                             displayEmpty: true
                         }}
-                        label="By"
+                        label="Filter By"
                         value={props.searchFilters.filterBy}
                         onChange={props.onFilterChange}
                         margin="normal">

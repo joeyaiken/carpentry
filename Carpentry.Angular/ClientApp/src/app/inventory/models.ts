@@ -163,6 +163,7 @@ export class TrimmingToolRequest {
   setCode: string;
   searchGroup: string;
   minCount: number;
+  maxPrice: number;
   // minBy: string;
   filterBy: string;
 }

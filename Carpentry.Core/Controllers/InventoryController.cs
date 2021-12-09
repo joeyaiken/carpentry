@@ -233,33 +233,8 @@ namespace Carpentry.Core.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(request.SetCode)) return new List<InventoryOverviewDto>();
-
-                //var result = new List<InventoryOverviewDto>();
-
-                var result = await _inventoryService.GetTrimmingToolCards(request.SetCode, request.MinCount, request.FilterBy, request.SearchGroup);
-                //InventoryQueryParameter param = new InventoryQueryParameter()
-                //{
-                //    Colors = new List<string>(),
-                //    ExclusiveColorFilters = false,
-                //    GroupBy = "print",
-                //    MaxCount = 0,
-                //    MinCount = request.MinCount,
-                //    MultiColorOnly = false,
-                //    Rarity = new List<string>(),
-                //    Set = request.SetCode,
-                //    Skip = 0,
-                //    Take = 25,
-                //    Sort = "name",
-                //    SortDescending = false,
-                //    Text = "",
-                //    Type = "",
-                //};
-
-                //IEnumerable<InventoryOverviewDto> result = await _searchService.SearchInventoryCards(param);
-                //Task<List<CardSearchResultDto>> SearchCardDefinitions(CardSearchQueryParameter filters);
-
+                var result = await _inventoryService.GetTrimmingToolCards(request);
                 return Ok(result);
-
             }
             catch (Exception ex)
             {

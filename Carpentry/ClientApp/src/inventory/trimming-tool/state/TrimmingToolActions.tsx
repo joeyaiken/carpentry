@@ -26,6 +26,7 @@ function tryLoadTrimmingToolCards(dispatch: Dispatch, state: AppState): any {
     
     let searchProps = state.inventory.trimmingTool.searchProps;
     searchProps.minCount = +searchProps.minCount;
+    searchProps.maxPrice = +searchProps.maxPrice;
     inventoryApi.getTrimmingToolCards(state.inventory.trimmingTool.searchProps).then((result) => {
         dispatch(trimmingToolCardsReceived(result));
     });
