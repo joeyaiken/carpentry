@@ -93,13 +93,13 @@
           <button
             mat-raised-button
             color="primary"
-            *ngIf="searchResultsById[id].recommendedTrimCount > searchResultsById[id].pendingTrimCount"
+            *ngIf="searchResultsById[id].recommendedTrimCount > pendingCardsById[id].numberToTrim"
             (click)="addPendingCardClick(searchResultsById[id], searchResultsById[id].recommendedTrimCount)">
             <mat-icon>content_cut</mat-icon> {{searchResultsById[id].recommendedTrimCount}}
           </button>
           <mat-icon
             color="primary"
-            *ngIf="searchResultsById[id].recommendedTrimCount <= searchResultsById[id].pendingTrimCount">
+            *ngIf="searchResultsById[id].recommendedTrimCount <= pendingCardsById[id].numberToTrim">
             check_circle_outline
           </mat-icon>
         </td>
@@ -112,13 +112,13 @@
         <td mat-cell *matCellDef="let id">
           <button mat-icon-button
                   (click)="removePendingCardClick(searchResultsById[id])"
-                  [disabled]="searchResultsById[id].pendingTrimCount <= 0">
+                  [disabled]="pendingCardsById[id].numberToTrim <= 0">
             <mat-icon>keyboard_arrow_left</mat-icon>
           </button>
-          {{searchResultsById[id].pendingTrimCount}}
+          {{pendingCardsById[id].numberToTrim}}
           <button mat-icon-button
                   (click)="addPendingCardClick(searchResultsById[id])"
-                  [disabled]="searchResultsById[id].pendingTrimCount >= searchResultsById[id].unusedCount">
+                  [disabled]="pendingCardsById[id].numberToTrim >= searchResultsById[id].unusedCount">
             <mat-icon>keyboard_arrow_right</mat-icon>
           </button>
         </td>

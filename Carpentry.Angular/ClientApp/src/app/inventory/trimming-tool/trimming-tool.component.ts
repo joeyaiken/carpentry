@@ -131,14 +131,12 @@ export class TrimmingToolComponent implements OnInit {
       this.pendingCardsAllIds = Object.keys(this.pendingCardsById);
     }
     pendingCard.numberToTrim += count;
-    // result.pendingTrimCount = pendingCard.numberToTrim;
   }
 
   removePendingCardClick(result: TrimmingToolResult): void {
     let pendingCard = this.pendingCardsById[result.id];
     if(pendingCard){
-       pendingCard.numberToTrim--;
-      // result.pendingTrimCount = pendingCard.numberToTrim;
+      pendingCard.numberToTrim--;
       if(pendingCard.numberToTrim === 0){
         delete this.pendingCardsById[result.id];
         this.pendingCardsAllIds = Object.keys(this.pendingCardsById);
@@ -171,4 +169,6 @@ export class TrimmingToolComponent implements OnInit {
     this.searchResultsAllIds = [];
     this.router.navigate(['inventory']).then();
   }
+
 }
+

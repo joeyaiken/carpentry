@@ -181,7 +181,6 @@ export class TrimmingToolResult {
   allPrintsCount: number;
   recommendedTrimCount: number;
   imageUrl: string;
-  pendingTrimCount: number;
 }
 
 export class TrimmedCard {
@@ -190,7 +189,7 @@ export class TrimmedCard {
 }
 
 export class TrimmedCardDto {
-  cardName: string; //TODO - Can this be removed?
+  cardName: string;
   cardId: number;
   isFoil: boolean;
   numberToTrim: number;
