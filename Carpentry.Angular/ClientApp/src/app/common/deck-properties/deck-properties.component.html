@@ -1,0 +1,36 @@
+﻿<div>
+  <div fxLayout="column">
+    <!-- Name -->
+    <div>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="deck.name" />
+      </mat-form-field>
+    </div>
+
+    <!-- Format -->
+    <div>
+      <mat-form-field>
+        <mat-label>Format</mat-label>
+        <mat-select [(ngModel)]="deck.format">
+          <mat-option *ngFor="let item of formatFilters" [value]="item.name">{{item.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Notes -->
+    <div>
+      <mat-form-field>
+        <mat-label>Notes</mat-label>
+        <input matInput [(ngModel)]="deck.notes" />
+      </mat-form-field>
+    </div>
+
+    <!-- lands  -->
+    <div *ngIf="showLands">
+
+
+
+    </div>
+  </div>
+</div>

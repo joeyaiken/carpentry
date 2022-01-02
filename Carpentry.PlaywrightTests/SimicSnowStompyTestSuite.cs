@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Carpentry.PlaywrightTests.Common;
 using Carpentry.PlaywrightTests.Common.Tests;
 using Carpentry.PlaywrightTests.e2e;
+using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -11,20 +12,31 @@ using Serilog;
 namespace Carpentry.PlaywrightTests
 {
     [TestClass]
-    public class SimicSnowStompyTestSuite
+    public class SimicSnowAngularTests : SimicSnowTestBase
+    {
+        public SimicSnowAngularTests() : base(AppType.Angular) { }
+    }
+
+    [TestClass]
+    public class SimicSnowReactTests : SimicSnowTestBase
+    {
+        public SimicSnowReactTests() : base(AppType.React) { }
+    }
+
+    public class SimicSnowTestBase
     {
         private static int APP_INIT_DELAY = 5000;
         private Mock<ILogger> _mockLogger;
         private IPage _page;
-        private AppSettings _appSettings;
-        private SeedData _seedData;
+        private readonly AppSettings _appSettings;
+        private readonly SeedData _seedData;
 
-        public SimicSnowStompyTestSuite()
+        public SimicSnowTestBase(AppType appType)
         {
             _seedData = new SeedData();
             _appSettings = new AppSettings()
             {
-                AppEnvironment = AppType.React,
+                AppEnvironment = appType,
                 AngularUrl = "https://localhost:44335/",
                 ReactUrl = "http://localhost:23374/",
             };
@@ -168,6 +180,5 @@ namespace Carpentry.PlaywrightTests
             var test = new Test04CreateSnowDeck(_page, _appSettings.AppUrl, _seedData, _appSettings.AppEnvironment);
             await test.Run();
         }
-        
     }
 }

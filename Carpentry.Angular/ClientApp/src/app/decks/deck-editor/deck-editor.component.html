@@ -1,15 +1,16 @@
 <div id="deck-editor" fxFill fxLayout="column">
 
-    
 
-    <app-deck-props-bar 
+
+    <app-deck-props-bar
         [deckProperties]="deckDetail?.props"
         (onToggleViewClick)="onToggleViewClick()"
         (onEditClick)="onEditClick()"
         (onExportClick)="onExportClick()"
-        (onAddCardsClick)="onAddCardsClick()">
+        (onAddCardsClick)="onAddCardsClick()"
+    >
     </app-deck-props-bar>
-    
+
     <div fxLayout="row" className="flexSection" fxFlex style="overflow:auto; align-items:stretch">
 
         <div fxFlex="70"  style="overflow:auto;">
@@ -24,41 +25,41 @@
                 [cardOverviews]="newGroupingMethod"
                 (onCardSelected)="onCardSelected($event)"
             ></app-grouped-deck-card-list>
-            <!-- 
+            <!--
                 {props.viewMode === "grid" && <DeckCardGrid cardOverviews={firstGroup.cardOverviews} onCardSelected={props.onCardSelected} />}
-                { props.viewMode === "grouped" && 
-                    <GroupedDeckCardList 
-                        groupedCardOverviews={props.groupedCardOverviews} 
-                        cardDetailsById={props.cardDetailsById} 
+                { props.viewMode === "grouped" &&
+                    <GroupedDeckCardList
+                        groupedCardOverviews={props.groupedCardOverviews}
+                        cardDetailsById={props.cardDetailsById}
                         onCardSelected={props.onCardSelected}
-                        onCardDetailClick={props.onCardDetailClick} 
+                        onCardDetailClick={props.onCardDetailClick}
                         onCardTagsClick={props.onCardTagsClick}  /> }
         -->
         </div>
 
         <div fxFlex="30" style="overflow:auto;">
 
-        <!-- 
-                <CardMenu 
-                    cardMenuAnchor={props.cardMenuAnchor} 
-                    onCardMenuSelect={props.onCardMenuSelected} 
-                    onCardMenuClose={props.onCardMenuClosed} 
+        <!--
+                <CardMenu
+                    cardMenuAnchor={props.cardMenuAnchor}
+                    onCardMenuSelect={props.onCardMenuSelected}
+                    onCardMenuClose={props.onCardMenuClosed}
                     cardCategoryId={props.selectedCard?.category || ''}
                     hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}
                     />
 
-                <DeckCardDetail 
-                    selectedCard={props.selectedCard} 
-                    inventoryCards={props.selectedInventoryCards} 
+                <DeckCardDetail
+                    selectedCard={props.selectedCard}
+                    inventoryCards={props.selectedInventoryCards}
                     onMenuClick={props.onCardMenuClick}
                     onMenuClose={props.onCardMenuClosed}
-                    onCardDetailClick={props.onCardDetailClick} 
+                    onCardDetailClick={props.onCardDetailClick}
                     onCardTagsClick={props.onCardTagsClick} />
         -->
 
             <app-deck-card-detail
                 [selectedCard]="selectedOverview"
-            
+
             ></app-deck-card-detail>
         </div>
 

@@ -387,38 +387,25 @@ declare interface TrimmingToolRequest {
     searchGroup: string;
     minCount: number;
     maxPrice: number;
-    // minBy: string;
     filterBy: string;
 }
 
 declare interface TrimmingToolResult {
     id: number;
-    isFoil: boolean | null;
     cardId: number;
-    setCode: string;
     name: string;
-    type: string;
-    imageUrl: string;
-    collectorNumber: number | null;
-    colorIdentity: string;
-    
+    isFoil: boolean | null;
+    printDisplay: string;
     price: number;
-    priceFoil: number | null;
-    tixPrice: number | null;
-    
-    printTotalCount: number;
-    printDeckCount: number;
-    printInventoryCount: number;
-    printSellCount: number;
-
-    allTotalCount: number;
-    allDeckCount: number;
-    allInventoryCount: number;
-    allSellCount: number;
+    unusedCount: number;
+    totalCount: number;
+    allPrintsCount: number;
+    recommendedTrimCount: number;
+    imageUrl: string;
 }
 
 declare interface TrimmedCardDto {
-    cardName: string;
+    cardName: string; //TODO - Can this be removed?
     cardId: number;
     isFoil: boolean;
     numberToTrim: number;

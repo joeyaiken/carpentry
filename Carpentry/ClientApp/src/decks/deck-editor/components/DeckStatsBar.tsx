@@ -8,115 +8,83 @@ interface ComponentProps{
 }
 
 export default function DeckStatsBar(props: ComponentProps): JSX.Element {
-    const { outlineSection, flexCol, flexRow, } = appStyles();
-    
-    
-    // TODO - NEXT : In order to get e2e tests working, I need to add classes/some identifying info to the tables below
-    
-    
-    return (
-        <Paper className={combineStyles(flexRow, outlineSection)}>
-            <Box className={outlineSection}>
-                <Typography variant="h6">Card Count</Typography>
-                <Typography variant="h5">{props.deckStats.totalCount}</Typography>
-                {/* <TextField 
-                    disabled
-                    label="Card Count"
-                    defaultValue={props.deckStats.totalCount}
-                /> */}
-            </Box>
+  const { outlineSection, flexCol, flexRow, } = appStyles();
+  
+  return (
+    <Paper className={combineStyles(flexRow, outlineSection)}>
+      <Box className={outlineSection}>
+        <Typography variant="h6">Card Count</Typography>
+        <Typography variant="h5" id="deck-stats-count">{props.deckStats.totalCount}</Typography>
+      </Box>
 
-            <Box className={outlineSection}>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            {
-                                Object.keys(props.deckStats.typeCounts).map((key) => <TableCell key={`stats-type-head-${key}`} size="small">{key}</TableCell>)
-                            }
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            {
-                                Object.keys(props.deckStats.typeCounts).map((key) => <TableCell key={`stats-type-cell-${key}`} size="small">{props.deckStats.typeCounts[key]}</TableCell>)
-                            }
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                {/* {
-                    Object.keys(props.deckStats.typeCounts).map((key) => {
-                        return (
-                            <TextField 
-                                disabled
-                                label={key}
-                                defaultValue={props.deckStats.typeCounts[key]}
-                            />
-                        );
-                    })
-                } */}
-            </Box>
+      <Box className={outlineSection}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              {
+                Object.keys(props.deckStats.typeCounts).map((key) => 
+                  <TableCell key={`stats-type-head-${key}`} className="stats-type-head" size="small">{key}</TableCell>
+                )
+              }
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {
+                Object.keys(props.deckStats.typeCounts).map((key) => 
+                  <TableCell key={`stats-type-cell-${key}`} className="stats-type-cell" size="small">{props.deckStats.typeCounts[key]}</TableCell>
+                )
+              }
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Box>
 
-            <Box className={outlineSection}>
-                {/* <Typography>CMC Breakdown</Typography> */}
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            {
-                                Object.keys(props.deckStats.costCounts).map((key) => <TableCell key={`stats-cmc-head-${key}`} size="small">{key}</TableCell>)
-                            }
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            {
-                                Object.keys(props.deckStats.costCounts).map((key) => <TableCell key={`stats-cmc-cell-${key}`} size="small">{props.deckStats.costCounts[key]}</TableCell>)
-                            }
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                {/* {
-                    
+      <Box className={outlineSection}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              {
+                Object.keys(props.deckStats.costCounts).map((key) => 
+                  <TableCell key={`stats-cmc-head-${key}`} className="stats-cmc-head" size="small">{key}</TableCell>
+                )
+              }
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {
+                Object.keys(props.deckStats.costCounts).map((key) => 
+                  <TableCell key={`stats-cmc-cell-${key}`} className="stats-cmc-cell" size="small">{props.deckStats.costCounts[key]}</TableCell>
+                )
+              }
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Box>
 
-                    Object.keys(props.deckStats.costCounts).map((key) => {
-                        return (
-                            <TextField 
-                                disabled
-                                label={key}
-                                defaultValue={props.deckStats.costCounts[key]}
-                            />
-                        );
-                    })
-                } */}
-            </Box>
-
-            <Box className={outlineSection}>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            {
-                                Object.keys(props.deckStats.tagCounts).map((key) => <TableCell key={`stats-type-head-${key}`} size="small">{key}</TableCell>)
-                            }
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            {
-                                Object.keys(props.deckStats.tagCounts).map((key) => <TableCell key={`stats-type-cell-${key}`} size="small">{props.deckStats.tagCounts[key]}</TableCell>)
-                            }
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </Box>
-
-            <Box className={combineStyles(outlineSection, flexCol)}>
-                <Typography variant="h6">Total Cost</Typography>
-                <Typography variant="h5">{props.deckStats.totalCost}</Typography>
-                {/* <TextField 
-                    disabled
-                    label="Total Cost"
-                    defaultValue={props.deckStats.totalCost}
-                /> */}
-            </Box>
-        </Paper>
-    );
+      <Box className={outlineSection}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              {
+                Object.keys(props.deckStats.tagCounts).map((key) => <TableCell key={`stats-type-head-${key}`} size="small">{key}</TableCell>)
+              }
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {
+                Object.keys(props.deckStats.tagCounts).map((key) => <TableCell key={`stats-type-cell-${key}`} size="small">{props.deckStats.tagCounts[key]}</TableCell>)
+              }
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Box>
+      <Box className={combineStyles(outlineSection, flexCol)}>
+        <Typography variant="h6">Total Cost</Typography>
+        <Typography variant="h5">{props.deckStats.totalCost}</Typography>
+      </Box>
+    </Paper>
+  );
 }

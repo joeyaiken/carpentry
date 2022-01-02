@@ -57,13 +57,13 @@ public class SeedData
                 {
                     {"Creatures", 24},
                     {"Spells", 8},
-                    {"Enchantments ", 6},
+                    {"Enchantments", 6},
                     {"Lands", 22},
                 },
                 ExpectedCurveBreakdown = new Dictionary<int, int>()
                 {
-                    {1, 17},
-                    {2, 24},
+                    {1, 16},
+                    {2, 10},
                     {3, 4},
                     {4, 4},
                     {5, 4},

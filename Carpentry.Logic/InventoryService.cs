@@ -32,7 +32,7 @@ namespace Carpentry.Logic
         Task<InventoryDetailDto> GetInventoryDetail(int cardId);
 
         // Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null);
-        Task<List<TrimmingToolResult>> GetTrimmingToolCards(TrimmingToolRequest request);
+        Task<List<TrimmingToolSearchResult>> GetTrimmingToolCards(TrimmingToolRequest request);
         Task TrimCards(List<TrimmedCardDto> cardsToTrim);
 
         Task<List<InventoryTotalsByStatusResult>> GetCollectionTotals();
@@ -321,20 +321,13 @@ namespace Carpentry.Logic
         //Consider moving this region to a unique service
         #region Trimming Tool
 
-        // public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(string setCode, int minCount, string filterBy, string searchGroup = null)
-        public async Task<List<TrimmingToolResult>> GetTrimmingToolCards(TrimmingToolRequest request)
+        public async Task<List<TrimmingToolSearchResult>> GetTrimmingToolCards(TrimmingToolRequest request)
         {
-            //need:
-            //  inventory cards by print
-            //  joined with inventoryCardsByName
-            //  filtered accordingly
-
+            //need to replace this with something that doesn't depend on views
             var query = from uniqueCard in _cardContext.InventoryCardByUnique
                         join namedCard in _cardContext.InventoryCardByName
                         on uniqueCard.Name equals namedCard.Name
                         where uniqueCard.SetCode == request.SetCode
-                        //&& uniqueCard.TotalCount >= minCount
-                        //&& (uniqueCard.InventoryCount + uniqueCard.DeckCount) >= minCount
                         select new { ByUnique = uniqueCard, ByName = namedCard };
 
             if (!string.IsNullOrEmpty(request.SearchGroup))
@@ -393,38 +386,37 @@ namespace Carpentry.Logic
                     break;
             }
 
-            var queryResult = await query.Select(c => new TrimmingToolResult
+            var queryResult = await query.Select(c => new TrimmingToolQueryResult
             {
                 Id = c.ByUnique.Id,
                 CardId = c.ByUnique.CardId,
                 SetCode = c.ByUnique.SetCode,
                 Name = c.ByUnique.Name,
                 ImageUrl = c.ByUnique.ImageUrl,
-                CollectorNumber =  c.ByUnique.CollectorNumber,
                 CollectorNumberStr = c.ByUnique.CollectorNumberStr,
-
-                Type = c.ByUnique.Type,
-                ColorIdentity = c.ByUnique.ColorIdentity,
-
                 IsFoil = c.ByUnique.IsFoil,
-
                 Price = (decimal?)c.ByUnique.Price,
-                PriceFoil = (decimal?)c.ByUnique.PriceFoil,
-                TixPrice = (decimal?)c.ByUnique.TixPrice,
-
-                PrintTotalCount = c.ByUnique.TotalCount,
                 PrintDeckCount = c.ByUnique.DeckCount,
                 PrintInventoryCount = c.ByUnique.InventoryCount,
-                PrintSellCount = c.ByUnique.SellCount,
-
-                AllTotalCount = c.ByName.TotalCount,
                 AllDeckCount = c.ByName.DeckCount,
                 AllInventoryCount = c.ByName.InventoryCount,
-                AllSellCount = c.ByName.SellCount,
-
             }).ToListAsync();
-
-            return queryResult;
+            
+            return queryResult.Select(c => new TrimmingToolSearchResult()
+            { 
+                Id = c.CardId + (c.IsFoil ?? false ? "f":""),
+                CardId = c.CardId,
+                Name = c.Name,
+                IsFoil = c.IsFoil,
+                PrintDisplay = $"{c.SetCode} {c.CollectorNumberStr}{(c.IsFoil!.Value ? " (FOIL)":"")}",
+                Price = c.Price,
+                UnusedCount = c.PrintInventoryCount,
+                TotalCount = c.PrintDeckCount + c.PrintInventoryCount,
+                AllPrintsCount = c.AllDeckCount + c.AllInventoryCount,
+                //TODO - Consider using different logic when not filtering by Inventory
+                RecommendedTrimCount = c.PrintInventoryCount - request.MinCount + 1,
+                ImageUrl = c.ImageUrl,
+            }).ToList();
         }
 
         public async Task TrimCards(List<TrimmedCardDto> cardsToTrim)
@@ -437,8 +429,6 @@ namespace Carpentry.Logic
             //get a dictionary of all inventory cards with a card id contained in a provided list
             var relevantCardsById = (await _cardContext.InventoryCards
                 .Where(ic => ic.InventoryCardStatusId == 1 && ic.DeckCards.Count == 0 && allIds.Contains(ic.CardId))
-
-                //includes
                 .ToListAsync())
                 .GroupBy(ic => ic.CardId)
                 .ToDictionary(g => g.Key, g => g.ToList());
@@ -446,7 +436,6 @@ namespace Carpentry.Logic
             foreach(var card in cardsToTrim)
             {
                 //  Get matching card by id/foil, ensure enough inventory cards exist to meet the request, update the cards along the way
-
                 var relevantInventoryCards = relevantCardsById[card.CardId].Where(c => c.IsFoil == card.IsFoil).ToArray();
 
                 if(relevantInventoryCards.Length < card.NumberToTrim)
@@ -455,7 +444,7 @@ namespace Carpentry.Logic
                     throw new Exception($"Not enough unused cards to trim. Card Name: {card.CardName}, Number to trim: {card.NumberToTrim}, Available: {relevantInventoryCards.Length}");
                 }
 
-                for(int i = 0; i < card.NumberToTrim; i++)
+                for(var i = 0; i < card.NumberToTrim; i++)
                 {
                     var cardToUpdate = relevantInventoryCards[i];
                     cardToUpdate.InventoryCardStatusId = 3;
@@ -463,8 +452,6 @@ namespace Carpentry.Logic
                 }
             }
 
-            //disabling this for now until the UI appears to be working again
-            //int breakpoint = 1;
             await _cardContext.SaveChangesAsync();
         }
 

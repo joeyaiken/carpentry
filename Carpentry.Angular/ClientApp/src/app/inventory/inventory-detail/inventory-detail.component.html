@@ -41,8 +41,8 @@
 
 
 <!-- <h4 mat-dialog-title>{`Inventory Detail - ${cardName}`}</h4> -->
-<h4 mat-dialog-title>{{cardName}}</h4>
-        
+<h4 mat-dialog-title>{{"Inventory Detail - "+cardName}}</h4>
+
 <div mat-dialog-content>
 <!-- <InventoryDetailLayout
 //  selectedDetailItem={this.props.selectedDetailItem}
@@ -55,6 +55,40 @@ inventoryCardsById={this.props.inventoryCardsById}
     <!-- <div>HalloModal</div> -->
 
     <div class="flex-col flex-section">
+      <mat-card *ngFor="let card of cardDefinitions()" class="outline-section">
+        <mat-card-header>
+          <mat-card-title>
+            {{cardGroupTitleString(card)}}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div fxFlex fxLayout="row">
+            <app-card-image mat-card-image [cardName]="  card.name" [imageUrl]="card.imageUrl"></app-card-image>
+
+            <div>
+
+              <table mat-table [dataSource]="getGroupCards(card.cardId)">
+
+                <ng-container matColumnDef="style">
+                  <th mat-header-cell *matHeaderCellDef>Style</th>
+                  <td mat-cell *matCellDef="let inventoryCard">{{ isFoilString(inventoryCard)}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <td mat-cell *matCellDef="let inventoryCard">{{cardStatusString(inventoryCard)}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+              </table>
+
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
 
     <!-- {
         props.allCardIds.map(cardId => {
@@ -66,16 +100,16 @@ inventoryCardsById={this.props.inventoryCardsById}
             return ( -->
                 <!-- <Card key={card.cardId} class={combineStyles(outlineSection, flexCol)}> -->
                     <!-- <CardHeader titleTypographyProps={{variant:"body1"}} style={{textTransform:"uppercase"}} title={cardTitle} /> -->
-                    
-                    <div class="flex-row flex-section"> 
+
+                    <div class="flex-row flex-section">
                         <!-- <div class={staticSection}> -->
-                            <!-- <CardMedia 
+                            <!-- <CardMedia
                                 style={{height:"310px", width: "223px"}}
                                 // class={itemImage}
                                 image={img}
                                 /> -->
                         <!-- </div> -->
-                        
+
                         <div class="flex-col flex-section">
                             <div class="scroll-section" style="overflow:auto">
                             <table size="small" >
@@ -86,7 +120,7 @@ inventoryCardsById={this.props.inventoryCardsById}
                                     </tr>
                                 </th>
                                 <!-- <TableBody> -->
-                                    
+
                                         <!-- inventoryCardIds.map(inventoryCardId => {
                                             const item = props.inventoryCardsById[inventoryCardId];
                                             return(
@@ -107,17 +141,17 @@ inventoryCardsById={this.props.inventoryCardsById}
                                                 </TableCell>
 
                                                 {/* <TableCell>
-                                                    {item.deckCards.length === 0 && item.statusId === 1 && 
+                                                    {item.deckCards.length === 0 && item.statusId === 1 &&
                                                         <Button size="small" variant="contained" onClick={() => props.handleUpdateCardClick && props.handleUpdateCardClick(item, 3)}>
                                                             To Sell List
                                                         </Button>
                                                     }
-                                                    { item.statusId === 2 && 
+                                                    { item.statusId === 2 &&
                                                         <Button size="small" variant="contained" onClick={() => props.handleUpdateCardClick && props.handleUpdateCardClick(item, 1)}>
                                                             Mark as Arrived
                                                         </Button>
                                                     }
-                                                    { item.statusId === 3 && 
+                                                    { item.statusId === 3 &&
                                                         <Button size="small" variant="contained" onClick={() => props.handleDeleteCardClick && props.handleDeleteCardClick(item.id)}>
                                                             Delte
                                                         </Button>
@@ -130,7 +164,7 @@ inventoryCardsById={this.props.inventoryCardsById}
                                 <!-- </TableBody> -->
                             </table>
                             </div>
-                            
+
                         </div>
                     </div>
                 <!-- </Card>  -->
@@ -143,6 +177,7 @@ inventoryCardsById={this.props.inventoryCardsById}
 </div>
 
 <div mat-dialog-actions fxLayout="column" fxLayoutAlign="none end" fxLayoutGap="10px">
+  <button mat-button (click)="closeClick()" >Close</button>
     <!-- <Button size="medium" onClick={() => this.handleCloseModalClick()}>Close</Button> -->
     <!-- <button mat-raised-button (click)="handleCloseModalClick()">Close</button> -->
     <!-- <button mat-raised-button (click)="onCancelClick()">Cancel</button> -->

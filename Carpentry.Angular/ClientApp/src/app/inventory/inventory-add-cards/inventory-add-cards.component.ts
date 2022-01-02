@@ -71,8 +71,10 @@ export class InventoryAddCardsComponent implements OnInit {
         })
     }
 
+    //TODO - This function call should be refactored out
+    // It's a bad idea to have UI elements that access values via function call
     getPendingCardCount(cardName: string, cardId: number = null, isFoil: boolean = null): string {
-        var pendingCard = this.pendingCards[cardName];
+        let pendingCard = this.pendingCards[cardName];
         if(!pendingCard) return "";
 
         if(cardId && isFoil != null) {
@@ -98,7 +100,7 @@ export class InventoryAddCardsComponent implements OnInit {
             this.pendingCards[name] = pendingCard;
         }
 
-        var cardPrint = pendingCard.cardsById[cardId];
+        let cardPrint = pendingCard.cardsById[cardId];
         if(!cardPrint) {
             cardPrint = new PendingPrintedCard();
             pendingCard.cardsById[cardId] = cardPrint;

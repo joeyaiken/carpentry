@@ -5,86 +5,92 @@ import { AppFiltersDto } from "src/app/settings/models";
 import { InventoryFilterProps, InventoryOverviewDto, InventoryQueryParameter } from "../models";
 import { tap } from 'rxjs/operators';
 import { InventoryService } from "../inventory.service";
-import { ActivatedRoute } from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { InventoryDetailComponent } from "../inventory-detail/inventory-detail.component";
 
 @Component({
-    selector: 'app-inventory-overview',
-    templateUrl: 'inventory-overview.component.html',
-    styleUrls: ['inventory-overview.component.less']
+  selector: 'app-inventory-overview',
+  templateUrl: 'inventory-overview.component.html',
+  styleUrls: ['inventory-overview.component.less']
 })
 export class InventoryOverviewComponent implements OnInit {
-    isLoading: boolean;
+  isLoading: boolean;
 
-    viewMethod: "grid" | "table";
+  viewMethod: "grid" | "table";
 
-    // searchResultsById: { [key: number]: InventoryOverviewDto }
-    // searchReusltIds: number[];
-    searchResults: InventoryOverviewDto[] = [];
+  // searchResultsById: { [key: number]: InventoryOverviewDto }
+  // searchReusltIds: number[];
+  searchResults: InventoryOverviewDto[] = [];
 
-    searchFilter: InventoryFilterProps;
+  searchFilter: InventoryFilterProps;
 
-    filterOptions: AppFiltersDto = {
-        sets: [],
-        colors: [],
-        rarities: [],
-        types: [],
-        formats: [],
-        statuses: [],
-        searchGroups: [],
-        groupBy: [],
-        sortBy: [],
-    };
-    
-    visibleSection: "inventory" | "trimmingTips" | "wishlistHelper" | "buylistHelper";
-    
-    cardImageMenuAnchor: HTMLButtonElement | null;
-    
-    constructor(
-        private filterService: FilterService,
-        private inventoryService: InventoryService,
-        private route: ActivatedRoute,
-        public dialog: MatDialog,
-    ) {
+  filterOptions: AppFiltersDto = {
+    sets: [],
+    colors: [],
+    rarities: [],
+    types: [],
+    formats: [],
+    statuses: [],
+    searchGroups: [],
+    groupBy: [],
+    sortBy: [],
+  };
 
+  visibleSection: "inventory" | "trimmingTips" | "wishlistHelper" | "buylistHelper";
+
+  cardImageMenuAnchor: HTMLButtonElement | null;
+
+  constructor(
+    private filterService: FilterService,
+    private inventoryService: InventoryService,
+    private route: ActivatedRoute,
+    private router: Router,
+    public dialog: MatDialog,
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.loadFilterOptions();
+    this.searchFilter = this.defaultFilterProps();
+    this.getInventoryOverviews(this.searchFilter);
+
+
+    //check trimming tool
+
+
+
+
+    this.checkInventoryDetail();
+    // const deckId = +this.route.snapshot.paramMap.get('deckId');
+    // console.log('route', this.route.url);
+  }
+
+  checkInventoryDetail() {
+    const cardId = +this.route.snapshot.paramMap.get('cardId');
+    if(cardId && cardId > 0) {
+      this.dialog.open(
+        InventoryDetailComponent, {
+          width: '500px',
+          data: {
+            cardId: cardId,
+          },
+          disableClose: false,
+
+        })
     }
+  }
 
-    ngOnInit(): void {
-        this.loadFilterOptions();
-        this.searchFilter = this.defaultFilterProps();
-        this.getInventoryOverviews(this.searchFilter);
-
-        this.checkInventoryDetail();
-        // const deckId = +this.route.snapshot.paramMap.get('deckId');
-    }
-
-    checkInventoryDetail() {
-        const cardId = +this.route.snapshot.paramMap.get('cardId');
-        if(cardId && cardId > 0) {
-            this.dialog.open(
-                InventoryDetailComponent, {
-                    width: '500px',
-                    data: {
-
-                    },
-                    disableClose: false,
-                })
-
-
-        }
-    }
-
-    loadFilterOptions(): void {
-        this.isLoading = true;
-        this.filterService.getAppFilterOptions().subscribe(
-            data => {
-                this.filterOptions = data;
-                this.isLoading = false;
-            }
-
-        )
-    }
+  loadFilterOptions(): void {
+    this.isLoading = true;
+    this.filterService.getAppFilterOptions().subscribe(
+      data => {
+        this.filterOptions = data;
+        this.isLoading = false;
+      }
+    )
+  }
 
     loadFilterOptionsLegacy(): void {
         let observables = [];
@@ -118,7 +124,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-    
+
         //formats
         observables.push(
             this.filterService.getFormatFilters().pipe(
@@ -132,7 +138,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-    
+
         //colors
         observables.push(
             this.filterService.getManaTypeFilters().pipe(
@@ -146,7 +152,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-    
+
         //rarities
         observables.push(
             this.filterService.getRarityFilters().pipe(
@@ -160,7 +166,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-        
+
         //statuses
         observables.push(
             this.filterService.getStatusFilters().pipe(
@@ -174,7 +180,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-        
+
         //groupBy
         observables.push(
             this.filterService.getInventoryGroupOptions().pipe(
@@ -188,7 +194,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-        
+
         //sortBy
         observables.push(
             this.filterService.getInventorySortOptions().pipe(
@@ -202,7 +208,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-        
+
         //searchGroups
         observables.push(
             this.filterService.getCardGroupFilters().pipe(
@@ -216,7 +222,7 @@ export class InventoryOverviewComponent implements OnInit {
                 )
             )
         );
-    
+
         forkJoin(observables).subscribe(
             (_) => {
                 this.isLoading = false;
@@ -244,7 +250,7 @@ export class InventoryOverviewComponent implements OnInit {
             rarity: [],
             minCount: 0,
             maxCount: 0,
-            
+
         }
     }
 
@@ -255,11 +261,11 @@ export class InventoryOverviewComponent implements OnInit {
     getInventoryOverviews(existingFilters: InventoryFilterProps): any {
 
         // if(this.isLoading) return;
-        
+
         this.isLoading = true;
         this.searchResults = [];
-    
-        const param: InventoryQueryParameter = { 
+
+        const param: InventoryQueryParameter = {
             groupBy: existingFilters.groupBy,
             text: existingFilters.text,
             colors: existingFilters.colorIdentity,
@@ -275,7 +281,7 @@ export class InventoryOverviewComponent implements OnInit {
             type: existingFilters.type,
             rarity: existingFilters.rarity,
         }
-    
+
         this.inventoryService.searchCards(param).subscribe(result => {
             this.searchResults = result;
             this.isLoading = false;
@@ -327,7 +333,7 @@ export class InventoryOverviewComponent implements OnInit {
         }
 
         this.searchFilter = newFilter;
-        
+
     }
 
     // <button mat-button (click)="handleAddCardsClick()">Add Cards</button>
@@ -335,17 +341,16 @@ export class InventoryOverviewComponent implements OnInit {
         // this.props.dispatch(push('/inventory/addCards/')); //todo - this should be renamed to add-cards
         // alert('Not implemented yet!')
     }
-    // <button mat-button (click)="handleTrimmingToolClick()">Trimming Tool</button>
+
     trimmingToolClick() {
-        alert('Not implemented yet!')
+      this.router.navigate(['inventory','trimming-tool']).then(() => { });
     }
-    cardDetailSelected(): void {
-        alert('Not implemented yet!')
-    }
-    cardDetailButtonClick(): void {
-        alert('Not implemented yet!')
-    }
-    cardDetailMenuClose(): void {
-        alert('Not implemented yet!')
-    }
+    //
+    // cardDetailButtonClick(): void {
+    //   alert('Not implemented yet!')
+    // }
+    //
+    // cardDetailMenuClose(): void {
+    //   alert('Not implemented yet!')
+    // }
 }

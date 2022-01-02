@@ -34,11 +34,13 @@
                         image={selectedOverview?.imageUrl}
                         /> -->
                     <!-- <LoadingBox *ngIf="isLoading" /> -->
-                    <app-inventory-card-grid *ngIf="!isLoading"
-                        [cardOverviews]="searchResults"
-                        (onCardSelected)="cardDetailSelected($event)"
+
+                    <!--
                         (onInfoButtonEnter)="cardDetailButtonClick($event)"
-                        (onInfoButtonLeave)="cardDetailMenuClose()" >
+                        (onInfoButtonLeave)="cardDetailMenuClose()"
+                    -->
+                    <app-inventory-card-grid *ngIf="!isLoading"
+                        [cardOverviews]="searchResults">
                     </app-inventory-card-grid>
                 </div>
     </div>

@@ -152,28 +152,53 @@ export class PendingPrintedCard {
     countFoil: number;
 }
 
+
+
+export class TrimmingToolRequest {
+  constructor() {
+    this.setCode = "";
+    this.searchGroup = "";
+    this.minCount = 0;
+    this.maxPrice = 0;
+    this.filterBy = "";
+  }
+  setCode: string;
+  searchGroup: string;
+  minCount: number;
+  maxPrice: number;
+  filterBy: string;
+}
+
+export class TrimmingToolResult {
+  id: string;
+  cardId: number;
+  name: string;
+  isFoil: boolean | null;
+  printDisplay: string;
+  price: number;
+  unusedCount: number;
+  totalCount: number;
+  allPrintsCount: number;
+  recommendedTrimCount: number;
+  imageUrl: string;
+  pendingTrimCount: number;
+}
+
+export class TrimmedCard {
+  data: TrimmingToolResult;
+  numberToTrim: number;
+}
+
 export class TrimmedCardDto {
-  cardName: string;
+  cardName: string; //TODO - Can this be removed?
   cardId: number;
   isFoil: boolean;
   numberToTrim: number;
 }
 
-export class TrimmingToolRequest {
-  setCode: string;
-  searchGroup: string;
-  minCount: number;
-  maxPrice: number;
-  // minBy: string;
-  filterBy: string;
-}
-
 export class ValidatedCarpentryImportDto {
 
 }
-
-
-
 
 export class CardSearchResultDto {
   cardId: number;

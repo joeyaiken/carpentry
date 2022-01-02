@@ -11,16 +11,28 @@ import { AppFiltersDto, FilterOption } from "../settings/models";
 export class FilterService extends HttpService {
 
     //Can I attempt to store cached values of commonly-used things?...
+    //TODO - confirm this does actually get re-used
     private formatFilters: FilterOption[] = [];
 
-    
+    private setFilters: FilterOption[] = [];
+
     constructor(http: HttpClient) {
         super(http);
     }
 
     getCardSetFilters(): Observable<FilterOption[]> {
+      if(this.setFilters.length === 0){
+        console.log('querying set filter')
         const endpoint = 'api/Core/GetCardSetFilters';
-        return this.http.get<FilterOption[]>(endpoint);
+        return this.http.get<FilterOption[]>(endpoint)
+          .pipe(tap(
+            data => this.setFilters = data,
+            error => console.log(error),
+          ));
+      }
+      else{
+        return of(this.setFilters);
+      }
     }
 
     getCardTypeFilters(): Observable<FilterOption[]> {
@@ -47,22 +59,22 @@ export class FilterService extends HttpService {
         const endpoint = 'api/Core/GetManaTypeFilters';
         return this.http.get<FilterOption[]>(endpoint);
     }
-    
+
     getRarityFilters(): Observable<FilterOption[]> {
         const endpoint = 'api/Core/GetRarityFilters';
         return this.http.get<FilterOption[]>(endpoint);
     }
-    
+
     getStatusFilters(): Observable<FilterOption[]> {
         const endpoint = 'api/Core/GetStatusFilters';
         return this.http.get<FilterOption[]>(endpoint);
     }
-    
+
     getCardGroupFilters(): Observable<FilterOption[]> {
         const endpoint = 'api/Core/GetCardGroupFilters';
         return this.http.get<FilterOption[]>(endpoint);
     }
-    
+
     getInventorySortOptions(): Observable<FilterOption[]> {
         const endpoint = 'api/Core/GetInventorySortOptions';
         return this.http.get<FilterOption[]>(endpoint);

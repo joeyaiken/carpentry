@@ -3,15 +3,15 @@
 /// <reference types="react-redux" />
 /// <reference types="redux-thunk" />
 
-declare type ApiScopeOption = 
-    'coreFilterOptions' | 
-    "deckOverviews" | 
-    "deckDetail" | 
-    "inventoryOverview" | 
-    "inventoryDetail" | 
-    "cardSearchResults" | 
-    "cardSearchInventoryDetail" |
-    "trackedSets";
+declare type ApiScopeOption =
+  'coreFilterOptions' |
+  "deckOverviews" |
+  "deckDetail" |
+  "inventoryOverview" |
+  "inventoryDetail" |
+  "cardSearchResults" |
+  "cardSearchInventoryDetail" |
+  "trackedSets";
 
 declare type DeckFormatOption = 'Standard' | 'Legacy' | 'Modern' | 'Commander' | 'Oathbreaker';
 
@@ -23,98 +23,98 @@ declare type DeckEditorViewMode = 'grid' | 'list' | 'grouped';
 declare type DeckExportType = 'list' | 'empty' | 'suggestions';
 
 declare interface ReduxAction extends AnyAction {
-    type: any, //Should be combined type of all fuckin action types?
-    error?: any,
-    payload?: any,
-    meta?: any
+  type: any, //Should be combined type of all fuckin action types?
+  error?: any,
+  payload?: any,
+  meta?: any
 }
 
 declare interface NamedCardGroup {
-    name: string;
-    cardOverviewIds: number[];
+  name: string;
+  cardOverviewIds: number[];
 }
 
 
 interface CardFilterProps {
-    set: string;
-    // setId: number | null;
+  set: string;
+  // setId: number | null;
 
-    type: string;
+  type: string;
 
-    text: string;
+  text: string;
 
-    colorIdentity: string[];
-    exclusiveColorFilters: boolean;
-    multiColorOnly: boolean;
+  colorIdentity: string[];
+  exclusiveColorFilters: boolean;
+  multiColorOnly: boolean;
 
-    rarity: string[];
+  rarity: string[];
 
-    cardName: string;
-    exclusiveName: boolean;
+  cardName: string;
+  exclusiveName: boolean;
 
-    format: string;
+  format: string;
 
-    minCount: number | null;
-    maxCount: number | null;
+  minCount: number | null;
+  maxCount: number | null;
 
-    group: string | null;
+  group: string | null;
 }
 
 interface InventoryFilterProps {
-    groupBy: InventoryGroupMethod;
-    sortBy: InventorySortMethod;
-    set: string;
-    text: string;
-    type: string;
-    colorIdentity: string[];
-    exclusiveColorFilters: boolean;
-    multiColorOnly: boolean;
-    rarity: string[];
-    minCount: number;
-    maxCount: number;
-    skip: number;
-    take: number;
-    sortDescending: boolean;
+  groupBy: InventoryGroupMethod;
+  sortBy: InventorySortMethod;
+  set: string;
+  text: string;
+  type: string;
+  colorIdentity: string[];
+  exclusiveColorFilters: boolean;
+  multiColorOnly: boolean;
+  rarity: string[];
+  minCount: number;
+  maxCount: number;
+  skip: number;
+  take: number;
+  sortDescending: boolean;
 }
 
 interface CardFilterVisibilities {
-    set: boolean;
-    type: boolean;
-    color: boolean;
-    rarity: boolean;
-    name: boolean;
-    count: boolean;
-    format: boolean;
-    text: boolean;
+  set: boolean;
+  type: boolean;
+  color: boolean;
+  rarity: boolean;
+  name: boolean;
+  count: boolean;
+  format: boolean;
+  text: boolean;
 }
 
 declare interface DeckCardDetail {
-    id: number;
-    deckId: number;
-    name: string;
-    inventoryCardId: number | null;
-    isFoil: boolean;
-    inventoryCardStatusId: number | null;
-    cardId: number | null;
-    set: string;
-    collectorNumber: number | null;
-    overviewId: number;
-    category: string;
-    availabilityId: number;
+  id: number;
+  deckId: number;
+  name: string;
+  inventoryCardId: number | null;
+  isFoil: boolean;
+  inventoryCardStatusId: number | null;
+  cardId: number | null;
+  set: string;
+  collectorNumber: number | null;
+  overviewId: number;
+  category: string;
+  availabilityId: number;
 }
 
 declare interface DeckCardOverview {
-    id: number;
-    name: string;
-    type: string;
-    cost: string;
-    cmc: number;
-    category: string;
-    img: string;
-    count: number;
-    cardId: number;
-    detailIds: number[];
-    tags: string[];
+  id: number;
+  name: string;
+  type: string;
+  cost: string;
+  cmc: number;
+  category: string;
+  img: string;
+  count: number;
+  cardId: number;
+  detailIds: number[];
+  tags: string[];
 }
 
 ///////
@@ -135,7 +135,7 @@ declare interface DeckCardOverview {
 
 // //     //secondary containers
 // //     CardSearch,
-    
+
 // // }
 
 // //declare type DataStateOption =  'coreFilterOptions' | 'deckList' | 'deckDetail' | 'inventoryOverview' | 'inventoryDetail' | 'cardSearchResults' | 'cardSearchInventoryDetail'
@@ -169,8 +169,8 @@ declare type InventorySortMethod = "name" | "price" | "cmc" | "count" | "collect
 
 
 declare interface CardListItem {
-    data: CardSearchResultDto;
-    count?: number;
+  data: CardSearchResultDto;
+  count?: number;
 }
 
 // declare interface DeckViewOptions {
@@ -189,8 +189,8 @@ declare interface CardListItem {
 
 //This represents actual grouped card overviews (used in Deck Editor at leasat)
 declare interface CardOverviewGroup {
-    name: string;
-    cardOverviews: DeckCardOverview[];
+  name: string;
+  cardOverviews: DeckCardOverview[];
 }
 
 
@@ -204,11 +204,11 @@ declare interface CardOverviewGroup {
 //Group by Name or CardId ??
 //Fuck it, grouping by name for now
 declare interface PendingCardsDto {
-    // data: MagicCard;
-    // multiverseId: number;
-    // cardId: number;
-    name: string;
-    cards: InventoryCard[]; //this might need to be something else
+  // data: MagicCard;
+  // multiverseId: number;
+  // cardId: number;
+  name: string;
+  cards: InventoryCard[]; //this might need to be something else
 }
 //pendingCards: { [name: string]: PendingCardsDto } //key === name, should this also have a list to track all keys?
 
@@ -336,18 +336,14 @@ declare interface PendingCardsDto {
 
 
 declare interface DeckImportUiProps {
-    name: string;
-    format: null | DeckFormatOption;
-    notes: string;
-    importMethod: string;
-    importString: string;
-};
-
+  name: string;
+  format: null | DeckFormatOption;
+  notes: string;
+  importMethod: string;
+  importString: string;
+}
 
 declare interface TrimmedCard { //NOT dto, used in UI, not sent to controller
-    cardName: string; //For display purposes, maybe validation
-    cardId: number;
-    //isFoil: boolean;
-    numberToTrim: number;
-    foilToTrim: number;
+  data: TrimmingToolResult,
+  numberToTrim: number;
 }

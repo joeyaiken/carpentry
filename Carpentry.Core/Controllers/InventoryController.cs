@@ -228,11 +228,11 @@ namespace Carpentry.Core.Controllers
         #region Trimming Tool
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<InventoryOverviewDto>>> GetTrimmingToolCards([FromBody] TrimmingToolRequest request) //payload: TrimmingTool[Card]Request
+        public async Task<ActionResult<IEnumerable<TrimmingToolQueryResult>>> GetTrimmingToolCards([FromBody] TrimmingToolRequest request)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(request.SetCode)) return new List<InventoryOverviewDto>();
+                if (string.IsNullOrWhiteSpace(request.SetCode)) return new List<TrimmingToolQueryResult>();
                 var result = await _inventoryService.GetTrimmingToolCards(request);
                 return Ok(result);
             }
@@ -242,7 +242,6 @@ namespace Carpentry.Core.Controllers
             }
         }
 
-        //save payload of cards
         [HttpPost("[action]")]
         public async Task<ActionResult> TrimCards([FromBody] List<TrimmedCardDto> cardsToTrim)
         {

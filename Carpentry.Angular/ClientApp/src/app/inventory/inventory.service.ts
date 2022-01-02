@@ -10,7 +10,7 @@ import {
   InventoryQueryParameter,
   NewInventoryCard,
   TrimmedCardDto,
-  TrimmingToolRequest,
+  TrimmingToolRequest, TrimmingToolResult,
   ValidatedCarpentryImportDto
 } from "./models";
 
@@ -65,9 +65,9 @@ export class InventoryService extends HttpService
         return this.http.get<InventoryDetailDto>(endpoint);
     }
 
-    getTrimmingToolCards(dto: TrimmingToolRequest): Observable<InventoryOverviewDto[]> {
+    getTrimmingToolCards(dto: TrimmingToolRequest): Observable<TrimmingToolResult[]> {
         const endpoint = `api/Inventory/GetTrimmingToolCards`;
-        return this.http.post<InventoryOverviewDto[]>(endpoint, dto);
+        return this.http.post<TrimmingToolResult[]>(endpoint, dto);
     }
 
     trimCards(cardsToTrim: TrimmedCardDto[]): Observable<void> {

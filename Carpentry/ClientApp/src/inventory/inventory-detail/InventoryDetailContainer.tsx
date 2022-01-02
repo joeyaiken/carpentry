@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, DispatchProp } from 'react-redux';
 // import { Box, CardHeader, CardMedia, Table, TableHead, TableRow, TableCell, TableBody, Card } from '@material-ui/core';
-import InventoryDetailLayout from './components/InventoryDetailLayout';
+import InventoryDetailLayout from './InventoryDetailLayout';
 import AppModal from '../../common/components/AppModal';
 // import { requestInventoryDetail } from '../../_actions/inventoryActions';
 

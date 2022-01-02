@@ -1,0 +1,8 @@
+﻿<div>
+  <h3>New Deck</h3>
+  <app-deck-properties [deck]="deckProps" [formatFilters]="formatFilters"></app-deck-properties>
+  <div>
+    <button mat-raised-button [routerLink]="['/']">Cancel</button>
+    <button mat-raised-button color="primary" (click)="saveClick()">Save</button>
+  </div>
+</div>

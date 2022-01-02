@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import { DecksService } from "../decks.service";
 import { CardOverviewGroup, DeckCardDetail, DeckCardOverview, DeckDetailDto, DeckPropertiesDto, GroupedCardOverview, NamedCardGroup } from "../models";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog"
@@ -19,7 +19,7 @@ export class DeckEditorComponent implements OnInit {
 
     deckId: number;
     viewMode: 'grid' | 'list' | 'grouped'; // DeckEditorViewMode;
-    
+
     deckProperties: DeckPropertiesDto | null;
 
     // formatFilterOptions: FilterOption[];
@@ -58,24 +58,25 @@ export class DeckEditorComponent implements OnInit {
 
 
     // cardGroups: NamedCardGroup[];
-    
+
     groupedCardOverviews: CardOverviewGroup[];
 
     newGroupingMethod: GroupedCardOverview[];
 
-    
+
     // selectedOverviewCardId: number | null;
     selectedOverview: DeckCardOverview | null;
-    
+
 
 
 
     constructor(
         private decksService: DecksService,
         private route: ActivatedRoute,
+        private router: Router,
         public dialog: MatDialog,
         ) {
-        
+
     }
     ngOnInit(): void {
         //get deck props
@@ -85,6 +86,7 @@ export class DeckEditorComponent implements OnInit {
 
         this.deckProperties = new DeckPropertiesDto();
         // this.viewMode = "list";
+        this.deckId = +this.route.snapshot.paramMap.get('deckId');
 
         this.loadDeckDetail();
 
@@ -98,11 +100,11 @@ export class DeckEditorComponent implements OnInit {
     }
 
     loadDeckDetail(): void {
-        const deckId = +this.route.snapshot.paramMap.get('deckId');
 
-        this.decksService.getDeckDetail(deckId).subscribe(result => {
+
+        this.decksService.getDeckDetail(this.deckId).subscribe(result => {
             this.applyDeckDetail(result);
-            
+
             // this.openPropsDialog();
         }, error => console.log(error));
     }
@@ -122,7 +124,7 @@ export class DeckEditorComponent implements OnInit {
         this.groupedCardOverviews = [];
 
         this.newGroupingMethod = [];
-        
+
         // detail.cards.forEach(cardOverview => {
         //     const overviewId = cardOverview.id;
         //     this.cardOverviews.allIds.push(overviewId);
@@ -164,13 +166,13 @@ export class DeckEditorComponent implements OnInit {
 
 
         const cardGroups = ["Commander", "Creatures", "Spells", "Enchantments", "Artifacts", "Planeswalkers", "Lands", "Sideboard"]; //todo should be component constant
-        
+
         cardGroups.forEach(groupName => {
-    
-            
-            
+
+
+
             const cardsInGroup = detail.cards.filter(card => card.category === groupName);
-            
+
             if(cardsInGroup.length){
                 this.newGroupingMethod.push({
                     isGroup: true,
@@ -181,16 +183,16 @@ export class DeckEditorComponent implements OnInit {
                     isGroup: false,
                     ...card,
                 }));
-    
+
                 this.newGroupingMethod.push(...mappedCards);
             }
 
-            
+
 
 //////////////////////
 
             // this.newGroupingMethod.push(cardsInGroup.map(card => ({
-                
+
             // })))
 
             // this.newGroupingMethod.push(
@@ -218,18 +220,18 @@ export class DeckEditorComponent implements OnInit {
 
     selectGroupedDeckCards(overviewsById: { [id: number]: DeckCardOverview }, allOverviewIds: number[]): NamedCardGroup[] {
         var result: NamedCardGroup[] = [];
-        
+
         const cardGroups = ["Commander", "Creatures", "Spells", "Enchantments", "Artifacts", "Planeswalkers", "Lands", "Sideboard"]; //todo should be component constant
-    
+
         //Am I worried about the fact that cards might get excluded if I mess up the groups?....
-        
+
         // console.log('figuring out mappings')
         // console.log(overviewsById);
 
         cardGroups.forEach(groupName => {
-    
+
             const cardsInGroup = allOverviewIds.filter(id => overviewsById[id].category === groupName);
-            
+
             // console.log('cards in group')
             // console.log(groupName)
             // console.log(cardsInGroup);
@@ -240,7 +242,7 @@ export class DeckEditorComponent implements OnInit {
                 });
             }
         });
-    
+
         return result;
     }
 
@@ -252,7 +254,7 @@ export class DeckEditorComponent implements OnInit {
             default: this.viewMode = "grouped"; break;
         }
     }
-    
+
     onEditClick(): void {
         this.openPropsDialog();
     }
@@ -281,7 +283,7 @@ export class DeckEditorComponent implements OnInit {
                 case "delete":
                     alert('delete not implemented')
                     break;
-                default: 
+                default:
                     console.log(`PropsDialog cannot recognize action ${result.action}`);
                     alert(`PropsDialog cannot recognize action ${result.action}`)
             }
@@ -303,11 +305,12 @@ export class DeckEditorComponent implements OnInit {
     }
 
     onExportClick(): void {
-        
+
     }
 
     onAddCardsClick(): void {
-        
+      this.router.navigate(['decks',this.deckId,'add-cards'])
+        .then(result => {}, error => console.log(error));
     }
 
     onCardSelected(card: DeckCardOverview): void {
@@ -325,5 +328,5 @@ export class DeckEditorComponent implements OnInit {
         // return null;
 
     }
-    
+
 }

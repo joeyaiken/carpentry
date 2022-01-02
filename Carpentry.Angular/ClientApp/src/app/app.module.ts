@@ -35,6 +35,13 @@ import { DeckPropsDialogComponent } from './decks/deck-editor/deck-props-dialog/
 import { InventoryDetailComponent } from './inventory/inventory-detail/inventory-detail.component';
 import { InventoryAddCardsComponent } from './inventory/inventory-add-cards/inventory-add-cards.component';
 import { CardImageComponent } from './common/card-image/card-image.component';
+import { NewDeckComponent } from "./decks/new-deck/new-deck.component";
+import {DeckAddCardsComponent} from "./decks/deck-add-cards/deck-add-cards.component";
+import {DeckPropertiesComponent} from "./common/deck-properties/deck-properties.component";
+import {TrimmingToolComponent} from "./inventory/trimming-tool/trimming-tool.component";
+import {SelectFieldComponent} from "./common/select-field/select-field.component";
+import {NumericFieldComponent} from "./common/numeric-field/numeric-field.component";
+import {CardImageDialogComponent} from "./common/card-image-dialog/card-image-dialog.component";
 
 @NgModule({
   declarations: [
@@ -44,13 +51,19 @@ import { CardImageComponent } from './common/card-image/card-image.component';
     CounterComponent,
     FetchDataComponent,
     LandingComponent,
+    DeckPropertiesComponent,
+
 
     ManaChipComponent,
     TextFilterComponent,
     VisualCardComponent,
     CardImageComponent,
-    
-    
+    CardImageDialogComponent,
+
+    SelectFieldComponent,
+    NumericFieldComponent,
+
+
     DeckListComponent,
     DeckEditorComponent,
     DeckPropsBarComponent,
@@ -60,6 +73,8 @@ import { CardImageComponent } from './common/card-image/card-image.component';
     DeckCardDetailComponent,
     DeckCardGridComponent,
     DeckPropsDialogComponent,
+    NewDeckComponent,
+    DeckAddCardsComponent,
 
     InventoryOverviewComponent,
     InventoryFilterBarComponent,
@@ -67,7 +82,8 @@ import { CardImageComponent } from './common/card-image/card-image.component';
     InventoryCardComponent,
     InventoryDetailComponent,
     InventoryAddCardsComponent,
-    
+    TrimmingToolComponent,
+
     SettingsComponent,
     CollectionTotalsComponent,
     TrackedSetsComponent,

@@ -26,19 +26,20 @@ export class DeckListComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.formatFilter = "jumpstart"; //"";
-        this.sortBy = "color"; //"name";
-        this.getDeckOverviews();
+      this.formatFilter = ""; //"";
+      this.sortBy = "color"; //"name";
+      this.includeDissasembled = true;
+      this.getDeckOverviews();
     }
 
     private getDeckOverviews(): void {
-        if(this.isLoading) return;
-        this.isLoading = true;
-        this.deckOverviews = [];
-        this.decksService.getDeckOverviews(this.formatFilter, this.sortBy, this.includeDissasembled).subscribe(result => {
-            this.isLoading = false;
-            this.deckOverviews = result;
-        }, err => {console.log(`getDeckOverviews error: ${err}`); this.isLoading = false;});
+      if(this.isLoading) return;
+      this.isLoading = true;
+      this.deckOverviews = [];
+      this.decksService.getDeckOverviews(this.formatFilter, this.sortBy, this.includeDissasembled).subscribe(result => {
+        this.isLoading = false;
+        this.deckOverviews = result;
+      }, err => {console.log(`getDeckOverviews error: ${err}`); this.isLoading = false;});
     }
 
 

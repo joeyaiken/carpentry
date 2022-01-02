@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Carpentry.PlaywrightTests.Common.Pages
 {
     public class DeckEditorPage : NavigationPage
     {
-        public DeckEditorPage(string appUrl, IPage page, AppType appType) : base(page, appType, $"{appUrl}inventory", "Inventory")
+        public DeckEditorPage(string appUrl, IPage page, AppType appType) : base(page, appType, $"{appUrl}inventory",
+            "Inventory")
         {
             
         }
@@ -28,17 +31,51 @@ namespace Carpentry.PlaywrightTests.Common.Pages
 
         public async Task<int> GetCardCount()
         {
-            throw new NotImplementedException();
+            var cardCountText = await Page.TextContentAsync("#deck-stats-count");
+            if (cardCountText == null) return 0;
+            return int.TryParse(cardCountText, out var parsedNumber) ? parsedNumber : 0;
         }
         
         public async Task<Dictionary<string, int>> GetTypeToatls()
         {
-            throw new NotImplementedException();
+            var allHeaders = (await Page.QuerySelectorAllAsync(".stats-type-head")).ToList();
+            var allValues = await Page.QuerySelectorAllAsync(".stats-type-cell");
+            Assert.AreEqual(allHeaders.Count, allValues.Count);
+
+            var result = new Dictionary<string, int>();
+
+            for (var i = 0; i < allHeaders.Count; i++)
+            {
+                var headerVal = await allHeaders[i].TextContentAsync();
+                var cellVal = await allValues[i].TextContentAsync();
+                Assert.IsNotNull(headerVal);
+                Assert.IsNotNull(cellVal);
+                result[headerVal] = int.Parse(cellVal);
+            }
+
+            return result;
         }
 
         public async Task<Dictionary<int, int>> GetCmcTotals()
         {
-            throw new NotImplementedException();
+            var allHeaders = (await Page.QuerySelectorAllAsync(".stats-cmc-head")).ToList();
+            var allValues = await Page.QuerySelectorAllAsync(".stats-cmc-cell");
+            Assert.AreEqual(allHeaders.Count, allValues.Count);
+
+            var result = new Dictionary<int, int>();
+
+            for (var i = 0; i < allHeaders.Count; i++)
+            {
+                var headerText = await allHeaders[i].TextContentAsync();
+                var cellText = await allValues[i].TextContentAsync();
+                Assert.IsNotNull(headerText);
+                Assert.IsNotNull(cellText);
+                var headerVal = int.Parse(headerText);
+                var cellVal = int.Parse(cellText);
+                result[headerVal] = cellVal;
+            }
+
+            return result;
         }
 
         public async Task AddCards_SetMinCount(int minCount)
