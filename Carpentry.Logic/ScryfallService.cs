@@ -189,7 +189,7 @@ namespace Carpentry.Logic
 
             //The Secret Lair (SLD) set contains a mirrored 'Viscera Seer' with only 100 copies printed
             //I will NEVER own one of these 100, so I'm going to actively filter it from the scryfall results
-            var cardToRemove = result.Cards.Single(c => c.CollectionNumberStr == "M11");
+            var cardToRemove = result.Cards.Single(c => c.CollectionNumberStr == "VS");
             result.Cards.Remove(cardToRemove);
             return result;
         }

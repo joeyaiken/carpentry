@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Carpentry.Logic.Models;
 using System.Collections.Generic;
+using System.Linq;
 using Serilog;
 using Serilog.Events;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +80,11 @@ namespace Carpentry.Tools.QuickImport
                 {
                     //throw new Exception("Invalid import, won't add");
                     logger.LogInformation($"Invalid import, won't add {deck.Name}");
+                    // var invalidCards = validatedPayload.ValidatedCards.Where(c => !c.IsValid).ToList();
+                    foreach (var card in validatedPayload.InvalidCards)
+                    {
+                        logger.LogInformation($"Invalid Card: {card.SourceString}");
+                    }
                 }
 
                 //Un-comment to actually save validated deck
@@ -233,8 +239,17 @@ namespace Carpentry.Tools.QuickImport
 
         private static List<DeckImportTemplate> GetImports()
         {
-            var deckTemplates = new List<DeckImportTemplate>();
+            var deckTemplates = new List<DeckImportTemplate>()
+            {
+                GenerateJumpstartTemplate("Devilish_3","Devilish 3"),
+                GenerateJumpstartTemplate("Lightning_2","Lightning 2"),
+                GenerateJumpstartTemplate("UnderTheSea_1","Under the Sea 1 - 1"),
+                GenerateJumpstartTemplate("UnderTheSea_1","Under the Sea 1 - 2"),
+                GenerateJumpstartTemplate("Discarding_2","Discarding 2"),
+            };
 
+            
+            
             //var jumpstartDecks = new List<string>()
             //{
             //    "AboveTheClouds_4",
@@ -614,11 +629,13 @@ namespace Carpentry.Tools.QuickImport
         //     };
         // }
 
-        private static DeckImportTemplate GenerateJumpstartTemplate(string fileName)
+        private static DeckImportTemplate GenerateJumpstartTemplate(string fileName, string deckName = null)
         {
+            deckName ??= fileName;
+
             return new DeckImportTemplate()
             {
-                Name = fileName,
+                Name = deckName,
                 FormatName = "jumpstart",
                 FilePath = $"C:\\DotNet\\Carpentry\\Carpentry.Tools.QuickImport\\JMP\\{fileName}.txt",
             };

@@ -11,8 +11,8 @@ namespace Carpentry.Logic.Models
             DeckProps = new DeckPropertiesDto();
             UntrackedSets = new List<ValidatedDtoUntrackedSet>();
             ValidatedCards = new List<ValidatedCardDto>();
-            //InvalidCards = new List<ImportListRecord>();
-            //InvalidRows = new List<string>();
+            InvalidCards = new List<ValidatedCardDto>();
+            // InvalidRows = new List<string>();
         }
 
         public bool IsValid { get; set; }
@@ -23,8 +23,8 @@ namespace Carpentry.Logic.Models
 
         //These two should be refactored into the ValidatedCardDto
         //  including IsValid 
-        //public List<ImportListRecord> InvalidCards { get; set; }
-        //public List<string> InvalidRows { get; set; }
+        public List<ValidatedCardDto> InvalidCards { get; set; }
+        // public List<string> InvalidRows { get; set; }
     }
 
     //Represents a validated row of the import text

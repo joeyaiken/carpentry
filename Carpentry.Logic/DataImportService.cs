@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.Extensions.Logging;
+using SQLitePCL;
 
 namespace Carpentry.Logic
 {
@@ -208,7 +210,7 @@ namespace Carpentry.Logic
 
             if (mappedRecords.Any(c => !c.IsValid))
             {
-                var invalidRecords = mappedRecords.Where(c => !c.IsValid).ToList();
+                result.InvalidCards = mappedRecords.Where(c => !c.IsValid).ToList();
                 result.IsValid = false;
             }
 
