@@ -14,10 +14,10 @@ namespace Carpentry.Core.Controllers
     {
         private string FormatExceptionMessage(string functionName, Exception ex)
         {
-            return $"An error occured when processing the {functionName} method of the Inventory controller: {ex.Message}";
+            return $"An error occured when processing the {functionName} method of the {nameof(InventoryController)}: {ex.Message}";
         }
 
-        private readonly IInventoryService _inventoryService;
+        private readonly IInventoryService _trimmingToolService;
         private readonly IDataExportService _dataExportService;
         private readonly IDataImportService _dataImportService;
         private readonly ISearchService _searchService;
@@ -26,13 +26,13 @@ namespace Carpentry.Core.Controllers
         /// Constructor, uses DI to get a card repo
         /// </summary>
         public InventoryController(
-            IInventoryService inventoryService,
+            IInventoryService trimmingToolService,
             IDataExportService dataExportService,
             IDataImportService dataImportService,
             ISearchService searchService
             )
         {
-            _inventoryService = inventoryService;
+            _trimmingToolService = trimmingToolService;
             _dataExportService = dataExportService;
             _dataImportService = dataImportService;
             _searchService = searchService;
@@ -55,7 +55,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                var updatedId = await _inventoryService.AddInventoryCard(dto);
+                var updatedId = await _trimmingToolService.AddInventoryCard(dto);
                 return Ok(updatedId);
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _inventoryService.AddInventoryCardBatch(dto);
+                await _trimmingToolService.AddInventoryCardBatch(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _inventoryService.UpdateInventoryCard(dto);
+                await _trimmingToolService.UpdateInventoryCard(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _inventoryService.UpdateInventoryCardBatch(batch);
+                await _trimmingToolService.UpdateInventoryCardBatch(batch);
                 return Ok();
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _inventoryService.DeleteInventoryCard(id);
+                await _trimmingToolService.DeleteInventoryCard(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -125,7 +125,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _inventoryService.DeleteInventoryCardBatch(batchIDs);
+                await _trimmingToolService.DeleteInventoryCardBatch(batchIDs);
                 return Ok();
             }
             catch (Exception ex)
@@ -163,7 +163,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                var result = await _inventoryService.GetInventoryDetail(cardId);
+                var result = await _trimmingToolService.GetInventoryDetail(cardId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -227,36 +227,7 @@ namespace Carpentry.Core.Controllers
 
         #region Trimming Tool
 
-        [HttpPost("[action]")]
-        public async Task<ActionResult<IEnumerable<TrimmingToolQueryResult>>> GetTrimmingToolCards([FromBody] TrimmingToolRequest request)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(request.SetCode)) return new List<TrimmingToolQueryResult>();
-                var result = await _inventoryService.GetTrimmingToolCards(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("GetTrimmingToolCards", ex));
-            }
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> TrimCards([FromBody] List<TrimmedCardDto> cardsToTrim)
-        {
-            try
-            {
-                await _inventoryService.TrimCards(cardsToTrim);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("TrimCards", ex));
-            }
-
-        }
-
+        
         #endregion
     }
 

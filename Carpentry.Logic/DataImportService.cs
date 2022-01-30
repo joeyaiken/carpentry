@@ -48,7 +48,7 @@ namespace Carpentry.Logic
     {
         private readonly IDataUpdateService _dataUpdateService;
         private readonly IDeckService _deckService;
-        private readonly IInventoryService _inventoryService;
+        private readonly IInventoryService _trimmingToolService;
         private readonly int _cardStatus_InInventory = 1;
         private readonly IDataBackupConfig _config;
 
@@ -58,14 +58,14 @@ namespace Carpentry.Logic
         public DataImportService(
             IDataUpdateService dataUpdateService,
             IDeckService deckService,
-            IInventoryService inventoryService,
+            IInventoryService trimmingToolService,
             IDataBackupConfig config,
             CarpentryDataContext cardContext
             )
         {
             _dataUpdateService = dataUpdateService;
             _deckService = deckService;
-            _inventoryService = inventoryService;
+            _trimmingToolService = trimmingToolService;
             _config = config;
             _cardContext = cardContext;
         }
@@ -248,7 +248,7 @@ namespace Carpentry.Logic
                     //})
                     .ToList();
 
-                await _inventoryService.AddInventoryCardBatch(cardBatch); // TODO - consider removing this bit of logic, it would mean the inventory service could be removed from this completely
+                await _trimmingToolService.AddInventoryCardBatch(cardBatch); // TODO - consider removing this bit of logic, it would mean the inventory service could be removed from this completely
 
                 return 0;
             }

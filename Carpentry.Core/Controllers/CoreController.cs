@@ -22,13 +22,13 @@ namespace Carpentry.Core.Controllers
 
         private readonly IDataUpdateService _dataUpdateService;
         private readonly IFilterService _filterService;
-        private readonly IInventoryService _inventoryService;
+        private readonly IInventoryService _trimmingToolService;
 
-        public CoreController(IDataUpdateService dataUpdateService, IFilterService filterService, IInventoryService inventoryService)
+        public CoreController(IDataUpdateService dataUpdateService, IFilterService filterService, IInventoryService trimmingToolService)
         {
             _dataUpdateService = dataUpdateService;
             _filterService = filterService;
-            _inventoryService = inventoryService;
+            _trimmingToolService = trimmingToolService;
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                var result = await _inventoryService.GetCollectionTotals();
+                var result = await _trimmingToolService.GetCollectionTotals();
                 return Ok(result);
             }
             catch (Exception ex)

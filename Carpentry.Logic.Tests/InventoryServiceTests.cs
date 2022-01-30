@@ -15,7 +15,7 @@ namespace Carpentry.Logic.Tests
     public class InventoryServiceTests : CarpentryServiceTestBase
     {
         protected override bool SeedViews => false;
-        private InventoryService _inventoryService = null!;
+        private InventoryService _trimmingToolService = null!;
         private Mock<ILogger<InventoryService>> _mockLogger = null!;
 
         [TestInitialize]
@@ -33,7 +33,7 @@ namespace Carpentry.Logic.Tests
         protected override void ResetContextChild()
         {
             _mockLogger = new Mock<ILogger<InventoryService>>();
-            _inventoryService = new InventoryService(CardContext, _mockLogger.Object);//context, logger
+            _trimmingToolService = new InventoryService(CardContext, _mockLogger.Object);//context, logger
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace Carpentry.Logic.Tests
         public async Task GetCollectionTotals_WorksWithNoCards()
         {
             //don't want any data seeded
-            var totals = await _inventoryService.GetCollectionTotals();
+            var totals = await _trimmingToolService.GetCollectionTotals();
 
             Assert.AreEqual(3, totals.Count);
         }
@@ -119,7 +119,7 @@ namespace Carpentry.Logic.Tests
 
 
             //don't want any data seeded
-            var totals = await _inventoryService.GetCollectionTotals();
+            var totals = await _trimmingToolService.GetCollectionTotals();
 
             Assert.AreEqual(3, totals.Count);
         }

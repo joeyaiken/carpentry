@@ -85,6 +85,8 @@ namespace Carpentry.Core
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IDataIntegrityService, DataIntegrityService>();
 
+            services.AddScoped<ITrimmingToolService, TrimmingToolService>();
+
             services.AddScoped<IDataImportService, DataImportService>();
             services.AddScoped<IDataUpdateService, DataUpdateService>();
             services.AddScoped<IDataExportService, DataExportService>();

@@ -75,7 +75,7 @@ namespace Carpentry.Logic
 
         private readonly CarpentryDataContext _cardContext;
 
-        private readonly IInventoryService _inventoryService;
+        private readonly IInventoryService _trimmingToolService;
 
         private static readonly string _sideboardCategory = "Sideboard";
 
@@ -87,12 +87,12 @@ namespace Carpentry.Logic
         //public ICardImportService _cardImportService;
 
         public DeckService(
-            IInventoryService inventoryService,
+            IInventoryService trimmingToolService,
             ILogger<DeckService> logger,
             CarpentryDataContext cardContext
             )
         {
-            _inventoryService = inventoryService;
+            _trimmingToolService = trimmingToolService;
             _logger = logger;
             _cardContext = cardContext;
         }
@@ -638,7 +638,7 @@ namespace Carpentry.Logic
                         StatusId = dto.InventoryCardStatusId, //1 == in inventory
                     };
 
-                    int newInventoryCardId = await _inventoryService.AddInventoryCard(newInventoryCard);
+                    int newInventoryCardId = await _trimmingToolService.AddInventoryCard(newInventoryCard);
                     dto.InventoryCardId = newInventoryCardId;
                 }
             }
