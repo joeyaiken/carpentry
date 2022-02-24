@@ -185,12 +185,16 @@ namespace Carpentry.Logic
                     .Select(token => new ScryfallMagicCard(token)).ToList()
             };
 
+            //I'm intentionally ignoring alchemy cards for now.  This app does not currently track arena cards
+            result.Cards = result.Cards.Where(c => !c.CollectionNumberStr.StartsWith("A-")).ToList();
+            
             if (setCode != "sld") return result;
 
             //The Secret Lair (SLD) set contains a mirrored 'Viscera Seer' with only 100 copies printed
             //I will NEVER own one of these 100, so I'm going to actively filter it from the scryfall results
             var cardToRemove = result.Cards.Single(c => c.CollectionNumberStr == "VS");
             result.Cards.Remove(cardToRemove);
+
             return result;
         }
 

@@ -229,3 +229,20 @@ export class cardSearchResultDetail {
 //     count?: number;
 // }
 
+export class trimmingToolOverview {
+  setTotals: TrimmingToolSetTotal[];
+  // public TrimmingToolStatusTotal InventoryTotal { get; set; }
+  // public TrimmingToolStatusTotal TrimmedTrimmingToolsTotal { get; set; }
+}
+
+export class TrimmingToolSetTotal
+{
+  setId: number;
+  code: string;
+  name: string;
+  releaseDate: Date;
+  inventoryCount: number;
+  deckCount: number;
+  sellCount: number;
+  totalCount: number;
+}

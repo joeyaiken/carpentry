@@ -74,13 +74,13 @@ export const inventoryApi = {
 
     async getTrimmingToolCards(dto: TrimmingToolRequest): Promise<TrimmingToolResult[]> {
         console.log('Trimming Tool Request: ', dto);
-        const endpoint = `api/Inventory/GetTrimmingToolCards`;
+        const endpoint = `api/TrimmingTool/GetTrimmingToolCards`;
         const result = await Post(endpoint, dto);
         return result;
     },
 
     async trimCards(cardsToTrim: TrimmedCardDto[]): Promise<void> {
-        const endpoint = `api/Inventory/TrimCards`;
+        const endpoint = `api/TrimmingTool/TrimCards`;
         await Post(endpoint, cardsToTrim);
         return;  
     },

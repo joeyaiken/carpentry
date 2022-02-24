@@ -34,6 +34,8 @@ namespace Carpentry.Core
 
         protected void ConfigureBase(IServiceCollection services)
         {
+            
+            // services.AddLogging(config => config.AddSerilog())
 
             var appEnvValue = Configuration.GetValue<string>("AppEnv");
 

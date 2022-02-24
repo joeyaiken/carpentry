@@ -66,12 +66,12 @@ export class InventoryService extends HttpService
     }
 
     getTrimmingToolCards(dto: TrimmingToolRequest): Observable<TrimmingToolResult[]> {
-        const endpoint = `api/Inventory/GetTrimmingToolCards`;
+        const endpoint = `api/TrimmingTool/GetTrimmingToolCards`;
         return this.http.post<TrimmingToolResult[]>(endpoint, dto);
     }
 
     trimCards(cardsToTrim: TrimmedCardDto[]): Observable<void> {
-        const endpoint = `api/Inventory/TrimCards`;
+        const endpoint = `api/TrimmingTool/TrimCards`;
         return this.http.post<void>(endpoint, cardsToTrim);
     }
 

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Carpentry.Logic;
 
 namespace Carpentry.Tests
 {
@@ -105,6 +106,19 @@ namespace Carpentry.Tests
             var factory = new CarpentryFactory();
             var client = factory.CreateClient();
             await client.GetAsync($"api/core/AddTrackedSet?setId={setId}");
+        }
+
+        [TestMethod]
+        public async Task GetTrimmingToolOverview_Works()
+        {
+            var factory = new CarpentryFactory();
+            var client = factory.CreateClient();
+            var response = await client.GetAsync($"api/trimmingTool/GetTrimmingToolOverview");
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var searchResult = JsonConvert.DeserializeObject<TrimmingToolOverview>(responseContent);
+
+            Assert.IsNotNull(searchResult);
         }
     }
 }

@@ -50,7 +50,16 @@ namespace Carpentry.Tests.ControllerStatusTests
             var response = await client.GetAsync("api/Inventory/");
             var responseContent = await response.Content.ReadAsStringAsync();
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
+        }
+        
+        [TestMethod]
+        public async Task TrimmingToolController_IsOnline_Test()
+        {
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync("api/TrimmingTool/");
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual("Online", responseContent);
         }
     }
 }

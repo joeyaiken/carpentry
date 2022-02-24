@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Carpentry.Logic;
 using Carpentry.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Serilog;
 
 namespace Carpentry.Core.Controllers
@@ -16,26 +17,39 @@ namespace Carpentry.Core.Controllers
     public class TrimmingToolController : ControllerBase
     {
         private readonly ITrimmingToolService _trimmingToolService;
-        private readonly ILogger _logger;
+        // private readonly ILogger _logger;
 
         private ActionResult BuildAndLogErrorResult(string functionName, Exception ex)
         {
             var errorMessage = $"An error occured when processing the {functionName} method of the {nameof(TrimmingToolController)}: {ex.Message}";
-            _logger.Error(errorMessage, ex);
+            // _logger.Error(errorMessage, ex);
             return StatusCode(500, errorMessage);
         }
 
-        public TrimmingToolController(ITrimmingToolService trimmingToolService, ILogger logger)
+        public TrimmingToolController(
+            ITrimmingToolService trimmingToolService
+            //, ILogger logger
+            )
         {
             _trimmingToolService = trimmingToolService;
-            _logger = logger;
+            // _logger = logger;
+        }
+        
+        /// <summary>
+        /// This method just ensures the controller can start correctly (catches DI issues)
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetStatus()
+        {
+            return Ok("Online");
         }
         
         /// <summary>
         /// Gets a dto containing a list of set totals, and summary info of current trimmed cards
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<ActionResult<TrimmingToolOverview>> GetTrimmingToolOverview()
         {
             try
@@ -93,7 +107,7 @@ namespace Carpentry.Core.Controllers
         /// Gets a list of current trimmed cards
         /// </summary>
         /// <returns></returns>
-        [HttpGet("Action")]
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetCurrentTrimmedCards()
         {
             try
@@ -130,6 +144,7 @@ namespace Carpentry.Core.Controllers
         /// Gets an export of current trimmed cards as a string
         /// </summary>
         /// <returns></returns>
+        [HttpGet("[action]")]
         public async Task<ActionResult<string>> GetTrimmedCardsExport()
         {
             try

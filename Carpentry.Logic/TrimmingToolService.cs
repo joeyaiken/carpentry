@@ -14,6 +14,10 @@ namespace Carpentry.Logic
         public int SetId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
+        public DateTime ReleaseDate { get; set;}
+        public int InventoryCount { get; set; }
+        public int DeckCount { get; set; }
+        public int SellCount { get; set; }
         public int TotalCount { get; set; }
     }
 
@@ -30,7 +34,7 @@ namespace Carpentry.Logic
     {
         public List<TrimmingToolSetTotal> SetTotals { get; set; }
         public TrimmingToolStatusTotal InventoryTotal { get; set; }
-        public TrimmingToolStatusTotal TrimmedTrimmingToolsTotal { get; set; }
+        public TrimmingToolStatusTotal TrimmedCardsTotal { get; set; }
     }
 
     public class TrimmedCard
@@ -83,47 +87,90 @@ namespace Carpentry.Logic
         private readonly CarpentryDataContext _cardContext;
         private readonly ILogger<InventoryService> _logger;
 
+        private const int InventoryStatusId = 1;
+        private const int SellListStatusId = 3;
+
         public TrimmingToolService(CarpentryDataContext cardContext, ILogger<InventoryService> logger)
         {
             _cardContext = cardContext;
             _logger = logger;
         }
-        
+
         /// <summary>
+        /// Gets all the info that the main Trimming Tool screen will need
         /// Gets a dto containing a list of set totals, and summary info of current trimmed cards
         /// </summary>
         /// <returns></returns>
         public async Task<TrimmingToolOverview> GetTrimmingToolOverview()
         {
+            var cardCounts = await _cardContext.Cards
+                .Select(c => new
+                {
+                    c.SetId,
+                    SetCode = c.Set.Code,
+                    SetName = c.Set.Name,
+                    SetReleaseDate = c.Set.ReleaseDate,
+                    DeckCount = c.InventoryCards.Count(ic => ic.DeckCards.Any()),
+                    InventoryCount = c.InventoryCards.Count(ic =>
+                        ic.InventoryCardStatusId == InventoryStatusId && !ic.DeckCards.Any()),
+                    SellCount = c.InventoryCards.Count(ic => ic.InventoryCardStatusId == SellListStatusId),
+                    TotalCount = c.InventoryCards.Count(),
+                }).ToListAsync();
+
+            var setTotals = cardCounts.GroupBy(c => c.SetId)
+                .Select(g => new TrimmingToolSetTotal
+                {
+                    SetId = g.Key,
+                    Code = g.First().SetCode,
+                    Name = g.First().SetName,
+                    ReleaseDate = g.First().SetReleaseDate,
+                    TotalCount = g.Sum(c => c.TotalCount),
+                    DeckCount = g.Sum(c => c.DeckCount),
+                    InventoryCount = g.Sum(c => c.InventoryCount),
+                    SellCount = g.Sum(c => c.SellCount),
+                })
+                .OrderByDescending(s => s.TotalCount)
+                .ToList();
+            
+            
+            var statusTotals = await _cardContext.InventoryCards
+                .Select(ic => new
+                {
+                    ic.InventoryCardStatusId,
+                    ic.Status.Name,
+                    ic.InventoryCardId,
+                    Price = ic.IsFoil ? ic.Card.PriceFoil : ic.Card.Price,
+                })
+                .GroupBy(ic => new {ic.InventoryCardStatusId, ic.Name})
+                .Select(g => new
+                {
+                    g.Key.InventoryCardStatusId,
+                    StatusName = g.Key.Name,
+                    Count = g.Count(),
+                    Price = (decimal) g.Sum(s => s.Price),
+                })
+                .ToListAsync();
+
+            var mappedTotals = statusTotals
+                .Select(s => new TrimmingToolStatusTotal
+                {
+                    StatusId = s.InventoryCardStatusId,
+                    StatusName = s.StatusName,
+                    TotalCount = s.Count,
+                    TotalPrice = s.Price,
+                    PricePerCard = s.Count == 0 ? 0 : s.Price / s.Count,
+                })
+                .ToList();
+
             var result = new TrimmingToolOverview()
             {
-                SetTotals = new List<TrimmingToolSetTotal>()
-                {
-                    new TrimmingToolSetTotal()
-                    {
-                        
-                    },
-                    new TrimmingToolSetTotal()
-                    {
-                        
-                    },
-                    new TrimmingToolSetTotal()
-                    {
-                        
-                    },
-                },
-                InventoryTotal = new TrimmingToolStatusTotal()
-                {
-                    
-                },
-                TrimmedTrimmingToolsTotal = new TrimmingToolStatusTotal()
-                {
-                    
-                }
+                SetTotals = setTotals,
+                InventoryTotal = mappedTotals.FirstOrDefault(s => s.StatusId == 1),
+                TrimmedCardsTotal = mappedTotals.FirstOrDefault(s => s.StatusId == 3),
             };
             return result;
         }
-        
+
         /// <summary>
         /// Gets a list of cards that can be trimmed
         /// </summary>
