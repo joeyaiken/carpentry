@@ -32,11 +32,11 @@ class AppContainer extends React.Component<AppContainerProps>{
     }
 
     render() {
-        return (<App />);
+        return (<AppLayout />);
     }
 }
 
-function App(): JSX.Element {
+function AppLayout(): JSX.Element {
 
     /*
     /decks/add/
