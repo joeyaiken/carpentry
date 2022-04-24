@@ -2,20 +2,20 @@ import { Dispatch } from "redux";
 import { coreApi } from "../../../api/coreApi";
 import { AppState } from "../../../configureStore";
 
-export const TRACKED_SETS_DATA_REQUESTED = 'TRACKED_SETS_DATA_REQUESTED';
-export const trackedSetsDataRequested = (showUntracked: boolean, update: boolean): ReduxAction => ({
-    type: TRACKED_SETS_DATA_REQUESTED,
-    payload:{
-        showUntracked: showUntracked, 
-        update: update
-    }
-});
+// export const TRACKED_SETS_DATA_REQUESTED = 'TRACKED_SETS_DATA_REQUESTED';
+// export const trackedSetsDataRequested = (showUntracked: boolean, update: boolean): ReduxAction => ({
+//     type: TRACKED_SETS_DATA_REQUESTED,
+//     payload:{
+//         showUntracked: showUntracked, 
+//         update: update
+//     }
+// });
 
-export const TRACKED_SETS_DATA_RECEIVED = 'TRACKED_SETS_DATA_RECEIVED';
-export const trackedSetsDataReceived = (dto: SetDetailDto | null): ReduxAction => ({
-    type: TRACKED_SETS_DATA_RECEIVED,
-    payload: dto,
-});
+// export const TRACKED_SETS_DATA_RECEIVED = 'TRACKED_SETS_DATA_RECEIVED';
+// export const trackedSetsDataReceived = (dto: SetDetailDto | null): ReduxAction => ({
+//     type: TRACKED_SETS_DATA_RECEIVED,
+//     payload: dto,
+// });
 
 export const requestTrackedSets = (showUntracked: boolean, update: boolean): any => {
     return (dispatch: Dispatch, getState: any) => {

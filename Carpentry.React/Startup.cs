@@ -1,3 +1,4 @@
+using Carpentry.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,26 +10,29 @@ using Microsoft.Extensions.Hosting;
 
 namespace Carpentry.React
 {
-    public class Startup
+    public class Startup : CarpentryStartupBase
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) : base(configuration, env) { }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public override void ConfigureServices(IServiceCollection services)
         {
+            //Going to actually pull the fill filepaths from app settings now
+            //TODO Eventually I could make a static config class and just read from that class
+            ConfigureBase(services);
             services.AddControllersWithViews();
 
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

@@ -17,7 +17,10 @@ export const deckExportReducer = (state = initialState, action: ReduxAction): St
     switch(action.type){
         case DECK_EXPORT_REQUESTED: return { ...state, isLoading: true, deckExportPayload: '' };
         case DECK_EXPORT_RECEIVED: return { ...state, isLoading: false, deckExportPayload: action.payload };
+        
+        //reminder that this should be local state and not part of the reducer
         case EXPORT_TYPE_CHANGED: return { ...state, selectedExportType: action.payload };
+        
         case OPEN_EXPORT_DIALOG: return { ...state, isDialogOpen: true };
         case CLOSE_DECK_DIALOG: return { ...state, isDialogOpen: false, deckExportPayload: '' };
         default: return(state);

@@ -1,14 +1,10 @@
 ﻿import { createSlice } from '@reduxjs/toolkit';
-import {State} from "./state/InventoryAddCardsReducer";
+// import {State} from "./state/InventoryAddCardsReducer";
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 
-
-
-
-
-
-
-
+export interface State {
+  
+}
 
 
 export const inventoryAddCardsSlice = createSlice({

@@ -1,21 +1,20 @@
-import React, { ReactNode } from 'react';
-import { Container, LinearProgress } from '@material-ui/core';
-import { appStyles, combineStyles } from '../../styles/appStyles';
-import NavigationContainer from "../../navigation/NavigationContainer";
+import React, {ReactNode} from 'react';
+import {Container, LinearProgress} from '@material-ui/core';
+import {Navigation} from "../../app/Navigation";
+import styles from '../../app/App.module.css';
 
 interface LayoutProps {
-    children: ReactNode;
+    children: NonNullable<ReactNode>;
     title: string;
     isLoading?: boolean;
 }
 
-export default function AppLayout(props: LayoutProps): JSX.Element {
-  const { stretch, flexCol, flexSection } = appStyles();
+export const AppLayout = (props: LayoutProps): JSX.Element => {
   return(
-  <div className={combineStyles(stretch, flexCol)}>
-    <NavigationContainer />
+  <div className={[styles.stretch, styles.flexCol].join(' ')}>
+    <Navigation />
     {props.isLoading && <LinearProgress id='progress-bar' />}
-    <Container maxWidth="xl" className={combineStyles(flexSection, flexCol)} style={{overflow:'auto'}}>
+    <Container maxWidth="xl" className={[styles.flexSection, styles.flexCol].join(' ')} style={{overflow:'auto'}}>
       {props.children}
     </Container>
   </div>

@@ -1,13 +1,12 @@
 ﻿import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {loadDeckOverviews} from "../decksDataSlice";
+import {loadDeckOverviews} from "../deckOverviewsSlice";
 import {Avatar, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 import {Link} from "react-router-dom";
-import {RootState} from "../../../app/store";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 
-const DeckListRow = (props: {deckId: number}) => {
-  const deck: DeckOverviewDto = useSelector((state: RootState) =>
-    state.decks.data.overviews.decksById[props.deckId]);
+const DeckListRow = (props: {deckId: number}): JSX.Element => {
+  const deck: DeckOverviewDto = useAppSelector((state) =>
+    state.decks.overviews.decksById[props.deckId]);
 
   const manaIcon = (type: string): JSX.Element => {
     return(<Avatar key={type} style={{height:"24px", width:"24px", display:"inline-flex", verticalAlign: "middle"}} src={`/img/${type}.svg`} />)
@@ -30,11 +29,11 @@ const DeckListRow = (props: {deckId: number}) => {
 }
 
 export const DeckList = (): JSX.Element => {
-  const dispatch = useDispatch();
-  const shouldLoad = useSelector((state: RootState) => 
-    !state.decks.data.overviews.isLoading && !state.decks.data.overviews.isInitialized);
+  const dispatch = useAppDispatch();
+  const shouldLoad = useAppSelector((state) => 
+    !state.decks.overviews.isLoading && !state.decks.overviews.isInitialized);
 
-  const deckIds: number[] = useSelector((state: RootState) => state.decks.data.overviews.deckIds);
+  const deckIds: number[] = useAppSelector((state) => state.decks.overviews.deckIds);
   
   useEffect(() => {
     if(shouldLoad) dispatch(loadDeckOverviews());

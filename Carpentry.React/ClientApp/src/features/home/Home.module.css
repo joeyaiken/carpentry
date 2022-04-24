@@ -1,0 +1,17 @@
+﻿.containerLayout {
+    display: grid;
+    grid-template-columns: auto 180px 180px;
+    grid-template-rows: 75px auto;
+}
+.titleContainer {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+.availableDecks {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 0;
+}

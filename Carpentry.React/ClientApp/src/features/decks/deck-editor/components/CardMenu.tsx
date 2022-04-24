@@ -1,8 +1,9 @@
 import React from 'react'
 import { Menu, MenuItem } from '@material-ui/core';
+import {useAppSelector} from "../../../../app/hooks";
 
 export interface ComponentProps {
-    cardMenuAnchor: HTMLButtonElement | null;
+    // cardMenuAnchor: HTMLButtonElement | null;
     //card category
     cardCategoryId: string;
     hasInventoryCard: boolean;
@@ -12,9 +13,12 @@ export interface ComponentProps {
 }
 
 export default function CardMenu(props: ComponentProps): JSX.Element {
+
+    const cardMenuAnchor: HTMLButtonElement | null = useAppSelector(state => state.decks.deckEditor.cardMenuAnchor);
+    // const cardCategoryId = useAppSelector(state => state.)
     return(
         <React.Fragment>
-            <Menu open={Boolean(props.cardMenuAnchor)} onClose={props.onCardMenuClose} anchorEl={props.cardMenuAnchor} >
+            <Menu open={Boolean(cardMenuAnchor)} onClose={props.onCardMenuClose} anchorEl={cardMenuAnchor} >
                 
                 { props.cardCategoryId !== 'c'  && 
                     <MenuItem onClick={() => {props.onCardMenuSelect("commander")}} value="">Make Commander</MenuItem> }

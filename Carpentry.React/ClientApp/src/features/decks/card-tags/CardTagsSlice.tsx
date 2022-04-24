@@ -2,9 +2,6 @@
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 import {Dispatch} from "redux";
 
-// //TODO - Actually have this model locally...
-// import {CardTagDetailDto} from "../../../../../../Carpentry.Angular/ClientApp/src/app/decks/models";
-
 export interface State {
   isLoading: boolean;
 
@@ -45,3 +42,5 @@ export const cardTagsSlice = createSlice({
     },
   }
 })
+
+export default cardTagsSlice.reducer;

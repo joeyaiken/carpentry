@@ -9,7 +9,7 @@ import cardDetailReducer, { State as CardDetailReducerState } from './features/d
 import cardTagsReducer, { State as CardTagsReducerState } from './features/decks/card-tags/cardTagsSlice';
 import coreDataReducer, { State as CoreDataReducerState } from './common/coreDataSlice';
 import deckAddCardsReducer, { State as DeckAddCardsReducerState } from './features/decks/deck-add-cards/deckAddCardsSlice';
-import deckEditorReducer, { State as DeckEditorReducerState } from './features/decks/deck-editor/deckEditorSlice';
+import deckEditorReducer, { DeckEditorState as DeckEditorReducerState } from './features/decks/deck-editor/deckEditorSlice';
 import deckExportReducer, { State as DeckExportReducerState } from './features/decks/deck-export/deckExportSlice';
 import decksDataReducer, { State as DecksDataReducerState } from './features/decks/decksDataSlice';
 import homeReducer, { State as HomeReducerState } from './features/home/homeSlice';

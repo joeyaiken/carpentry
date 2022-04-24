@@ -4,7 +4,7 @@ import { AppState } from '../../configureStore';
 import CardTagsLayout from './components/CardTagsLayout';
 import { ensureTagDetailLoaded, newTagChange, requestAddCardTag, requestRemoveCardTag } from './state/CardTagsActions';
 
-interface PropsFromState { 
+interface PropsFromState {
     selectedDeckId: number;
     selectedCardId: number;
     selectedCardName: string;
@@ -31,7 +31,7 @@ class CardDetailContainer extends React.Component<ContainerProps>{
     componentDidMount() {
         this.props.dispatch(ensureTagDetailLoaded(this.props.selectedCardId))
     }
-  
+
     handleAddTagButtonClick() {
         const dto: CardTagDto = {
             cardName: this.props.selectedCardName,
@@ -60,15 +60,15 @@ class CardDetailContainer extends React.Component<ContainerProps>{
 
     render(){
         return(
-            <CardTagsLayout
-                newTagName={this.props.newTagName}
-                selectedCardName={this.props.selectedCardName}
-                existingTags={this.props.existingTags}
-                tagSuggestions={this.props.tagSuggestions}
-                onNewTagChange={this.handleNewTagChange} 
-                onAddTagButtonClick={this.handleAddTagButtonClick}
-                onAddSuggestionClick={this.handleAddSuggestionClick}
-                onRemoveTagClick={this.handleRemoveTagClick} />
+          <CardTagsLayout
+            newTagName={this.props.newTagName}
+            selectedCardName={this.props.selectedCardName}
+            existingTags={this.props.existingTags}
+            tagSuggestions={this.props.tagSuggestions}
+            onNewTagChange={this.handleNewTagChange}
+            onAddTagButtonClick={this.handleAddTagButtonClick}
+            onAddSuggestionClick={this.handleAddSuggestionClick}
+            onRemoveTagClick={this.handleRemoveTagClick} />
         );
     }
 }

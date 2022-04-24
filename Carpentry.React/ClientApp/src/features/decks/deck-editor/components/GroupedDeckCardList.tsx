@@ -1,42 +1,53 @@
 import React from 'react'
 import { Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Button } from '@material-ui/core';
-import ManaCostChip from '../../../common/components/ManaCostChip';
+// import ManaCostChip from '../../../common/components/ManaCostChip';
 import { Star } from '@material-ui/icons';
+import ManaCostChip from "../../../../common/components/ManaCostChip";
 // import ManaCostChip from '../../../_components/ManaCostChip';
 
 interface ComponentProps{
-    //totalPrice: number;
-    // deckProperties: DeckProperties;
-    // onEditClick: () => void;
-    
-    //cardOverviews: InventoryOverviewDto[];
+
+    // groupedCardOverviews: selectDeckOverviews(state),
+
+    // function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
+    //     const { cardOverviews, cardGroups } = state.decks.data.detail; //state.data.deckDetail;
+    //    
+    //     if(state.decks.deckEditor.viewMode === "grouped"){
+    //         const result = cardGroups.map(group => {
+    //             const groupResult: CardOverviewGroup = {
+    //                 name: group.name,
+    //                 cardOverviews: group.cardOverviewIds.map(id => cardOverviews.byId[id]),
+    //             }
+    //             return groupResult;
+    //         });
+    //         return result;
+    //    
+    //     } else {
+    //    
+    //         return [{
+    //             name: "All",
+    //             cardOverviews: cardOverviews.allIds.map(id => cardOverviews.byId[id]),
+    //         }];
+    //    
+    //     }
+    // }
     groupedCardOverviews: CardOverviewGroup[];
+
+    // cardDetailsById: state.decks.data.detail.cardDetails.byId,
     cardDetailsById: { [deckCardId: number]: DeckCardDetail };
-    //detailsById
-
-    // cardGroups: GroupedInventoryOverview[];
-
-    onCardSelected: (card: DeckCardOverview) => void;
     
-    //cardDetail/tags
+    
+    
+    
+    onCardSelected: (card: DeckCardOverview) => void;
     onCardDetailClick: (cardId: number) => void;
     onCardTagsClick: (cardId: number) => void;
 }
 
 export default function GroupedDeckCardList(props: ComponentProps): JSX.Element {
-    // className= "flex-section"
     return (
         <Paper>
             <Table size="small">
-                {/* <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Count</TableCell>
-                        <TableCell>Type</TableCell>
-                        <TableCell>Cost</TableCell>
-                        <TableCell>Category</TableCell>
-                    </TableRow>
-                </TableHead> */}
                 {
                     props.groupedCardOverviews.map(group => (
                         <React.Fragment key={group.name}>
@@ -51,7 +62,6 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                                     group.cardOverviews.map(cardItem => 
                                         <TableRow onClick={() => props.onCardSelected(cardItem)} onMouseEnter={() => props.onCardSelected(cardItem)}
                                             key={cardItem.id+cardItem.name}>
-                                            {/* <TableCell>{(cardItem.count > 1) && cardItem.count}</TableCell> */}
                                             <TableCell>{cardItem.count}</TableCell>
                                             <TableCell>{cardItem.name}</TableCell>
                                             <TableCell>
@@ -66,11 +76,7 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                                                     </Button>
                                                 }
                                             </TableCell>
-                                            {/* <TableCell>{cardItem.count}</TableCell> */}
-                                            {/* <TableCell>{cardItem.type}</TableCell> */}
-                                            {/* <TableCell>{cardItem.cost}</TableCell> */}
                                             <TableCell><ManaCostChip costString={cardItem.cost} /></TableCell>
-                                            
                                             <TableCell>
                                             <Button color="inherit" onClick={()=>{props.onCardDetailClick(cardItem.cardId)}} >
                                                 {
@@ -82,7 +88,6 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                                                 }
                                             </Button>
                                             </TableCell>
-                                            {/* <TableCell>{cardItem.description}</TableCell> */}
                                         </TableRow>
                                     )
                                 }
@@ -90,8 +95,6 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                         </React.Fragment>
                     ))
                 }
-
-         
             </Table>
         </Paper>
     );
@@ -106,7 +109,3 @@ function GetAvailabilityColor(availabilityId: number): string {
         default: return "blue";
     }
 }
-
-// function CardStatusBar(): JSX.Element {
-
-// }

@@ -1,62 +1,72 @@
 import * as React from 'react';
-import { Switch, Route } from 'react-router';
+// import {Switch, Route, Redirect} from 'react-router';
 import Layout from './components/Layout';
-import Home from './components/Home';
+// import Home from './components/Home';
 import Counter from './components/Counter';
 import FetchData from './components/FetchData';
 import { connect, DispatchProp } from 'react-redux';
-import DecksLayout from "../../../Carpentry/ClientApp/src/decks/DecksLayout";
-import InventoryLayout from "../../../Carpentry/ClientApp/src/inventory/InventoryLayout";
-import TrackedSetsContainer from "../../../Carpentry/ClientApp/src/settings/tracked-sets/TrackedSetsContainer";
-import NewDeckContainer from "../../../Carpentry/ClientApp/src/decks/new-deck/NewDeckContainer";
-import HomeContainer from "../../../Carpentry/ClientApp/src/home/HomeContainer";
-import ImportDeckContainer from "../../../Carpentry/ClientApp/src/decks/import-deck/ImportDeckContainer";
-import {AppState} from "../../../Carpentry/ClientApp/src/configureStore";
+import {Home} from "./features/home/Home";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
+import DecksLayout from "./features/decks/DecksLayout";
+
 
 // import './custom.css'
 
-interface PropsFromState { }
+// interface PropsFromState { }
+//
+// type AppContainerProps = PropsFromState & DispatchProp<ReduxAction>;
 
-type AppContainerProps = PropsFromState & DispatchProp<ReduxAction>;
+// class AppContainer extends  React.Component<AppContainerProps>{
+//  
+//   componentDidMount() {
+//     //this.props.dispatch(requestCoreData());
+//   }
+//  
+//   render() {
+//     return(<App />);
+//   }
+// }
 
-class AppContainer extends  React.Component<AppContainerProps>{
-  
-  componentDidMount() {
-    //this.props.dispatch(requestCoreData());
-  }
-  
-  render() {
-    return(<AppLayout />);
-  }
-}
-
-function AppLayout(): JSX.Element {
+function App(): JSX.Element {
   return (
-    <Switch>
-      <Route exact path="/" component={HomeContainer} />
-      <Route path="/decks/" component={DecksLayout} />
-      <Route path="/inventory" component={InventoryLayout} />
-      <Route path="/settings/sets" component={TrackedSetsContainer} />
-      <Route path="/add-deck">
-        <NewDeckContainer />
-        <HomeContainer />
-      </Route>
-      <Route path="/import-deck">
-        <ImportDeckContainer />
-        <HomeContainer />
-      </Route>
-    </Switch>
+    <Router>
+      
+    
+    
+      <Switch>
+        
+        <Route path="/decks/" component={DecksLayout} />
+        {/*<Route exact path="/inventory" component={InventoryLayout} />*/}
+        {/*<Route exact path="/settings/sets" component={TrackedSetsContainer} />*/}
+        {/*<Route exact path="/add-deck">*/}
+        {/*  <NewDeckContainer />*/}
+        {/*  <HomeContainer />*/}
+        {/*</Route>*/}
+        {/*<Route exact path="/import-deck">*/}
+        {/*  <ImportDeckContainer />*/}
+        {/*  <HomeContainer />*/}
+        {/*</Route>*/}
+        <Route path="/" component={Home} />
+        {/*<Redirect to="/" />*/}
+      </Switch>
+    </Router>
   );
 }
 
-function mapStateToProps(state: AppState): PropsFromState {
-  const result: PropsFromState = {
-  }
-  return result;
-}
-export default connect(mapStateToProps)(AppContainer);
+// function mapStateToProps(state: AppState): PropsFromState {
+//   const result: PropsFromState = {
+//   }
+//   return result;
+// }
+// export default connect(mapStateToProps)(AppContainer);
+//
 
-
+export default App;
 
 // export default () => (
 //     <Layout>

@@ -49,3 +49,6 @@ function initialCardSearchFilterProps(): InventoryFilterProps {
     sortDescending: true,
   } as InventoryFilterProps;
 } 
+
+
+export default inventoryOverviewSlice.reducer;
