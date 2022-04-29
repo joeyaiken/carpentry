@@ -1,15 +1,6 @@
 ﻿import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import {
-//   DECK_DETAIL_RECEIVED,
-//   DECK_DETAIL_REQUESTED,
-//   DECK_OVERVIEWS_RECEIVED,
-//   DECK_OVERVIEWS_REQUESTED
-// } from "./state/decksDataActions";
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
-import {Dispatch} from "redux";
 import {decksApi} from "../../api/decksApi";
-import {AppDispatch, RootState} from "../../app/store";
-// import {Root} from "react-dom";
 
 export interface State {
   decksById: { [id: number]: DeckOverviewDto };
@@ -25,23 +16,18 @@ const initialState: State = {
   isInitialized: false,
 }
 
-// export const ensureDeckOverviewsLoaded = (): any => {
-//   return(dispatch: Dispatch, getState: any) => {
-//     getDeckOverviews(dispatch, getState(), false);
-//   }
-// }
-
-// function getDeckOverviews(dispatch: Dispatch, state: RootState, forceReload: boolean): any  {
-//   if(state.decks.data.overviews.isLoading || (!forceReload && state.decks.data.overviews.isInitialized)) return;
-//   dispatch(deckOverviewsRequested());
-//   decksApi.getDeckOverviews().then((results: DeckOverviewDto[]) => {
-//     dispatch(deckOverviewsReceived(results));
-//   });
-// }
-
-export const loadDeckOverviews = createAsyncThunk<DeckOverviewDto[], void>(
-  'decksData/loadDeckOverviews',
-  async (forceReload, thunkApi) => {
+export const loadDeckOverviews = createAsyncThunk<
+  DeckOverviewDto[],
+  void//,
+  // {
+  //  
+  // }
+  >(
+  'decksOverview/loadDeckOverviews',
+  async (
+   // forceReload //, thunkApi
+  ) => {
+    console.log('load deck overviews..............')
     return await decksApi.getDeckOverviews();
   }
 );
@@ -52,28 +38,36 @@ export const deckOverviewsSlice = createSlice({
   initialState: initialState,
   reducers: {
     // deckOverviewsRequested: (state) => {
+    //   // todo - decide if I need to clear current deck overviews
+    //   state.isLoading = true;
+    // },
+    //
+    //
+    // deckOverviewsRequested: (state) => {
     //   state.overviews = initialState.overviews;
     //   state.overviews.isLoading = true;
     // },
-    //
+    
     // deckOverviewsReceived: (state, action: PayloadAction<DeckOverviewDto[]>) => {
     //   const apiDecks = action.payload;
     //   let decksById: { [key:number]: DeckOverviewDto } = {};
     //   apiDecks.forEach(deck => {
     //     decksById[deck.id] = deck;
     //   });
-    //   state.overviews = {
+    //  
+    //   return {
     //     deckIds: apiDecks.map(deck => deck.id),
-    //       decksById: decksById,
-    //       isLoading: false,
-    //       isInitialized: true,
-    //   }
+    //     decksById: decksById,
+    //     isLoading: false,
+    //     isInitialized: true,
+    //   } as State;
     // },
     
   },
   extraReducers: (builder: any) => { //TODO - figure out why the builder type isn't being inferred
     builder.addCase(loadDeckOverviews.pending, (state: State) => {
-      state = initialState;
+      console.log('load asyncThunk pending')
+      // todo - decide if I need to clear current deck overviews
       state.isLoading = true;
     });
 
@@ -84,14 +78,17 @@ export const deckOverviewsSlice = createSlice({
       apiDecks.forEach(deck => {
         decksById[deck.id] = deck;
       });
-      state = {
+      return {
         deckIds: apiDecks.map(deck => deck.id),
         decksById: decksById,
         isLoading: false,
         isInitialized: true,
-      }
+      } as State;
     });
-    // builder.addCase(loadDeckOverviews.rejected, (state, action) => { })
+    builder.addCase(loadDeckOverviews.rejected, (state: State, more: PayloadAction) => {
+      // TODO - Show a toast error or something
+      console.log('load asyncThunk rejected: ', more)
+    })
   }
 })
 

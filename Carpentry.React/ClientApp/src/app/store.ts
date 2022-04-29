@@ -1,6 +1,6 @@
 ﻿import { configureStore } from '@reduxjs/toolkit'
 import {combineReducers} from "redux";
-import cardTagsReducer from '../features/decks/card-tags/cardTagsSlice'
+// import cardTagsReducer from '../features/decks/card-tags/cardTagsSlice'
 // import decksDataReducer from '../features/decks/decksDataSlice'
 import deckDetailReducer from '../features/decks/deckDetailSlice'
 import deckOverviewsReducer from '../features/decks/deckOverviewsSlice'

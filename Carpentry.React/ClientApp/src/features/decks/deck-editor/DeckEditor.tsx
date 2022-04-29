@@ -1,26 +1,43 @@
-﻿//imports
-import React from 'react';
-import {useAppSelector} from "../../../app/hooks";
-import {DeckPropsDialog} from "./components/DeckPropsDialog";
-import {CardDetailDialog} from "./components/CardDetailDialog";
-import {CardTagsDialog} from "./components/CardTagsDialog";
-import DeckExportContainer from "../deck-export/DeckExportContainer";
+﻿import React, {useEffect} from 'react';
+// import {useAppSelector} from "../../../app/hooks";
+// import {DeckPropsDialog} from "./components/DeckPropsDialog";
+// import {CardDetailDialog} from "./components/CardDetailDialog";
+// import {CardTagsDialog} from "./components/CardTagsDialog";
+// import DeckExportContainer from "../deck-export/DeckExportContainer";
 // import {DeckEditorLayout} from "./components/DeckEditorLayout";
-import {Box} from "@material-ui/core";
+// import {Box} from "@material-ui/core";
 // import DeckCardList from "./components/DeckCardList";
-import {DeckCardGrid} from "./components/DeckCardGrid";
-import GroupedDeckCardList from "./components/GroupedDeckCardList";
-import CardMenu from "./components/CardMenu";
-import DeckCardDetail from "./components/DeckCardDetail";
-import {DeckStatsBar} from "./components/DeckStatsBar";
-import {AppLayout} from "../../../common/components/AppLayout";
+// import {DeckCardGrid} from "./components/DeckCardGrid";
+// import GroupedDeckCardList from "./components/GroupedDeckCardList";
+// import CardMenu from "./components/CardMenu";
+// import DeckCardDetail from "./components/DeckCardDetail";
+// import {DeckStatsBar} from "./components/DeckStatsBar";
+// import {AppLayout} from "../../../common/components/AppLayout";
 import {DeckEditorLayout} from "./components/DeckEditorLayout";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {loadDeckDetails} from "../deckDetailSlice";
+// import {ensureDeckDetailLoaded} from "../state/decksDataActions";
+// import {ensureDeckDetailLoaded} from "../state/decksDataActions";
 
-//component
+interface OwnProps {
+  match: {
+    params: {
+      deckId: string;
+    }
+  }
+}
 
-export const DeckEditor = (): JSX.Element => {
+export const DeckEditor = (props: OwnProps): JSX.Element => {
+  const deckId = +props.match.params.deckId;
+  const dispatch = useAppDispatch();
   
-  // const deckProperties = useAppSelector(state => state.decks.data.deail.deckProps);
+  const shouldLoad = useAppSelector(
+    (state) => !state.decks.detail.isLoading && state.decks.detail.deckId !== deckId
+  );
+  
+  useEffect(() => {
+    if(shouldLoad) dispatch(loadDeckDetails(deckId));
+  })
   
   return (
     <React.Fragment>

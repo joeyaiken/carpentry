@@ -52,7 +52,7 @@ function App(): JSX.Element {
         {/*  <HomeContainer />*/}
         {/*</Route>*/}
         <Route path="/" component={Home} />
-        {/*<Redirect to="/" />*/}
+        <Redirect to="/" />
       </Switch>
     </Router>
   );

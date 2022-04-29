@@ -1,9 +1,9 @@
 import {  Table, TableHead, TableRow, TableCell, TableBody, Box, CardActions, Button, Card, CardHeader, CardMedia, CardContent, Typography, IconButton } from '@material-ui/core';
 import React from 'react';
 import { MoreVert } from '@material-ui/icons';
-// import { appStyles } from '../../../styles/appStyles';
 import styles from '../../../../app/App.module.css'
 import {useAppSelector} from "../../../../app/hooks";
+import {getSelectedDeckDetails} from "../deckEditorSlice";
 
 interface ComponentProps{
     // selectedCard: DeckCardOverview | null;
@@ -18,6 +18,8 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
     // selectedCard: DeckCardOverview | null;
     
     //getSelectedCardOverview
+    
+    //TODO - make slice selector
     const selectedCard: DeckCardOverview | null = useAppSelector(state => {
         const selectedOverviewCardId = state.decks.deckEditor.selectedOverviewCardId;
         if(selectedOverviewCardId){
@@ -25,6 +27,10 @@ export default function DeckCardDetail(props: ComponentProps): JSX.Element {
         }
         return null; 
     });
+    
+    const inventoryCards = useAppSelector(getSelectedDeckDetails);
+    
+    
     
     // inventoryCards: DeckCardDetail[];
     // onMenuClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

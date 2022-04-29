@@ -350,6 +350,7 @@ function getSelectedCardOverview(state: AppState): DeckCardOverview | null {
     return null;
 }
 
+//So, this should be a 'memoized' selector in the slice?
 function getSelectedDeckDetails(state: AppState): DeckCardDetail[] {
     const { cardOverviews, cardDetails } = state.decks.data.detail;
     const { selectedOverviewCardId } = state.decks.deckEditor;

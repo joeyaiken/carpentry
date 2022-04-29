@@ -3,9 +3,10 @@ import {loadDeckOverviews} from "../deckOverviewsSlice";
 import {Avatar, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
+import {RootState} from "../../../app/store";
 
 const DeckListRow = (props: {deckId: number}): JSX.Element => {
-  const deck: DeckOverviewDto = useAppSelector((state) =>
+  const deck: DeckOverviewDto = useAppSelector((state: RootState) =>
     state.decks.overviews.decksById[props.deckId]);
 
   const manaIcon = (type: string): JSX.Element => {
@@ -19,9 +20,7 @@ const DeckListRow = (props: {deckId: number}): JSX.Element => {
       </TableCell>
       <TableCell>{deck.format}</TableCell>
       <TableCell>
-        {
-          deck.colors.map(color => manaIcon(color))
-        }
+        { deck.colors.map(color => manaIcon(color)) }
       </TableCell>
       <TableCell>{deck.validationIssues}</TableCell>
     </TableRow>
@@ -29,10 +28,12 @@ const DeckListRow = (props: {deckId: number}): JSX.Element => {
 }
 
 export const DeckList = (): JSX.Element => {
+  
   const dispatch = useAppDispatch();
+  
   const shouldLoad = useAppSelector((state) => 
     !state.decks.overviews.isLoading && !state.decks.overviews.isInitialized);
-
+  
   const deckIds: number[] = useAppSelector((state) => state.decks.overviews.deckIds);
   
   useEffect(() => {

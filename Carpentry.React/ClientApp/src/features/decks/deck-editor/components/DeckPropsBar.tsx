@@ -2,9 +2,10 @@ import React from 'react';
 import { Typography, Box, AppBar, Chip, Toolbar, Avatar, Button } from '@material-ui/core';
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 // import {openDeckPropsModal, toggleDeckViewMode} from "../state/DeckEditorActions";
-import {openExportDialog} from "../../deck-export/state/DeckExportActions";
+// import {openExportDialog} from "../../deck-export/state/DeckExportActions";
 import {Link} from "react-router-dom";
 import {selectDeckProperties} from "../../deckDetailSlice";
+import {toggleDeckViewMode} from "../deckEditorSlice";
 
 export const DeckPropsBar = (): JSX.Element => {
     const deckProperties = useAppSelector(selectDeckProperties)
@@ -12,7 +13,7 @@ export const DeckPropsBar = (): JSX.Element => {
     const dispatch = useAppDispatch();
 
     const onToggleViewClick = (): void => {
-        // dispatch(toggleDeckViewMode());
+        dispatch(toggleDeckViewMode());
     }
 
     const onEditClick = (): void => {
@@ -20,7 +21,7 @@ export const DeckPropsBar = (): JSX.Element => {
     }
 
     const onExportClick = (): void => {
-        dispatch(openExportDialog());
+        // dispatch(openExportDialog());
     }
 
     const onAddCardsClick = (): void => {
@@ -36,8 +37,8 @@ export const DeckPropsBar = (): JSX.Element => {
     return (
         <AppBar color="default" position="relative">
             <Toolbar>
-                <Typography variant="h5">{name}</Typography>
-                <Box>}
+                <Typography variant="h5">{deckProperties.name}</Typography>
+                <Box>
                     { deckProperties.basicW > 0 && ManaChip('W',deckProperties.basicW)}
                     { deckProperties.basicU > 0 && ManaChip('U',deckProperties.basicU)}
                     { deckProperties.basicB > 0 && ManaChip('B',deckProperties.basicB)}
@@ -55,14 +56,16 @@ export const DeckPropsBar = (): JSX.Element => {
                         Export
                     </Button>
                     {/*<Link to={addCardsLink} component={Button} color="primary" variant="contained" className="add-cards-button">*/}
-                    <Link to={`/decks/${deckProperties.id}/addCards`} 
-                          component={Button} 
-                          color="primary" 
-                          // variant="contained"
-                          className="add-cards-button"
-                    >
-                        Add Cards
-                    </Link>
+                    
+                    {/*<Link to={`/decks/${deckProperties.id}/addCards`} */}
+                    {/*      component={Button} */}
+                    {/*      color="primary" */}
+                    {/*      // variant="contained"*/}
+                    {/*      className="add-cards-button"*/}
+                    {/*>*/}
+                    {/*    Add Cards*/}
+                    {/*</Link>*/}
+                    
                     <Button onClick={onAddCardsClick} color="primary" variant="contained" className="add-cards-button">
                         Add Cards
                     </Button>

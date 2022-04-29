@@ -5,7 +5,7 @@ import InventoryOverviewContianer from './inventory-overview/InventoryOverviewCo
 // import CardSearchContainer from '../_containers/CardSearch/CardSearchContainer';
 import TrimmingToolContainer from './trimming-tool/TrimmingToolContainer';
 import InventoryDetailContainer from './inventory-detail/InventoryDetailContainer';
-import AppLayout from '../common/components/AppLayout';
+// import AppLayout from '../common/components/AppLayout';
 // import CardSearchContainer from '../common/card-search/CardSearchContainer';
 import InventoryAddCardsContainer from './inventory-add-cards/InventoryAddCardsContainer';
 

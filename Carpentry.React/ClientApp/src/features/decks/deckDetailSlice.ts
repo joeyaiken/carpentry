@@ -1,15 +1,7 @@
-﻿import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
-// import {
-//   DECK_DETAIL_RECEIVED,
-//   DECK_DETAIL_REQUESTED,
-//   DECK_OVERVIEWS_RECEIVED,
-//   DECK_OVERVIEWS_REQUESTED
-// } from "./state/decksDataActions";
-import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
-import {Dispatch} from "redux";
+﻿import {createSlice,createAsyncThunk} from '@reduxjs/toolkit';
+import {PayloadAction} from '@reduxjs/toolkit/dist/createAction';
 import {decksApi} from "../../api/decksApi";
-import {AppDispatch, RootState} from "../../app/store";
-// import {Root} from "react-dom";
+import {RootState} from "../../app/store";
 
 export interface State {
   isLoading: boolean;
@@ -57,79 +49,22 @@ const initialState: State = {
   cardGroups: [],
 }
 
-// export const reloadDeckDetail = (deckId: number): any => {
-//   return (dispatch: Dispatch, getState: any) => {
-//     tryLoadDeckDetail(dispatch, getState(), deckId, true);
-//   }
-// }
-// export const ensureDeckDetailLoaded = (deckId: number): any => {
-//   return (dispatch: Dispatch, getState: any) => {
-//     tryLoadDeckDetail(dispatch, getState(), deckId, false);
-//   }
-// }
-// function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number, forceReload: boolean): void {
-//   if (state.decks.data.detail.isLoading || (!forceReload && state.decks.data.detail.deckId === deckId)) return;
-//   dispatch(deckDetailRequested(deckId));
-//   decksApi.getDeckDetail(deckId).then((result) => {
-//     dispatch(deckDetailReceived(result));
-//   });
-// }
-
-// export const ensureDeckOverviewsLoaded = (): any => {
-//   return(dispatch: Dispatch, getState: any) => {
-//     getDeckOverviews(dispatch, getState(), false);
-//   }
-// }
-// function getDeckOverviews(dispatch: Dispatch, state: RootState, forceReload: boolean): any  {
-//   if(state.decks.data.overviews.isLoading || (!forceReload && state.decks.data.overviews.isInitialized)) return;
-//   dispatch(deckOverviewsRequested());
-//   decksApi.getDeckOverviews().then((results: DeckOverviewDto[]) => {
-//     dispatch(deckOverviewsReceived(results));
-//   });
-// }
-
-export const loadDeckOverviews = createAsyncThunk<DeckOverviewDto[], void,{
-  // state: RootState,
-
-}>(
-  'decksData/loadDeckOverviews',
-  async (forceReload, thunkApi) => {
-    // console.log('loadDeckOverviews')
-    const result = await decksApi.getDeckOverviews();
-    // console.log('overviews',result)
-    return result;
-  }
+export const loadDeckDetails = createAsyncThunk<DeckDetailDto, number>(
+  'decksData/loadDeckDetails',
+  async (deckId) => await decksApi.getDeckDetail(deckId)
 );
-
 
 export const decksDetailSlice = createSlice({
   name: 'decksData',
   initialState: initialState,
-  reducers: {
-    // deckOverviewsRequested: (state) => {
-    //   state.overviews = initialState.overviews;
-    //   state.overviews.isLoading = true;
-    // },
-    //
-    // deckOverviewsReceived: (state, action: PayloadAction<DeckOverviewDto[]>) => {
-    //   const apiDecks = action.payload;
-    //   let decksById: { [key:number]: DeckOverviewDto } = {};
-    //   apiDecks.forEach(deck => {
-    //     decksById[deck.id] = deck;
-    //   });
-    //   state.overviews = {
-    //     deckIds: apiDecks.map(deck => deck.id),
-    //       decksById: decksById,
-    //       isLoading: false,
-    //       isInitialized: true,
-    //   }
-    // },
+  reducers: { },
+  extraReducers: (builder: any) => { //TODO - figure out why the builder type isn't being inferred
+    
+    builder.addCase(loadDeckDetails.pending, (state: State) => {
+      state.isLoading = true;
+    });
 
-    deckDetailRequested: (state: State) => {
-      state.isLoading = true
-    },
-
-    deckDetailReceived: (state: State, action: PayloadAction<DeckDetailDto>) => {
+    builder.addCase(loadDeckDetails.fulfilled, (state: State, action: PayloadAction<DeckDetailDto>) => {
       const dto: DeckDetailDto = action.payload;
 
       let overviewsById: {[id: number]: DeckCardOverview} = {};
@@ -190,38 +125,19 @@ export const decksDetailSlice = createSlice({
       };
       state.cardGroups = selectGroupedDeckCards(overviewsById, overviewIds);
       state.deckStats = dto.stats;
-    },
-  },
-  extraReducers: (builder: any) => { //TODO - figure out why the builder type isn't being inferred
-    // builder.addCase(loadDeckOverviews.pending, (state: State) => {
-    //   console.log('load pending');
-    //   state.overviews = initialState.overviews;
-    //   state.overviews.isLoading = true;
-    // });
-    //
-    // builder.addCase(loadDeckOverviews.fulfilled, (state: State, action: PayloadAction<DeckOverviewDto[]>) => {
-    //   console.log('load fulfilled', action);
-    //   const apiDecks = action.payload;
-    //   let decksById: { [key:number]: DeckOverviewDto } = {};
-    //   apiDecks.forEach(deck => {
-    //     decksById[deck.id] = deck;
-    //   });
-    //   state.overviews = {
-    //     deckIds: apiDecks.map(deck => deck.id),
-    //     decksById: decksById,
-    //     isLoading: false,
-    //     isInitialized: true,
-    //   }
-    // });
+    });
 
-    // builder.addCase(loadDeckOverviews.rejected, (state, action) => {
-    //
-    // })
+    builder.addCase(loadDeckDetails.rejected, (state: State, action: PayloadAction) => {
+      // TODO - Show a toast error or something
+      console.log('loadDeckOverviews thunk rejected: ', action);
+      state.isLoading = false;
+    });
   }
 })
 
+// TODO - This grouping should really be done in the controller/service layer, not here 
 function selectGroupedDeckCards(overviewsById: { [id: number]: DeckCardOverview }, allOverviewIds: number[]): NamedCardGroup[] {
-  var result: NamedCardGroup[] = [];
+  let result: NamedCardGroup[] = [];
 
   const cardGroups = ["Commander", "Creatures", "Spells", "Enchantments", "Artifacts", "Planeswalkers", "Lands", "Sideboard"];
 
@@ -242,18 +158,12 @@ function selectGroupedDeckCards(overviewsById: { [id: number]: DeckCardOverview 
   return result;
 }
 
-export const {
-  // deckOverviewsRequested,
-  // deckOverviewsReceived,
-  deckDetailRequested,
-  deckDetailReceived,
-} = decksDetailSlice.actions;
-
 // export const selectCount = (state: RootState) => state.counter.value
 
 export default decksDetailSlice.reducer;
 
 //const deckProperties: DeckPropertiesDto = useAppSelector(state => state.decks.data.detail.deckProps);
+
 // export const selectDeckProperties = createSelector(
 //   [(state: RootState) => state.decks.detail.deckProps],
 //   (props) => props 
