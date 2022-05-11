@@ -66,6 +66,7 @@ export const DeckEditor = (props: OwnProps): JSX.Element => {
       {/*<DeckExportContainer />*/}
 
       <DeckEditorLayout
+        deckId={deckId}
         // //props & modal
         // deckProperties={deckProperties}
         // onPropsModalOpen={this.handlePropsModalOpen}

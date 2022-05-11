@@ -11,7 +11,7 @@ export interface DeckEditorState {
   isSaving: boolean;
   isPropsModalOpen: boolean;
   deckModalProps: DeckPropertiesDto | null;
-  cardMenuAnchor: HTMLButtonElement | null;
+  // cardMenuAnchor: HTMLButtonElement | null;
   cardMenuAnchorId: number;
 }
 
@@ -24,7 +24,7 @@ const initialState: DeckEditorState = {
   isSaving: false,
   isPropsModalOpen: false,
   deckModalProps: null,
-  cardMenuAnchor: null,
+  // cardMenuAnchor: null,
   cardMenuAnchorId: 0,
 }
 
@@ -51,11 +51,11 @@ export const deckEditorSlice = createSlice({
         }
     },
     
-    // openDeckPropsModal: (state: DeckEditorState, action: PayloadAction<DeckPropertiesDto | null>) => {
+    // openDeckPropsModal: (state, action: PayloadAction<DeckPropertiesDto | null>) => {
     //   state.isPropsModalOpen = true;
     //   state.deckModalProps = action.payload;
     // },
-    //
+
     // closeDeckPropsModal: (state: DeckEditorState) => {
     //   state.isPropsModalOpen = false;
     //   state.deckModalProps = null;
@@ -73,10 +73,18 @@ export const deckEditorSlice = createSlice({
     //     deckPropsModalChanged: (state: DeckEditorState, action: PayloadAction<string | number>) => {
     //     },
         
-    // cardMenuButtonClicked: (state: DeckEditorState, action: PayloadAction<HTMLElement | null>) => {
-    //   state.cardMenuAnchor = action.payload;
-    //   state.cardMenuAnchorId = parseInt(action.payload?.value);
-    // },
+    //cardMenuButtonClicked: (state, action: PayloadAction<HTMLElement | null>) => {
+    cardMenuButtonClicked: (state, action: PayloadAction<HTMLButtonElement | null>) => {
+      // state.cardMenuAnchor = action.payload;
+      
+      // const test = action.payload?.value ?? "";
+      //
+      //
+      // if(test) state.cardMenuAnchorId = parseInt(test);
+      //
+      // parseInt(test);
+      // state.cardMenuAnchorId = parseInt(action.payload?.value);
+    },
   },
 });
 
@@ -84,6 +92,7 @@ export const {
   deckEditorCardSelected,
   toggleDeckViewMode,
   
+  cardMenuButtonClicked,
 } = deckEditorSlice.actions;
 
 export default deckEditorSlice.reducer;
@@ -123,5 +132,34 @@ export const getSelectedDeckDetails = createSelector(
         }
       }
       return [];
+  }
+);
+
+
+export const selectDeckOverviews = createSelector(
+  [
+    (state: RootState) => state.decks.deckEditor.viewMode,
+    (state: RootState) => state.decks.detail.cardOverviews,
+    (state: RootState) => state.decks.detail.cardGroups,
+  ],
+  (
+    viewMode,
+    cardOverviews,
+    cardGroups
+  ) => {
+    if(viewMode === "grouped"){
+      return cardGroups.map(group => {
+        const groupResult: CardOverviewGroup = {
+          name: group.name,
+          cardOverviews: group.cardOverviewIds.map(id => cardOverviews.byId[id]),
+        }
+        return groupResult;
+      });
+    } else {
+      return [{
+        name: "All",
+        cardOverviews: cardOverviews.allIds.map(id => cardOverviews.byId[id]),
+      }];
+    }
   }
 );

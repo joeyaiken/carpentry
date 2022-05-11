@@ -13,6 +13,7 @@ import {
   Redirect,
 } from 'react-router-dom'
 import DecksLayout from "./features/decks/DecksLayout";
+import {Settings} from "./features/settings/Settings";
 
 
 // import './custom.css'
@@ -42,7 +43,7 @@ function App(): JSX.Element {
         
         <Route path="/decks/" component={DecksLayout} />
         {/*<Route exact path="/inventory" component={InventoryLayout} />*/}
-        {/*<Route exact path="/settings/sets" component={TrackedSetsContainer} />*/}
+        <Route path="/settings" component={Settings} />
         {/*<Route exact path="/add-deck">*/}
         {/*  <NewDeckContainer />*/}
         {/*  <HomeContainer />*/}
@@ -51,7 +52,7 @@ function App(): JSX.Element {
         {/*  <ImportDeckContainer />*/}
         {/*  <HomeContainer />*/}
         {/*</Route>*/}
-        <Route path="/" component={Home} />
+        <Route exact path="/" component={Home} />
         <Redirect to="/" />
       </Switch>
     </Router>

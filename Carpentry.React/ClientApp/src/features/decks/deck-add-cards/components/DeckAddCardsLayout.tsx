@@ -1,13 +1,18 @@
 import { AppBar, Box, Button, Paper, Toolbar, Typography } from '@material-ui/core';
 import React from 'react';
-import { appStyles, combineStyles } from '../../../styles/appStyles';
+// import { appStyles, combineStyles } from '../../../styles/appStyles';
 import SelectedCardSection from './SelectedCardSection';
 import FilterBar from './FilterBar';
 import SearchResultGrid from './SearchResultGrid';
 import SearchResultTable from './SearchResultTable';
-import AppLayout from "../../../common/components/AppLayout";
+import {AppLayout} from "../../../../common/components/AppLayout";
+import styles from "../../../../app/App.module.css";
+
 
 interface ContainerLayoutProps {
+  
+  deckId: number;
+  
   filterOptions: AppFiltersDto;
   searchFilterProps: CardFilterProps;
   viewMode: CardSearchViewMode;
@@ -27,14 +32,14 @@ interface ContainerLayoutProps {
   handleFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSearchButtonClick: () => void;
   handleCardSelected: (item: CardListItem) => void;
-  handleAddNewCardClick: (cardName: string, cardId: number, isFoil: boolean) => void;
-  handleAddExistingCardClick: (inventoryCard: InventoryCard) => void;
-  handleAddEmptyCard: (cardName: string) => void;
+  // handleAddNewCardClick: (cardName: string, cardId: number, isFoil: boolean) => void;
+  // handleAddExistingCardClick: (inventoryCard: InventoryCard) => void;
+  // handleAddEmptyCard: (cardName: string) => void;
 
 }
 
 export default function DeckAddCardsLayout(props: ContainerLayoutProps): JSX.Element {
-  const {  flexRow, outlineSection, flexSection } = appStyles();
+  // const {  flexRow, outlineSection, flexSection } = appStyles();
   // console.log("props.selectedCardDetail");
   // console.log(props.selectedCardDetail);
 
@@ -53,12 +58,13 @@ export default function DeckAddCardsLayout(props: ContainerLayoutProps): JSX.Ele
       </AppBar>
       <FilterBar
         filterOptions={props.filterOptions}
-        handleBoolFilterChange={props.handleBoolFilterChange}
-        handleFilterChange={props.handleFilterChange}
-        searchFilterProps={props.searchFilterProps}
-        handleSearchButtonClick={props.handleSearchButtonClick} />
+        // handleBoolFilterChange={props.handleBoolFilterChange}
+        // handleFilterChange={props.handleFilterChange}
+        // searchFilterProps={props.searchFilterProps}
+        // handleSearchButtonClick={props.handleSearchButtonClick} 
+      />
 
-      <Box className={combineStyles(flexRow,flexSection)} style={{ overflow:'auto', alignItems:'stretch' }}>
+      <Box className={[styles.flexRow,styles.flexSection].join(' ')} style={{ overflow:'auto', alignItems:'stretch' }}>
         <Paper style={{ overflow:'auto', flex:'1 1 70%' }} >
           { props.viewMode === "list" && <SearchResultTable searchResults={props.searchResults} onCardSelected={props.handleCardSelected} /> }
           { props.viewMode === "grid" && <SearchResultGrid searchResults={props.searchResults} onCardSelected={props.handleCardSelected} /> }
@@ -66,17 +72,19 @@ export default function DeckAddCardsLayout(props: ContainerLayoutProps): JSX.Ele
         <Paper style={{ overflow:'auto', flex:'1 1 30%' }} >
           { props.selectedCard &&
           <SelectedCardSection
-              selectedCard={props.selectedCard}
+            deckId={props.deckId}
+              // selectedCard={props.selectedCard}
             // selectedCardDetail={props.selectedCardDetail}
-              inventoryCardsById={props.inventoryCardsById}
-              inventoryCardsAllIds={props.inventoryCardsAllIds}
-              handleAddInventoryCard={props.handleAddExistingCardClick}
-              handleAddNewCard={props.handleAddNewCardClick}
-              handleAddEmptyCard={props.handleAddEmptyCard} />
+            //   inventoryCardsById={props.inventoryCardsById}
+            //   inventoryCardsAllIds={props.inventoryCardsAllIds}
+              // handleAddInventoryCard={props.handleAddExistingCardClick}
+              // handleAddNewCard={props.handleAddNewCardClick}
+              // handleAddEmptyCard={props.handleAddEmptyCard} 
+            />
           }
         </Paper>
       </Box>
-      <Paper className={combineStyles(outlineSection, flexRow)}>
+      <Paper className={[styles.outlineSection, styles.flexRow].join(' ')}>
         <Button onClick={props.handleCloseClick} id="close-button">
           Close
         </Button>

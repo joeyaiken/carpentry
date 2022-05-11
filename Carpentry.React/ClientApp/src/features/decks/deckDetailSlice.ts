@@ -1,7 +1,8 @@
-﻿import {createSlice,createAsyncThunk} from '@reduxjs/toolkit';
+﻿import {createSlice,createAsyncThunk,createSelector} from '@reduxjs/toolkit';
 import {PayloadAction} from '@reduxjs/toolkit/dist/createAction';
 import {decksApi} from "../../api/decksApi";
 import {RootState} from "../../app/store";
+import {Root} from "react-dom";
 
 export interface State {
   isLoading: boolean;
@@ -168,6 +169,11 @@ export default decksDetailSlice.reducer;
 //   [(state: RootState) => state.decks.detail.deckProps],
 //   (props) => props 
 // )
+
+
+
+
+
 
 export const selectDeckProperties = (state: RootState): DeckPropertiesDto => state.decks.detail.deckProps;
 

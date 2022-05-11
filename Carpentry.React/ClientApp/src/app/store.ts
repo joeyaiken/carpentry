@@ -5,6 +5,7 @@ import {combineReducers} from "redux";
 import deckDetailReducer from '../features/decks/deckDetailSlice'
 import deckOverviewsReducer from '../features/decks/deckOverviewsSlice'
 import deckEditorReducer from '../features/decks/deck-editor/deckEditorSlice'
+import deckAddCardsReducer from '../features/decks/deck-add-cards/deckAddCardsSlice'
 
 // import {connectRouter} from "connected-react-router";
 // import {History} from 'history';
@@ -18,7 +19,7 @@ const rootReducer = combineReducers({
     // cardDetail: cardDetailReducer,
     // cardTags: cardTagsReducer,
     // //cardSearch | addDeckCards | deckAddCards | ??
-    // deckAddCards: deckAddCardsReducer,
+    deckAddCards: deckAddCardsReducer,
     // deckExport: deckExportReducer,
     // data: decksDataReducer,
     

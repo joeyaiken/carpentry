@@ -1,15 +1,16 @@
 import React from 'react'
-import { Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Button } from '@material-ui/core';
-import { Star } from '@material-ui/icons';
+import {Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Button} from '@material-ui/core';
+import {Star} from '@material-ui/icons';
 import ManaCostChip from "../../../../common/components/ManaCostChip";
-// import {push} from "react-router-redux";
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
+import {deckEditorCardSelected,selectDeckOverviews} from "../deckEditorSlice";
+import {useHistory} from "react-router";
 
-interface ComponentProps{
-  groupedCardOverviews: CardOverviewGroup[];
-  cardDetailsById: { [deckCardId: number]: DeckCardDetail };
+interface ComponentProps {
+  deckId: number;
 }
 
-export default function GroupedDeckCardList(props: ComponentProps): JSX.Element {
+export const GroupedDeckCardList = (props: ComponentProps): JSX.Element => {
   function GetAvailabilityColor(availabilityId: number): string {
     switch(availabilityId){
       case 1: return "green";
@@ -19,24 +20,31 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
       default: return "blue";
     }
   }
-
+  
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+  
+  const cardDetailsById = useAppSelector(state => state.decks.detail.cardDetails.byId);
+  
+  const groupedCardOverviews = useAppSelector(selectDeckOverviews);
+  
   const onCardSelected = (card: DeckCardOverview): void => {
-    //dispatch(deckEditorCardSelected(cardOverview))
+    dispatch(deckEditorCardSelected(card))
   }
 
   const onCardDetailClick = (cardId: number): void => {
-    //dispatch(push(`/decks/${this.props.deckId}?cardId=${cardId}&show=detail`));
+    history.push(`/decks/${props.deckId}?cardId=${cardId}&show=detail`);
   }
 
   const onCardTagsClick = (cardId: number): void => {
-    // dispatch(push(`/decks/${this.props.deckId}?cardId=${cardId}&show=tags`));
+    history.push(`/decks/${props.deckId}?cardId=${cardId}&show=tags`);
   }
 
   return (
     <Paper>
       <Table size="small">
         {
-          props.groupedCardOverviews.map(group => (
+          groupedCardOverviews.map(group => (
             <React.Fragment key={group.name}>
               <TableHead key={`th-${group.name}`}>
                 <TableRow>
@@ -68,7 +76,7 @@ export default function GroupedDeckCardList(props: ComponentProps): JSX.Element 
                         <Button color="inherit" onClick={()=>{onCardDetailClick(cardItem.cardId)}} >
                           {
                             cardItem.detailIds.map(id => {
-                              const cardDetail = props.cardDetailsById[id];
+                              const cardDetail = cardDetailsById[id];
                               let color = GetAvailabilityColor(cardDetail.availabilityId);
                               return(<Star style={{color: color}} key={id} />);
                             })

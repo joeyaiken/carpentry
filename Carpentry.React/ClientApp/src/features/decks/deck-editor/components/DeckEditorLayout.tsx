@@ -7,7 +7,7 @@ import {DeckCardGrid} from "./DeckCardGrid";
 import {DeckCardList} from "./DeckCardList";
 import {DeckPropsBar} from "./DeckPropsBar";
 import {DeckStatsBar} from "./DeckStatsBar";
-import GroupedDeckCardList from "./GroupedDeckCardList";
+import {GroupedDeckCardList} from "./GroupedDeckCardList";
 import { AppLayout } from "../../../../common/components/AppLayout";
 import styles from "../../../../app/App.module.css";
 import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
@@ -15,6 +15,7 @@ import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 // import AppLayout from "../../../common/components/AppLayout";
 
 declare interface ComponentProps{
+  deckId: number;
   // //props & modal
   //
   // //props
@@ -63,36 +64,24 @@ export function DeckEditorLayout(props: ComponentProps): JSX.Element {
   
   return(
     <AppLayout title="Decks">
-      <DeckPropsBar />
+      <DeckPropsBar deckId={props.deckId} />
       <Box className={[styles.flexRow, styles.flexSection].join(' ')} style={{ overflow:'auto', alignItems:'stretch' }}>
         <div className={styles.flexSection} style={{ overflow:'auto', flex:'1 1 70%' }} >
           {viewMode === "list" && <DeckCardList />}
           {viewMode === "grid" && <DeckCardGrid />}
-          {/*{viewMode === "grouped" &&*/}
-          {/*<GroupedDeckCardList*/}
-          {/*    groupedCardOverviews={props.groupedCardOverviews}*/}
-          {/*    cardDetailsById={props.cardDetailsById}*/}
-          {/*    onCardSelected={props.onCardSelected}*/}
-          {/*    onCardDetailClick={props.onCardDetailClick}*/}
-          {/*    onCardTagsClick={props.onCardTagsClick}  /> }*/}
+          {viewMode === "grouped" && <GroupedDeckCardList deckId={props.deckId} /> }
         </div>
         <div className={styles.flexSection} style={{ overflow:'auto', flex:'1 1 30%' }} >
           {/*<CardMenu*/}
+          {/*  */}
           {/*  // cardMenuAnchor={props.cardMenuAnchor}*/}
-          {/*  onCardMenuSelect={props.onCardMenuSelected}*/}
-          {/*  onCardMenuClose={onCardMenuClosed}*/}
-          {/*  cardCategoryId={props.selectedCard?.category || ''}*/}
-          {/*  hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}*/}
+          {/*  // onCardMenuSelect={props.onCardMenuSelected}*/}
+          {/*  // onCardMenuClose={onCardMenuClosed}*/}
+          {/*  // cardCategoryId={props.selectedCard?.category || ''}*/}
+          {/*  // hasInventoryCard={Boolean(props.cardDetailsById[props.cardMenuAnchorId]?.inventoryCardId)}*/}
           {/*/>*/}
-      
-          {/*<DeckCardDetail*/}
-          {/*  selectedCard={props.selectedCard}*/}
-          {/*  inventoryCards={props.selectedInventoryCards}*/}
-          {/*  onMenuClick={props.onCardMenuClick}*/}
-          {/*  onMenuClose={onCardMenuClosed}*/}
-          {/*  onCardDetailClick={props.onCardDetailClick}*/}
-          {/*  onCardTagsClick={props.onCardTagsClick} />*/}
-        
+          
+          <DeckCardDetail deckId={props.deckId} />
         </div>
       </Box>
 

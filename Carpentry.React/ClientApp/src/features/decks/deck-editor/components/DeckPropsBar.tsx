@@ -6,11 +6,16 @@ import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 import {Link} from "react-router-dom";
 import {selectDeckProperties} from "../../deckDetailSlice";
 import {toggleDeckViewMode} from "../deckEditorSlice";
+import {useHistory} from "react-router";
 
-export const DeckPropsBar = (): JSX.Element => {
+interface ComponentProps {
+    deckId: number
+}
+export const DeckPropsBar = (props: ComponentProps): JSX.Element => {
     const deckProperties = useAppSelector(selectDeckProperties)
     
     const dispatch = useAppDispatch();
+    const history = useHistory();
 
     const onToggleViewClick = (): void => {
         dispatch(toggleDeckViewMode());
@@ -25,8 +30,7 @@ export const DeckPropsBar = (): JSX.Element => {
     }
 
     const onAddCardsClick = (): void => {
-        //onAddCardsClick
-        //this.props.dispatch(push(`/decks/${this.props.deckId}/addCards`))
+        history.push(`/decks/${props.deckId}/addCards`);
     }
 
     const ManaChip = (type: String, value: number): JSX.Element =>

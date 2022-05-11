@@ -1,9 +1,94 @@
-﻿import { createSlice } from '@reduxjs/toolkit';
+﻿import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {coreApi} from "../../../api/coreApi";
 // import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
 // import {Dispatch} from "redux";
 // import {AppState} from "../../../store";
 // import {coreApi} from "../../../api/coreApi";
 //
+
+export interface  State {
+  //   setsById: { [id: number]: SetDetailDto };
+  //   setIds: number[];
+    trackedSetsIsLoading: boolean;
+    
+  //   showUntracked: boolean;
+}
+
+const initialState: State = {
+  trackedSetsIsLoading = false,
+}
+
+class PayloadAction {
+}
+
+export const trackedSetsSlice = createSlice({
+  name: 'trackedSets',
+  initialState: initialState,
+  reducers: { 
+    
+  },
+  extraReducers: (builder: any) => { //TODO - figure out why the builder type isn't being inferred
+    builder.addCase(loadTrackedSets.pending, (state: State) => {
+    //     const { showUntracked } = action.payload;
+    //
+    //     const newState: State = {
+    //         ...state,
+    //         ...initialState,
+    //         isLoading: true,
+    //         showUntracked: showUntracked,
+    //     }
+    //
+    //     return newState;
+    });
+    builder.addCase(loadTrackedSets.fulfilled, (state: State) => {
+    //     //I guess this is normally where Normalizr should be used?
+    //     const apiSets: SetDetailDto[] = action.payload;
+    //
+    //     //Create/Update/Delete actions will return null
+    //     if(apiSets === null){
+    //         return {
+    //             ...state,
+    //             isLoading: false,
+    //         }
+    //     }
+    //
+    //     let setsById: { [key:number]: SetDetailDto } = {};
+    //
+    //     apiSets.forEach(set => {
+    //         setsById[set.setId] = set;
+    //     });
+    //
+    //     const newState: State = {
+    //         isLoading: false,
+    //         setIds: apiSets.map(set => set.setId),
+    //         setsById: setsById,
+    //         showUntracked: state.showUntracked,
+    //     }
+    //
+    //     return newState;
+    });
+    builder.addCase(loadTrackedSets.rejected, (state: State, action: PayloadAction) => {
+      // TODO - Show a toast error or something
+      console.log('loadTrackedSets thunk rejected: ', action);
+      state.trackedSetsIsLoading = false;
+    });
+  }
+})
+
+//export const loadTrackedSets = createAsyncThunk<SetDetailDto, void>(
+export const loadTrackedSets = createAsyncThunk<SetDetailDto, { showUntracked: boolean, update: boolean}>(
+  'trackedSets/loadTrackedSets',
+  //showUntracked: boolean, update: boolean
+  async (props) => coreApi.getTrackedSets(props.showUntracked, props.update)
+);
+
+
+
+
+
+
+
+
 // export interface State {
 //   setsById: { [id: number]: SetDetailDto };
 //   setIds: number[];
