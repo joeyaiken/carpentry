@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Carpentry.PlaywrightTests.Common.Pages;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Playwright;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

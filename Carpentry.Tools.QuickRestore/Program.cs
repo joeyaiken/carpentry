@@ -15,8 +15,8 @@ namespace Carpentry.Tools.QuickRestore
 {
     class Program
     {
-        // static async Task Main(string[] args)
-        // {
+        static async Task Main(string[] args)
+        {
         //     var serviceProvider = BuildServiceProvider();
         //
         //     var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
@@ -63,7 +63,7 @@ namespace Carpentry.Tools.QuickRestore
         //     await importService.AddValidatedCarpentryImport(validatedDto);
         //
         //     logger.LogInformation("Completed successfully");
-        // }
+        }
         //
         //
         // private static ServiceProvider BuildServiceProvider()
