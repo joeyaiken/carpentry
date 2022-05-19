@@ -1,5 +1,5 @@
 ﻿import React from 'react'
-import {TrackedSets} from "./tracked-sets/TrackedSets";
+import {TrackedSets} from "./TrackedSets";
 
 export const Settings = (): JSX.Element => {
   return (

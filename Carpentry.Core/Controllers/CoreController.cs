@@ -247,8 +247,8 @@ namespace Carpentry.Core.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> AddTrackedSet(int setId)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddTrackedSet([FromBody] int setId)
         {
             try
             {
@@ -261,8 +261,8 @@ namespace Carpentry.Core.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateTrackedSet(int setId)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateTrackedSet([FromBody] int setId)
         {
             try
             {
@@ -275,8 +275,8 @@ namespace Carpentry.Core.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveTrackedSet(int setId)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> RemoveTrackedSet([FromBody] int setId)
         {
             try
             {

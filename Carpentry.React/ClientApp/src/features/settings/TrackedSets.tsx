@@ -6,29 +6,45 @@ import {
   IconButton,
   Paper,
   Switch,
-  Table, TableBody, TableCell,
-  TableHead, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Typography
 } from "@material-ui/core";
 import {Add, Delete, Refresh} from "@material-ui/icons";
-import {AppLayout} from "../../../common/components/AppLayout";
-import styles from "../../../app/App.module.css";
-import {SetDetailDto} from "../../../../../../Carpentry.Angular/ClientApp/src/app/settings/models";
-import {useAppSelector} from "../../../app/hooks";
+import {AppLayout} from "../../common/components/AppLayout";
+import styles from "../../app/App.module.css";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {loadTrackedSets, modifyTrackedSets, selectSettingsApiStatus, TrackedSetsApiAction} from "./settingsSlice";
+import {ApiStatus} from "../../enums";
 
-
-const TrackedSetsRow = (props: { setDetail: SetDetailDto}): JSX.Element => {
-  const setDetail = props.setDetail; // lazy
-
-  const onAddSetClick = (setId: number): void => {
-
-  }
-  const onRemoveSetClick = (setId: number): void => {
-
-  }
-  const onUpdateSetClick = (setId: number): void => {
-
-  }
+const TrackedSetsRow = (props: { setId: number}): JSX.Element => {
+  const setDetail = useAppSelector(state => state.settings.trackedSets.byId[props.setId]);
+  const showUntracked = useAppSelector(state => state.settings.showUntrackedSets);
+  const dispatch = useAppDispatch();
+  
+  const onAddSetClick = (setId: number): void => 
+    dispatch(modifyTrackedSets({
+      action: TrackedSetsApiAction.add, 
+      setId: setId, 
+      showUntracked: showUntracked
+    }));
+  
+  const onRemoveSetClick = (setId: number): void => 
+    dispatch(modifyTrackedSets({
+      action: TrackedSetsApiAction.update,
+      setId: setId,
+      showUntracked: showUntracked
+    }));
+  
+  const onUpdateSetClick = (setId: number): void => 
+    dispatch(modifyTrackedSets({
+      action: TrackedSetsApiAction.remove,
+      setId: setId,
+      showUntracked: showUntracked
+    }));
   
   return (
     <TableRow key={setDetail.code} className="set-row">
@@ -59,26 +75,26 @@ const TrackedSetsRow = (props: { setDetail: SetDetailDto}): JSX.Element => {
 }
 
 export const TrackedSets = (): JSX.Element => {
+  const settingsApiStatus = useAppSelector(selectSettingsApiStatus);
+  const isLoading = settingsApiStatus == ApiStatus.loading;
   
-  const trackedSetDetails: SetDetailDto[] = [];
-  const showUntrackedValue = false;
-  const isLoading = false;// useAppSelector(state => state.se)
+  const showUntrackedValue = useAppSelector(state => 
+    state.settings.showUntrackedSets);
   
-  
-  // useEffect - ensure loaded
-  
+  const trackedSetIds = useAppSelector(state => 
+    state.settings.trackedSets.allIds);
+
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    //ensure tracked sets are loaded
-    //     this.props.dispatch(requestTrackedSets(this.props.showUntracked, false));
+    if(settingsApiStatus == ApiStatus.uninitialized) dispatch(loadTrackedSets({showUntracked: showUntrackedValue, update: false}))
   })
   
-
   const onRefreshClick = (): void => {
-
+    dispatch(loadTrackedSets({showUntracked: showUntrackedValue, update: true}));
   }
   
   const onShowUntrackedClick = (): void => {
-    
+    dispatch(loadTrackedSets({showUntracked: !showUntrackedValue, update: false}));
   }
 
   return(
@@ -90,15 +106,16 @@ export const TrackedSets = (): JSX.Element => {
               Tracked Sets
             </Typography>
           </Box>
-          <FormControlLabel id='show-untracked-toggle'
-                            onClick={onShowUntrackedClick}
-                            control={
-                              <Switch
-                                checked={showUntrackedValue}
-                                name="checkedB"
-                                color="primary" />
-                            }
-                            label="Show Untracked"
+          <FormControlLabel 
+            id='show-untracked-toggle'
+            onClick={onShowUntrackedClick}
+            control={
+              <Switch
+                checked={showUntrackedValue}
+                name="checkedB"
+                color="primary" />
+            }
+            label="Show Untracked"
           />
           <Button disabled={true} color="primary" variant="contained" >Update All</Button>
           <IconButton color="inherit" onClick={onRefreshClick} id="refresh-button" >
@@ -118,10 +135,7 @@ export const TrackedSets = (): JSX.Element => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* TODO - pass in an ID instead of a whole object*/}
-              { trackedSetDetails.map(setDetail =>
-                <TrackedSetsRow setDetail={setDetail} />
-              )}
+              {trackedSetIds.map(id => <TrackedSetsRow key={id} setId={id} />)}
             </TableBody>
           </Table>
         </Paper>
