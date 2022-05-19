@@ -1,14 +1,13 @@
-import { ContentObserver } from "@angular/cdk/observers";
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { HttpService } from "../common/HttpService";
-import { AppFiltersDto, InventoryTotalsByStatusResult, SetDetailDto } from "./models";
+import {HttpClient} from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
+import {HttpService} from "../common/HttpService";
+import {InventoryTotalsByStatusResult, SetDetailDto} from "./models";
 
 @Injectable({
     providedIn: 'root',
 })
-export class CoreService extends HttpService 
+export class CoreService extends HttpService
 {
     constructor(http: HttpClient) {
         super(http);
@@ -25,22 +24,20 @@ export class CoreService extends HttpService
         return this.http.get<SetDetailDto[]>(endpoint);
     }
 
-    //TODO - These next 3 should be POST not GET
     addTrackedSet(setId: number): Observable<void> {
-        const endpoint = `api/Core/AddTrackedSet?setId=${setId}`;
-        return this.http.get<void>(endpoint);
+        const endpoint = `api/Core/AddTrackedSet`;
+        return this.http.post<void>(endpoint, setId);
     }
 
     updateTrackedSet(setId: number): Observable<void> {
-        const endpoint = `api/Core/UpdateTrackedSet?setId=${setId}`;
-        return this.http.get<void>(endpoint);
+        const endpoint = `api/Core/UpdateTrackedSet`;
+        return this.http.post<void>(endpoint, setId);
     }
-    
+
     removeTrackedSet(setId: number): Observable<void> {
-        const endpoint = `api/Core/RemoveTrackedSet?setId=${setId}`;        
-        return this.http.get<void>(endpoint);
+        const endpoint = `api/Core/RemoveTrackedSet`;
+        return this.http.post<void>(endpoint, setId);
     }
-    //
 
     getCollectionTotals(): Observable<InventoryTotalsByStatusResult[]> {
         const endpoint = 'api/Core/GetCollectionTotals';

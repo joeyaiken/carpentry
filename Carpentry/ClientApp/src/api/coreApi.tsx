@@ -1,36 +1,26 @@
-import { 
-    Get, 
-    // GetFile, 
-    // Post 
-} from '../api/apiHandler'
+import {Get, Post} from './apiHandler'
 
 export const coreApi = {
     async getCoreData(): Promise<AppFiltersDto> {
         const endpoint = `api/Core/GetCoreData`;
-        const result = await Get(endpoint);
-        return result;
+        return await Get(endpoint);
     },
 
     async getTrackedSets(showUntracked: boolean, update: boolean): Promise<SetDetailDto> {
         const endpoint = `api/Core/GetTrackedSets?showUntracked=${showUntracked}&update=${update}`;
-        const result = await Get(endpoint);
-        return result;
+        return  await Get(endpoint);
     },
 
-    //TODO - These next 3 should be POST not GET
     async addTrackedSet(setId: number): Promise<void> {
-        const endpoint = `api/Core/AddTrackedSet?setId=${setId}`;
-        await Get(endpoint);
-        return;
+        const endpoint = `api/Core/AddTrackedSet`;
+        return await Post(endpoint, setId);
     },
     async updateTrackedSet(setId: number): Promise<void> {
-        const endpoint = `api/Core/UpdateTrackedSet?setId=${setId}`;
-        await Get(endpoint);
-        return;
+        const endpoint = `api/Core/UpdateTrackedSet`;
+        return await Post(endpoint, setId);
     },
     async removeTrackedSet(setId: number): Promise<void> {
-        const endpoint = `api/Core/RemoveTrackedSet?setId=${setId}`;
-        await Get(endpoint);
-        return;
+        const endpoint = `api/Core/RemoveTrackedSet`;
+        return await Post(endpoint, setId);
     },
 }
