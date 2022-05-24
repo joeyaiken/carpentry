@@ -51,9 +51,9 @@ namespace Carpentry.Logic
                 throw new ArgumentNullException("Directory cannot be blank");
             }
 
-            string deckBackupFilepath = $"{directory}{_config.DeckBackupFilename}";
-            string cardBackupFilepath = $"{directory}{_config.CardBackupFilename}";
-            string propsBackupFilepath = $"{directory}{_config.PropsBackupFilename}";
+            var deckBackupFilepath = $"{directory}{_config.DeckBackupFilename}";
+            var cardBackupFilepath = $"{directory}{_config.CardBackupFilename}";
+            var propsBackupFilepath = $"{directory}{_config.PropsBackupFilename}";
 
             var deckBackupObj = await GetDeckBackups();
             var cardBackupObj = await GetCardBackups();
@@ -75,32 +75,35 @@ namespace Carpentry.Logic
             {
                 using(var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create, true))
                 {
-                    //Decks
-                    var decksEntry = archive.CreateEntry(_config.DeckBackupFilename, _exportCompressionLevel);
-                    using (var zipStream = decksEntry.Open())
-                    {
-                        var deckBackupObj = await GetDeckBackups();
-                        byte[] deckBackupContent = Encoding.ASCII.GetBytes(deckBackupObj.ToString());
-                        zipStream.Write(deckBackupContent, 0, deckBackupContent.Length);
-                    }
+                    throw new NotImplementedException(
+                        "This had a bug in it's initial implementation, and should be re-evaluated");
 
-                    //Cards
-                    var cardsEntry = archive.CreateEntry(_config.CardBackupFilename, _exportCompressionLevel);
-                    using (var zipStream = cardsEntry.Open())
-                    {
-                        var deckBackupObj = await GetDeckBackups();
-                        byte[] deckBackupContent = Encoding.ASCII.GetBytes(deckBackupObj.ToString());
-                        zipStream.Write(deckBackupContent, 0, deckBackupContent.Length);
-                    }
-
-                    //Backup Props
-                    var propsEntry = archive.CreateEntry(_config.PropsBackupFilename, _exportCompressionLevel);
-                    using (var zipStream = propsEntry.Open())
-                    {
-                        var deckBackupObj = await GetDeckBackups();
-                        byte[] deckBackupContent = Encoding.ASCII.GetBytes(deckBackupObj.ToString());
-                        zipStream.Write(deckBackupContent, 0, deckBackupContent.Length);
-                    }
+                    // //Decks
+                    // var decksEntry = archive.CreateEntry(_config.DeckBackupFilename, _exportCompressionLevel);
+                    // using (var zipStream = decksEntry.Open())
+                    // {
+                    //     var deckBackupObj = await GetDeckBackups();
+                    //     byte[] deckBackupContent = Encoding.ASCII.GetBytes(deckBackupObj.ToString());
+                    //     zipStream.Write(deckBackupContent, 0, deckBackupContent.Length);
+                    // }
+                    //
+                    // //Cards
+                    // var cardsEntry = archive.CreateEntry(_config.CardBackupFilename, _exportCompressionLevel);
+                    // using (var zipStream = cardsEntry.Open())
+                    // {
+                    //     var deckBackupObj = await GetCardBackups();
+                    //     byte[] deckBackupContent = Encoding.ASCII.GetBytes(deckBackupObj.ToString());
+                    //     zipStream.Write(deckBackupContent, 0, deckBackupContent.Length);
+                    // }
+                    //
+                    // //Backup Props
+                    // var propsEntry = archive.CreateEntry(_config.PropsBackupFilename, _exportCompressionLevel);
+                    // using (var zipStream = propsEntry.Open())
+                    // {
+                    //     var deckBackupObj = await GetDeckBackups();
+                    //     byte[] deckBackupContent = Encoding.ASCII.GetBytes(deckBackupObj.ToString());
+                    //     zipStream.Write(deckBackupContent, 0, deckBackupContent.Length);
+                    // }
                 }
 
                 backupFile = archiveStream.ToArray();

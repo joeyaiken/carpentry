@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace Carpentry.Data.DataModels
+namespace Carpentry.Data.Models
 {
     public class CardData
     {
@@ -18,18 +15,21 @@ namespace Carpentry.Data.DataModels
         public string Text { get; set; }
         public string Type { get; set; }
         public int? MultiverseId { get; set; }
-        public decimal? Price { get; set; }
-        public decimal? PriceFoil { get; set; }
+        //These 3 prices should be decimals, but SQLite doesn't support decimals...
+        public double? Price { get; set; }
+        public double? PriceFoil { get; set; }
+        public double? TixPrice { get; set; }
         public string ImageUrl { get; set; }
         public int CollectorNumber { get; set; }
-        public decimal? TixPrice { get; set; }
+        public char? CollectorNumberSuffix { get; set; }
+        public string CollectorNumberStr { get; set; }
         public string Color { get; set; }
         public string ColorIdentity { get; set; }
 
         //Associations
-        public virtual CardSetData Set { get; set; }
-        public virtual CardRarityData Rarity { get; set; }
-        public virtual ICollection<InventoryCardData> InventoryCards { get; set; }
-        public virtual ICollection<CardLegalityData> Legalities { get; set; }
+        // public virtual CardSetData Set { get; set; }
+        // public virtual CardRarityData Rarity { get; set; }
+        // public virtual ICollection<InventoryCardData> InventoryCards { get; set; }
+        // public virtual ICollection<CardLegalityData> Legalities { get; set; }
     }
 }

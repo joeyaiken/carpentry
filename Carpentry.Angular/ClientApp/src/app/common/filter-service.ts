@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import { HttpService } from "../common/HttpService";
+import { HttpService } from "./HttpService";
 import { AppFiltersDto, FilterOption } from "../settings/models";
 
 @Injectable({
