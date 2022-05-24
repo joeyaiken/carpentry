@@ -1,19 +1,31 @@
 import React from 'react';
 import { Box, Card, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
-import { appStyles, combineStyles } from '../../../styles/appStyles';
+import styles from '../../../../app/App.module.css';
+import {addPendingCard, removePendingCard} from "../inventoryAddCardsSlice";
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
 interface SelectedCardDetailSectionProps {
   selectedCard: CardSearchResultDto;
   pendingCards?: PendingCardsDto;
-  selectedCardDetail: InventoryDetailDto | null;
-  handleAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
-  handleRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
 }
 
-export default function SelectedCardSection(props: SelectedCardDetailSectionProps): JSX.Element {
-  const { outlineSection, flexRow, flexCol } = appStyles();
+export const SelectedCardSection = (props: SelectedCardDetailSectionProps): JSX.Element => {
+  const dispatch = useAppDispatch();
+  
+  const handleAddPendingCard = (name: string, cardId: number, isFoil: boolean): void =>
+    dispatch(addPendingCard({name: name, cardId: cardId, isFoil: isFoil}));
+
+  const handleRemovePendingCard = (name: string, cardId: number, isFoil: boolean): void =>
+    dispatch(removePendingCard({name: name, cardId: cardId, isFoil: isFoil}));
+  
+  const selectedCard = useAppSelector(state => state.inventory.inventoryAddCards.selectedCard);
+  
+  
+  
+  // const pendingCards = useAppSelector(state => state.inventory.inventoryAddCards.pendingCards)
+  //pendingCards={props.pendingCards[props.selectedCard!.name]}
   return(
-    <Box className={flexCol}>
+    <Box className={styles.flexCol}>
       {
         props.selectedCard.details.map((detail) => {
           let countNormal = 0;
@@ -24,28 +36,28 @@ export default function SelectedCardSection(props: SelectedCardDetailSectionProp
             countFoil = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil).length;
           }
           return (
-            <Card key={detail.cardId} className={combineStyles(outlineSection, flexRow, 'search-result-card')}>
+            <Card key={detail.cardId} className={[styles.outlineSection, styles.flexRow, 'search-result-card'].join(' ')}>
               <CardMedia
                 style={{height:"310px", width: "223px"}}
                 image={detail.imageUrl || undefined} />
               <CardContent>
-                <Box className={flexCol}>
-                  <Box className={flexCol}>
-                    <Box className={flexCol}>
+                <Box className={styles.flexCol}>
+                  <Box className={styles.flexCol}>
+                    <Box className={styles.flexCol}>
                       <Typography>{`${detail.price} | ${detail.priceFoil}`}</Typography>
                     </Box>
-                    <Box className={flexCol}>
+                    <Box className={styles.flexCol}>
                       <Typography>Normal ({countNormal})</Typography>
-                      <Box className={flexRow}>
-                        <Button variant="outlined" className="remove-button-normal" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, false)} } >-</Button>
-                        <Button variant="outlined" className="add-button-normal" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, false)} } >+</Button>
+                      <Box className={styles.flexRow}>
+                        <Button variant="outlined" className="remove-button-normal" onClick={() => {handleRemovePendingCard(detail.name, detail.cardId, false)} } >-</Button>
+                        <Button variant="outlined" className="add-button-normal" onClick={() => {handleAddPendingCard(detail.name, detail.cardId, false)} } >+</Button>
                       </Box>
                     </Box>
-                    <Box className={flexCol}>
+                    <Box className={styles.flexCol}>
                       <Typography>Foil ({countFoil})</Typography>
-                      <Box className={flexRow}>
-                        <Button variant="outlined" className="remove-button-foil" onClick={() => {props.handleRemovePendingCard(detail.name, detail.cardId, true)} } >-</Button>
-                        <Button variant="outlined" className="add-button-foil" onClick={() => {props.handleAddPendingCard(detail.name, detail.cardId, true)} } >+</Button>
+                      <Box className={styles.flexRow}>
+                        <Button variant="outlined" className="remove-button-foil" onClick={() => {handleRemovePendingCard(detail.name, detail.cardId, true)} } >-</Button>
+                        <Button variant="outlined" className="add-button-foil" onClick={() => {handleAddPendingCard(detail.name, detail.cardId, true)} } >+</Button>
                       </Box>
                     </Box>
                   </Box>

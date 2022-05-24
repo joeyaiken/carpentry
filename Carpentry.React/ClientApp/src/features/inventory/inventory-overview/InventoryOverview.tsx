@@ -175,7 +175,7 @@ export const InventoryOverview = (): JSX.Element => {
   }
 
   const handleAddCardsClick = (): void =>
-    history.push('/inventory/add-cards/');
+    history.push('/inventory/add-cards');
   
 
   const handleTrimmingToolClick = (): void =>

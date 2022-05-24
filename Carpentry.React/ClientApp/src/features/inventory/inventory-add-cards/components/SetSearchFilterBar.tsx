@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, TextField, MenuItem, FormControl, FormControlLabel, Checkbox } from '@material-ui/core';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import { appStyles, combineStyles } from '../../../styles/appStyles';
+import styles from '../../../../app/App.module.css';
 
 export interface SetSearchFilterBarProps{
     searchFilter: CardFilterProps,
@@ -11,16 +11,15 @@ export interface SetSearchFilterBarProps{
     handleBoolFilterChange: (filter: string, value: boolean) => void;
 }
 
-export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.Element {
-  const classes = appStyles();
+export const SetSearchFilterBar = (props: SetSearchFilterBarProps): JSX.Element => {
   return(
-    <Box className={combineStyles(classes.flexSection, classes.flexRow)}>
+    <Box className={[styles.flexSection, styles.flexRow].join(' ')}>
       {/* //SET filter */}
-      <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+      <Box className={`${styles.flexSection} ${styles.sidePadded}`}>
         <TextField
           id="set-select"
           name="set"
-          className={classes.stretch}
+          className={styles.stretch}
           select
           label="Set filter"
           value={props.searchFilter.set}
@@ -31,11 +30,11 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
         </TextField>
       </Box>
       {/* //Group filter */}
-      <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+      <Box className={`${styles.flexSection} ${styles.sidePadded}`}>
         <TextField
           id="search-group-select"
           name="group"
-          className={classes.stretch}
+          className={styles.stretch}
           select
           SelectProps={{ displayEmpty: true }}
           label="Group"
@@ -47,10 +46,10 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
         </TextField>
       </Box>
       {/* //Type filter */}
-      <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+      <Box className={`${styles.flexSection} ${styles.sidePadded}`}>
         <TextField
           name="type"
-          className={classes.stretch}
+          className={styles.stretch}
           select
           SelectProps={{ displayEmpty: true }}
           label="Type filter"
@@ -62,10 +61,10 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
         </TextField>
       </Box>
       {/* //Color Color Identity */}
-      <Box className={`${classes.flexSection} ${classes.sidePadded}`}>
+      <Box className={`${styles.flexSection} ${styles.sidePadded}`}>
         <TextField
           name="colorIdentity"
-          className={classes.stretch}
+          className={styles.stretch}
           label="Color filter"
           select
           SelectProps={{ multiple: true }}
@@ -76,7 +75,7 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
         </TextField>
       </Box>
       {/* //color booleans */}
-      <Box className={combineStyles(classes.staticSection, classes.sidePadded)}>
+      <Box className={[styles.staticSection, styles.sidePadded].join(' ')}>
         <FormControl component="fieldset">
           <FormControlLabel
             name="exclusiveColorFilters"
@@ -107,10 +106,10 @@ export default function SetSearchFilterBar(props: SetSearchFilterBarProps): JSX.
         </FormControl>
       </Box>
       {/* //RARITY filter */}
-      <Box className={combineStyles(classes.flexSection, classes.sidePadded)}>
+      <Box className={[styles.flexSection, styles.sidePadded].join(' ')}>
         <TextField
           name="rarity"
-          className={classes.stretch}
+          className={styles.stretch}
           select
           SelectProps={{ multiple: true }}
           label="Rarity filter"

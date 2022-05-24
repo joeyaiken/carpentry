@@ -8,6 +8,7 @@ import deckEditorReducer from '../features/decks/deck-editor/deckEditorSlice'
 import deckAddCardsReducer from '../features/decks/deck-add-cards/deckAddCardsSlice'
 import settingsReducer from '../features/settings/settingsSlice'
 import inventoryOverviewReducer from '../features/inventory/inventory-overview/inventoryOverviewSlice'
+import inventoryAddCardsReducer from "../features/inventory/inventory-add-cards/inventoryAddCardsSlice";
 import coreDataReducer from '../common/coreDataSlice';
 // import {connectRouter} from "connected-react-router";
 // import {History} from 'history';
@@ -31,7 +32,7 @@ const rootReducer = combineReducers({
 
   inventory: combineReducers({
     overviews: inventoryOverviewReducer,
-  //   inventoryAddCards: inventoryAddCardsReducer,
+    inventoryAddCards: inventoryAddCardsReducer,
   //   trimmingTool: trimmingToolReducer,
   //   data: inventoryDataReducer,
   }),

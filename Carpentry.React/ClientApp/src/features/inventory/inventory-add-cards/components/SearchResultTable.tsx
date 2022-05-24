@@ -8,17 +8,47 @@ import {
   TableCell,
   TableBody,
 } from '@material-ui/core';
-import { appStyles } from '../../../styles/appStyles';
+import styles from '../../../../app/App.module.css';
+import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
+import {
+  addPendingCard,
+  cardSearchSelectCard,
+  removePendingCard,
+  selectSearchResultItem
+} from "../inventoryAddCardsSlice";
 
-interface SearchResultTableProps {
-  searchResults: CardListItem[];
-  handleAddPendingCard: (name: string, cardId: number, isFoil: boolean) => void;
-  handleRemovePendingCard: (name: string, cardId: number, isFoil: boolean) => void;
-  onCardSelected: (item: CardListItem) => void;
+const SearchResultTableRow = (props: {cardId: number}): JSX.Element => {
+  const dispatch = useAppDispatch();
+
+  const handleAddPendingCard = (name: string, cardId: number, isFoil: boolean): void =>
+    dispatch(addPendingCard({name: name, cardId: cardId, isFoil: isFoil}));
+
+  const handleRemovePendingCard = (name: string, cardId: number, isFoil: boolean): void =>
+    dispatch(removePendingCard({name: name, cardId: cardId, isFoil: isFoil}));
+
+  const onCardSelected = (item: CardListItem): void =>
+    dispatch(cardSearchSelectCard(item.data));
+  
+  const result = useAppSelector(state => selectSearchResultItem(state, props.cardId)) 
+
+  return (
+    <TableRow onClick={() => { onCardSelected(result) }} key={result.data.cardId}>
+      <TableCell>{result.data.name}</TableCell>
+      <TableCell>{result.count}</TableCell>
+      <TableCell>
+        <Box className={styles.flexRow}>
+          <Button className="quick-remove-button" variant="contained" size="small" onClick={() => {handleRemovePendingCard(result.data.name, result.data.cardId, false)} } >-</Button>
+          <Button className="quick-add-button" variant="contained" size="small" onClick={() => {handleAddPendingCard(result.data.name, result.data.cardId, false)} } >+</Button>
+        </Box>
+      </TableCell>
+    </TableRow>
+  )
 }
 
-export default function SearchResultTable(props: SearchResultTableProps): JSX.Element {
-  const { flexRow } = appStyles();
+export const SearchResultTable = (): JSX.Element => {
+  const searchResultIds = useAppSelector(state => 
+    state.inventory.inventoryAddCards.searchResults.allSearchResultIds);
+  
   return (
     <Table size="small">
       <TableHead>
@@ -29,18 +59,7 @@ export default function SearchResultTable(props: SearchResultTableProps): JSX.El
         </TableRow>
       </TableHead>
       <TableBody>
-        { props.searchResults.map(result => (
-          <TableRow onClick={() => { props.onCardSelected(result) }} key={result.data.cardId}>
-            <TableCell>{result.data.name}</TableCell>
-            <TableCell>{result.count}</TableCell>
-            <TableCell>
-              <Box className={flexRow}>
-                <Button className="quick-remove-button" variant="contained" size="small" onClick={() => {props.handleRemovePendingCard(result.data.name, result.data.cardId, false)} } >-</Button>
-                <Button className="quick-add-button" variant="contained" size="small" onClick={() => {props.handleAddPendingCard(result.data.name, result.data.cardId, false)} } >+</Button>
-              </Box>
-            </TableCell>
-          </TableRow>
-        ))}
+        { searchResultIds.map(cardId => <SearchResultTableRow key={cardId} cardId={cardId} /> ) }
       </TableBody>
     </Table>
   );

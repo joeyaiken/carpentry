@@ -54,8 +54,8 @@ function App(): JSX.Element {
     
       <Switch>
         
-        <Route path="/decks/" component={DecksLayout} />
-        <Route exact path="/inventory" component={InventoryLayout} />
+        <Route path="/decks" component={DecksLayout} />
+        <Route path="/inventory" component={InventoryLayout} />
         <Route path="/settings" component={Settings} />
         {/*<Route exact path="/add-deck">*/}
         {/*  <NewDeckContainer />*/}
