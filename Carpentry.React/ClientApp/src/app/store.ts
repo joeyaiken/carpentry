@@ -6,7 +6,9 @@ import deckDetailReducer from '../features/decks/deckDetailSlice'
 import deckOverviewsReducer from '../features/decks/deckOverviewsSlice'
 import deckEditorReducer from '../features/decks/deck-editor/deckEditorSlice'
 import deckAddCardsReducer from '../features/decks/deck-add-cards/deckAddCardsSlice'
-
+import settingsReducer from '../features/settings/settingsSlice'
+import inventoryOverviewReducer from '../features/inventory/inventory-overview/inventoryOverviewSlice'
+import coreDataReducer from '../common/coreDataSlice';
 // import {connectRouter} from "connected-react-router";
 // import {History} from 'history';
 
@@ -27,20 +29,26 @@ const rootReducer = combineReducers({
     detail: deckDetailReducer,
   }),
 
-  // inventory: combineReducers({
-  //   overviews: inventoryOverviewAppReducer,
+  inventory: combineReducers({
+    overviews: inventoryOverviewReducer,
   //   inventoryAddCards: inventoryAddCardsReducer,
   //   trimmingTool: trimmingToolReducer,
   //   data: inventoryDataReducer,
-  // }),
+  }),
   //
+  
+  core: coreDataReducer,
   // core: combineReducers({
   //   data: coreDataReducer,
   // }),
+  
+  
   //
   // settings: combineReducers({
   //   trackedSets: trackedSetsReducer,
   // }),
+  
+  settings: settingsReducer,
 
   // router: connectRouter(history)
 })

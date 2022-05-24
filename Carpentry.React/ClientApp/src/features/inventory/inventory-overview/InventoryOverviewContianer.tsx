@@ -12,7 +12,6 @@ import LoadingBox from '../../common/components/LoadingBox';
 import { cardMenuButtonClick, inventoryOverviewFilterChanged, quickFilterApplied } from './state/InventoryOverviewActions';
 import { appStyles } from '../../styles/appStyles';
 import { group } from 'console';
-import CardImagePopper from '../../common/components/CardImagePopper';
 import AppLayout from "../../common/components/AppLayout";
 
 interface PropsFromState {

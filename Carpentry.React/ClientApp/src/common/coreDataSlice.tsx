@@ -1,13 +1,14 @@
-﻿import {createSlice} from '@reduxjs/toolkit';
+﻿import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {PayloadAction} from '@reduxjs/toolkit/dist/createAction';
-import {Dispatch} from "redux";
-import {coreApi} from "../api/coreApi";
 // import {appCoreDataReceived, appCoreDataRequested} from "./state/coreDataActions";
-import {RootState} from "../app/store";
+import {ApiStatus} from "../enums";
+import {coreApi} from "../api/coreApi";
+import {Add, AddIcCall, Build} from "@material-ui/icons";
 
 export interface State {
-  filterDataIsLoading: boolean;
+  // filterDataIsLoading: boolean;
   filterOptions: AppFiltersDto;
+  filterDataStatus: ApiStatus;
 }
 
 const initialState: State = {
@@ -22,20 +23,32 @@ const initialState: State = {
     groupBy: [],
     sortBy: [],
   },
-  filterDataIsLoading: false,
+  filterDataStatus: ApiStatus.uninitialized,
 }
+
+export const getCoreData = createAsyncThunk<AppFiltersDto>(
+  'coreData/getCoreData',
+  async () => coreApi.getCoreData()
+);
 
 export const coreDataSlice = createSlice({
   name: 'coreData',
   initialState: initialState,
-  reducers: {
-    appFiltersRequested: (state: State) => {
-      state.filterDataIsLoading = true;
-    },
-    appFiltersReceived: (state: State, action: PayloadAction<AppFiltersDto>) => {
+  reducers: { },
+  extraReducers: (builder) => {
+    builder.addCase(getCoreData.pending, (state) => {
+      state.filterDataStatus = ApiStatus.loading;
+    });
+
+    builder.addCase(getCoreData.fulfilled, (state, action) => {
+      state.filterDataStatus = ApiStatus.initialized;
       state.filterOptions = action.payload || {};
-      state.filterDataIsLoading = false;
-    }
+    });
+
+    builder.addCase(getCoreData.rejected, (state, action) => {
+      console.error('getCoreData thunk rejected: ', action);
+      state.filterDataStatus = ApiStatus.errored;
+    });
   },
 })
 
@@ -57,6 +70,6 @@ export const coreDataSlice = createSlice({
 //   });
 // }
 
-export const { appFiltersReceived, appFiltersRequested } = coreDataSlice.actions;
+// export const { appFiltersReceived, appFiltersRequested } = coreDataSlice.actions;
 
 export default coreDataSlice.reducer;

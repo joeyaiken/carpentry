@@ -14,6 +14,11 @@ import {
 } from 'react-router-dom'
 import DecksLayout from "./features/decks/DecksLayout";
 import {Settings} from "./features/settings/Settings";
+import {InventoryLayout} from "./features/inventory/InventoryLayout";
+import {useEffect} from "react";
+import {useAppDispatch, useAppSelector} from "./app/hooks";
+import {ApiStatus} from "./enums";
+import {getCoreData} from "./common/coreDataSlice";
 
 
 // import './custom.css'
@@ -34,6 +39,14 @@ import {Settings} from "./features/settings/Settings";
 // }
 
 function App(): JSX.Element {
+  
+  const coreDataStatus = useAppSelector(state => state.core.filterDataStatus);
+  
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if(coreDataStatus === ApiStatus.uninitialized) dispatch(getCoreData()); 
+  });
+  
   return (
     <Router>
       
@@ -42,7 +55,7 @@ function App(): JSX.Element {
       <Switch>
         
         <Route path="/decks/" component={DecksLayout} />
-        {/*<Route exact path="/inventory" component={InventoryLayout} />*/}
+        <Route exact path="/inventory" component={InventoryLayout} />
         <Route path="/settings" component={Settings} />
         {/*<Route exact path="/add-deck">*/}
         {/*  <NewDeckContainer />*/}

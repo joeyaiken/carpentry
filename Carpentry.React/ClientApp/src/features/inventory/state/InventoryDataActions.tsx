@@ -21,9 +21,9 @@ function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
     //dispatch(inventoryItemsRequested());
     dispatch(inventoryOverviewsRequested());
     
-    //TODO -- This whole chunk shouyld come from the inventory overview app reducer
+    //TODO -- This whole chunk should come from the inventory overview app reducer
     //  It should also probably be passed as a param and not purely read from app state
-
+    
     const existingFilters = state.inventory.overviews.filters;
     const param: InventoryQueryParameter = { 
         groupBy: existingFilters.groupBy,

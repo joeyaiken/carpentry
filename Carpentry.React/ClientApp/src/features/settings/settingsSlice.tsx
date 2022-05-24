@@ -25,8 +25,7 @@ const initialState: State = {
 
 export const loadTrackedSets = createAsyncThunk<SetDetailDto[], {showUntracked: boolean, update: boolean}>(
   'trackedSets/loadTrackedSets',
-  async (props, thunkApi) => 
-    await coreApi.getTrackedSets(props.showUntracked, props.update)
+  async (props) => coreApi.getTrackedSets(props.showUntracked, props.update)
 );
 
 export enum TrackedSetsApiAction {
@@ -35,7 +34,7 @@ export enum TrackedSetsApiAction {
   remove,
 }
 export const modifyTrackedSets = createAsyncThunk<void, {action: TrackedSetsApiAction, setId: number, showUntracked: boolean}>(
-  'trackedSets/',
+  'trackedSets/modifyTrackedSets',
   async(props, thunkApi) => {
     switch (props.action){
       case TrackedSetsApiAction.add: 

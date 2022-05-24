@@ -34,7 +34,6 @@ declare interface NamedCardGroup {
   cardOverviewIds: number[];
 }
 
-
 interface CardFilterProps {
   set: string;
   // setId: number | null;
