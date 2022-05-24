@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataModels\CardVariantData.cs" />
+    <Compile Remove="DataModels\CardVariantTypeData.cs" />
+    <Compile Remove="DataModels\ManaTypeData.cs" />
+    <Compile Remove="Implementations\CardComparer.cs" />
+    <Compile Remove="Implementations\DataQueryService.cs" />
+    <Compile Remove="Implementations\DataReferenceRepo.cs" />
+    <Compile Remove="Implementations\DataReferenceService.cs" />
+    <Compile Remove="Implementations\LegacyScryfallRepo.cs" />
+    <Compile Remove="Implementations\SqliteCardRepo.cs" />
+    <Compile Remove="Interfaces\IDataQueryService.cs" />
+    <Compile Remove="Interfaces\IDataReferenceRepo.cs" />
+    <Compile Remove="Interfaces\IDataReferenceService.cs" />
+    <Compile Remove="Implementations\LegacySqliteCardRepo.cs" />
+    <Compile Remove="Implementations\SqliteNCardRepo.cs" />
+    <Compile Remove="Interfaces\ILegacySqliteCardRepo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Implementations\notes.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.16" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DataScripts\spGetInventoryTotals.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\spGetTotalTrimCount.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\spGetTrimmingTips.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwAllInventoryCards.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwCardTotals.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwInventoryCardsByName.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwInventoryCardsByPrint.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwInventoryCardsByUnique.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwInventoryTotalsByStatus.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DataScripts\vwSetTotals.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
