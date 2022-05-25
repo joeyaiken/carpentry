@@ -1,7 +1,7 @@
-﻿import {coreApi} from "../api/coreApi";
+﻿import {coreApi} from "../../api/coreApi";
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {ApiStatus} from "../enums";
-import {RootState} from "../configureStore";
+import {ApiStatus} from "../../enums";
+import {RootState} from "../../configureStore";
 
 export interface State {
   showUntrackedSets: boolean;

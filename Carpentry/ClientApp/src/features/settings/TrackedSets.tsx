@@ -15,10 +15,10 @@ import {
 } from "@material-ui/core";
 import {Add, Delete, Refresh} from "@material-ui/icons";
 import {AppLayout} from "../common/components/AppLayout";
-import styles from "../App.module.css";
-import {useAppDispatch, useAppSelector} from "../hooks";
+import styles from "../../App.module.css";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 import {loadTrackedSets, modifyTrackedSets, selectSettingsApiStatus, TrackedSetsApiAction} from "./settingsSlice";
-import {ApiStatus} from "../enums";
+import {ApiStatus} from "../../enums";
 
 const TrackedSetsRow = (props: { setId: number}): JSX.Element => {
   const setDetail = useAppSelector(state => state.settings.trackedSets.byId[props.setId]);

@@ -1,7 +1,7 @@
 ﻿import React from "react"
 import {AppBar, Button, IconButton, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-import styles from '../../App.module.css'
+import styles from '../../../App.module.css'
 import {useHistory} from "react-router";
 
 export const Navigation = (): JSX.Element => {

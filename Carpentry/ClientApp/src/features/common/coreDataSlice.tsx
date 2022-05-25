@@ -1,6 +1,6 @@
 ﻿import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {ApiStatus} from "../enums";
-import {coreApi} from "../api/coreApi";
+import {ApiStatus} from "../../enums";
+import {coreApi} from "../../api/coreApi";
 
 export interface State {
   filterOptions: AppFiltersDto;

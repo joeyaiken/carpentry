@@ -1,19 +1,15 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { AppState } from '../../configureStore'
-import { Box, Tabs, AppBar, Typography, Toolbar, Button, IconButton, Tab, Menu, Card, CardMedia, CardContent, Paper, Popper } from '@material-ui/core';
+import {RootState} from '../../configureStore'
+import { Box, AppBar, Typography, Toolbar, Button } from '@material-ui/core';
 import InventoryCardGrid from './components/InventoryCardGrid';
 import InventoryFilterBar from './components/InventoryFilterBar';
-import { Link } from 'react-router-dom';
-import { Publish } from '@material-ui/icons';
 import { push } from 'react-router-redux';
 import { requestInventoryOverviews } from '../state/InventoryDataActions';
 import LoadingBox from '../../common/components/LoadingBox';
 import { cardMenuButtonClick, inventoryOverviewFilterChanged, quickFilterApplied } from './state/InventoryOverviewActions';
-import { appStyles } from '../../styles/appStyles';
-import { group } from 'console';
 import CardImagePopper from '../../common/components/CardImagePopper';
-import {AppLayout} from "../../common/components/AppLayout";
+import {AppLayout} from "../../features/common/components/AppLayout";
 
 interface PropsFromState {
   // searchMethod: "name" | "quantity" | "price";
@@ -275,7 +271,7 @@ function QuickFilter(props: QuickFilterProps): JSX.Element {
 
 
 //State
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: RootState): PropsFromState {
 
   const result: PropsFromState = {
     // searchResults: selectInventoryOverviews(state),
@@ -289,7 +285,7 @@ function mapStateToProps(state: AppState): PropsFromState {
 
     searchFilter: state.inventory.overviews.filters,
     // visibleFilters: getFilterVisibilities(state.inventory.overviews.filters.groupBy),
-    filterOptions: state.core.data.filterOptions,
+    filterOptions: state.core.filterOptions,
     // searchMethod: state.app.inventory.searchMethod,
 
     visibleSection: "inventory",

@@ -1,6 +1,6 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextareaAutosize, TextField } from "@material-ui/core";
+import {Box} from "@material-ui/core";
 import React from "react";
-import { appStyles, combineStyles } from "../../../styles/appStyles";
+import {appStyles, combineStyles} from "../../../styles/appStyles";
 import CardMenu from "./CardMenu";
 import DeckCardDetail from "./DeckCardDetail";
 import DeckCardGrid from "./DeckCardGrid";
@@ -8,7 +8,7 @@ import DeckCardList from "./DeckCardList";
 import DeckPropsBar from "./DeckPropsBar";
 import DeckStatsBar from "./DeckStatsBar";
 import GroupedDeckCardList from "./GroupedDeckCardList";
-import {AppLayout} from "../../../common/components/AppLayout";
+import {AppLayout} from "../../../features/common/components/AppLayout";
 
 declare interface ComponentProps{
   //props & modal

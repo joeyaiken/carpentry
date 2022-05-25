@@ -10,10 +10,10 @@ import DecksLayout from './decks/DecksLayout';
 import InventoryLayout from './inventory/InventoryLayout';
 import NewDeckContainer from './decks/new-deck/NewDeckContainer';
 import ImportDeckContainer from './decks/import-deck/ImportDeckContainer';
-import {Settings} from './settings/Settings';
+import {Settings} from './features/settings/Settings';
 import {useAppDispatch, useAppSelector} from "./hooks";
 import {ApiStatus} from "./enums";
-import {getCoreData} from "./common/coreDataSlice";
+import {getCoreData} from "./features/common/coreDataSlice";
 
 export const App = (): JSX.Element  => {
   const coreDataStatus = useAppSelector(state => state.core.filterDataStatus);

@@ -1,7 +1,4 @@
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { History } from 'history';
+import {combineReducers} from 'redux';
 import { decksDataReducer, State as DecksDataReducerState } from './decks/state/decksDataReducer';
 import { inventoryDataReducer, InventoryDataReducerState } from './inventory/state/inventoryDataReducer';
 import { inventoryOverviewAppReducer, State as InventoryOverviewState } from './inventory/inventory-overview/state/InventoryOverviewAppReducer';
@@ -17,8 +14,8 @@ import { deckExportReducer, State as DeckExportReducerState } from './decks/deck
 import { cardTagsReducer, State as CardTagsReducerState } from './decks/card-tags/state/CardTagsReducer';
 import { importDeckReducer, State as ImportDeckReducerState } from './decks/import-deck/state/ImportDeckReducer';
 import { trimmingToolReducer, State as TrimmingToolReducerState } from './inventory/trimming-tool/state/TrimmingToolReducer';
-import coreDataReducer from './common/coreDataSlice';
-import settingsReducer from './settings/settingsSlice';
+import coreDataReducer from './features/common/coreDataSlice';
+import settingsReducer from './features/settings/settingsSlice';
 import {configureStore} from "@reduxjs/toolkit";
 
 //TODO - consider renaming this file to just "store.tsx"

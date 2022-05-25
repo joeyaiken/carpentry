@@ -1,12 +1,12 @@
-import { AppBar, Box, Button, Paper, Tab, Tabs, Toolbar, Typography } from '@material-ui/core';
+import {AppBar, Box, Button, Paper, Toolbar, Typography} from '@material-ui/core';
 import React from 'react';
-import { appStyles, combineStyles } from '../../../styles/appStyles';
+import {appStyles, combineStyles} from '../../../styles/appStyles';
 import FilterBar from './FilterBar';
 import PendingCardsSection from './PendingCardsSection';
 import SearchResultGrid from './SearchResultGrid';
 import SearchResultTable from './SearchResultTable';
 import SelectedCardSection from './SelectedCardSection';
-import {AppLayout} from "../../../common/components/AppLayout";
+import {AppLayout} from "../../../features/common/components/AppLayout";
 
 interface ComponentProps {
   filterOptions: AppFiltersDto;
