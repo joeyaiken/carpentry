@@ -1,94 +1,61 @@
-//This is the core "app" component.
-//I need some place to load core values from the API
-//Because of that, it might make more sense for this to be a connected component, even if it just displays the routing functional component
-import * as React from 'react';
-import { Route, Switch } from 'react-router';
+// This is the core "app" component.
+// I need some place to load core values from the API, there might be a better place to load that data...
+// ...but it will just exist here for now
+import React, {useEffect} from "react";
+import {BrowserRouter,Switch,Route} from 'react-router-dom';
 import './styles/App.css';
 import HomeContainer from './home/HomeContainer';
-import { connect, DispatchProp } from 'react-redux';
-import { AppState } from './configureStore'
 import './styles/mana.css';
 import DecksLayout from './decks/DecksLayout';
 import InventoryLayout from './inventory/InventoryLayout';
-import { requestCoreData } from './common/state/coreDataActions';
-import TrackedSetsContainer from './settings/tracked-sets/TrackedSetsContainer';
 import NewDeckContainer from './decks/new-deck/NewDeckContainer';
-// import { push } from 'react-router-redux';
-// import { Typography } from '@material-ui/core';
 import ImportDeckContainer from './decks/import-deck/ImportDeckContainer';
+import {Settings} from './settings/Settings';
+import {useAppDispatch, useAppSelector} from "./hooks";
+import {ApiStatus} from "./enums";
+import {getCoreData} from "./common/coreDataSlice";
 
-interface PropsFromState {
+export const App = (): JSX.Element  => {
+  const coreDataStatus = useAppSelector(state => state.core.filterDataStatus);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if(coreDataStatus === ApiStatus.uninitialized) dispatch(getCoreData());
+  });
+
+  /*
+  /decks/add/
+  /decks/import/
+  /decks/:id/props/
+  /decks/:id/addCards/
+  /decks/:id/
+  /inventory/addCards/
+  /inventory/:detail/
+  /inventory/import/
+  /inventory/
+  /settings/???
+  /settings/cardData|trackedSets
+  /settings/backups
+  */
+
+  return(
+    <BrowserRouter>
+      <Switch>
+        <Route path="/decks/" component={DecksLayout} />
+        <Route path="/inventory" component={InventoryLayout} />
+        <Route path="/settings" component={Settings} />
+
+        <Route path="/add-deck">
+          <NewDeckContainer />
+          <HomeContainer />
+        </Route>
+
+        <Route path="/import-deck">
+          <ImportDeckContainer />
+          <HomeContainer />
+        </Route>
+
+        <Route path="/" component={HomeContainer} />
+      </Switch>
+    </BrowserRouter>
+  )
 }
-
-type AppContainerProps = PropsFromState & DispatchProp<ReduxAction>;
-
-class AppContainer extends React.Component<AppContainerProps>{
-    // constructor(props: AppContainerProps) {
-    //     super(props);
-    // }
-    componentDidMount() {
-        this.props.dispatch(requestCoreData());
-        // this.props.dispatch(push('/decks/52'));
-    }
-
-    render() {
-        return (<AppLayout />);
-    }
-}
-
-function AppLayout(): JSX.Element {
-
-    /*
-    /decks/add/
-    /decks/import/
-    /decks/:id/props/
-    /decks/:id/addCards/
-    /decks/:id/
-    /inventory/addCards/
-    /inventory/:detail/
-    /inventory/import/
-    /inventory/
-    /settings/???
-    /settings/cardData|trackedSets
-    /settings/backups
-    */
-
-
-    return(
-        // <AppLayout>
-            <Switch>
-                <Route path="/decks/" component={DecksLayout} />
-                <Route path="/inventory" component={InventoryLayout} />
-                {/* <Route path="/settings" component={SettingsLayout} /> */}
-                <Route path="/settings/sets" component={TrackedSetsContainer} />
-
-                <Route path="/add-deck">
-                    <NewDeckContainer />
-                    <HomeContainer />
-                </Route>
-
-                <Route path="/import-deck">
-                    <ImportDeckContainer />
-                    <HomeContainer />
-                </Route>
-
-                <Route path="/" component={HomeContainer} />
-
-                {/* <Route path='/settings/backups' >
-                    <Backups />
-                </Route> */}
-                {/* <Route path='/settings' >
-                    Settings
-                </Route> */}
-            </Switch>
-        // </AppLayout>
-    )
-}
-
-function mapStateToProps(state: AppState): PropsFromState {
-    const result: PropsFromState = {
-    }
-    return result;
-}
-export default connect(mapStateToProps)(AppContainer);
-

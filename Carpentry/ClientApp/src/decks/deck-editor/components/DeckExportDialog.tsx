@@ -32,7 +32,7 @@ export function DeckExportDialog(props: ComponentProps): JSX.Element {
                         Export
                     </Button>
                 </Box>
-                <TextareaAutosize placeholder="Select Export Type" rowsMin={3} value="abcd" />
+                <TextareaAutosize placeholder="Select Export Type" minRows={3} value="abcd" />
             </DialogContent>
             <DialogActions>
                 <Button size="medium" onClick={props.onExportCloseClick}>

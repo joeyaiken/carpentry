@@ -8,7 +8,7 @@ import DeckCardList from "./DeckCardList";
 import DeckPropsBar from "./DeckPropsBar";
 import DeckStatsBar from "./DeckStatsBar";
 import GroupedDeckCardList from "./GroupedDeckCardList";
-import AppLayout from "../../../common/components/AppLayout";
+import {AppLayout} from "../../../common/components/AppLayout";
 
 declare interface ComponentProps{
   //props & modal

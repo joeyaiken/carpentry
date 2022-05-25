@@ -131,8 +131,8 @@ function ImportDetailLayout(props: ImportDetailLayoutProps): JSX.Element {
         {/* Import String */}
         <Box>
             <TextareaAutosize 
-                placeholder="Cards" 
-                rowsMin={3} rowsMax={10} 
+                placeholder="Cards"
+                minRows={3} maxRows={10} 
                 value={props.importProps.importString} 
                 name={"importString"} 
                 onChange={event => props.onChange(event.target.name, event.target.value)} />

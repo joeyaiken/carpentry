@@ -1,7 +1,7 @@
 import React from 'react';
 import { Add, ArrowForward, SaveAlt } from '@material-ui/icons';
 import DeckListContainer from '../decks/deck-list/DeckListContainer';
-import AppLayout from '../common/components/AppLayout';
+import {AppLayout} from '../common/components/AppLayout';
 import {
     Typography,
     Box,

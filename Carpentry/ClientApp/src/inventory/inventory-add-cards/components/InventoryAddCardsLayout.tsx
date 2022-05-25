@@ -6,7 +6,7 @@ import PendingCardsSection from './PendingCardsSection';
 import SearchResultGrid from './SearchResultGrid';
 import SearchResultTable from './SearchResultTable';
 import SelectedCardSection from './SelectedCardSection';
-import AppLayout from "../../../common/components/AppLayout";
+import {AppLayout} from "../../../common/components/AppLayout";
 
 interface ComponentProps {
   filterOptions: AppFiltersDto;

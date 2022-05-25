@@ -5,7 +5,7 @@ import SelectedCardSection from './SelectedCardSection';
 import FilterBar from './FilterBar';
 import SearchResultGrid from './SearchResultGrid';
 import SearchResultTable from './SearchResultTable';
-import AppLayout from "../../../common/components/AppLayout";
+import {AppLayout} from "../../../common/components/AppLayout";
 
 interface ContainerLayoutProps {
   filterOptions: AppFiltersDto;

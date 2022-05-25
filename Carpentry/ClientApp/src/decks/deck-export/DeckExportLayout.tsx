@@ -34,7 +34,7 @@ export function DeckExportLayout(props: ComponentProps): JSX.Element {
                         Export
                     </Button>
                 </Box>
-                <TextareaAutosize placeholder="Select Export Type" rowsMin={3} rowsMax={10} value={props.deckExportString} />
+                <TextareaAutosize placeholder="Select Export Type" minRows={3} maxRows={10} value={props.deckExportString} />
             </DialogContent>
             <DialogActions>
                 <Button size="medium" onClick={props.onExportCloseClick}>

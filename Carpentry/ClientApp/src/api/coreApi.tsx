@@ -6,7 +6,7 @@ export const coreApi = {
         return await Get(endpoint);
     },
 
-    async getTrackedSets(showUntracked: boolean, update: boolean): Promise<SetDetailDto> {
+    async getTrackedSets(showUntracked: boolean, update: boolean): Promise<SetDetailDto[]> {
         const endpoint = `api/Core/GetTrackedSets?showUntracked=${showUntracked}&update=${update}`;
         return  await Get(endpoint);
     },
