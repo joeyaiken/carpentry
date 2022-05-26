@@ -2,7 +2,7 @@ import { push } from "react-router-redux";
 import { Dispatch } from "redux";
 import { cardSearchApi } from "../../../api/cardSearchApi";
 import { inventoryApi } from "../../../api/inventoryApi";
-import { AppState } from "../../../configureStore";
+import { RootState } from "../../../configureStore";
 
 export const requestSearch = (): any => {
     return (dispatch: Dispatch, getState: any) => {
@@ -22,7 +22,7 @@ export const searchReceived = (results: CardSearchResultDto[]): ReduxAction => (
 
 });
 
-function trySearchCards(dispatch: Dispatch, state: AppState): any{
+function trySearchCards(dispatch: Dispatch, state: RootState): any{
     const searchInProgress: boolean = state.inventory.inventoryAddCards.searchResults.isLoading;
     if(searchInProgress){
         return;
@@ -108,7 +108,7 @@ export const saveCompleted = (): ReduxAction => ({
     type: SAVE_COMPLETED,
 });
 
-function trySavePendingCards(dispatch: Dispatch, state: AppState){
+function trySavePendingCards(dispatch: Dispatch, state: RootState){
     const isSaving = state.inventory.inventoryAddCards.pendingCardsSaving;
     if(isSaving){
         return;

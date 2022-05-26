@@ -16,9 +16,8 @@ import React from 'react'
 // import { requestDeckDetail } from '../actions/core.actions';
 
 import DeckListTable from './components/DeckListTable';
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import { ensureDeckOverviewsLoaded } from '../state/decksDataActions';
-import AppLayout from "../../common/components/AppLayout";
 
 // import DeckListLayout from '../components/DeckListLayout';
 // // import { deckList } from '../reducers/deckList.reducer';
@@ -115,7 +114,7 @@ class DeckList extends React.Component<DeckListProps> {
 
 }
 
-function selectDeckList(state: AppState): DeckOverviewDto[] {
+function selectDeckList(state: RootState): DeckOverviewDto[] {
     //state.data.
     //const someting = state.
     const { deckIds, decksById } = state.decks.data.overviews;
@@ -123,7 +122,7 @@ function selectDeckList(state: AppState): DeckOverviewDto[] {
     return result;
 }
 
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: RootState): PropsFromState {
 
     const result: PropsFromState = {
         decks: selectDeckList(state),

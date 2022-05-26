@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { AppState } from '../../configureStore';
+import {RootState} from '../../configureStore';
 import { 
     requestAddDeckCard, //TODO - This should be moved to the Deck Data Reducer
 } from '../deck-add-cards/state/DeckAddCardsActions';
@@ -296,7 +296,7 @@ function getCategoryId(category: string): string {
     }
 }
 
-function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+function mapStateToProps(state: RootState, ownProps: OwnProps): PropsFromState {
     //I need to get all deck card details for (the name mapping to this ID)
 
     var matchingIds = state.decks.data.detail.cardDetails.allIds.filter(id => {

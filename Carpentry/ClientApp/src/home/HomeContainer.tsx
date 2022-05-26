@@ -1,7 +1,7 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
 import HomeLayout from './HomeLayout';
-import { AppState } from '../configureStore';
+import { RootState } from '../configureStore';
 import { push } from 'react-router-redux';
 // import { addMenuButtonClicked } from './state/HomeActions';
 // import { Menu, MenuItem } from '@material-ui/core';
@@ -79,7 +79,7 @@ class HomeContainer extends React.Component<HomeProps> {
     }
 }
 
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: RootState): PropsFromState {
     const result: PropsFromState = {
         // addMenuAnchor: state.home.cardMenuAnchor,
     }

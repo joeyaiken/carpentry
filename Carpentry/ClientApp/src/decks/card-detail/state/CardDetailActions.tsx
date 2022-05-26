@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { inventoryApi } from '../../../api/inventoryApi';
-import { AppState } from '../../../configureStore';
+import { RootState } from '../../../configureStore';
 
 export const ensureCardDetailLoaded = (cardId: number): any => {
     return (dispatch: Dispatch, getState: any) => {
@@ -25,7 +25,7 @@ export const cardDetailReceived = (payload: InventoryDetailDto): ReduxAction => 
     payload: payload,
 });
 
-function tryLoadCardDetail(dispatch: Dispatch, state: AppState, cardId: number, forceReload: boolean): void {
+function tryLoadCardDetail(dispatch: Dispatch, state: RootState, cardId: number, forceReload: boolean): void {
 
     const isLoading = state.decks.cardDetail.isLoading;
     const activeCardId = state.decks.cardDetail.activeCardId;

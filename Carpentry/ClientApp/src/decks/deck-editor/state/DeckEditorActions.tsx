@@ -2,7 +2,7 @@
 import { push } from "connected-react-router";
 import { Dispatch } from "redux";
 import { decksApi } from "../../../api/decksApi";
-import { AppState } from "../../../configureStore";
+import { RootState } from "../../../configureStore";
 import { reloadDeckDetail, requestDeckOverviews } from "../../state/decksDataActions";
 
 export const TOGGLE_DECK_VIEW_MODE = 'TOGGLE_DECK_VIEW_MODE';
@@ -53,7 +53,7 @@ export const deckEditorSaveReceived = (): ReduxAction => ({
 //     type: DECK_PROPS_SAVE_RECEIVED,
 // });
 
-function trySaveDeckProps(dispatch: Dispatch, state: AppState): void {
+function trySaveDeckProps(dispatch: Dispatch, state: RootState): void {
     var isSaving = state.decks.deckEditor.isSaving;
     const deckPropsToUpdate = state.decks.deckEditor.deckModalProps;
 
@@ -91,7 +91,7 @@ export const requestDisassembleDeck = (): any => {
     }
 }
 //Not going to implement this until I'm done removing the .ui and .legacy project
-function tryDisassembleDeck(dispatch: Dispatch, state: AppState): void {
+function tryDisassembleDeck(dispatch: Dispatch, state: RootState): void {
     //Not going to implement this until I'm done removing the .ui and .legacy project
     console.log('Prentending to disassemble deck');
     dispatch(closeDeckPropsModal());
@@ -106,7 +106,7 @@ export const requestDeleteDeck = (): any => {
         tryDeleteDeck(dispatch, getState());
     }
 }
-function tryDeleteDeck(dispatch: Dispatch, state: AppState): void {
+function tryDeleteDeck(dispatch: Dispatch, state: RootState): void {
     const isSaving = state.decks.deckEditor.isSaving;
     if(isSaving) return;
     dispatch(deckEditorSaveRequested());
@@ -133,7 +133,7 @@ export const requestUpdateDeckCard = (detail: DeckCardDetail): any => {
 }
 
 //"status" should be "category" but w/e
-function updateDeckCard(dispatch: Dispatch, state: AppState, cardDetail: DeckCardDetail): any {
+function updateDeckCard(dispatch: Dispatch, state: RootState, cardDetail: DeckCardDetail): any {
 
     // const cardDetail = state.decks.data.detail.cardDetails.byId[deckCardId];
 
@@ -209,7 +209,7 @@ export const requestDeleteDeckCard = (deckCardId: number): any => {
     }
 }
 
-function deleteDeckCard(dispatch: Dispatch, state: AppState, deckCardId: number): any {
+function deleteDeckCard(dispatch: Dispatch, state: RootState, deckCardId: number): any {
     const currentDeckId = state.decks.data.detail.deckId;
     decksApi.removeDeckCard(deckCardId).then(() => {
         dispatch(reloadDeckDetail(currentDeckId));

@@ -1,7 +1,7 @@
 import { push } from "react-router-redux";
 import { Dispatch } from "redux";
 import { decksApi } from "../../../api/decksApi";
-import { AppState } from "../../../configureStore";
+import { RootState } from "../../../configureStore";
 
 export const requestValidateImport = (dto: CardImportDto): any => {
     return(dispatch: Dispatch, getState: any) => {
@@ -9,7 +9,7 @@ export const requestValidateImport = (dto: CardImportDto): any => {
     }
 }
 
-function tryValidateImport(dispatch: Dispatch, state: AppState, dto: CardImportDto): any {
+function tryValidateImport(dispatch: Dispatch, state: RootState, dto: CardImportDto): any {
     const { isValidating, isSaving } = state.decks.importDeck;
     if(isValidating || isSaving) return;
 
@@ -48,7 +48,7 @@ export const requestSaveImport = (): any => {
     }
 }
 
-function trySaveImport(dispatch: Dispatch, state: AppState): any {
+function trySaveImport(dispatch: Dispatch, state: RootState): any {
     
     const { isValidating, isSaving } = state.decks.importDeck;
     if(isValidating || isSaving) return;

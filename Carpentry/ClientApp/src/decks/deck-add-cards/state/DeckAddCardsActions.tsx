@@ -2,7 +2,7 @@ import { Dispatch } from "redux";
 import { cardSearchApi } from "../../../api/cardSearchApi";
 import { decksApi } from "../../../api/decksApi";
 import { inventoryApi } from "../../../api/inventoryApi";
-import { AppState } from "../../../configureStore";
+import { RootState } from "../../../configureStore";
 import { reloadDeckDetail } from "../../state/decksDataActions";
 
 export const CARD_SEARCH_FILTER_VALUE_CHANGED = 'DECK_ADD_CARDS.CARD_SEARCH_FILTER_VALUE_CHANGED';
@@ -35,7 +35,7 @@ export const requestAddDeckCard = (deckCardDto: DeckCardDto): any => {
   }
 }
 //TODO - should this belong in data actions?
-function addDeckCard(dispatch: Dispatch, state: AppState, deckCardDto: DeckCardDto): any{
+function addDeckCard(dispatch: Dispatch, state: RootState, deckCardDto: DeckCardDto): any{
   dispatch(cardSearchAddingDeckCard());
 
   // alert('broken code hit - cardSearchActions - addDeckCard')
@@ -107,7 +107,7 @@ export const cardSearchReceived = (results: CardSearchResultDto[]): ReduxAction 
 
 });
 
-function searchCards(dispatch: Dispatch, state: AppState): any{
+function searchCards(dispatch: Dispatch, state: RootState): any{
 
   const containerState = state.decks.deckAddCards;
 
@@ -159,7 +159,7 @@ export const cardSearchInventoryReceived = (payload: InventoryDetailDto): ReduxA
 
 
 //I don't really want to solve this tonight
-function searchCardSearchInventory(dispatch: Dispatch, state: AppState, card: CardSearchResultDto): any{
+function searchCardSearchInventory(dispatch: Dispatch, state: RootState, card: CardSearchResultDto): any{
   //need another bool for isSearching
   const searchInProgress: boolean = state.decks.deckAddCards.inventoryDetail.isLoading;
   if(searchInProgress){

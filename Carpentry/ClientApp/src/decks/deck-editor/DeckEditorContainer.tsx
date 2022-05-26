@@ -15,7 +15,7 @@ import {
     requestDeleteDeckCard,
 } from './state/DeckEditorActions';
 
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import { ensureDeckDetailLoaded, reloadDeckDetail } from '../state/decksDataActions';
 import { DeckEditorLayout } from './components/DeckEditorLayout';
 import { push } from 'react-router-redux';
@@ -319,7 +319,7 @@ class DeckEditor extends React.Component<DeckEditorProps> {
     }
 }
 
-function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
+function selectDeckOverviews(state: RootState): CardOverviewGroup[] {
     const { cardOverviews, cardGroups } = state.decks.data.detail; //state.data.deckDetail;
 
     if(state.decks.deckEditor.viewMode === "grouped"){
@@ -342,7 +342,7 @@ function selectDeckOverviews(state: AppState): CardOverviewGroup[] {
     }
 }
 
-function getSelectedCardOverview(state: AppState): DeckCardOverview | null {
+function getSelectedCardOverview(state: RootState): DeckCardOverview | null {
     const selectedOverviewCardId = state.decks.deckEditor.selectedOverviewCardId;
     if(selectedOverviewCardId){
         return state.decks.data.detail.cardOverviews.byId[selectedOverviewCardId];
@@ -350,7 +350,7 @@ function getSelectedCardOverview(state: AppState): DeckCardOverview | null {
     return null;
 }
 
-function getSelectedDeckDetails(state: AppState): DeckCardDetail[] {
+function getSelectedDeckDetails(state: RootState): DeckCardDetail[] {
     const { cardOverviews, cardDetails } = state.decks.data.detail;
     const { selectedOverviewCardId } = state.decks.deckEditor;
     if(selectedOverviewCardId){
@@ -386,7 +386,7 @@ function parseQueryString(queryString: string): ParsedQueryString {
     return result;
 }
 
-function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+function mapStateToProps(state: RootState, ownProps: OwnProps): PropsFromState {
 
     const queryString = parseQueryString(ownProps.location.search);
 
@@ -417,7 +417,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
         
         
         deckProperties: state.decks.data.detail.deckProps,
-        formatFilterOptions: state.core.data.filterOptions.formats,
+        formatFilterOptions: state.core.filterOptions.formats,
 
         isPropsDialogOpen: state.decks.deckEditor.isPropsModalOpen,
         deckDialogProperties: state.decks.deckEditor.deckModalProps,

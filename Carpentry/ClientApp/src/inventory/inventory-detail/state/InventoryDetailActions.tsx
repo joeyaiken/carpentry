@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { inventoryApi } from '../../../api/inventoryApi';
-import { AppState } from '../../../configureStore';
+import { RootState } from '../../../configureStore';
 import { inventoryDetailRequested, inventoryDetailReceived } from '../../state/InventoryDataActions';
 
 export const ensureInventoryDetailLoaded = (cardId: number): any => {
@@ -9,7 +9,7 @@ export const ensureInventoryDetailLoaded = (cardId: number): any => {
     }
 }
 
-function tryLoadInventoryDetail(dispatch: Dispatch, state: AppState, cardId: number){
+function tryLoadInventoryDetail(dispatch: Dispatch, state: RootState, cardId: number){
     //Has a load been requested?
     //  if yes, return
     //So this could be two variables: queryIsLoaded, loadedId

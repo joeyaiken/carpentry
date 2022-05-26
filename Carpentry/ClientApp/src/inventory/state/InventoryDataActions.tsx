@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { inventoryApi } from "../../api/inventoryApi";
-import { AppState } from "../../configureStore";
+import { RootState } from "../../configureStore";
 
 
 
@@ -10,7 +10,7 @@ export const requestInventoryOverviews = (): any => {
     }
 }
 
-function getInventoryOverviews(dispatch: Dispatch, state: AppState): any {
+function getInventoryOverviews(dispatch: Dispatch, state: RootState): any {
     // console.log('actions - getInventoryItems START');
     //const dataQueryInProgress = state.inventory.overviewIsLoading;
     const dataQueryInProgress = state.inventory.data.overviews.isLoading;  //.isLoading.inventoryOverview;

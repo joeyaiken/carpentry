@@ -10,6 +10,7 @@ import LoadingBox from '../../common/components/LoadingBox';
 import { cardMenuButtonClick, inventoryOverviewFilterChanged, quickFilterApplied } from './state/InventoryOverviewActions';
 import CardImagePopper from '../../common/components/CardImagePopper';
 import {AppLayout} from "../../features/common/components/AppLayout";
+import {useHistory} from "react-router";
 
 interface PropsFromState {
   // searchMethod: "name" | "quantity" | "price";
@@ -144,7 +145,9 @@ class InventoryOverviewContainer extends React.Component<InventoryOverviewProps>
   }
 
   handleTrimmingToolClick() {
-    this.props.dispatch(push('/inventory/trimming-tool'))
+    //this.props.dispatch(push('/inventory/trimming-tool'))
+    // const history = useHistory();
+    // history.push('/inventory/trimming-tool')
   }
 
   render() {

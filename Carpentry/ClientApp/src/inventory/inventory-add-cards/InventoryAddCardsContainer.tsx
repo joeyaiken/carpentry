@@ -1,7 +1,7 @@
 //This may be the ideal situation to figure out how to do [that second mapping for actions]
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import InventoryAddCardsLayout from './components/InventoryAddCardsLayout';
 import {
   addPendingCard,
@@ -108,13 +108,13 @@ class InventoryAddCardsContainer extends React.Component<ContainerProps>{
   }
 }
 
-function selectSearchResults(state: AppState): CardSearchResultDto[] {
+function selectSearchResults(state: RootState): CardSearchResultDto[] {
   const { allSearchResultIds, searchResultsById } = state.inventory.inventoryAddCards.searchResults;
   const result: CardSearchResultDto[] = allSearchResultIds.map(cid => searchResultsById[cid])
   return result;
 }
 
-function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+function mapStateToProps(state: RootState, ownProps: OwnProps): PropsFromState {
   const containerState = state.inventory.inventoryAddCards;
 
   let mappedSearchResults: CardListItem[] = selectSearchResults(state).map(card => ({
@@ -128,7 +128,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
     selectedCard: containerState.selectedCard,
     searchResults: mappedSearchResults,
     viewMode: containerState.viewMode,
-    filterOptions: state.core.data.filterOptions,
+    filterOptions: state.core.filterOptions,
     searchFilterProps: containerState.searchFilter,
     isLoading: containerState.searchResults.isLoading,
   }

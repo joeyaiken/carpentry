@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import ImportDeckLayout from './components/ImportDeckLayout';
 import { push } from 'react-router-redux';
 import { importDeckPropertyChanged, requestValidateImport } from './state/ImportDeckActions';
@@ -74,11 +74,11 @@ class NewDeckContainer extends React.Component<ContainerProps> {
     }
 }
 
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: RootState): PropsFromState {
     
     const result: PropsFromState = {
         importProps: state.decks.importDeck.ui,
-        formatFilters: state.core.data.filterOptions.formats,
+        formatFilters: state.core.filterOptions.formats,
         validatedImport: state.decks.importDeck.validatedImport,
         // importString: state.decks.importDeck.importString,    
     }

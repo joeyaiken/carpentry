@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { Container, LinearProgress } from '@material-ui/core';
+import React, {ReactNode} from 'react';
+import {Container, LinearProgress} from '@material-ui/core';
 import {Navigation} from "./Navigation";
 import styles from '../../../App.module.css'
 

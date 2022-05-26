@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { decksApi } from '../../../api/decksApi';
-import { AppState } from '../../../configureStore';
+import { RootState } from '../../../configureStore';
 import { reloadDeckDetail } from '../../state/decksDataActions';
 
 export const ensureTagDetailLoaded = (cardId: number): any => {
@@ -15,7 +15,7 @@ export const reloadTagDetail = (cardId: number): any => {
     }
 }
 
-function tryLoadTagDetail(dispatch: Dispatch, state: AppState, cardId: number, forceReload: boolean): void {
+function tryLoadTagDetail(dispatch: Dispatch, state: RootState, cardId: number, forceReload: boolean): void {
 
     const isLoading = state.decks.cardTags.isLoading;
     const activeCardId = state.decks.cardTags.cardId;
@@ -52,7 +52,7 @@ export const requestAddCardTag = (dto: CardTagDto): any => {
 }
 
 //tryAddCardTag
-function tryAddCardTag(dispatch: Dispatch, state: AppState, dto: CardTagDto): void {
+function tryAddCardTag(dispatch: Dispatch, state: RootState, dto: CardTagDto): void {
     const isLoading = state.decks.cardTags.isLoading;
     if(isLoading) return;
 
@@ -82,7 +82,7 @@ export const requestRemoveCardTag = (cardTagId: number): any => {
 }
 
 //tryRemoveCardTag
-function tryRemoveCardTag(dispatch: Dispatch, state: AppState, cardTagId: number): void {
+function tryRemoveCardTag(dispatch: Dispatch, state: RootState, cardTagId: number): void {
     const isLoading = state.decks.cardTags.isLoading;
     if(isLoading) return;
 

@@ -1,7 +1,7 @@
 import { push } from "react-router-redux";
 import { Dispatch } from "redux";
 import { decksApi } from "../../../api/decksApi";
-import { AppState } from "../../../configureStore";
+import { RootState } from "../../../configureStore";
 import { requestDeckOverviews } from "../../state/decksDataActions";
 
 
@@ -35,7 +35,7 @@ export const newDeckSaveComplete = (): ReduxAction => ({
     type: NEW_DECK_SAVE_COMPLETE
 });
 
-function trySaveNewDeck(dispatch: Dispatch, state: AppState): any {
+function trySaveNewDeck(dispatch: Dispatch, state: RootState): any {
     
     const isSaving = false;
     if(isSaving){

@@ -6,7 +6,7 @@ import AppModal from '../../common/components/AppModal';
 // import { requestInventoryDetail } from '../../_actions/inventoryActions';
 
 import { ensureInventoryDetailLoaded } from './state/InventoryDetailActions';
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
 import { push } from 'connected-react-router';
 // import { parseConfigFileTextToJson } from 'typescript';
@@ -93,7 +93,7 @@ class InventoryDetailContainer extends React.Component<InventoryDetailContainerP
 // }
 
 //State
-function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+function mapStateToProps(state: RootState, ownProps: OwnProps): PropsFromState {
     // const containterState = state.
     const detailData = state.inventory.data.detail;
     const result: PropsFromState = {

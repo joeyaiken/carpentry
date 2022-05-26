@@ -1,7 +1,7 @@
 //This may be the ideal situation to figure out how to do [that second mapping for actions]
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { AppState } from '../../configureStore';
+import {RootState} from '../../configureStore';
 import {
   cardSearchFilterValueChanged,
   toggleCardSearchViewMode,
@@ -155,7 +155,7 @@ class DeckAddCardsContainer extends React.Component<ContainerProps>{
   }
 }
 
-function selectInventoryDetail(state: AppState): InventoryDetailDto {
+function selectInventoryDetail(state: RootState): InventoryDetailDto {
   const { allCardIds, cardsById, inventoryCardsAllIds, inventoryCardsById } = state.decks.deckAddCards.inventoryDetail;//state.cardSearch.data.inventoryDetail;
 
   //Are you fucking kidding me?
@@ -171,13 +171,13 @@ function selectInventoryDetail(state: AppState): InventoryDetailDto {
   return result;
 }
 
-function selectSearchResults(state: AppState): CardSearchResultDto[] {
+function selectSearchResults(state: RootState): CardSearchResultDto[] {
   const { allSearchResultIds, searchResultsById } = state.decks.deckAddCards.searchResults; //state.cardSearch.data.searchResults;
   const result: CardSearchResultDto[] = allSearchResultIds.map(cid => searchResultsById[cid])
   return result;
 }
 
-function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+function mapStateToProps(state: RootState, ownProps: OwnProps): PropsFromState {
   //I'm going to need to map pending card totals to the inventory query result
 
   let mappedSearchResults: CardListItem[] = [];
@@ -209,7 +209,7 @@ function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
 
     searchResults: mappedSearchResults,
     viewMode: containerState.viewMode,
-    filterOptions: state.core.data.filterOptions,
+    filterOptions: state.core.filterOptions,
     searchFilterProps: containerState.searchFilterProps,
     isLoading: containerState.inventoryDetail.isLoading || containerState.searchResults.isLoading || containerState.addCardIsSaving,
   }

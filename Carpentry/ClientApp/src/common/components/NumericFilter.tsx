@@ -15,6 +15,7 @@ export default function NumericFilter(props: NumericFilterProps): JSX.Element {
         <Box className={`${flexSection} ${sidePadded}`}>
             <TextField
                 id={props.id}
+                type="number"
                 name={props.name}
                 className={stretch}
                 label={props.name}

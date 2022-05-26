@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { decksApi } from "../../../api/decksApi";
-import { AppState } from "../../../configureStore";
+import { RootState } from "../../../configureStore";
 
 export const OPEN_EXPORT_DIALOG = 'DECK_EXPORT.OPEN_EXPORT_DIALOG';
 export const openExportDialog = (): ReduxAction => ({
@@ -24,7 +24,7 @@ export const requestDeckExport = (deckId: number, exportType: DeckExportType): a
     }
 }
 
-function tryGetDeckExport(dispatch: Dispatch, state: AppState, deckId: number, exportType: DeckExportType): void {
+function tryGetDeckExport(dispatch: Dispatch, state: RootState, deckId: number, exportType: DeckExportType): void {
     var isLoading = state.decks.deckExport.isLoading;
     if(isLoading) return;
     

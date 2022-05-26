@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { decksApi } from '../../api/decksApi';
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 // import { decksApi } from '../api/decksApi';
 // import { AppState } from '../_reducers';
 // // import { api } from './api';
@@ -18,7 +18,7 @@ export const ensureDeckOverviewsLoaded = (): any => {
     }
 }
 
-function getDeckOverviews(dispatch: Dispatch, state: AppState, forceReload: boolean): any  {
+function getDeckOverviews(dispatch: Dispatch, state: RootState, forceReload: boolean): any  {
     if(state.decks.data.overviews.isLoading || (!forceReload && state.decks.data.overviews.isInitialized)) return;
     dispatch(deckOverviewsRequested());
     decksApi.getDeckOverviews().then((results) => {
@@ -61,7 +61,7 @@ export const ensureDeckDetailLoaded = (deckId: number): any => {
     }
 }
 
-function tryLoadDeckDetail(dispatch: Dispatch, state: AppState, deckId: number, forceReload: boolean): void {
+function tryLoadDeckDetail(dispatch: Dispatch, state: RootState, deckId: number, forceReload: boolean): void {
     if (state.decks.data.detail.isLoading || (!forceReload && state.decks.data.detail.deckId === deckId)) return;
     dispatch(deckDetailRequested(deckId));
     decksApi.getDeckDetail(deckId).then((result) => {

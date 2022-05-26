@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux';
 import React from 'react';
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import CardTagsLayout from './components/CardTagsLayout';
 import { ensureTagDetailLoaded, newTagChange, requestAddCardTag, requestRemoveCardTag } from './state/CardTagsActions';
 
@@ -73,7 +73,7 @@ class CardDetailContainer extends React.Component<ContainerProps>{
     }
 }
 
-function mapStateToProps(state: AppState, ownProps: OwnProps): PropsFromState {
+function mapStateToProps(state: RootState, ownProps: OwnProps): PropsFromState {
     const containerState = state.decks.cardTags;
     const result: PropsFromState = {
         selectedDeckId: state.decks.data.detail.deckId,

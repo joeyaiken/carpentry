@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react';
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import { DeckExportLayout } from './DeckExportLayout';
 import { closeExportDialog, exportTypeChanged, requestDeckExport } from './state/DeckExportActions';
 
@@ -47,7 +47,7 @@ class DeckExport extends React.Component<DeckEditorProps> {
     }
 }
 
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: RootState): PropsFromState {
     const containerProps = state.decks.deckExport;
     const result: PropsFromState = {
         deckId: state.decks.data.detail.deckId,

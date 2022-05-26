@@ -1,6 +1,6 @@
 import { connect, DispatchProp } from 'react-redux'
 import React from 'react'
-import { AppState } from '../../configureStore';
+import { RootState } from '../../configureStore';
 import NewDeckLayout from './components/NewDeckLayout';
 import { push } from 'react-router-redux';
 import { newDeckModalClosed, newDeckPropertyChanged, requestSaveNewDeck } from './state/NewDeckActions';
@@ -48,10 +48,10 @@ class NewDeckContainer extends React.Component<ContainerProps> {
     }
 }
 
-function mapStateToProps(state: AppState): PropsFromState {
+function mapStateToProps(state: RootState): PropsFromState {
     const result: PropsFromState = {
         deckProps: state.decks.newDeck.deckProps,
-        formatFilters: state.core.data.filterOptions.formats,
+        formatFilters: state.core.filterOptions.formats,
     }
     return result;
 }
