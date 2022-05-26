@@ -13,7 +13,8 @@ import { homeReducer, State as HomeReducerState } from './home/state/HomeReducer
 import { deckExportReducer, State as DeckExportReducerState } from './decks/deck-export/state/DeckExportReducer';
 import { cardTagsReducer, State as CardTagsReducerState } from './decks/card-tags/state/CardTagsReducer';
 import { importDeckReducer, State as ImportDeckReducerState } from './decks/import-deck/state/ImportDeckReducer';
-import { trimmingToolReducer, State as TrimmingToolReducerState } from './inventory/trimming-tool/state/TrimmingToolReducer';
+//import { trimmingToolReducer, State as TrimmingToolReducerState } from './inventory/trimming-tool/state/TrimmingToolReducer';
+import trimmingToolReducer from './features/inventory/trimming-tool/trimmingToolSlice';
 import coreDataReducer from './features/common/coreDataSlice';
 import settingsReducer from './features/settings/settingsSlice';
 import {configureStore} from "@reduxjs/toolkit";
@@ -50,6 +51,7 @@ const rootReducer =
     inventory: combineReducers({
         overviews: inventoryOverviewAppReducer,
         inventoryAddCards: inventoryAddCardsReducer,
+        // trimmingToolLegacy: trimmingToolReducer,
         trimmingTool: trimmingToolReducer,
         data: inventoryDataReducer,
     }),
@@ -64,43 +66,7 @@ export const store = configureStore({
     reducer: rootReducer,
 })
 
-
-// export type AppState = ReturnType<typeof rootReducer>;
 export type RootState = ReturnType<typeof rootReducer>;
-
-export interface AppState {
-    //router state
-    //
-    // cardSearch: {
-    //     state: CardSearchReducersState,
-    //     data: CardSearchDataReducerState
-    // }
-    home: HomeReducerState,
-
-    decks: {
-        newDeck: NewDeckReducerState,
-        importDeck: ImportDeckReducerState,
-        deckEditor: DeckEditorReducerState,
-        cardDetail: CardDetailReducerState,
-        cardTags: CardTagsReducerState,
-        deckAddCards: DeckAddCardsReducerState,
-        deckExport: DeckExportReducerState,
-        data: DecksDataReducerState
-    }
-    inventory:{
-        //or
-        //app: {
-        //  overviews
-        //  detail
-        //}
-        overviews: InventoryOverviewState,
-        inventoryAddCards: InventoryAddCardsReducerState,
-
-        trimmingTool: TrimmingToolReducerState,
-
-        data: InventoryDataReducerState
-    }
-}
 
 export type AppDispatch = typeof store.dispatch;
 
