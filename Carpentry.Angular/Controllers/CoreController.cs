@@ -6,7 +6,7 @@ using Carpentry.Logic;
 using Carpentry.Logic.Models;
 using Carpentry.CarpentryData.Models;
 
-namespace Carpentry.Controllers
+namespace Carpentry.Angular.Controllers
 {
     /// <summary>
     /// This controller will return general/core app information.
@@ -22,13 +22,13 @@ namespace Carpentry.Controllers
 
         private readonly IDataUpdateService _dataUpdateService;
         private readonly IFilterService _filterService;
-        private readonly IInventoryService _inventoryService;
+        private readonly IInventoryService _trimmingToolService;
 
-        public CoreController(IDataUpdateService dataUpdateService, IFilterService filterService, IInventoryService inventoryService)
+        public CoreController(IDataUpdateService dataUpdateService, IFilterService filterService, IInventoryService trimmingToolService)
         {
             _dataUpdateService = dataUpdateService;
             _filterService = filterService;
-            _inventoryService = inventoryService;
+            _trimmingToolService = trimmingToolService;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Carpentry.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetManaTypeFilters", ex));
             }
         }
-        
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetRarityFilters()
         {
@@ -114,7 +114,7 @@ namespace Carpentry.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetRarityFilters", ex));
             }
         }
-        
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetStatusFilters()
         {
@@ -128,7 +128,7 @@ namespace Carpentry.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetStatusFilters", ex));
             }
         }
-        
+
         [HttpGet("[action]")]
         public ActionResult GetCardGroupFilters()
         {
@@ -142,7 +142,7 @@ namespace Carpentry.Controllers
                 return StatusCode(500, FormatExceptionMessage("GetCardGroupFilters", ex));
             }
         }
-        
+
         [HttpGet("[action]")]
         public ActionResult GetInventorySortOptions()
         {
@@ -174,26 +174,26 @@ namespace Carpentry.Controllers
         #endregion
 
         #region Other
-
-        /// <summary>
-        /// Returns default reference/filter values used by the app
-        /// When the app loads, values will be queried to populate dropdown lists
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("[action]")]
-        public async Task<ActionResult<AppFiltersDto>> GetCoreData()
-        {
-            try
-            {
-                await _dataUpdateService.ValidateDatabase();
-                AppFiltersDto result = await _filterService.GetAppCoreData();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("GetCoreData", ex));
-            }
-        }
+        //
+        // /// <summary>
+        // /// Returns default reference/filter values used by the app
+        // /// When the app loads, values will be queried to populate dropdown lists
+        // /// </summary>
+        // /// <returns></returns>
+        // [HttpGet("[action]")]
+        // public async Task<ActionResult<AppFiltersDto>> GetCoreData()
+        // {
+        //     try
+        //     {
+        //         await _dataUpdateService.ValidateDatabase();
+        //         AppFiltersDto result = await _filterService.GetAppCoreData();
+        //         return Ok(result);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return StatusCode(500, FormatExceptionMessage("GetCoreData", ex));
+        //     }
+        // }
 
         /// <summary>
         /// Returns default reference/filter values used by the app
@@ -220,7 +220,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                var result = await _inventoryService.GetCollectionTotals();
+                var result = await _trimmingToolService.GetCollectionTotals();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -247,8 +247,8 @@ namespace Carpentry.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> AddTrackedSet(int setId)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AddTrackedSet([FromBody] int setId)
         {
             try
             {
@@ -261,8 +261,8 @@ namespace Carpentry.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateTrackedSet(int setId)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdateTrackedSet([FromBody] int setId)
         {
             try
             {
@@ -275,8 +275,8 @@ namespace Carpentry.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveTrackedSet(int setId)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> RemoveTrackedSet([FromBody] int setId)
         {
             try
             {

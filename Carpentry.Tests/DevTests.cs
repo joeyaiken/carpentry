@@ -3,13 +3,12 @@ using Carpentry.Legacy.Models;
 using Carpentry.Logic.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Carpentry.Logic;
+using Carpentry.Models;
 
 namespace Carpentry.Tests
 {
@@ -17,7 +16,6 @@ namespace Carpentry.Tests
     public class DevTests
     {
 
-        
         [TestMethod]
         public async Task GetTrackedSets_Query_Works()
         {
@@ -34,7 +32,6 @@ namespace Carpentry.Tests
             Assert.IsNotNull(searchResult);
         }
 
-
         [TestMethod]
         public async Task GetCollectionTotals_Query_Works()
         {
@@ -46,9 +43,10 @@ namespace Carpentry.Tests
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            var searchResult = JsonConvert.DeserializeObject<List<InventoryTotalsByStatusResult>>(responseContent);
-
+            var searchResult = JsonConvert.DeserializeObject<NormalizedList<InventoryTotalsByStatusResult>>(responseContent);
+            
             Assert.IsNotNull(searchResult);
+            Assert.AreEqual(4, searchResult.AllIds.Count);
         }
 
         [DataRow("name")]

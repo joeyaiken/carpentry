@@ -17,7 +17,7 @@ export class SettingsComponent implements OnInit {
 
   setDetails: SetDetailDto[];
 
-  //deck overviews | Collection Total Group | 
+  //deck overviews | Collection Total Group |
   inventoryStatusTotals: InventoryTotalsByStatusResult[] = [];
   // deckOverviews: InventoryTotalsByStatusResult[] = [];
 
@@ -43,41 +43,39 @@ export class SettingsComponent implements OnInit {
       this.isBusy = false;
     }/* err => console.log(`loadData error: ${err}`) */);
   }
-  
+
   getCollectionTotalsObservable(): Observable<InventoryTotalsByStatusResult[]> {
     return this.coreService.getCollectionTotals().pipe(tap<InventoryTotalsByStatusResult[]>(
       result => {
         this.inventoryStatusTotals = result;
-        const totalCount = result.reduce((accum, curr) => accum + curr.totalCount, 0);
-        const totalPrice = result.reduce((accum, curr) => accum + curr.totalPrice, 0);
-        this.inventoryStatusTotals.push({ 
-          statusId: 0, 
-          statusName: 'Total', 
-          totalCount: totalCount, 
-          totalPrice: totalPrice,
-        });
+        // const totalCount = result.reduce((accum, curr) => accum + curr.totalCount, 0);
+        // const totalPrice = result.reduce((accum, curr) => accum + curr.totalPrice, 0);
+        // this.inventoryStatusTotals.push({
+        //   statusId: 0,
+        //   statusName: 'Total',
+        //   totalCount: totalCount,
+        //   totalPrice: totalPrice,
+        // });
       },
       err => console.log(`getCollectionTotals error: ${err}`)
     ));
   }
 
-  getCollectionTotals(): void {
-    this.coreService.getCollectionTotals().subscribe(result => {
-        // this.deckOverviews = result;
-        this.inventoryStatusTotals = result;
-        const totalCount = result.reduce((accum, curr) => accum + curr.totalCount, 0);
-        const totalPrice = result.reduce((accum, curr) => accum + curr.totalPrice, 0);
-        // this.totalCount = result.reduce((accum, curr) => accum + curr.totalCount, 0);
-        // this.totalPrice = result.reduce((accum, curr) => accum + curr.totalPrice, 0);
-        this.inventoryStatusTotals.push({ 
-          statusId: 0, 
-          statusName: 'Total', 
-          totalCount: totalCount, 
-          totalPrice: totalPrice,
-        });
-
-    }, err => console.log(`getCollectionTotals error: ${err}`));
-  }
+  // getCollectionTotals(): void {
+  //   this.coreService.getCollectionTotals().subscribe(result => {
+  //       // this.deckOverviews = result;
+  //       this.inventoryStatusTotals = result;
+  //       // const totalCount = result.reduce((accum, curr) => accum + curr.totalCount, 0);
+  //       // const totalPrice = result.reduce((accum, curr) => accum + curr.totalPrice, 0);
+  //
+  //       // this.inventoryStatusTotals.push({
+  //       //   statusId: 0,
+  //       //   statusName: 'Total',
+  //       //   totalCount: totalCount,
+  //       //   totalPrice: totalPrice,
+  //       // });
+  //   }, err => console.log(`getCollectionTotals error: ${err}`));
+  // }
 
   loadTrackedSetsObseervable(update: boolean = false): Observable<SetDetailDto[]> {
     return this.coreService.getTrackedSets(this.showUntrackedSets, update)

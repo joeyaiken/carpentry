@@ -457,19 +457,24 @@ namespace Carpentry.Logic
 
         #endregion
 
-        //get collection/inventory totals by status
-        // GetTotalsByStatus | GetCollectionTotals | GetInventoryTotals
+        // Get collection/inventory totals by status
+        //  GetTotalsByStatus | GetCollectionTotals | GetInventoryTotals
         public async Task<List<InventoryTotalsByStatusResult>> GetCollectionTotals()
         {
-            //Should attempt to replicate this view with an EF query instead
-            //This just gets the total price and total count of all cards in the 3 statuses (Inventory, BuyList, SellList)
-            
-
-            //var legacyResult = await _cardContext.InventoryTotalsByStatus.ToListAsync();
-
+            // Should attempt to replicate this view with an EF query instead
+            // This just gets the total price and total count of all cards in the 3 statuses (Inventory, BuyList, SellList)
             var result = await _cardContext.GetInventoryTotalsByStatus().ToListAsync();
-
-            //Should really return a DTO instead but whatever
+            
+            // The view doesn't contain a Totals row, so one will be added here
+            var totals = new InventoryTotalsByStatusResult()
+            {
+                StatusId = 0,
+                StatusName = "Total",
+                TotalCount = result.Sum(status => status.TotalCount),
+                TotalPrice = result.Sum(status => status.TotalPrice),
+            };
+            result.Add(totals);
+            
             return result;
         }
 

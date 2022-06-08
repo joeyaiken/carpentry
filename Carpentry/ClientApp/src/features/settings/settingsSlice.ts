@@ -1,7 +1,8 @@
-﻿import {coreApi} from "../../api/coreApi";
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+﻿import {trackedSetsApi} from "../../api/trackedSetsApi";
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ApiStatus} from "../../enums";
 import {RootState} from "../../configureStore";
+import {coreApi} from "../../api/coreApi";
 
 export interface State {
   showUntrackedSets: boolean;
@@ -9,6 +10,12 @@ export interface State {
     readDataStatus: ApiStatus,
     writeDataStatus: ApiStatus,
     byId: { [id: number]: SetDetailDto };
+    allIds: number[];
+  },
+  
+  collectionTotals: {
+    status: ApiStatus,
+    byId: { [id: number]: InventoryTotalsByStatusResult };
     allIds: number[];
   }
 }
@@ -20,12 +27,17 @@ const initialState: State = {
     writeDataStatus: ApiStatus.initialized,
     byId: {},
     allIds: [],
+  },
+  collectionTotals: {
+    status: ApiStatus.uninitialized,
+    byId: {},
+    allIds: [],
   }
 }
 
-export const loadTrackedSets = createAsyncThunk<SetDetailDto[], {showUntracked: boolean, update: boolean}>(
+export const loadTrackedSets = createAsyncThunk<NormalizedList<SetDetailDto>, {showUntracked: boolean, update: boolean}>(
   'trackedSets/loadTrackedSets',
-  async (props) => coreApi.getTrackedSets(props.showUntracked, props.update)
+  async (props) => trackedSetsApi.getTrackedSets(props.showUntracked, props.update)
 );
 
 export enum TrackedSetsApiAction {
@@ -33,24 +45,31 @@ export enum TrackedSetsApiAction {
   update,
   remove,
 }
+
 export const modifyTrackedSets = createAsyncThunk<void, {action: TrackedSetsApiAction, setId: number, showUntracked: boolean}>(
   'trackedSets/modifyTrackedSets',
   async(props, thunkApi) => {
     switch (props.action){
       case TrackedSetsApiAction.add:
-        console.log('add set', props.setId);
-        await coreApi.addTrackedSet(props.setId);
+        await trackedSetsApi.addTrackedSet(props.setId);
         break;
       case TrackedSetsApiAction.update:
-        await coreApi.updateTrackedSet(props.setId);
+        await trackedSetsApi.updateTrackedSet(props.setId);
         break;
       case TrackedSetsApiAction.remove:
-        await coreApi.removeTrackedSet(props.setId);
+        await trackedSetsApi.removeTrackedSet(props.setId);
         break;
     }
     thunkApi.dispatch(loadTrackedSets({showUntracked: props.showUntracked, update: false}))
   }
 );
+
+export const loadCollectionTotals = createAsyncThunk<NormalizedList<InventoryTotalsByStatusResult>>(
+  'settings/loadCollectionTotals',
+  async () => {
+    return coreApi.GetCollectionTotals();
+  }
+)
 
 export const settingsSlice = createSlice({
   name: 'settings',
@@ -61,21 +80,13 @@ export const settingsSlice = createSlice({
       state.trackedSets.readDataStatus = ApiStatus.loading;
       state.showUntrackedSets = action.meta.arg.showUntracked;
     });
-
     builder.addCase(loadTrackedSets.fulfilled, (state, action) => {
-      const apiSets: SetDetailDto[] = action.payload;
-      if(apiSets===null) return;
-
-      let setsById: { [key:number]: SetDetailDto } = {};
-      apiSets.forEach(set => {
-        setsById[set.setId] = set;
-      });
-      state.trackedSets.byId = setsById;
-      state.trackedSets.allIds = apiSets.map(set => set.setId);
-
+      if(action.payload === null) return;
+      
+      state.trackedSets.byId = action.payload.byId;
+      state.trackedSets.allIds = action.payload.allIds;
       state.trackedSets.readDataStatus = ApiStatus.initialized;
     });
-
     builder.addCase(loadTrackedSets.rejected, (state, action) => {
       console.error('loadTrackedSets thunk rejected: ', action);
       state.trackedSets.readDataStatus = ApiStatus.errored;
@@ -84,14 +95,26 @@ export const settingsSlice = createSlice({
     builder.addCase(modifyTrackedSets.pending, (state) => {
       state.trackedSets.writeDataStatus = ApiStatus.loading;
     });
-
     builder.addCase(modifyTrackedSets.fulfilled, (state) => {
       state.trackedSets.writeDataStatus = ApiStatus.initialized;
     });
-
     builder.addCase(modifyTrackedSets.rejected, (state, action) => {
       console.error('modifyTrackedSets thunk rejected: ', action);
       state.trackedSets.writeDataStatus = ApiStatus.errored;
+    });
+
+
+    builder.addCase(loadCollectionTotals.pending, (state, action) => {
+      state.collectionTotals.status = ApiStatus.loading;
+    });
+    builder.addCase(loadCollectionTotals.fulfilled, (state, action) => {
+      state.collectionTotals.byId = action.payload.byId;
+      state.collectionTotals.allIds = action.payload.allIds;
+      state.collectionTotals.status = ApiStatus.initialized;
+    });
+    builder.addCase(loadCollectionTotals.rejected, (state, action) => {
+      console.error('loadCollectionTotals thunk rejected: ', action);
+      state.collectionTotals.status = ApiStatus.errored;
     });
   }
 });

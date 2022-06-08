@@ -17,7 +17,7 @@ namespace Carpentry.Core.Controllers
             return $"An error occured when processing the {functionName} method of the {nameof(InventoryController)}: {ex.Message}";
         }
 
-        private readonly IInventoryService _trimmingToolService;
+        private readonly IInventoryService _inventoryToolService;
         private readonly IDataExportService _dataExportService;
         private readonly IDataImportService _dataImportService;
         private readonly ISearchService _searchService;
@@ -26,13 +26,13 @@ namespace Carpentry.Core.Controllers
         /// Constructor, uses DI to get a card repo
         /// </summary>
         public InventoryController(
-            IInventoryService trimmingToolService,
+            IInventoryService inventoryToolService,
             IDataExportService dataExportService,
             IDataImportService dataImportService,
             ISearchService searchService
             )
         {
-            _trimmingToolService = trimmingToolService;
+            _inventoryToolService = inventoryToolService;
             _dataExportService = dataExportService;
             _dataImportService = dataImportService;
             _searchService = searchService;
@@ -55,7 +55,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                var updatedId = await _trimmingToolService.AddInventoryCard(dto);
+                var updatedId = await _inventoryToolService.AddInventoryCard(dto);
                 return Ok(updatedId);
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _trimmingToolService.AddInventoryCardBatch(dto);
+                await _inventoryToolService.AddInventoryCardBatch(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _trimmingToolService.UpdateInventoryCard(dto);
+                await _inventoryToolService.UpdateInventoryCard(dto);
                 return Ok();
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _trimmingToolService.UpdateInventoryCardBatch(batch);
+                await _inventoryToolService.UpdateInventoryCardBatch(batch);
                 return Ok();
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _trimmingToolService.DeleteInventoryCard(id);
+                await _inventoryToolService.DeleteInventoryCard(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -125,7 +125,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                await _trimmingToolService.DeleteInventoryCardBatch(batchIDs);
+                await _inventoryToolService.DeleteInventoryCardBatch(batchIDs);
                 return Ok();
             }
             catch (Exception ex)
@@ -163,7 +163,7 @@ namespace Carpentry.Core.Controllers
         {
             try
             {
-                var result = await _trimmingToolService.GetInventoryDetail(cardId);
+                var result = await _inventoryToolService.GetInventoryDetail(cardId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -225,10 +225,6 @@ namespace Carpentry.Core.Controllers
 
         #endregion
 
-        #region Trimming Tool
-
-        
-        #endregion
     }
 
 

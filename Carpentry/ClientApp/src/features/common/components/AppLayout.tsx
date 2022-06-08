@@ -12,7 +12,7 @@ interface LayoutProps {
 export const AppLayout = (props: LayoutProps): JSX.Element => {
   return(
     <div className={[styles.stretch, styles.flexCol].join(' ')}>
-      <Navigation />
+      <Navigation pageTitle={props.title} />
       {props.isLoading && <LinearProgress id='progress-bar' />}
       <Container maxWidth="xl" className={[styles.flexSection, styles.flexCol].join(' ')} style={{overflow:'auto'}}>
         {props.children}

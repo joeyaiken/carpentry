@@ -354,6 +354,8 @@ declare interface MagicCard {
     imageUrl: string;
 }
 
+// Used in SETTINGS area
+
 declare interface SetDetailDto {
     setId: number;
     code: string;
@@ -365,7 +367,14 @@ declare interface SetDetailDto {
     isTracked: boolean;
 }
 
+declare interface InventoryTotalsByStatusResult {
+    statusId: number;
+    statusName: string;
+    totalPrice: number;
+    totalCount: number;
+}
 
+// End used in SETTINGS area
 
 declare interface CardTagDto {
     deckId: number;
@@ -416,4 +425,9 @@ declare interface NewInventoryCard {
     cardId: number;
     isFoil: boolean;
     statusId: number;
+}
+
+declare interface NormalizedList<T> {
+    byId: { [key:number]: T };
+    allIds: number[];
 }

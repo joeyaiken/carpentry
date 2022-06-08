@@ -4,17 +4,20 @@ import {Menu} from "@material-ui/icons";
 import styles from '../../../App.module.css'
 import {useHistory} from "react-router";
 
-export const Navigation = (): JSX.Element => {
+export const Navigation = (props: {pageTitle: string}): JSX.Element => {
   const history =  useHistory();
   const Navigate = (route: string): void => {
     history.push(route);
   }
+  
+  const navigationTitle = "Carpentry" +  (!props.pageTitle ? "" : " - "+props.pageTitle);
+  
   return (
     <AppBar id="app-nav-menu" position="static">
       <Toolbar>
         <IconButton onClick={() => Navigate('/')} color="inherit"><Menu /></IconButton>
         <Typography variant="h5" className={styles.flexSection}>
-          Carpentry
+          {navigationTitle}
         </Typography>
         <Button onClick={() => Navigate('/decks')} className="nav-button" color="inherit">Decks</Button>
         <Button onClick={() => Navigate('/inventory')} className="nav-button" color="inherit">Inventory</Button>

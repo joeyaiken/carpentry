@@ -76,7 +76,6 @@ const TrackedSetsRow = (props: { setId: number}): JSX.Element => {
 
 export const TrackedSets = (): JSX.Element => {
   const settingsApiStatus = useAppSelector(selectSettingsApiStatus);
-  const isLoading = settingsApiStatus == ApiStatus.loading;
 
   const showUntrackedValue = useAppSelector(state =>
     state.settings.showUntrackedSets);
@@ -98,48 +97,47 @@ export const TrackedSets = (): JSX.Element => {
   }
 
   return(
-    <AppLayout title="Settings - Tracked Sets" isLoading={isLoading}>
-      <Box>
-        <Box className={styles.flexRow}>
-          <Box className={styles.flexSection}>
-            <Typography variant="h4">
-              Tracked Sets
-            </Typography>
-          </Box>
-          <FormControlLabel
-            id='show-untracked-toggle'
-            onClick={onShowUntrackedClick}
-            control={
-              <Switch
-                checked={showUntrackedValue}
-                name="checkedB"
-                color="primary" />
-            }
-            label="Show Untracked"
-          />
-          <Button disabled={true} color="primary" variant="contained" >Update All</Button>
-          <IconButton color="inherit" onClick={onRefreshClick} id="refresh-button" >
-            <Refresh />
-          </IconButton>
+    <Box>
+      <Box className={styles.flexRow}>
+        <Box className={styles.flexSection}>
+          <Typography variant="h4">
+            Tracked Sets
+          </Typography>
         </Box>
-        <Paper>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Code</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Owned</TableCell>
-                <TableCell>Collected</TableCell>
-                <TableCell>Last Updated</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {trackedSetIds.map(id => <TrackedSetsRow key={id} setId={id} />)}
-            </TableBody>
-          </Table>
-        </Paper>
+        <FormControlLabel
+          id='show-untracked-toggle'
+          onClick={onShowUntrackedClick}
+          control={
+            <Switch
+              checked={showUntrackedValue}
+              name="checkedB"
+              color="primary" />
+          }
+          label="Show Untracked"
+        />
+        {/* TODO - Don't forget this button exists and needs to be implemented*/}
+        <Button disabled={true} hidden={true} color="primary" variant="contained" >Update All</Button>
+        <IconButton color="inherit" onClick={onRefreshClick} id="refresh-button" >
+          <Refresh />
+        </IconButton>
       </Box>
-    </AppLayout>
+      <Paper>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Code</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Owned</TableCell>
+              <TableCell>Collected</TableCell>
+              <TableCell>Last Updated</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {trackedSetIds.map(id => <TrackedSetsRow key={id} setId={id} />)}
+          </TableBody>
+        </Table>
+      </Paper>
+    </Box>
   );
 }

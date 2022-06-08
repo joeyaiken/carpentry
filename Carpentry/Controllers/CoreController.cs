@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Carpentry.Logic;
 using Carpentry.Logic.Models;
 using Carpentry.CarpentryData.Models;
+using Carpentry.Controllers;
+using Carpentry.Models;
 
 namespace Carpentry.Controllers
 {
@@ -15,9 +17,9 @@ namespace Carpentry.Controllers
     [Route("api/[controller]")]
     public class CoreController : ControllerBase
     {
-        private string FormatExceptionMessage(string functionName, Exception ex)
+        private static string FormatExceptionMessage(string functionName, Exception ex)
         {
-            return $"An error occured when processing the {functionName} method of the Core controller: {ex.Message}";
+            return $"An error occured when processing the {functionName} method of the {nameof(CoreController)}: {ex.Message}";
         }
 
         private readonly IDataUpdateService _dataUpdateService;
@@ -41,8 +43,6 @@ namespace Carpentry.Controllers
             return Ok("Online");
         }
 
-        #region Other
-
         /// <summary>
         /// Returns default reference/filter values used by the app
         /// When the app loads, values will be queried to populate dropdown lists
@@ -53,7 +53,7 @@ namespace Carpentry.Controllers
         {
             try
             {
-                await _dataUpdateService.ValidateDatabase();//Should this be called somewhere else?...
+                await _dataUpdateService.ValidateDatabase();
                 AppFiltersDto result = await _filterService.GetAppCoreData();
                 return Ok(result);
             }
@@ -63,104 +63,19 @@ namespace Carpentry.Controllers
             }
         }
 
-        /// <summary>
-        /// Returns default reference/filter values used by the app
-        /// When the app loads, values will be queried to populate dropdown lists
-        /// </summary>
-        /// <returns></returns>
         [HttpGet("[action]")]
-        public async Task<ActionResult> ValidateDatabase()
+        public async Task<ActionResult<NormalizedList<InventoryTotalsByStatusResult>>> GetCollectionTotals()
         {
             try
             {
-                //ummm does this call a single 'core service' or does it
-                await _dataUpdateService.ValidateDatabase();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage("ValidateDatabase", ex));
-            }
-        }
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult<InventoryTotalsByStatusResult>> GetCollectionTotals()
-        {
-            try
-            {
-                //ummm does this call a single 'core service' or does it
                 var result = await _inventoryService.GetCollectionTotals();
-                return Ok(result);
+                var mappedResult = new NormalizedList<InventoryTotalsByStatusResult>(result, r => r.StatusId);
+                return Ok(mappedResult);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, FormatExceptionMessage("GetCollectionTotals", ex));
             }
         }
-
-        #endregion 
-
-        #region Tracked Sets
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult<List<SetDetailDto>>> GetTrackedSets(bool showUntracked, bool update = false)
-        {
-            try
-            {
-                var result = await _dataUpdateService.GetTrackedSets(showUntracked, update);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage(nameof(GetTrackedSets), ex));
-            }
-        }
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult> AddTrackedSet(int setId)
-        {
-            try
-            {
-                await _dataUpdateService.AddTrackedSet(setId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage(nameof(AddTrackedSet), ex));
-            }
-        }
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult> UpdateTrackedSet(int setId)
-        {
-            try
-            {
-                await _dataUpdateService.UpdateTrackedSet(setId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage(nameof(UpdateTrackedSet), ex));
-            }
-        }
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult> RemoveTrackedSet(int setId)
-        {
-            try
-            {
-                await _dataUpdateService.RemoveTrackedSet(setId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, FormatExceptionMessage(nameof(RemoveTrackedSet), ex));
-            }
-        }
-
-        #endregion Tracked Sets
-
-
-
     }
 }
