@@ -339,8 +339,8 @@ namespace Carpentry.Logic
 
         private async Task<int> GetDeckCardCount(int deckId)
         {
-            int basicLandCount = await _cardContext.Decks.Where(x => x.DeckId == deckId).Select(deck => deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG).FirstOrDefaultAsync();
-            int cardCount = await _cardContext.DeckCards.Where(x => x.DeckId == deckId).CountAsync();
+            var basicLandCount = await _cardContext.Decks.Where(x => x.DeckId == deckId).Select(deck => deck.BasicW + deck.BasicU + deck.BasicB + deck.BasicR + deck.BasicG).FirstOrDefaultAsync();
+            var cardCount = await _cardContext.DeckCards.Where(x => x.DeckId == deckId).CountAsync();
             return basicLandCount + cardCount;
         }
 
@@ -355,18 +355,17 @@ namespace Carpentry.Logic
                     DeckCardId = x.DeckCardId,
                     DeckId = x.DeckId,
                     Name = x.CardName,
-
+                    
                     Category = x.CategoryId == null ? null : x.Category.Name,
                     InventoryCardId = x.InventoryCardId,
-
                     Cmc = x.InventoryCard.Card.Cmc,
                     Cost = x.InventoryCard.Card.ManaCost,
                     Img = x.InventoryCard.Card.ImageUrl,
                     IsFoil = x.InventoryCard.IsFoil,
                     CollectorNumber = x.InventoryCard.Card.CollectorNumber,
                     CardId = x.InventoryCard.CardId,
-                    //Set = x.InventoryCard.Card.Set.Code,
-                    //SetId = x.InventoryCard.Card.SetId,
+                    // //Set = x.InventoryCard.Card.Set.Code,
+                    // //SetId = x.InventoryCard.Card.SetId,
                     SetCode = x.InventoryCard.Card.Set.Code,
                     Type = x.InventoryCard.Card.Type,
                     ColorIdentity = x.InventoryCard.Card.ColorIdentity,
@@ -898,6 +897,8 @@ namespace Carpentry.Logic
 
         public async Task<DeckDetailDto> GetDeckDetail(int deckId)
         {
+            if (deckId == 0) return null;
+            
             var deckProps = await _cardContext.Decks
                 .Where(d => d.DeckId == deckId)
                 .Select(dbDeck => new DeckPropertiesDto()
@@ -1193,7 +1194,7 @@ namespace Carpentry.Logic
             {
                 cardsToPrice = cardsToPrice.Where(c => c.Category != _sideboardCategory).ToList();
             }
-            result.Stats.TotalCost = cardsToPrice.Select(c => c.IsFoil ? c.PriceFoil : c.Price).Sum() ?? 0;
+            result.Stats.TotalCost = cardsToPrice.Select(c => (c.IsFoil ?? false) ? c.PriceFoil : c.Price).Sum() ?? 0;
 
             #endregion
 
@@ -1256,7 +1257,7 @@ namespace Carpentry.Logic
                 if(dc.SetCode != null)
                     cardString = $"{cardString} ({dc.SetCode}) {dc.CollectorNumber}";
 
-                if(dc.IsFoil)
+                if(dc.IsFoil ?? false)
                     cardString = $"{cardString} FOIL";
 
                 //If I'm worried about special characters in tags, I can encode/wrap them some other way (not just comma-separated)

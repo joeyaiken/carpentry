@@ -13,9 +13,9 @@
 // import DeckCardDetail from "./components/DeckCardDetail";
 // import {DeckStatsBar} from "./components/DeckStatsBar";
 // import {AppLayout} from "../../../common/components/AppLayout";
-import {DeckEditorLayout} from "./components/DeckEditorLayout";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {loadDeckDetails} from "../deckDetailSlice";
+import {DeckEditorLayout} from "../../../decks/deck-editor/components/DeckEditorLayout";
 // import {ensureDeckDetailLoaded} from "../state/decksDataActions";
 // import {ensureDeckDetailLoaded} from "../state/decksDataActions";
 

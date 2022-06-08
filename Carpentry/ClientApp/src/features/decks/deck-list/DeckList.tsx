@@ -2,12 +2,12 @@
 import {loadDeckOverviews} from "../deckOverviewsSlice";
 import {Avatar, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 import {Link} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../../app/hooks";
-import {RootState} from "../../../app/store";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {ApiStatus} from "../../../enums";
 
 const DeckListRow = (props: {deckId: number}): JSX.Element => {
-  const deck: DeckOverviewDto = useAppSelector((state: RootState) =>
-    state.decks.overviews.decksById[props.deckId]);
+  const deck: DeckOverviewDto = useAppSelector(state =>
+    state.decks.deckList.data.decksById[props.deckId]);
 
   const manaIcon = (type: string): JSX.Element => {
     return(<Avatar key={type} style={{height:"24px", width:"24px", display:"inline-flex", verticalAlign: "middle"}} src={`/img/${type}.svg`} />)
@@ -31,10 +31,9 @@ export const DeckList = (): JSX.Element => {
   
   const dispatch = useAppDispatch();
   
-  const shouldLoad = useAppSelector((state) => 
-    !state.decks.overviews.isLoading && !state.decks.overviews.isInitialized);
+  const shouldLoad = useAppSelector(state => state.decks.deckList.data.status == ApiStatus.uninitialized);
   
-  const deckIds: number[] = useAppSelector((state) => state.decks.overviews.deckIds);
+  const deckIds: number[] = useAppSelector((state) => state.decks.deckList.data.deckIds);
   
   useEffect(() => {
     if(shouldLoad) dispatch(loadDeckOverviews());

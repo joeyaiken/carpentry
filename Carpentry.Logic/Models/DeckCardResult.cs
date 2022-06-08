@@ -24,11 +24,11 @@ namespace Carpentry.Logic.Models
         public string SetCode { get; set; }
         //public int SetId { get; set; }
 
-        public bool IsFoil { get; set; }
+        public bool? IsFoil { get; set; }
 
         //public string VariantType { get; set; }
         public int? CollectorNumber { get; set; }
-        public int CardId { get; set; }
+        public int? CardId { get; set; }
         public string ColorIdentity { get; set; }
 
         public decimal? Price { get; set; }

@@ -1,36 +1,36 @@
 import React from 'react';
-import {Box,Card,CardMedia} from '@material-ui/core';
-import styles from '../../../../app/App.module.css';
-import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
-import {cardSearchSelectCard, selectSearchResultItem} from "../inventoryAddCardsSlice";
+import {Box, Card, CardMedia} from '@material-ui/core';
+import styles from '../../../../App.module.css';
+import {useAppDispatch, useAppSelector} from "../../../../hooks";
+import {cardSearchSelectCard} from "../inventoryAddCardsSlice";
 
-const SearchResultGridCell = (props:{cardId: number}): JSX.Element => {
+const SearchResultGridItem = (props: {searchResultId: number}): JSX.Element => {
+  const searchResult = useAppSelector(state => state.inventory.inventoryAddCards.searchResults.searchResultsById[props.searchResultId]);
+  
   const dispatch = useAppDispatch();
-  const onCardSelected = (item: CardListItem): void =>
-    dispatch(cardSearchSelectCard(item.data));
-
-  const card = useAppSelector(state => selectSearchResultItem(state, props.cardId))
-
+  const onCardSelected = (card: CardSearchResultDto): void =>
+    dispatch(cardSearchSelectCard(card));
+  
   return (
     <Card
-      key={card.data.name}
+      key={searchResult.name}
       className={styles.outlineSection}
-      onClick={() => onCardSelected(card)}>
+      onClick={() => onCardSelected(searchResult)}>
       <CardMedia
         style={{height:"310px", width: "223px"}}
-        image={card.data.details[0].imageUrl}
-        title={card.data.name} />
+        image={searchResult.details[0].imageUrl}
+        title={searchResult.name} />
     </Card>
   )
 }
 
 export const SearchResultGrid = (): JSX.Element => {
-  const searchResultIds = useAppSelector(state =>
-    state.inventory.inventoryAddCards.searchResults.allSearchResultIds);
-  
+  const searchResultIds = useAppSelector(state => state.inventory.inventoryAddCards.searchResults.allSearchResultIds);
   return (
     <Box className={styles.flexRowWrap}>
-      { searchResultIds.map(cardId => <SearchResultGridCell key={cardId} cardId={cardId} />) }
+      { searchResultIds.map((searchResultId) => 
+        <SearchResultGridItem key={searchResultId} searchResultId={searchResultId} />
+      )}
     </Box>
   );
 }

@@ -1,65 +1,65 @@
 import React from 'react';
-
 import { Typography, Box, AppBar, Chip, Toolbar, Avatar, Button } from '@material-ui/core';
-// import { Link } from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {openDeckPropsModal, toggleDeckViewMode} from "../state/DeckEditorActions";
+import {getSelectedDeckId} from "../deckDetailSlice";
+import {useHistory} from "react-router";
+import {openExportDialog} from "../../../features/decks/deck-export/deckExportSlice";
 
-interface ComponentProps{
-    //totalPrice: number;
-    deckProperties: DeckPropertiesDto;
-    onEditClick: () => void;
-    onToggleViewClick: () => void;
-    onAddCardsClick: () => void;
-    onExportClick: () => void;
-}
+const ManaChip = (type: String, value: number): JSX.Element =>
+  (<Chip size="small" avatar={<Avatar src={`/img/${type}.svg`}/>} label={ value }/>);
 
-const ManaChip = (type: String, value: number): JSX.Element => 
-    (<Chip size="small" avatar={<Avatar src={`/img/${type}.svg`}/>} label={ value }/>);
+export const DeckPropsBar = (): JSX.Element => {
+  const deckProperties = useAppSelector(state => state.decks.deckDetailData.deckProps);
+  const deckId = useAppSelector(getSelectedDeckId);
 
-export default function DeckPropsBar(props: ComponentProps): JSX.Element {
+  const { basicW, basicU, basicB, basicR, basicG } = deckProperties;
 
-    const { basicW, basicU, basicB, basicR, basicG } = props.deckProperties;
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+  
+  const onEditClick = (): void => {
+    dispatch(openDeckPropsModal());
+  }
+  
+  const onToggleViewClick = (): void => {
+    dispatch(toggleDeckViewMode());
+  }
 
-    return (
-        <AppBar color="default" position="relative">
-            <Toolbar>
-                {/* <Typography variant="h5">Deck Editor</Typography> */}
-                <Typography variant="h5">{props.deckProperties.name}</Typography>
-                {/* &nbsp; */}
-                {/* <Typography variant="h6">--{props.deckProperties && props.deckProperties.name+ ' - '+ props.deckProperties.notes}</Typography> */}
-                <Box>
-                {/* <div className= "flex-section flex-25"> */}
-                    { basicW > 0 && ManaChip('W',basicW)}
-                    { basicU > 0 && ManaChip('U',basicU)}
-                    { basicB > 0 && ManaChip('B',basicB)}
-                    { basicR > 0 && ManaChip('R',basicR)}
-                    { basicG > 0 && ManaChip('G',basicG)}
-                    {/* <Chip size="small" avatar={<Avatar src="/img/W.svg" />} label={ basicW }/> */}
-                    
-                    
-                    {/* <Chip size="small" avatar={<Avatar src="/img/W.svg" />} label={ basicW }/> */}
-                    {/* <Chip size="small" avatar={<Avatar src="/img/U.svg" />} label={ basicU }/>
-                    <Chip size="small" avatar={<Avatar src="/img/B.svg" />} label={ basicB }/>
-                    <Chip size="small" avatar={<Avatar src="/img/R.svg" />} label={ basicR }/>
-                    <Chip size="small" avatar={<Avatar src="/img/G.svg" />} label={ basicG }/> */}
-                </Box>
-                <Box>
-                    <Button onClick={props.onToggleViewClick} color="primary" variant="contained">
-                        Toggle View
-                    </Button>
-                    <Button onClick={props.onEditClick} color="primary" variant="contained">
-                        Edit
-                    </Button>
-                    <Button onClick={props.onExportClick} color="primary" variant="contained">
-                        Export
-                    </Button>
-                    <Button onClick={props.onAddCardsClick} color="primary" variant="contained" className="add-cards-button">
-                        Add Cards
-                    </Button>
-                    {/* <Link to={`/decks/${props.deckProperties.id}/addCards/`}>
-                        <Button color="primary" variant="contained">Add Cards</Button>
-                    </Link> */}
-                </Box>
-            </Toolbar>
-        </AppBar>
-    );
+  const onAddCardsClick = (): void => {
+    history.push(`/decks/${deckId}/addCards`);
+  }
+  
+  const onExportClick = (): void => {
+    dispatch(openExportDialog());
+  }
+  
+  return (
+    <AppBar color="default" position="relative">
+      <Toolbar>
+        <Typography variant="h5">{deckProperties.name}</Typography>
+        <Box>
+          { basicW > 0 && ManaChip('W',basicW)}
+          { basicU > 0 && ManaChip('U',basicU)}
+          { basicB > 0 && ManaChip('B',basicB)}
+          { basicR > 0 && ManaChip('R',basicR)}
+          { basicG > 0 && ManaChip('G',basicG)}
+        </Box>
+        <Box>
+          <Button onClick={onToggleViewClick} color="primary" variant="contained">
+            Toggle View
+          </Button>
+          <Button onClick={onEditClick} color="primary" variant="contained">
+            Edit
+          </Button>
+          <Button onClick={onExportClick} color="primary" variant="contained">
+            Export
+          </Button>
+          <Button onClick={onAddCardsClick} color="primary" variant="contained" className="add-cards-button">
+            Add Cards
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
 }

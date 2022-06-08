@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
-import DeckPropertiesLayout from '../../../common/components/DeckPropertiesLayout';
+import {DeckPropertiesLayout} from "../../../common/components/DeckPropertiesLayout";
 
 interface ComponentProps {
     deckProps: DeckPropertiesDto;
@@ -16,7 +16,7 @@ export default function NewDeckLayout(props: ComponentProps): JSX.Element {
             <Dialog open={true} onClose={props.onCloseClick} >
                 <DialogTitle>New Deck</DialogTitle>
                 <DialogContent>
-                    <DeckPropertiesLayout formatFilters={props.formatFilters} deck={props.deckProps} 
+                    <DeckPropertiesLayout showLands={false} formatFilters={props.formatFilters} deck={props.deckProps} 
                         onChange={event => props.onChange(event.target.name, event.target.value)} />
                 </DialogContent>
                 <DialogActions>

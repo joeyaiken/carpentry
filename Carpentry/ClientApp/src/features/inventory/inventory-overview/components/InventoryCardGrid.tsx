@@ -1,30 +1,24 @@
 import React, {useState} from 'react';
 import {Box, CardContent, Typography, CardMedia, CardActions, Button, Card, IconButton, TableRow, Table, TableCell, TableBody} from '@material-ui/core';
-import CardGridContainer from './CardGridContainer';
 import {InfoOutlined} from '@material-ui/icons';
-import styles from "../../../../app/App.module.css";
-import {useAppSelector} from "../../../../app/hooks";
+import styles from "../../../../App.module.css";
 import {useHistory} from "react-router";
-import {CardImagePopper} from "../../../../common/components/CardImagePopper";
+import {useAppSelector} from "../../../../hooks";
+import {CardImagePopper} from "../../../common/components/CardImagePopper";
 
-const InventoryCardGridItem = (props: {cardId: number}): JSX.Element => {
+interface InventoryCardGridItemProps {
+  cardId: number;
+  onInfoButtonEnter: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onInfoButtonLeave: () => void;
+}
+const InventoryCardGridItem = (props: InventoryCardGridItemProps): JSX.Element => {
   const cardItem = useAppSelector(state => state.inventory.overviews.data.byId[props.cardId]);
-  const [cardMenuAnchor, setCardMenuAnchor] = useState<HTMLButtonElement | null>(null);
   const history = useHistory();
-  
   const onCardSelected = (cardId: number): void => 
     history.push(`/inventory/${cardId}`);
-  const onInfoButtonEnter = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => 
-    setCardMenuAnchor(event.currentTarget);
-  const onInfoButtonLeave = (): void =>
-    setCardMenuAnchor(null);
-  
+
   return(
     <React.Fragment>
-      <CardImagePopper
-        menuAnchor={cardMenuAnchor}
-        onClose={onInfoButtonLeave}
-        image={cardItem?.imageUrl} />
       <Card key={cardItem.id} className={[styles.outlineSection, "card-result"].join(' ')}>
         <CardMedia
           className="card-result-image"
@@ -83,8 +77,8 @@ const InventoryCardGridItem = (props: {cardId: number}): JSX.Element => {
               value={cardItem.id}
               color="primary"
               size="small"
-              onMouseEnter={onInfoButtonEnter}
-              onMouseLeave={onInfoButtonLeave} >
+              onMouseEnter={props.onInfoButtonEnter}
+              onMouseLeave={props.onInfoButtonLeave} >
               <InfoOutlined />
             </IconButton>
           </CardActions>
@@ -95,12 +89,38 @@ const InventoryCardGridItem = (props: {cardId: number}): JSX.Element => {
 }
 
 export default function InventoryCardGrid(): JSX.Element {
-  const cardOverviewIds = useAppSelector(state => state.inventory.overviews.data.allIds) 
+  
+  const [cardImageMenuAnchor, setCardImageMenuAnchor] = useState<HTMLButtonElement | null>(null);
+  
+  const cardOverviewIds = useAppSelector(state => state.inventory.overviews.data.allIds)
+
+  const selectedOverviewImage: string = useAppSelector(state => {
+    const cardImageAnchorId = +(cardImageMenuAnchor?.value ?? "0");
+    const card = state.inventory.overviews.data.byId[cardImageAnchorId];
+    return card?.imageUrl ?? "";
+  });
+
+  const onInfoButtonEnter = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void =>
+    setCardImageMenuAnchor(event.currentTarget);
+
+  const onInfoButtonLeave = (): void =>
+    setCardImageMenuAnchor(null);
+
   return (
     <React.Fragment>
-      <CardGridContainer layout="grid">
-        {cardOverviewIds.map(overviewId => <InventoryCardGridItem key={overviewId} cardId={overviewId} />)}
-      </CardGridContainer>
+      <CardImagePopper
+        menuAnchor={cardImageMenuAnchor}
+        onClose={onInfoButtonLeave}
+        image={selectedOverviewImage} />
+      <Box className={styles.flexRowWrap}>
+        {cardOverviewIds.map(overviewId => 
+          <InventoryCardGridItem 
+            key={overviewId} 
+            cardId={overviewId}
+            onInfoButtonEnter={onInfoButtonEnter}
+            onInfoButtonLeave={onInfoButtonLeave}
+          />)}
+      </Box>
     </React.Fragment>
   );
 }

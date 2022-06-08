@@ -1,6 +1,6 @@
 ﻿import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit/dist/createAction';
-import {RootState} from "../../../app/store";
+import {RootState} from "../../../configureStore";
 
 export interface DeckEditorState {
   viewMode: DeckEditorViewMode;
@@ -13,6 +13,7 @@ export interface DeckEditorState {
   deckModalProps: DeckPropertiesDto | null;
   // cardMenuAnchor: HTMLButtonElement | null;
   cardMenuAnchorId: number;
+  
 }
 
 const initialState: DeckEditorState = {
@@ -121,9 +122,8 @@ const selectedOverviewCardId = (state: RootState) => state.decks.deckEditor.sele
 
 export const getSelectedDeckDetails = createSelector(
   selectedOverviewCardId,
-  //(state: RootState) => state.decks.data.detail.cardOverviews,
-  (state: RootState) => state.decks.detail.cardOverviews.byId,
-  (state: RootState) => state.decks.detail.cardDetails.byId,
+  (state: RootState) => state.decks.deckDetailData.cardOverviews.byId,
+  (state: RootState) => state.decks.deckDetailData.cardDetails.byId,
   (selectedOverviewCardId, cardOverviews, cardDetails) => {
       if(selectedOverviewCardId){
         const match = cardOverviews[selectedOverviewCardId];
@@ -135,12 +135,11 @@ export const getSelectedDeckDetails = createSelector(
   }
 );
 
-
 export const selectDeckOverviews = createSelector(
   [
     (state: RootState) => state.decks.deckEditor.viewMode,
-    (state: RootState) => state.decks.detail.cardOverviews,
-    (state: RootState) => state.decks.detail.cardGroups,
+    (state: RootState) => state.decks.deckDetailData.cardOverviews,
+    (state: RootState) => state.decks.deckDetailData.cardGroups,
   ],
   (
     viewMode,

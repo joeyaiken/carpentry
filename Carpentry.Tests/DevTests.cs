@@ -120,5 +120,19 @@ namespace Carpentry.Tests
 
             Assert.IsNotNull(searchResult);
         }
+
+        [TestMethod]
+        public async Task GetDeckDetail_DinoEDH_Works()
+        {
+            const int deckId = 31;
+            var factory = new CarpentryFactory();
+            var client = factory.CreateClient();
+            var response = await client.GetAsync($"api/decks/GetDeckDetail?deckId={deckId}");
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var searchResult = JsonConvert.DeserializeObject<DeckDetailDto>(responseContent);
+
+            Assert.IsNotNull(searchResult);
+        }
     }
 }

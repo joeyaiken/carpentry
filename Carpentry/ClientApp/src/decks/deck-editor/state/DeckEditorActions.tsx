@@ -3,7 +3,10 @@ import { push } from "connected-react-router";
 import { Dispatch } from "redux";
 import { decksApi } from "../../../api/decksApi";
 import { RootState } from "../../../configureStore";
-import { reloadDeckDetail, requestDeckOverviews } from "../../state/decksDataActions";
+import { reloadDeckDetail, 
+    // requestDeckOverviews 
+} from "../../state/decksDataActions";
+import {loadDeckOverviews} from "../../../features/decks/deck-list/DeckListSlice";
 
 export const TOGGLE_DECK_VIEW_MODE = 'TOGGLE_DECK_VIEW_MODE';
 export const toggleDeckViewMode = (): ReduxAction => ({
@@ -17,9 +20,11 @@ export const deckEditorCardSelected = (cardOverview: DeckCardOverview): ReduxAct
 });
 
 export const OPEN_DECK_PROPS_MODAL = 'OPEN_DECK_PROPS_MODAL';
-export const openDeckPropsModal = (deckProps: DeckPropertiesDto | null): ReduxAction => ({
+export const openDeckPropsModal = (
+  // deckProps: DeckPropertiesDto | null
+): ReduxAction => ({
     type: OPEN_DECK_PROPS_MODAL,
-    payload: deckProps,
+    // payload: deckProps,
 });
 
 export const CLOSE_DECK_PROPS_MODAL = 'CLOSE_DECK_PROPS_MODAL';
@@ -27,9 +32,9 @@ export const closeDeckPropsModal = (): ReduxAction => ({
     type: CLOSE_DECK_PROPS_MODAL,
 });
 
-export const requestSavePropsModal = (): any => {
+export const requestSavePropsModal = (deckProps: DeckPropertiesDto): any => {
     return(dispatch: Dispatch, getState: any) => {
-        trySaveDeckProps(dispatch, getState());
+        trySaveDeckProps(dispatch, getState(), deckProps);
     }
 }
 
@@ -53,10 +58,9 @@ export const deckEditorSaveReceived = (): ReduxAction => ({
 //     type: DECK_PROPS_SAVE_RECEIVED,
 // });
 
-function trySaveDeckProps(dispatch: Dispatch, state: RootState): void {
-    var isSaving = state.decks.deckEditor.isSaving;
-    const deckPropsToUpdate = state.decks.deckEditor.deckModalProps;
-
+function trySaveDeckProps(dispatch: Dispatch, state: RootState, deckPropsToUpdate: DeckPropertiesDto): void {
+    const isSaving = state.decks.deckEditor.isSaving;
+    
     if(isSaving || deckPropsToUpdate === null){
         return
     }
@@ -76,14 +80,14 @@ function trySaveDeckProps(dispatch: Dispatch, state: RootState): void {
     });
 }
 
-export const DECK_PROPS_MODAL_CHANGED = 'DECK_PROPS_MODAL_CHANGED';
-export const deckPropsModalChanged = (name: string, value: string | number): ReduxAction => ({
-    type: DECK_PROPS_MODAL_CHANGED,
-    payload: {
-        name: name,
-        value: value
-    }
-});
+// export const DECK_PROPS_MODAL_CHANGED = 'DECK_PROPS_MODAL_CHANGED';
+// export const deckPropsModalChanged = (name: string, value: string | number): ReduxAction => ({
+//     type: DECK_PROPS_MODAL_CHANGED,
+//     payload: {
+//         name: name,
+//         value: value
+//     }
+// });
 
 export const requestDisassembleDeck = (): any => {
     return(dispatch: Dispatch, getState: any) => {
@@ -93,7 +97,7 @@ export const requestDisassembleDeck = (): any => {
 //Not going to implement this until I'm done removing the .ui and .legacy project
 function tryDisassembleDeck(dispatch: Dispatch, state: RootState): void {
     //Not going to implement this until I'm done removing the .ui and .legacy project
-    console.log('Prentending to disassemble deck');
+    console.log('Pretending to disassemble deck');
     dispatch(closeDeckPropsModal());
     //is[Saving|Loading]Check?
     //dispatch
@@ -110,20 +114,23 @@ function tryDeleteDeck(dispatch: Dispatch, state: RootState): void {
     const isSaving = state.decks.deckEditor.isSaving;
     if(isSaving) return;
     dispatch(deckEditorSaveRequested());
-    const idToDelete = state.decks.data.detail.deckId;
+    const idToDelete = state.decks.deckDetailData.deckId;
     decksApi.deleteDeck(idToDelete).then(() => {
         dispatch(deckEditorSaveReceived());
         dispatch(push('/'));
-        dispatch(requestDeckOverviews());
+        //This WAS set to re-load the deck list after deleting one
+        //  But it's broken from refactoring
+        // dispatch(requestDeckOverviews());
+        // dispatch(loadDeckOverviews())
     });
 }
 
-export const CARD_MENU_BUTTON_CLICKED = 'CARD_MENU_BUTTON_CLICKED';
-export const cardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
-    type: CARD_MENU_BUTTON_CLICKED,
-    payload: cardMenuAnchor
-});
-
+// export const CARD_MENU_BUTTON_CLICKED = 'CARD_MENU_BUTTON_CLICKED';
+// export const cardMenuButtonClicked = (cardMenuAnchor: HTMLElement | null): ReduxAction => ({
+//     type: CARD_MENU_BUTTON_CLICKED,
+//     payload: cardMenuAnchor
+// });
+//
 
 ////////////
 export const requestUpdateDeckCard = (detail: DeckCardDetail): any => {
@@ -210,7 +217,7 @@ export const requestDeleteDeckCard = (deckCardId: number): any => {
 }
 
 function deleteDeckCard(dispatch: Dispatch, state: RootState, deckCardId: number): any {
-    const currentDeckId = state.decks.data.detail.deckId;
+    const currentDeckId = state.decks.deckDetailData.deckId;
     decksApi.removeDeckCard(deckCardId).then(() => {
         dispatch(reloadDeckDetail(currentDeckId));
     });

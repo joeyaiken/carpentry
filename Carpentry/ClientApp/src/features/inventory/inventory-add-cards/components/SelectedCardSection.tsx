@@ -1,42 +1,37 @@
 import React from 'react';
 import { Box, Card, CardMedia, CardContent, Typography, Button } from '@material-ui/core';
-import styles from '../../../../app/App.module.css';
+import {combineStyles} from '../../../../styles/appStyles';
+import styles from '../../../../App.module.css';
+import {useAppDispatch, useAppSelector} from "../../../../hooks";
 import {addPendingCard, removePendingCard} from "../inventoryAddCardsSlice";
-import {useAppDispatch, useAppSelector} from "../../../../app/hooks";
 
-interface SelectedCardDetailSectionProps {
-  selectedCard: CardSearchResultDto;
-  pendingCards?: PendingCardsDto;
-}
+export default function SelectedCardSection(): JSX.Element {
+  const selectedCard = useAppSelector(state => state.inventory.inventoryAddCards.selectedCard);
+  const pendingCards = useAppSelector(state => selectedCard && state.inventory.inventoryAddCards.pendingCards.byName[selectedCard!.name]);
 
-export const SelectedCardSection = (props: SelectedCardDetailSectionProps): JSX.Element => {
   const dispatch = useAppDispatch();
   
-  const handleAddPendingCard = (name: string, cardId: number, isFoil: boolean): void =>
+  const handleAddPendingCard = (name: string, cardId: number, isFoil: boolean): void => 
     dispatch(addPendingCard({name: name, cardId: cardId, isFoil: isFoil}));
-
-  const handleRemovePendingCard = (name: string, cardId: number, isFoil: boolean): void =>
+  
+  const handleRemovePendingCard = (name: string, cardId: number, isFoil: boolean): void => 
     dispatch(removePendingCard({name: name, cardId: cardId, isFoil: isFoil}));
   
-  const selectedCard = useAppSelector(state => state.inventory.inventoryAddCards.selectedCard);
+  if(!selectedCard) return (<React.Fragment />);
   
-  
-  
-  // const pendingCards = useAppSelector(state => state.inventory.inventoryAddCards.pendingCards)
-  //pendingCards={props.pendingCards[props.selectedCard!.name]}
   return(
     <Box className={styles.flexCol}>
       {
-        props.selectedCard.details.map((detail) => {
+        selectedCard!.details.map((detail) => {
           let countNormal = 0;
           let countFoil = 0;
-          if(props.pendingCards)
+          if(pendingCards)
           {
-            countNormal = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && !c.isFoil).length;
-            countFoil = props.pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil).length;
+            countNormal = pendingCards.cards.filter(c => c.cardId === detail.cardId && !c.isFoil).length;
+            countFoil = pendingCards.cards.filter(c => c.cardId === detail.cardId && c.isFoil).length;
           }
           return (
-            <Card key={detail.cardId} className={[styles.outlineSection, styles.flexRow, 'search-result-card'].join(' ')}>
+            <Card key={detail.cardId} className={combineStyles(styles.outlineSection, styles.flexRow, 'search-result-card')}>
               <CardMedia
                 style={{height:"310px", width: "223px"}}
                 image={detail.imageUrl || undefined} />

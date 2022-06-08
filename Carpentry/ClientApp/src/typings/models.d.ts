@@ -157,7 +157,8 @@ declare interface DeckPropertiesDto {
     id: number;
     name: string;
     //format: DeckFormats;
-    format: null | DeckFormatOption;
+    //format: null | DeckFormatOption;
+    format: string;
     notes: string;
 
     basicW: number;

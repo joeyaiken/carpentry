@@ -1,8 +1,9 @@
 ﻿import {createSlice,createAsyncThunk,createSelector} from '@reduxjs/toolkit';
 import {PayloadAction} from '@reduxjs/toolkit/dist/createAction';
 import {decksApi} from "../../api/decksApi";
-import {RootState} from "../../app/store";
-import {Root} from "react-dom";
+import {RootState} from "../../configureStore";
+// import {RootState} from "../../app/store";
+// import {Root} from "react-dom";
 
 export interface State {
   isLoading: boolean;
@@ -27,7 +28,7 @@ const initialState: State = {
   deckProps: {
     id: 0,
     name: '',
-    format: null,
+    format: '',
     notes: '',
     basicW: 0,
     basicU: 0,
@@ -175,8 +176,8 @@ export default decksDetailSlice.reducer;
 
 
 
-export const selectDeckProperties = (state: RootState): DeckPropertiesDto => state.decks.detail.deckProps;
+export const selectDeckProperties = (state: RootState): DeckPropertiesDto => state.decks.deckDetailData.deckProps;
 
-export const selectOverviewIds = (state: RootState): number[] => state.decks.detail.cardOverviews.allIds;
+export const selectOverviewIds = (state: RootState): number[] => state.decks.deckDetailData.cardOverviews.allIds;
 
-export const selectOverviewCard = (state: RootState, cardId: number): DeckCardOverview => state.decks.detail.cardOverviews.byId[cardId];
+export const selectOverviewCard = (state: RootState, cardId: number): DeckCardOverview => state.decks.deckDetailData.cardOverviews.byId[cardId];

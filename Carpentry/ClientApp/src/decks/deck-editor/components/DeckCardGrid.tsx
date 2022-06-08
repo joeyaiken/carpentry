@@ -1,22 +1,34 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
-import { appStyles } from '../../../styles/appStyles';
-import VisualCard from '../../../common/components/VisualCard';
+import {Box} from '@material-ui/core';
+import {deckEditorCardSelected} from "../../../features/decks/deck-editor/deckEditorSlice";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import styles from "../../../App.module.css";
+import {selectOverviewCard, selectOverviewIds} from "../deckDetailSlice";
+import {VisualCard} from "../../../features/common/components/VisualCard";
 
-interface ComponentProps{
-    cardOverviews: DeckCardOverview[];
-    onCardSelected: (card: DeckCardOverview) => void;
+const DeckCardGridCell = (props: {cardId: number}): JSX.Element => {
+  const card = useAppSelector(state => selectOverviewCard(state, props.cardId));
+
+  const dispatch = useAppDispatch();
+  const onCardSelected = (): void => {
+    dispatch(deckEditorCardSelected(card))
+  }
+
+  return (
+    <VisualCard key={card.name} cardOverview={card} onCardSelected={() => {onCardSelected()}} />
+  );
 }
 
-export default function DeckCardGrid(props: ComponentProps): JSX.Element {
-    const { flexRowWrap } = appStyles();
-    return (
-        <React.Fragment>
-            <Box className={flexRowWrap}>
-                {props.cardOverviews.map((card) => (
-                    <VisualCard key={card.name} cardOverview={card} onCardSelected={() => {props.onCardSelected(card)}} />
-                ))}
-            </Box>
-        </React.Fragment>
-    );
+export const DeckCardGrid = (): JSX.Element => {
+  const overviewIds = useAppSelector(selectOverviewIds);
+  
+  return (
+    <React.Fragment>
+      <Box className={styles.flexRowWrap}>
+        {overviewIds.map((cardId) => (
+          <DeckCardGridCell cardId={cardId} />
+        ))}
+      </Box>
+    </React.Fragment>
+  );
 }

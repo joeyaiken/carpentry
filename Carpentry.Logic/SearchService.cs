@@ -391,7 +391,7 @@ namespace Carpentry.Logic
 
         private IEnumerable<InventoryOverviewDto> GetGroupedCards(List<CardOverview> queryResult, string groupBy)
         {
-            var result = new List<InventoryOverviewDto>().AsEnumerable();
+            var result = new List<InventoryOverviewDto>();
 
             switch (groupBy)
             {
@@ -430,13 +430,13 @@ namespace Carpentry.Logic
                             SellCount = g.InventoryCards.Where(ic => ic.Status == (int)InventoryCardStatus.SellList).Count(),
                             //misc
                             IsFoil = false,
-                        });
+                        }).ToList();
                     break;
                 case nameof(CardSearchGroupBy.print):
                     result = queryResult.Select(c => new InventoryOverviewDto()
                     {
                         //for tracking uniqueness
-                        Id = c.CardId,
+                        // Id = c.CardId,
                         //card definition props
                         CardId = c.CardId,
                         SetCode = c.SetCode,
@@ -461,15 +461,19 @@ namespace Carpentry.Logic
                         SellCount = c.InventoryCards.Where(ic => ic.Status == (int)InventoryCardStatus.SellList).Count(),
                         //misc
                         IsFoil = false,
-                    });
+                    }).ToList();
                     break;
                 case nameof(CardSearchGroupBy.unique):
                     //TODO - Find a way to combine these into a single linq query
                     //Get all foil cards
-                    var foilCards = queryResult.Select(c => new InventoryOverviewDto()
+                    var foilCards = queryResult.Select((c, i) => new InventoryOverviewDto()
                     {
                         //for tracking uniqueness
-                        Id = c.CardId,
+                        
+                        //This actually breaks foil mapping
+                        // Id = c.CardId,
+                        
+                        
                         //card definition props
                         CardId = c.CardId,
                         SetCode = c.SetCode,
@@ -528,7 +532,9 @@ namespace Carpentry.Logic
                         IsFoil = false,
                     })
                     .Where(c => c.TotalCount > 0);
-                    result = foilCards.Concat(nonfoilCards);
+                    result = foilCards.Concat(nonfoilCards).ToList();
+                    for (var i = 0; i < result.Count; i++)
+                        result[i].Id = i+1;
                     break;
                 default: return result;
 

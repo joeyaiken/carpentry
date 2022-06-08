@@ -4,16 +4,18 @@
 import React, {useEffect} from "react";
 import {BrowserRouter,Switch,Route} from 'react-router-dom';
 import './styles/App.css';
-import HomeContainer from './home/HomeContainer';
+// import HomeContainer from './home/HomeContainer';
 import './styles/mana.css';
 import DecksLayout from './decks/DecksLayout';
-import InventoryLayout from './inventory/InventoryLayout';
 import NewDeckContainer from './decks/new-deck/NewDeckContainer';
 import ImportDeckContainer from './decks/import-deck/ImportDeckContainer';
 import {Settings} from './features/settings/Settings';
 import {useAppDispatch, useAppSelector} from "./hooks";
 import {ApiStatus} from "./enums";
 import {getCoreData} from "./features/common/coreDataSlice";
+import {Home} from "./features/home/Home";
+// import HomeContainer from "./home/HomeContainer";
+import InventoryLayout from "./features/inventory/InventoryLayout";
 
 export const App = (): JSX.Element  => {
   const coreDataStatus = useAppSelector(state => state.core.filterDataStatus);
@@ -46,15 +48,15 @@ export const App = (): JSX.Element  => {
 
         <Route path="/add-deck">
           <NewDeckContainer />
-          <HomeContainer />
+          <Home />
         </Route>
 
         <Route path="/import-deck">
           <ImportDeckContainer />
-          <HomeContainer />
+          <Home />
         </Route>
 
-        <Route path="/" component={HomeContainer} />
+        <Route path="/" component={Home} />
       </Switch>
     </BrowserRouter>
   )

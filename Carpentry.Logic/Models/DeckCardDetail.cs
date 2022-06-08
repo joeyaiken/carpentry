@@ -26,7 +26,7 @@ namespace Carpentry.Logic.Models
 
         public string Set { get; set; }
 
-        public bool IsFoil { get; set; }
+        public bool? IsFoil { get; set; }
 
         //[JsonProperty("variantName")]
         //public string VariantType { get; set; }

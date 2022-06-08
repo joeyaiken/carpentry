@@ -21,9 +21,9 @@ import {
   trimCards
 } from "./trimmingToolSlice";
 import styles from "../../../App.module.css";
-import NumericFilter from "../../../common/components/NumericFilter";
-import CardImagePopper from "../../../common/components/CardImagePopper";
 import {CheckCircleOutline, Delete, InfoOutlined, KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
+import {CardImagePopper} from "../../common/components/CardImagePopper";
+import NumericFilter from "../../common/components/NumericFilter";
 
 export const TrimmingTool = (): JSX.Element => {
   

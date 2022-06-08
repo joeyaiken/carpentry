@@ -1,12 +1,15 @@
-import { DECK_OVERVIEWS_REQUESTED, DECK_OVERVIEWS_RECEIVED, DECK_DETAIL_REQUESTED, DECK_DETAIL_RECEIVED } from "./decksDataActions";
+import { 
+    // DECK_OVERVIEWS_REQUESTED, 
+    // DECK_OVERVIEWS_RECEIVED, 
+    DECK_DETAIL_REQUESTED, DECK_DETAIL_RECEIVED } from "./decksDataActions";
 
 export interface State {
-    overviews: {
-        decksById: { [id: number]: DeckOverviewDto };
-        deckIds: number[];
-        isLoading: boolean;
-        isInitialized: boolean;
-    };
+    // overviews: {
+    //     decksById: { [id: number]: DeckOverviewDto };
+    //     deckIds: number[];
+    //     isLoading: boolean;
+    //     isInitialized: boolean;
+    // };
     detail: { //TODO - rename to 'deckDetail' or something
         isLoading: boolean;
 
@@ -56,8 +59,8 @@ export interface State {
 
 export const decksDataReducer = (state = initialState, action: ReduxAction): State => {
     switch(action.type){
-        case DECK_OVERVIEWS_REQUESTED: return deckOverviewsRequested(state, action);
-        case DECK_OVERVIEWS_RECEIVED: return deckOverviewsReceived(state, action);
+        // case DECK_OVERVIEWS_REQUESTED: return deckOverviewsRequested(state, action);
+        // case DECK_OVERVIEWS_RECEIVED: return deckOverviewsReceived(state, action);
         case DECK_DETAIL_REQUESTED: return deckDetailRequested(state, action);
         case DECK_DETAIL_RECEIVED: return deckDetailReceived(state, action);
         default: return(state)
@@ -65,12 +68,12 @@ export const decksDataReducer = (state = initialState, action: ReduxAction): Sta
 }
 
 const initialState: State = {
-    overviews: {
-        decksById: {},
-        deckIds: [],
-        isLoading: false,
-        isInitialized: false,
-    },
+    // overviews: {
+    //     decksById: {},
+    //     deckIds: [],
+    //     isLoading: false,
+    //     isInitialized: false,
+    // },
     detail: {
         isLoading: false,
 
@@ -103,38 +106,38 @@ const initialState: State = {
     }   
 }
 
-const deckOverviewsRequested = (state: State, action: ReduxAction): State => {
-    const newState: State = {
-        ...state,
-        overviews: {
-            ...initialState.overviews,
-            isLoading: true,
-        }
-    };
-    return newState;
-}
+// const deckOverviewsRequested = (state: State, action: ReduxAction): State => {
+//     const newState: State = {
+//         ...state,
+//         overviews: {
+//             ...initialState.overviews,
+//             isLoading: true,
+//         }
+//     };
+//     return newState;
+// }
 
-const deckOverviewsReceived = (state: State, action: ReduxAction): State => {
-    const apiDecks: DeckOverviewDto[] = action.payload;
-
-    let decksById: { [key:number]: DeckOverviewDto } = {};
-
-    apiDecks?.forEach(deck => {
-        decksById[deck.id] = deck;
-    });
-
-    const newState: State = {
-        ...state,
-        overviews: {
-            deckIds: apiDecks?.map(deck => deck.id),
-            decksById: decksById,
-            isLoading: false,
-            isInitialized: true,
-        }
-    };
-
-    return newState;
-}
+// const deckOverviewsReceived = (state: State, action: ReduxAction): State => {
+//     const apiDecks: DeckOverviewDto[] = action.payload;
+//
+//     let decksById: { [key:number]: DeckOverviewDto } = {};
+//
+//     apiDecks?.forEach(deck => {
+//         decksById[deck.id] = deck;
+//     });
+//
+//     const newState: State = {
+//         ...state,
+//         overviews: {
+//             deckIds: apiDecks?.map(deck => deck.id),
+//             decksById: decksById,
+//             isLoading: false,
+//             isInitialized: true,
+//         }
+//     };
+//
+//     return newState;
+// }
 
 const deckDetailRequested = (state: State, action: ReduxAction): State => {
     const newState: State = {

@@ -1,75 +1,79 @@
-﻿import React from 'react';
-import {InventoryAddCardsLayout} from "./components/InventoryAddCardsLayout";
-// import {
-//   addPendingCard,
-//   cardSearchClearPendingCards, cardSearchFilterValueChanged, cardSearchSelectCard, removePendingCard,
-//   requestSavePendingCards, requestSearch,
-//   toggleCardSearchViewMode
-// } from "./state/InventoryAddCardsActions";
+import {AppBar, Box, Button, Paper, Toolbar, Typography} from '@material-ui/core';
+import React from 'react';
+import {combineStyles} from '../../../styles/appStyles';
+import {FilterBar} from './components/FilterBar';
+import {PendingCardsSection} from './components/PendingCardsSection';
+import {SearchResultGrid} from './components/SearchResultGrid';
+import {SearchResultTable} from './components/SearchResultTable';
+import SelectedCardSection from './components/SelectedCardSection';
+import {clearPendingCards, savePendingCards, toggleSearchViewMode} from './inventoryAddCardsSlice';
+import styles from '../../../App.module.css';
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {AppLayout} from "../../common/components/AppLayout";
+import {ApiStatus} from "../../../enums";
 
-
-
+import {unwrapResult} from '@reduxjs/toolkit';
+import {useHistory} from "react-router";
+ 
 export const InventoryAddCards = (): JSX.Element => {
+  const viewMode = useAppSelector(state => state.inventory.inventoryAddCards.viewMode);
+  const isLoading = useAppSelector(state => state.inventory.inventoryAddCards.searchResults.status === ApiStatus.loading);
+  const isSaving = useAppSelector(state => state.inventory.inventoryAddCards.pendingCards.status === ApiStatus.loading);
   
-  // handleSaveClick(){
-  //   this.props.dispatch(requestSavePendingCards());
-  // }
-  //
-  // handleCancelClick(){
-  //   this.props.dispatch(cardSearchClearPendingCards());
-  // }
-  //
-  // handleToggleViewClick(): void {
-  //   this.props.dispatch(toggleCardSearchViewMode());
-  // }
-  //
-  // handleAddPendingCard(name: string, cardId: number, isFoil: boolean){
-  //   this.props.dispatch(addPendingCard(name, cardId, isFoil));
-  // }
-  //
-  // handleRemovePendingCard(name: string, cardId: number, isFoil: boolean){
-  //   this.props.dispatch(removePendingCard(name, cardId, isFoil));
-  // }
-  //
-  // handleCardSelected(item: CardListItem){
-  //   this.props.dispatch(cardSearchSelectCard(item.data));
-  // }
-  //
-  // handleSearchButtonClick(){
-  //   this.props.dispatch(requestSearch())
-  // }
-  //
-  // handleFilterChange(event: React.ChangeEvent<HTMLInputElement>): void {
-  //   this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", event.target.name, event.target.value));
-  // }
-  //
-  // handleBoolFilterChange(filter: string, value: boolean): void {
-  //   this.props.dispatch(cardSearchFilterValueChanged("cardSearchFilterProps", filter, value));
-  // }
-
-
-
-  // return(
-  //   <InventoryAddCardsLayout
-  //     filterOptions={this.props.filterOptions}
-  //     pendingCards={this.props.pendingCards}
-  //     searchFilterProps={this.props.searchFilterProps}
-  //     searchResults={this.props.searchResults}
-  //     selectedCard={this.props.selectedCard}
-  //     viewMode={this.props.viewMode}
-  //     isLoading={this.props.isLoading}
-  //     handleCancelClick={this.handleCancelClick}
-  //     handleSaveClick={this.handleSaveClick}
-  //     handleToggleViewClick={this.handleToggleViewClick}
-  //     handleAddPendingCard={this.handleAddPendingCard}
-  //     handleBoolFilterChange={this.handleBoolFilterChange}
-  //     handleCardSelected={this.handleCardSelected}
-  //     handleFilterChange={this.handleFilterChange}
-  //     handleRemovePendingCard={this.handleRemovePendingCard}
-  //     handleSearchButtonClick={this.handleSearchButtonClick}
-  //   />);
+  const dispatch = useAppDispatch();
+  const history = useHistory();
   
-  return (
-    <InventoryAddCardsLayout />
-  )
+  const handleToggleViewClick = (): void =>
+    dispatch(toggleSearchViewMode());
+
+  const handleSaveClick = (): void => {
+    if(isSaving) return;
+    const resultAction = dispatch(savePendingCards());
+    try{
+      unwrapResult(resultAction);
+      history.push('/inventory');
+    } catch (err) { }
+  }
+  
+  const handleCancelClick = (): void =>{
+    dispatch(clearPendingCards());
+    history.push('/inventory');
+  } 
+  
+  return(
+    <React.Fragment>
+      <AppLayout title="Inventory" isLoading={isLoading}>
+        <AppBar color="default" position="relative">
+          <Toolbar>
+            <Typography variant="h6">
+              Card Search
+            </Typography>
+            <Button onClick={handleToggleViewClick} color="primary" variant="contained">
+              Toggle View
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <FilterBar />
+        <Box className={combineStyles(styles.flexRow,styles.flexSection)} style={{ overflow:'auto', alignItems:'stretch' }}>
+          <Paper id="search-results" style={{ overflow:'auto', flex:'1 1 70%' }} >
+            { viewMode === "list" &&
+              <SearchResultTable /> }
+            { viewMode === "grid" &&
+              <SearchResultGrid /> }
+          </Paper>
+          <Paper style={{ overflow:'auto', flex:'1 1 30%' }} >
+            <SelectedCardSection />
+          </Paper>
+        </Box>
+        <PendingCardsSection />
+        <Paper className={combineStyles(styles.outlineSection, styles.flexRow)}>
+          <Button onClick={handleCancelClick}>
+            Cancel
+          </Button>
+          <Button color="primary" variant="contained" onClick={handleSaveClick}>
+            Save
+          </Button>
+        </Paper>
+      </AppLayout>
+    </React.Fragment>);
 }

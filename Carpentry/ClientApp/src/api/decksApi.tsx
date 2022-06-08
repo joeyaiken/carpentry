@@ -77,7 +77,7 @@ export const decksApi = {
         var newId = await Post(endpoint, dto);
         return newId;
     },
-    async exportDeckList(deckId: number, exportType: DeckExportType): Promise<string> {
+    async exportDeckList(deckId: number, exportType: string): Promise<string> {
         const endpoint = `api/Decks/ExportDeckList`;
         const url = `${endpoint}?deckId=${deckId}&exportType=${exportType}`;
         const result = await Get(url);
@@ -95,11 +95,11 @@ export const decksApi = {
         await Post(endpoint, dto);
         return;
     },
-    async removeCardTag(cardTagId: number): Promise<CardTagDetailDto> {
+    async removeCardTag(cardTagId: number): Promise<void> {
         const endpoint = `api/Decks/RemoveCardTag`;
         const url = `${endpoint}?cardTagId=${cardTagId}`;
-        const result = await Get(url);
-        return result;
+        await Get(url);
+        return;
     },
 
 }
