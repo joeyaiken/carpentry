@@ -31,8 +31,8 @@ namespace Carpentry.CarpentryData
 				LastUpdated = set.LastUpdated,
 				IsTracked = set.IsTracked,
 				InventoryCount = set.Cards.SelectMany(c => c.InventoryCards).Count(),
-				CollectedCount = set.Cards.Where(c => c.InventoryCards.Count() > 0).Count(),
-				TotalCount = set.Cards.Count(),
+				CollectedCount = set.Cards.Count(c => c.InventoryCards.Any()),
+				TotalCount = set.Cards.Count,
 			});
 		}
 

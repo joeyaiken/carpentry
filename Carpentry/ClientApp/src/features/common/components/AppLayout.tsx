@@ -2,10 +2,11 @@ import React, {ReactNode} from 'react';
 import {Container, LinearProgress} from '@material-ui/core';
 import {Navigation} from "./Navigation";
 import styles from '../../../App.module.css'
+//import {combineStyles} from '';
 
 interface LayoutProps {
   children: NonNullable<ReactNode>;
-    title: string;
+    title?: string;
     isLoading?: boolean;
 }
 

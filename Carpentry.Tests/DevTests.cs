@@ -1,5 +1,4 @@
 ﻿using Carpentry.CarpentryData.Models;
-using Carpentry.Legacy.Models;
 using Carpentry.Logic.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -8,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Carpentry.Logic;
+using Carpentry.Logic.Models.Search;
 using Carpentry.Models;
 
 namespace Carpentry.Tests

@@ -136,36 +136,36 @@ namespace Carpentry.Tests
             base.ConfigureWebHost(builder);
         }
     }
-
-    class CarpentryLegacyFactory : WebApplicationFactory<Legacy.Startup>
-    {
-        private static IConfiguration Configuration
-        {
-            get
-            {
-                return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                //.AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile("appsettings.Development.json", false, true)
-                //.AddUserSecrets<CarpentryFactory>()
-                .AddEnvironmentVariables()
-                .Build();
-            }
-        }
-
-        protected override IWebHostBuilder CreateWebHostBuilder()
-        {
-            return WebHost.CreateDefaultBuilder()
-                .UseConfiguration(Configuration)
-                .UseStartup<Legacy.Startup>();
-        }
-
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            builder.UseContentRoot(".");
-            base.ConfigureWebHost(builder);
-        }
-    }
+    
+    // class CarpentryLegacyFactory : WebApplicationFactory<Legacy.Startup>
+    // {
+    //     private static IConfiguration Configuration
+    //     {
+    //         get
+    //         {
+    //             return new ConfigurationBuilder()
+    //             .SetBasePath(Directory.GetCurrentDirectory())
+    //             //.AddJsonFile("appsettings.json", false, true)
+    //             .AddJsonFile("appsettings.Development.json", false, true)
+    //             //.AddUserSecrets<CarpentryFactory>()
+    //             .AddEnvironmentVariables()
+    //             .Build();
+    //         }
+    //     }
+    //
+    //     protected override IWebHostBuilder CreateWebHostBuilder()
+    //     {
+    //         return WebHost.CreateDefaultBuilder()
+    //             .UseConfiguration(Configuration)
+    //             .UseStartup<Legacy.Startup>();
+    //     }
+    //
+    //     protected override void ConfigureWebHost(IWebHostBuilder builder)
+    //     {
+    //         builder.UseContentRoot(".");
+    //         base.ConfigureWebHost(builder);
+    //     }
+    // }
 
     interface IStartup
     {

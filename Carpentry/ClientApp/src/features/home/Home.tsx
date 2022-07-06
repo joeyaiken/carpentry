@@ -27,7 +27,7 @@ export const Home = (): JSX.Element => {
   }
   
   return (
-    <AppLayout title="Carpentry">
+    <AppLayout>
       <Box id="home-container" className={styles.containerLayout}>
         <Box className={styles.titleContainer}>
           <Typography variant="h4" id="title">

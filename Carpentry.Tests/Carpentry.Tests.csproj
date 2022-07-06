@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Carpentry.Angular\Carpentry.Angular.csproj" />
-    <ProjectReference Include="..\Carpentry.Legacy\Carpentry.Legacy.csproj" />
+<!--    <ProjectReference Include="..\Carpentry.Legacy\Carpentry.Legacy.csproj" />-->
     <ProjectReference Include="..\Carpentry\Carpentry.csproj" />
   </ItemGroup>
 

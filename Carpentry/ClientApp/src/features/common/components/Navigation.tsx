@@ -4,7 +4,7 @@ import {Menu} from "@material-ui/icons";
 import styles from '../../../App.module.css'
 import {useHistory} from "react-router";
 
-export const Navigation = (props: {pageTitle: string}): JSX.Element => {
+export const Navigation = (props: {pageTitle?: string}): JSX.Element => {
   const history =  useHistory();
   const Navigate = (route: string): void => {
     history.push(route);
