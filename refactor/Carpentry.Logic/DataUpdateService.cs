@@ -66,36 +66,65 @@ public class TrackedSetDetail
 /// </summary>
 public class DataUpdateService : IDataUpdateService
 {
-    private readonly CarpentryDataContext _carpentryContext;
-    private readonly IScryfallService _scryfallService;
+    // private readonly CarpentryDataContext _carpentryContext;
+    // private readonly IScryfallService _scryfallService;
 
     public DataUpdateService(
-        CarpentryDataContext carpentryContext,
-        IScryfallService scryfallService
+        // CarpentryDataContext carpentryContext,
+        // IScryfallService scryfallService
     )
     {
-        _carpentryContext = carpentryContext;
-        _scryfallService = scryfallService;
+        // _carpentryContext = carpentryContext;
+        // _scryfallService = scryfallService;
+    }
+
+    private static TrackedSetDetail MakeTestSet(int setId)
+    {
+        return new TrackedSetDetail()
+        {
+            SetId = setId,
+            Code = $"S0{setId}",
+            Name = $"set {setId}",
+        };
     }
     
     public async Task<List<TrackedSetDetail>> GetTrackedSets(bool showUntracked)
     {
-        // Figure out how old the list of tracked sets is
-        var availableSetsLastUpdated = await _carpentryContext.CoreDefinitionUpdateHistory
-            .Where(d => d.Type == "AvailableSets") //TODO - no magic strings
-            .OrderByDescending(d => d.UpdatedDate)
-            .Select(d => d.UpdatedDate)
-            .FirstOrDefaultAsync();
 
-        // Update the list of available sets if data is > 24hrs old
-        if (DateIsStale(availableSetsLastUpdated))
-            await UpdateAvailableSets();
+        var result = new List<TrackedSetDetail>()
+        {
+            MakeTestSet(1),
+            MakeTestSet(2),
+            MakeTestSet(3),
+        };
+
         
-        // Get list of available sets, map, and return
-        var result = _carpentryContext.
         
+        return result;
         
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
+        // // Figure out how old the list of tracked sets is
+        // var availableSetsLastUpdated = await _carpentryContext.CoreDefinitionUpdateHistory
+        //     .Where(d => d.Type == "AvailableSets") //TODO - no magic strings
+        //     .OrderByDescending(d => d.UpdatedDate)
+        //     .Select(d => d.UpdatedDate)
+        //     .FirstOrDefaultAsync();
+        //
+        // // Update the list of available sets if data is > 24hrs old
+        // if (DateIsStale(availableSetsLastUpdated))
+        //     await UpdateAvailableSets();
+        //
+        // // Get list of available sets, map, and return
+        // var result = await _carpentryContext.GetSetTotals()
+        //     .Where(s => showUntracked || s.IsTracked == true)
+        //     .OrderByDescending(s => s.ReleaseDate)
+        //     .Select(s => new TrackedSetDetail()
+        //     {
+        //         
+        //     })
+        //     .ToListAsync();
+        //
+        // return result;
     }
 
     public Task AddTrackedSet(int setId)
@@ -142,32 +171,32 @@ public class DataUpdateService : IDataUpdateService
 
     private async Task UpdateAvailableSets()
     {
-        // Get list of all sets from ScryService
-        var scrySets = await _scryfallService.GetSetOverviews();
-
-        // get list of db sets (=> map to dictionary)
-        var existingCardSetsDict =
-            (await _carpentryContext.Sets.ToListAsync()).ToDictionary(s => s.Code.ToLower(), s => s);
-
-        foreach (var scrySet in scrySets)
-        {
-            // For each result, see if it exists in the DB
-            if (!existingCardSetsDict.TryGetValue(scrySet.Code.ToLower(), out var existingSet))
-            {
-                // If it doesn't, create a new one that can be added to the db
-                existingSet = new CardSetData()
-                {
-                    Code = scrySet.Code,
-                    IsTracked = false,
-                };
-            }
-            
-            if (existingSet.Name != scrySet.Name) existingSet.Name = scrySet.Name;
-            if (existingSet.ReleaseDate != scrySet.ReleasedAt) existingSet.ReleaseDate = scrySet.ReleasedAt;
-
-            // Update will still add new if is untracked
-            _carpentryContext.Sets.Update(existingSet);
-            await _carpentryContext.SaveChangesAsync();
-        }
+        // // Get list of all sets from ScryService
+        // var scrySets = await _scryfallService.GetSetOverviews();
+        //
+        // // get list of db sets (=> map to dictionary)
+        // var existingCardSetsDict =
+        //     (await _carpentryContext.Sets.ToListAsync()).ToDictionary(s => s.Code.ToLower(), s => s);
+        //
+        // foreach (var scrySet in scrySets)
+        // {
+        //     // For each result, see if it exists in the DB
+        //     if (!existingCardSetsDict.TryGetValue(scrySet.Code.ToLower(), out var existingSet))
+        //     {
+        //         // If it doesn't, create a new one that can be added to the db
+        //         existingSet = new CardSetData()
+        //         {
+        //             Code = scrySet.Code,
+        //             IsTracked = false,
+        //         };
+        //     }
+        //     
+        //     if (existingSet.Name != scrySet.Name) existingSet.Name = scrySet.Name;
+        //     if (existingSet.ReleaseDate != scrySet.ReleasedAt) existingSet.ReleaseDate = scrySet.ReleasedAt;
+        //
+        //     // Update will still add new if is untracked
+        //     _carpentryContext.Sets.Update(existingSet);
+        //     await _carpentryContext.SaveChangesAsync();
+        // }
     }
 }

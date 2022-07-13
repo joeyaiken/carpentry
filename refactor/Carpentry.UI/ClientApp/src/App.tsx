@@ -6,11 +6,15 @@ import * as React from 'react';
 // import FetchData from './components/FetchData';
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import {Home} from "./features/home/Home";
+import {Settings} from "./features/settings/Settings";
 import './styles/App.css';
 
 export default () => (
   <BrowserRouter>
     <Switch>
+
+      <Route path="/settings" component={Settings} />
+      
       <Route exact path='/' component={Home} />
       {/*<Route path='/' component={Home} />*/}
       

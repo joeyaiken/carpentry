@@ -316,7 +316,7 @@ namespace Carpentry.Logic
                     existingSet = new CardSetData()
                     {
                         Code = scrySet.Code,
-                        IsTracked = false,6
+                        IsTracked = false,
                         LastUpdated = null,
                     };
                 }
