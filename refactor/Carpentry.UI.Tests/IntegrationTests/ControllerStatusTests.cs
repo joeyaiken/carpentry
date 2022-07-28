@@ -2,21 +2,19 @@
 
 namespace Carpentry.UI.Tests.IntegrationTests;
 
+/// <summary>
+/// This test class simply checks if all of the controllers can be successfully started.
+/// It catches DI errors & other things.
+/// </summary>
 [TestClass]
-public class ControllerStatusTests
+public class ControllerStatusTests : CarpentryTestBase
 {
-    // Whenever I add a 2nd controller, I should swap this to TestDataMethod
-    // Might also want to add a shared base class whenever I build out more test classes
-    //  Although when I add angular tests, they should be as a 2nd test method
-    [TestMethod]
-    public async Task TrackedSetsController_IsOnline_Test()
+    [DataRow(TrackedSetsControllerTests.ControllerEndpoint)]
+    [DataTestMethod]
+    public async Task TrackedSetsController_IsOnline_Test(string apiEndpoint)
     {
-        const string controllerEndpoint = "api/TrackedSets/status";
-        var factory = new CarpentryFactory<Startup>();
-        var client = factory.CreateClient();
-        var response = await client.GetAsync(controllerEndpoint);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var controllerEndpoint = $"{apiEndpoint}/status";
+        var responseContent = await GetControllerStringResult(controllerEndpoint);
         Assert.AreEqual("Online", responseContent);
     }
 }

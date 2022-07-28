@@ -241,11 +241,12 @@ namespace Carpentry.Tools.QuickImport
         {
             var deckTemplates = new List<DeckImportTemplate>()
             {
-                GenerateJumpstartTemplate("Devilish_3","Devilish 3"),
-                GenerateJumpstartTemplate("Lightning_2","Lightning 2"),
-                GenerateJumpstartTemplate("UnderTheSea_1","Under the Sea 1 - 1"),
-                GenerateJumpstartTemplate("UnderTheSea_1","Under the Sea 1 - 2"),
-                GenerateJumpstartTemplate("Discarding_2","Discarding 2"),
+                // GenerateJumpstartTemplate("Devilish_3","Devilish 3"),
+                // GenerateJumpstartTemplate("Lightning_2","Lightning 2"),
+                // GenerateJumpstartTemplate("UnderTheSea_1","Under the Sea 1 - 1"),
+                // GenerateJumpstartTemplate("UnderTheSea_1","Under the Sea 1 - 2"),
+                // GenerateJumpstartTemplate("Discarding_2","Discarding 2"),
+                GenerateDeckTemplate("SNC_RiveteersRampage"),
             };
 
             

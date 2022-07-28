@@ -9,52 +9,46 @@ namespace Carpentry.UI.Tests.IntegrationTests;
 /// Simple series of tests used to develop against local data
 /// </summary>
 [TestClass]
-public class TrackedSetsControllerTests
+public class TrackedSetsControllerTests : CarpentryTestBase
 {
-    // [TestMethod]
-    // public async Task TrackedSetsController_IsOnline_Test(string controllerEndpoint = "api/trackedSets/status")
+
+    public const string ControllerEndpoint = "api/TrackedSets";
+
+    // Just going to assume this can be disposed of as soon as we create the client
+    private CarpentryFactory<Startup> _factory = null!;
+    private HttpClient _client = null!;
+    
+    // [TestInitialize]
+    // public void BeforeEach()
     // {
-    //     var factory = new CarpentryFactory<Startup>();
-    //     var client = factory.CreateClient();
-    //     var response = await client.GetAsync(controllerEndpoint);
-    //     var responseContent = await response.Content.ReadAsStringAsync();
-    //     Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-    //     Assert.AreEqual("Online", responseContent);
+    //     _factory = new CarpentryFactory<Startup>();
+    //     _client = _factory.CreateClient();
     // }
+
+    // [TestCleanup]
+    //  public void AfterEach()
+    //  {
+    //      // Not convinced this step helps with anything but w/e
+    //      _client.Dispose();
+    //      _factory.Dispose();
+    //  }
     
     [TestMethod]
     public async Task GetTrackedSets_Query_Works()
     {
         const bool showUntracked = false;
-        
-        // var factory = new CarpentryFactory<Startup>();
-        // var client = factory.CreateClient();
-        //
-        // var response = await client.GetAsync($"api/core/GetTrackedSets?showUntracked={showUntracked}");
-        // var responseContent = await response.Content.ReadAsStringAsync();
-        // var searchResult = JsonConvert.DeserializeObject<NormalizedList<TrackedSetDto>>(responseContent);
-
-        var endpoint = $"api/TrackedSets?showUntracked={showUntracked}";
-
-        var searchResult = await GetResult<NormalizedList<TrackedSetDto>>(endpoint);
-        
+        var endpoint = $"{ControllerEndpoint}?showUntracked={showUntracked}";
+        var searchResult = await GetControllerResult<NormalizedList<TrackedSetDto>>(endpoint);
         Assert.IsNotNull(searchResult);
     }
 
-
-
-
-    private static async Task<T?> GetResult<T>(string apiEndpoint)
-    {
-        var factory = new CarpentryFactory<Startup>();
-        var client = factory.CreateClient();
-        var response = await client.GetAsync(apiEndpoint);
-
-        if (response.StatusCode != HttpStatusCode.OK) return default;
-        
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var searchResult = JsonConvert.DeserializeObject<T>(responseContent);
-        return searchResult;
-    }
+    // private async Task<T?> GetControllerResult<T>(string apiEndpoint)
+    // {
+    //     var response = await _client.GetAsync(apiEndpoint);
+    //     if (response.StatusCode != HttpStatusCode.OK) return default;
+    //     var responseContent = await response.Content.ReadAsStringAsync();
+    //     var searchResult = JsonConvert.DeserializeObject<T>(responseContent);
+    //     return searchResult;
+    // }
     
 }

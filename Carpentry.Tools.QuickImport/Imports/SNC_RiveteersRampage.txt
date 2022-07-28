@@ -1,0 +1,90 @@
+﻿1 Henzie "Toolbox" Torre (NCC) FOIL
+1 The Beamtown Bullies (NCC) 101 FOIL
+1 Bellowing Mauler (NCC) 134
+1 Wave of Rats (NCC) 142
+1 Mezzio Mugger (NCC) 149
+1 Caldaia Guardian (NCC) 156
+1 First Responder (NCC) 160
+1 Grime Gorger (NCC) 172
+1 Jolene, the Plunder Queen (NCC) 173
+1 Weathered Sentinels (NCC) 185
+1 Deathbringer Regent (NCC) 246
+1 Disciple of Bolas (NCC) 247
+1 Noxious Gearhulk (NCC) 254
+1 Etali, Primal Storm (NCC) 793
+1 Inferno Titan (NCC) 269
+1 Stalking Vengeance (NCC) 276
+1 Avenger of Zendikar (NCC) 280
+1 Giant Adephage (NCC) 293
+1 Greenwarden of Murasa (NCC) 294
+1 Mitotic Slime (NCC) 302
+1 Thragtusk (NCC) 316
+1 Treeshaker Chimera (NCC) 318
+1 Woodfall Primus (NCC) 322
+1 World Shaper (NCC) 323
+1 Kresh the Bloodbraided (NCC) 345
+1 Solemn Simulacrum (NCC) 872
+1 Artisan of Kozilek (NCC) 191
+1 Indrik Stomphowler (NCC) 297
+1 Overgrown Battlement (NCC) 303
+1 Temur Sabertooth (NCC) 315
+1 Riveteers Confluence (NCC) 179
+1 Aether Snap (NCC) 241
+1 Painful Truths (NCC) 255
+1 Blasphemous Act (NCC) 780
+1 Life's Legacy (NCC) 300
+1 Victimize (NCC) 261
+1 Explore (NCC) 823
+1 Farseek (NCC) 290
+1 Kodama's Reach (NCC) 826
+1 Migration Path (NCC) 301
+1 Rampant Growth (NCC) 371
+1 Chaos Warp (NCC) 451
+1 Windgrace's Judgment (NCC) 358
+1 Riveteers Charm (SNC) 396
+1 Terminate (NCC) 389
+1 Dodgy Jalopy (NCC) 158
+1 Lifecrafter's Bestiary (NCC) 370
+1 Glittering Stockpile (SNC) 107
+1 Arcane Signet (NCC) 298
+1 Commander's Sphere (NCC) 363
+1 Fellwar Stone (NCC) 860
+1 Sol Ring (NCC) 871
+1 Protection Racket (NCC) 140
+1 Industrial Advancement (NCC) 147
+1 Rain of Riches (NCC) 150
+1 Turf War (NCC) 154
+1 Next of Kin (NCC) 162
+1 Warstorm Surge (NCC) 815
+1 Evolutionary Leap (NCC) 288
+1 Garruk's Uprising (NCC) 292
+1 Deathreap Ritual (NCC) 336
+1 Cinder Glade (NCC) 887
+1 Exotic Orchard (NCC) 893
+1 Foreboding Ruins (NCC) 403
+1 Game Trail (NCC) 894
+1 Kessig Wolf Run (NCC) 898
+1 Mossfire Valley (NCC) 901
+1 Mosswort Bridge (NCC) 902
+1 Shadowblood Ridge (NCC) 426
+1 Smoldering Marsh (NCC) 428
+1 Spinerock Knoll (NCC) 916
+1 Temple of Malady (NCC) 433
+1 Twilight Mire (NCC) 443
+1 Riveteers Overlook (SNC) 255
+1 Ash Barrens (NCC) 880
+1 Blighted Woodland (NCC) 881
+1 Command Tower (NCC) 351
+1 Jund Panorama (NCC) 408
+1 Myriad Landscape (NCC) 904
+1 Path of Ancestry (NCC) 907
+1 Savage Lands (NCC) 424
+1 Temple of the False God (NCC) 925
+1 Thriving Bluff (NCC) 438
+1 Thriving Grove (NCC) 439
+1 Thriving Moor (NCC) 442
+4 Swamp (NCC) 462
+5 Mountain (NCC) 466
+6 Forest (NCC) 470
+
+

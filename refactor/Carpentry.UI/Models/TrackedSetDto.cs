@@ -4,13 +4,16 @@ namespace Carpentry.UI.Models;
 
 public class TrackedSetDto
 {
-
-    public TrackedSetDto(TrackedSetDetail props)
+    public static TrackedSetDto FromModel(TrackedSetDetail props)
     {
-        SetId = props.SetId;
-        Code = props.Code;
-        Name = props.Name;
-        LastUpdated = props.DataLastUpdated.ToString();
+        return new TrackedSetDto()
+        {
+            SetId = props.SetId,
+            Code = props.Code,
+            Name = props.Name,
+            
+            LastUpdated = props.DataLastUpdated.ToString(),
+        };
     }
     
     public int SetId { get; set; }
@@ -29,7 +32,6 @@ public class TrackedSetDto
     public bool CanBeAdded { get; set; }
     public bool CanBeUpdated { get; set; }
     public bool CanBeRemoved { get; set; }
-    
     public string LastUpdated { get; set; }
     
 }

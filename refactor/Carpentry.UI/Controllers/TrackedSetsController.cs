@@ -20,13 +20,11 @@ public class TrackedSetsController : ControllerBase
         return $"An error occured when processing the {functionName} method of the {nameof(TrackedSetsController)}: {ex.Message}";
     }
     
-    // private readonly IDataUpdateService _dataUpdateService;
+    private readonly IDataUpdateService _dataUpdateService;
     
-    public TrackedSetsController(
-        // IDataUpdateService dataUpdateService
-        )
+    public TrackedSetsController(IDataUpdateService dataUpdateService)
     {
-        // _dataUpdateService = dataUpdateService;
+        _dataUpdateService = dataUpdateService;
     }
     
     /// <summary>
@@ -42,18 +40,17 @@ public class TrackedSetsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<NormalizedList<TrackedSetDto>>> GetTrackedSets(bool showUntracked)
     {
-        throw new NotImplementedException();
-        // try
-        // {
-        //     var serviceResult = await _dataUpdateService.GetTrackedSets(showUntracked);
-        //     var mappedResult = serviceResult.Select(s => new TrackedSetDto(s)).ToList();
-        //     var result = new NormalizedList<TrackedSetDto>(mappedResult, s => s.SetId);
-        //     return Ok(result);
-        // }
-        // catch (Exception ex)
-        // {
-        //     return StatusCode(500, FormatExceptionMessage("GetTrackedSets", ex));
-        // }
+        try
+        {
+            var serviceResult = await _dataUpdateService.GetTrackedSets(showUntracked);
+            var mappedResult = serviceResult.Select(TrackedSetDto.FromModel).ToList();
+            var result = new NormalizedList<TrackedSetDto>(mappedResult, s => s.SetId);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, FormatExceptionMessage("GetTrackedSets", ex));
+        }
     }
 
 }
