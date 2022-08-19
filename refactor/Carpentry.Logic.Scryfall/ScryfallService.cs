@@ -49,23 +49,16 @@ public class ScryfallService : IScryfallService
 
     private readonly ScryfallApiService _apiService;
     // private readonly ILogger<ScryfallService> _logger;
-    // private readonly HttpClient _client;
-    // private readonly int _scryfallApiDelay;
 
     public ScryfallService(
         ScryfallDataContext scryContext,
         ScryfallApiService apiService//,
         // ILogger logger
-        // HttpClient client
     )
     {
         _scryContext = scryContext;
         _apiService = apiService;
         // _logger = logger;
-        // _client = client;
-        //
-        // //TODO - load this from a config
-        // _scryfallApiDelay = 100; //1000 = 1 second, scryfall requests 50-100
     }
     
     

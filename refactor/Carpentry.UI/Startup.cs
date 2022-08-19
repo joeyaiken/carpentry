@@ -1,6 +1,7 @@
 using Carpentry.Data;
 using Carpentry.Logic;
 using Carpentry.Logic.Scryfall;
+using Carpentry.ScryfallData;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,7 +28,25 @@ namespace Carpentry.UI
         {
             // services.AddDbContext<CarpentryDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarpentryDataContext")));
 
-            // services.AddScoped<IScryfallService, ScryfallService>();
+            
+            
+            // TODO - Figure out how to wrap this into a module (or something)
+            //  - I could just make some static 'module' class in the Carpentry.Logic.Scryfall project lol
+            services.AddDbContext<ScryfallDataContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString(nameof(ScryfallDataContext))));
+            
+            // Only want a singleton of the ScryfallApiService to respect rate-limiting requests from Scryfall
+            //  I'd love to find a more reliable approach but this is the best I can do for now
+            //  I remember something about using a 'semaphore' lock, should research what that was
+            //  or just generally look into ways I can avoid violating their rate-limiting policy
+            services.AddSingleton<IScryfallApiService, ScryfallApiService>();
+            services.AddHttpClient<IScryfallApiService, ScryfallApiService>();
+            
+            services.AddScoped<IScryfallService, ScryfallService>();
+            
+            
+            
+            
             
             services.AddScoped<IDataUpdateService, DataUpdateService>();
             
