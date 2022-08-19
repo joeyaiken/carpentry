@@ -20,10 +20,14 @@ public interface IScryfallDataService
     /// <returns></returns>
     Task<ScryfallSetDetail> GetSetDetail(string setCode);
     
-    //get set card prices
-
+    /// <summary>
+    /// Gets just the price data for all cards available in the set.
+    /// It's not always necessary to update all card definition data for a set, sometimes it's sufficient to just update price data
+    /// (saving & updating legalities will be handled in a future implementation) 
+    /// </summary>
+    /// <param name="setCode"></param>
+    /// <returns></returns>
     Task GetSetCardPrices(string setCode);
-
 }
 
 public class ScryfallDataService : IScryfallDataService

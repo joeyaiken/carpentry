@@ -104,10 +104,10 @@ namespace Carpentry.Logic
             var setData = await _scryContext.ScryfallAuditData.FirstOrDefaultAsync();
             JArray setTokens = null;
 
-            //If stale or non-existant, re-query from Scryfall
-            if (setData == null || setData.LastUpdated == null || setData.LastUpdated.Value.Date < DateTime.Today)
+            //If stale or non-existent, re-query from Scryfall
+            if (setData?.LastUpdated == null || setData.LastUpdated.Value.Date < DateTime.Today)
             {
-                if (setData == null) setData = new ScryfallAuditData();
+                setData ??= new ScryfallAuditData();
 
                 //get API result
                 setTokens = await ApiGetAvailableSets();
@@ -121,7 +121,7 @@ namespace Carpentry.Logic
             }
 
             //Parse tokens in case the DB record was recent-enough
-            if (setTokens == null) setTokens = JsonConvert.DeserializeObject<JArray>(setData.SetTokensString);
+            setTokens ??= JsonConvert.DeserializeObject<JArray>(setData.SetTokensString);
             
             //Map tokens to classes
             var result = setTokens.Select(token => new ScryfallSetOverview(token)).ToList();
