@@ -7,7 +7,7 @@ namespace Carpentry.Tests.ControllerStatusTests
     [TestClass]
     public class CarpentryAngularControllerTests
     {
-        readonly CarpentryFactory<Angular.Startup> _factory;
+        private readonly CarpentryFactory<Angular.Startup> _factory;
 
         public CarpentryAngularControllerTests()
         {
