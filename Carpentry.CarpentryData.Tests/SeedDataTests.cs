@@ -39,13 +39,7 @@ namespace Carpentry.CarpentryData.Tests
         public async Task SeedData_Works_Test(bool includeViews)
         {
             await _cardContext.EnsureDatabaseCreated(includeViews);
-
             ResetContext();
-
-            //Assert.Fail("Must implement more details about expected record count");
         }
-
-
-        //TODO - Add tests that cover view logic (or add them in a 2nd test class)
     }
 }
