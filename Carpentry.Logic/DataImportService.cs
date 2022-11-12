@@ -373,13 +373,13 @@ namespace Carpentry.Logic
 
             #region Load Deck Backups
 
-            string deckBackupLocation = $"{payload.BackupDirectory}{_config.DeckBackupFilename}";
+            var deckBackupLocation = $"{payload.BackupDirectory}{_config.DeckBackupFilename}";
 
             //_logger.LogWarning("LoadDeckBackups - Loading parsed decks");
 
             var formats = await _cardContext.MagicFormats.ToDictionaryAsync(f => f.Name, f => f);
 
-            string deckBackupsDataString = await System.IO.File.ReadAllTextAsync(deckBackupLocation);
+            var deckBackupsDataString = await System.IO.File.ReadAllTextAsync(deckBackupLocation);
             List<BackupDeck> parsedBackupDecks = JArray.Parse(deckBackupsDataString).ToObject<List<BackupDeck>>();
 
             /*

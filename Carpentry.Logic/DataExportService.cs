@@ -114,7 +114,7 @@ namespace Carpentry.Logic
 
         private async Task<JArray> GetDeckBackups()
         {
-            var deckExports = (await _cardContext.Decks.Select(d => new
+            var deckData = await _cardContext.Decks.Select(d => new
             {
                 Props = d,
                 Format = d.Format.Name,
@@ -123,28 +123,33 @@ namespace Carpentry.Logic
                 {
                     Name = dc.CardName,
                     Category = dc.CategoryId,
-                    InventoryCard = dc.InventoryCardId == null ? null : new BackupInventoryCard()
-                    {
-                        SetCode = dc.InventoryCard.Card.Set.Code,
-                        CollectorNumberStr = dc.InventoryCard.Card.CollectorNumberStr,
-                        InventoryCardStatusId = dc.InventoryCard.InventoryCardStatusId,
-                        IsFoil = dc.InventoryCard.IsFoil,
-                    },
+                    InventoryCard = dc.InventoryCardId == null
+                        ? null
+                        : new BackupInventoryCard()
+                        {
+                            SetCode = dc.InventoryCard.Card.Set.Code,
+                            CollectorNumberStr = dc.InventoryCard.Card.CollectorNumberStr,
+                            InventoryCardStatusId = dc.InventoryCard.InventoryCardStatusId,
+                            IsFoil = dc.InventoryCard.IsFoil,
+                        },
                 }).ToList(),
-            }).ToListAsync())
-            .Select(d => new BackupDeck
-            {
-                Name = d.Props.Name,
-                Format = d.Format,
-                Notes = d.Props.Notes,
-                BasicW = d.Props.BasicW,
-                BasicU = d.Props.BasicU,
-                BasicB = d.Props.BasicB,
-                BasicR = d.Props.BasicR,
-                BasicG = d.Props.BasicG,
-                Cards = d.Cards,
-                Tags = d.Tags.GroupBy(t => t.CardName).ToDictionary(g => g.Key, g => g.Select(t => t.Description).ToList()),
-            }).OrderBy(x => x.Name).ToList();
+            }).ToListAsync();
+
+            var deckExports = deckData
+                .Select(d => new BackupDeck
+                {
+                    Name = d.Props.Name,
+                    Format = d.Format,
+                    Notes = d.Props.Notes,
+                    BasicW = d.Props.BasicW,
+                    BasicU = d.Props.BasicU,
+                    BasicB = d.Props.BasicB,
+                    BasicR = d.Props.BasicR,
+                    BasicG = d.Props.BasicG,
+                    Cards = d.Cards,
+                    Tags = d.Tags.GroupBy(t => t.CardName)
+                        .ToDictionary(g => g.Key, g => g.Select(t => t.Description).ToList()),
+                }).OrderBy(x => x.Name).ToList();
 
             return JArray.FromObject(deckExports);
         }

@@ -89,7 +89,7 @@ namespace Carpentry.Tools
                 ImportPayload = appConfig.BackupDirectory,
             };
 
-            ValidatedCarpentryImportDto validatedDto = await importService.ValidateCarpentryImport(importDto);
+            var validatedDto = await importService.ValidateCarpentryImport(importDto);
 
             logger.LogInformation($"Found {validatedDto.UntrackedSets.Count} untracked sets to add");
 

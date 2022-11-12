@@ -43,6 +43,10 @@ import {SelectFieldComponent} from "./common/select-field/select-field.component
 import {NumericFieldComponent} from "./common/numeric-field/numeric-field.component";
 import {CardImageDialogComponent} from "./common/card-image-dialog/card-image-dialog.component";
 
+// TODO - 10-31-2022 - I Should probably make a ComponentModule for each section
+//  ex: InventoryModule | InventoryComponentModule could contain all of the inventory-specific components
+//    It could help reduce the size of this massive declarations block
+
 @NgModule({
   declarations: [
     AppComponent,
